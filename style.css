@@ -2119,3 +2119,92 @@ main {
     min-height: 260px;
   }
 }
+
+/* Correctifs affichage: animations du hero, retour visuel fiable et assistant desktop centre. */
+@keyframes navEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroTextEnter {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes panelEnter {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+html {
+  scroll-padding-top: 110px;
+}
+
+.assistant-overlay {
+  z-index: 9000;
+}
+
+.assistant {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  z-index: 9001;
+  width: min(520px, calc(100vw - 32px));
+  height: min(650px, calc(100dvh - 54px));
+  max-height: calc(100dvh - 54px);
+  transform: translate(-50%, -45%) scale(0.96);
+}
+
+.assistant.is-open {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.assistant-launcher {
+  z-index: 8999;
+}
+
+body.assistant-open {
+  overflow: hidden;
+}
+
+@media (max-width: 760px) {
+  .assistant {
+    width: min(430px, calc(100vw - 24px));
+    height: min(650px, calc(100dvh - 42px));
+    max-height: calc(100dvh - 42px);
+  }
+}
+
+body {
+  animation: pageFadeClean 0.78s ease both;
+  filter: none;
+}
+
+@keyframes pageFadeClean {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
