@@ -11,7 +11,9 @@
 
 </head>
 
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 <body>
+  <div id="particles-js"></div>
 
 <div class="background"></div>
 
@@ -261,6 +263,26 @@ Rejoindre Discord
 
 </a>
 
+<section class="partners">
+
+<h2>Nos partenaires</h2>
+
+<div class="partner-grid">
+
+<div class="partner-card">
+<h3>Virtual French Tournament</h3>
+<p>Partenaire officiel de ModBot.</p>
+</div>
+
+<div class="partner-card">
+<h3>VPG Belgique</h3>
+<p>Partenaire officiel de ModBot.</p>
+</div>
+
+</div>
+
+</section>
+  
 </section>
 
 <footer>
@@ -273,5 +295,30 @@ Rejoindre Discord
 
 <script src="script.js"></script>
 
+<div id="chatbot">
+
+    <button id="chat-toggle">🤖</button>
+
+    <div id="chat-window">
+
+        <h3>Assistant ModBot</h3>
+
+        <button onclick="botReply('installation')">
+            Comment obtenir ModBot ?
+        </button>
+
+        <button onclick="botReply('prix')">
+            Quels sont les tarifs ?
+        </button>
+
+        <button onclick="botReply('fonctionnalites')">
+            Fonctionnalités ?
+        </button>
+
+        <div id="bot-response"></div>
+
+    </div>
+
+</div>  
 </body>
 </html>
