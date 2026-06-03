@@ -22,7 +22,7 @@
     <nav class="navbar" aria-label="Navigation principale">
       <a class="brand" href="#top" aria-label="Accueil ModBot">
         <span class="brand-mark">
-          <img src="logo.png" alt="" onerror="this.remove(); this.parentElement.classList.add('brand-fallback')">
+          <img src="logo.png" alt="" onerror="this.parentElement.classList.add('brand-fallback'); this.remove()">
         </span>
         <span>ModBot</span>
       </a>
@@ -315,7 +315,7 @@
     <header class="assistant-header">
       <div class="assistant-title">
         <span class="assistant-avatar">
-          <img src="logo.png" alt="" onerror="this.remove(); this.parentElement.classList.add('avatar-fallback')">
+          <img src="logo.png" alt="" onerror="this.parentElement.classList.add('avatar-fallback'); this.remove()">
         </span>
         <div>
           <strong>Assistant ModBot</strong>
