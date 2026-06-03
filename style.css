@@ -128,7 +128,23 @@ gap:20px;
 }
 
 .stat,
-.card,
+.card{
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.1);
+padding:25px;
+border-radius:20px;
+transition:0.3s;
+position:relative;
+overflow:hidden;
+}
+
+.card:hover{
+transform:translateY(-10px);
+box-shadow:
+0 0 20px rgba(139,92,246,.6),
+0 0 40px rgba(139,92,246,.4),
+0 0 80px rgba(139,92,246,.2);
+}
 .price-card,
 .faq-box{
 background:rgba(255,255,255,.05);
