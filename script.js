@@ -2,25 +2,23 @@ const discordInvite = "https://discord.gg/CK8CbFtYuv";
 const patchDiscordChannel = "https://discord.com/channels/1510421934435729586/1510440693070430324";
 
 const commandResponses = {
-  warn: {
-    title: "Avertissement enregistré",
-    body: "L’utilisateur a reçu un avertissement. L’action est ajoutée à son historique de modération.",
-    tags: ["Sanction", "Historique", "Staff"]
-  },
-  ticket: {
-    title: "Ticket créé",
-    body: "Un salon privé vient d’être ouvert. Le support peut suivre la demande et fermer le ticket proprement.",
-    tags: ["Support", "Privé", "Transcripts"]
+  panel: {
+    title: "Panneau d'administration - ModBot",
+    command: "/panel",
+    body: "Panneau de contrôle de ModBot sur Hote BOT - ModBot. Toutes les modérations sont sauvegardées par serveur.",
+    type: "panel"
   },
   stats: {
-    title: "Statistiques serveur",
-    body: "ModBot analyse l’activité, les arrivées, les départs et les actions de modération importantes.",
-    tags: ["Membres", "Modération", "Activité"]
+    title: "Statistiques - Hote BOT - ModBot",
+    command: "/serverstats",
+    body: "Résumé instantané du serveur : membres, messages du jour, avertissements, bans et tickets.",
+    type: "stats"
   },
-  suggestion: {
-    title: "Suggestion publiée",
-    body: "L’idée est envoyée dans le salon dédié avec un système de validation pour la communauté.",
-    tags: ["Vote", "Communauté", "Idées"]
+  avert: {
+    title: "Dossier de modération",
+    command: "/avert-count",
+    body: "Dossier membre avec progression, statut et prochain niveau d'avertissement.",
+    type: "avert"
   }
 };
 
@@ -32,7 +30,7 @@ const assistantAnswers = {
   },
   tarifs: {
     question: "Quels sont les tarifs ?",
-    answer: "L’offre Standard est à 20€ par an. L’offre Sur Mesure est à 40€ par an avec bot personnalisé, fonctionnalités exclusives et support prioritaire."
+    answer: "L’offre de base est à 10€ par an pour protéger votre serveur toute l’année. L’offre Premium est à 35€ par an avec une configuration complète, les fonctionnalités mises en avant et le support prioritaire."
   },
   fonctionnalite: {
     question: "Comment demander une fonctionnalité ?",
@@ -130,17 +128,102 @@ function initStarfield() {
   window.addEventListener("resize", resize);
 }
 
-function renderCommand(target, command) {
-  const data = commandResponses[command] || commandResponses.warn;
-  target.innerHTML = `
-    <article class="bot-embed">
-      <strong>${data.title}</strong>
-      <p>${data.body}</p>
-      <div class="bot-tags">
-        ${data.tags.map((tag) => `<span>${tag}</span>`).join("")}
+function getCommandMarkup(command) {
+  const data = commandResponses[command] || commandResponses.panel;
+  const thumb = `<span class="embed-thumb"><img src="logo.png" alt="" onerror="this.remove()"></span>`;
+  let embedContent = "";
+
+  if (data.type === "panel") {
+    embedContent = `
+      <div class="discord-embed embed-with-thumb">
+        ${thumb}
+        <h3>${data.title}</h3>
+        <p>Panneau de contrôle de <strong>ModBot</strong> sur <strong>Hote BOT - ModBot</strong>.</p>
+        <p>Toutes les modérations sont <strong>sauvegardées par serveur</strong>.</p>
+        <div class="embed-grid">
+          <div class="embed-stat"><strong>Mots filtrés</strong><span class="embed-pill">37</span></div>
+          <div class="embed-stat"><strong>Anti-Raid</strong><span class="embed-pill">Inactif</span></div>
+          <div class="embed-stat"><strong>Anti-Invite</strong><span class="embed-pill">Inactif</span></div>
+          <div class="embed-stat"><strong>Anti-Spam</strong><span class="embed-pill">Inactif</span></div>
+          <div class="embed-stat"><strong>Lockdown</strong><span class="embed-pill">Inactif</span></div>
+          <div class="embed-stat"><strong>Staff Alert</strong><span class="embed-pill">Inactif</span></div>
+        </div>
+        <div class="embed-actions">
+          <span class="action-red">Insultes</span>
+          <span class="action-blue">Sécurité</span>
+          <span class="action-green">Salons</span>
+          <span class="action-dark">Stats & Bans</span>
+          <span class="action-blue">Staff</span>
+          <span class="action-dark">Personnalisation</span>
+        </div>
+        <p class="embed-footer">ModBot - Protection de votre communauté - Aujourd'hui à 14:57</p>
       </div>
-    </article>
+    `;
+  }
+
+  if (data.type === "stats") {
+    embedContent = `
+      <div class="discord-embed embed-with-thumb">
+        ${thumb}
+        <h3>${data.title}</h3>
+        <div class="embed-grid">
+          <div class="embed-stat"><strong>Membres</strong><span class="embed-pill">7</span></div>
+          <div class="embed-stat"><strong>Messages aujourd'hui</strong><span class="embed-pill">0</span></div>
+          <div class="embed-stat"><strong>Membres avertis</strong><span class="embed-pill">0</span></div>
+          <div class="embed-stat"><strong>Total bans</strong><span class="embed-pill">0</span></div>
+          <div class="embed-stat"><strong>Tickets aujourd'hui</strong><span class="embed-pill">0</span></div>
+        </div>
+        <p class="embed-footer">ModBot - Protection de votre communauté - Aujourd'hui à 14:58</p>
+      </div>
+    `;
+  }
+
+  if (data.type === "avert") {
+    embedContent = `
+      <div class="discord-embed">
+        <div class="mod-record">
+          <div>
+            <h3>gimskh</h3>
+            <p><strong>${data.title}</strong></p>
+            <div class="mod-fields">
+              <div class="embed-field"><strong>Membre</strong><span class="embed-pill">@</span></div>
+              <div class="embed-field"><strong>ID</strong><span class="embed-pill">1189681599965573131</span></div>
+              <div class="embed-field"><strong>Rejoint le</strong><span class="embed-pill">30/05/2026 à 23:51</span></div>
+              <div class="embed-field"><strong>Progression</strong><div class="meter"><span></span></div><span class="embed-pill">0/4</span></div>
+              <div class="embed-field"><strong>Prochain</strong><span>warn</span></div>
+              <div class="embed-field"><strong>Statut</strong><span>Aucun</span></div>
+            </div>
+          </div>
+          <div class="mod-photo" aria-hidden="true"></div>
+        </div>
+        <p class="embed-footer">ModBot - Dossier de modération - Aujourd'hui à 14:59</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="discord-command-preview">
+      <div class="discord-message">
+        <span class="discord-avatar"><img src="logo.png" alt="" onerror="this.remove()">MB</span>
+        <div>
+          <div class="discord-meta">
+            <span class="used-command">LGCY a utilisé</span>
+            <span class="slash-chip">${data.command}</span>
+          </div>
+          <div class="discord-meta">
+            <span class="discord-bot">ModBot</span>
+            <span class="discord-app">APP</span>
+            <span>14:59</span>
+          </div>
+          ${embedContent}
+        </div>
+      </div>
+    </div>
   `;
+}
+
+function renderCommand(target, command) {
+  target.innerHTML = getCommandMarkup(command);
 }
 
 function initHeroCommands() {
@@ -156,7 +239,7 @@ function initHeroCommands() {
     });
   });
 
-  renderCommand(stage, "warn");
+  renderCommand(stage, "panel");
 }
 
 function appendDemoMessage(feed, text, type) {
@@ -171,14 +254,17 @@ function runDemoCommand(command) {
   const feed = document.getElementById("demoFeed");
   if (!feed) return;
 
-  const data = commandResponses[command] || commandResponses.warn;
-  const commandText = command === "warn" ? "/warn @Membre comportement inadapté" : `/${command === "stats" ? "serverstats" : command}`;
+  const data = commandResponses[command] || commandResponses.panel;
 
   feed.innerHTML = "";
-  appendDemoMessage(feed, commandText, "user");
+  appendDemoMessage(feed, data.command, "user");
 
   window.setTimeout(() => {
-    appendDemoMessage(feed, `${data.title}. ${data.body}`, "bot");
+    const message = document.createElement("div");
+    message.className = "message bot command-demo-message";
+    message.innerHTML = getCommandMarkup(command);
+    feed.appendChild(message);
+    feed.scrollTop = feed.scrollHeight;
   }, 260);
 }
 
@@ -194,7 +280,7 @@ function initDemo() {
     });
   });
 
-  runDemoCommand("warn");
+  runDemoCommand("panel");
 }
 
 function addAssistantMessage(type, html) {
@@ -225,6 +311,7 @@ function askAssistant(key) {
 
 function initAssistant() {
   const assistant = document.getElementById("assistant");
+  const overlay = document.getElementById("assistantOverlay");
   const launcher = document.querySelector(".assistant-launcher");
   const close = document.querySelector(".assistant-close");
   const quickQuestions = document.querySelectorAll(".quick-questions button");
@@ -233,7 +320,10 @@ function initAssistant() {
 
   function setOpen(isOpen) {
     assistant.classList.toggle("is-open", isOpen);
+    overlay?.classList.toggle("is-open", isOpen);
+    document.body.classList.toggle("assistant-open", isOpen);
     assistant.setAttribute("aria-hidden", String(!isOpen));
+    overlay?.setAttribute("aria-hidden", String(!isOpen));
     launcher.setAttribute("aria-expanded", String(isOpen));
   }
 
@@ -243,13 +333,17 @@ function initAssistant() {
   });
 
   close?.addEventListener("click", () => setOpen(false));
+  overlay?.addEventListener("click", () => setOpen(false));
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setOpen(false);
+  });
 
   quickQuestions.forEach((button) => {
     button.addEventListener("click", () => askAssistant(button.dataset.question));
   });
 
   addAssistantMessage("bot", "Bonjour, je suis l’assistant ModBot. Comment puis-je vous aider ?");
-  window.setTimeout(() => setOpen(true), 900);
 }
 
 function initNavigation() {
@@ -300,6 +394,7 @@ function initRevealAnimations() {
     ".feature-card",
     ".price-card",
     ".faq-box",
+    ".partner-card",
     ".discord-window",
     ".demo-controls"
   ];
