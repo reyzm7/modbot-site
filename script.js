@@ -180,22 +180,48 @@ function getCommandMarkup(command) {
 
   if (data.type === "avert") {
     embedContent = `
-      <div class="discord-embed">
-        <div class="mod-record">
+      <div class="discord-embed avert-embed">
+        <div class="avert-head">
           <div>
             <h3>gimskh</h3>
-            <p><strong>${data.title}</strong></p>
-            <div class="mod-fields">
-              <div class="embed-field"><strong>Membre</strong><span class="embed-pill">@</span></div>
-              <div class="embed-field"><strong>ID</strong><span class="embed-pill">1189681599965573131</span></div>
-              <div class="embed-field"><strong>Rejoint le</strong><span class="embed-pill">30/05/2026 à 23:51</span></div>
-              <div class="embed-field"><strong>Progression</strong><div class="meter"><span></span></div><span class="embed-pill">0/4</span></div>
-              <div class="embed-field"><strong>Prochain</strong><span>warn</span></div>
-              <div class="embed-field"><strong>Statut</strong><span>Aucun</span></div>
-            </div>
+            <h4>${data.title}</h4>
           </div>
           <div class="mod-photo" aria-hidden="true"></div>
         </div>
+
+        <div class="avert-main-fields">
+          <div class="avert-field member">
+            <strong>Membre</strong>
+            <span class="embed-pill">@</span>
+          </div>
+          <div class="avert-field id">
+            <strong>ID</strong>
+            <span class="embed-pill">1189681599965573131</span>
+          </div>
+          <div class="avert-field joined">
+            <strong>Rejoint le</strong>
+            <span>30/05/2026<br>à 23:51</span>
+          </div>
+        </div>
+
+        <div class="avert-secondary-fields">
+          <div class="avert-field progress">
+            <strong>Progression</strong>
+            <div class="progress-line">
+              <div class="meter"><span></span></div>
+              <span class="embed-pill">0/4</span>
+            </div>
+          </div>
+          <div class="avert-field">
+            <strong>Prochain</strong>
+            <span>warn</span>
+          </div>
+          <div class="avert-field">
+            <strong>Statut</strong>
+            <span>Aucun</span>
+          </div>
+        </div>
+
         <p class="embed-footer">ModBot - Dossier de modération - Aujourd'hui à 14:59</p>
       </div>
     `;
