@@ -1,3 +1,7 @@
+if ("scrollRestoration" in window.history) {
+  window.history.scrollRestoration = "manual";
+}
+
 const discordInvite = "https://discord.gg/CK8CbFtYuv";
 const patchDiscordChannel = "https://discord.com/channels/1510421934435729586/1510440693070430324";
 
@@ -47,6 +51,14 @@ const assistantAnswers = {
     link: "Voir le Discord"
   }
 };
+
+function resetInitialScroll() {
+  if (window.location.hash) return;
+
+  window.scrollTo(0, 0);
+  window.addEventListener("load", () => window.scrollTo(0, 0), { once: true });
+  window.setTimeout(() => window.scrollTo(0, 0), 80);
+}
 
 function initStarfield() {
   const canvas = document.getElementById("starfield");
@@ -433,6 +445,7 @@ function initRevealAnimations() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  resetInitialScroll();
   initStarfield();
   initNavigation();
   initHeroCommands();
