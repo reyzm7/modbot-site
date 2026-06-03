@@ -12,6 +12,11 @@
 <body>
   <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
   <div class="page-glow" aria-hidden="true"></div>
+  <div class="animated-bg" aria-hidden="true">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
 
   <header class="site-header">
     <nav class="navbar" aria-label="Navigation principale">
@@ -31,6 +36,7 @@
         <a href="#features">Fonctionnalités</a>
         <a href="#demo">Démo</a>
         <a href="#pricing">Tarifs</a>
+        <a href="#partners">Partenaires</a>
         <a href="#patch-notes">Patch notes</a>
         <a href="#faq">FAQ</a>
         <a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">Demander ModBot</a>
@@ -67,17 +73,17 @@
 
         <aside class="command-rail" aria-label="Commandes disponibles">
           <p>Commandes disponibles</p>
-          <button type="button" class="command-card is-active" data-command="warn">
+          <button type="button" class="command-card is-active" data-command="panel">
             <span class="command-icon">!</span>
-            <span><strong>/warn @Utilisateur</strong><small>Avertir un membre</small></span>
-          </button>
-          <button type="button" class="command-card" data-command="ticket">
-            <span class="command-icon">?</span>
-            <span><strong>/ticket</strong><small>Ouvrir un ticket</small></span>
+            <span><strong>/panel</strong><small>Panneau admin</small></span>
           </button>
           <button type="button" class="command-card" data-command="stats">
+            <span class="command-icon">?</span>
+            <span><strong>/serverstats</strong><small>Stats serveur</small></span>
+          </button>
+          <button type="button" class="command-card" data-command="avert">
             <span class="command-icon">#</span>
-            <span><strong>/serverstats</strong><small>Statistiques serveur</small></span>
+            <span><strong>/avert-count</strong><small>Dossier modération</small></span>
           </button>
         </aside>
       </div>
@@ -167,10 +173,9 @@
         </div>
 
         <div class="demo-controls">
-          <button type="button" class="demo-command is-active" data-command="warn">/warn @Membre</button>
-          <button type="button" class="demo-command" data-command="ticket">/ticket</button>
+          <button type="button" class="demo-command is-active" data-command="panel">/panel</button>
           <button type="button" class="demo-command" data-command="stats">/serverstats</button>
-          <button type="button" class="demo-command" data-command="suggestion">/suggestion</button>
+          <button type="button" class="demo-command" data-command="avert">/avert-count</button>
         </div>
       </div>
     </section>
@@ -185,14 +190,14 @@
       <div class="pricing-grid">
         <article class="price-card">
           <div class="price-head">
-            <h3>Offre Standard</h3>
-            <p>L’essentiel pour protéger votre communauté.</p>
+            <h3>Offre de base</h3>
+            <p>La protection ModBot pour sécuriser votre serveur toute l’année.</p>
           </div>
-          <div class="price">20€ <span>/ an</span></div>
+          <div class="price">10€ <span>/ an</span></div>
           <ul>
             <li>Installation</li>
             <li>Configuration</li>
-            <li>Toutes les fonctionnalités ModBot</li>
+            <li>Protection du serveur toute l’année</li>
             <li>Support Discord</li>
           </ul>
           <a class="secondary-btn stretch" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">Choisir cette offre</a>
@@ -201,17 +206,43 @@
         <article class="price-card premium">
           <span class="premium-ribbon">Premium</span>
           <div class="price-head">
-            <h3>Offre Sur Mesure</h3>
-            <p>Une expérience taillée pour votre serveur.</p>
+            <h3>Offre Premium</h3>
+            <p>Tout ModBot mis en avant avec une expérience complète pour votre serveur.</p>
           </div>
-          <div class="price">40€ <span>/ an</span></div>
+          <div class="price">35€ <span>/ an</span></div>
           <ul>
             <li>Bot personnalisé</li>
-            <li>Fonctionnalités exclusives</li>
-            <li>Développement sur mesure</li>
+            <li>Fonctionnalités mises en avant</li>
+            <li>Configuration premium complète</li>
             <li>Support prioritaire</li>
           </ul>
           <a class="primary-btn stretch" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">Choisir cette offre</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="partners" class="partners section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">Partenaires</p>
+        <h2>Ils avancent avec ModBot</h2>
+        <p>Des communautés liées au club pro et aux tournois qui font confiance à l’écosystème ModBot.</p>
+      </div>
+
+      <div class="partner-grid">
+        <article class="partner-card">
+          <span class="partner-mark">VPG</span>
+          <div>
+            <h3>VPG Belgique</h3>
+            <p>Compétition club pro</p>
+          </div>
+        </article>
+
+        <article class="partner-card">
+          <span class="partner-mark">VFT</span>
+          <div>
+            <h3>VFT</h3>
+            <p>Tournois club pro</p>
+          </div>
         </article>
       </div>
     </section>
@@ -273,6 +304,8 @@
       <a class="primary-btn" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">Rejoindre Discord</a>
     </section>
   </main>
+
+  <div class="assistant-overlay" id="assistantOverlay" aria-hidden="true"></div>
 
   <button class="assistant-launcher" type="button" aria-label="Ouvrir l’assistant ModBot" aria-expanded="false">
     <span></span>
