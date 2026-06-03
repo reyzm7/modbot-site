@@ -25,6 +25,41 @@ cards.forEach(card => {
 
 });
 
+document.getElementById("chat-toggle").onclick = () => {
+
+const windowBot = document.getElementById("chat-window");
+
+windowBot.classList.toggle("open");
+
+};
+
+function botReply(type){
+
+const response = document.getElementById("bot-response");
+
+if(type === "installation"){
+
+response.innerHTML =
+"Rejoignez notre serveur Discord pour demander l'installation.";
+
+}
+
+if(type === "prix"){
+
+response.innerHTML =
+"20€/an pour ModBot Standard et 40€/an pour un bot sur mesure.";
+
+}
+
+if(type === "fonctionnalites"){
+
+response.innerHTML =
+"Modération, tickets, statistiques, traduction, suggestions et plus.";
+
+}
+
+}
+
 const button = document.getElementById("assistant-button");
 const box = document.getElementById("assistant-box");
 
