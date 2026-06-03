@@ -1,0 +1,148 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#09071A;
+    color:white;
+    font-family:Arial, sans-serif;
+}
+
+header{
+    background:#0D0A22;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+nav{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logo img{
+    width:50px;
+    height:50px;
+}
+
+.logo span{
+    font-size:24px;
+    font-weight:bold;
+}
+
+.btn,
+.btn-primary{
+    background:#8B5CF6;
+    color:white;
+    text-decoration:none;
+    padding:12px 20px;
+    border-radius:10px;
+    transition:0.3s;
+}
+
+.btn:hover,
+.btn-primary:hover{
+    background:#A855F7;
+}
+
+.hero{
+    text-align:center;
+    padding:60px 20px;
+    max-width:1200px;
+    margin:auto;
+}
+
+.banner{
+    width:100%;
+    border-radius:20px;
+    margin-bottom:30px;
+}
+
+.hero h1{
+    font-size:3rem;
+    margin-bottom:20px;
+}
+
+.hero p{
+    max-width:700px;
+    margin:auto;
+    color:#cfcfcf;
+    margin-bottom:30px;
+}
+
+.features,
+.pricing,
+.contact{
+    max-width:1200px;
+    margin:auto;
+    padding:80px 20px;
+}
+
+h2{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#151532;
+    padding:25px;
+    border-radius:15px;
+    border:1px solid rgba(139,92,246,.3);
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    transition:0.3s;
+}
+
+.price-card{
+    background:#151532;
+    max-width:500px;
+    margin:auto;
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+}
+
+.price{
+    font-size:3rem;
+    color:#8B5CF6;
+    margin:20px 0;
+}
+
+.price-card ul{
+    list-style:none;
+}
+
+.price-card li{
+    margin:10px 0;
+}
+
+.contact{
+    text-align:center;
+}
+
+footer{
+    background:#050510;
+    text-align:center;
+    padding:30px;
+    color:#999;
+}
