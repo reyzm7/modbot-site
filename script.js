@@ -1,14 +1,3 @@
-// PARTNER TOGGLE
-function togglePartner(el) {
-  const p = el.querySelector(".hidden");
-  p.style.display = p.style.display === "block" ? "none" : "block";
-}
-
-// COMMAND DEMO
-function runCmd(cmd) {
-  console.log("Commande:", cmd);
-}
-
 // ASSISTANT
 function toggleAssistant() {
   const panel = document.getElementById("panel");
@@ -19,27 +8,40 @@ function answer(type) {
   const r = document.getElementById("response");
 
   const answers = {
-    prix: "Offre Standard 20€/an, Sur Mesure 40€/an.",
-    obtenir: "Invitez le bot manuellement via l'installation propriétaire.",
-    fonctionnalite: "Modération, tickets, stats, annonces et plus.",
-    support: "Via notre serveur Discord officiel.",
-    partenaires: "VPG Belgique et Virtual French Tournament."
+    prix: "20€/an Standard — 40€/an Sur mesure (installation incluse).",
+    obtenir: "Le bot est installé manuellement après achat.",
+    fonctionnalite: "Modération, tickets, stats, logs, annonces.",
+    support: "Support disponible via le Discord officiel.",
+    partenaires: "VPG Belgique & Virtual French Tournament."
   };
 
   r.innerText = answers[type];
 }
 
-// PARTICLES SIMPLE
-const p = document.getElementById("particles");
-for(let i=0;i<40;i++){
-  const d = document.createElement("div");
-  d.style.position="absolute";
-  d.style.width="4px";
-  d.style.height="4px";
-  d.style.background="#8B5CF6";
-  d.style.borderRadius="50%";
-  d.style.top=Math.random()*100+"%";
-  d.style.left=Math.random()*100+"%";
-  d.style.opacity=Math.random();
-  p.appendChild(d);
-}
+// TILT EFFECT (CARDS)
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("mousemove", (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    card.style.setProperty("--x", x + "%");
+    card.style.setProperty("--y", y + "%");
+  });
+});
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.style.opacity = 1;
+      entry.target.style.transform = "translateY(0)";
+    }
+  });
+});
+
+document.querySelectorAll(".section, .card, .pricing, .patch").forEach(el => {
+  el.style.opacity = 0;
+  el.style.transform = "translateY(20px)";
+  el.style.transition = "0.6s ease";
+  observer.observe(el);
+});
