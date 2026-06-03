@@ -1,135 +1,154 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ModBot - Protection Discord</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ModBot - Protection Discord</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
 
-    <header>
-        <nav>
-            <div class="logo">
-                <img src="images/6BF9CC36-66E5-4810-8D28-AE8A3B048724.png" alt="ModBot Logo">
-                <span>ModBot</span>
-            </div>
+<div id="particles"></div>
 
-            <a href="https://discord.gg/CK8CbFtYuv" target="_blank" class="btn">
-                Discord
-            </a>
-        </nav>
-    </header>
+<!-- NAV -->
+<header class="nav">
+  <div class="logo">
+    <img src="logo.png" alt="ModBot"/>
+    <span>ModBot</span>
+  </div>
+  <a class="btn-glow" href="https://discord.gg/CK8CbFtYuv" target="_blank">
+    Rejoindre Discord
+  </a>
+</header>
 
-    <section class="hero">
+<!-- HERO -->
+<section class="hero">
+  <img src="banner.png" class="banner"/>
+  <h1>Protection & Gestion Discord nouvelle génération</h1>
+  <p>Un bot moderne pour sécuriser et automatiser votre serveur.</p>
+</section>
 
-        <img src="images/4F6AF086-1DAB-4E61-8080-CFFD984BF840.png"
-             alt="ModBot Banner"
-             class="banner">
+<!-- FEATURES -->
+<section class="section">
+  <h2>Fonctionnalités</h2>
 
-        <h1>Protégez votre communauté Discord</h1>
+  <div class="grid">
 
-        <p>
-            ModBot est une solution complète de protection,
-            modération et gestion communautaire conçue pour
-            maintenir un environnement sain, sécurisé et agréable.
-        </p>
+    <div class="card">Modération avancée</div>
+    <div class="card">Tickets</div>
+    <div class="card">Traduction</div>
+    <div class="card">Suggestions</div>
+    <div class="card">Statistiques</div>
+    <div class="card">Annonces</div>
+    <div class="card">Panel administrateur</div>
+    <div class="card">Historique sanctions</div>
+    <div class="card">Développement continu</div>
+    <div class="card">Configuration personnalisée</div>
 
-        <a href="https://discord.gg/CK8CbFtYuv"
-           target="_blank"
-           class="btn-primary">
-            Demander ModBot
-        </a>
+  </div>
+</section>
 
-    </section>
+<!-- PRICING -->
+<section class="section">
+  <h2>Tarifs</h2>
 
-    <section class="features">
+  <div class="grid">
 
-        <h2>Fonctionnalités</h2>
+    <div class="pricing">
+      <h3>Offre Standard</h3>
+      <p class="price">20€/an</p>
+      <ul>
+        <li>Installation</li>
+        <li>Configuration</li>
+        <li>Toutes fonctionnalités</li>
+        <li>Support Discord</li>
+      </ul>
+    </div>
 
-        <div class="grid">
+    <div class="pricing premium">
+      <h3>Sur Mesure</h3>
+      <p class="price">40€/an</p>
+      <ul>
+        <li>Bot personnalisé</li>
+        <li>Fonctionnalités exclusives</li>
+        <li>Développement sur mesure</li>
+        <li>Support prioritaire</li>
+      </ul>
+    </div>
 
-            <div class="card">
-                <h3>🛡️ Modération avancée</h3>
-                <p>Warn, Ban, Deban, historique des sanctions et protection du serveur.</p>
-            </div>
+  </div>
+</section>
 
-            <div class="card">
-                <h3>📊 Statistiques</h3>
-                <p>Analyse complète des membres, modérateurs et activités.</p>
-            </div>
+<!-- PARTNERS -->
+<section class="section">
+  <h2>Nos partenaires</h2>
 
-            <div class="card">
-                <h3>🎫 Tickets</h3>
-                <p>Système de support intégré pour les membres.</p>
-            </div>
+  <div class="grid">
 
-            <div class="card">
-                <h3>📢 Annonces</h3>
-                <p>Diffusion d'annonces officielles et patch notes.</p>
-            </div>
+    <div class="partner" onclick="togglePartner(this)">
+      <h3>VPG Belgique</h3>
+      <p class="hidden">Compétition partenaire de ModBot.</p>
+    </div>
 
-            <div class="card">
-                <h3>🌍 Traduction</h3>
-                <p>Traduction rapide des messages pour tous les membres.</p>
-            </div>
+    <div class="partner" onclick="togglePartner(this)">
+      <h3>Virtual French Tournament</h3>
+      <p class="hidden">Serveur de tournois partenaire de ModBot.</p>
+    </div>
 
-            <div class="card">
-                <h3>💡 Suggestions</h3>
-                <p>Gestion des idées et améliorations proposées par la communauté.</p>
-            </div>
+  </div>
+</section>
 
-        </div>
+<!-- PATCH NOTES -->
+<section class="section">
+  <h2>Patch Notes</h2>
 
-    </section>
+  <div class="patch">
+    <div>
+      <strong>v1.2.0</strong> - 03/06/2026
+      <p>Amélioration du système de modération et performances.</p>
+    </div>
 
-    <section class="pricing">
+    <a class="btn" href="https://discord.com/channels/1510421934435729586/1510440693070430324/1511122399926554806">
+      Voir le message Discord
+    </a>
+  </div>
+</section>
 
-        <h2>Tarification</h2>
+<!-- DEMO -->
+<section class="section">
+  <h2>Démo interactive</h2>
 
-        <div class="price-card">
+  <div class="terminal">
+    <div class="cmd" onclick="runCmd('/warn @User')">/warn @Utilisateur</div>
+    <div class="out">→ Avertissement enregistré</div>
 
-            <h3>Offre Premium</h3>
+    <div class="cmd" onclick="runCmd('/ticket')">/ticket</div>
+    <div class="out">→ Ticket créé</div>
 
-            <div class="price">20€ / an</div>
+    <div class="cmd" onclick="runCmd('/serverstats')">/serverstats</div>
+    <div class="out">→ Statistiques générées</div>
+  </div>
+</section>
 
-            <ul>
-                <li>✔ Installation personnalisée</li>
-                <li>✔ Toutes les fonctionnalités</li>
-                <li>✔ Support Discord</li>
-                <li>✔ Mises à jour incluses</li>
-                <li>✔ Ajouts possibles sur demande</li>
-            </ul>
+<!-- FOOTER -->
+<footer>
+  <p>© ModBot - Protection Discord</p>
+</footer>
 
-        </div>
+<!-- ASSISTANT -->
+<div id="assistant">
+  <div id="bubble" onclick="toggleAssistant()">💬 ModBot Assistant</div>
+  <div id="panel">
+    <p onclick="answer('prix')">Quels sont les tarifs ?</p>
+    <p onclick="answer('obtenir')">Comment obtenir ModBot ?</p>
+    <p onclick="answer('fonctionnalite')">Fonctionnalités ?</p>
+    <p onclick="answer('support')">Support ?</p>
+    <p onclick="answer('partenaires')">Partenaires ?</p>
+    <div id="response"></div>
+  </div>
+</div>
 
-    </section>
-
-    <section class="contact">
-
-        <h2>Obtenir ModBot</h2>
-
-        <p>
-            Rejoignez notre serveur Discord pour demander
-            l'installation de ModBot sur votre communauté.
-        </p>
-
-        <a href="https://discord.gg/CK8CbFtYuv"
-           target="_blank"
-           class="btn-primary">
-            Rejoindre le serveur
-        </a>
-
-    </section>
-
-    <footer>
-        © 2026 ModBot • Respect • Non-toxicité • Bienveillance
-    </footer>
-
-    <script src="script.js"></script>
-
+<script src="script.js"></script>
 </body>
 </html>
