@@ -2395,11 +2395,45 @@ main,
   text-align: left;
 }
 
-.server-logo {
+.server-logo-shell {
+  position: relative;
   width: 72px;
   height: 72px;
-  object-fit: contain;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(158, 110, 255, 0.34);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 35% 20%, rgba(98, 230, 255, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(9, 5, 20, 0.94));
+  box-shadow: 0 0 22px rgba(139, 92, 246, 0.22);
   filter: drop-shadow(0 10px 18px rgba(139, 92, 246, 0.28));
+}
+
+.server-logo-shell::before {
+  content: attr(data-initials);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--soft);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.server-logo-shell img,
+.server-logo {
+  position: relative;
+  z-index: 1;
+  width: 72px;
+  height: 72px;
+  padding: 4px;
+  object-fit: contain;
+}
+
+.server-logo-shell.is-fallback img {
+  display: none;
 }
 
 .server-card strong {
@@ -2482,16 +2516,20 @@ main,
   white-space: nowrap;
 }
 
-.server-current-logo,
-.server-summary img {
+.server-current-logo-shell,
+.server-summary-logo-shell {
   width: 34px;
   height: 34px;
   padding: 2px;
-  border: 1px solid rgba(158, 110, 255, 0.36);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  object-fit: contain;
   filter: drop-shadow(0 8px 16px rgba(139, 92, 246, 0.22));
+}
+
+.server-current-logo,
+.server-current-logo-shell img {
+  width: 100%;
+  height: 100%;
+  padding: 2px;
+  object-fit: contain;
 }
 
 .server-summary {
@@ -2501,9 +2539,16 @@ main,
   flex-wrap: wrap;
 }
 
-.server-summary img {
+.server-summary-logo-shell {
   width: 30px;
   height: 30px;
+}
+
+.server-summary-logo-shell img {
+  width: 100%;
+  height: 100%;
+  padding: 2px;
+  object-fit: contain;
 }
 
 .dashboard-server select,
@@ -3160,6 +3205,9 @@ main,
 
 @media (max-width: 760px) {
   .dashboard-topbar {
+    position: relative;
+    top: auto;
+    z-index: 20;
     padding: 12px;
   }
 
