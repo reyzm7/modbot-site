@@ -477,6 +477,14 @@ function initDashboard() {
   const serverScreen = document.querySelector("[data-server-screen]");
   const dashboardApp = document.querySelector("[data-dashboard-app]");
   const currentServerTargets = document.querySelectorAll("[data-current-server], [data-current-server-label]");
+  const unsavedModal = document.querySelector("[data-unsaved-modal]");
+  const publishTicketButton = document.querySelector("[data-publish-ticket]");
+  const ticketChannelInput = document.querySelector("[data-ticket-channel]");
+  let activePanelName = "overview";
+  let hasUnsavedChanges = false;
+  let dirtyPanelName = null;
+  let ticketNeedsPublish = false;
+  let pendingNavigation = null;
   let toastTimer;
 
   function showToast(message) {
@@ -500,7 +508,62 @@ function initDashboard() {
     });
   }
 
+  function setTicketPublishVisible(isVisible) {
+    if (!publishTicketButton) return;
+    publishTicketButton.hidden = !isVisible;
+  }
+
+  function markPanelDirty(panelName = activePanelName) {
+    if (!panelName) return;
+    hasUnsavedChanges = true;
+    dirtyPanelName = panelName;
+    dashboard.classList.add("has-unsaved");
+    if (panelName === "tickets") {
+      ticketNeedsPublish = true;
+      setTicketPublishVisible(true);
+    }
+  }
+
+  function clearUnsavedChanges() {
+    hasUnsavedChanges = false;
+    dirtyPanelName = null;
+    dashboard.classList.remove("has-unsaved");
+  }
+
+  function saveCurrentChanges(message = "💾 Configuration enregistrée") {
+    if (!hasUnsavedChanges) {
+      showToast("✅ Tout est déjà enregistré");
+      return;
+    }
+    clearUnsavedChanges();
+    showToast(message);
+  }
+
+  function showUnsavedModal(action) {
+    pendingNavigation = action;
+    if (!unsavedModal) {
+      saveCurrentChanges();
+      pendingNavigation?.();
+      pendingNavigation = null;
+      return;
+    }
+    unsavedModal.hidden = false;
+  }
+
+  function closeUnsavedModal() {
+    if (unsavedModal) unsavedModal.hidden = true;
+  }
+
+  function runWithUnsavedGuard(action) {
+    if (hasUnsavedChanges) {
+      showUnsavedModal(action);
+      return;
+    }
+    action();
+  }
+
   function openPanel(panelName) {
+    activePanelName = panelName;
     tabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.dashboardTab === panelName));
     panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.dashboardPanel === panelName));
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -516,7 +579,7 @@ function initDashboard() {
   });
 
   document.querySelector("[data-change-server]")?.addEventListener("click", () => {
-    showDashboardStage("servers");
+    runWithUnsavedGuard(() => showDashboardStage("servers"));
   });
 
   document.querySelectorAll("[data-server-name]").forEach((serverCard) => {
@@ -528,19 +591,62 @@ function initDashboard() {
   });
 
   tabs.forEach((tab) => {
-    tab.addEventListener("click", () => openPanel(tab.dataset.dashboardTab));
+    tab.addEventListener("click", () => {
+      const panelName = tab.dataset.dashboardTab;
+      if (!panelName || panelName === activePanelName) return;
+      runWithUnsavedGuard(() => openPanel(panelName));
+    });
   });
 
   document.querySelectorAll("[data-dashboard-jump]").forEach((button) => {
-    button.addEventListener("click", () => openPanel(button.dataset.dashboardJump));
+    button.addEventListener("click", () => {
+      const panelName = button.dataset.dashboardJump;
+      if (!panelName || panelName === activePanelName) return;
+      runWithUnsavedGuard(() => openPanel(panelName));
+    });
   });
 
   document.querySelectorAll("[data-dashboard-save]").forEach((button) => {
-    button.addEventListener("click", () => showToast("Configuration enregistrée dans la maquette"));
+    button.addEventListener("click", () => saveCurrentChanges("💾 Configuration enregistrée dans la maquette"));
   });
 
   document.querySelectorAll("[data-reset-section]").forEach((button) => {
-    button.addEventListener("click", () => showToast("Section réinitialisée"));
+    button.addEventListener("click", () => {
+      const panel = button.closest("[data-dashboard-panel]");
+      markPanelDirty(panel?.dataset.dashboardPanel || activePanelName);
+      showToast("♻️ Section réinitialisée");
+    });
+  });
+
+  document.querySelector("[data-unsaved-save]")?.addEventListener("click", () => {
+    const action = pendingNavigation;
+    closeUnsavedModal();
+    saveCurrentChanges("💾 Configuration sauvegardée");
+    pendingNavigation = null;
+    action?.();
+  });
+
+  document.querySelector("[data-unsaved-discard]")?.addEventListener("click", () => {
+    const action = pendingNavigation;
+    closeUnsavedModal();
+    if (dirtyPanelName === "tickets") {
+      ticketNeedsPublish = false;
+      setTicketPublishVisible(false);
+    }
+    clearUnsavedChanges();
+    showToast("🗑️ Modifications laissées de côté");
+    pendingNavigation = null;
+    action?.();
+  });
+
+  panels.forEach((panel) => {
+    const panelName = panel.dataset.dashboardPanel;
+    panel.addEventListener("input", (event) => {
+      if (event.target.matches("input, textarea, select")) markPanelDirty(panelName);
+    });
+    panel.addEventListener("change", (event) => {
+      if (event.target.matches("input, textarea, select")) markPanelDirty(panelName);
+    });
   });
 
   document.querySelectorAll(".toggle-line input[type='checkbox']").forEach((checkbox) => {
@@ -549,6 +655,7 @@ function initDashboard() {
     syncToggle();
     checkbox.addEventListener("change", () => {
       syncToggle();
+      markPanelDirty(checkbox.closest("[data-dashboard-panel]")?.dataset.dashboardPanel || activePanelName);
       showToast(checkbox.checked ? "Module activé" : "Module désactivé");
     });
   });
@@ -588,6 +695,7 @@ function initDashboard() {
       <button type="button">Supprimer</button>
     `;
     optionList.appendChild(option);
+    markPanelDirty("tickets");
     showToast("Option de ticket ajoutée");
   });
 
@@ -603,7 +711,16 @@ function initDashboard() {
     optionList.querySelectorAll(".option-row span").forEach((label, index) => {
       label.textContent = String(index + 1).padStart(2, "0");
     });
+    markPanelDirty("tickets");
     showToast("Option supprimée");
+  });
+
+  publishTicketButton?.addEventListener("click", () => {
+    const channel = ticketChannelInput?.value.trim() || "salon ticket désigné";
+    ticketNeedsPublish = false;
+    setTicketPublishVisible(false);
+    if (dirtyPanelName === "tickets") clearUnsavedChanges();
+    showToast(`🚀 Message ticket publié dans le salon ${channel}`);
   });
 
   const colorPreview = document.querySelector(".live-color-preview");
@@ -612,6 +729,7 @@ function initDashboard() {
       document.querySelectorAll(".color-swatch").forEach((item) => item.classList.remove("is-selected"));
       swatch.classList.add("is-selected");
       colorPreview?.style.setProperty("--dashboard-accent", swatch.dataset.color || "#5865F2");
+      markPanelDirty("personalization");
       showToast("Couleur d'embed mise à jour");
     });
   });
@@ -629,6 +747,7 @@ function initDashboard() {
       if (fileName) fileName.textContent = file ? file.name : "Aucun fichier sélectionné";
       if (file && input.dataset.fileInput === "logo" && liveLogo) liveLogo.src = URL.createObjectURL(file);
       if (file && input.dataset.fileInput === "banner" && liveBanner) liveBanner.src = URL.createObjectURL(file);
+      markPanelDirty("personalization");
       showToast(file ? "Fichier ajouté à l'aperçu" : "Aucun fichier sélectionné");
     });
   });
