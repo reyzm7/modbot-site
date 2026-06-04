@@ -164,7 +164,7 @@ function initStarfield() {
 
 function getCommandMarkup(command) {
   const data = commandResponses[command] || commandResponses.panel;
-  const thumb = `<span class="embed-thumb"><img src="assets/default_logo.png" alt="" onerror="this.remove()"></span>`;
+  const thumb = `<span class="embed-thumb"><img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';"></span>`;
   let embedContent = "";
 
   if (data.type === "panel") {
@@ -264,7 +264,7 @@ function getCommandMarkup(command) {
   return `
     <div class="discord-command-preview">
       <div class="discord-message">
-        <span class="discord-avatar"><img src="assets/default_logo.png" alt="" onerror="this.remove()">MB</span>
+        <span class="discord-avatar"><img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">MB</span>
         <div>
           <div class="discord-meta">
             <span class="used-command">LGCY a utilisé</span>
