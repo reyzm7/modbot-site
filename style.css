@@ -2652,6 +2652,13 @@ main,
   gap: 16px;
 }
 
+.panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 .panel-title h2 {
   margin-top: 4px;
   font-size: 1.42rem;
@@ -2802,6 +2809,14 @@ main,
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 14px;
+}
+
+.ticket-publish-btn {
+  border: 1px solid rgba(101, 245, 150, 0.5);
+  background: linear-gradient(135deg, rgba(67, 181, 129, 0.94), rgba(88, 101, 242, 0.92));
+  box-shadow:
+    0 14px 34px rgba(67, 181, 129, 0.24),
+    0 0 28px rgba(101, 245, 150, 0.18);
 }
 
 .option-list {
@@ -3047,6 +3062,47 @@ main,
   transform: translateY(0);
 }
 
+.dashboard-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(4, 2, 10, 0.72);
+  backdrop-filter: blur(12px);
+}
+
+.dashboard-modal-card {
+  width: min(100%, 520px);
+  padding: 24px;
+  border: 1px solid rgba(255, 215, 0, 0.34);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025)),
+    rgba(17, 10, 32, 0.96);
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.56),
+    0 0 44px rgba(255, 215, 0, 0.14);
+}
+
+.dashboard-modal-card h2 {
+  margin: 2px 0 10px;
+  font-size: 1.55rem;
+}
+
+.dashboard-modal-card p:not(.eyebrow) {
+  color: var(--soft);
+  line-height: 1.6;
+}
+
+.dashboard-modal-actions {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 @media (max-width: 1120px) {
   .dashboard-topbar,
   .dashboard-shell {
@@ -3101,6 +3157,10 @@ main,
   .panel-title {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .panel-actions {
+    justify-content: flex-start;
   }
 
   .dashboard-grid.two,
