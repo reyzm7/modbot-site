@@ -105,8 +105,9 @@
       <button class="dash-nav" type="button" data-dashboard-tab="personalization"><span>05</span>🎨 Personnalisation</button>
       <button class="dash-nav" type="button" data-dashboard-tab="moderation"><span>06</span>⚒️ Modération</button>
       <button class="dash-nav" type="button" data-dashboard-tab="language"><span>07</span>🌍 Langue</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="ratings"><span>08</span>⭐ Ratings</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="logs"><span>09</span>🧾 Logs</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="socials"><span>08</span>📣 Réseaux</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="ratings"><span>09</span>⭐ Ratings</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="logs"><span>10</span>🧾 Logs</button>
     </aside>
 
     <section class="dashboard-content">
@@ -151,6 +152,7 @@
               <button type="button" data-dashboard-jump="security">🛡️ Sécurité serveur</button>
               <button type="button" data-dashboard-jump="channels">📌 Choisir les salons</button>
               <button type="button" data-dashboard-jump="personalization">🎨 Identité visuelle</button>
+              <button type="button" data-dashboard-jump="socials">📣 Relais réseaux</button>
             </div>
           </div>
 
@@ -161,6 +163,7 @@
               <li>💾 Sauvegarde vers l’API du bot</li>
               <li>🧭 Liste réelle des serveurs</li>
               <li>👁️ Prévisualisation synchronisée avec Discord</li>
+              <li>📣 Surveillance des posts réseaux sociaux</li>
             </ul>
           </div>
         </div>
@@ -286,13 +289,16 @@
             <p class="eyebrow">🎨 Personnalisation</p>
             <h2>Identité des embeds</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset ModBot</button>
+          <div class="panel-actions">
+            <button class="secondary-btn compact" type="button" data-cancel-personalization>↩️ Annuler les changements</button>
+            <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset ModBot</button>
+          </div>
         </div>
 
         <div class="dashboard-grid two">
           <form class="tool-panel form-panel">
             <label>Nom affiché serveur
-              <input type="text" value="ModBot">
+              <input type="text" value="ModBot" data-personalization-name>
             </label>
             <label class="file-field">Logo embed
               <input type="file" accept="image/*" data-file-input="logo">
@@ -309,7 +315,7 @@
               </span>
             </label>
             <label>Footer
-              <input type="text" value="ModBot - Protection de votre communauté">
+              <input type="text" value="ModBot - Protection de votre communauté" data-personalization-footer>
             </label>
             <div class="color-row">
               <button type="button" class="color-swatch is-selected" style="--swatch:#5865F2" data-color="#5865F2"></button>
@@ -323,10 +329,10 @@
             <h3>👁️ Aperçu embed</h3>
             <div class="discord-embed embed-with-thumb live-color-preview">
               <span class="embed-thumb"><img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';"></span>
-              <h3>Panel ModBot</h3>
+              <h3 data-personalization-preview-title>Panel ModBot</h3>
               <p>Configuration serveur, tickets, sécurité et statistiques.</p>
               <img class="preview-banner" src="assets/default_banner.png" alt="">
-              <p class="embed-footer">ModBot - Protection de votre communauté</p>
+              <p class="embed-footer" data-personalization-preview-footer>ModBot - Protection de votre communauté</p>
             </div>
           </div>
         </div>
@@ -376,6 +382,107 @@
               <option>Staff strict</option>
             </select>
           </label>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="socials">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow">📣 Réseaux sociaux</p>
+            <h2>Relais automatique des publications</h2>
+          </div>
+          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset réseaux</button>
+        </div>
+
+        <div class="tool-panel social-info">
+          <strong>🔔 Principe</strong>
+          <p>Ajoute le lien du compte et l’ID du salon Discord. Quand ce module sera branché au bot, chaque nouveau post sera relayé automatiquement dans le salon choisi pour la plateforme.</p>
+        </div>
+
+        <div class="social-grid">
+          <article class="social-card" data-social-platform="Twitter/X">
+            <div class="social-card-head">
+              <span class="social-icon">𝕏</span>
+              <div>
+                <h3>Twitter / X</h3>
+                <p>Posts, annonces et threads publics.</p>
+              </div>
+              <span class="state inactive" data-social-state>⚪ Inactif</span>
+            </div>
+            <label>Lien du compte
+              <input type="url" placeholder="https://x.com/ton_compte" data-social-link>
+            </label>
+            <label>Salon de publication
+              <input type="text" placeholder="ID du salon Discord" data-social-channel>
+            </label>
+            <div class="social-actions">
+              <label class="mini-toggle"><input type="checkbox" data-social-enabled><span></span>Activer</label>
+              <button class="secondary-btn compact" type="button" data-social-test>🧪 Tester</button>
+            </div>
+          </article>
+
+          <article class="social-card" data-social-platform="TikTok">
+            <div class="social-card-head">
+              <span class="social-icon">🎵</span>
+              <div>
+                <h3>TikTok</h3>
+                <p>Nouvelles vidéos et clips publiés.</p>
+              </div>
+              <span class="state inactive" data-social-state>⚪ Inactif</span>
+            </div>
+            <label>Lien du compte
+              <input type="url" placeholder="https://www.tiktok.com/@ton_compte" data-social-link>
+            </label>
+            <label>Salon de publication
+              <input type="text" placeholder="ID du salon Discord" data-social-channel>
+            </label>
+            <div class="social-actions">
+              <label class="mini-toggle"><input type="checkbox" data-social-enabled><span></span>Activer</label>
+              <button class="secondary-btn compact" type="button" data-social-test>🧪 Tester</button>
+            </div>
+          </article>
+
+          <article class="social-card" data-social-platform="Twitch">
+            <div class="social-card-head">
+              <span class="social-icon">🟣</span>
+              <div>
+                <h3>Twitch</h3>
+                <p>Annonce live, rediffusion ou nouveau contenu.</p>
+              </div>
+              <span class="state inactive" data-social-state>⚪ Inactif</span>
+            </div>
+            <label>Lien du compte
+              <input type="url" placeholder="https://www.twitch.tv/ton_compte" data-social-link>
+            </label>
+            <label>Salon de publication
+              <input type="text" placeholder="ID du salon Discord" data-social-channel>
+            </label>
+            <div class="social-actions">
+              <label class="mini-toggle"><input type="checkbox" data-social-enabled><span></span>Activer</label>
+              <button class="secondary-btn compact" type="button" data-social-test>🧪 Tester</button>
+            </div>
+          </article>
+
+          <article class="social-card" data-social-platform="Instagram">
+            <div class="social-card-head">
+              <span class="social-icon">📸</span>
+              <div>
+                <h3>Instagram</h3>
+                <p>Posts, reels et annonces publiques.</p>
+              </div>
+              <span class="state inactive" data-social-state>⚪ Inactif</span>
+            </div>
+            <label>Lien du compte
+              <input type="url" placeholder="https://www.instagram.com/ton_compte" data-social-link>
+            </label>
+            <label>Salon de publication
+              <input type="text" placeholder="ID du salon Discord" data-social-channel>
+            </label>
+            <div class="social-actions">
+              <label class="mini-toggle"><input type="checkbox" data-social-enabled><span></span>Activer</label>
+              <button class="secondary-btn compact" type="button" data-social-test>🧪 Tester</button>
+            </div>
+          </article>
         </div>
       </section>
 
