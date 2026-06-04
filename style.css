@@ -2395,7 +2395,7 @@ main,
   text-align: left;
 }
 
-.server-card img {
+.server-logo {
   width: 72px;
   height: 72px;
   object-fit: contain;
@@ -2457,7 +2457,7 @@ main,
 .dashboard-server {
   min-width: 0;
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr);
+  grid-template-columns: auto 34px auto minmax(0, 1fr);
   align-items: center;
   gap: 10px;
   padding: 8px 10px;
@@ -2480,6 +2480,30 @@ main,
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.server-current-logo,
+.server-summary img {
+  width: 34px;
+  height: 34px;
+  padding: 2px;
+  border: 1px solid rgba(158, 110, 255, 0.36);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(139, 92, 246, 0.22));
+}
+
+.server-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.server-summary img {
+  width: 30px;
+  height: 30px;
 }
 
 .dashboard-server select,
