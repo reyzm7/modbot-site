@@ -192,6 +192,9 @@ button {
 .nav-cta,
 .primary-btn,
 .secondary-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   min-height: 44px;
   display: inline-flex;
   align-items: center;
@@ -225,6 +228,33 @@ button {
   box-shadow:
     0 18px 38px rgba(139, 92, 246, 0.38),
     0 0 32px rgba(177, 92, 255, 0.28);
+}
+
+.hero-actions a[href="dashboard.html"] {
+  border-color: rgba(167, 139, 250, 0.58);
+  background:
+    linear-gradient(135deg, rgba(139, 92, 246, 0.22), rgba(88, 101, 242, 0.08)),
+    rgba(255, 255, 255, 0.055);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.035) inset,
+    0 0 26px rgba(139, 92, 246, 0.18);
+}
+
+.hero-actions a[href="dashboard.html"]::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.24), transparent 78%);
+  opacity: 0;
+  transform: translateX(-45%);
+  transition: opacity 0.18s ease, transform 0.42s ease;
+  pointer-events: none;
+}
+
+.hero-actions a[href="dashboard.html"]:hover::after {
+  opacity: 1;
+  transform: translateX(45%);
 }
 
 .nav-toggle {
@@ -2238,6 +2268,173 @@ main,
     linear-gradient(180deg, #05020d 0%, #080411 100%);
 }
 
+.dashboard-page [hidden] {
+  display: none !important;
+}
+
+.dashboard-page button,
+.dashboard-page .primary-btn,
+.dashboard-page .secondary-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.dashboard-auth,
+.server-picker {
+  width: min(100% - 28px, 1080px);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 54px 0;
+  display: grid;
+  place-items: center;
+}
+
+.auth-card,
+.server-picker-card {
+  width: min(100%, 760px);
+  padding: clamp(24px, 5vw, 46px);
+  border: 1px solid rgba(158, 110, 255, 0.34);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.02)),
+    rgba(13, 7, 29, 0.86);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.035) inset,
+    0 26px 80px rgba(0, 0, 0, 0.48),
+    0 0 60px rgba(139, 92, 246, 0.22);
+  text-align: center;
+}
+
+.server-picker-card {
+  width: min(100%, 980px);
+  text-align: left;
+}
+
+.auth-logo {
+  width: min(260px, 70vw);
+  margin: 0 auto 18px;
+  display: block;
+  filter: drop-shadow(0 18px 35px rgba(139, 92, 246, 0.34));
+}
+
+.dashboard-auth h1,
+.server-picker h1 {
+  margin: 0 0 16px;
+  font-size: clamp(2.3rem, 6vw, 4.4rem);
+  line-height: 0.95;
+}
+
+.dashboard-auth p:not(.eyebrow),
+.server-picker p:not(.eyebrow) {
+  max-width: 620px;
+  margin: 0 auto 24px;
+  color: var(--soft);
+  line-height: 1.7;
+}
+
+.server-picker-card p:not(.eyebrow) {
+  margin-left: 0;
+}
+
+.discord-login-btn,
+.server-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(158, 110, 255, 0.38);
+  border-radius: var(--radius);
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(88, 101, 242, 0.3), rgba(177, 92, 255, 0.2)),
+    rgba(255, 255, 255, 0.045);
+  box-shadow:
+    0 18px 42px rgba(88, 101, 242, 0.22),
+    0 0 34px rgba(139, 92, 246, 0.18);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.discord-login-btn {
+  min-height: 54px;
+  padding: 0 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 900;
+}
+
+.discord-login-btn span {
+  color: #c9b8ff;
+}
+
+.auth-return {
+  display: block;
+  width: fit-content;
+  margin: 16px auto 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.server-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.server-card {
+  min-height: 150px;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+}
+
+.server-card img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 18px rgba(139, 92, 246, 0.28));
+}
+
+.server-card strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.server-card small {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.discord-login-btn:hover,
+.server-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(205, 184, 255, 0.7);
+  box-shadow:
+    0 22px 54px rgba(88, 101, 242, 0.3),
+    0 0 42px rgba(139, 92, 246, 0.28);
+}
+
+.button-ripple {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.42);
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  animation: dashboardRipple 0.55s ease-out forwards;
+}
+
+@keyframes dashboardRipple {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(14);
+  }
+}
+
 .dashboard-topbar {
   position: sticky;
   top: 0;
@@ -2268,6 +2465,17 @@ main,
 .dashboard-server label {
   color: var(--muted);
   font-size: 0.82rem;
+}
+
+.dashboard-server span:not(.server-dot) {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.dashboard-server strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dashboard-server select,
@@ -2509,11 +2717,22 @@ main,
 
 .quick-grid button,
 .option-row button {
+  position: relative;
+  overflow: hidden;
   min-height: 40px;
   border: 1px solid rgba(158, 110, 255, 0.22);
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.055);
   color: var(--text);
+  transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
+}
+
+.quick-grid button:hover,
+.option-row button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(205, 184, 255, 0.56);
+  background: rgba(139, 92, 246, 0.16);
+  box-shadow: 0 12px 28px rgba(139, 92, 246, 0.18);
 }
 
 .check-list {
@@ -2594,11 +2813,73 @@ main,
 }
 
 .option-row {
-  grid-template-columns: 44px minmax(120px, 0.8fr) minmax(180px, 1.4fr) 110px;
+  grid-template-columns: 44px 66px minmax(120px, 0.8fr) minmax(180px, 1.4fr) 110px;
 }
 
 .option-row span {
   color: var(--muted);
+}
+
+.emoji-input,
+.emoji-input-wide {
+  text-align: center;
+  font-size: 1.08rem;
+}
+
+.emoji-input-wide {
+  max-width: 96px;
+}
+
+.file-field {
+  position: relative;
+}
+
+.file-field input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.file-control {
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid rgba(158, 110, 255, 0.28);
+  border-radius: var(--radius);
+  background: rgba(6, 3, 14, 0.76);
+  cursor: pointer;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.file-control:hover {
+  transform: translateY(-1px);
+  border-color: rgba(205, 184, 255, 0.6);
+  box-shadow: 0 12px 30px rgba(139, 92, 246, 0.16);
+}
+
+.file-button {
+  min-height: 32px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #5865f2, #a855f7);
+  color: white;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.file-name {
+  overflow: hidden;
+  color: var(--muted);
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .toggle-grid {
@@ -2787,7 +3068,8 @@ main,
   }
 
   .metric-grid,
-  .toggle-grid {
+  .toggle-grid,
+  .server-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -2821,6 +3103,7 @@ main,
   .dashboard-grid.three,
   .metric-grid,
   .toggle-grid,
+  .server-grid,
   .form-row,
   .sanction-flow {
     grid-template-columns: 1fr;
@@ -2829,5 +3112,14 @@ main,
   .option-row,
   .channel-row {
     grid-template-columns: 1fr;
+  }
+
+  .server-card,
+  .file-control {
+    grid-template-columns: 1fr;
+  }
+
+  .file-button {
+    justify-content: center;
   }
 }
