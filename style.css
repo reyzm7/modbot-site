@@ -2970,6 +2970,124 @@ main,
   white-space: nowrap;
 }
 
+.social-info {
+  margin-bottom: 14px;
+}
+
+.social-info strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.social-info p {
+  color: var(--soft);
+  line-height: 1.6;
+}
+
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.social-card {
+  padding: 18px;
+  display: grid;
+  gap: 14px;
+  border: 1px solid rgba(158, 110, 255, 0.24);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+    rgba(18, 12, 34, 0.72);
+  box-shadow: 0 14px 40px rgba(8, 3, 20, 0.24);
+}
+
+.social-card-head {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.social-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(158, 110, 255, 0.34);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.065);
+  font-size: 1.35rem;
+  box-shadow: 0 0 24px rgba(139, 92, 246, 0.16);
+}
+
+.social-card h3 {
+  margin: 0 0 4px;
+}
+
+.social-card p,
+.social-card label {
+  color: var(--soft);
+}
+
+.social-card label {
+  display: grid;
+  gap: 8px;
+  font-size: 0.88rem;
+}
+
+.social-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.mini-toggle {
+  display: inline-flex !important;
+  grid-template-columns: none !important;
+  align-items: center;
+  gap: 10px;
+  color: var(--text) !important;
+  font-weight: 900;
+}
+
+.mini-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mini-toggle span {
+  width: 42px;
+  height: 24px;
+  position: relative;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.mini-toggle span::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.mini-toggle input:checked + span {
+  background: rgba(101, 245, 150, 0.18);
+}
+
+.mini-toggle input:checked + span::after {
+  transform: translateX(18px);
+  background: var(--green);
+}
+
 .toggle-grid {
   grid-template-columns: repeat(5, minmax(150px, 1fr));
 }
@@ -3198,7 +3316,8 @@ main,
 
   .metric-grid,
   .toggle-grid,
-  .server-grid {
+  .server-grid,
+  .social-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -3240,6 +3359,7 @@ main,
   .metric-grid,
   .toggle-grid,
   .server-grid,
+  .social-grid,
   .form-row,
   .sanction-flow {
     grid-template-columns: 1fr;
