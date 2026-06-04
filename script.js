@@ -53,11 +53,33 @@ const assistantAnswers = {
 };
 
 function resetInitialScroll() {
-  if (window.location.hash) return;
+  if (window.location.hash) {
+    document.documentElement.classList.remove("site-is-loading");
+    return;
+  }
 
-  window.scrollTo(0, 0);
-  window.addEventListener("load", () => window.scrollTo(0, 0), { once: true });
-  window.setTimeout(() => window.scrollTo(0, 0), 80);
+  const forceTop = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  };
+
+  forceTop();
+
+  // Plusieurs passages courts empêchent le navigateur de restaurer
+  // automatiquement l'ancienne position au milieu ou en bas de la page.
+  window.addEventListener("load", forceTop, { once: true });
+  window.addEventListener("pageshow", forceTop, { once: true });
+
+  [40, 120, 260, 520].forEach((delay) => {
+    window.setTimeout(forceTop, delay);
+  });
+
+  window.addEventListener("load", () => {
+    window.setTimeout(() => {
+      document.documentElement.classList.remove("site-is-loading");
+    }, 120);
+  }, { once: true });
 }
 
 function initStarfield() {
