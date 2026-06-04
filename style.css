@@ -161,7 +161,8 @@ button {
 .assistant-avatar img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  padding: 2px;
+  object-fit: contain;
 }
 
 .brand-fallback::before,
@@ -1860,13 +1861,16 @@ main {
 }
 
 .embed-thumb img {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  padding: 4px;
+  object-fit: contain;
 }
 
 .embed-thumb::before {
-  content: "ModBot";
+  content: "";
   color: var(--soft);
   font-size: 0.74rem;
   font-weight: 900;
