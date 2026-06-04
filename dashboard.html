@@ -158,7 +158,10 @@
             <p class="eyebrow">🎫 Tickets</p>
             <h2>Message public et options</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset tickets</button>
+          <div class="panel-actions">
+            <button class="primary-btn compact ticket-publish-btn" type="button" data-publish-ticket hidden>🚀 Publier</button>
+            <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset tickets</button>
+          </div>
         </div>
 
         <div class="dashboard-grid two">
@@ -180,7 +183,7 @@
             </label>
             <div class="form-row">
               <label>Salon ticket
-                <input type="text" value="1510600280016818357">
+                <input type="text" value="1510600280016818357" data-ticket-channel>
               </label>
               <label>Rôle support
                 <input type="text" value="@Support Ticket">
@@ -400,6 +403,18 @@
   </div>
 
   <div class="dashboard-toast" id="dashboardToast" aria-live="polite">Configuration enregistrée</div>
+
+  <div class="dashboard-modal" data-unsaved-modal hidden role="dialog" aria-modal="true" aria-labelledby="unsavedTitle">
+    <div class="dashboard-modal-card">
+      <p class="eyebrow">⚠️ Modifications non sauvegardées</p>
+      <h2 id="unsavedTitle">Veuillez sauvegarder ce que vous avez fait</h2>
+      <p>Tu as modifié cette partie du dashboard. Choisis quoi faire avant de changer de configuration.</p>
+      <div class="dashboard-modal-actions">
+        <button class="primary-btn compact" type="button" data-unsaved-save>💾 Sauvegarder</button>
+        <button class="secondary-btn compact" type="button" data-unsaved-discard>🗑️ Laisser tomber</button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
