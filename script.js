@@ -164,7 +164,7 @@ function initStarfield() {
 
 function getCommandMarkup(command) {
   const data = commandResponses[command] || commandResponses.panel;
-  const thumb = `<span class="embed-thumb"><img src="logo.png" alt="" onerror="this.remove()"></span>`;
+  const thumb = `<span class="embed-thumb"><img src="assets/default_logo.png" alt="" onerror="this.remove()"></span>`;
   let embedContent = "";
 
   if (data.type === "panel") {
@@ -264,7 +264,7 @@ function getCommandMarkup(command) {
   return `
     <div class="discord-command-preview">
       <div class="discord-message">
-        <span class="discord-avatar"><img src="logo.png" alt="" onerror="this.remove()">MB</span>
+        <span class="discord-avatar"><img src="assets/default_logo.png" alt="" onerror="this.remove()">MB</span>
         <div>
           <div class="discord-meta">
             <span class="used-command">LGCY a utilisé</span>
@@ -466,6 +466,129 @@ function initRevealAnimations() {
   observeReveals();
 }
 
+function initDashboard() {
+  const dashboard = document.querySelector(".dashboard-page");
+  if (!dashboard) return;
+
+  const tabs = document.querySelectorAll("[data-dashboard-tab]");
+  const panels = document.querySelectorAll("[data-dashboard-panel]");
+  const toast = document.getElementById("dashboardToast");
+  let toastTimer;
+
+  function showToast(message) {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add("is-visible");
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 2200);
+  }
+
+  function openPanel(panelName) {
+    tabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.dashboardTab === panelName));
+    panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.dashboardPanel === panelName));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => openPanel(tab.dataset.dashboardTab));
+  });
+
+  document.querySelectorAll("[data-dashboard-jump]").forEach((button) => {
+    button.addEventListener("click", () => openPanel(button.dataset.dashboardJump));
+  });
+
+  document.querySelectorAll("[data-dashboard-save]").forEach((button) => {
+    button.addEventListener("click", () => showToast("Configuration enregistrée dans la maquette"));
+  });
+
+  document.querySelectorAll("[data-reset-section]").forEach((button) => {
+    button.addEventListener("click", () => showToast("Section réinitialisée"));
+  });
+
+  document.querySelectorAll(".toggle-line input[type='checkbox']").forEach((checkbox) => {
+    const line = checkbox.closest(".toggle-line");
+    const syncToggle = () => line?.classList.toggle("is-on", checkbox.checked);
+    syncToggle();
+    checkbox.addEventListener("change", () => {
+      syncToggle();
+      showToast(checkbox.checked ? "Module activé" : "Module désactivé");
+    });
+  });
+
+  const previewTitle = document.querySelector("[data-preview-title]");
+  const previewDescription = document.querySelector("[data-preview-desc]");
+  const liveTitle = document.querySelector("[data-live-title]");
+  const liveDescription = document.querySelector("[data-live-desc]");
+
+  previewTitle?.addEventListener("input", () => {
+    if (liveTitle) liveTitle.textContent = previewTitle.value || "Ouvre ton ticket";
+  });
+
+  previewDescription?.addEventListener("input", () => {
+    if (liveDescription) liveDescription.textContent = previewDescription.value || "Merci de sélectionner la raison de ta demande.";
+  });
+
+  const optionList = document.getElementById("ticketOptionList");
+  const addOptionButton = document.querySelector("[data-add-ticket-option]");
+
+  addOptionButton?.addEventListener("click", () => {
+    if (!optionList) return;
+    const count = optionList.querySelectorAll(".option-row").length + 1;
+    const option = document.createElement("div");
+    option.className = "option-row";
+    option.innerHTML = `
+      <span>${String(count).padStart(2, "0")}</span>
+      <input type="text" value="Nouvelle option">
+      <input type="text" value="Description de l'option">
+      <button type="button">Supprimer</button>
+    `;
+    optionList.appendChild(option);
+    showToast("Option de ticket ajoutée");
+  });
+
+  optionList?.addEventListener("click", (event) => {
+    const button = event.target.closest("button");
+    if (!button) return;
+    const rows = optionList.querySelectorAll(".option-row");
+    if (rows.length <= 1) {
+      showToast("Il faut garder au moins une option");
+      return;
+    }
+    button.closest(".option-row")?.remove();
+    optionList.querySelectorAll(".option-row span").forEach((label, index) => {
+      label.textContent = String(index + 1).padStart(2, "0");
+    });
+    showToast("Option supprimée");
+  });
+
+  const colorPreview = document.querySelector(".live-color-preview");
+  document.querySelectorAll(".color-swatch").forEach((swatch) => {
+    swatch.addEventListener("click", () => {
+      document.querySelectorAll(".color-swatch").forEach((item) => item.classList.remove("is-selected"));
+      swatch.classList.add("is-selected");
+      colorPreview?.style.setProperty("--dashboard-accent", swatch.dataset.color || "#5865F2");
+      showToast("Couleur d'embed mise à jour");
+    });
+  });
+
+  const personalization = document.querySelector("[data-dashboard-panel='personalization']");
+  const fileInputs = personalization ? personalization.querySelectorAll("input[type='file']") : [];
+  const liveLogo = personalization?.querySelector(".embed-thumb img");
+  const liveBanner = personalization?.querySelector(".preview-banner");
+
+  fileInputs[0]?.addEventListener("change", () => {
+    const file = fileInputs[0].files?.[0];
+    if (file && liveLogo) liveLogo.src = URL.createObjectURL(file);
+    showToast("Logo ajouté à l'aperçu");
+  });
+
+  fileInputs[1]?.addEventListener("change", () => {
+    const file = fileInputs[1].files?.[0];
+    if (file && liveBanner) liveBanner.src = URL.createObjectURL(file);
+    showToast("Bannière ajoutée à l'aperçu");
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   resetInitialScroll();
   initStarfield();
@@ -474,4 +597,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initDemo();
   initAssistant();
   initRevealAnimations();
+  initDashboard();
 });
