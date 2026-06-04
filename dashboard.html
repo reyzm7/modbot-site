@@ -13,6 +13,58 @@
   <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
   <div class="page-glow" aria-hidden="true"></div>
 
+  <main class="dashboard-auth" data-auth-screen>
+    <section class="auth-card">
+      <img class="auth-logo" src="assets/default_logo.png" alt="ModBot">
+      <p class="eyebrow">Connexion dashboard</p>
+      <h1>Connecte-toi avec Discord</h1>
+      <p>Le dashboard affichera ensuite uniquement les serveurs où tu as accès à la configuration ModBot.</p>
+      <button class="discord-login-btn" type="button" data-dashboard-login>
+        <span>💬</span>
+        Se connecter avec Discord
+      </button>
+      <a class="auth-return" href="index.html">Retour au site</a>
+    </section>
+  </main>
+
+  <main class="server-picker" data-server-screen hidden>
+    <section class="server-picker-card">
+      <div class="panel-title">
+        <div>
+          <p class="eyebrow">🧭 Choix du serveur</p>
+          <h1>Sélectionne un serveur</h1>
+          <p>Seuls les serveurs autorisés apparaîtront ici quand la connexion Discord sera branchée.</p>
+        </div>
+        <button class="secondary-btn compact" type="button" data-auth-back>↩️ Retour</button>
+      </div>
+
+      <div class="server-grid">
+        <button class="server-card" type="button" data-server-name="Hote BOT - ModBot">
+          <img src="assets/default_logo.png" alt="">
+          <span>
+            <strong>Hote BOT - ModBot</strong>
+            <small>Administrateur • Premium actif</small>
+          </span>
+        </button>
+        <button class="server-card" type="button" data-server-name="VPG Belgique">
+          <img src="assets/default_logo.png" alt="">
+          <span>
+            <strong>VPG Belgique</strong>
+            <small>Manager • Tickets configurés</small>
+          </span>
+        </button>
+        <button class="server-card" type="button" data-server-name="Serveur test">
+          <img src="assets/default_logo.png" alt="">
+          <span>
+            <strong>Serveur test</strong>
+            <small>Owner • Maquette</small>
+          </span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <div class="dashboard-app" data-dashboard-app hidden>
   <header class="dashboard-topbar">
     <a class="brand" href="index.html" aria-label="Retour au site ModBot">
       <span class="brand-mark">
@@ -23,81 +75,78 @@
 
     <div class="dashboard-server">
       <span class="server-dot"></span>
-      <label for="serverSelect">Serveur</label>
-      <select id="serverSelect">
-        <option>Hote BOT - ModBot</option>
-        <option>VPG Belgique</option>
-        <option>Serveur test</option>
-      </select>
+      <span>Serveur actif</span>
+      <strong data-current-server>Hote BOT - ModBot</strong>
     </div>
 
     <div class="dashboard-actions">
-      <button class="secondary-btn compact" type="button" data-dashboard-save>Enregistrer</button>
-      <a class="primary-btn compact" href="index.html">Retour au site</a>
+      <button class="secondary-btn compact" type="button" data-change-server>🔁 Changer de serveur</button>
+      <button class="secondary-btn compact" type="button" data-dashboard-save>💾 Enregistrer</button>
+      <a class="primary-btn compact" href="index.html">🏠 Retour au site</a>
     </div>
   </header>
 
   <main class="dashboard-shell">
     <aside class="dashboard-sidebar" aria-label="Navigation dashboard">
       <p class="sidebar-label">Configuration</p>
-      <button class="dash-nav is-active" type="button" data-dashboard-tab="overview"><span>01</span>Vue globale</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span>02</span>Tickets</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="security"><span>03</span>Sécurité</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="channels"><span>04</span>Salons</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="personalization"><span>05</span>Personnalisation</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="moderation"><span>06</span>Modération</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="language"><span>07</span>Langue</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="ratings"><span>08</span>Ratings</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="logs"><span>09</span>Logs</button>
+      <button class="dash-nav is-active" type="button" data-dashboard-tab="overview"><span>01</span>📊 Vue globale</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span>02</span>🎫 Tickets</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="security"><span>03</span>🛡️ Sécurité</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="channels"><span>04</span>📌 Salons</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="personalization"><span>05</span>🎨 Personnalisation</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="moderation"><span>06</span>⚒️ Modération</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="language"><span>07</span>🌍 Langue</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="ratings"><span>08</span>⭐ Ratings</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="logs"><span>09</span>🧾 Logs</button>
     </aside>
 
     <section class="dashboard-content">
       <div class="dashboard-banner">
         <div>
-          <p class="eyebrow">Dashboard maquette</p>
+          <p class="eyebrow">⚡ Dashboard maquette</p>
           <h1>Centre de contrôle ModBot</h1>
-          <p>Interface non connectée au bot pour visualiser la future configuration serveur.</p>
+          <p>Configuration du serveur <strong data-current-server-label>Hote BOT - ModBot</strong>.</p>
         </div>
         <div class="health-pill">
           <span></span>
-          Maquette active
+          🟢 Maquette active
         </div>
       </div>
 
       <section class="dash-panel is-active" data-dashboard-panel="overview">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">Résumé</p>
+            <p class="eyebrow">📊 Résumé</p>
             <h2>État du serveur</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>Réinitialiser la vue</button>
+          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Réinitialiser la vue</button>
         </div>
 
         <div class="metric-grid">
-          <article class="metric-card"><span>Tickets</span><strong>Actif</strong><small>4 catégories configurées</small></article>
-          <article class="metric-card"><span>Sécurité</span><strong>3/5</strong><small>Modules actifs</small></article>
-          <article class="metric-card"><span>Salons</span><strong>5</strong><small>Salons renseignés</small></article>
-          <article class="metric-card"><span>Ratings</span><strong>4.8/5</strong><small>24 évaluations</small></article>
+          <article class="metric-card"><span>🎫 Tickets</span><strong>Actif</strong><small>4 catégories configurées</small></article>
+          <article class="metric-card"><span>🛡️ Sécurité</span><strong>3/5</strong><small>Modules actifs</small></article>
+          <article class="metric-card"><span>📌 Salons</span><strong>5</strong><small>Salons renseignés</small></article>
+          <article class="metric-card"><span>⭐ Ratings</span><strong>4.8/5</strong><small>24 évaluations</small></article>
         </div>
 
         <div class="dashboard-grid two">
           <div class="tool-panel">
-            <h3>Actions rapides</h3>
+            <h3>⚡ Actions rapides</h3>
             <div class="quick-grid">
-              <button type="button" data-dashboard-jump="tickets">Configurer tickets</button>
-              <button type="button" data-dashboard-jump="security">Sécurité serveur</button>
-              <button type="button" data-dashboard-jump="channels">Choisir les salons</button>
-              <button type="button" data-dashboard-jump="personalization">Identité visuelle</button>
+              <button type="button" data-dashboard-jump="tickets">🎫 Configurer tickets</button>
+              <button type="button" data-dashboard-jump="security">🛡️ Sécurité serveur</button>
+              <button type="button" data-dashboard-jump="channels">📌 Choisir les salons</button>
+              <button type="button" data-dashboard-jump="personalization">🎨 Identité visuelle</button>
             </div>
           </div>
 
           <div class="tool-panel">
-            <h3>À connecter plus tard</h3>
+            <h3>🔌 À connecter plus tard</h3>
             <ul class="check-list">
-              <li>Connexion Discord OAuth</li>
-              <li>Sauvegarde vers l’API du bot</li>
-              <li>Liste réelle des serveurs</li>
-              <li>Prévisualisation synchronisée avec Discord</li>
+              <li>💬 Connexion Discord OAuth</li>
+              <li>💾 Sauvegarde vers l’API du bot</li>
+              <li>🧭 Liste réelle des serveurs</li>
+              <li>👁️ Prévisualisation synchronisée avec Discord</li>
             </ul>
           </div>
         </div>
@@ -106,10 +155,10 @@
       <section class="dash-panel" data-dashboard-panel="tickets">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">Tickets</p>
+            <p class="eyebrow">🎫 Tickets</p>
             <h2>Message public et options</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>Reset tickets</button>
+          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset tickets</button>
         </div>
 
         <div class="dashboard-grid two">
@@ -119,6 +168,9 @@
             </label>
             <label>Titre
               <input type="text" value="Ouvre ton ticket" data-preview-title>
+            </label>
+            <label>Emoji du message
+              <input class="emoji-input-wide" type="text" value="📩" maxlength="3" data-preview-emoji>
             </label>
             <label>Description
               <textarea data-preview-desc>Merci de sélectionner la raison de ta demande via le menu. Un membre du staff viendra rapidement te répondre.</textarea>
@@ -137,16 +189,16 @@
           </form>
 
           <div class="tool-panel preview-panel">
-            <h3>Aperçu Discord</h3>
+            <h3>👁️ Aperçu Discord</h3>
             <div class="ticket-preview">
               <div class="discord-embed embed-with-thumb">
                 <span class="embed-thumb"><img src="assets/default_logo.png" alt=""></span>
-                <h3 data-live-title>Ouvre ton ticket</h3>
+                <h3><span data-live-ticket-emoji>📩</span> <span data-live-title>Ouvre ton ticket</span></h3>
                 <p data-live-desc>Merci de sélectionner la raison de ta demande via le menu. Un membre du staff viendra rapidement te répondre.</p>
                 <div class="embed-actions">
-                  <span class="action-blue">Support technique</span>
-                  <span class="action-dark">Question</span>
-                  <span class="action-red">Déban</span>
+                  <span class="action-blue">🛠️ Support technique</span>
+                  <span class="action-dark">❓ Question</span>
+                  <span class="action-red">🔒 Déban</span>
                 </div>
                 <img class="preview-banner" src="assets/default_banner.png" alt="">
                 <p class="embed-footer">ModBot - Protection de votre communauté</p>
@@ -158,13 +210,13 @@
         <div class="tool-panel">
           <div class="table-head">
             <h3>Options du menu</h3>
-            <button type="button" class="primary-btn compact" data-add-ticket-option>Ajouter</button>
+            <button type="button" class="primary-btn compact" data-add-ticket-option>➕ Ajouter</button>
           </div>
           <div class="option-list" id="ticketOptionList">
-            <div class="option-row"><span>01</span><input value="Support technique"><input value="Problème technique, bug ou aide"><button type="button">Supprimer</button></div>
-            <div class="option-row"><span>02</span><input value="Question"><input value="Poser une question au staff"><button type="button">Supprimer</button></div>
-            <div class="option-row"><span>03</span><input value="Déban"><input value="Contester un bannissement"><button type="button">Supprimer</button></div>
-            <div class="option-row"><span>04</span><input value="Administration"><input value="Demande administrative"><button type="button">Supprimer</button></div>
+            <div class="option-row"><span>01</span><input class="emoji-input" value="🛠️" maxlength="3"><input value="Support technique"><input value="Problème technique, bug ou aide"><button type="button">Supprimer</button></div>
+            <div class="option-row"><span>02</span><input class="emoji-input" value="❓" maxlength="3"><input value="Question"><input value="Poser une question au staff"><button type="button">Supprimer</button></div>
+            <div class="option-row"><span>03</span><input class="emoji-input" value="🔒" maxlength="3"><input value="Déban"><input value="Contester un bannissement"><button type="button">Supprimer</button></div>
+            <div class="option-row"><span>04</span><input class="emoji-input" value="📋" maxlength="3"><input value="Administration"><input value="Demande administrative"><button type="button">Supprimer</button></div>
           </div>
         </div>
       </section>
@@ -172,52 +224,52 @@
       <section class="dash-panel" data-dashboard-panel="security">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">Sécurité</p>
+            <p class="eyebrow">🛡️ Sécurité</p>
             <h2>Protections serveur</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>Tout désactiver</button>
+          <button class="secondary-btn compact" type="button" data-reset-section>🚫 Tout désactiver</button>
         </div>
 
         <div class="toggle-grid">
-          <label class="toggle-line"><input type="checkbox" checked><span></span><strong>Anti-lien</strong><small>Bloque les liens et invitations Discord.</small></label>
-          <label class="toggle-line"><input type="checkbox" checked><span></span><strong>Anti-spam</strong><small>Détecte les messages trop rapides.</small></label>
-          <label class="toggle-line"><input type="checkbox"><span></span><strong>Anti-raid</strong><small>Surveille les arrivées suspectes.</small></label>
-          <label class="toggle-line"><input type="checkbox"><span></span><strong>Staff alert</strong><small>Préviens le staff des actions importantes.</small></label>
-          <label class="toggle-line danger"><input type="checkbox"><span></span><strong>Lockdown</strong><small>Masque les salons en urgence.</small></label>
+          <label class="toggle-line"><input type="checkbox" checked><span></span><strong>🔗 Anti-lien</strong><small>Bloque les liens et invitations Discord.</small></label>
+          <label class="toggle-line"><input type="checkbox" checked><span></span><strong>💬 Anti-spam</strong><small>Détecte les messages trop rapides.</small></label>
+          <label class="toggle-line"><input type="checkbox"><span></span><strong>🚨 Anti-raid</strong><small>Surveille les arrivées suspectes.</small></label>
+          <label class="toggle-line"><input type="checkbox"><span></span><strong>📣 Staff alert</strong><small>Préviens le staff des actions importantes.</small></label>
+          <label class="toggle-line danger"><input type="checkbox"><span></span><strong>🔒 Lockdown</strong><small>Masque les salons en urgence.</small></label>
         </div>
 
         <div class="dashboard-grid three">
-          <label class="tool-panel mini-form">Messages max<input type="number" value="5"></label>
-          <label class="tool-panel mini-form">Fenêtre anti-spam<input type="number" value="5"></label>
-          <label class="tool-panel mini-form">Seuil ban<input type="number" value="4"></label>
+          <label class="tool-panel mini-form">💬 Messages max<input type="number" value="5"></label>
+          <label class="tool-panel mini-form">⏱️ Fenêtre anti-spam<input type="number" value="5"></label>
+          <label class="tool-panel mini-form">🔨 Seuil ban<input type="number" value="4"></label>
         </div>
       </section>
 
       <section class="dash-panel" data-dashboard-panel="channels">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">Salons</p>
+            <p class="eyebrow">📌 Salons</p>
             <h2>Routage des systèmes</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>Reset salons</button>
+          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset salons</button>
         </div>
 
         <div class="channel-table">
-          <div class="channel-row"><strong>Tickets</strong><input value="1510600280016818357"><span class="state active">Actif</span></div>
-          <div class="channel-row"><strong>Logs</strong><input value="1510422154725036062"><span class="state active">Actif</span></div>
-          <div class="channel-row"><strong>Suggestions</strong><input value="1510422091340709898"><span class="state active">Actif</span></div>
-          <div class="channel-row"><strong>Reports</strong><input value="1510422117290868926"><span class="state active">Actif</span></div>
-          <div class="channel-row"><strong>Staff alert</strong><input placeholder="ID du salon"><span class="state inactive">Inactif</span></div>
+          <div class="channel-row"><strong>🎫 Tickets</strong><input value="1510600280016818357"><span class="state active">🟢 Actif</span></div>
+          <div class="channel-row"><strong>🧾 Logs</strong><input value="1510422154725036062"><span class="state active">🟢 Actif</span></div>
+          <div class="channel-row"><strong>💡 Suggestions</strong><input value="1510422091340709898"><span class="state active">🟢 Actif</span></div>
+          <div class="channel-row"><strong>🚩 Reports</strong><input value="1510422117290868926"><span class="state active">🟢 Actif</span></div>
+          <div class="channel-row"><strong>📣 Staff alert</strong><input placeholder="ID du salon"><span class="state inactive">⚪ Inactif</span></div>
         </div>
       </section>
 
       <section class="dash-panel" data-dashboard-panel="personalization">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">Personnalisation</p>
+            <p class="eyebrow">🎨 Personnalisation</p>
             <h2>Identité des embeds</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>Reset ModBot</button>
+          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset ModBot</button>
         </div>
 
         <div class="dashboard-grid two">
@@ -225,11 +277,19 @@
             <label>Nom affiché serveur
               <input type="text" value="ModBot">
             </label>
-            <label>Logo embed
-              <input type="file" accept="image/*">
+            <label class="file-field">Logo embed
+              <input type="file" accept="image/*" data-file-input="logo">
+              <span class="file-control">
+                <span class="file-button">Choisir un logo</span>
+                <span class="file-name" data-file-name>Aucun fichier sélectionné</span>
+              </span>
             </label>
-            <label>Bannière embed
-              <input type="file" accept="image/*">
+            <label class="file-field">Bannière embed
+              <input type="file" accept="image/*" data-file-input="banner">
+              <span class="file-control">
+                <span class="file-button">Choisir une bannière</span>
+                <span class="file-name" data-file-name>Aucun fichier sélectionné</span>
+              </span>
             </label>
             <label>Footer
               <input type="text" value="ModBot - Protection de votre communauté">
@@ -243,7 +303,7 @@
           </form>
 
           <div class="tool-panel preview-panel">
-            <h3>Aperçu embed</h3>
+            <h3>👁️ Aperçu embed</h3>
             <div class="discord-embed embed-with-thumb live-color-preview">
               <span class="embed-thumb"><img src="assets/default_logo.png" alt=""></span>
               <h3>Panel ModBot</h3>
@@ -258,20 +318,20 @@
       <section class="dash-panel" data-dashboard-panel="moderation">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">Modération</p>
+            <p class="eyebrow">⚒️ Modération</p>
             <h2>Mots filtrés et sanctions</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>Reset modération</button>
+          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset modération</button>
         </div>
 
         <div class="dashboard-grid two">
           <div class="tool-panel">
-            <h3>Mots personnalisés</h3>
+            <h3>🚫 Mots personnalisés</h3>
             <textarea>spam, scam, insultes personnalisées</textarea>
           </div>
           <div class="tool-panel">
-            <h3>Progression sanctions</h3>
-            <div class="sanction-flow"><span>1 Warn</span><span>2 Mute 4h</span><span>3 Mute 24h</span><span>4 Ban</span></div>
+            <h3>⚡ Progression sanctions</h3>
+            <div class="sanction-flow"><span>⚠️ 1 Warn</span><span>🔇 2 Mute 4h</span><span>⏳ 3 Mute 24h</span><span>🔨 4 Ban</span></div>
           </div>
         </div>
       </section>
@@ -279,10 +339,10 @@
       <section class="dash-panel" data-dashboard-panel="language">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">Langue</p>
+            <p class="eyebrow">🌍 Langue</p>
             <h2>Textes du bot</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>Reset langue</button>
+          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset langue</button>
         </div>
 
         <div class="tool-panel form-panel narrow">
@@ -305,38 +365,39 @@
       <section class="dash-panel" data-dashboard-panel="ratings">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">Ratings</p>
+            <p class="eyebrow">⭐ Ratings</p>
             <h2>Qualité du support</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>Reset ratings</button>
+          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset ratings</button>
         </div>
 
         <div class="metric-grid">
-          <article class="metric-card"><span>Moyenne</span><strong>4.8/5</strong><small>Très positif</small></article>
-          <article class="metric-card"><span>Avis</span><strong>24</strong><small>Depuis 30 jours</small></article>
-          <article class="metric-card"><span>Tickets fermés</span><strong>63</strong><small>Ce mois-ci</small></article>
-          <article class="metric-card"><span>Réponse</span><strong>7 min</strong><small>Délai moyen</small></article>
+          <article class="metric-card"><span>⭐ Moyenne</span><strong>4.8/5</strong><small>Très positif</small></article>
+          <article class="metric-card"><span>💬 Avis</span><strong>24</strong><small>Depuis 30 jours</small></article>
+          <article class="metric-card"><span>✅ Tickets fermés</span><strong>63</strong><small>Ce mois-ci</small></article>
+          <article class="metric-card"><span>⏱️ Réponse</span><strong>7 min</strong><small>Délai moyen</small></article>
         </div>
       </section>
 
       <section class="dash-panel" data-dashboard-panel="logs">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">Logs</p>
+            <p class="eyebrow">🧾 Logs</p>
             <h2>Dernières actions</h2>
           </div>
-          <button class="secondary-btn compact" type="button">Exporter</button>
+          <button class="secondary-btn compact" type="button">📤 Exporter</button>
         </div>
 
         <div class="log-feed">
-          <div><span>20:42</span> Ticket support technique ouvert</div>
-          <div><span>20:35</span> Anti-lien activé</div>
-          <div><span>20:21</span> Message filtré et avertissement envoyé</div>
-          <div><span>20:10</span> Rôle support ticket modifié</div>
+          <div><span>20:42</span> 🎫 Ticket support technique ouvert</div>
+          <div><span>20:35</span> 🔗 Anti-lien activé</div>
+          <div><span>20:21</span> ⚠️ Message filtré et avertissement envoyé</div>
+          <div><span>20:10</span> 👥 Rôle support ticket modifié</div>
         </div>
       </section>
     </section>
   </main>
+  </div>
 
   <div class="dashboard-toast" id="dashboardToast" aria-live="polite">Configuration enregistrée</div>
 
