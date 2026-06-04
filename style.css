@@ -2208,3 +2208,24 @@ body {
     opacity: 1;
   }
 }
+
+/* Entrée propre au chargement : garde le même style, ajoute seulement une arrivée douce. */
+html.site-is-loading {
+  scroll-behavior: auto;
+}
+
+html.site-is-loading,
+html.site-is-loading body {
+  overflow-anchor: none;
+}
+
+html.site-is-loading main,
+html.site-is-loading .site-header {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+main,
+.site-header {
+  transition: opacity 0.62s ease, transform 0.62s cubic-bezier(.2,.8,.2,1);
+}
