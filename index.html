@@ -8,6 +8,30 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <!-- Aperçu du site quand le lien est partagé sur Discord / réseaux -->
+  <meta name="description" content="ModBot protège votre communauté Discord avec une modération intelligente, des tickets, des sanctions et une configuration personnalisée.">
+  <meta property="og:title" content="ModBot - Protection Discord intelligente">
+  <meta property="og:description" content="Automatisez la modération, gérez les tickets et protégez votre communauté Discord 24/7.">
+  <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://modbot-website.vercel.app/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ModBot - Protection Discord intelligente">
+  <meta name="twitter:description" content="La modération intelligente qui protège votre communauté Discord.">
+  <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.png">
+
+  <script>
+    document.documentElement.classList.add("site-is-loading");
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+    if (!location.hash) {
+      scrollTo(0, 0);
+    }
+  </script>
 </head>
 <body>
   <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
