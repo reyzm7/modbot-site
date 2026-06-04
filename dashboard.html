@@ -39,22 +39,22 @@
       </div>
 
       <div class="server-grid">
-        <button class="server-card" type="button" data-server-name="Hote BOT - ModBot">
-          <img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
+        <button class="server-card" type="button" data-server-name="Hote BOT - ModBot" data-server-logo="assets/default_logo.png">
+          <img class="server-logo" src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
           <span>
             <strong>Hote BOT - ModBot</strong>
             <small>Administrateur • Premium actif</small>
           </span>
         </button>
-        <button class="server-card" type="button" data-server-name="VPG Belgique">
-          <img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
+        <button class="server-card" type="button" data-server-name="VPG Belgique" data-server-logo="assets/default_logo.png">
+          <img class="server-logo" src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
           <span>
             <strong>VPG Belgique</strong>
             <small>Manager • Tickets configurés</small>
           </span>
         </button>
-        <button class="server-card" type="button" data-server-name="Serveur test">
-          <img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
+        <button class="server-card" type="button" data-server-name="Serveur test" data-server-logo="assets/default_logo.png">
+          <img class="server-logo" src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
           <span>
             <strong>Serveur test</strong>
             <small>Owner • Maquette</small>
@@ -75,6 +75,7 @@
 
     <div class="dashboard-server">
       <span class="server-dot"></span>
+      <img class="server-current-logo" src="assets/default_logo.png" alt="" data-current-server-logo onerror="this.onerror=null; this.src='logo.png';">
       <span>Serveur actif</span>
       <strong data-current-server>Hote BOT - ModBot</strong>
     </div>
@@ -105,7 +106,10 @@
         <div>
           <p class="eyebrow">⚡ Dashboard maquette</p>
           <h1>Centre de contrôle ModBot</h1>
-          <p>Configuration du serveur <strong data-current-server-label>Hote BOT - ModBot</strong>.</p>
+          <p class="server-summary">
+            <img src="assets/default_logo.png" alt="" data-current-server-logo-inline onerror="this.onerror=null; this.src='logo.png';">
+            Configuration du serveur <strong data-current-server-label>Hote BOT - ModBot</strong>.
+          </p>
         </div>
         <div class="health-pill">
           <span></span>
