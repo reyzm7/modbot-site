@@ -477,6 +477,7 @@ function initDashboard() {
   const serverScreen = document.querySelector("[data-server-screen]");
   const dashboardApp = document.querySelector("[data-dashboard-app]");
   const currentServerTargets = document.querySelectorAll("[data-current-server], [data-current-server-label]");
+  const currentServerLogoTargets = document.querySelectorAll("[data-current-server-logo], [data-current-server-logo-inline]");
   const unsavedModal = document.querySelector("[data-unsaved-modal]");
   const publishTicketButton = document.querySelector("[data-publish-ticket]");
   const ticketChannelInput = document.querySelector("[data-ticket-channel]");
@@ -502,9 +503,12 @@ function initDashboard() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function setCurrentServer(serverName) {
+  function setCurrentServer(serverName, serverLogo = "assets/default_logo.png") {
     currentServerTargets.forEach((target) => {
       target.textContent = serverName;
+    });
+    currentServerLogoTargets.forEach((logo) => {
+      logo.src = serverLogo;
     });
   }
 
@@ -541,6 +545,7 @@ function initDashboard() {
 
   function showUnsavedModal(action) {
     pendingNavigation = action;
+    openPanel(activePanelName);
     if (!unsavedModal) {
       saveCurrentChanges();
       pendingNavigation?.();
@@ -548,10 +553,12 @@ function initDashboard() {
       return;
     }
     unsavedModal.hidden = false;
+    dashboard.classList.add("is-navigation-blocked");
   }
 
   function closeUnsavedModal() {
     if (unsavedModal) unsavedModal.hidden = true;
+    dashboard.classList.remove("is-navigation-blocked");
   }
 
   function runWithUnsavedGuard(action) {
@@ -584,7 +591,7 @@ function initDashboard() {
 
   document.querySelectorAll("[data-server-name]").forEach((serverCard) => {
     serverCard.addEventListener("click", () => {
-      setCurrentServer(serverCard.dataset.serverName || "Serveur ModBot");
+      setCurrentServer(serverCard.dataset.serverName || "Serveur ModBot", serverCard.dataset.serverLogo || "assets/default_logo.png");
       showDashboardStage("dashboard");
       showToast(`Serveur sélectionné : ${serverCard.dataset.serverName}`);
     });
