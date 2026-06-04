@@ -482,6 +482,13 @@ function initDashboard() {
   const unsavedModal = document.querySelector("[data-unsaved-modal]");
   const publishTicketButton = document.querySelector("[data-publish-ticket]");
   const ticketChannelInput = document.querySelector("[data-ticket-channel]");
+  const personalizationDefaults = {
+    name: "ModBot",
+    footer: "ModBot - Protection de votre communauté",
+    logo: "assets/default_logo.png",
+    banner: "assets/default_banner.png",
+    color: "#5865F2"
+  };
   let activePanelName = "overview";
   let hasUnsavedChanges = false;
   let dirtyPanelName = null;
@@ -758,6 +765,41 @@ function initDashboard() {
     showToast(`🚀 Message ticket publié dans le salon ${channel}`);
   });
 
+  document.querySelectorAll(".social-card").forEach((card) => {
+    const enabled = card.querySelector("[data-social-enabled]");
+    const state = card.querySelector("[data-social-state]");
+    const linkInput = card.querySelector("[data-social-link]");
+    const channelInput = card.querySelector("[data-social-channel]");
+    const testButton = card.querySelector("[data-social-test]");
+    const platform = card.dataset.socialPlatform || "Réseau";
+
+    function syncSocialState() {
+      const isActive = Boolean(enabled?.checked);
+      if (!state) return;
+      state.classList.toggle("active", isActive);
+      state.classList.toggle("inactive", !isActive);
+      state.textContent = isActive ? "🟢 Actif" : "⚪ Inactif";
+    }
+
+    syncSocialState();
+
+    enabled?.addEventListener("change", () => {
+      syncSocialState();
+      markPanelDirty("socials");
+      showToast(enabled.checked ? `📣 Relais ${platform} activé` : `⚪ Relais ${platform} désactivé`);
+    });
+
+    testButton?.addEventListener("click", () => {
+      const link = linkInput?.value.trim();
+      const channel = channelInput?.value.trim();
+      if (!link || !channel) {
+        showToast(`⚠️ Ajoute le lien ${platform} et l'ID du salon`);
+        return;
+      }
+      showToast(`🧪 Test ${platform} envoyé dans le salon ${channel}`);
+    });
+  });
+
   const colorPreview = document.querySelector(".live-color-preview");
   document.querySelectorAll(".color-swatch").forEach((swatch) => {
     swatch.addEventListener("click", () => {
@@ -773,6 +815,10 @@ function initDashboard() {
   const fileInputs = personalization ? personalization.querySelectorAll("input[type='file']") : [];
   const liveLogo = personalization?.querySelector(".embed-thumb img");
   const liveBanner = personalization?.querySelector(".preview-banner");
+  const personalizationName = document.querySelector("[data-personalization-name]");
+  const personalizationFooter = document.querySelector("[data-personalization-footer]");
+  const personalizationPreviewTitle = document.querySelector("[data-personalization-preview-title]");
+  const personalizationPreviewFooter = document.querySelector("[data-personalization-preview-footer]");
 
   fileInputs.forEach((input) => {
     input.addEventListener("change", () => {
@@ -785,6 +831,40 @@ function initDashboard() {
       markPanelDirty("personalization");
       showToast(file ? "Fichier ajouté à l'aperçu" : "Aucun fichier sélectionné");
     });
+  });
+
+  personalizationName?.addEventListener("input", () => {
+    if (personalizationPreviewTitle) {
+      personalizationPreviewTitle.textContent = `${personalizationName.value || personalizationDefaults.name} - Panel`;
+    }
+  });
+
+  personalizationFooter?.addEventListener("input", () => {
+    if (personalizationPreviewFooter) {
+      personalizationPreviewFooter.textContent = personalizationFooter.value || personalizationDefaults.footer;
+    }
+  });
+
+  document.querySelector("[data-cancel-personalization]")?.addEventListener("click", () => {
+    if (personalizationName) personalizationName.value = personalizationDefaults.name;
+    if (personalizationFooter) personalizationFooter.value = personalizationDefaults.footer;
+    if (personalizationPreviewTitle) personalizationPreviewTitle.textContent = "Panel ModBot";
+    if (personalizationPreviewFooter) personalizationPreviewFooter.textContent = personalizationDefaults.footer;
+    if (liveLogo) liveLogo.src = personalizationDefaults.logo;
+    if (liveBanner) liveBanner.src = personalizationDefaults.banner;
+    fileInputs.forEach((input) => {
+      input.value = "";
+      const field = input.closest(".file-field");
+      const fileName = field?.querySelector("[data-file-name]");
+      if (fileName) fileName.textContent = "Aucun fichier sélectionné";
+    });
+    document.querySelectorAll(".color-swatch").forEach((item) => {
+      const isDefault = item.dataset.color === personalizationDefaults.color;
+      item.classList.toggle("is-selected", isDefault);
+    });
+    colorPreview?.style.setProperty("--dashboard-accent", personalizationDefaults.color);
+    if (dirtyPanelName === "personalization") clearUnsavedChanges();
+    showToast("↩️ Personnalisation remise sur la base ModBot");
   });
 
   document.querySelectorAll(".dashboard-page button, .dashboard-page .primary-btn, .dashboard-page .secondary-btn").forEach((element) => {
