@@ -478,6 +478,7 @@ function initDashboard() {
   const dashboardApp = document.querySelector("[data-dashboard-app]");
   const currentServerTargets = document.querySelectorAll("[data-current-server], [data-current-server-label]");
   const currentServerLogoTargets = document.querySelectorAll("[data-current-server-logo], [data-current-server-logo-inline]");
+  const currentServerLogoShells = document.querySelectorAll("[data-current-server-logo-shell]");
   const unsavedModal = document.querySelector("[data-unsaved-modal]");
   const publishTicketButton = document.querySelector("[data-publish-ticket]");
   const ticketChannelInput = document.querySelector("[data-ticket-channel]");
@@ -503,12 +504,34 @@ function initDashboard() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function setCurrentServer(serverName, serverLogo = "assets/default_logo.png") {
+  function markLogoFallback(img) {
+    const shell = img.closest(".server-logo-shell");
+    shell?.classList.add("is-fallback");
+  }
+
+  function setupLogoFallbacks() {
+    document.querySelectorAll("[data-logo-img]").forEach((img) => {
+      const checkImage = () => {
+        if (!img.complete || img.naturalWidth > 0) return;
+        markLogoFallback(img);
+      };
+      img.addEventListener("error", () => markLogoFallback(img));
+      img.addEventListener("load", () => img.closest(".server-logo-shell")?.classList.remove("is-fallback"));
+      checkImage();
+    });
+  }
+
+  function setCurrentServer(serverName, serverLogo = "assets/default_logo.png", initials = "MB") {
     currentServerTargets.forEach((target) => {
       target.textContent = serverName;
     });
+    currentServerLogoShells.forEach((shell) => {
+      shell.dataset.initials = initials;
+      shell.classList.remove("is-fallback");
+    });
     currentServerLogoTargets.forEach((logo) => {
       logo.src = serverLogo;
+      logo.alt = serverName;
     });
   }
 
@@ -591,11 +614,16 @@ function initDashboard() {
 
   document.querySelectorAll("[data-server-name]").forEach((serverCard) => {
     serverCard.addEventListener("click", () => {
-      setCurrentServer(serverCard.dataset.serverName || "Serveur ModBot", serverCard.dataset.serverLogo || "assets/default_logo.png");
+      const cardLogo = serverCard.querySelector("[data-logo-img]");
+      const loadedLogo = cardLogo?.currentSrc || cardLogo?.src || serverCard.dataset.serverLogo || "assets/default_logo.png";
+      const initials = serverCard.dataset.serverInitials || serverCard.dataset.serverName?.slice(0, 2).toUpperCase() || "MB";
+      setCurrentServer(serverCard.dataset.serverName || "Serveur ModBot", loadedLogo, initials);
       showDashboardStage("dashboard");
       showToast(`Serveur sélectionné : ${serverCard.dataset.serverName}`);
     });
   });
+
+  setupLogoFallbacks();
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
