@@ -473,6 +473,10 @@ function initDashboard() {
   const tabs = document.querySelectorAll("[data-dashboard-tab]");
   const panels = document.querySelectorAll("[data-dashboard-panel]");
   const toast = document.getElementById("dashboardToast");
+  const authScreen = document.querySelector("[data-auth-screen]");
+  const serverScreen = document.querySelector("[data-server-screen]");
+  const dashboardApp = document.querySelector("[data-dashboard-app]");
+  const currentServerTargets = document.querySelectorAll("[data-current-server], [data-current-server-label]");
   let toastTimer;
 
   function showToast(message) {
@@ -483,11 +487,45 @@ function initDashboard() {
     toastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 2200);
   }
 
+  function showDashboardStage(stage) {
+    if (authScreen) authScreen.hidden = stage !== "auth";
+    if (serverScreen) serverScreen.hidden = stage !== "servers";
+    if (dashboardApp) dashboardApp.hidden = stage !== "dashboard";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function setCurrentServer(serverName) {
+    currentServerTargets.forEach((target) => {
+      target.textContent = serverName;
+    });
+  }
+
   function openPanel(panelName) {
     tabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.dashboardTab === panelName));
     panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.dashboardPanel === panelName));
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
+
+  document.querySelector("[data-dashboard-login]")?.addEventListener("click", () => {
+    showDashboardStage("servers");
+    showToast("Connexion Discord simulée");
+  });
+
+  document.querySelector("[data-auth-back]")?.addEventListener("click", () => {
+    showDashboardStage("auth");
+  });
+
+  document.querySelector("[data-change-server]")?.addEventListener("click", () => {
+    showDashboardStage("servers");
+  });
+
+  document.querySelectorAll("[data-server-name]").forEach((serverCard) => {
+    serverCard.addEventListener("click", () => {
+      setCurrentServer(serverCard.dataset.serverName || "Serveur ModBot");
+      showDashboardStage("dashboard");
+      showToast(`Serveur sélectionné : ${serverCard.dataset.serverName}`);
+    });
+  });
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => openPanel(tab.dataset.dashboardTab));
@@ -517,8 +555,10 @@ function initDashboard() {
 
   const previewTitle = document.querySelector("[data-preview-title]");
   const previewDescription = document.querySelector("[data-preview-desc]");
+  const previewEmoji = document.querySelector("[data-preview-emoji]");
   const liveTitle = document.querySelector("[data-live-title]");
   const liveDescription = document.querySelector("[data-live-desc]");
+  const liveTicketEmoji = document.querySelector("[data-live-ticket-emoji]");
 
   previewTitle?.addEventListener("input", () => {
     if (liveTitle) liveTitle.textContent = previewTitle.value || "Ouvre ton ticket";
@@ -526,6 +566,10 @@ function initDashboard() {
 
   previewDescription?.addEventListener("input", () => {
     if (liveDescription) liveDescription.textContent = previewDescription.value || "Merci de sélectionner la raison de ta demande.";
+  });
+
+  previewEmoji?.addEventListener("input", () => {
+    if (liveTicketEmoji) liveTicketEmoji.textContent = previewEmoji.value || "📩";
   });
 
   const optionList = document.getElementById("ticketOptionList");
@@ -538,6 +582,7 @@ function initDashboard() {
     option.className = "option-row";
     option.innerHTML = `
       <span>${String(count).padStart(2, "0")}</span>
+      <input class="emoji-input" type="text" value="✨" maxlength="3">
       <input type="text" value="Nouvelle option">
       <input type="text" value="Description de l'option">
       <button type="button">Supprimer</button>
@@ -576,16 +621,29 @@ function initDashboard() {
   const liveLogo = personalization?.querySelector(".embed-thumb img");
   const liveBanner = personalization?.querySelector(".preview-banner");
 
-  fileInputs[0]?.addEventListener("change", () => {
-    const file = fileInputs[0].files?.[0];
-    if (file && liveLogo) liveLogo.src = URL.createObjectURL(file);
-    showToast("Logo ajouté à l'aperçu");
+  fileInputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      const file = input.files?.[0];
+      const field = input.closest(".file-field");
+      const fileName = field?.querySelector("[data-file-name]");
+      if (fileName) fileName.textContent = file ? file.name : "Aucun fichier sélectionné";
+      if (file && input.dataset.fileInput === "logo" && liveLogo) liveLogo.src = URL.createObjectURL(file);
+      if (file && input.dataset.fileInput === "banner" && liveBanner) liveBanner.src = URL.createObjectURL(file);
+      showToast(file ? "Fichier ajouté à l'aperçu" : "Aucun fichier sélectionné");
+    });
   });
 
-  fileInputs[1]?.addEventListener("change", () => {
-    const file = fileInputs[1].files?.[0];
-    if (file && liveBanner) liveBanner.src = URL.createObjectURL(file);
-    showToast("Bannière ajoutée à l'aperçu");
+  document.querySelectorAll(".dashboard-page button, .dashboard-page .primary-btn, .dashboard-page .secondary-btn").forEach((element) => {
+    element.addEventListener("click", (event) => {
+      if (element.classList.contains("color-swatch")) return;
+      const bounds = element.getBoundingClientRect();
+      const ripple = document.createElement("span");
+      ripple.className = "button-ripple";
+      ripple.style.left = `${event.clientX - bounds.left}px`;
+      ripple.style.top = `${event.clientY - bounds.top}px`;
+      element.appendChild(ripple);
+      window.setTimeout(() => ripple.remove(), 620);
+    });
   });
 }
 
