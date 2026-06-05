@@ -17,6 +17,27 @@ const siteTranslations = {
     "hero.primary": "Obtenir ModBot",
     "hero.dashboard": "Accéder au dashboard",
     "hero.demo": "Essayer les commandes",
+    "stats.protection": "Protection active",
+    "stats.config": "Configuration personnalisée",
+    "stats.evolutions": "Évolutions possibles",
+    "features.eyebrow": "Fonctionnalités",
+    "features.title": "Tout ce qu’il faut pour tenir un serveur propre.",
+    "features.moderation.title": "Modération",
+    "features.moderation.copy": "Warn, ban, deban, sanctions graduées et historique complet des actions.",
+    "features.tickets.title": "Tickets",
+    "features.tickets.copy": "Support intégré avec ouverture, suivi et fermeture de tickets depuis Discord.",
+    "features.stats.title": "Statistiques",
+    "features.stats.copy": "Analyse des membres, activité modération et indicateurs serveur utiles.",
+    "features.announcements.title": "Annonces",
+    "features.announcements.copy": "Publication d’annonces, changelogs, patch notes et messages propres.",
+    "features.translation.title": "Traduction",
+    "features.translation.copy": "Traduction rapide pour aider les membres à communiquer sans friction.",
+    "features.suggestions.title": "Suggestions",
+    "features.suggestions.copy": "Collecte et suivi des idées proposées par votre communauté.",
+    "features.panel.title": "Panel Admin",
+    "features.panel.copy": "Gestion rapide des réglages et des outils importants du serveur.",
+    "features.development.title": "Développement continu",
+    "features.development.copy": "Nouvelles fonctions créées selon les besoins et les retours serveur.",
     "pricing.eyebrow": "Tarifs",
     "pricing.title": "Des offres simples et claires",
     "pricing.copy": "ModBot n’est pas ajouté librement : nous l’installons manuellement sur votre serveur.",
@@ -40,14 +61,26 @@ const siteTranslations = {
     "admin.title": "Centre administrateur du site",
     "admin.copy": "Gérez le premium, suivez l’activité du site et préparez la synchronisation des serveurs où ModBot est installé.",
     "admin.access.title": "🔐 Accès admin",
-    "admin.access.copy": "Maquette d’accès. Le vrai verrouillage sera à brancher avec Discord OAuth et une liste d’IDs admin.",
+    "admin.access.copy": "Entre ton identifiant Discord administrateur pour ouvrir l’espace de gestion.",
+    "admin.access.label": "ID Discord administrateur",
+    "admin.access.button": "Déverrouiller",
     "admin.stats.title": "📈 Stats du site",
     "admin.stats.visits": "Visites",
     "admin.stats.today": "Aujourd’hui",
     "admin.stats.dashboard": "Ouvertures dashboard",
     "admin.stats.installs": "Serveurs ModBot",
     "admin.premium.title": "💎 Premium membre",
+    "admin.premium.badge": "2 serveurs max",
+    "admin.premium.copy": "Chaque membre Premium peut associer jusqu’à 2 serveurs à son abonnement.",
+    "admin.premium.member": "ID ou pseudo Discord",
+    "admin.premium.duration": "Durée",
+    "admin.premium.customValue": "Durée personnalisée",
+    "admin.premium.customUnit": "Unité",
+    "admin.premium.server1": "Serveur premium 1",
+    "admin.premium.server2": "Serveur premium 2",
+    "admin.premium.apply": "Attribuer le premium",
     "admin.servers.title": "🧭 Serveurs détectés",
+    "admin.servers.refresh": "Rafraîchir",
     "admin.servers.copy": "Quand le backend sera branché au bot Discord, cette zone affichera automatiquement les logos réels des serveurs via les données `bot.guilds`."
   },
   en: {
@@ -61,6 +94,27 @@ const siteTranslations = {
     "hero.primary": "Get ModBot",
     "hero.dashboard": "Open dashboard",
     "hero.demo": "Try commands",
+    "stats.protection": "Active protection",
+    "stats.config": "Custom configuration",
+    "stats.evolutions": "Possible evolutions",
+    "features.eyebrow": "Features",
+    "features.title": "Everything needed to keep a server clean.",
+    "features.moderation.title": "Moderation",
+    "features.moderation.copy": "Warn, ban, unban, progressive sanctions and full action history.",
+    "features.tickets.title": "Tickets",
+    "features.tickets.copy": "Built-in support with ticket opening, tracking and closing from Discord.",
+    "features.stats.title": "Statistics",
+    "features.stats.copy": "Member analysis, moderation activity and useful server indicators.",
+    "features.announcements.title": "Announcements",
+    "features.announcements.copy": "Publish announcements, changelogs, patch notes and clean messages.",
+    "features.translation.title": "Translation",
+    "features.translation.copy": "Fast translation to help members communicate without friction.",
+    "features.suggestions.title": "Suggestions",
+    "features.suggestions.copy": "Collect and track ideas proposed by your community.",
+    "features.panel.title": "Admin Panel",
+    "features.panel.copy": "Quick management of important server settings and tools.",
+    "features.development.title": "Continuous development",
+    "features.development.copy": "New features created according to server needs and feedback.",
     "pricing.eyebrow": "Pricing",
     "pricing.title": "Simple and clear offers",
     "pricing.copy": "ModBot is not added freely: we install it manually on your server.",
@@ -84,14 +138,26 @@ const siteTranslations = {
     "admin.title": "Site administrator center",
     "admin.copy": "Manage premium, track site activity and prepare server synchronization for guilds where ModBot is installed.",
     "admin.access.title": "🔐 Admin access",
-    "admin.access.copy": "Access mockup. Real protection should be connected to Discord OAuth and an admin ID allowlist.",
+    "admin.access.copy": "Enter your administrator Discord ID to open the management area.",
+    "admin.access.label": "Administrator Discord ID",
+    "admin.access.button": "Unlock",
     "admin.stats.title": "📈 Site stats",
     "admin.stats.visits": "Visits",
     "admin.stats.today": "Today",
     "admin.stats.dashboard": "Dashboard opens",
     "admin.stats.installs": "ModBot servers",
     "admin.premium.title": "💎 Member premium",
+    "admin.premium.badge": "2 servers max",
+    "admin.premium.copy": "Each Premium member can attach up to 2 servers to their subscription.",
+    "admin.premium.member": "Discord ID or username",
+    "admin.premium.duration": "Duration",
+    "admin.premium.customValue": "Custom duration",
+    "admin.premium.customUnit": "Unit",
+    "admin.premium.server1": "Premium server 1",
+    "admin.premium.server2": "Premium server 2",
+    "admin.premium.apply": "Grant premium",
     "admin.servers.title": "🧭 Detected servers",
+    "admin.servers.refresh": "Refresh",
     "admin.servers.copy": "When the backend is connected to the Discord bot, this area will automatically show real server logos from `bot.guilds` data."
   },
   ar: {
@@ -105,6 +171,27 @@ const siteTranslations = {
     "hero.primary": "الحصول على ModBot",
     "hero.dashboard": "فتح لوحة التحكم",
     "hero.demo": "تجربة الأوامر",
+    "stats.protection": "حماية نشطة",
+    "stats.config": "إعداد مخصص",
+    "stats.evolutions": "تطويرات ممكنة",
+    "features.eyebrow": "الميزات",
+    "features.title": "كل ما تحتاجه للحفاظ على خادم منظم.",
+    "features.moderation.title": "الإشراف",
+    "features.moderation.copy": "تحذير، حظر، رفع حظر، عقوبات تدريجية وسجل كامل للإجراءات.",
+    "features.tickets.title": "التذاكر",
+    "features.tickets.copy": "دعم مدمج مع فتح وتتبع وإغلاق التذاكر من Discord.",
+    "features.stats.title": "الإحصائيات",
+    "features.stats.copy": "تحليل الأعضاء ونشاط الإشراف ومؤشرات مفيدة للخادم.",
+    "features.announcements.title": "الإعلانات",
+    "features.announcements.copy": "نشر الإعلانات وسجلات التغيير وملاحظات التحديث ورسائل منظمة.",
+    "features.translation.title": "الترجمة",
+    "features.translation.copy": "ترجمة سريعة لمساعدة الأعضاء على التواصل بسهولة.",
+    "features.suggestions.title": "الاقتراحات",
+    "features.suggestions.copy": "جمع ومتابعة الأفكار المقترحة من مجتمعك.",
+    "features.panel.title": "لوحة الإدارة",
+    "features.panel.copy": "إدارة سريعة لإعدادات وأدوات الخادم المهمة.",
+    "features.development.title": "تطوير مستمر",
+    "features.development.copy": "ميزات جديدة حسب احتياجات الخادم وملاحظاته.",
     "pricing.eyebrow": "الأسعار",
     "pricing.title": "عروض بسيطة وواضحة",
     "pricing.copy": "لا تتم إضافة ModBot تلقائياً: نقوم بتثبيته يدوياً على خادمك.",
@@ -128,14 +215,26 @@ const siteTranslations = {
     "admin.title": "مركز إدارة الموقع",
     "admin.copy": "إدارة Premium، متابعة نشاط الموقع، وتحضير مزامنة الخوادم التي يوجد فيها ModBot.",
     "admin.access.title": "🔐 دخول الإدارة",
-    "admin.access.copy": "واجهة تجريبية. الحماية الحقيقية يجب ربطها بـ Discord OAuth وقائمة IDs للمسؤولين.",
+    "admin.access.copy": "أدخل معرف Discord للمسؤول لفتح مساحة الإدارة.",
+    "admin.access.label": "معرف Discord للمسؤول",
+    "admin.access.button": "فتح",
     "admin.stats.title": "📈 إحصائيات الموقع",
     "admin.stats.visits": "الزيارات",
     "admin.stats.today": "اليوم",
     "admin.stats.dashboard": "فتح لوحة التحكم",
     "admin.stats.installs": "خوادم ModBot",
     "admin.premium.title": "💎 Premium للعضو",
+    "admin.premium.badge": "خادمان كحد أقصى",
+    "admin.premium.copy": "يمكن لكل عضو Premium ربط ما يصل إلى خادمين باشتراكه.",
+    "admin.premium.member": "معرف Discord أو الاسم",
+    "admin.premium.duration": "المدة",
+    "admin.premium.customValue": "مدة مخصصة",
+    "admin.premium.customUnit": "الوحدة",
+    "admin.premium.server1": "الخادم Premium 1",
+    "admin.premium.server2": "الخادم Premium 2",
+    "admin.premium.apply": "منح Premium",
     "admin.servers.title": "🧭 الخوادم المكتشفة",
+    "admin.servers.refresh": "تحديث",
     "admin.servers.copy": "عند ربط الخلفية ببوت ديسكورد، ستظهر هنا شعارات الخوادم الحقيقية من بيانات `bot.guilds`."
   }
 };
@@ -580,36 +679,192 @@ function initSiteLanguage() {
   selector.addEventListener("change", () => applyLanguage(selector.value));
 }
 
+function getStoredNumber(key, fallback = 0) {
+  return Number(localStorage.getItem(key) || fallback) || 0;
+}
+
+function setStoredNumber(key, value) {
+  localStorage.setItem(key, String(value));
+}
+
+function trackSiteAnalytics() {
+  const todayKey = new Date().toISOString().slice(0, 10);
+  const storedDay = localStorage.getItem("modbot-analytics-day");
+
+  if (storedDay !== todayKey) {
+    localStorage.setItem("modbot-analytics-day", todayKey);
+    setStoredNumber("modbot-analytics-today", 0);
+  }
+
+  const visitSessionKey = `modbot-analytics-visit-${todayKey}`;
+  if (!sessionStorage.getItem(visitSessionKey)) {
+    setStoredNumber("modbot-analytics-visits", getStoredNumber("modbot-analytics-visits") + 1);
+    setStoredNumber("modbot-analytics-today", getStoredNumber("modbot-analytics-today") + 1);
+    sessionStorage.setItem(visitSessionKey, "1");
+  }
+
+  const isDashboard = document.body?.classList.contains("dashboard-page");
+  const isAdmin = document.body?.classList.contains("admin-page");
+  const dashboardSessionKey = `modbot-analytics-dashboard-${todayKey}`;
+  if (isDashboard && !isAdmin && !sessionStorage.getItem(dashboardSessionKey)) {
+    setStoredNumber("modbot-analytics-dashboard", getStoredNumber("modbot-analytics-dashboard") + 1);
+    sessionStorage.setItem(dashboardSessionKey, "1");
+  }
+}
+
 function initAdminZone() {
   const adminZone = document.getElementById("admin");
   if (!adminZone) return;
 
+  const allowedAdminIds = new Set([
+    "1189681599965573131"
+  ]);
   const visits = document.querySelector("[data-admin-stat='visits']");
   const today = document.querySelector("[data-admin-stat='today']");
   const dashboard = document.querySelector("[data-admin-stat='dashboard']");
   const installs = document.querySelector("[data-admin-stat='installs']");
+  const statsBadge = document.querySelector("[data-admin-stats-badge]");
+  const adminIdInput = document.querySelector("[data-admin-id]");
+  const adminError = document.querySelector("[data-admin-error]");
+  const adminStatus = document.querySelector("[data-admin-status]");
+  const adminGateItems = document.querySelectorAll("[data-admin-gate]");
+  const protectedItems = document.querySelectorAll("[data-admin-protected]");
+  const toast = document.getElementById("adminToast");
+  const durationSelect = document.querySelector("[data-premium-duration]");
+  const customDuration = document.querySelector("[data-premium-custom-duration]");
+  const customDurationValue = document.querySelector("[data-premium-custom-value]");
+  const customDurationUnit = document.querySelector("[data-premium-custom-unit]");
+  let adminToastTimer;
 
-  const storedVisits = Number(localStorage.getItem("modbot-site-visits") || "12480") + 1;
-  localStorage.setItem("modbot-site-visits", String(storedVisits));
-  if (visits) visits.textContent = storedVisits.toLocaleString("fr-FR");
-  if (today) today.textContent = String(326 + Math.min(storedVisits % 40, 39));
-  if (dashboard) dashboard.textContent = String(89 + Math.min(storedVisits % 18, 17));
-  if (installs) installs.textContent = "16";
+  function showAdminToast(message) {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add("is-visible");
+    window.clearTimeout(adminToastTimer);
+    adminToastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 2400);
+  }
 
-  document.querySelector("[data-admin-unlock]")?.addEventListener("click", () => {
-    addAssistantMessage?.("bot", "Accès admin simulé : branche Discord OAuth pour verrouiller réellement cette zone.");
+  function formatStat(value) {
+    return Number(value || 0).toLocaleString("fr-FR");
+  }
+
+  function getLocalAdminStats() {
+    return {
+      visits: getStoredNumber("modbot-analytics-visits"),
+      today: getStoredNumber("modbot-analytics-today"),
+      dashboard: getStoredNumber("modbot-analytics-dashboard"),
+      installs: document.querySelectorAll("[data-admin-server-list] > div").length
+    };
+  }
+
+  function setAdminStats(stats, sourceLabel) {
+    if (visits) visits.textContent = formatStat(stats.visits);
+    if (today) today.textContent = formatStat(stats.today);
+    if (dashboard) dashboard.textContent = formatStat(stats.dashboard);
+    if (installs) installs.textContent = formatStat(stats.installs);
+    if (statsBadge) statsBadge.textContent = sourceLabel;
+  }
+
+  async function loadAdminStats() {
+    if (statsBadge) statsBadge.textContent = "Chargement";
+
+    try {
+      const response = await fetch("/api/admin/stats", { cache: "no-store" });
+      if (response.ok) {
+        const data = await response.json();
+        setAdminStats({
+          visits: data.visits,
+          today: data.today,
+          dashboard: data.dashboardOpens ?? data.dashboard,
+          installs: data.installs ?? data.servers
+        }, "API active");
+        return;
+      }
+    } catch (error) {
+      // Le site peut fonctionner sans backend pendant la maquette.
+    }
+
+    setAdminStats(getLocalAdminStats(), "Stats locales");
+  }
+
+  function unlockAdmin(adminId) {
+    adminGateItems.forEach((item) => {
+      item.hidden = true;
+    });
+    protectedItems.forEach((item) => {
+      item.hidden = false;
+    });
+    if (adminStatus) adminStatus.innerHTML = "<span></span> ✅ Admin validé";
+    if (adminError) adminError.hidden = true;
+    sessionStorage.setItem("modbot-admin-id", adminId);
+    loadAdminStats();
+    showAdminToast("✅ Accès administrateur ouvert");
+  }
+
+  function tryUnlockAdmin() {
+    const adminId = adminIdInput?.value.trim() || "";
+    if (!allowedAdminIds.has(adminId)) {
+      if (adminError) adminError.hidden = false;
+      showAdminToast("❌ ID Discord non autorisé");
+      return;
+    }
+    unlockAdmin(adminId);
+  }
+
+  const savedAdminId = sessionStorage.getItem("modbot-admin-id");
+  if (savedAdminId && allowedAdminIds.has(savedAdminId)) {
+    unlockAdmin(savedAdminId);
+  }
+
+  document.querySelector("[data-admin-unlock]")?.addEventListener("click", tryUnlockAdmin);
+  adminIdInput?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") tryUnlockAdmin();
   });
+
+  function updateCustomDurationVisibility() {
+    if (!customDuration || !durationSelect) return;
+    customDuration.hidden = durationSelect.value !== "custom";
+  }
+
+  function getPremiumDuration() {
+    if (durationSelect?.value !== "custom") {
+      return durationSelect?.value || "Permanent";
+    }
+
+    const value = Math.max(1, Number(customDurationValue?.value || 1));
+    const unit = customDurationUnit?.value || "jours";
+    return `${value} ${unit}`;
+  }
+
+  durationSelect?.addEventListener("change", updateCustomDurationVisibility);
+  updateCustomDurationVisibility();
 
   document.querySelector("[data-premium-apply]")?.addEventListener("click", () => {
     const memberInput = document.querySelector("[data-premium-member]");
-    const duration = document.querySelector("[data-premium-duration]")?.value || "Permanent";
+    const primaryServer = document.querySelector("[data-premium-server-primary]")?.value || "";
+    const secondaryServer = document.querySelector("[data-premium-server-secondary]")?.value || "";
     const list = document.querySelector("[data-premium-list]");
     const member = memberInput?.value.trim();
     if (!member || !list) return;
+    if (secondaryServer && secondaryServer === primaryServer) {
+      showAdminToast("⚠️ Choisis deux serveurs différents");
+      return;
+    }
+    const servers = [primaryServer, secondaryServer].filter(Boolean).slice(0, 2);
+    const duration = getPremiumDuration();
     const item = document.createElement("div");
-    item.innerHTML = `<strong>${member}</strong><span>Premium ${duration}</span>`;
+    const identity = document.createElement("span");
+    const name = document.createElement("strong");
+    const serverLine = document.createElement("small");
+    const meta = document.createElement("span");
+    name.textContent = member;
+    serverLine.textContent = servers.join(" + ") || "Aucun serveur choisi";
+    meta.textContent = `${servers.length}/2 • Premium ${duration}`;
+    identity.append(name, serverLine);
+    item.append(identity, meta);
     list.prepend(item);
     memberInput.value = "";
+    showAdminToast(`💎 Premium ajouté pour ${member}`);
   });
 
   document.querySelector("[data-refresh-servers]")?.addEventListener("click", () => {
@@ -1081,6 +1336,7 @@ function initDashboard() {
 document.addEventListener("DOMContentLoaded", () => {
   resetInitialScroll();
   initStarfield();
+  trackSiteAnalytics();
   initNavigation();
   initSiteLanguage();
   initAdminZone();
