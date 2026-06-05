@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration ModBot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-page admin-page">
+  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
+  <div class="page-glow" aria-hidden="true"></div>
+
+  <header class="dashboard-topbar admin-topbar">
+    <a class="brand" href="index.html" aria-label="Retour au site ModBot">
+      <span class="brand-mark">
+        <img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
+      </span>
+      <span>ModBot</span>
+    </a>
+
+    <div class="dashboard-server">
+      <span class="server-dot"></span>
+      <span>🔐 Espace actif</span>
+      <strong>Administration</strong>
+    </div>
+
+    <div class="dashboard-actions">
+      <label class="language-switch" aria-label="Choisir la langue du site">
+        <span>🌍</span>
+        <select id="siteLanguage">
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+          <option value="ar">العربية</option>
+        </select>
+      </label>
+      <a class="secondary-btn compact" href="dashboard.html">📊 Dashboard</a>
+      <a class="primary-btn compact" href="index.html">🏠 Retour au site</a>
+    </div>
+  </header>
+
+  <main id="admin" class="admin-site section-shell" data-admin-page>
+    <section class="dashboard-banner admin-hero">
+      <div>
+        <p class="eyebrow" data-i18n="admin.eyebrow">Administration</p>
+        <h1 data-i18n="admin.title">Centre administrateur du site</h1>
+        <p data-i18n="admin.copy">Gérez le premium, suivez l’activité du site et préparez la synchronisation des serveurs où ModBot est installé.</p>
+      </div>
+      <div class="health-pill" data-admin-status>
+        <span></span>
+        🔒 Verrouillé
+      </div>
+    </section>
+
+    <div class="admin-grid">
+      <article class="admin-panel admin-login-panel" data-admin-gate>
+        <h3 data-i18n="admin.access.title">🔐 Accès admin</h3>
+        <p data-i18n="admin.access.copy">Entre ton identifiant Discord administrateur pour ouvrir l’espace de gestion.</p>
+        <label>
+          <span data-i18n="admin.access.label">ID Discord administrateur</span>
+          <input type="text" inputmode="numeric" autocomplete="off" placeholder="Exemple : 1189681599965573131" data-admin-id>
+        </label>
+        <p class="admin-error" data-admin-error hidden>❌ ID non autorisé pour cet espace administrateur.</p>
+        <button class="primary-btn compact" type="button" data-admin-unlock data-i18n="admin.access.button">Déverrouiller</button>
+      </article>
+
+      <article class="admin-panel admin-access-note" data-admin-gate>
+        <h3>🛡️ Sécurité</h3>
+        <p>Les statistiques, le premium et les serveurs restent masqués tant que l’ID Discord administrateur n’est pas validé.</p>
+      </article>
+
+      <article class="admin-panel admin-stats-panel" data-admin-protected hidden>
+        <div class="admin-panel-head">
+          <h3 data-i18n="admin.stats.title">📈 Stats du site</h3>
+          <span class="admin-badge" data-admin-stats-badge>En attente</span>
+        </div>
+        <div class="site-stat-grid">
+          <div><span data-admin-stat="visits">—</span><small data-i18n="admin.stats.visits">Visites</small></div>
+          <div><span data-admin-stat="today">—</span><small data-i18n="admin.stats.today">Aujourd’hui</small></div>
+          <div><span data-admin-stat="dashboard">—</span><small data-i18n="admin.stats.dashboard">Ouvertures dashboard</small></div>
+          <div><span data-admin-stat="installs">—</span><small data-i18n="admin.stats.installs">Serveurs ModBot</small></div>
+        </div>
+      </article>
+
+      <article class="admin-panel premium-manager" data-admin-protected hidden>
+        <div class="admin-panel-head">
+          <h3 data-i18n="admin.premium.title">💎 Premium membre</h3>
+          <span class="admin-badge active" data-i18n="admin.premium.badge">2 serveurs max</span>
+        </div>
+        <p class="premium-limit-copy" data-i18n="admin.premium.copy">Chaque membre Premium peut associer jusqu’à 2 serveurs à son abonnement.</p>
+        <div class="premium-form">
+          <label>
+            <span data-i18n="admin.premium.member">ID ou pseudo Discord</span>
+            <input type="text" placeholder="@membre ou ID Discord" data-premium-member>
+          </label>
+          <label>
+            <span data-i18n="admin.premium.duration">Durée</span>
+            <select data-premium-duration>
+              <option value="30 jours">30 jours</option>
+              <option value="90 jours">90 jours</option>
+              <option value="1 an">1 an</option>
+              <option value="Permanent">Permanent</option>
+              <option value="custom">Durée personnalisée</option>
+            </select>
+          </label>
+          <div class="premium-custom-duration" data-premium-custom-duration hidden>
+            <label>
+              <span data-i18n="admin.premium.customValue">Durée personnalisée</span>
+              <input type="number" min="1" value="14" data-premium-custom-value>
+            </label>
+            <label>
+              <span data-i18n="admin.premium.customUnit">Unité</span>
+              <select data-premium-custom-unit>
+                <option value="jours">jours</option>
+                <option value="semaines">semaines</option>
+                <option value="mois">mois</option>
+                <option value="ans">ans</option>
+              </select>
+            </label>
+          </div>
+          <div class="premium-server-slots">
+            <label>
+              <span data-i18n="admin.premium.server1">Serveur premium 1</span>
+              <select data-premium-server-primary>
+                <option value="Hote BOT - ModBot">Hote BOT - ModBot</option>
+                <option value="VPG Belgique">VPG Belgique</option>
+                <option value="Serveur test">Serveur test</option>
+              </select>
+            </label>
+            <label>
+              <span data-i18n="admin.premium.server2">Serveur premium 2</span>
+              <select data-premium-server-secondary>
+                <option value="">Aucun deuxième serveur</option>
+                <option value="Hote BOT - ModBot">Hote BOT - ModBot</option>
+                <option value="VPG Belgique">VPG Belgique</option>
+                <option value="Serveur test">Serveur test</option>
+              </select>
+            </label>
+          </div>
+          <button class="primary-btn compact" type="button" data-premium-apply data-i18n="admin.premium.apply">Attribuer le premium</button>
+        </div>
+        <div class="premium-list" data-premium-list>
+          <div>
+            <span><strong>gimskh</strong><small>Hote BOT - ModBot + VPG Belgique</small></span>
+            <span>2/2 • Premium permanent</span>
+          </div>
+          <div>
+            <span><strong>Owner BE</strong><small>Serveur test</small></span>
+            <span>1/2 • Premium 1 an</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="admin-panel server-sync-panel" data-admin-protected hidden>
+        <div class="admin-panel-head">
+          <h3 data-i18n="admin.servers.title">🧭 Serveurs détectés</h3>
+          <button class="secondary-btn compact" type="button" data-refresh-servers data-i18n="admin.servers.refresh">Rafraîchir</button>
+        </div>
+        <p data-i18n="admin.servers.copy">Quand le backend sera branché au bot Discord, cette zone affichera automatiquement les logos réels des serveurs via les données `bot.guilds`.</p>
+        <div class="admin-server-list" data-admin-server-list>
+          <div><img src="assets/default_logo.png" alt=""><span><strong>Hote BOT - ModBot</strong><small>Logo serveur synchronisable</small></span></div>
+          <div><img src="assets/default_logo.png" alt=""><span><strong>VPG Belgique</strong><small>Logo serveur synchronisable</small></span></div>
+          <div><img src="assets/default_logo.png" alt=""><span><strong>Serveur test</strong><small>Logo serveur synchronisable</small></span></div>
+        </div>
+      </article>
+    </div>
+
+    <div class="dashboard-toast" id="adminToast" aria-live="polite">Action admin enregistrée</div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
