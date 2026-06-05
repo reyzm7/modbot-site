@@ -87,9 +87,9 @@
       <article class="admin-panel premium-manager" data-admin-protected hidden>
         <div class="admin-panel-head">
           <h3 data-i18n="admin.premium.title">💎 Premium membre</h3>
-          <span class="admin-badge active" data-i18n="admin.premium.badge">2 serveurs max</span>
+          <span class="admin-badge active" data-i18n="admin.premium.badge">Serveurs côté dashboard</span>
         </div>
-        <p class="premium-limit-copy" data-i18n="admin.premium.copy">Chaque membre Premium peut associer jusqu’à 2 serveurs à son abonnement.</p>
+        <p class="premium-limit-copy" data-i18n="admin.premium.copy">L’admin attribue le Premium et sa durée. Le membre associe ensuite jusqu’à 2 serveurs depuis son dashboard.</p>
         <div class="premium-form">
           <label>
             <span data-i18n="admin.premium.member">ID ou pseudo Discord</span>
@@ -120,35 +120,16 @@
               </select>
             </label>
           </div>
-          <div class="premium-server-slots">
-            <label>
-              <span data-i18n="admin.premium.server1">Serveur premium 1</span>
-              <select data-premium-server-primary>
-                <option value="Hote BOT - ModBot">Hote BOT - ModBot</option>
-                <option value="VPG Belgique">VPG Belgique</option>
-                <option value="Serveur test">Serveur test</option>
-              </select>
-            </label>
-            <label>
-              <span data-i18n="admin.premium.server2">Serveur premium 2</span>
-              <select data-premium-server-secondary>
-                <option value="">Aucun deuxième serveur</option>
-                <option value="Hote BOT - ModBot">Hote BOT - ModBot</option>
-                <option value="VPG Belgique">VPG Belgique</option>
-                <option value="Serveur test">Serveur test</option>
-              </select>
-            </label>
-          </div>
           <button class="primary-btn compact" type="button" data-premium-apply data-i18n="admin.premium.apply">Attribuer le premium</button>
         </div>
         <div class="premium-list" data-premium-list>
           <div>
-            <span><strong>gimskh</strong><small>Hote BOT - ModBot + VPG Belgique</small></span>
-            <span>2/2 • Premium permanent</span>
+            <span><strong>gimskh</strong><small>Serveurs associés depuis le dashboard</small></span>
+            <span>Premium permanent</span>
           </div>
           <div>
-            <span><strong>Owner BE</strong><small>Serveur test</small></span>
-            <span>1/2 • Premium 1 an</span>
+            <span><strong>Owner BE</strong><small>Serveurs associés depuis le dashboard</small></span>
+            <span>Premium 1 an</span>
           </div>
         </div>
       </article>
