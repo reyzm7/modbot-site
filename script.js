@@ -5,6 +5,141 @@ if ("scrollRestoration" in window.history) {
 const discordInvite = "https://discord.gg/CK8CbFtYuv";
 const patchDiscordChannel = "https://discord.com/channels/1510421934435729586/1510440693070430324";
 
+const siteTranslations = {
+  fr: {
+    "nav.features": "Fonctionnalités",
+    "nav.demo": "Démo",
+    "nav.pricing": "Tarifs",
+    "nav.admin": "Admin",
+    "nav.cta": "Demander ModBot",
+    "hero.eyebrow": "Protection Discord 24/7",
+    "hero.lead": "La modération intelligente qui protège votre communauté, automatise les sanctions, gère les tickets et garde votre serveur clair, sain et réactif.",
+    "hero.primary": "Obtenir ModBot",
+    "hero.dashboard": "Accéder au dashboard",
+    "hero.demo": "Essayer les commandes",
+    "pricing.eyebrow": "Tarifs",
+    "pricing.title": "Des offres simples et claires",
+    "pricing.copy": "ModBot n’est pas ajouté librement : nous l’installons manuellement sur votre serveur.",
+    "pricing.free.title": "Offre de base",
+    "pricing.free.copy": "La protection ModBot pour sécuriser votre serveur toute l’année.",
+    "pricing.free.period": "/ an",
+    "pricing.free.item1": "Installation",
+    "pricing.free.item2": "Configuration",
+    "pricing.free.item3": "Protection du serveur toute l’année",
+    "pricing.free.item4": "Support Discord",
+    "pricing.free.cta": "Choisir cette offre",
+    "pricing.premium.title": "Offre Premium",
+    "pricing.premium.copy": "Tout ModBot mis en avant avec une expérience complète pour votre serveur.",
+    "pricing.premium.period": "/ an",
+    "pricing.premium.item1": "Bot personnalisé",
+    "pricing.premium.item2": "Fonctionnalités mises en avant",
+    "pricing.premium.item3": "Configuration premium complète",
+    "pricing.premium.item4": "Support prioritaire",
+    "pricing.premium.cta": "Choisir cette offre",
+    "admin.eyebrow": "Administration",
+    "admin.title": "Centre administrateur du site",
+    "admin.copy": "Gérez le premium, suivez l’activité du site et préparez la synchronisation des serveurs où ModBot est installé.",
+    "admin.access.title": "🔐 Accès admin",
+    "admin.access.copy": "Maquette d’accès. Le vrai verrouillage sera à brancher avec Discord OAuth et une liste d’IDs admin.",
+    "admin.stats.title": "📈 Stats du site",
+    "admin.stats.visits": "Visites",
+    "admin.stats.today": "Aujourd’hui",
+    "admin.stats.dashboard": "Ouvertures dashboard",
+    "admin.stats.installs": "Serveurs ModBot",
+    "admin.premium.title": "💎 Premium membre",
+    "admin.servers.title": "🧭 Serveurs détectés",
+    "admin.servers.copy": "Quand le backend sera branché au bot Discord, cette zone affichera automatiquement les logos réels des serveurs via les données `bot.guilds`."
+  },
+  en: {
+    "nav.features": "Features",
+    "nav.demo": "Demo",
+    "nav.pricing": "Pricing",
+    "nav.admin": "Admin",
+    "nav.cta": "Add ModBot",
+    "hero.eyebrow": "Discord protection 24/7",
+    "hero.lead": "Smart moderation that protects your community, automates sanctions, manages tickets, and keeps your server clear, healthy, and responsive.",
+    "hero.primary": "Get ModBot",
+    "hero.dashboard": "Open dashboard",
+    "hero.demo": "Try commands",
+    "pricing.eyebrow": "Pricing",
+    "pricing.title": "Simple and clear offers",
+    "pricing.copy": "ModBot is not added freely: we install it manually on your server.",
+    "pricing.free.title": "Base offer",
+    "pricing.free.copy": "ModBot protection to secure your server all year.",
+    "pricing.free.period": "/ year",
+    "pricing.free.item1": "Installation",
+    "pricing.free.item2": "Configuration",
+    "pricing.free.item3": "Year-round server protection",
+    "pricing.free.item4": "Discord support",
+    "pricing.free.cta": "Choose this offer",
+    "pricing.premium.title": "Premium offer",
+    "pricing.premium.copy": "A complete ModBot experience with advanced setup for your server.",
+    "pricing.premium.period": "/ year",
+    "pricing.premium.item1": "Personalized bot",
+    "pricing.premium.item2": "Highlighted features",
+    "pricing.premium.item3": "Complete premium configuration",
+    "pricing.premium.item4": "Priority support",
+    "pricing.premium.cta": "Choose this offer",
+    "admin.eyebrow": "Administration",
+    "admin.title": "Site administrator center",
+    "admin.copy": "Manage premium, track site activity and prepare server synchronization for guilds where ModBot is installed.",
+    "admin.access.title": "🔐 Admin access",
+    "admin.access.copy": "Access mockup. Real protection should be connected to Discord OAuth and an admin ID allowlist.",
+    "admin.stats.title": "📈 Site stats",
+    "admin.stats.visits": "Visits",
+    "admin.stats.today": "Today",
+    "admin.stats.dashboard": "Dashboard opens",
+    "admin.stats.installs": "ModBot servers",
+    "admin.premium.title": "💎 Member premium",
+    "admin.servers.title": "🧭 Detected servers",
+    "admin.servers.copy": "When the backend is connected to the Discord bot, this area will automatically show real server logos from `bot.guilds` data."
+  },
+  ar: {
+    "nav.features": "الميزات",
+    "nav.demo": "تجربة",
+    "nav.pricing": "الأسعار",
+    "nav.admin": "الإدارة",
+    "nav.cta": "إضافة ModBot",
+    "hero.eyebrow": "حماية ديسكورد 24/7",
+    "hero.lead": "إشراف ذكي يحمي مجتمعك، يدير التذاكر، وينظم الخادم بطريقة واضحة وسريعة.",
+    "hero.primary": "الحصول على ModBot",
+    "hero.dashboard": "فتح لوحة التحكم",
+    "hero.demo": "تجربة الأوامر",
+    "pricing.eyebrow": "الأسعار",
+    "pricing.title": "عروض بسيطة وواضحة",
+    "pricing.copy": "لا تتم إضافة ModBot تلقائياً: نقوم بتثبيته يدوياً على خادمك.",
+    "pricing.free.title": "العرض الأساسي",
+    "pricing.free.copy": "حماية ModBot لتأمين خادمك طوال العام.",
+    "pricing.free.period": "/ سنة",
+    "pricing.free.item1": "التثبيت",
+    "pricing.free.item2": "الإعداد",
+    "pricing.free.item3": "حماية الخادم طوال السنة",
+    "pricing.free.item4": "دعم Discord",
+    "pricing.free.cta": "اختيار هذا العرض",
+    "pricing.premium.title": "عرض Premium",
+    "pricing.premium.copy": "تجربة ModBot كاملة مع إعداد متقدم لخادمك.",
+    "pricing.premium.period": "/ سنة",
+    "pricing.premium.item1": "بوت مخصص",
+    "pricing.premium.item2": "ميزات مميزة",
+    "pricing.premium.item3": "إعداد Premium كامل",
+    "pricing.premium.item4": "دعم أولوية",
+    "pricing.premium.cta": "اختيار هذا العرض",
+    "admin.eyebrow": "الإدارة",
+    "admin.title": "مركز إدارة الموقع",
+    "admin.copy": "إدارة Premium، متابعة نشاط الموقع، وتحضير مزامنة الخوادم التي يوجد فيها ModBot.",
+    "admin.access.title": "🔐 دخول الإدارة",
+    "admin.access.copy": "واجهة تجريبية. الحماية الحقيقية يجب ربطها بـ Discord OAuth وقائمة IDs للمسؤولين.",
+    "admin.stats.title": "📈 إحصائيات الموقع",
+    "admin.stats.visits": "الزيارات",
+    "admin.stats.today": "اليوم",
+    "admin.stats.dashboard": "فتح لوحة التحكم",
+    "admin.stats.installs": "خوادم ModBot",
+    "admin.premium.title": "💎 Premium للعضو",
+    "admin.servers.title": "🧭 الخوادم المكتشفة",
+    "admin.servers.copy": "عند ربط الخلفية ببوت ديسكورد، ستظهر هنا شعارات الخوادم الحقيقية من بيانات `bot.guilds`."
+  }
+};
+
 const commandResponses = {
   panel: {
     title: "Panneau d'administration - ModBot",
@@ -420,6 +555,68 @@ function initNavigation() {
     link.addEventListener("click", () => {
       links.classList.remove("is-open");
       toggle.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+
+function initSiteLanguage() {
+  const selector = document.getElementById("siteLanguage");
+  if (!selector) return;
+
+  function applyLanguage(language) {
+    const dictionary = siteTranslations[language] || siteTranslations.fr;
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach((element) => {
+      const value = dictionary[element.dataset.i18n];
+      if (value) element.textContent = value;
+    });
+    localStorage.setItem("modbot-site-language", language);
+  }
+
+  const savedLanguage = localStorage.getItem("modbot-site-language") || "fr";
+  selector.value = savedLanguage;
+  applyLanguage(savedLanguage);
+  selector.addEventListener("change", () => applyLanguage(selector.value));
+}
+
+function initAdminZone() {
+  const adminZone = document.getElementById("admin");
+  if (!adminZone) return;
+
+  const visits = document.querySelector("[data-admin-stat='visits']");
+  const today = document.querySelector("[data-admin-stat='today']");
+  const dashboard = document.querySelector("[data-admin-stat='dashboard']");
+  const installs = document.querySelector("[data-admin-stat='installs']");
+
+  const storedVisits = Number(localStorage.getItem("modbot-site-visits") || "12480") + 1;
+  localStorage.setItem("modbot-site-visits", String(storedVisits));
+  if (visits) visits.textContent = storedVisits.toLocaleString("fr-FR");
+  if (today) today.textContent = String(326 + Math.min(storedVisits % 40, 39));
+  if (dashboard) dashboard.textContent = String(89 + Math.min(storedVisits % 18, 17));
+  if (installs) installs.textContent = "16";
+
+  document.querySelector("[data-admin-unlock]")?.addEventListener("click", () => {
+    addAssistantMessage?.("bot", "Accès admin simulé : branche Discord OAuth pour verrouiller réellement cette zone.");
+  });
+
+  document.querySelector("[data-premium-apply]")?.addEventListener("click", () => {
+    const memberInput = document.querySelector("[data-premium-member]");
+    const duration = document.querySelector("[data-premium-duration]")?.value || "Permanent";
+    const list = document.querySelector("[data-premium-list]");
+    const member = memberInput?.value.trim();
+    if (!member || !list) return;
+    const item = document.createElement("div");
+    item.innerHTML = `<strong>${member}</strong><span>Premium ${duration}</span>`;
+    list.prepend(item);
+    memberInput.value = "";
+  });
+
+  document.querySelector("[data-refresh-servers]")?.addEventListener("click", () => {
+    const list = document.querySelector("[data-admin-server-list]");
+    if (!list) return;
+    list.querySelectorAll("small").forEach((item) => {
+      item.textContent = "Prêt pour sync bot.guilds";
     });
   });
 }
@@ -885,6 +1082,8 @@ document.addEventListener("DOMContentLoaded", () => {
   resetInitialScroll();
   initStarfield();
   initNavigation();
+  initSiteLanguage();
+  initAdminZone();
   initHeroCommands();
   initDemo();
   initAssistant();
