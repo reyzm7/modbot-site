@@ -921,6 +921,16 @@ function initDashboard() {
   const premiumUsedTarget = document.querySelector("[data-premium-used]");
   const premiumSlots = document.querySelector("[data-dashboard-premium-slots]");
   const premiumServerChoices = document.querySelectorAll("[data-premium-server-choice]");
+  const tournamentEnabled = document.querySelector("[data-tournament-enabled]");
+  const tournamentState = document.querySelector("[data-tournament-state]");
+  const tournamentCommandState = document.querySelector("[data-tournament-command-state]");
+  const tournamentOverviewState = document.querySelector("[data-tournament-overview-state]");
+  const tournamentCommandCards = document.querySelectorAll(".tournament-command-card");
+  const tournamentNameInput = document.querySelector("[data-tournament-name]");
+  const tournamentFormatInput = document.querySelector("[data-tournament-format]");
+  const tournamentTeamsInput = document.querySelector("[data-tournament-teams]");
+  const tournamentChannelInput = document.querySelector("[data-tournament-channel]");
+  const tournamentRoleInput = document.querySelector("[data-tournament-role]");
   const unsavedModal = document.querySelector("[data-unsaved-modal]");
   const publishTicketButton = document.querySelector("[data-publish-ticket]");
   const ticketChannelInput = document.querySelector("[data-ticket-channel]");
@@ -943,6 +953,7 @@ function initDashboard() {
     initials: "HB"
   };
   let premiumDraftServers = readStoredPremiumServers();
+  let tournamentDraft = readStoredTournamentConfig();
 
   function showToast(message) {
     if (!toast) return;
@@ -995,6 +1006,81 @@ function initDashboard() {
 
   function savePremiumServers() {
     localStorage.setItem("modbot-dashboard-premium-servers", JSON.stringify(premiumDraftServers.slice(0, 2)));
+  }
+
+  function defaultTournamentConfig() {
+    return {
+      enabled: false,
+      name: "EA FC 26 Club Pro Cup",
+      format: "Poules + phase finale",
+      teams: "32",
+      channel: "",
+      role: ""
+    };
+  }
+
+  function readStoredTournamentConfig() {
+    try {
+      const stored = JSON.parse(localStorage.getItem("modbot-dashboard-tournament") || "null");
+      return {
+        ...defaultTournamentConfig(),
+        ...(stored && typeof stored === "object" ? stored : {})
+      };
+    } catch (error) {
+      return defaultTournamentConfig();
+    }
+  }
+
+  function collectTournamentConfig() {
+    return {
+      enabled: Boolean(tournamentEnabled?.checked),
+      name: tournamentNameInput?.value.trim() || defaultTournamentConfig().name,
+      format: tournamentFormatInput?.value || defaultTournamentConfig().format,
+      teams: tournamentTeamsInput?.value || defaultTournamentConfig().teams,
+      channel: tournamentChannelInput?.value.trim() || "",
+      role: tournamentRoleInput?.value.trim() || ""
+    };
+  }
+
+  function saveTournamentConfig() {
+    tournamentDraft = collectTournamentConfig();
+    localStorage.setItem("modbot-dashboard-tournament", JSON.stringify(tournamentDraft));
+  }
+
+  function syncTournamentState(isActive = Boolean(tournamentEnabled?.checked)) {
+    const stateText = isActive ? "🟢 Actif" : "⚪ Inactif";
+    const commandText = isActive ? "🟢 Commandes disponibles" : "⚪ Module inactif";
+
+    if (tournamentState) {
+      tournamentState.classList.toggle("active", isActive);
+      tournamentState.classList.toggle("inactive", !isActive);
+      tournamentState.textContent = stateText;
+    }
+
+    if (tournamentCommandState) {
+      tournamentCommandState.classList.toggle("active", isActive);
+      tournamentCommandState.classList.toggle("inactive", !isActive);
+      tournamentCommandState.textContent = commandText;
+    }
+
+    if (tournamentOverviewState) {
+      tournamentOverviewState.textContent = isActive ? "Actif" : "Inactif";
+    }
+
+    tournamentCommandCards.forEach((card) => {
+      card.classList.toggle("is-disabled", !isActive);
+    });
+  }
+
+  function applyTournamentConfig(config = defaultTournamentConfig()) {
+    if (tournamentEnabled) tournamentEnabled.checked = Boolean(config.enabled);
+    if (tournamentNameInput) tournamentNameInput.value = config.name || defaultTournamentConfig().name;
+    if (tournamentFormatInput) tournamentFormatInput.value = config.format || defaultTournamentConfig().format;
+    if (tournamentTeamsInput) tournamentTeamsInput.value = config.teams || defaultTournamentConfig().teams;
+    if (tournamentChannelInput) tournamentChannelInput.value = config.channel || "";
+    if (tournamentRoleInput) tournamentRoleInput.value = config.role || "";
+    tournamentEnabled?.closest(".toggle-line")?.classList.toggle("is-on", Boolean(config.enabled));
+    syncTournamentState(Boolean(config.enabled));
   }
 
   function escapeHtml(value) {
@@ -1122,6 +1208,9 @@ function initDashboard() {
     if (dirtyPanelName === "premium") {
       savePremiumServers();
     }
+    if (dirtyPanelName === "tournaments") {
+      saveTournamentConfig();
+    }
     clearUnsavedChanges();
     showToast(message);
   }
@@ -1211,6 +1300,20 @@ function initDashboard() {
   });
 
   renderPremiumAssociations();
+  applyTournamentConfig(tournamentDraft);
+
+  tournamentEnabled?.addEventListener("change", () => {
+    syncTournamentState(tournamentEnabled.checked);
+    showToast(tournamentEnabled.checked ? "🏆 Module tournois activé" : "⚪ Module tournois désactivé");
+  });
+
+  document.querySelector("[data-reset-tournament]")?.addEventListener("click", () => {
+    tournamentDraft = defaultTournamentConfig();
+    applyTournamentConfig(tournamentDraft);
+    markPanelDirty("tournaments");
+    showToast("♻️ Module tournois réinitialisé");
+  });
+
   setupLogoFallbacks();
 
   tabs.forEach((tab) => {
@@ -1260,6 +1363,10 @@ function initDashboard() {
       premiumDraftServers = readStoredPremiumServers();
       renderPremiumAssociations();
     }
+    if (dirtyPanelName === "tournaments") {
+      tournamentDraft = readStoredTournamentConfig();
+      applyTournamentConfig(tournamentDraft);
+    }
     clearUnsavedChanges();
     showToast("🗑️ Modifications laissées de côté");
     pendingNavigation = null;
@@ -1283,7 +1390,11 @@ function initDashboard() {
     checkbox.addEventListener("change", () => {
       syncToggle();
       markPanelDirty(checkbox.closest("[data-dashboard-panel]")?.dataset.dashboardPanel || activePanelName);
-      showToast(checkbox.checked ? "Module activé" : "Module désactivé");
+      if (checkbox.matches("[data-tournament-enabled]")) {
+        showToast(checkbox.checked ? "🏆 Module tournois activé" : "⚪ Module tournois désactivé");
+      } else {
+        showToast(checkbox.checked ? "Module activé" : "Module désactivé");
+      }
     });
   });
 
