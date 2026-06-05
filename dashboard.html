@@ -106,9 +106,10 @@
       <button class="dash-nav" type="button" data-dashboard-tab="personalization"><span>06</span>🎨 Personnalisation</button>
       <button class="dash-nav" type="button" data-dashboard-tab="moderation"><span>07</span>⚒️ Modération</button>
       <button class="dash-nav" type="button" data-dashboard-tab="language"><span>08</span>🌍 Langue</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="socials"><span>09</span>📣 Réseaux</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="ratings"><span>10</span>⭐ Ratings</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="logs"><span>11</span>🧾 Logs</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="tournaments"><span>09</span>🏆 Tournois</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="socials"><span>10</span>📣 Réseaux</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="ratings"><span>11</span>⭐ Ratings</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="logs"><span>12</span>🧾 Logs</button>
     </aside>
 
     <section class="dashboard-content">
@@ -141,7 +142,7 @@
         <div class="metric-grid">
           <article class="metric-card"><span>🎫 Tickets</span><strong>Actif</strong><small>4 catégories configurées</small></article>
           <article class="metric-card"><span>🛡️ Sécurité</span><strong>3/5</strong><small>Modules actifs</small></article>
-          <article class="metric-card"><span>📌 Salons</span><strong>5</strong><small>Salons renseignés</small></article>
+          <article class="metric-card"><span>🏆 Tournois</span><strong data-tournament-overview-state>Inactif</strong><small>EA FC 26 Club Pro</small></article>
           <article class="metric-card"><span>⭐ Ratings</span><strong>4.8/5</strong><small>24 évaluations</small></article>
         </div>
 
@@ -154,6 +155,7 @@
               <button type="button" data-dashboard-jump="security">🛡️ Sécurité serveur</button>
               <button type="button" data-dashboard-jump="channels">📌 Choisir les salons</button>
               <button type="button" data-dashboard-jump="personalization">🎨 Identité visuelle</button>
+              <button type="button" data-dashboard-jump="tournaments">🏆 Module tournois</button>
               <button type="button" data-dashboard-jump="socials">📣 Relais réseaux</button>
             </div>
           </div>
@@ -435,6 +437,100 @@
               <option>Staff strict</option>
             </select>
           </label>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="tournaments">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow">🏆 Tournois</p>
+            <h2>EA FC 26 Club Pro</h2>
+          </div>
+          <button class="secondary-btn compact" type="button" data-reset-tournament>♻️ Reset tournois</button>
+        </div>
+
+        <div class="dashboard-grid two">
+          <div class="tool-panel tournament-activation-card">
+            <div class="tournament-state-line">
+              <div>
+                <h3>⚽ Module tournoi</h3>
+                <p>Active ce module pour débloquer les commandes spéciales de gestion de compétition Club Pro.</p>
+              </div>
+              <span class="state inactive" data-tournament-state>⚪ Inactif</span>
+            </div>
+            <label class="toggle-line tournament-toggle">
+              <input type="checkbox" data-tournament-enabled>
+              <span></span>
+              <strong>🏆 Activer le mode tournoi</strong>
+              <small>Donne accès aux commandes /poules, /huitieme, /classement et aux outils de bracket.</small>
+            </label>
+          </div>
+
+          <form class="tool-panel form-panel">
+            <h3>🎮 Paramètres compétition</h3>
+            <label>Nom du tournoi
+              <input type="text" value="EA FC 26 Club Pro Cup" data-tournament-name>
+            </label>
+            <div class="form-row">
+              <label>Format
+                <select data-tournament-format>
+                  <option>Poules + phase finale</option>
+                  <option>Élimination directe</option>
+                  <option>Championnat</option>
+                </select>
+              </label>
+              <label>Équipes max
+                <input type="number" min="2" max="128" value="32" data-tournament-teams>
+              </label>
+            </div>
+            <div class="form-row">
+              <label>Salon annonces tournoi
+                <input type="text" placeholder="ID du salon" data-tournament-channel>
+              </label>
+              <label>Rôle organisateur
+                <input type="text" placeholder="@Organisateur Tournoi" data-tournament-role>
+              </label>
+            </div>
+          </form>
+        </div>
+
+        <div class="tool-panel tournament-command-panel">
+          <div class="table-head">
+            <h3>⚡ Commandes spéciales débloquées</h3>
+            <span class="state inactive" data-tournament-command-state>⚪ Module inactif</span>
+          </div>
+          <div class="tournament-command-grid">
+            <article class="tournament-command-card">
+              <strong>/poules</strong>
+              <span>Créer ou afficher les groupes du tournoi.</span>
+            </article>
+            <article class="tournament-command-card">
+              <strong>/huitieme</strong>
+              <span>Générer les huitièmes de finale depuis les qualifiés.</span>
+            </article>
+            <article class="tournament-command-card">
+              <strong>/quart</strong>
+              <span>Préparer les quarts de finale et les affiches.</span>
+            </article>
+            <article class="tournament-command-card">
+              <strong>/demi</strong>
+              <span>Publier les demi-finales du bracket.</span>
+            </article>
+            <article class="tournament-command-card">
+              <strong>/finale</strong>
+              <span>Créer la finale et le match pour la troisième place.</span>
+            </article>
+            <article class="tournament-command-card">
+              <strong>/classement</strong>
+              <span>Afficher le classement général ou d’une poule.</span>
+            </article>
+          </div>
+        </div>
+
+        <div class="dashboard-grid three tournament-flow">
+          <article class="tool-panel"><h3>📋 Inscriptions</h3><p>Centralise les équipes, capitaines, IDs joueurs et validation organisateur.</p></article>
+          <article class="tool-panel"><h3>🧮 Résultats</h3><p>Prépare la saisie des scores, preuves de match et mise à jour automatique du classement.</p></article>
+          <article class="tool-panel"><h3>📣 Publications</h3><p>Publie les poules, affiches, classements et annonces dans le salon tournoi choisi.</p></article>
         </div>
       </section>
 
