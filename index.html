@@ -57,14 +57,23 @@
       </button>
 
       <div class="nav-links" id="navLinks">
-        <a href="#features">Fonctionnalités</a>
-        <a href="#demo">Démo</a>
-        <a href="#pricing">Tarifs</a>
+        <a href="#features" data-i18n="nav.features">Fonctionnalités</a>
+        <a href="#demo" data-i18n="nav.demo">Démo</a>
+        <a href="#pricing" data-i18n="nav.pricing">Tarifs</a>
+        <a href="#admin" data-i18n="nav.admin">Admin</a>
         <a href="#partners">Partenaires</a>
         <a href="#patch-notes">Patch notes</a>
         <a href="#faq">FAQ</a>
         <a href="dashboard.html">Dashboard</a>
-        <a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">Demander ModBot</a>
+        <label class="language-switch" aria-label="Choisir la langue du site">
+          <span>🌍</span>
+          <select id="siteLanguage">
+            <option value="fr">Français</option>
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+          </select>
+        </label>
+        <a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="nav.cta">Demander ModBot</a>
       </div>
     </nav>
   </header>
@@ -72,16 +81,16 @@
   <main id="top">
     <section class="hero section-shell">
       <div class="hero-copy">
-        <p class="eyebrow">Protection Discord 24/7</p>
+        <p class="eyebrow" data-i18n="hero.eyebrow">Protection Discord 24/7</p>
         <h1>ModBot</h1>
-        <p class="hero-lead">
+        <p class="hero-lead" data-i18n="hero.lead">
           La modération intelligente qui protège votre communauté, automatise les sanctions,
           gère les tickets et garde votre serveur clair, sain et réactif.
         </p>
         <div class="hero-actions">
-          <a class="primary-btn" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">Obtenir ModBot</a>
-          <a class="secondary-btn" href="dashboard.html">Accéder au dashboard</a>
-          <a class="secondary-btn" href="#demo">Essayer les commandes</a>
+          <a class="primary-btn" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="hero.primary">Obtenir ModBot</a>
+          <a class="secondary-btn" href="dashboard.html" data-i18n="hero.dashboard">Accéder au dashboard</a>
+          <a class="secondary-btn" href="#demo" data-i18n="hero.demo">Essayer les commandes</a>
         </div>
       </div>
 
@@ -208,41 +217,111 @@
 
     <section id="pricing" class="pricing section-shell">
       <div class="section-heading">
-        <p class="eyebrow">Tarifs</p>
-        <h2>Des offres simples et claires</h2>
-        <p>ModBot n’est pas ajouté librement : nous l’installons manuellement sur votre serveur.</p>
+        <p class="eyebrow" data-i18n="pricing.eyebrow">Tarifs</p>
+        <h2 data-i18n="pricing.title">Des offres simples et claires</h2>
+        <p data-i18n="pricing.copy">ModBot n’est pas ajouté librement : nous l’installons manuellement sur votre serveur.</p>
       </div>
 
       <div class="pricing-grid">
         <article class="price-card">
           <div class="price-head">
-            <h3>Offre de base</h3>
-            <p>La protection ModBot pour sécuriser votre serveur toute l’année.</p>
+            <h3 data-i18n="pricing.free.title">Offre de base</h3>
+            <p data-i18n="pricing.free.copy">La protection ModBot pour sécuriser votre serveur toute l’année.</p>
           </div>
-          <div class="price">10€ <span>/ an</span></div>
+          <div class="price">10€ <span data-i18n="pricing.free.period">/ an</span></div>
           <ul>
-            <li>Installation</li>
-            <li>Configuration</li>
-            <li>Protection du serveur toute l’année</li>
-            <li>Support Discord</li>
+            <li data-i18n="pricing.free.item1">Installation</li>
+            <li data-i18n="pricing.free.item2">Configuration</li>
+            <li data-i18n="pricing.free.item3">Protection du serveur toute l’année</li>
+            <li data-i18n="pricing.free.item4">Support Discord</li>
           </ul>
-          <a class="secondary-btn stretch" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">Choisir cette offre</a>
+          <a class="secondary-btn stretch" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="pricing.free.cta">Choisir cette offre</a>
         </article>
 
         <article class="price-card premium">
           <span class="premium-ribbon">Premium</span>
           <div class="price-head">
-            <h3>Offre Premium</h3>
-            <p>Tout ModBot mis en avant avec une expérience complète pour votre serveur.</p>
+            <h3 data-i18n="pricing.premium.title">Offre Premium</h3>
+            <p data-i18n="pricing.premium.copy">Tout ModBot mis en avant avec une expérience complète pour votre serveur.</p>
           </div>
-          <div class="price">35€ <span>/ an</span></div>
+          <div class="price">35€ <span data-i18n="pricing.premium.period">/ an</span></div>
           <ul>
-            <li>Bot personnalisé</li>
-            <li>Fonctionnalités mises en avant</li>
-            <li>Configuration premium complète</li>
-            <li>Support prioritaire</li>
+            <li data-i18n="pricing.premium.item1">Bot personnalisé</li>
+            <li data-i18n="pricing.premium.item2">Fonctionnalités mises en avant</li>
+            <li data-i18n="pricing.premium.item3">Configuration premium complète</li>
+            <li data-i18n="pricing.premium.item4">Support prioritaire</li>
           </ul>
-          <a class="primary-btn stretch" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">Choisir cette offre</a>
+          <a class="primary-btn stretch" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="pricing.premium.cta">Choisir cette offre</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="admin" class="admin-zone section-shell">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="admin.eyebrow">Administration</p>
+        <h2 data-i18n="admin.title">Centre administrateur du site</h2>
+        <p data-i18n="admin.copy">Gérez le premium, suivez l’activité du site et préparez la synchronisation des serveurs où ModBot est installé.</p>
+      </div>
+
+      <div class="admin-grid">
+        <article class="admin-panel admin-login-panel">
+          <h3 data-i18n="admin.access.title">🔐 Accès admin</h3>
+          <p data-i18n="admin.access.copy">Maquette d’accès. Le vrai verrouillage sera à brancher avec Discord OAuth et une liste d’IDs admin.</p>
+          <label>ID Discord administrateur
+            <input type="text" placeholder="Exemple : 1189681599965573131">
+          </label>
+          <button class="primary-btn compact" type="button" data-admin-unlock>Déverrouiller</button>
+        </article>
+
+        <article class="admin-panel admin-stats-panel">
+          <div class="admin-panel-head">
+            <h3 data-i18n="admin.stats.title">📈 Stats du site</h3>
+            <span class="admin-badge">Live mock</span>
+          </div>
+          <div class="site-stat-grid">
+            <div><span data-admin-stat="visits">12 480</span><small data-i18n="admin.stats.visits">Visites</small></div>
+            <div><span data-admin-stat="today">326</span><small data-i18n="admin.stats.today">Aujourd’hui</small></div>
+            <div><span data-admin-stat="dashboard">89</span><small data-i18n="admin.stats.dashboard">Ouvertures dashboard</small></div>
+            <div><span data-admin-stat="installs">16</span><small data-i18n="admin.stats.installs">Serveurs ModBot</small></div>
+          </div>
+        </article>
+
+        <article class="admin-panel premium-manager">
+          <div class="admin-panel-head">
+            <h3 data-i18n="admin.premium.title">💎 Premium membre</h3>
+            <span class="admin-badge active">Admin</span>
+          </div>
+          <div class="premium-form">
+            <label>ID ou pseudo Discord
+              <input type="text" placeholder="@membre ou ID Discord" data-premium-member>
+            </label>
+            <label>Durée
+              <select data-premium-duration>
+                <option value="30 jours">30 jours</option>
+                <option value="90 jours">90 jours</option>
+                <option value="1 an">1 an</option>
+                <option value="Permanent">Permanent</option>
+              </select>
+            </label>
+            <button class="primary-btn compact" type="button" data-premium-apply>Attribuer le premium</button>
+          </div>
+          <div class="premium-list" data-premium-list>
+            <div><strong>gimskh</strong><span>Premium permanent</span></div>
+            <div><strong>Owner BE</strong><span>Premium 1 an</span></div>
+          </div>
+        </article>
+
+        <article class="admin-panel server-sync-panel">
+          <div class="admin-panel-head">
+            <h3 data-i18n="admin.servers.title">🧭 Serveurs détectés</h3>
+            <button class="secondary-btn compact" type="button" data-refresh-servers>Rafraîchir</button>
+          </div>
+          <p data-i18n="admin.servers.copy">Quand le backend sera branché au bot Discord, cette zone affichera automatiquement les logos réels des serveurs via les données `bot.guilds`.</p>
+          <div class="admin-server-list" data-admin-server-list>
+            <div><img src="assets/default_logo.png" alt=""><span><strong>Hote BOT - ModBot</strong><small>Logo serveur synchronisable</small></span></div>
+            <div><img src="assets/default_logo.png" alt=""><span><strong>VPG Belgique</strong><small>Logo serveur synchronisable</small></span></div>
+            <div><img src="assets/default_logo.png" alt=""><span><strong>Serveur test</strong><small>Logo serveur synchronisable</small></span></div>
+          </div>
         </article>
       </div>
     </section>
