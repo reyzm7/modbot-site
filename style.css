@@ -850,6 +850,18 @@ h1 {
   padding-top: 92px;
 }
 
+.admin-site {
+  padding-top: 118px;
+}
+
+.admin-page .dashboard-topbar {
+  width: min(100% - 32px, 1480px);
+}
+
+.admin-hero {
+  margin-bottom: 22px;
+}
+
 .admin-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -900,6 +912,21 @@ h1 {
 .premium-form {
   display: grid;
   gap: 14px;
+}
+
+.admin-access-note {
+  display: grid;
+  align-content: center;
+}
+
+.admin-error {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 88, 88, 0.32);
+  border-radius: var(--radius);
+  background: rgba(255, 88, 88, 0.1);
+  color: #ffd1d1 !important;
+  font-weight: 900;
 }
 
 .admin-panel-head {
@@ -970,12 +997,32 @@ h1 {
   gap: 10px;
 }
 
+.premium-limit-copy {
+  margin-bottom: 14px;
+}
+
+.premium-server-slots,
+.premium-custom-duration {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
 .premium-list div {
   padding: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+}
+
+.premium-list strong,
+.premium-list small {
+  display: block;
+}
+
+.premium-list small {
+  margin-top: 3px;
 }
 
 .admin-server-list div {
@@ -1609,7 +1656,9 @@ h1 {
   .stats,
   .pricing-grid,
   .feature-grid,
-  .admin-grid {
+  .admin-grid,
+  .premium-server-slots,
+  .premium-custom-duration {
     grid-template-columns: 1fr;
   }
 
@@ -1620,6 +1669,7 @@ h1 {
   .features,
   .demo,
   .pricing,
+  .admin-site,
   .admin-zone,
   .patch-notes,
   .faq,
