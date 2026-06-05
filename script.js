@@ -70,14 +70,12 @@ const siteTranslations = {
     "admin.stats.dashboard": "Ouvertures dashboard",
     "admin.stats.installs": "Serveurs ModBot",
     "admin.premium.title": "💎 Premium membre",
-    "admin.premium.badge": "2 serveurs max",
-    "admin.premium.copy": "Chaque membre Premium peut associer jusqu’à 2 serveurs à son abonnement.",
+    "admin.premium.badge": "Serveurs côté dashboard",
+    "admin.premium.copy": "L’admin attribue le Premium et sa durée. Le membre associe ensuite jusqu’à 2 serveurs depuis son dashboard.",
     "admin.premium.member": "ID ou pseudo Discord",
     "admin.premium.duration": "Durée",
     "admin.premium.customValue": "Durée personnalisée",
     "admin.premium.customUnit": "Unité",
-    "admin.premium.server1": "Serveur premium 1",
-    "admin.premium.server2": "Serveur premium 2",
     "admin.premium.apply": "Attribuer le premium",
     "admin.servers.title": "🧭 Serveurs détectés",
     "admin.servers.refresh": "Rafraîchir",
@@ -147,14 +145,12 @@ const siteTranslations = {
     "admin.stats.dashboard": "Dashboard opens",
     "admin.stats.installs": "ModBot servers",
     "admin.premium.title": "💎 Member premium",
-    "admin.premium.badge": "2 servers max",
-    "admin.premium.copy": "Each Premium member can attach up to 2 servers to their subscription.",
+    "admin.premium.badge": "Servers on dashboard",
+    "admin.premium.copy": "The admin grants Premium and its duration. The member then associates up to 2 servers from their dashboard.",
     "admin.premium.member": "Discord ID or username",
     "admin.premium.duration": "Duration",
     "admin.premium.customValue": "Custom duration",
     "admin.premium.customUnit": "Unit",
-    "admin.premium.server1": "Premium server 1",
-    "admin.premium.server2": "Premium server 2",
     "admin.premium.apply": "Grant premium",
     "admin.servers.title": "🧭 Detected servers",
     "admin.servers.refresh": "Refresh",
@@ -224,14 +220,12 @@ const siteTranslations = {
     "admin.stats.dashboard": "فتح لوحة التحكم",
     "admin.stats.installs": "خوادم ModBot",
     "admin.premium.title": "💎 Premium للعضو",
-    "admin.premium.badge": "خادمان كحد أقصى",
-    "admin.premium.copy": "يمكن لكل عضو Premium ربط ما يصل إلى خادمين باشتراكه.",
+    "admin.premium.badge": "الخوادم من لوحة التحكم",
+    "admin.premium.copy": "يمنح المسؤول Premium ومدته، ثم يربط العضو ما يصل إلى خادمين من لوحة التحكم الخاصة به.",
     "admin.premium.member": "معرف Discord أو الاسم",
     "admin.premium.duration": "المدة",
     "admin.premium.customValue": "مدة مخصصة",
     "admin.premium.customUnit": "الوحدة",
-    "admin.premium.server1": "الخادم Premium 1",
-    "admin.premium.server2": "الخادم Premium 2",
     "admin.premium.apply": "منح Premium",
     "admin.servers.title": "🧭 الخوادم المكتشفة",
     "admin.servers.refresh": "تحديث",
@@ -841,16 +835,9 @@ function initAdminZone() {
 
   document.querySelector("[data-premium-apply]")?.addEventListener("click", () => {
     const memberInput = document.querySelector("[data-premium-member]");
-    const primaryServer = document.querySelector("[data-premium-server-primary]")?.value || "";
-    const secondaryServer = document.querySelector("[data-premium-server-secondary]")?.value || "";
     const list = document.querySelector("[data-premium-list]");
     const member = memberInput?.value.trim();
     if (!member || !list) return;
-    if (secondaryServer && secondaryServer === primaryServer) {
-      showAdminToast("⚠️ Choisis deux serveurs différents");
-      return;
-    }
-    const servers = [primaryServer, secondaryServer].filter(Boolean).slice(0, 2);
     const duration = getPremiumDuration();
     const item = document.createElement("div");
     const identity = document.createElement("span");
@@ -858,8 +845,8 @@ function initAdminZone() {
     const serverLine = document.createElement("small");
     const meta = document.createElement("span");
     name.textContent = member;
-    serverLine.textContent = servers.join(" + ") || "Aucun serveur choisi";
-    meta.textContent = `${servers.length}/2 • Premium ${duration}`;
+    serverLine.textContent = "Serveurs à associer depuis le dashboard";
+    meta.textContent = `Premium ${duration}`;
     identity.append(name, serverLine);
     item.append(identity, meta);
     list.prepend(item);
@@ -931,6 +918,9 @@ function initDashboard() {
   const currentServerTargets = document.querySelectorAll("[data-current-server], [data-current-server-label]");
   const currentServerLogoTargets = document.querySelectorAll("[data-current-server-logo], [data-current-server-logo-inline]");
   const currentServerLogoShells = document.querySelectorAll("[data-current-server-logo-shell]");
+  const premiumUsedTarget = document.querySelector("[data-premium-used]");
+  const premiumSlots = document.querySelector("[data-dashboard-premium-slots]");
+  const premiumServerChoices = document.querySelectorAll("[data-premium-server-choice]");
   const unsavedModal = document.querySelector("[data-unsaved-modal]");
   const publishTicketButton = document.querySelector("[data-publish-ticket]");
   const ticketChannelInput = document.querySelector("[data-ticket-channel]");
@@ -947,6 +937,12 @@ function initDashboard() {
   let ticketNeedsPublish = false;
   let pendingNavigation = null;
   let toastTimer;
+  let selectedServer = {
+    name: "Hote BOT - ModBot",
+    logo: "assets/default_logo.png",
+    initials: "HB"
+  };
+  let premiumDraftServers = readStoredPremiumServers();
 
   function showToast(message) {
     if (!toast) return;
@@ -980,7 +976,109 @@ function initDashboard() {
     });
   }
 
+  function readStoredPremiumServers() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem("modbot-dashboard-premium-servers") || "[]");
+      if (!Array.isArray(parsed)) return [];
+      return parsed
+        .filter((server) => server && server.name)
+        .map((server) => ({
+          name: String(server.name),
+          logo: String(server.logo || "assets/default_logo.png"),
+          initials: String(server.initials || "MB")
+        }))
+        .slice(0, 2);
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function savePremiumServers() {
+    localStorage.setItem("modbot-dashboard-premium-servers", JSON.stringify(premiumDraftServers.slice(0, 2)));
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, (character) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      "\"": "&quot;",
+      "'": "&#39;"
+    }[character]));
+  }
+
+  function isPremiumServerAssociated(serverName) {
+    return premiumDraftServers.some((server) => server.name === serverName);
+  }
+
+  function renderPremiumAssociations() {
+    if (premiumUsedTarget) premiumUsedTarget.textContent = String(premiumDraftServers.length);
+
+    if (premiumSlots) {
+      premiumSlots.innerHTML = "";
+      for (let index = 0; index < 2; index += 1) {
+        const server = premiumDraftServers[index];
+        const slot = document.createElement("div");
+        slot.className = `premium-slot ${server ? "is-filled" : "is-empty"}`;
+
+        if (server) {
+          slot.innerHTML = `
+            <span class="server-logo-shell" data-initials="${escapeHtml(server.initials)}">
+              <img src="${escapeHtml(server.logo)}" alt="" data-logo-img>
+            </span>
+            <span>
+              <strong>${escapeHtml(server.name)}</strong>
+              <small>Emplacement ${index + 1}/2 actif</small>
+            </span>
+            <button class="secondary-btn compact" type="button" data-premium-remove-slot="${index}">Retirer</button>
+          `;
+        } else {
+          slot.textContent = `Emplacement ${index + 1} libre`;
+        }
+
+        premiumSlots.append(slot);
+      }
+      setupLogoFallbacks();
+    }
+
+    premiumServerChoices.forEach((choice) => {
+      const associated = isPremiumServerAssociated(choice.dataset.serverName);
+      choice.classList.toggle("is-associated", associated);
+      choice.setAttribute("aria-pressed", associated ? "true" : "false");
+    });
+  }
+
+  function addPremiumServer(server) {
+    if (!server?.name) return;
+    if (isPremiumServerAssociated(server.name)) {
+      showToast("✅ Ce serveur est déjà associé au Premium");
+      return;
+    }
+    if (premiumDraftServers.length >= 2) {
+      showToast("⚠️ Maximum 2 serveurs Premium");
+      return;
+    }
+
+    premiumDraftServers = [...premiumDraftServers, server].slice(0, 2);
+    renderPremiumAssociations();
+    markPanelDirty("premium");
+    showToast(`💎 ${server.name} ajouté aux emplacements Premium`);
+  }
+
+  function removePremiumServer(index) {
+    const removed = premiumDraftServers[index];
+    premiumDraftServers = premiumDraftServers.filter((_, serverIndex) => serverIndex !== index);
+    renderPremiumAssociations();
+    markPanelDirty("premium");
+    showToast(removed ? `🗑️ ${removed.name} retiré du Premium` : "🗑️ Emplacement libéré");
+  }
+
   function setCurrentServer(serverName, serverLogo = "assets/default_logo.png", initials = "MB") {
+    selectedServer = {
+      name: serverName,
+      logo: serverLogo,
+      initials
+    };
     currentServerTargets.forEach((target) => {
       target.textContent = serverName;
     });
@@ -1020,6 +1118,9 @@ function initDashboard() {
     if (!hasUnsavedChanges) {
       showToast("✅ Tout est déjà enregistré");
       return;
+    }
+    if (dirtyPanelName === "premium") {
+      savePremiumServers();
     }
     clearUnsavedChanges();
     showToast(message);
@@ -1071,7 +1172,7 @@ function initDashboard() {
     runWithUnsavedGuard(() => showDashboardStage("servers"));
   });
 
-  document.querySelectorAll("[data-server-name]").forEach((serverCard) => {
+  document.querySelectorAll(".server-card[data-server-name]").forEach((serverCard) => {
     serverCard.addEventListener("click", () => {
       const cardLogo = serverCard.querySelector("[data-logo-img]");
       const loadedLogo = cardLogo?.currentSrc || cardLogo?.src || serverCard.dataset.serverLogo || "assets/default_logo.png";
@@ -1082,6 +1183,34 @@ function initDashboard() {
     });
   });
 
+  document.querySelector("[data-premium-associate-current]")?.addEventListener("click", () => {
+    addPremiumServer(selectedServer);
+  });
+
+  premiumServerChoices.forEach((choice) => {
+    choice.addEventListener("click", () => {
+      addPremiumServer({
+        name: choice.dataset.serverName || "Serveur ModBot",
+        logo: choice.dataset.serverLogo || "assets/default_logo.png",
+        initials: choice.dataset.serverInitials || "MB"
+      });
+    });
+  });
+
+  premiumSlots?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-premium-remove-slot]");
+    if (!button) return;
+    removePremiumServer(Number(button.dataset.premiumRemoveSlot || 0));
+  });
+
+  document.querySelector("[data-reset-premium-associations]")?.addEventListener("click", () => {
+    premiumDraftServers = [];
+    renderPremiumAssociations();
+    markPanelDirty("premium");
+    showToast("♻️ Emplacements Premium vidés");
+  });
+
+  renderPremiumAssociations();
   setupLogoFallbacks();
 
   tabs.forEach((tab) => {
@@ -1126,6 +1255,10 @@ function initDashboard() {
     if (dirtyPanelName === "tickets") {
       ticketNeedsPublish = false;
       setTicketPublishVisible(false);
+    }
+    if (dirtyPanelName === "premium") {
+      premiumDraftServers = readStoredPremiumServers();
+      renderPremiumAssociations();
     }
     clearUnsavedChanges();
     showToast("🗑️ Modifications laissées de côté");
