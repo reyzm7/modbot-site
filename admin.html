@@ -62,11 +62,7 @@
           <span data-i18n="admin.access.label">ID Discord administrateur</span>
           <input type="text" inputmode="numeric" autocomplete="off" placeholder="Exemple : 1189681599965573131" data-admin-id>
         </label>
-        <label class="api-url-field">
-          <span>URL API du bot</span>
-          <input type="url" placeholder="https://ton-bot.onrender.com" data-api-url-input>
-        </label>
-        <button class="secondary-btn compact" type="button" data-save-api-url>🔗 Enregistrer l’API</button>
+        <p class="oauth-note">La connexion réelle se fait via l’autorisation Discord de ModBot, puis l’accès admin est vérifié avec ton identifiant Discord autorisé.</p>
         <p class="admin-error" data-admin-error hidden>❌ ID non autorisé pour cet espace administrateur.</p>
         <button class="primary-btn compact" type="button" data-admin-unlock data-i18n="admin.access.button">Déverrouiller</button>
       </article>
