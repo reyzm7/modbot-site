@@ -941,6 +941,7 @@ function initDashboard() {
     banner: "assets/default_banner.png",
     color: "#5865F2"
   };
+  const IFC_TOURNAMENT_API_READY = false;
   let activePanelName = "overview";
   let hasUnsavedChanges = false;
   let dirtyPanelName = null;
@@ -1024,7 +1025,8 @@ function initDashboard() {
       const stored = JSON.parse(localStorage.getItem("modbot-dashboard-tournament") || "null");
       return {
         ...defaultTournamentConfig(),
-        ...(stored && typeof stored === "object" ? stored : {})
+        ...(stored && typeof stored === "object" ? stored : {}),
+        enabled: IFC_TOURNAMENT_API_READY ? Boolean(stored?.enabled) : false
       };
     } catch (error) {
       return defaultTournamentConfig();
@@ -1033,7 +1035,7 @@ function initDashboard() {
 
   function collectTournamentConfig() {
     return {
-      enabled: Boolean(tournamentEnabled?.checked),
+      enabled: IFC_TOURNAMENT_API_READY && Boolean(tournamentEnabled?.checked),
       name: tournamentNameInput?.value.trim() || defaultTournamentConfig().name,
       format: tournamentFormatInput?.value || defaultTournamentConfig().format,
       teams: tournamentTeamsInput?.value || defaultTournamentConfig().teams,
@@ -1048,6 +1050,38 @@ function initDashboard() {
   }
 
   function syncTournamentState(isActive = Boolean(tournamentEnabled?.checked)) {
+    if (!IFC_TOURNAMENT_API_READY) {
+      if (tournamentEnabled) {
+        tournamentEnabled.checked = false;
+        tournamentEnabled.disabled = true;
+      }
+
+      const toggleLine = tournamentEnabled?.closest(".toggle-line");
+      toggleLine?.classList.remove("is-on");
+      toggleLine?.classList.add("is-locked");
+
+      if (tournamentState) {
+        tournamentState.classList.remove("active", "inactive");
+        tournamentState.classList.add("pending");
+        tournamentState.textContent = "🟡 En attente API IFC";
+      }
+
+      if (tournamentCommandState) {
+        tournamentCommandState.classList.remove("active", "inactive");
+        tournamentCommandState.classList.add("pending");
+        tournamentCommandState.textContent = "🟡 Commandes indisponibles";
+      }
+
+      if (tournamentOverviewState) {
+        tournamentOverviewState.textContent = "En attente";
+      }
+
+      tournamentCommandCards.forEach((card) => {
+        card.classList.add("is-disabled");
+      });
+      return;
+    }
+
     const stateText = isActive ? "🟢 Actif" : "⚪ Inactif";
     const commandText = isActive ? "🟢 Commandes disponibles" : "⚪ Module inactif";
 
@@ -1073,14 +1107,19 @@ function initDashboard() {
   }
 
   function applyTournamentConfig(config = defaultTournamentConfig()) {
-    if (tournamentEnabled) tournamentEnabled.checked = Boolean(config.enabled);
+    const canEnableTournament = IFC_TOURNAMENT_API_READY && Boolean(config.enabled);
+    if (tournamentEnabled) {
+      tournamentEnabled.checked = canEnableTournament;
+      tournamentEnabled.disabled = !IFC_TOURNAMENT_API_READY;
+    }
     if (tournamentNameInput) tournamentNameInput.value = config.name || defaultTournamentConfig().name;
     if (tournamentFormatInput) tournamentFormatInput.value = config.format || defaultTournamentConfig().format;
     if (tournamentTeamsInput) tournamentTeamsInput.value = config.teams || defaultTournamentConfig().teams;
     if (tournamentChannelInput) tournamentChannelInput.value = config.channel || "";
     if (tournamentRoleInput) tournamentRoleInput.value = config.role || "";
-    tournamentEnabled?.closest(".toggle-line")?.classList.toggle("is-on", Boolean(config.enabled));
-    syncTournamentState(Boolean(config.enabled));
+    tournamentEnabled?.closest(".toggle-line")?.classList.toggle("is-on", canEnableTournament);
+    tournamentEnabled?.closest(".toggle-line")?.classList.toggle("is-locked", !IFC_TOURNAMENT_API_READY);
+    syncTournamentState(canEnableTournament);
   }
 
   function escapeHtml(value) {
@@ -1303,6 +1342,12 @@ function initDashboard() {
   applyTournamentConfig(tournamentDraft);
 
   tournamentEnabled?.addEventListener("change", () => {
+    if (!IFC_TOURNAMENT_API_READY) {
+      tournamentEnabled.checked = false;
+      syncTournamentState(false);
+      showToast("🔒 Module tournois en attente de l'API IFC");
+      return;
+    }
     syncTournamentState(tournamentEnabled.checked);
     showToast(tournamentEnabled.checked ? "🏆 Module tournois activé" : "⚪ Module tournois désactivé");
   });
@@ -1388,6 +1433,13 @@ function initDashboard() {
     const syncToggle = () => line?.classList.toggle("is-on", checkbox.checked);
     syncToggle();
     checkbox.addEventListener("change", () => {
+      if (checkbox.matches("[data-tournament-enabled]") && !IFC_TOURNAMENT_API_READY) {
+        checkbox.checked = false;
+        syncToggle();
+        syncTournamentState(false);
+        showToast("🔒 Module tournois en attente de l'API IFC");
+        return;
+      }
       syncToggle();
       markPanelDirty(checkbox.closest("[data-dashboard-panel]")?.dataset.dashboardPanel || activePanelName);
       if (checkbox.matches("[data-tournament-enabled]")) {
