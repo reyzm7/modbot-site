@@ -927,10 +927,6 @@ function initDashboard() {
   const tournamentOverviewState = document.querySelector("[data-tournament-overview-state]");
   const tournamentCommandCards = document.querySelectorAll(".tournament-command-card");
   const tournamentNameInput = document.querySelector("[data-tournament-name]");
-  const tournamentFormatInput = document.querySelector("[data-tournament-format]");
-  const tournamentTeamsInput = document.querySelector("[data-tournament-teams]");
-  const tournamentChannelInput = document.querySelector("[data-tournament-channel]");
-  const tournamentRoleInput = document.querySelector("[data-tournament-role]");
   const unsavedModal = document.querySelector("[data-unsaved-modal]");
   const publishTicketButton = document.querySelector("[data-publish-ticket]");
   const ticketChannelInput = document.querySelector("[data-ticket-channel]");
@@ -1012,11 +1008,7 @@ function initDashboard() {
   function defaultTournamentConfig() {
     return {
       enabled: false,
-      name: "EA FC 26 Club Pro Cup",
-      format: "Poules + phase finale",
-      teams: "32",
-      channel: "",
-      role: ""
+      name: "EA FC 26 Club Pro Cup"
     };
   }
 
@@ -1036,11 +1028,7 @@ function initDashboard() {
   function collectTournamentConfig() {
     return {
       enabled: IFC_TOURNAMENT_API_READY && Boolean(tournamentEnabled?.checked),
-      name: tournamentNameInput?.value.trim() || defaultTournamentConfig().name,
-      format: tournamentFormatInput?.value || defaultTournamentConfig().format,
-      teams: tournamentTeamsInput?.value || defaultTournamentConfig().teams,
-      channel: tournamentChannelInput?.value.trim() || "",
-      role: tournamentRoleInput?.value.trim() || ""
+      name: tournamentNameInput?.value.trim() || defaultTournamentConfig().name
     };
   }
 
@@ -1113,10 +1101,6 @@ function initDashboard() {
       tournamentEnabled.disabled = !IFC_TOURNAMENT_API_READY;
     }
     if (tournamentNameInput) tournamentNameInput.value = config.name || defaultTournamentConfig().name;
-    if (tournamentFormatInput) tournamentFormatInput.value = config.format || defaultTournamentConfig().format;
-    if (tournamentTeamsInput) tournamentTeamsInput.value = config.teams || defaultTournamentConfig().teams;
-    if (tournamentChannelInput) tournamentChannelInput.value = config.channel || "";
-    if (tournamentRoleInput) tournamentRoleInput.value = config.role || "";
     tournamentEnabled?.closest(".toggle-line")?.classList.toggle("is-on", canEnableTournament);
     tournamentEnabled?.closest(".toggle-line")?.classList.toggle("is-locked", !IFC_TOURNAMENT_API_READY);
     syncTournamentState(canEnableTournament);
