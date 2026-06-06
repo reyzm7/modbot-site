@@ -365,7 +365,7 @@
               <input type="text" value="151042200000000001" placeholder="ID du salon">
             </label>
             <label>Message au-dessus de l’image
-              <textarea data-welcome-message>Bienvenue @membre sur @serveur !</textarea>
+              <textarea data-welcome-message>Bienvenue nom du membre sur @serveur !</textarea>
             </label>
             <label class="toggle-line">
               <input type="checkbox">
@@ -374,21 +374,22 @@
               <small>Préviens le serveur quand un membre part.</small>
             </label>
             <label>Message de départ
-              <input type="text" value="@membre vient de quitter @serveur.">
+              <input type="text" value="Au revoir nom du membre." data-departure-message>
             </label>
           </form>
 
           <div class="tool-panel welcome-preview-panel">
             <h3>👁️ Aperçu Discord</h3>
             <div class="welcome-discord-preview">
-              <p data-welcome-live-message>Bienvenue @membre sur @serveur !</p>
+              <p data-welcome-live-message>Bienvenue nom du membre sur @serveur !</p>
               <div class="welcome-card" data-welcome-card>
-                <span class="welcome-avatar"></span>
+                <img class="welcome-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Photo de profil du membre">
                 <div>
                   <strong>BIENVENUE</strong>
-                  <small>ZEBELLIJUR_</small>
+                  <small data-welcome-member-name>nom du membre</small>
                 </div>
               </div>
+              <p class="departure-preview" data-departure-live-message>Au revoir nom du membre.</p>
             </div>
           </div>
         </div>
