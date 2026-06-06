@@ -4,6 +4,8 @@ if ("scrollRestoration" in window.history) {
 
 const discordInvite = "https://discord.gg/CK8CbFtYuv";
 const patchDiscordChannel = "https://discord.com/channels/1510421934435729586/1510440693070430324";
+const modbotDiscordClientId = String(window.MODBOT_DISCORD_CLIENT_ID || document.querySelector('meta[name="modbot-discord-client-id"]')?.content || "").trim();
+const modbotBotPermissions = String(window.MODBOT_BOT_PERMISSIONS || "8");
 
 const siteTranslations = {
   fr: {
@@ -726,12 +728,30 @@ function escapeHtmlValue(value) {
 }
 
 function getModbotApiBase() {
-  const configured = normalizeApiBase(window.MODBOT_API_URL || localStorage.getItem("modbot-api-url"));
+  const configured = normalizeApiBase(window.MODBOT_API_URL || document.querySelector('meta[name="modbot-api-url"]')?.content || "");
   if (configured) return configured;
   if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     return `${location.protocol}//${location.host}`;
   }
   return "";
+}
+
+function currentCleanUrl() {
+  return `${location.origin}${location.pathname}`;
+}
+
+function buildDiscordOAuthUrl(mode = "login") {
+  if (!modbotDiscordClientId) return "";
+  const params = new URLSearchParams({ client_id: modbotDiscordClientId });
+  if (mode === "invite") {
+    params.set("permissions", modbotBotPermissions);
+    params.set("scope", "bot applications.commands");
+  } else {
+    params.set("response_type", "code");
+    params.set("redirect_uri", currentCleanUrl());
+    params.set("scope", "identify guilds");
+  }
+  return `https://discord.com/oauth2/authorize?${params.toString()}`;
 }
 
 function getModbotSessionToken() {
@@ -753,7 +773,7 @@ function modbotAuthHeaders() {
 
 async function modbotApiFetch(path, options = {}) {
   const base = getModbotApiBase();
-  if (!base) throw new Error("URL API ModBot non configuree.");
+  if (!base) throw new Error("Connexion Discord ModBot non finalisee.");
   const headers = {
     ...modbotAuthHeaders(),
     ...(options.headers || {})
@@ -763,7 +783,7 @@ async function modbotApiFetch(path, options = {}) {
   }
   const response = await fetch(`${base}${path}`, { ...options, headers });
   if (!response.ok) {
-    let message = `Erreur API ${response.status}`;
+    let message = `Erreur connexion ModBot ${response.status}`;
     try {
       const text = await response.text();
       if (text) message = text;
@@ -781,14 +801,18 @@ function initApiBridgeFromUrl() {
   const session = hash.get("session") || query.get("session");
   const tokenRequired = hash.get("api_token_required") || query.get("api_token_required");
   const loginError = hash.get("login_error") || query.get("login_error");
+  const oauthCode = query.get("code");
 
   if (session) {
     localStorage.setItem("modbot-dashboard-session", session);
     history.replaceState(null, "", location.pathname);
   }
   if (tokenRequired) {
-    const token = window.prompt("OAuth Discord n'est pas encore configure. Colle la cle DASHBOARD_API_TOKEN du bot pour continuer.");
-    if (token) localStorage.setItem("modbot-api-token", token.trim());
+    console.warn("OAuth Discord ModBot non configure cote bot.");
+    history.replaceState(null, "", location.pathname);
+  }
+  if (oauthCode && !session) {
+    console.warn("Code OAuth Discord recu. Branche le callback backend ModBot pour finaliser la session dashboard.");
     history.replaceState(null, "", location.pathname);
   }
   if (loginError) {
@@ -797,22 +821,13 @@ function initApiBridgeFromUrl() {
   }
 }
 
-function initApiUrlControls() {
-  const saved = getModbotApiBase();
-  document.querySelectorAll("[data-api-url-input]").forEach((input) => {
-    input.value = saved;
-  });
-  document.querySelectorAll("[data-save-api-url]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const input = button.closest("section, article, main, body")?.querySelector("[data-api-url-input]") || document.querySelector("[data-api-url-input]");
-      const value = normalizeApiBase(input?.value);
-      if (!value) return;
-      localStorage.setItem("modbot-api-url", value);
-      button.textContent = "✅ API enregistrée";
-      window.setTimeout(() => {
-        button.textContent = "🔗 Enregistrer l’API";
-      }, 1800);
-    });
+function initDiscordOAuthLinks() {
+  const inviteUrl = buildDiscordOAuthUrl("invite");
+  if (!inviteUrl) return;
+  document.querySelectorAll("[data-discord-bot-invite]").forEach((link) => {
+    link.href = inviteUrl;
+    link.target = "_blank";
+    link.rel = "noreferrer";
   });
 }
 
@@ -925,7 +940,7 @@ function initAdminZone() {
         today: data.today,
         dashboard: data.dashboardOpens ?? data.dashboard,
         installs: data.installs ?? data.servers
-      }, "API bot active");
+      }, "Connexion bot active");
       const serverList = document.querySelector("[data-admin-server-list]");
       if (serverList && Array.isArray(data.guilds)) {
         serverList.innerHTML = data.guilds.map((guild) => `
@@ -934,7 +949,7 @@ function initAdminZone() {
       }
       return;
     } catch (error) {
-      // Le site garde un secours local si l'API du bot n'est pas encore branchee.
+      // Le site garde un secours local si la connexion bot n'est pas encore branchee.
     }
 
     setAdminStats(getLocalAdminStats(), "Stats locales");
@@ -1038,7 +1053,7 @@ function initAdminZone() {
       });
       showAdminToast(`💎 Premium synchronisé avec le bot pour ${member}`);
     } catch (error) {
-      showAdminToast(`💾 Premium ajouté localement, API non connectée`);
+      showAdminToast(`💾 Premium ajouté localement, connexion bot non disponible`);
     }
     memberInput.value = "";
   });
@@ -1106,7 +1121,7 @@ function initAdminZone() {
       });
       showAdminToast(`🚫 ${member} blacklisté côté bot`);
     } catch (error) {
-      showAdminToast(`💾 ${member} blacklisté localement, API non connectée`);
+      showAdminToast(`💾 ${member} blacklisté localement, connexion bot non disponible`);
     }
   });
 
@@ -1426,10 +1441,6 @@ function initDashboard() {
 
   async function dashboardLogin() {
     const base = getModbotApiBase();
-    if (!base) {
-      showToast("🔗 Ajoute l'URL API du bot avant de te connecter");
-      return;
-    }
     if (getModbotSessionToken() || getModbotApiToken()) {
       try {
         await loadDashboardGuilds();
@@ -1440,7 +1451,16 @@ function initDashboard() {
         showToast("⚠️ Session invalide, nouvelle connexion requise");
       }
     }
-    window.location.href = `${base}/api/auth/discord/login?redirect=${encodeURIComponent(location.href.split("#")[0])}`;
+    if (base) {
+      window.location.href = `${base}/api/auth/discord/login?redirect=${encodeURIComponent(currentCleanUrl())}`;
+      return;
+    }
+    const oauthUrl = buildDiscordOAuthUrl("login");
+    if (!oauthUrl) {
+      showToast("⚠️ Client ID Discord manquant pour ouvrir la connexion");
+      return;
+    }
+    window.location.href = oauthUrl;
   }
 
   function applyDashboardConfig(config) {
@@ -1586,7 +1606,7 @@ function initDashboard() {
       applyDashboardConfig(data.config);
       showToast("✅ Configuration chargée depuis le bot");
     } catch (error) {
-      showToast("⚠️ Configuration locale affichée, API non disponible");
+      showToast("⚠️ Configuration locale affichée, connexion bot non disponible");
     }
   }
 
@@ -1808,11 +1828,11 @@ function initDashboard() {
     try {
       savedToApi = await saveDashboardConfigToApi();
     } catch (error) {
-      showToast("⚠️ API du bot indisponible, sauvegarde non envoyée");
+      showToast("⚠️ Connexion bot indisponible, sauvegarde non envoyée");
       return false;
     }
     if (selectedServer.id && !savedToApi) {
-      showToast("🔗 Connecte l'API du bot pour enregistrer ce serveur");
+      showToast("🔗 Connecte-toi avec Discord pour enregistrer ce serveur");
       return false;
     }
     clearUnsavedChanges();
@@ -2098,7 +2118,7 @@ function initDashboard() {
         body: JSON.stringify({ channel_id: channel })
       });
     } catch (error) {
-      showToast("⚠️ Publication impossible : API du bot indisponible");
+      showToast("⚠️ Publication impossible : connexion bot indisponible");
       return;
     }
     ticketNeedsPublish = false;
@@ -2433,7 +2453,7 @@ function initDashboard() {
 document.addEventListener("DOMContentLoaded", () => {
   resetInitialScroll();
   initApiBridgeFromUrl();
-  initApiUrlControls();
+  initDiscordOAuthLinks();
   initStarfield();
   trackSiteAnalytics();
   initNavigation();
