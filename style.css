@@ -111,7 +111,7 @@ button {
 }
 
 .navbar {
-  width: min(980px, 100%);
+  width: min(1180px, 100%);
   min-height: 66px;
   margin: 0 auto;
   padding: 10px 12px 10px 18px;
@@ -190,6 +190,38 @@ button {
   transform: translateY(-1px);
 }
 
+.nav-action-btn {
+  min-height: 44px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--radius);
+  white-space: nowrap;
+  color: var(--text);
+  font-weight: 900;
+  border: 1px solid rgba(158, 110, 255, 0.32);
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow: 0 10px 26px rgba(8, 3, 20, 0.22);
+}
+
+.nav-dashboard-btn {
+  color: #fff;
+  border-color: rgba(205, 184, 255, 0.52);
+  background: linear-gradient(135deg, #7c5cff, #b15cff);
+  box-shadow:
+    0 14px 34px rgba(139, 92, 246, 0.34),
+    0 0 26px rgba(177, 92, 255, 0.22);
+}
+
+.nav-admin-btn {
+  border-color: rgba(98, 230, 255, 0.28);
+  background:
+    linear-gradient(135deg, rgba(98, 230, 255, 0.1), rgba(139, 92, 246, 0.16)),
+    rgba(255, 255, 255, 0.045);
+}
+
 .language-switch {
   min-height: 38px;
   display: inline-flex;
@@ -249,7 +281,8 @@ button {
 
 .primary-btn:hover,
 .secondary-btn:hover,
-.nav-cta:hover {
+.nav-cta:hover,
+.nav-action-btn:hover {
   transform: translateY(-2px);
   border-color: var(--line-strong);
   box-shadow:
@@ -756,9 +789,9 @@ h1 {
 
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 22px;
-  max-width: 860px;
+  max-width: 1180px;
   margin: 0 auto;
 }
 
@@ -776,6 +809,13 @@ h1 {
   box-shadow:
     0 0 0 1px rgba(139, 92, 246, 0.18) inset,
     0 24px 90px rgba(139, 92, 246, 0.42);
+}
+
+.price-card.ultimate {
+  border-color: rgba(255, 215, 0, 0.38);
+  box-shadow:
+    0 0 0 1px rgba(255, 215, 0, 0.12) inset,
+    0 24px 90px rgba(139, 92, 246, 0.26);
 }
 
 .premium-ribbon {
@@ -862,10 +902,78 @@ h1 {
   margin-bottom: 22px;
 }
 
-.admin-grid {
+.admin-grid,
+.admin-gate-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
+}
+
+.admin-grid.two {
+  margin-top: 18px;
+}
+
+.admin-workspace {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 18px;
+}
+
+.admin-sidebar-panel {
+  position: sticky;
+  top: 96px;
+  min-height: 520px;
+  align-self: start;
+  padding: 16px;
+  border: 1px solid rgba(158, 110, 255, 0.24);
+  border-radius: var(--radius-lg);
+  background: rgba(11, 7, 24, 0.78);
+  box-shadow: var(--shadow);
+}
+
+.admin-nav {
+  width: 100%;
+  min-height: 42px;
+  margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+}
+
+.admin-nav span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-left: 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--soft);
+  font-size: 0.72rem;
+}
+
+.admin-nav:hover,
+.admin-nav.is-active {
+  color: var(--text);
+  background: rgba(139, 92, 246, 0.18);
+}
+
+.admin-nav.is-active span {
+  background: linear-gradient(135deg, var(--purple), var(--cyan));
+  color: #fff;
+}
+
+.admin-view {
+  display: none;
+}
+
+.admin-view.is-active {
+  display: block;
 }
 
 .admin-panel {
@@ -966,6 +1074,10 @@ h1 {
 
 .site-stat-grid div,
 .premium-list div,
+.payment-list div,
+.admin-list div,
+.blacklist-list div,
+.server-log-feed div,
 .admin-server-list div {
   border: 1px solid rgba(158, 110, 255, 0.18);
   border-radius: var(--radius);
@@ -991,6 +1103,10 @@ h1 {
 }
 
 .premium-list,
+.payment-list,
+.admin-list,
+.blacklist-list,
+.server-log-feed,
 .admin-server-list {
   margin-top: 14px;
   display: grid;
@@ -1007,7 +1123,10 @@ h1 {
   gap: 12px;
 }
 
-.premium-list div {
+.premium-list div,
+.payment-list div,
+.admin-list div,
+.blacklist-list div {
   padding: 12px;
   display: flex;
   align-items: center;
@@ -1016,12 +1135,68 @@ h1 {
 }
 
 .premium-list strong,
-.premium-list small {
+.premium-list small,
+.payment-list strong,
+.payment-list small,
+.admin-list strong,
+.admin-list small,
+.blacklist-list strong,
+.blacklist-list small {
   display: block;
 }
 
-.premium-list small {
+.premium-list small,
+.payment-list small,
+.admin-list small,
+.blacklist-list small {
   margin-top: 3px;
+}
+
+.admin-action-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.admin-action-row.split {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+}
+
+.admin-list button,
+.blacklist-list button {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(158, 110, 255, 0.24);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+.admin-list button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.danger-btn {
+  background: linear-gradient(135deg, #ed4245, #b15cff) !important;
+}
+
+.server-log-feed div {
+  padding: 14px;
+  display: grid;
+  grid-template-columns: 74px minmax(160px, 0.55fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.server-log-feed span {
+  color: var(--cyan);
+  font-weight: 900;
+}
+
+.server-log-feed em {
+  color: var(--soft);
+  font-style: normal;
 }
 
 .admin-server-list div {
@@ -1044,6 +1219,148 @@ h1 {
 .admin-server-list strong,
 .admin-server-list small {
   display: block;
+}
+
+.wiki-page .site-header {
+  background: rgba(7, 4, 17, 0.72);
+}
+
+.wiki-shell {
+  padding-top: 118px;
+}
+
+.wiki-hero {
+  max-width: 960px;
+  margin: 0 auto 26px;
+  text-align: center;
+}
+
+.wiki-hero h1 {
+  margin: 8px 0 14px;
+  font-size: clamp(2.6rem, 7vw, 5.4rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.wiki-hero p:not(.eyebrow) {
+  color: var(--soft);
+  line-height: 1.7;
+}
+
+.wiki-layout {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.wiki-toc {
+  position: sticky;
+  top: 108px;
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid rgba(158, 110, 255, 0.24);
+  border-radius: var(--radius-lg);
+  background: rgba(11, 7, 24, 0.78);
+  box-shadow: var(--shadow);
+}
+
+.wiki-toc a {
+  min-height: 38px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius);
+  color: var(--soft);
+  font-weight: 900;
+}
+
+.wiki-toc a:hover {
+  background: rgba(139, 92, 246, 0.18);
+  color: var(--text);
+}
+
+.wiki-content {
+  display: grid;
+  gap: 18px;
+}
+
+.wiki-section {
+  padding: 26px;
+  border: 1px solid rgba(158, 110, 255, 0.24);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+    rgba(18, 12, 34, 0.72);
+  box-shadow: var(--shadow);
+}
+
+.wiki-section h2 {
+  margin-bottom: 12px;
+  font-size: 1.5rem;
+}
+
+.wiki-section p,
+.wiki-check-list {
+  color: var(--soft);
+  line-height: 1.75;
+}
+
+.wiki-card-grid,
+.wiki-plan-grid,
+.command-doc-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.wiki-card-grid,
+.wiki-plan-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.command-doc-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wiki-card-grid article,
+.wiki-plan-grid article,
+.command-doc-grid article {
+  padding: 16px;
+  border: 1px solid rgba(158, 110, 255, 0.18);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.wiki-card-grid strong,
+.wiki-plan-grid strong,
+.command-doc-grid code {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text);
+  font-weight: 900;
+}
+
+.wiki-card-grid span,
+.wiki-plan-grid span,
+.command-doc-grid span {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.command-doc-grid code {
+  width: fit-content;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: rgba(139, 92, 246, 0.18);
+  color: #dccdff;
+}
+
+.wiki-check-list {
+  display: grid;
+  gap: 10px;
+  padding-left: 18px;
 }
 
 .patch-toolbar {
@@ -1618,7 +1935,8 @@ h1 {
     max-width: 100%;
   }
 
-  .nav-cta {
+  .nav-cta,
+  .nav-action-btn {
     justify-content: center;
   }
 
@@ -1634,6 +1952,22 @@ h1 {
 
   .feature-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pricing-grid,
+  .wiki-card-grid,
+  .wiki-plan-grid,
+  .command-doc-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wiki-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .wiki-toc {
+    position: relative;
+    top: auto;
   }
 }
 
@@ -1656,6 +1990,10 @@ h1 {
   .pricing-grid,
   .feature-grid,
   .admin-grid,
+  .admin-gate-grid,
+  .wiki-card-grid,
+  .wiki-plan-grid,
+  .command-doc-grid,
   .premium-custom-duration {
     grid-template-columns: 1fr;
   }
@@ -1817,11 +2155,11 @@ body::after {
   }
 
   .navbar {
-    width: min(1120px, 100%);
+    width: min(1280px, 100%);
   }
 
   .nav-links {
-    gap: 17px;
+    gap: 12px;
     font-size: 0.86rem;
   }
 
@@ -3749,6 +4087,178 @@ main,
   color: var(--cyan);
 }
 
+.welcome-preview-panel,
+.premium-welcome-panel,
+.recurring-list-panel {
+  overflow: hidden;
+}
+
+.welcome-discord-preview {
+  display: grid;
+  gap: 12px;
+}
+
+.welcome-discord-preview p {
+  color: var(--soft);
+  font-weight: 800;
+}
+
+.welcome-card {
+  --welcome-title-color: #ffffff;
+  min-height: 230px;
+  padding: 28px;
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  border-radius: var(--radius);
+  text-align: center;
+  background:
+    linear-gradient(90deg, rgba(19, 15, 70, 0.58), rgba(42, 94, 255, 0.72)),
+    url("assets/default_banner.png") center / cover;
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.24);
+}
+
+.welcome-avatar {
+  width: 86px;
+  height: 86px;
+  border: 4px solid rgba(255, 255, 255, 0.92);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 45% 35%, rgba(255, 255, 255, 0.85), transparent 0 12px),
+    linear-gradient(135deg, #7c5cff, #62e6ff);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
+}
+
+.welcome-card strong {
+  display: block;
+  color: var(--welcome-title-color);
+  font-size: clamp(2rem, 5vw, 3.7rem);
+  line-height: 0.9;
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.46);
+}
+
+.welcome-card small {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 900;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.46);
+}
+
+.reaction-role-list,
+.recurring-list {
+  display: grid;
+  gap: 10px;
+}
+
+.reaction-role-row {
+  display: grid;
+  grid-template-columns: 48px 68px minmax(0, 1fr) minmax(0, 1.25fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.reaction-role-row > span,
+.option-row > span {
+  color: var(--muted);
+  font-weight: 900;
+}
+
+.reaction-role-row button {
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 88, 88, 0.28);
+  border-radius: var(--radius);
+  background: rgba(255, 88, 88, 0.12);
+  color: #ffd7d7;
+}
+
+.reaction-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.reaction-chip-list span {
+  min-height: 32px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius);
+  background: rgba(139, 92, 246, 0.26);
+  color: var(--text);
+  font-weight: 900;
+}
+
+.recurring-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(320px, 0.8fr);
+  gap: 14px;
+}
+
+.recurring-builder {
+  display: grid;
+  gap: 14px;
+}
+
+.segmented-control,
+.day-pill-row,
+.message-composer-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.segmented-control button,
+.day-pill-row button,
+.message-composer-tabs button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(158, 110, 255, 0.22);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.055);
+  color: var(--soft);
+  font-weight: 900;
+}
+
+.segmented-control button.is-active,
+.day-pill-row button.is-active,
+.message-composer-tabs button.is-active {
+  border-color: rgba(205, 184, 255, 0.54);
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.74), rgba(177, 92, 255, 0.64));
+  color: #fff;
+  box-shadow: 0 14px 34px rgba(139, 92, 246, 0.22);
+}
+
+.recurring-empty,
+.recurring-item {
+  padding: 14px;
+  border: 1px dashed rgba(205, 184, 255, 0.3);
+  border-radius: var(--radius);
+  color: var(--muted);
+  text-align: center;
+}
+
+.recurring-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-style: solid;
+  color: var(--text);
+  text-align: left;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.recurring-item strong,
+.recurring-item small {
+  display: block;
+}
+
+.recurring-item small {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
 .dashboard-toast {
   position: fixed;
   right: 22px;
@@ -3813,11 +4323,14 @@ main,
 
 @media (max-width: 1120px) {
   .dashboard-topbar,
-  .dashboard-shell {
+  .dashboard-shell,
+  .admin-workspace,
+  .recurring-layout {
     grid-template-columns: 1fr;
   }
 
-  .dashboard-sidebar {
+  .dashboard-sidebar,
+  .admin-sidebar-panel {
     position: relative;
     top: auto;
     height: auto;
@@ -3839,8 +4352,11 @@ main,
   .toggle-grid,
   .server-grid,
   .social-grid,
-  .premium-choice-grid,
-  .tournament-command-grid {
+    .premium-choice-grid,
+    .tournament-command-grid,
+    .wiki-card-grid,
+    .wiki-plan-grid,
+    .command-doc-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -3863,7 +4379,8 @@ main,
     padding-top: 12px;
   }
 
-  .dashboard-sidebar {
+  .dashboard-sidebar,
+  .admin-sidebar-panel {
     grid-template-columns: 1fr;
   }
 
@@ -3885,6 +4402,12 @@ main,
   .social-grid,
   .premium-choice-grid,
   .tournament-command-grid,
+  .wiki-card-grid,
+  .wiki-plan-grid,
+  .command-doc-grid,
+  .admin-action-row,
+  .admin-action-row.split,
+  .server-log-feed div,
   .form-row,
   .sanction-flow {
     grid-template-columns: 1fr;
@@ -3895,9 +4418,19 @@ main,
   }
 
   .option-row,
+  .reaction-role-row,
   .channel-row,
   .premium-slot {
     grid-template-columns: 1fr;
+  }
+
+  .recurring-item,
+  .premium-list div,
+  .payment-list div,
+  .admin-list div,
+  .blacklist-list div {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .server-card,
