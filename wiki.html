@@ -1,1 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wiki ModBot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="wiki-page">
+  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
+  <div class="page-glow" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navigation wiki">
+      <a class="brand" href="index.html" aria-label="Accueil ModBot">
+        <span class="brand-mark">
+          <img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
+        </span>
+        <span>ModBot</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#features">Fonctionnalités</a>
+        <a href="index.html#pricing">Tarifs</a>
+        <a class="nav-action-btn nav-dashboard-btn" href="dashboard.html"><span>📊</span><span data-i18n="nav.dashboard">Dashboard</span></a>
+        <a class="nav-action-btn nav-admin-btn" href="admin.html"><span>🔐</span><span data-i18n="nav.admin">Admin</span></a>
+        <label class="language-switch" aria-label="Choisir la langue du site">
+          <span>🌍</span>
+          <select id="siteLanguage">
+            <option value="fr">Français</option>
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+          </select>
+        </label>
+        <a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">Support Discord</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="wiki-shell section-shell">
+    <section class="wiki-hero">
+      <p class="eyebrow">📚 Wiki officiel</p>
+      <h1>Comprendre ModBot de A à Z</h1>
+      <p>Cette page explique le rôle du bot, les offres, les commandes, les modules du dashboard et les systèmes prévus pour les serveurs Discord.</p>
+    </section>
+
+    <div class="wiki-layout">
+      <aside class="wiki-toc" aria-label="Sommaire du wiki">
+        <a href="#objectif">🎯 Objectif</a>
+        <a href="#createur">👤 Création</a>
+        <a href="#offres">💎 Offres</a>
+        <a href="#dashboard">📊 Dashboard</a>
+        <a href="#commandes">⌨️ Commandes</a>
+        <a href="#tickets">🎫 Tickets</a>
+        <a href="#tournois">🏆 Tournois IFC</a>
+        <a href="#admin">🔐 Administration</a>
+      </aside>
+
+      <div class="wiki-content">
+        <section id="objectif" class="wiki-section">
+          <h2>🎯 À quoi sert ModBot ?</h2>
+          <p>ModBot sert à protéger une communauté Discord avec des outils simples : sécurité, modération, logs, salons configurables, tickets, ratings, annonces, messages récurrents, rôles réactions et automatisations utiles au staff.</p>
+          <div class="wiki-card-grid">
+            <article><strong>🛡️ Sécurité</strong><span>Anti-lien, anti-spam, anti-raid, alertes staff et lockdown propre.</span></article>
+            <article><strong>⚒️ Modération</strong><span>Sanctions, avertissements, logs, clear messages et suivi des actions.</span></article>
+            <article><strong>🎫 Support</strong><span>Tickets configurables, priorités, transcripts, ratings et support staff.</span></article>
+          </div>
+        </section>
+
+        <section id="createur" class="wiki-section">
+          <h2>👤 Par qui et pourquoi ?</h2>
+          <p>ModBot est pensé pour les serveurs qui veulent garder une communauté propre, claire et bien organisée sans devoir multiplier les bots. L’objectif est d’avoir un outil central, compréhensible par les admins, et agréable pour les membres.</p>
+        </section>
+
+        <section id="offres" class="wiki-section">
+          <h2>💎 Offres disponibles</h2>
+          <div class="wiki-plan-grid">
+            <article><strong>0€ - Gratuit</strong><span>Sécurité, modération, salons essentiels et logs de base.</span></article>
+            <article><strong>15€ - 2 mois Premium</strong><span>Modération, ratings, logs, salons avancés et système de tickets.</span></article>
+            <article><strong>35€ - 3 mois complet</strong><span>Tout, support Discord prioritaire et personnalisations dédiées.</span></article>
+          </div>
+        </section>
+
+        <section id="dashboard" class="wiki-section">
+          <h2>📊 Modules du dashboard</h2>
+          <ul class="wiki-check-list">
+            <li>Vue globale : état du serveur et raccourcis de configuration.</li>
+            <li>Premium : association de maximum 2 serveurs par membre Premium.</li>
+            <li>Tickets : message public, options, emojis, salon, rôle support et publication.</li>
+            <li>Sécurité : protections, anti-spam, anti-lien, anti-raid et alertes.</li>
+            <li>Salons : IDs des salons utilisés par les systèmes du bot.</li>
+            <li>Arrivées/Départs : message de bienvenue, départ, image et options Premium.</li>
+            <li>Rôles réactions : emojis, rôles, labels et mode d’attribution.</li>
+            <li>Messages récurrents : nom, salon, intervalle, jours, contenu et options d’envoi.</li>
+            <li>Personnalisation : logo, bannière, footer et couleur des embeds.</li>
+            <li>Réseaux : relais automatique Twitter/X, TikTok, Twitch et Instagram à connecter au backend.</li>
+          </ul>
+        </section>
+
+        <section id="commandes" class="wiki-section">
+          <h2>⌨️ Commandes principales</h2>
+          <div class="command-doc-grid">
+            <article><code>/panel</code><span>Ouvre le panneau d’administration Discord.</span></article>
+            <article><code>/aide</code><span>Affiche le récapitulatif des commandes et le lien du site.</span></article>
+            <article><code>/clear-message</code><span>Supprime entre 1 et 100 messages dans le salon courant.</span></article>
+            <article><code>/clear-all</code><span>Nettoie les messages du salon selon les limites Discord.</span></article>
+            <article><code>/translate</code><span>Traduit un message via réponse ou ID de message.</span></article>
+            <article><code>/suggest</code><span>Envoie une suggestion au salon configuré.</span></article>
+            <article><code>/patchnotes</code><span>Publie des patch notes dans le salon où la commande est faite.</span></article>
+            <article><code>/annonce</code><span>Publie une annonce dans le salon choisi par ID.</span></article>
+            <article><code>!addchannel</code><span>Ajoute un membre à un salon précis.</span></article>
+            <article><code>!deletechannel</code><span>Retire l’accès d’un membre à un salon précis.</span></article>
+          </div>
+        </section>
+
+        <section id="tickets" class="wiki-section">
+          <h2>🎫 Système de tickets</h2>
+          <p>Le message de ticket se publie depuis le dashboard. Le staff peut choisir la priorité du ticket dans l’interface Discord : 🟢 P1, 🟡 P2 ou 🔴 P3. La couleur est ajoutée devant le nom du salon. Les transcripts doivent être envoyés en MP et les ratings sont centralisés dans le panel.</p>
+        </section>
+
+        <section id="tournois" class="wiki-section">
+          <h2>🏆 Tournois IFC</h2>
+          <p>Le module tournoi EA FC 26 Club Pro reste en attente tant que l’API IFC n’est pas disponible. Quand elle sera prête, le bot utilisera le nom exact du tournoi IFC pour récupérer participants, logos, wins, buts, classements, poules et affiches.</p>
+          <div class="command-doc-grid">
+            <article><code>/poules</code><span>Affiche les poules depuis IFC.</span></article>
+            <article><code>/huitieme</code><span>Affiche les huitièmes depuis IFC.</span></article>
+            <article><code>/classement</code><span>Affiche wins, buts et classement IFC.</span></article>
+            <article><code>/podium</code><span>Génère une image podium avec les logos des 3 équipes.</span></article>
+            <article><code>/inscription</code><span>Inscrit une équipe IFC avec GM obligatoire et co-GM facultatif.</span></article>
+          </div>
+        </section>
+
+        <section id="admin" class="wiki-section">
+          <h2>🔐 Administration du site</h2>
+          <p>L’espace administrateur est séparé du dashboard serveur. Il sert à gérer les accès admin, le Premium, les paiements, la blacklist des membres du bot, les serveurs détectés et les logs globaux d’utilisation.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
 
