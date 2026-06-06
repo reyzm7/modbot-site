@@ -895,7 +895,7 @@ function initAdminZone() {
   document.querySelector("[data-premium-apply]")?.addEventListener("click", () => {
     const memberInput = document.querySelector("[data-premium-member]");
     const list = document.querySelector("[data-premium-list]");
-    const paymentList = document.querySelector("[data-payment-list]");
+    const premiumTicketList = document.querySelector("[data-premium-ticket-list]");
     const member = memberInput?.value.trim();
     if (!member || !list) return;
     const duration = getPremiumDuration();
@@ -910,19 +910,18 @@ function initAdminZone() {
     identity.append(name, serverLine);
     item.append(identity, meta);
     list.prepend(item);
-    if (paymentList) {
-      const payment = document.createElement("div");
-      const paymentIdentity = document.createElement("span");
-      const paymentName = document.createElement("strong");
-      const paymentMeta = document.createElement("small");
-      const amount = duration.includes("3 mois") ? "35€" : duration.includes("2 mois") ? "15€" : "Durée personnalisée";
-      paymentName.textContent = member;
-      paymentMeta.textContent = "Discord connecté ou ID renseigné";
-      paymentIdentity.append(paymentName, paymentMeta);
-      const paymentAmount = document.createElement("span");
-      paymentAmount.textContent = `${amount} / ${duration}`;
-      payment.append(paymentIdentity, paymentAmount);
-      paymentList.prepend(payment);
+    if (premiumTicketList) {
+      const request = document.createElement("div");
+      const requestIdentity = document.createElement("span");
+      const requestName = document.createElement("strong");
+      const requestMeta = document.createElement("small");
+      requestName.textContent = member;
+      requestMeta.textContent = `Ticket Premium à ouvrir ou vérifier pour une durée : ${duration}`;
+      requestIdentity.append(requestName, requestMeta);
+      const requestState = document.createElement("span");
+      requestState.textContent = "🎫 Ticket requis";
+      request.append(requestIdentity, requestState);
+      premiumTicketList.prepend(request);
     }
     memberInput.value = "";
     showAdminToast(`💎 Premium ajouté pour ${member}`);
@@ -1641,12 +1640,17 @@ function initDashboard() {
   const welcomeBgInput = document.querySelector("[data-welcome-bg]");
   const welcomeFontSelect = document.querySelector("[data-welcome-font]");
   const welcomeColorInput = document.querySelector("[data-welcome-color]");
+  const departureMessageInput = document.querySelector("[data-departure-message]");
   const welcomeLiveMessage = document.querySelector("[data-welcome-live-message]");
+  const departureLiveMessage = document.querySelector("[data-departure-live-message]");
   const welcomeCard = document.querySelector("[data-welcome-card]");
 
   function syncWelcomePreview() {
     if (welcomeLiveMessage) {
-      welcomeLiveMessage.textContent = welcomeMessageInput?.value.trim() || "Bienvenue @membre sur @serveur !";
+      welcomeLiveMessage.textContent = welcomeMessageInput?.value.trim() || "Bienvenue nom du membre sur @serveur !";
+    }
+    if (departureLiveMessage) {
+      departureLiveMessage.textContent = departureMessageInput?.value.trim() || "Au revoir nom du membre.";
     }
     if (welcomeCard && welcomeBgInput?.value.trim()) {
       welcomeCard.style.backgroundImage = `linear-gradient(90deg, rgba(19, 15, 70, 0.58), rgba(42, 94, 255, 0.72)), url("${welcomeBgInput.value.trim()}")`;
@@ -1659,7 +1663,7 @@ function initDashboard() {
     }
   }
 
-  [welcomeMessageInput, welcomeBgInput, welcomeFontSelect, welcomeColorInput].forEach((field) => {
+  [welcomeMessageInput, departureMessageInput, welcomeBgInput, welcomeFontSelect, welcomeColorInput].forEach((field) => {
     field?.addEventListener("input", syncWelcomePreview);
     field?.addEventListener("change", syncWelcomePreview);
   });
