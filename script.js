@@ -10,7 +10,9 @@ const siteTranslations = {
     "nav.features": "Fonctionnalités",
     "nav.demo": "Démo",
     "nav.pricing": "Tarifs",
+    "nav.wiki": "Wiki",
     "nav.admin": "Admin",
+    "nav.dashboard": "Dashboard",
     "nav.cta": "Demander ModBot",
     "hero.eyebrow": "Protection Discord 24/7",
     "hero.lead": "La modération intelligente qui protège votre communauté, automatise les sanctions, gère les tickets et garde votre serveur clair, sain et réactif.",
@@ -36,27 +38,35 @@ const siteTranslations = {
     "features.suggestions.copy": "Collecte et suivi des idées proposées par votre communauté.",
     "features.panel.title": "Panel Admin",
     "features.panel.copy": "Gestion rapide des réglages et des outils importants du serveur.",
-    "features.development.title": "Développement continu",
-    "features.development.copy": "Nouvelles fonctions créées selon les besoins et les retours serveur.",
+    "features.development.title": "Automatisations",
+    "features.development.copy": "Messages récurrents, rôles réactions, arrivées et départs configurables.",
     "pricing.eyebrow": "Tarifs",
     "pricing.title": "Des offres simples et claires",
-    "pricing.copy": "ModBot n’est pas ajouté librement : nous l’installons manuellement sur votre serveur.",
-    "pricing.free.title": "Offre de base",
-    "pricing.free.copy": "La protection ModBot pour sécuriser votre serveur toute l’année.",
-    "pricing.free.period": "/ an",
-    "pricing.free.item1": "Installation",
-    "pricing.free.item2": "Configuration",
-    "pricing.free.item3": "Protection du serveur toute l’année",
-    "pricing.free.item4": "Support Discord",
+    "pricing.copy": "Commence gratuitement avec la sécurité, puis ajoute les modules avancés selon les besoins de ton serveur.",
+    "pricing.free.title": "Gratuit",
+    "pricing.free.copy": "Le socle essentiel pour protéger et modérer ton serveur Discord.",
+    "pricing.free.period": "/ toujours",
+    "pricing.free.item1": "Sécurité serveur",
+    "pricing.free.item2": "Modération",
+    "pricing.free.item3": "Salons de logs",
+    "pricing.free.item4": "Configuration des salons essentiels",
     "pricing.free.cta": "Choisir cette offre",
     "pricing.premium.title": "Offre Premium",
-    "pricing.premium.copy": "Tout ModBot mis en avant avec une expérience complète pour votre serveur.",
-    "pricing.premium.period": "/ an",
-    "pricing.premium.item1": "Bot personnalisé",
-    "pricing.premium.item2": "Fonctionnalités mises en avant",
-    "pricing.premium.item3": "Configuration premium complète",
-    "pricing.premium.item4": "Support prioritaire",
+    "pricing.premium.copy": "Pour les serveurs qui veulent les tickets, ratings et outils de gestion complets.",
+    "pricing.premium.period": "/ 2 mois",
+    "pricing.premium.item1": "Modération complète",
+    "pricing.premium.item2": "Ratings support",
+    "pricing.premium.item3": "Logs et salons avancés",
+    "pricing.premium.item4": "Système de tickets",
     "pricing.premium.cta": "Choisir cette offre",
+    "pricing.ultimate.title": "Offre complète",
+    "pricing.ultimate.copy": "Tout ModBot avec accompagnement prioritaire et personnalisations dédiées.",
+    "pricing.ultimate.period": "/ 3 mois",
+    "pricing.ultimate.item1": "Tout le Premium",
+    "pricing.ultimate.item2": "Support Discord prioritaire",
+    "pricing.ultimate.item3": "Personnalisations juste pour vous",
+    "pricing.ultimate.item4": "Accompagnement configuration avancée",
+    "pricing.ultimate.cta": "Choisir cette offre",
     "admin.eyebrow": "Administration",
     "admin.title": "Centre administrateur du site",
     "admin.copy": "Gérez le premium, suivez l’activité du site et préparez la synchronisation des serveurs où ModBot est installé.",
@@ -70,7 +80,7 @@ const siteTranslations = {
     "admin.stats.dashboard": "Ouvertures dashboard",
     "admin.stats.installs": "Serveurs ModBot",
     "admin.premium.title": "💎 Premium membre",
-    "admin.premium.badge": "Serveurs côté dashboard",
+    "admin.premium.badge": "2 serveurs maximum",
     "admin.premium.copy": "L’admin attribue le Premium et sa durée. Le membre associe ensuite jusqu’à 2 serveurs depuis son dashboard.",
     "admin.premium.member": "ID ou pseudo Discord",
     "admin.premium.duration": "Durée",
@@ -85,7 +95,9 @@ const siteTranslations = {
     "nav.features": "Features",
     "nav.demo": "Demo",
     "nav.pricing": "Pricing",
+    "nav.wiki": "Wiki",
     "nav.admin": "Admin",
+    "nav.dashboard": "Dashboard",
     "nav.cta": "Add ModBot",
     "hero.eyebrow": "Discord protection 24/7",
     "hero.lead": "Smart moderation that protects your community, automates sanctions, manages tickets, and keeps your server clear, healthy, and responsive.",
@@ -111,27 +123,35 @@ const siteTranslations = {
     "features.suggestions.copy": "Collect and track ideas proposed by your community.",
     "features.panel.title": "Admin Panel",
     "features.panel.copy": "Quick management of important server settings and tools.",
-    "features.development.title": "Continuous development",
-    "features.development.copy": "New features created according to server needs and feedback.",
+    "features.development.title": "Automations",
+    "features.development.copy": "Recurring messages, reaction roles, welcome and departure messages you can configure.",
     "pricing.eyebrow": "Pricing",
     "pricing.title": "Simple and clear offers",
-    "pricing.copy": "ModBot is not added freely: we install it manually on your server.",
-    "pricing.free.title": "Base offer",
-    "pricing.free.copy": "ModBot protection to secure your server all year.",
-    "pricing.free.period": "/ year",
-    "pricing.free.item1": "Installation",
-    "pricing.free.item2": "Configuration",
-    "pricing.free.item3": "Year-round server protection",
-    "pricing.free.item4": "Discord support",
+    "pricing.copy": "Start free with security, then add advanced modules depending on your server needs.",
+    "pricing.free.title": "Free",
+    "pricing.free.copy": "The essential base to protect and moderate your Discord server.",
+    "pricing.free.period": "/ forever",
+    "pricing.free.item1": "Server security",
+    "pricing.free.item2": "Moderation",
+    "pricing.free.item3": "Log channels",
+    "pricing.free.item4": "Essential channel setup",
     "pricing.free.cta": "Choose this offer",
     "pricing.premium.title": "Premium offer",
-    "pricing.premium.copy": "A complete ModBot experience with advanced setup for your server.",
-    "pricing.premium.period": "/ year",
-    "pricing.premium.item1": "Personalized bot",
-    "pricing.premium.item2": "Highlighted features",
-    "pricing.premium.item3": "Complete premium configuration",
-    "pricing.premium.item4": "Priority support",
+    "pricing.premium.copy": "For servers that want tickets, ratings and complete management tools.",
+    "pricing.premium.period": "/ 2 months",
+    "pricing.premium.item1": "Complete moderation",
+    "pricing.premium.item2": "Support ratings",
+    "pricing.premium.item3": "Advanced logs and channels",
+    "pricing.premium.item4": "Ticket system",
     "pricing.premium.cta": "Choose this offer",
+    "pricing.ultimate.title": "Complete offer",
+    "pricing.ultimate.copy": "All of ModBot with priority support and dedicated customizations.",
+    "pricing.ultimate.period": "/ 3 months",
+    "pricing.ultimate.item1": "Everything in Premium",
+    "pricing.ultimate.item2": "Priority Discord support",
+    "pricing.ultimate.item3": "Customizations just for you",
+    "pricing.ultimate.item4": "Advanced setup assistance",
+    "pricing.ultimate.cta": "Choose this offer",
     "admin.eyebrow": "Administration",
     "admin.title": "Site administrator center",
     "admin.copy": "Manage premium, track site activity and prepare server synchronization for guilds where ModBot is installed.",
@@ -145,7 +165,7 @@ const siteTranslations = {
     "admin.stats.dashboard": "Dashboard opens",
     "admin.stats.installs": "ModBot servers",
     "admin.premium.title": "💎 Member premium",
-    "admin.premium.badge": "Servers on dashboard",
+    "admin.premium.badge": "2 servers maximum",
     "admin.premium.copy": "The admin grants Premium and its duration. The member then associates up to 2 servers from their dashboard.",
     "admin.premium.member": "Discord ID or username",
     "admin.premium.duration": "Duration",
@@ -160,7 +180,9 @@ const siteTranslations = {
     "nav.features": "الميزات",
     "nav.demo": "تجربة",
     "nav.pricing": "الأسعار",
+    "nav.wiki": "الويكي",
     "nav.admin": "الإدارة",
+    "nav.dashboard": "لوحة التحكم",
     "nav.cta": "إضافة ModBot",
     "hero.eyebrow": "حماية ديسكورد 24/7",
     "hero.lead": "إشراف ذكي يحمي مجتمعك، يدير التذاكر، وينظم الخادم بطريقة واضحة وسريعة.",
@@ -186,27 +208,35 @@ const siteTranslations = {
     "features.suggestions.copy": "جمع ومتابعة الأفكار المقترحة من مجتمعك.",
     "features.panel.title": "لوحة الإدارة",
     "features.panel.copy": "إدارة سريعة لإعدادات وأدوات الخادم المهمة.",
-    "features.development.title": "تطوير مستمر",
-    "features.development.copy": "ميزات جديدة حسب احتياجات الخادم وملاحظاته.",
+    "features.development.title": "الأتمتة",
+    "features.development.copy": "رسائل متكررة، أدوار تفاعلية، ورسائل ترحيب ومغادرة قابلة للإعداد.",
     "pricing.eyebrow": "الأسعار",
     "pricing.title": "عروض بسيطة وواضحة",
-    "pricing.copy": "لا تتم إضافة ModBot تلقائياً: نقوم بتثبيته يدوياً على خادمك.",
-    "pricing.free.title": "العرض الأساسي",
-    "pricing.free.copy": "حماية ModBot لتأمين خادمك طوال العام.",
-    "pricing.free.period": "/ سنة",
-    "pricing.free.item1": "التثبيت",
-    "pricing.free.item2": "الإعداد",
-    "pricing.free.item3": "حماية الخادم طوال السنة",
-    "pricing.free.item4": "دعم Discord",
+    "pricing.copy": "ابدأ مجاناً بالحماية، ثم أضف الوحدات المتقدمة حسب احتياجات خادمك.",
+    "pricing.free.title": "مجاني",
+    "pricing.free.copy": "القاعدة الأساسية لحماية وإدارة خادم Discord الخاص بك.",
+    "pricing.free.period": "/ دائماً",
+    "pricing.free.item1": "حماية الخادم",
+    "pricing.free.item2": "الإشراف",
+    "pricing.free.item3": "قنوات السجلات",
+    "pricing.free.item4": "إعداد القنوات الأساسية",
     "pricing.free.cta": "اختيار هذا العرض",
     "pricing.premium.title": "عرض Premium",
-    "pricing.premium.copy": "تجربة ModBot كاملة مع إعداد متقدم لخادمك.",
-    "pricing.premium.period": "/ سنة",
-    "pricing.premium.item1": "بوت مخصص",
-    "pricing.premium.item2": "ميزات مميزة",
-    "pricing.premium.item3": "إعداد Premium كامل",
-    "pricing.premium.item4": "دعم أولوية",
+    "pricing.premium.copy": "للخوادم التي تحتاج التذاكر والتقييمات وأدوات إدارة كاملة.",
+    "pricing.premium.period": "/ شهرين",
+    "pricing.premium.item1": "إشراف كامل",
+    "pricing.premium.item2": "تقييمات الدعم",
+    "pricing.premium.item3": "سجلات وقنوات متقدمة",
+    "pricing.premium.item4": "نظام التذاكر",
     "pricing.premium.cta": "اختيار هذا العرض",
+    "pricing.ultimate.title": "العرض الكامل",
+    "pricing.ultimate.copy": "كل ميزات ModBot مع دعم أولوية وتخصيصات مخصصة لك.",
+    "pricing.ultimate.period": "/ 3 أشهر",
+    "pricing.ultimate.item1": "كل ميزات Premium",
+    "pricing.ultimate.item2": "دعم Discord أولوية",
+    "pricing.ultimate.item3": "تخصيصات خاصة بك",
+    "pricing.ultimate.item4": "مساعدة إعداد متقدمة",
+    "pricing.ultimate.cta": "اختيار هذا العرض",
     "admin.eyebrow": "الإدارة",
     "admin.title": "مركز إدارة الموقع",
     "admin.copy": "إدارة Premium، متابعة نشاط الموقع، وتحضير مزامنة الخوادم التي يوجد فيها ModBot.",
@@ -220,7 +250,7 @@ const siteTranslations = {
     "admin.stats.dashboard": "فتح لوحة التحكم",
     "admin.stats.installs": "خوادم ModBot",
     "admin.premium.title": "💎 Premium للعضو",
-    "admin.premium.badge": "الخوادم من لوحة التحكم",
+    "admin.premium.badge": "خادمان كحد أقصى",
     "admin.premium.copy": "يمنح المسؤول Premium ومدته، ثم يربط العضو ما يصل إلى خادمين من لوحة التحكم الخاصة به.",
     "admin.premium.member": "معرف Discord أو الاسم",
     "admin.premium.duration": "المدة",
@@ -257,12 +287,12 @@ const commandResponses = {
 const assistantAnswers = {
   obtenir: {
     question: "Comment obtenir ModBot ?",
-    answer: "ModBot n’est pas ajouté librement : nous l’installons manuellement sur votre serveur. Rejoignez notre Discord et faites votre demande, nous nous occupons de tout.",
+    answer: "ModBot peut être demandé depuis le Discord. L’offre gratuite donne accès à la sécurité, à la modération et aux salons/logs essentiels. Les offres payantes ajoutent tickets, ratings, support prioritaire et personnalisations.",
     link: "Ouvrir le Discord"
   },
   tarifs: {
     question: "Quels sont les tarifs ?",
-    answer: "L’offre de base est à 10€ par an pour protéger votre serveur toute l’année. L’offre Premium est à 35€ par an avec une configuration complète, les fonctionnalités mises en avant et le support prioritaire."
+    answer: "L’offre gratuite est à 0€ avec sécurité, modération et salons/logs. L’offre Premium est à 15€ pour 2 mois avec tickets, ratings, logs, salons et modération. L’offre complète est à 35€ tous les 3 mois avec tout, support Discord prioritaire et personnalisations dédiées."
   },
   fonctionnalite: {
     question: "Comment demander une fonctionnalité ?",
@@ -728,7 +758,23 @@ function initAdminZone() {
   const customDuration = document.querySelector("[data-premium-custom-duration]");
   const customDurationValue = document.querySelector("[data-premium-custom-value]");
   const customDurationUnit = document.querySelector("[data-premium-custom-unit]");
+  const adminTabs = document.querySelectorAll("[data-admin-tab]");
+  const adminPanels = document.querySelectorAll("[data-admin-panel]");
+  let storedAdminIds = [];
+  try {
+    storedAdminIds = JSON.parse(localStorage.getItem("modbot-admin-ids") || "[]");
+  } catch (error) {
+    storedAdminIds = [];
+  }
   let adminToastTimer;
+
+  if (Array.isArray(storedAdminIds)) {
+    storedAdminIds.forEach((adminId) => {
+      if (typeof adminId === "string" && adminId.trim()) {
+        allowedAdminIds.add(adminId.trim());
+      }
+    });
+  }
 
   function showAdminToast(message) {
     if (!toast) return;
@@ -736,6 +782,11 @@ function initAdminZone() {
     toast.classList.add("is-visible");
     window.clearTimeout(adminToastTimer);
     adminToastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 2400);
+  }
+
+  function openAdminPanel(panelName) {
+    adminTabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.adminTab === panelName));
+    adminPanels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.adminPanel === panelName));
   }
 
   function formatStat(value) {
@@ -815,6 +866,14 @@ function initAdminZone() {
     if (event.key === "Enter") tryUnlockAdmin();
   });
 
+  adminTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const panelName = tab.dataset.adminTab;
+      if (!panelName) return;
+      openAdminPanel(panelName);
+    });
+  });
+
   function updateCustomDurationVisibility() {
     if (!customDuration || !durationSelect) return;
     customDuration.hidden = durationSelect.value !== "custom";
@@ -836,6 +895,7 @@ function initAdminZone() {
   document.querySelector("[data-premium-apply]")?.addEventListener("click", () => {
     const memberInput = document.querySelector("[data-premium-member]");
     const list = document.querySelector("[data-premium-list]");
+    const paymentList = document.querySelector("[data-payment-list]");
     const member = memberInput?.value.trim();
     if (!member || !list) return;
     const duration = getPremiumDuration();
@@ -850,8 +910,88 @@ function initAdminZone() {
     identity.append(name, serverLine);
     item.append(identity, meta);
     list.prepend(item);
+    if (paymentList) {
+      const payment = document.createElement("div");
+      const paymentIdentity = document.createElement("span");
+      const paymentName = document.createElement("strong");
+      const paymentMeta = document.createElement("small");
+      const amount = duration.includes("3 mois") ? "35€" : duration.includes("2 mois") ? "15€" : "Durée personnalisée";
+      paymentName.textContent = member;
+      paymentMeta.textContent = "Discord connecté ou ID renseigné";
+      paymentIdentity.append(paymentName, paymentMeta);
+      const paymentAmount = document.createElement("span");
+      paymentAmount.textContent = `${amount} / ${duration}`;
+      payment.append(paymentIdentity, paymentAmount);
+      paymentList.prepend(payment);
+    }
     memberInput.value = "";
     showAdminToast(`💎 Premium ajouté pour ${member}`);
+  });
+
+  document.querySelector("[data-add-admin]")?.addEventListener("click", () => {
+    const input = document.querySelector("[data-new-admin-id]");
+    const list = document.querySelector("[data-admin-list]");
+    const adminId = input?.value.trim();
+    if (!adminId || !list) {
+      showAdminToast("⚠️ Ajoute un ID Discord administrateur");
+      return;
+    }
+    if (allowedAdminIds.has(adminId)) {
+      showAdminToast("✅ Cet administrateur est déjà autorisé");
+      return;
+    }
+    allowedAdminIds.add(adminId);
+    const nextStoredIds = Array.from(allowedAdminIds);
+    localStorage.setItem("modbot-admin-ids", JSON.stringify(nextStoredIds));
+    const item = document.createElement("div");
+    item.innerHTML = `
+      <span><strong>${adminId}</strong><small>Administrateur ajouté manuellement</small></span>
+      <button type="button" data-remove-admin="${adminId}">Retirer</button>
+    `;
+    list.append(item);
+    input.value = "";
+    showAdminToast(`🔐 Administrateur ${adminId} ajouté`);
+  });
+
+  document.querySelector("[data-admin-list]")?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-remove-admin]");
+    if (!button) return;
+    const adminId = button.dataset.removeAdmin;
+    if (!adminId) return;
+    allowedAdminIds.delete(adminId);
+    localStorage.setItem("modbot-admin-ids", JSON.stringify(Array.from(allowedAdminIds)));
+    button.closest("div")?.remove();
+    showAdminToast(`🗑️ Administrateur ${adminId} retiré`);
+  });
+
+  document.querySelector("[data-blacklist-add]")?.addEventListener("click", () => {
+    const memberInput = document.querySelector("[data-blacklist-member]");
+    const reasonInput = document.querySelector("[data-blacklist-reason]");
+    const list = document.querySelector("[data-blacklist-list]");
+    const member = memberInput?.value.trim();
+    const reason = reasonInput?.value.trim() || "Aucune raison renseignée";
+    if (!member || !list) {
+      showAdminToast("⚠️ Ajoute un membre à blacklister");
+      return;
+    }
+    const emptyRow = Array.from(list.children).find((row) => row.textContent.includes("Aucun membre blacklisté"));
+    emptyRow?.remove();
+    const item = document.createElement("div");
+    item.innerHTML = `
+      <span><strong>${member}</strong><small>${reason}</small></span>
+      <button type="button" data-blacklist-remove>Retirer</button>
+    `;
+    list.prepend(item);
+    memberInput.value = "";
+    if (reasonInput) reasonInput.value = "";
+    showAdminToast(`🚫 ${member} ajouté à la blacklist`);
+  });
+
+  document.querySelector("[data-blacklist-list]")?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-blacklist-remove]");
+    if (!button) return;
+    button.closest("div")?.remove();
+    showAdminToast("✅ Membre retiré de la blacklist");
   });
 
   document.querySelector("[data-refresh-servers]")?.addEventListener("click", () => {
@@ -1495,6 +1635,171 @@ function initDashboard() {
     setTicketPublishVisible(false);
     if (dirtyPanelName === "tickets") clearUnsavedChanges();
     showToast(`🚀 Message ticket publié dans le salon ${channel}`);
+  });
+
+  const welcomeMessageInput = document.querySelector("[data-welcome-message]");
+  const welcomeBgInput = document.querySelector("[data-welcome-bg]");
+  const welcomeFontSelect = document.querySelector("[data-welcome-font]");
+  const welcomeColorInput = document.querySelector("[data-welcome-color]");
+  const welcomeLiveMessage = document.querySelector("[data-welcome-live-message]");
+  const welcomeCard = document.querySelector("[data-welcome-card]");
+
+  function syncWelcomePreview() {
+    if (welcomeLiveMessage) {
+      welcomeLiveMessage.textContent = welcomeMessageInput?.value.trim() || "Bienvenue @membre sur @serveur !";
+    }
+    if (welcomeCard && welcomeBgInput?.value.trim()) {
+      welcomeCard.style.backgroundImage = `linear-gradient(90deg, rgba(19, 15, 70, 0.58), rgba(42, 94, 255, 0.72)), url("${welcomeBgInput.value.trim()}")`;
+    }
+    if (welcomeCard && welcomeFontSelect?.value) {
+      welcomeCard.style.fontFamily = `${welcomeFontSelect.value}, Inter, sans-serif`;
+    }
+    if (welcomeCard && welcomeColorInput?.value) {
+      welcomeCard.style.setProperty("--welcome-title-color", welcomeColorInput.value);
+    }
+  }
+
+  [welcomeMessageInput, welcomeBgInput, welcomeFontSelect, welcomeColorInput].forEach((field) => {
+    field?.addEventListener("input", syncWelcomePreview);
+    field?.addEventListener("change", syncWelcomePreview);
+  });
+  syncWelcomePreview();
+
+  const reactionTitleInput = document.querySelector("[data-reaction-title]");
+  const reactionDescriptionInput = document.querySelector("[data-reaction-description]");
+  const reactionLiveTitle = document.querySelector("[data-reaction-live-title]");
+  const reactionLiveDescription = document.querySelector("[data-reaction-live-description]");
+  const reactionPreviewList = document.querySelector("[data-reaction-preview-list]");
+  const reactionRoleList = document.querySelector("[data-reaction-role-list]");
+  const addReactionRoleButton = document.querySelector("[data-add-reaction-role]");
+
+  function renderReactionPreview() {
+    if (reactionLiveTitle) {
+      reactionLiveTitle.textContent = `🎭 ${reactionTitleInput?.value.trim() || "Choisis tes rôles"}`;
+    }
+    if (reactionLiveDescription) {
+      reactionLiveDescription.textContent = reactionDescriptionInput?.value.trim() || "Clique sur une réaction pour recevoir ou retirer le rôle correspondant.";
+    }
+    if (!reactionPreviewList || !reactionRoleList) return;
+
+    reactionPreviewList.innerHTML = "";
+    reactionRoleList.querySelectorAll(".reaction-role-row").forEach((row) => {
+      const inputs = row.querySelectorAll("input");
+      const emoji = inputs[0]?.value.trim() || "✨";
+      const label = inputs[2]?.value.trim() || inputs[1]?.value.trim() || "Rôle";
+      const chip = document.createElement("span");
+      chip.textContent = `${emoji} ${label}`;
+      reactionPreviewList.append(chip);
+    });
+  }
+
+  function renumberReactionRoles() {
+    reactionRoleList?.querySelectorAll(".reaction-role-row > span").forEach((label, index) => {
+      label.textContent = String(index + 1).padStart(2, "0");
+    });
+  }
+
+  reactionTitleInput?.addEventListener("input", renderReactionPreview);
+  reactionDescriptionInput?.addEventListener("input", renderReactionPreview);
+  reactionRoleList?.addEventListener("input", renderReactionPreview);
+
+  addReactionRoleButton?.addEventListener("click", () => {
+    if (!reactionRoleList) return;
+    const count = reactionRoleList.querySelectorAll(".reaction-role-row").length + 1;
+    const row = document.createElement("div");
+    row.className = "reaction-role-row";
+    row.innerHTML = `
+      <span>${String(count).padStart(2, "0")}</span>
+      <input class="emoji-input" type="text" value="✨" maxlength="3">
+      <input type="text" value="@Nouveau rôle">
+      <input type="text" value="Nouveau rôle">
+      <button type="button">Supprimer</button>
+    `;
+    reactionRoleList.append(row);
+    renderReactionPreview();
+    markPanelDirty("reactionroles");
+    showToast("🎭 Rôle réaction ajouté");
+  });
+
+  reactionRoleList?.addEventListener("click", (event) => {
+    const button = event.target.closest("button");
+    if (!button) return;
+    const rows = reactionRoleList.querySelectorAll(".reaction-role-row");
+    if (rows.length <= 1) {
+      showToast("⚠️ Garde au moins un rôle réaction");
+      return;
+    }
+    button.closest(".reaction-role-row")?.remove();
+    renumberReactionRoles();
+    renderReactionPreview();
+    markPanelDirty("reactionroles");
+    showToast("🗑️ Rôle réaction supprimé");
+  });
+  renderReactionPreview();
+
+  document.querySelectorAll("[data-recurring-mode]").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll("[data-recurring-mode]").forEach((item) => item.classList.remove("is-active"));
+      button.classList.add("is-active");
+      markPanelDirty("recurring");
+      showToast(button.dataset.recurringMode === "target" ? "⏰ Mode heure ciblée sélectionné" : "🔁 Mode répétition sélectionné");
+    });
+  });
+
+  document.querySelectorAll(".day-pill-row button, .message-composer-tabs button").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button.closest(".message-composer-tabs")) {
+        button.closest(".message-composer-tabs")?.querySelectorAll("button").forEach((item) => item.classList.remove("is-active"));
+        button.classList.add("is-active");
+      } else {
+        button.classList.toggle("is-active");
+      }
+      markPanelDirty(button.closest("[data-dashboard-panel]")?.dataset.dashboardPanel || activePanelName);
+    });
+  });
+
+  document.querySelector("[data-create-recurring]")?.addEventListener("click", () => {
+    const name = document.querySelector("[data-recurring-name]")?.value.trim() || "Message récurrent";
+    const channel = document.querySelector("[data-recurring-channel]")?.value.trim();
+    const interval = document.querySelector("[data-recurring-interval]")?.value || "30";
+    const unit = document.querySelector("[data-recurring-unit]")?.value || "minutes";
+    const list = document.querySelector("[data-recurring-list]");
+    if (!channel) {
+      showToast("⚠️ Ajoute l'ID du salon pour créer le message");
+      return;
+    }
+    list?.querySelector(".recurring-empty")?.remove();
+    const item = document.createElement("div");
+    item.className = "recurring-item";
+    item.innerHTML = `
+      <span>
+        <strong>🔁 ${escapeHtml(name)}</strong>
+        <small>Toutes les ${escapeHtml(interval)} ${escapeHtml(unit)} dans ${escapeHtml(channel)}</small>
+      </span>
+      <button class="secondary-btn compact" type="button" data-recurring-remove>Supprimer</button>
+    `;
+    list?.prepend(item);
+    markPanelDirty("recurring");
+    showToast(`✅ Message récurrent "${name}" créé`);
+  });
+
+  document.querySelector("[data-recurring-list]")?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-recurring-remove]");
+    if (!button) return;
+    const list = button.closest("[data-recurring-list]");
+    button.closest(".recurring-item")?.remove();
+    if (list && !list.querySelector(".recurring-item")) {
+      const empty = document.createElement("div");
+      empty.className = "recurring-empty";
+      empty.textContent = "Aucun message récurrent créé pour le moment.";
+      list.append(empty);
+    }
+    markPanelDirty("recurring");
+    showToast("🗑️ Message récurrent supprimé");
+  });
+
+  document.querySelector("[data-recurring-recover]")?.addEventListener("click", () => {
+    showToast("♻️ Récupération prête pour le futur backend du bot");
   });
 
   document.querySelectorAll(".social-card").forEach((card) => {
