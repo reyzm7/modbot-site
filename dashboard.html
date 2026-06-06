@@ -103,13 +103,16 @@
       <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span>03</span>🎫 Tickets</button>
       <button class="dash-nav" type="button" data-dashboard-tab="security"><span>04</span>🛡️ Sécurité</button>
       <button class="dash-nav" type="button" data-dashboard-tab="channels"><span>05</span>📌 Salons</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="personalization"><span>06</span>🎨 Personnalisation</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="moderation"><span>07</span>⚒️ Modération</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="language"><span>08</span>🌍 Langue</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="tournaments"><span>09</span>🏆 Tournois</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="socials"><span>10</span>📣 Réseaux</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="ratings"><span>11</span>⭐ Ratings</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="logs"><span>12</span>🧾 Logs</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="welcome"><span>06</span>👋 Arrivées/Départs</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="reactionroles"><span>07</span>🎭 Rôles réactions</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="recurring"><span>08</span>🔁 Messages récurrents</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="personalization"><span>09</span>🎨 Personnalisation</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="moderation"><span>10</span>⚒️ Modération</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="language"><span>11</span>🌍 Langue</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="tournaments"><span>12</span>🏆 Tournois</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="socials"><span>13</span>📣 Réseaux</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="ratings"><span>14</span>⭐ Ratings</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="logs"><span>15</span>🧾 Logs</button>
     </aside>
 
     <section class="dashboard-content">
@@ -154,6 +157,9 @@
               <button type="button" data-dashboard-jump="premium">💎 Associer Premium</button>
               <button type="button" data-dashboard-jump="security">🛡️ Sécurité serveur</button>
               <button type="button" data-dashboard-jump="channels">📌 Choisir les salons</button>
+              <button type="button" data-dashboard-jump="welcome">👋 Bienvenue / départ</button>
+              <button type="button" data-dashboard-jump="reactionroles">🎭 Rôles réactions</button>
+              <button type="button" data-dashboard-jump="recurring">🔁 Messages récurrents</button>
               <button type="button" data-dashboard-jump="personalization">🎨 Identité visuelle</button>
               <button type="button" data-dashboard-jump="tournaments">🏆 Module tournois</button>
               <button type="button" data-dashboard-jump="socials">📣 Relais réseaux</button>
@@ -335,6 +341,224 @@
           <div class="channel-row"><strong>💡 Suggestions</strong><input value="1510422091340709898"><span class="state active">🟢 Actif</span></div>
           <div class="channel-row"><strong>🚩 Reports</strong><input value="1510422117290868926"><span class="state active">🟢 Actif</span></div>
           <div class="channel-row"><strong>📣 Staff alert</strong><input placeholder="ID du salon"><span class="state inactive">⚪ Inactif</span></div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="welcome">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow">👋 Arrivées et départs</p>
+            <h2>Messages de bienvenue</h2>
+          </div>
+          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset bienvenue</button>
+        </div>
+
+        <div class="dashboard-grid two">
+          <form class="tool-panel form-panel">
+            <label class="toggle-line">
+              <input type="checkbox" checked>
+              <span></span>
+              <strong>✅ Activer les arrivées</strong>
+              <small>Envoie un message quand un membre rejoint le serveur.</small>
+            </label>
+            <label>Salon de bienvenue
+              <input type="text" value="151042200000000001" placeholder="ID du salon">
+            </label>
+            <label>Message au-dessus de l’image
+              <textarea data-welcome-message>Bienvenue @membre sur @serveur !</textarea>
+            </label>
+            <label class="toggle-line">
+              <input type="checkbox">
+              <span></span>
+              <strong>👋 Activer les départs</strong>
+              <small>Préviens le serveur quand un membre part.</small>
+            </label>
+            <label>Message de départ
+              <input type="text" value="@membre vient de quitter @serveur.">
+            </label>
+          </form>
+
+          <div class="tool-panel welcome-preview-panel">
+            <h3>👁️ Aperçu Discord</h3>
+            <div class="welcome-discord-preview">
+              <p data-welcome-live-message>Bienvenue @membre sur @serveur !</p>
+              <div class="welcome-card" data-welcome-card>
+                <span class="welcome-avatar"></span>
+                <div>
+                  <strong>BIENVENUE</strong>
+                  <small>ZEBELLIJUR_</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tool-panel premium-welcome-panel">
+          <div class="table-head">
+            <h3>💎 Personnalisation Premium</h3>
+            <span class="state pending">🟡 Premium requis</span>
+          </div>
+          <div class="dashboard-grid three">
+            <label>Arrière-plan
+              <input type="text" value="assets/default_banner.png" data-welcome-bg>
+            </label>
+            <label>Police d’écriture
+              <select data-welcome-font>
+                <option value="Inter">Inter</option>
+                <option value="Arial Black">Arial Black</option>
+                <option value="Trebuchet MS">Trebuchet MS</option>
+                <option value="Georgia">Georgia</option>
+              </select>
+            </label>
+            <label>Couleur du titre
+              <input type="color" value="#ffffff" data-welcome-color>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="reactionroles">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow">🎭 Rôles réactions</p>
+            <h2>Distribution de rôles</h2>
+          </div>
+          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset rôles réactions</button>
+        </div>
+
+        <div class="dashboard-grid two">
+          <form class="tool-panel form-panel">
+            <label>Titre du message
+              <input type="text" value="Choisis tes rôles" data-reaction-title>
+            </label>
+            <label>Description
+              <textarea data-reaction-description>Clique sur une réaction pour recevoir ou retirer le rôle correspondant.</textarea>
+            </label>
+            <div class="form-row">
+              <label>Salon
+                <input type="text" value="151042200000000002" placeholder="ID du salon">
+              </label>
+              <label>Mode
+                <select>
+                  <option>Plusieurs rôles possibles</option>
+                  <option>Un seul rôle à la fois</option>
+                </select>
+              </label>
+            </div>
+          </form>
+
+          <div class="tool-panel preview-panel">
+            <h3>👁️ Aperçu</h3>
+            <div class="discord-embed reaction-preview">
+              <h3 data-reaction-live-title>🎭 Choisis tes rôles</h3>
+              <p data-reaction-live-description>Clique sur une réaction pour recevoir ou retirer le rôle correspondant.</p>
+              <div class="reaction-chip-list" data-reaction-preview-list>
+                <span>⚽ Joueur</span>
+                <span>📣 Annonces</span>
+                <span>🎮 Matchs</span>
+              </div>
+              <p class="embed-footer">ModBot - Rôles réactions</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tool-panel">
+          <div class="table-head">
+            <h3>🎯 Réactions configurées</h3>
+            <button class="primary-btn compact" type="button" data-add-reaction-role>➕ Ajouter un rôle</button>
+          </div>
+          <div class="reaction-role-list" data-reaction-role-list>
+            <div class="reaction-role-row"><span>01</span><input class="emoji-input" value="⚽" maxlength="3"><input value="@Joueur"><input value="Joueur"><button type="button">Supprimer</button></div>
+            <div class="reaction-role-row"><span>02</span><input class="emoji-input" value="📣" maxlength="3"><input value="@Annonces"><input value="Annonces"><button type="button">Supprimer</button></div>
+            <div class="reaction-role-row"><span>03</span><input class="emoji-input" value="🎮" maxlength="3"><input value="@Matchs"><input value="Matchs"><button type="button">Supprimer</button></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="recurring">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow">🔁 Messages récurrents</p>
+            <h2>Automatiser les rappels</h2>
+          </div>
+          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset récurrents</button>
+        </div>
+
+        <div class="recurring-layout">
+          <form class="tool-panel recurring-builder">
+            <div class="dashboard-grid two">
+              <label>Nom du message récurrent
+                <input type="text" value="Rappel Twitch" maxlength="30" data-recurring-name>
+              </label>
+              <label>Salon du message récurrent
+                <input type="text" placeholder="ID du salon" data-recurring-channel>
+              </label>
+            </div>
+
+            <div class="segmented-control" role="group" aria-label="Intervalle d'envoi">
+              <button class="is-active" type="button" data-recurring-mode="repeat">🔁 Répétition</button>
+              <button type="button" data-recurring-mode="target">⏰ Heure ciblée</button>
+            </div>
+
+            <div class="dashboard-grid two">
+              <label>Intervalle
+                <input type="number" min="1" value="30" data-recurring-interval>
+              </label>
+              <label>Unité
+                <select data-recurring-unit>
+                  <option>minutes</option>
+                  <option>heures</option>
+                  <option>jours</option>
+                </select>
+              </label>
+            </div>
+
+            <div>
+              <h3>📅 Jours d’envoi</h3>
+              <div class="day-pill-row">
+                <button class="is-active" type="button">Lun.</button>
+                <button class="is-active" type="button">Mar.</button>
+                <button class="is-active" type="button">Mer.</button>
+                <button class="is-active" type="button">Jeu.</button>
+                <button class="is-active" type="button">Ven.</button>
+                <button type="button">Sam.</button>
+                <button type="button">Dim.</button>
+              </div>
+            </div>
+
+            <label class="toggle-line">
+              <input type="checkbox">
+              <span></span>
+              <strong>🔂 Forcer le renvoi</strong>
+              <small>Renvoie même s’il n’y a pas eu de message depuis le dernier envoi.</small>
+            </label>
+            <label class="toggle-line">
+              <input type="checkbox">
+              <span></span>
+              <strong>🧹 Supprimer l’ancien message</strong>
+              <small>Supprime le précédent rappel lors du nouvel envoi.</small>
+            </label>
+
+            <div class="message-composer-tabs">
+              <button class="is-active" type="button">💬 Contenu</button>
+              <button type="button">🖼️ Image</button>
+              <button type="button">📦 Embed</button>
+              <button type="button">🔗 Bouton lien</button>
+            </div>
+            <textarea data-recurring-content>Hey @everyone, pensez à suivre les dernières annonces du serveur.</textarea>
+
+            <button class="primary-btn compact" type="button" data-create-recurring>✅ Créer le message</button>
+          </form>
+
+          <aside class="tool-panel recurring-list-panel">
+            <div class="table-head">
+              <h3>📋 Messages récurrents</h3>
+              <button class="secondary-btn compact" type="button" data-recurring-recover>♻️ Récupérer</button>
+            </div>
+            <div class="recurring-list" data-recurring-list>
+              <div class="recurring-empty">Aucun message récurrent créé pour le moment.</div>
+            </div>
+          </aside>
         </div>
       </section>
 
