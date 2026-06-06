@@ -471,27 +471,13 @@
             <label>Nom exact du tournoi sur IFC
               <input type="text" value="EA FC 26 Club Pro Cup" data-tournament-name>
             </label>
-            <div class="form-row">
-              <label>Format
-                <select data-tournament-format>
-                  <option>Poules + phase finale</option>
-                  <option>Élimination directe</option>
-                  <option>Championnat</option>
-                </select>
-              </label>
-              <label>Équipes max
-                <input type="number" min="2" max="128" value="32" data-tournament-teams>
-              </label>
+            <p class="tournament-api-note">Le bot utilisera uniquement ce nom exact pour retrouver le tournoi sur IFC et connecter ses stats Discord : équipes, logos, wins, buts, poules, classement, affiches et participants.</p>
+            <div class="ifc-data-list">
+              <span>📊 Stats IFC</span>
+              <span>🛡️ Équipes IFC</span>
+              <span>⚽ Résultats IFC</span>
+              <span>🏆 Bracket IFC</span>
             </div>
-            <div class="form-row">
-              <label>Salon annonces tournoi
-                <input type="text" placeholder="ID du salon" data-tournament-channel>
-              </label>
-              <label>Rôle organisateur
-                <input type="text" placeholder="@Organisateur Tournoi" data-tournament-role>
-              </label>
-            </div>
-            <p class="tournament-api-note">L’organisateur renseignera le nom du tournoi IFC ici. Quand l’API sera disponible, ModBot détectera le tournoi, récupérera les équipes et générera les embeds automatiquement.</p>
           </form>
         </div>
 
@@ -503,27 +489,27 @@
           <div class="tournament-command-grid">
             <article class="tournament-command-card">
               <strong>/poules</strong>
-              <span>Affiche les poules récupérées sur IFC avec une mise en page propre.</span>
+              <span>Génère l’embed des poules depuis les données IFC.</span>
             </article>
             <article class="tournament-command-card">
               <strong>/huitieme</strong>
-              <span>Publie les huitièmes générés depuis les données IFC.</span>
+              <span>Génère l’embed des huitièmes depuis les affiches IFC.</span>
             </article>
             <article class="tournament-command-card">
               <strong>/quart</strong>
-              <span>Affiche les quarts de finale et les affiches associées.</span>
+              <span>Génère l’embed des quarts depuis les affiches IFC.</span>
             </article>
             <article class="tournament-command-card">
               <strong>/demi</strong>
-              <span>Publie les demi-finales du bracket IFC.</span>
+              <span>Génère l’embed des demi-finales depuis le bracket IFC.</span>
             </article>
             <article class="tournament-command-card">
               <strong>/finale</strong>
-              <span>Affiche la finale, la petite finale et les infos de match.</span>
+              <span>Génère l’embed de la finale et des matchs liés depuis IFC.</span>
             </article>
             <article class="tournament-command-card">
               <strong>/classement</strong>
-              <span>Génère le classement avec wins, buts et statistiques IFC.</span>
+              <span>Génère l’embed classement avec wins, buts et statistiques IFC.</span>
             </article>
             <article class="tournament-command-card spotlight">
               <strong>/podium</strong>
@@ -538,15 +524,19 @@
 
         <div class="dashboard-grid two tournament-preview-grid">
           <div class="tool-panel">
-            <h3>📝 Aperçu /inscription</h3>
-            <div class="ifc-registration-preview">
-              <span class="rank">18.</span>
-              <strong>KSK</strong>
-              <span>-</span>
-              <span class="team-mention">@KSK</span>
-              <span class="team-logo-dot">M</span>
+            <h3>📝 Aperçu participants /inscription</h3>
+            <div class="ifc-participants-preview">
+              <h4>Participants</h4>
+              <ol>
+                <li><strong>Morocco B</strong> - <span>@Morocco B | M</span> <span class="team-logo-dot"></span></li>
+                <li><strong>CAMORA ESPORTS</strong> - <span>@CAMORA ESPORTS | M</span> <span class="team-logo-dot"></span></li>
+                <li><strong>Attawia City</strong> - <span>@1307880971387011095</span> <span class="team-logo-dot"></span></li>
+                <li><strong>XVenom</strong> - <span>@isc</span> / <span>@1249518731168841732</span> <span class="team-logo-dot"></span></li>
+                <li><strong>KSK</strong> - <span>@KSK | M</span> <span class="team-logo-dot"></span></li>
+                <li><strong>Essence cf</strong> - <span>@Essence cf | M</span> <span class="team-logo-dot"></span></li>
+              </ol>
             </div>
-            <p class="tournament-api-note">Si le tournoi IFC est limité à 32 équipes et que les 32 places sont prises, ModBot ajoutera l’équipe en liste d’attente.</p>
+            <p class="tournament-api-note">/inscription ajoutera l’équipe IFC dans cette liste. Si le tournoi est complet, ModBot créera une liste d’attente.</p>
           </div>
 
           <div class="tool-panel">
@@ -561,8 +551,8 @@
         </div>
 
         <div class="dashboard-grid three tournament-flow">
-          <article class="tool-panel"><h3>📋 Inscriptions IFC</h3><p>La commande /inscription vérifie l’équipe sur IFC, puis l’ajoute ou la met en liste d’attente.</p></article>
-          <article class="tool-panel"><h3>🧮 Données IFC</h3><p>Les résultats, wins, buts, classements et affiches seront récupérés depuis l’API IFC.</p></article>
+          <article class="tool-panel"><h3>📋 Participants IFC</h3><p>/inscription vérifie le nom d’équipe sur IFC, ajoute l’équipe aux participants ou à la liste d’attente.</p></article>
+          <article class="tool-panel"><h3>🧮 Données IFC</h3><p>Toutes les commandes récupèrent leurs infos depuis IFC : résultats, wins, buts, poules, classements et affiches.</p></article>
           <article class="tool-panel"><h3>📣 Embeds Discord</h3><p>Les commandes génèrent seulement les embeds Discord, avec des visuels propres et soignés.</p></article>
         </div>
       </section>
