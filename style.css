@@ -2945,6 +2945,17 @@ main,
   box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);
 }
 
+.oauth-note {
+  width: min(100%, 560px);
+  margin: 0 auto 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(158, 110, 255, 0.28);
+  border-radius: 8px;
+  color: var(--soft);
+  background: rgba(255, 255, 255, 0.045);
+  line-height: 1.55;
+}
+
 .discord-login-btn,
 .server-card {
   position: relative;
