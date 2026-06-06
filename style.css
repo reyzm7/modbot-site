@@ -2918,6 +2918,33 @@ main,
   margin-left: 0;
 }
 
+.api-url-field {
+  width: min(100%, 560px);
+  margin: 0 auto 12px;
+  display: grid;
+  gap: 8px;
+  text-align: left;
+  color: var(--soft);
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.api-url-field input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid rgba(158, 110, 255, 0.34);
+  border-radius: 8px;
+  color: var(--text);
+  background: rgba(4, 1, 12, 0.8);
+  outline: none;
+}
+
+.api-url-field input:focus {
+  border-color: rgba(178, 132, 255, 0.82);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);
+}
+
 .discord-login-btn,
 .server-card {
   position: relative;
