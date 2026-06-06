@@ -2937,6 +2937,11 @@ main,
   white-space: nowrap;
 }
 
+.state.pending {
+  background: rgba(255, 215, 0, 0.12);
+  color: #ffeaa0;
+}
+
 .health-pill span {
   width: 8px;
   height: 8px;
@@ -3203,6 +3208,21 @@ main,
   min-height: 112px;
 }
 
+.tournament-toggle.is-locked {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.tournament-toggle.is-locked strong,
+.tournament-toggle.is-locked small {
+  color: var(--muted);
+}
+
+.tournament-api-note {
+  color: var(--soft);
+  line-height: 1.6;
+}
+
 .tournament-command-panel {
   margin-top: 14px;
 }
@@ -3238,6 +3258,13 @@ main,
   filter: grayscale(0.8);
 }
 
+.tournament-command-card.spotlight {
+  border-color: rgba(255, 215, 0, 0.3);
+  background:
+    linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(139, 92, 246, 0.12)),
+    rgba(255, 255, 255, 0.045);
+}
+
 .tournament-command-card strong {
   color: var(--text);
   font-size: 1rem;
@@ -3250,6 +3277,91 @@ main,
 
 .tournament-flow {
   margin-top: 14px;
+}
+
+.tournament-preview-grid {
+  margin-top: 14px;
+}
+
+.ifc-registration-preview {
+  min-height: 58px;
+  padding: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid rgba(158, 110, 255, 0.24);
+  border-radius: var(--radius);
+  background: rgba(8, 6, 18, 0.86);
+  font-weight: 900;
+}
+
+.ifc-registration-preview .rank {
+  color: var(--soft);
+}
+
+.ifc-registration-preview .team-mention {
+  color: #9db7ff;
+}
+
+.team-logo-dot {
+  width: 22px;
+  height: 22px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #62e6ff, #5865f2);
+  color: #fff;
+  font-size: 0.72rem;
+  box-shadow: 0 0 18px rgba(98, 230, 255, 0.32);
+}
+
+.podium-preview {
+  min-height: 180px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  gap: 10px;
+}
+
+.podium-team {
+  min-height: 118px;
+  padding: 12px;
+  display: grid;
+  align-content: end;
+  justify-items: center;
+  gap: 8px;
+  border: 1px solid rgba(158, 110, 255, 0.24);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(139, 92, 246, 0.18), rgba(255, 255, 255, 0.045));
+}
+
+.podium-team.first {
+  min-height: 158px;
+  border-color: rgba(255, 215, 0, 0.42);
+}
+
+.podium-team.second {
+  min-height: 132px;
+}
+
+.podium-team.third {
+  min-height: 110px;
+}
+
+.podium-team span {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,0.88), rgba(255,255,255,0.08) 42%, transparent 43%),
+    linear-gradient(135deg, rgba(98, 230, 255, 0.74), rgba(139, 92, 246, 0.86));
+  box-shadow: 0 0 24px rgba(139, 92, 246, 0.3);
+}
+
+.podium-team strong {
+  font-size: 1.5rem;
 }
 
 .form-panel,
