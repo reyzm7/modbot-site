@@ -68,7 +68,7 @@
 
       <article class="admin-panel admin-access-note">
         <h3>🛡️ Sécurité</h3>
-        <p>Les statistiques, les paiements, les serveurs, les administrateurs et la blacklist restent masqués tant que l’ID Discord administrateur n’est pas validé.</p>
+        <p>Les statistiques, les demandes Premium, les serveurs, les administrateurs et la blacklist restent masqués tant que l’ID Discord administrateur n’est pas validé.</p>
       </article>
     </div>
 
@@ -76,7 +76,7 @@
       <aside class="admin-sidebar-panel">
         <p class="sidebar-label">Administration</p>
         <button class="admin-nav is-active" type="button" data-admin-tab="overview"><span>01</span>📊 Vue globale</button>
-        <button class="admin-nav" type="button" data-admin-tab="premium"><span>02</span>💎 Premium & paiements</button>
+        <button class="admin-nav" type="button" data-admin-tab="premium"><span>02</span>💎 Premium</button>
         <button class="admin-nav" type="button" data-admin-tab="admins"><span>03</span>🔐 Administrateurs</button>
         <button class="admin-nav" type="button" data-admin-tab="blacklist"><span>04</span>🚫 Blacklist bot</button>
         <button class="admin-nav" type="button" data-admin-tab="servers"><span>05</span>🧭 Serveurs</button>
@@ -105,7 +105,7 @@
             </article>
             <article class="admin-panel">
               <h3>💎 Règle Premium</h3>
-              <p>Chaque membre Premium peut associer jusqu’à 2 serveurs depuis son dashboard. L’admin gère ici la durée et le suivi des paiements.</p>
+              <p>Chaque membre Premium peut associer jusqu’à 2 serveurs depuis son dashboard. L’admin gère ici la durée et le suivi des demandes Premium.</p>
             </article>
           </div>
         </section>
@@ -163,12 +163,13 @@
 
           <article class="admin-panel">
             <div class="admin-panel-head">
-              <h3>💳 Paiements détectés</h3>
-              <span class="admin-badge">Connexion Discord requise</span>
+              <h3>🎫 Paiement Premium via ticket</h3>
+              <span class="admin-badge">Action manuelle</span>
             </div>
-            <div class="payment-list" data-payment-list>
-              <div><span><strong>gimskh</strong><small>ID 1189681599965573131</small></span><span>35€ / 3 mois</span></div>
-              <div><span><strong>Owner BE</strong><small>ID Discord connecté</small></span><span>15€ / 2 mois</span></div>
+            <p>Pour procéder au paiement d’un Premium, le membre doit ouvrir un ticket sur le serveur Discord ModBot. Le staff confirme l’offre, la durée et les serveurs concernés directement dans ce ticket.</p>
+            <div class="premium-ticket-list" data-premium-ticket-list>
+              <div><span><strong>1. Ouvrir un ticket</strong><small>Le membre ouvre un ticket Premium sur le serveur support.</small></span><span>🎫 Obligatoire</span></div>
+              <div><span><strong>2. Confirmer l’offre</strong><small>15€ / 2 mois ou 35€ / 3 mois selon le besoin.</small></span><span>💎 Premium</span></div>
             </div>
           </article>
         </section>
