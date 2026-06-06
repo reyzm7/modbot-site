@@ -142,7 +142,7 @@
         <div class="metric-grid">
           <article class="metric-card"><span>🎫 Tickets</span><strong>Actif</strong><small>4 catégories configurées</small></article>
           <article class="metric-card"><span>🛡️ Sécurité</span><strong>3/5</strong><small>Modules actifs</small></article>
-          <article class="metric-card"><span>🏆 Tournois</span><strong data-tournament-overview-state>Inactif</strong><small>EA FC 26 Club Pro</small></article>
+          <article class="metric-card"><span>🏆 Tournois</span><strong data-tournament-overview-state>En attente</strong><small>API IFC requise</small></article>
           <article class="metric-card"><span>⭐ Ratings</span><strong>4.8/5</strong><small>24 évaluations</small></article>
         </div>
 
@@ -454,21 +454,21 @@
             <div class="tournament-state-line">
               <div>
                 <h3>⚽ Module tournoi</h3>
-                <p>Active ce module pour débloquer les commandes spéciales de gestion de compétition Club Pro.</p>
+                <p>Module préparé pour les tournois EA FC 26 Club Pro, mais bloqué en attendant l’API IFC.</p>
               </div>
-              <span class="state inactive" data-tournament-state>⚪ Inactif</span>
+              <span class="state pending" data-tournament-state>🟡 En attente API IFC</span>
             </div>
             <label class="toggle-line tournament-toggle">
-              <input type="checkbox" data-tournament-enabled>
+              <input type="checkbox" data-tournament-enabled disabled>
               <span></span>
-              <strong>🏆 Activer le mode tournoi</strong>
-              <small>Donne accès aux commandes /poules, /huitieme, /classement et aux outils de bracket.</small>
+              <strong>🔒 Mode tournoi verrouillé</strong>
+              <small>L’activation sera possible quand l’API IFC permettra de récupérer équipes, logos, résultats, buts, wins et affiches.</small>
             </label>
           </div>
 
           <form class="tool-panel form-panel">
-            <h3>🎮 Paramètres compétition</h3>
-            <label>Nom du tournoi
+            <h3>🎮 Liaison IFC</h3>
+            <label>Nom exact du tournoi sur IFC
               <input type="text" value="EA FC 26 Club Pro Cup" data-tournament-name>
             </label>
             <div class="form-row">
@@ -491,46 +491,79 @@
                 <input type="text" placeholder="@Organisateur Tournoi" data-tournament-role>
               </label>
             </div>
+            <p class="tournament-api-note">L’organisateur renseignera le nom du tournoi IFC ici. Quand l’API sera disponible, ModBot détectera le tournoi, récupérera les équipes et générera les embeds automatiquement.</p>
           </form>
         </div>
 
         <div class="tool-panel tournament-command-panel">
           <div class="table-head">
-            <h3>⚡ Commandes spéciales débloquées</h3>
-            <span class="state inactive" data-tournament-command-state>⚪ Module inactif</span>
+            <h3>⚡ Commandes spéciales prévues</h3>
+            <span class="state pending" data-tournament-command-state>🟡 En attente API IFC</span>
           </div>
           <div class="tournament-command-grid">
             <article class="tournament-command-card">
               <strong>/poules</strong>
-              <span>Créer ou afficher les groupes du tournoi.</span>
+              <span>Affiche les poules récupérées sur IFC avec une mise en page propre.</span>
             </article>
             <article class="tournament-command-card">
               <strong>/huitieme</strong>
-              <span>Générer les huitièmes de finale depuis les qualifiés.</span>
+              <span>Publie les huitièmes générés depuis les données IFC.</span>
             </article>
             <article class="tournament-command-card">
               <strong>/quart</strong>
-              <span>Préparer les quarts de finale et les affiches.</span>
+              <span>Affiche les quarts de finale et les affiches associées.</span>
             </article>
             <article class="tournament-command-card">
               <strong>/demi</strong>
-              <span>Publier les demi-finales du bracket.</span>
+              <span>Publie les demi-finales du bracket IFC.</span>
             </article>
             <article class="tournament-command-card">
               <strong>/finale</strong>
-              <span>Créer la finale et le match pour la troisième place.</span>
+              <span>Affiche la finale, la petite finale et les infos de match.</span>
             </article>
             <article class="tournament-command-card">
               <strong>/classement</strong>
-              <span>Afficher le classement général ou d’une poule.</span>
+              <span>Génère le classement avec wins, buts et statistiques IFC.</span>
+            </article>
+            <article class="tournament-command-card spotlight">
+              <strong>/podium</strong>
+              <span>Génère une image podium top 3 avec les logos des équipes récupérés via IFC.</span>
+            </article>
+            <article class="tournament-command-card spotlight">
+              <strong>/inscription</strong>
+              <span>Inscrit une équipe IFC. Si le tournoi est complet, l’équipe passe en liste d’attente.</span>
             </article>
           </div>
         </div>
 
+        <div class="dashboard-grid two tournament-preview-grid">
+          <div class="tool-panel">
+            <h3>📝 Aperçu /inscription</h3>
+            <div class="ifc-registration-preview">
+              <span class="rank">18.</span>
+              <strong>KSK</strong>
+              <span>-</span>
+              <span class="team-mention">@KSK</span>
+              <span class="team-logo-dot">M</span>
+            </div>
+            <p class="tournament-api-note">Si le tournoi IFC est limité à 32 équipes et que les 32 places sont prises, ModBot ajoutera l’équipe en liste d’attente.</p>
+          </div>
+
+          <div class="tool-panel">
+            <h3>🏆 Aperçu /podium</h3>
+            <div class="podium-preview" aria-label="Aperçu podium">
+              <div class="podium-team second"><span></span><strong>2</strong></div>
+              <div class="podium-team first"><span></span><strong>1</strong></div>
+              <div class="podium-team third"><span></span><strong>3</strong></div>
+            </div>
+            <p class="tournament-api-note">Les ronds seront remplacés par les logos d’équipes récupérés depuis IFC.</p>
+          </div>
+        </div>
+
         <div class="dashboard-grid three tournament-flow">
-          <article class="tool-panel"><h3>📋 Inscriptions</h3><p>Centralise les équipes, capitaines, IDs joueurs et validation organisateur.</p></article>
-          <article class="tool-panel"><h3>🧮 Résultats</h3><p>Prépare la saisie des scores, preuves de match et mise à jour automatique du classement.</p></article>
-          <article class="tool-panel"><h3>📣 Publications</h3><p>Publie les poules, affiches, classements et annonces dans le salon tournoi choisi.</p></article>
+          <article class="tool-panel"><h3>📋 Inscriptions IFC</h3><p>La commande /inscription vérifie l’équipe sur IFC, puis l’ajoute ou la met en liste d’attente.</p></article>
+          <article class="tool-panel"><h3>🧮 Données IFC</h3><p>Les résultats, wins, buts, classements et affiches seront récupérés depuis l’API IFC.</p></article>
+          <article class="tool-panel"><h3>📣 Embeds Discord</h3><p>Les commandes génèrent seulement les embeds Discord, avec des visuels propres et soignés.</p></article>
         </div>
       </section>
 
