@@ -60,11 +60,12 @@
         <a href="#features" data-i18n="nav.features">Fonctionnalités</a>
         <a href="#demo" data-i18n="nav.demo">Démo</a>
         <a href="#pricing" data-i18n="nav.pricing">Tarifs</a>
-        <a href="admin.html" data-i18n="nav.admin">Admin</a>
+        <a href="wiki.html" data-i18n="nav.wiki">Wiki</a>
+        <a class="nav-action-btn nav-admin-btn" href="admin.html"><span>🔐</span><span data-i18n="nav.admin">Admin</span></a>
         <a href="#partners">Partenaires</a>
         <a href="#patch-notes">Patch notes</a>
         <a href="#faq">FAQ</a>
-        <a href="dashboard.html">Dashboard</a>
+        <a class="nav-action-btn nav-dashboard-btn" href="dashboard.html"><span>📊</span><span data-i18n="nav.dashboard">Dashboard</span></a>
         <label class="language-switch" aria-label="Choisir la langue du site">
           <span>🌍</span>
           <select id="siteLanguage">
@@ -183,8 +184,8 @@
         </article>
         <article class="feature-card">
           <span class="feature-icon">08</span>
-          <h3 data-i18n="features.development.title">Développement continu</h3>
-          <p data-i18n="features.development.copy">Nouvelles fonctions créées selon les besoins et les retours serveur.</p>
+          <h3 data-i18n="features.development.title">Automatisations</h3>
+          <p data-i18n="features.development.copy">Messages récurrents, rôles réactions, arrivées et départs configurables.</p>
         </article>
       </div>
     </section>
@@ -219,21 +220,21 @@
       <div class="section-heading">
         <p class="eyebrow" data-i18n="pricing.eyebrow">Tarifs</p>
         <h2 data-i18n="pricing.title">Des offres simples et claires</h2>
-        <p data-i18n="pricing.copy">ModBot n’est pas ajouté librement : nous l’installons manuellement sur votre serveur.</p>
+        <p data-i18n="pricing.copy">Commence gratuitement avec la sécurité, puis ajoute les modules avancés selon les besoins de ton serveur.</p>
       </div>
 
       <div class="pricing-grid">
         <article class="price-card">
           <div class="price-head">
-            <h3 data-i18n="pricing.free.title">Offre de base</h3>
-            <p data-i18n="pricing.free.copy">La protection ModBot pour sécuriser votre serveur toute l’année.</p>
+            <h3 data-i18n="pricing.free.title">Gratuit</h3>
+            <p data-i18n="pricing.free.copy">Le socle essentiel pour protéger et modérer ton serveur Discord.</p>
           </div>
-          <div class="price">10€ <span data-i18n="pricing.free.period">/ an</span></div>
+          <div class="price">0€ <span data-i18n="pricing.free.period">/ toujours</span></div>
           <ul>
-            <li data-i18n="pricing.free.item1">Installation</li>
-            <li data-i18n="pricing.free.item2">Configuration</li>
-            <li data-i18n="pricing.free.item3">Protection du serveur toute l’année</li>
-            <li data-i18n="pricing.free.item4">Support Discord</li>
+            <li data-i18n="pricing.free.item1">Sécurité serveur</li>
+            <li data-i18n="pricing.free.item2">Modération</li>
+            <li data-i18n="pricing.free.item3">Salons de logs</li>
+            <li data-i18n="pricing.free.item4">Configuration des salons essentiels</li>
           </ul>
           <a class="secondary-btn stretch" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="pricing.free.cta">Choisir cette offre</a>
         </article>
@@ -242,16 +243,32 @@
           <span class="premium-ribbon">Premium</span>
           <div class="price-head">
             <h3 data-i18n="pricing.premium.title">Offre Premium</h3>
-            <p data-i18n="pricing.premium.copy">Tout ModBot mis en avant avec une expérience complète pour votre serveur.</p>
+            <p data-i18n="pricing.premium.copy">Pour les serveurs qui veulent les tickets, ratings et outils de gestion complets.</p>
           </div>
-          <div class="price">35€ <span data-i18n="pricing.premium.period">/ an</span></div>
+          <div class="price">15€ <span data-i18n="pricing.premium.period">/ 2 mois</span></div>
           <ul>
-            <li data-i18n="pricing.premium.item1">Bot personnalisé</li>
-            <li data-i18n="pricing.premium.item2">Fonctionnalités mises en avant</li>
-            <li data-i18n="pricing.premium.item3">Configuration premium complète</li>
-            <li data-i18n="pricing.premium.item4">Support prioritaire</li>
+            <li data-i18n="pricing.premium.item1">Modération complète</li>
+            <li data-i18n="pricing.premium.item2">Ratings support</li>
+            <li data-i18n="pricing.premium.item3">Logs et salons avancés</li>
+            <li data-i18n="pricing.premium.item4">Système de tickets</li>
           </ul>
           <a class="primary-btn stretch" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="pricing.premium.cta">Choisir cette offre</a>
+        </article>
+
+        <article class="price-card ultimate">
+          <span class="premium-ribbon">Complet</span>
+          <div class="price-head">
+            <h3 data-i18n="pricing.ultimate.title">Offre complète</h3>
+            <p data-i18n="pricing.ultimate.copy">Tout ModBot avec accompagnement prioritaire et personnalisations dédiées.</p>
+          </div>
+          <div class="price">35€ <span data-i18n="pricing.ultimate.period">/ 3 mois</span></div>
+          <ul>
+            <li data-i18n="pricing.ultimate.item1">Tout le Premium</li>
+            <li data-i18n="pricing.ultimate.item2">Support Discord prioritaire</li>
+            <li data-i18n="pricing.ultimate.item3">Personnalisations juste pour vous</li>
+            <li data-i18n="pricing.ultimate.item4">Accompagnement configuration avancée</li>
+          </ul>
+          <a class="primary-btn stretch" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="pricing.ultimate.cta">Choisir cette offre</a>
         </article>
       </div>
     </section>
