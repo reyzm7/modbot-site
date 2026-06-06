@@ -5,7 +5,9 @@ if ("scrollRestoration" in window.history) {
 const discordInvite = "https://discord.gg/CK8CbFtYuv";
 const patchDiscordChannel = "https://discord.com/channels/1510421934435729586/1510440693070430324";
 const modbotDiscordClientId = String(window.MODBOT_DISCORD_CLIENT_ID || document.querySelector('meta[name="modbot-discord-client-id"]')?.content || "").trim();
-const modbotBotPermissions = String(window.MODBOT_BOT_PERMISSIONS || "8");
+const modbotLoginRedirectUri = String(window.MODBOT_LOGIN_REDIRECT_URI || document.querySelector('meta[name="modbot-login-redirect-uri"]')?.content || "").trim();
+const modbotInviteRedirectUri = String(window.MODBOT_INVITE_REDIRECT_URI || document.querySelector('meta[name="modbot-invite-redirect-uri"]')?.content || "").trim();
+const modbotBotPermissions = String(window.MODBOT_BOT_PERMISSIONS || document.querySelector('meta[name="modbot-bot-permissions"]')?.content || "3124257994829047");
 
 const siteTranslations = {
   fr: {
@@ -740,16 +742,27 @@ function currentCleanUrl() {
   return `${location.origin}${location.pathname}`;
 }
 
+function makeOAuthState(prefix = "modbot") {
+  const randomPart = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  const state = `${prefix}-${randomPart}`;
+  sessionStorage.setItem("modbot-oauth-state", state);
+  return state;
+}
+
 function buildDiscordOAuthUrl(mode = "login") {
   if (!modbotDiscordClientId) return "";
   const params = new URLSearchParams({ client_id: modbotDiscordClientId });
   if (mode === "invite") {
+    params.set("response_type", "code");
+    params.set("redirect_uri", modbotInviteRedirectUri || modbotLoginRedirectUri || currentCleanUrl());
     params.set("permissions", modbotBotPermissions);
-    params.set("scope", "bot applications.commands");
+    params.set("scope", "bot applications.commands identify guilds email");
+    params.set("state", makeOAuthState("invite"));
   } else {
     params.set("response_type", "code");
-    params.set("redirect_uri", currentCleanUrl());
-    params.set("scope", "identify guilds");
+    params.set("redirect_uri", modbotLoginRedirectUri || currentCleanUrl());
+    params.set("scope", "identify email guilds");
+    params.set("state", makeOAuthState("login"));
   }
   return `https://discord.com/oauth2/authorize?${params.toString()}`;
 }
@@ -799,19 +812,22 @@ function initApiBridgeFromUrl() {
   const hash = new URLSearchParams((location.hash || "").replace(/^#/, ""));
   const query = new URLSearchParams(location.search || "");
   const session = hash.get("session") || query.get("session");
-  const tokenRequired = hash.get("api_token_required") || query.get("api_token_required");
   const loginError = hash.get("login_error") || query.get("login_error");
   const oauthCode = query.get("code");
+  const oauthState = query.get("state");
 
   if (session) {
     localStorage.setItem("modbot-dashboard-session", session);
     history.replaceState(null, "", location.pathname);
   }
-  if (tokenRequired) {
-    console.warn("OAuth Discord ModBot non configure cote bot.");
-    history.replaceState(null, "", location.pathname);
-  }
   if (oauthCode && !session) {
+    const expectedState = sessionStorage.getItem("modbot-oauth-state");
+    if (expectedState && oauthState && expectedState !== oauthState) {
+      console.warn("State OAuth Discord invalide.");
+      history.replaceState(null, "", location.pathname);
+      return;
+    }
+    sessionStorage.removeItem("modbot-oauth-state");
     console.warn("Code OAuth Discord recu. Branche le callback backend ModBot pour finaliser la session dashboard.");
     history.replaceState(null, "", location.pathname);
   }
