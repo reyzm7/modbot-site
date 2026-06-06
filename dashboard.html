@@ -19,15 +19,12 @@
       <p class="eyebrow">Connexion dashboard</p>
       <h1>Connecte-toi avec Discord</h1>
       <p>Le dashboard affichera ensuite uniquement les serveurs où tu as accès à la configuration ModBot.</p>
-      <label class="api-url-field">
-        <span>URL API du bot</span>
-        <input type="url" placeholder="https://ton-bot.onrender.com" data-api-url-input>
-      </label>
-      <button class="secondary-btn compact" type="button" data-save-api-url>🔗 Enregistrer l’API</button>
+      <p class="oauth-note">Tu seras redirigé vers Discord pour autoriser ModBot, comme une vraie application Discord.</p>
       <button class="discord-login-btn" type="button" data-dashboard-login>
         <span>💬</span>
         Se connecter avec Discord
       </button>
+      <a class="secondary-btn compact oauth-invite-btn" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite>➕ Ajouter ModBot à un serveur</a>
       <a class="auth-return" href="index.html">Retour au site</a>
     </section>
   </main>
@@ -174,8 +171,8 @@
           <div class="tool-panel">
             <h3>🔌 Synchronisé avec le bot</h3>
             <ul class="check-list">
-              <li>💬 Connexion Discord OAuth ou jeton API</li>
-              <li>💾 Sauvegarde vers l’API du bot</li>
+              <li>💬 Connexion Discord OAuth</li>
+              <li>💾 Sauvegarde synchronisée avec ModBot</li>
               <li>🧭 Liste réelle des serveurs du bot</li>
               <li>👁️ Prévisualisation chargée depuis la config serveur</li>
               <li>📣 Relais réseaux stockés côté bot</li>
