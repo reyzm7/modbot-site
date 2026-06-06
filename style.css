@@ -1074,7 +1074,7 @@ h1 {
 
 .site-stat-grid div,
 .premium-list div,
-.payment-list div,
+.premium-ticket-list div,
 .admin-list div,
 .blacklist-list div,
 .server-log-feed div,
@@ -1103,7 +1103,7 @@ h1 {
 }
 
 .premium-list,
-.payment-list,
+.premium-ticket-list,
 .admin-list,
 .blacklist-list,
 .server-log-feed,
@@ -1124,7 +1124,7 @@ h1 {
 }
 
 .premium-list div,
-.payment-list div,
+.premium-ticket-list div,
 .admin-list div,
 .blacklist-list div {
   padding: 12px;
@@ -1136,8 +1136,8 @@ h1 {
 
 .premium-list strong,
 .premium-list small,
-.payment-list strong,
-.payment-list small,
+.premium-ticket-list strong,
+.premium-ticket-list small,
 .admin-list strong,
 .admin-list small,
 .blacklist-list strong,
@@ -1146,7 +1146,7 @@ h1 {
 }
 
 .premium-list small,
-.payment-list small,
+.premium-ticket-list small,
 .admin-list small,
 .blacklist-list small {
   margin-top: 3px;
@@ -4123,10 +4123,16 @@ main,
   height: 86px;
   border: 4px solid rgba(255, 255, 255, 0.92);
   border-radius: 50%;
-  background:
-    radial-gradient(circle at 45% 35%, rgba(255, 255, 255, 0.85), transparent 0 12px),
-    linear-gradient(135deg, #7c5cff, #62e6ff);
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.12);
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
+}
+
+.departure-preview {
+  padding: 10px 12px;
+  border: 1px solid rgba(158, 110, 255, 0.18);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.045);
 }
 
 .welcome-card strong {
@@ -4426,7 +4432,7 @@ main,
 
   .recurring-item,
   .premium-list div,
-  .payment-list div,
+  .premium-ticket-list div,
   .admin-list div,
   .blacklist-list div {
     align-items: stretch;
