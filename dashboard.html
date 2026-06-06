@@ -19,6 +19,11 @@
       <p class="eyebrow">Connexion dashboard</p>
       <h1>Connecte-toi avec Discord</h1>
       <p>Le dashboard affichera ensuite uniquement les serveurs où tu as accès à la configuration ModBot.</p>
+      <label class="api-url-field">
+        <span>URL API du bot</span>
+        <input type="url" placeholder="https://ton-bot.onrender.com" data-api-url-input>
+      </label>
+      <button class="secondary-btn compact" type="button" data-save-api-url>🔗 Enregistrer l’API</button>
       <button class="discord-login-btn" type="button" data-dashboard-login>
         <span>💬</span>
         Se connecter avec Discord
@@ -63,7 +68,7 @@
           </span>
           <span>
             <strong>Serveur test</strong>
-            <small>Owner • Maquette</small>
+            <small>Owner • Serveur de test</small>
           </span>
         </button>
       </div>
@@ -118,7 +123,7 @@
     <section class="dashboard-content">
       <div class="dashboard-banner">
         <div>
-          <p class="eyebrow">⚡ Dashboard maquette</p>
+          <p class="eyebrow">⚡ Dashboard ModBot</p>
           <h1>Centre de contrôle ModBot</h1>
           <p class="server-summary">
             <span class="server-logo-shell server-summary-logo-shell" data-current-server-logo-shell data-initials="HB">
@@ -129,7 +134,7 @@
         </div>
         <div class="health-pill">
           <span></span>
-          🟢 Maquette active
+          🟢 Connecté au bot
         </div>
       </div>
 
@@ -167,13 +172,13 @@
           </div>
 
           <div class="tool-panel">
-            <h3>🔌 À connecter plus tard</h3>
+            <h3>🔌 Synchronisé avec le bot</h3>
             <ul class="check-list">
-              <li>💬 Connexion Discord OAuth</li>
+              <li>💬 Connexion Discord OAuth ou jeton API</li>
               <li>💾 Sauvegarde vers l’API du bot</li>
-              <li>🧭 Liste réelle des serveurs</li>
-              <li>👁️ Prévisualisation synchronisée avec Discord</li>
-              <li>📣 Surveillance des posts réseaux sociaux</li>
+              <li>🧭 Liste réelle des serveurs du bot</li>
+              <li>👁️ Prévisualisation chargée depuis la config serveur</li>
+              <li>📣 Relais réseaux stockés côté bot</li>
             </ul>
           </div>
         </div>
@@ -257,14 +262,14 @@
               <textarea data-preview-desc>Merci de sélectionner la raison de ta demande via le menu. Un membre du staff viendra rapidement te répondre.</textarea>
             </label>
             <label>Bannière ticket
-              <input type="text" value="assets/default_banner.png">
+              <input type="text" value="assets/default_banner.png" data-ticket-banner>
             </label>
             <div class="form-row">
               <label>Salon ticket
                 <input type="text" value="1510600280016818357" data-ticket-channel>
               </label>
               <label>Rôle support
-                <input type="text" value="@Support Ticket">
+                <input type="text" value="@Support Ticket" data-ticket-support-role>
               </label>
             </div>
           </form>
@@ -362,7 +367,7 @@
               <small>Envoie un message quand un membre rejoint le serveur.</small>
             </label>
             <label>Salon de bienvenue
-              <input type="text" value="151042200000000001" placeholder="ID du salon">
+              <input type="text" value="151042200000000001" placeholder="ID du salon" data-welcome-channel>
             </label>
             <label>Message au-dessus de l’image
               <textarea data-welcome-message>Bienvenue nom du membre sur @serveur !</textarea>
