@@ -711,6 +711,111 @@ function setStoredNumber(key, value) {
   localStorage.setItem(key, String(value));
 }
 
+function normalizeApiBase(value) {
+  return String(value || "").trim().replace(/\/+$/, "");
+}
+
+function escapeHtmlValue(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#39;"
+  }[character]));
+}
+
+function getModbotApiBase() {
+  const configured = normalizeApiBase(window.MODBOT_API_URL || localStorage.getItem("modbot-api-url"));
+  if (configured) return configured;
+  if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+    return `${location.protocol}//${location.host}`;
+  }
+  return "";
+}
+
+function getModbotSessionToken() {
+  return sessionStorage.getItem("modbot-dashboard-session") || localStorage.getItem("modbot-dashboard-session") || "";
+}
+
+function getModbotApiToken() {
+  return sessionStorage.getItem("modbot-api-token") || localStorage.getItem("modbot-api-token") || "";
+}
+
+function modbotAuthHeaders() {
+  const headers = {};
+  const sessionToken = getModbotSessionToken();
+  const apiToken = getModbotApiToken();
+  if (sessionToken) headers.Authorization = `Bearer ${sessionToken}`;
+  if (apiToken) headers["X-ModBot-Api-Token"] = apiToken;
+  return headers;
+}
+
+async function modbotApiFetch(path, options = {}) {
+  const base = getModbotApiBase();
+  if (!base) throw new Error("URL API ModBot non configuree.");
+  const headers = {
+    ...modbotAuthHeaders(),
+    ...(options.headers || {})
+  };
+  if (options.body && !headers["Content-Type"]) {
+    headers["Content-Type"] = "application/json";
+  }
+  const response = await fetch(`${base}${path}`, { ...options, headers });
+  if (!response.ok) {
+    let message = `Erreur API ${response.status}`;
+    try {
+      const text = await response.text();
+      if (text) message = text;
+    } catch (error) {
+      // message par defaut
+    }
+    throw new Error(message);
+  }
+  return response.json();
+}
+
+function initApiBridgeFromUrl() {
+  const hash = new URLSearchParams((location.hash || "").replace(/^#/, ""));
+  const query = new URLSearchParams(location.search || "");
+  const session = hash.get("session") || query.get("session");
+  const tokenRequired = hash.get("api_token_required") || query.get("api_token_required");
+  const loginError = hash.get("login_error") || query.get("login_error");
+
+  if (session) {
+    localStorage.setItem("modbot-dashboard-session", session);
+    history.replaceState(null, "", location.pathname);
+  }
+  if (tokenRequired) {
+    const token = window.prompt("OAuth Discord n'est pas encore configure. Colle la cle DASHBOARD_API_TOKEN du bot pour continuer.");
+    if (token) localStorage.setItem("modbot-api-token", token.trim());
+    history.replaceState(null, "", location.pathname);
+  }
+  if (loginError) {
+    console.warn("Erreur de connexion ModBot:", loginError);
+    history.replaceState(null, "", location.pathname);
+  }
+}
+
+function initApiUrlControls() {
+  const saved = getModbotApiBase();
+  document.querySelectorAll("[data-api-url-input]").forEach((input) => {
+    input.value = saved;
+  });
+  document.querySelectorAll("[data-save-api-url]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const input = button.closest("section, article, main, body")?.querySelector("[data-api-url-input]") || document.querySelector("[data-api-url-input]");
+      const value = normalizeApiBase(input?.value);
+      if (!value) return;
+      localStorage.setItem("modbot-api-url", value);
+      button.textContent = "✅ API enregistrée";
+      window.setTimeout(() => {
+        button.textContent = "🔗 Enregistrer l’API";
+      }, 1800);
+    });
+  });
+}
+
 function trackSiteAnalytics() {
   const todayKey = new Date().toISOString().slice(0, 10);
   const storedDay = localStorage.getItem("modbot-analytics-day");
@@ -814,19 +919,22 @@ function initAdminZone() {
     if (statsBadge) statsBadge.textContent = "Chargement";
 
     try {
-      const response = await fetch("/api/admin/stats", { cache: "no-store" });
-      if (response.ok) {
-        const data = await response.json();
-        setAdminStats({
-          visits: data.visits,
-          today: data.today,
-          dashboard: data.dashboardOpens ?? data.dashboard,
-          installs: data.installs ?? data.servers
-        }, "API active");
-        return;
+      const data = await modbotApiFetch("/api/admin/stats", { cache: "no-store" });
+      setAdminStats({
+        visits: data.visits,
+        today: data.today,
+        dashboard: data.dashboardOpens ?? data.dashboard,
+        installs: data.installs ?? data.servers
+      }, "API bot active");
+      const serverList = document.querySelector("[data-admin-server-list]");
+      if (serverList && Array.isArray(data.guilds)) {
+        serverList.innerHTML = data.guilds.map((guild) => `
+          <div><img src="${escapeHtmlValue(guild.icon || "assets/default_logo.png")}" alt=""><span><strong>${escapeHtmlValue(guild.name)}</strong><small>ID ${escapeHtmlValue(guild.id)}</small></span></div>
+        `).join("");
       }
+      return;
     } catch (error) {
-      // Le site peut fonctionner sans backend pendant la maquette.
+      // Le site garde un secours local si l'API du bot n'est pas encore branchee.
     }
 
     setAdminStats(getLocalAdminStats(), "Stats locales");
@@ -892,7 +1000,7 @@ function initAdminZone() {
   durationSelect?.addEventListener("change", updateCustomDurationVisibility);
   updateCustomDurationVisibility();
 
-  document.querySelector("[data-premium-apply]")?.addEventListener("click", () => {
+  document.querySelector("[data-premium-apply]")?.addEventListener("click", async () => {
     const memberInput = document.querySelector("[data-premium-member]");
     const list = document.querySelector("[data-premium-list]");
     const premiumTicketList = document.querySelector("[data-premium-ticket-list]");
@@ -923,8 +1031,16 @@ function initAdminZone() {
       request.append(requestIdentity, requestState);
       premiumTicketList.prepend(request);
     }
+    try {
+      await modbotApiFetch("/api/admin/premium", {
+        method: "POST",
+        body: JSON.stringify({ member, duration })
+      });
+      showAdminToast(`💎 Premium synchronisé avec le bot pour ${member}`);
+    } catch (error) {
+      showAdminToast(`💾 Premium ajouté localement, API non connectée`);
+    }
     memberInput.value = "";
-    showAdminToast(`💎 Premium ajouté pour ${member}`);
   });
 
   document.querySelector("[data-add-admin]")?.addEventListener("click", () => {
@@ -963,7 +1079,7 @@ function initAdminZone() {
     showAdminToast(`🗑️ Administrateur ${adminId} retiré`);
   });
 
-  document.querySelector("[data-blacklist-add]")?.addEventListener("click", () => {
+  document.querySelector("[data-blacklist-add]")?.addEventListener("click", async () => {
     const memberInput = document.querySelector("[data-blacklist-member]");
     const reasonInput = document.querySelector("[data-blacklist-reason]");
     const list = document.querySelector("[data-blacklist-list]");
@@ -983,7 +1099,15 @@ function initAdminZone() {
     list.prepend(item);
     memberInput.value = "";
     if (reasonInput) reasonInput.value = "";
-    showAdminToast(`🚫 ${member} ajouté à la blacklist`);
+    try {
+      await modbotApiFetch("/api/admin/blacklist", {
+        method: "POST",
+        body: JSON.stringify({ member, reason })
+      });
+      showAdminToast(`🚫 ${member} blacklisté côté bot`);
+    } catch (error) {
+      showAdminToast(`💾 ${member} blacklisté localement, API non connectée`);
+    }
   });
 
   document.querySelector("[data-blacklist-list]")?.addEventListener("click", (event) => {
@@ -1076,6 +1200,10 @@ function initDashboard() {
     banner: "assets/default_banner.png",
     color: "#5865F2"
   };
+  let personalizationAssets = {
+    logo: "",
+    banner: ""
+  };
   const IFC_TOURNAMENT_API_READY = false;
   let activePanelName = "overview";
   let hasUnsavedChanges = false;
@@ -1084,10 +1212,12 @@ function initDashboard() {
   let pendingNavigation = null;
   let toastTimer;
   let selectedServer = {
+    id: "",
     name: "Hote BOT - ModBot",
     logo: "assets/default_logo.png",
     initials: "HB"
   };
+  let dashboardGuilds = [];
   let premiumDraftServers = readStoredPremiumServers();
   let tournamentDraft = readStoredTournamentConfig();
 
@@ -1130,6 +1260,7 @@ function initDashboard() {
       return parsed
         .filter((server) => server && server.name)
         .map((server) => ({
+          id: String(server.id || ""),
           name: String(server.name),
           logo: String(server.logo || "assets/default_logo.png"),
           initials: String(server.initials || "MB")
@@ -1255,6 +1386,305 @@ function initDashboard() {
     }[character]));
   }
 
+  function renderGuildChoices(guilds) {
+    const serverGrid = document.querySelector(".server-grid");
+    if (!serverGrid || !Array.isArray(guilds) || !guilds.length) return;
+    serverGrid.innerHTML = guilds.map((guild) => `
+      <button class="server-card" type="button" data-server-name="${escapeHtml(guild.name)}" data-server-id="${escapeHtml(guild.id)}" data-server-logo="${escapeHtml(guild.icon || "assets/default_logo.png")}" data-server-initials="${escapeHtml(guild.initials || "MB")}">
+        <span class="server-logo-shell" data-initials="${escapeHtml(guild.initials || "MB")}">
+          <img class="server-logo" src="${escapeHtml(guild.icon || "assets/default_logo.png")}" alt="" data-logo-img>
+        </span>
+        <span>
+          <strong>${escapeHtml(guild.name)}</strong>
+          <small>ID ${escapeHtml(guild.id)}</small>
+        </span>
+      </button>
+    `).join("");
+    setupLogoFallbacks();
+  }
+
+  function renderPremiumGuildChoices(guilds) {
+    const grid = document.querySelector(".premium-choice-grid");
+    if (!grid || !Array.isArray(guilds) || !guilds.length) return;
+    grid.innerHTML = guilds.map((guild) => `
+      <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="${escapeHtml(guild.name)}" data-server-id="${escapeHtml(guild.id)}" data-server-logo="${escapeHtml(guild.icon || "assets/default_logo.png")}" data-server-initials="${escapeHtml(guild.initials || "MB")}">
+        <span class="server-logo-shell" data-initials="${escapeHtml(guild.initials || "MB")}"><img src="${escapeHtml(guild.icon || "assets/default_logo.png")}" alt="" data-logo-img></span>
+        <span><strong>${escapeHtml(guild.name)}</strong><small>ID ${escapeHtml(guild.id)}</small></span>
+      </button>
+    `).join("");
+    setupLogoFallbacks();
+  }
+
+  async function loadDashboardGuilds() {
+    const data = await modbotApiFetch("/api/guilds", { cache: "no-store" });
+    dashboardGuilds = data.guilds || [];
+    renderGuildChoices(dashboardGuilds);
+    renderPremiumGuildChoices(dashboardGuilds);
+    renderPremiumAssociations();
+    return dashboardGuilds;
+  }
+
+  async function dashboardLogin() {
+    const base = getModbotApiBase();
+    if (!base) {
+      showToast("🔗 Ajoute l'URL API du bot avant de te connecter");
+      return;
+    }
+    if (getModbotSessionToken() || getModbotApiToken()) {
+      try {
+        await loadDashboardGuilds();
+        showDashboardStage("servers");
+        showToast("✅ Dashboard connecté au bot");
+        return;
+      } catch (error) {
+        showToast("⚠️ Session invalide, nouvelle connexion requise");
+      }
+    }
+    window.location.href = `${base}/api/auth/discord/login?redirect=${encodeURIComponent(location.href.split("#")[0])}`;
+  }
+
+  function applyDashboardConfig(config) {
+    if (!config) return;
+    const tickets = config.tickets || {};
+    const channels = config.channels || {};
+    const personalization = config.personalization || {};
+    const welcome = config.welcome_system || config.welcome || {};
+    const security = config.security || {};
+
+    const previewAuthor = document.querySelector("[data-preview-author]");
+    const previewTitle = document.querySelector("[data-preview-title]");
+    const previewEmoji = document.querySelector("[data-preview-emoji]");
+    const previewDesc = document.querySelector("[data-preview-desc]");
+    const ticketChannel = document.querySelector("[data-ticket-channel]");
+    const ticketBanner = document.querySelector("[data-ticket-banner]");
+    const ticketSupportRole = document.querySelector("[data-ticket-support-role]");
+    if (previewAuthor && tickets.author) previewAuthor.value = tickets.author;
+    if (previewTitle && tickets.title) previewTitle.value = tickets.title;
+    if (previewEmoji && tickets.emoji) previewEmoji.value = tickets.emoji;
+    if (previewDesc && tickets.description) previewDesc.value = tickets.description;
+    if (ticketChannel && channels.tickets) ticketChannel.value = channels.tickets;
+    if (ticketBanner && tickets.banner) ticketBanner.value = tickets.banner;
+    if (ticketSupportRole && tickets.support_role) ticketSupportRole.value = tickets.support_role;
+
+    const optionList = document.getElementById("ticketOptionList");
+    if (optionList && Array.isArray(tickets.options) && tickets.options.length) {
+      optionList.innerHTML = tickets.options.map((option, index) => `
+        <div class="option-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(option.emoji || "🎫")}" maxlength="3"><input value="${escapeHtml(option.label || "Ticket")}"><input value="${escapeHtml(option.desc || "Ouvrir un ticket")}"><button type="button">Supprimer</button></div>
+      `).join("");
+    }
+
+    const channelRows = document.querySelectorAll("[data-dashboard-panel='channels'] .channel-row input");
+    const channelValues = [channels.tickets, channels.logs, channels.suggestions, channels.reports, channels.staff_alert];
+    channelRows.forEach((input, index) => {
+      if (channelValues[index]) input.value = channelValues[index];
+    });
+
+    const securityToggles = document.querySelectorAll("[data-dashboard-panel='security'] .toggle-line input");
+    [
+      security.antilink,
+      security.antispam,
+      security.antiraid,
+      security.staff_alert,
+      security.lockdown
+    ].forEach((value, index) => {
+      if (typeof value === "boolean" && securityToggles[index]) {
+        securityToggles[index].checked = value;
+        securityToggles[index].closest(".toggle-line")?.classList.toggle("is-on", value);
+      }
+    });
+
+    const personalizationName = document.querySelector("[data-personalization-name]");
+    const personalizationFooter = document.querySelector("[data-personalization-footer]");
+    if (personalizationName && personalization.name) personalizationName.value = personalization.name;
+    if (personalizationFooter && personalization.footer) personalizationFooter.value = personalization.footer;
+    const personalizationPreviewTitle = document.querySelector("[data-personalization-preview-title]");
+    const personalizationPreviewFooter = document.querySelector("[data-personalization-preview-footer]");
+    if (personalizationPreviewTitle) personalizationPreviewTitle.textContent = `${personalization.name || "ModBot"} - Panel`;
+    if (personalizationPreviewFooter) personalizationPreviewFooter.textContent = personalization.footer || "ModBot - Protection de votre communauté";
+    const personalizationLogo = document.querySelector("[data-dashboard-panel='personalization'] .embed-thumb img");
+    const personalizationBanner = document.querySelector("[data-dashboard-panel='personalization'] .preview-banner");
+    if (personalizationLogo && personalization.logo) personalizationLogo.src = personalization.logo;
+    if (personalizationBanner && personalization.banner) personalizationBanner.src = personalization.banner;
+    personalizationAssets = { logo: "", banner: "" };
+
+    const welcomeMessage = document.querySelector("[data-welcome-message]");
+    const departureMessage = document.querySelector("[data-departure-message]");
+    const welcomeChannel = document.querySelector("[data-welcome-channel]");
+    const welcomeBg = document.querySelector("[data-welcome-bg]");
+    const welcomeFont = document.querySelector("[data-welcome-font]");
+    const welcomeColor = document.querySelector("[data-welcome-color]");
+    if (welcomeChannel && welcome.channel_id) welcomeChannel.value = welcome.channel_id;
+    if (welcomeMessage && welcome.message) welcomeMessage.value = welcome.message;
+    if (departureMessage && welcome.departure_message) departureMessage.value = welcome.departure_message;
+    if (welcomeBg && welcome.background) welcomeBg.value = welcome.background;
+    if (welcomeFont && welcome.font) welcomeFont.value = welcome.font;
+    if (welcomeColor && welcome.color) welcomeColor.value = welcome.color;
+
+    if (config.language) {
+      const languageSelect = document.querySelector("[data-dashboard-panel='language'] select");
+      if (languageSelect) languageSelect.value = config.language === "en" ? "English" : "Français";
+    }
+
+    if (Array.isArray(config.premium_servers)) {
+      premiumDraftServers = config.premium_servers
+        .filter((server) => server && server.name)
+        .map((server) => ({
+          id: String(server.id || ""),
+          name: String(server.name),
+          logo: String(server.logo || "assets/default_logo.png"),
+          initials: String(server.initials || "MB")
+        }))
+        .slice(0, 2);
+      renderPremiumAssociations();
+    }
+
+    if (Array.isArray(config.recurring_messages)) {
+      const recurringList = document.querySelector("[data-recurring-list]");
+      if (recurringList) {
+        recurringList.innerHTML = "";
+        if (!config.recurring_messages.length) {
+          const empty = document.createElement("div");
+          empty.className = "recurring-empty";
+          empty.textContent = "Aucun message récurrent créé pour le moment.";
+          recurringList.append(empty);
+        }
+        config.recurring_messages.forEach((message) => {
+          const item = document.createElement("div");
+          item.className = "recurring-item";
+          item.dataset.name = message.name || "Message récurrent";
+          item.dataset.channel = message.channel_id || "";
+          item.dataset.interval = message.interval || "30";
+          item.dataset.unit = message.unit || "minutes";
+          item.dataset.content = message.content || "";
+          item.dataset.mode = message.mode || "repeat";
+          item.dataset.lastSent = message.last_sent || "";
+          item.innerHTML = `
+            <span>
+              <strong>🔁 ${escapeHtml(item.dataset.name)}</strong>
+              <small>Toutes les ${escapeHtml(item.dataset.interval)} ${escapeHtml(item.dataset.unit)} dans ${escapeHtml(item.dataset.channel)}</small>
+            </span>
+            <button class="secondary-btn compact" type="button" data-recurring-remove>Supprimer</button>
+          `;
+          recurringList.append(item);
+        });
+      }
+    }
+
+    const liveTitle = document.querySelector("[data-live-title]");
+    const liveDescription = document.querySelector("[data-live-desc]");
+    const liveTicketEmoji = document.querySelector("[data-live-ticket-emoji]");
+    if (liveTitle) liveTitle.textContent = tickets.title || "Ouvre ton ticket";
+    if (liveDescription) liveDescription.textContent = tickets.description || "Merci de sélectionner la raison de ta demande.";
+    if (liveTicketEmoji) liveTicketEmoji.textContent = tickets.emoji || "📩";
+    syncWelcomePreview();
+    renderReactionPreview();
+  }
+
+  async function loadSelectedGuildConfig(guildId) {
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/config`, { cache: "no-store" });
+      applyDashboardConfig(data.config);
+      showToast("✅ Configuration chargée depuis le bot");
+    } catch (error) {
+      showToast("⚠️ Configuration locale affichée, API non disponible");
+    }
+  }
+
+  function collectDashboardConfig() {
+    const ticketOptions = Array.from(document.querySelectorAll("#ticketOptionList .option-row")).map((row) => {
+      const inputs = row.querySelectorAll("input");
+      return {
+        emoji: inputs[0]?.value || "🎫",
+        label: inputs[1]?.value || "Ticket",
+        desc: inputs[2]?.value || "Ouvrir un ticket",
+      };
+    });
+    const channelRows = document.querySelectorAll("[data-dashboard-panel='channels'] .channel-row input");
+    const socialRelays = Array.from(document.querySelectorAll(".social-card")).map((card) => ({
+      platform: card.dataset.socialPlatform,
+      link: card.querySelector("[data-social-link]")?.value || "",
+      channel_id: card.querySelector("[data-social-channel]")?.value || "",
+      enabled: Boolean(card.querySelector("[data-social-enabled]")?.checked),
+    }));
+    const reactionRoles = Array.from(document.querySelectorAll(".reaction-role-row")).map((row) => {
+      const inputs = row.querySelectorAll("input");
+      return {
+        emoji: inputs[0]?.value || "✨",
+        role: inputs[1]?.value || "",
+        label: inputs[2]?.value || "",
+      };
+    });
+    const recurringMessages = Array.from(document.querySelectorAll(".recurring-item")).map((item) => ({
+      enabled: true,
+      name: item.dataset.name || item.querySelector("strong")?.textContent?.replace(/^🔁\s*/, "") || "Message récurrent",
+      channel_id: item.dataset.channel || "",
+      interval: Number(item.dataset.interval || 30),
+      unit: item.dataset.unit || "minutes",
+      content: item.dataset.content || "Hey @everyone, pensez à suivre les dernières annonces du serveur.",
+      mode: item.dataset.mode || "repeat",
+      last_sent: item.dataset.lastSent || "",
+    }));
+    const languageValue = document.querySelector("[data-dashboard-panel='language'] select")?.value || "Français";
+    const securityToggles = document.querySelectorAll("[data-dashboard-panel='security'] .toggle-line input");
+    return {
+      channels: {
+        tickets: document.querySelector("[data-ticket-channel]")?.value || channelRows[0]?.value || "",
+        logs: channelRows[1]?.value || "",
+        suggestions: channelRows[2]?.value || "",
+        reports: channelRows[3]?.value || "",
+        staff_alert: channelRows[4]?.value || "",
+      },
+      security: {
+        antilink: Boolean(securityToggles[0]?.checked),
+        antispam: Boolean(securityToggles[1]?.checked),
+        antiraid: Boolean(securityToggles[2]?.checked),
+        staff_alert: Boolean(securityToggles[3]?.checked),
+        lockdown: Boolean(securityToggles[4]?.checked),
+      },
+      tickets: {
+        author: document.querySelector("[data-preview-author]")?.value || "ModBot Ticket System",
+        title: document.querySelector("[data-preview-title]")?.value || "Ouvre ton ticket",
+        emoji: document.querySelector("[data-preview-emoji]")?.value || "📩",
+        description: document.querySelector("[data-preview-desc]")?.value || "",
+        banner: document.querySelector("[data-ticket-banner]")?.value || "",
+        support_role: document.querySelector("[data-ticket-support-role]")?.value || "",
+        options: ticketOptions,
+      },
+      personalization: {
+        name: document.querySelector("[data-personalization-name]")?.value || "ModBot",
+        footer: document.querySelector("[data-personalization-footer]")?.value || "",
+        logo: personalizationAssets.logo,
+        banner: personalizationAssets.banner,
+        color: document.querySelector(".color-swatch.is-selected")?.dataset.color || "#5865F2",
+      },
+      welcome_system: {
+        enabled: Boolean(document.querySelector("[data-dashboard-panel='welcome'] .toggle-line input")?.checked),
+        departure_enabled: Boolean(document.querySelectorAll("[data-dashboard-panel='welcome'] .toggle-line input")[1]?.checked),
+        channel_id: document.querySelector("[data-welcome-channel]")?.value || "",
+        message: document.querySelector("[data-welcome-message]")?.value || "",
+        departure_message: document.querySelector("[data-departure-message]")?.value || "",
+        background: document.querySelector("[data-welcome-bg]")?.value || "",
+        font: document.querySelector("[data-welcome-font]")?.value || "Inter",
+        color: document.querySelector("[data-welcome-color]")?.value || "#ffffff",
+      },
+      reaction_roles: reactionRoles,
+      recurring_messages: recurringMessages,
+      social_relays: socialRelays,
+      premium_servers: premiumDraftServers,
+      language: languageValue === "English" ? "en" : "fr",
+      tournament: collectTournamentConfig(),
+    };
+  }
+
+  async function saveDashboardConfigToApi() {
+    if (!selectedServer.id) return false;
+    await modbotApiFetch(`/api/guilds/${selectedServer.id}/config`, {
+      method: "PUT",
+      body: JSON.stringify(collectDashboardConfig())
+    });
+    return true;
+  }
+
   function isPremiumServerAssociated(serverName) {
     return premiumDraftServers.some((server) => server.name === serverName);
   }
@@ -1289,7 +1719,7 @@ function initDashboard() {
       setupLogoFallbacks();
     }
 
-    premiumServerChoices.forEach((choice) => {
+    document.querySelectorAll("[data-premium-server-choice]").forEach((choice) => {
       const associated = isPremiumServerAssociated(choice.dataset.serverName);
       choice.classList.toggle("is-associated", associated);
       choice.setAttribute("aria-pressed", associated ? "true" : "false");
@@ -1321,8 +1751,9 @@ function initDashboard() {
     showToast(removed ? `🗑️ ${removed.name} retiré du Premium` : "🗑️ Emplacement libéré");
   }
 
-  function setCurrentServer(serverName, serverLogo = "assets/default_logo.png", initials = "MB") {
+  function setCurrentServer(serverName, serverLogo = "assets/default_logo.png", initials = "MB", serverId = "") {
     selectedServer = {
+      id: serverId,
       name: serverName,
       logo: serverLogo,
       initials
@@ -1362,10 +1793,10 @@ function initDashboard() {
     dashboard.classList.remove("has-unsaved");
   }
 
-  function saveCurrentChanges(message = "💾 Configuration enregistrée") {
+  async function saveCurrentChanges(message = "💾 Configuration enregistrée") {
     if (!hasUnsavedChanges) {
       showToast("✅ Tout est déjà enregistré");
-      return;
+      return true;
     }
     if (dirtyPanelName === "premium") {
       savePremiumServers();
@@ -1373,17 +1804,30 @@ function initDashboard() {
     if (dirtyPanelName === "tournaments") {
       saveTournamentConfig();
     }
+    let savedToApi = false;
+    try {
+      savedToApi = await saveDashboardConfigToApi();
+    } catch (error) {
+      showToast("⚠️ API du bot indisponible, sauvegarde non envoyée");
+      return false;
+    }
+    if (selectedServer.id && !savedToApi) {
+      showToast("🔗 Connecte l'API du bot pour enregistrer ce serveur");
+      return false;
+    }
     clearUnsavedChanges();
-    showToast(message);
+    showToast(savedToApi ? message : "💾 Configuration gardée dans cette page");
+    return true;
   }
 
   function showUnsavedModal(action) {
     pendingNavigation = action;
     openPanel(activePanelName);
     if (!unsavedModal) {
-      saveCurrentChanges();
-      pendingNavigation?.();
-      pendingNavigation = null;
+      saveCurrentChanges().then((saved) => {
+        if (saved) pendingNavigation?.();
+        pendingNavigation = null;
+      });
       return;
     }
     unsavedModal.hidden = false;
@@ -1411,8 +1855,7 @@ function initDashboard() {
   }
 
   document.querySelector("[data-dashboard-login]")?.addEventListener("click", () => {
-    showDashboardStage("servers");
-    showToast("Connexion Discord simulée");
+    dashboardLogin();
   });
 
   document.querySelector("[data-auth-back]")?.addEventListener("click", () => {
@@ -1423,28 +1866,36 @@ function initDashboard() {
     runWithUnsavedGuard(() => showDashboardStage("servers"));
   });
 
-  document.querySelectorAll(".server-card[data-server-name]").forEach((serverCard) => {
-    serverCard.addEventListener("click", () => {
-      const cardLogo = serverCard.querySelector("[data-logo-img]");
-      const loadedLogo = cardLogo?.currentSrc || cardLogo?.src || serverCard.dataset.serverLogo || "assets/default_logo.png";
-      const initials = serverCard.dataset.serverInitials || serverCard.dataset.serverName?.slice(0, 2).toUpperCase() || "MB";
-      setCurrentServer(serverCard.dataset.serverName || "Serveur ModBot", loadedLogo, initials);
-      showDashboardStage("dashboard");
-      showToast(`Serveur sélectionné : ${serverCard.dataset.serverName}`);
-    });
+  document.querySelector(".server-picker .server-grid")?.addEventListener("click", async (event) => {
+    const serverCard = event.target.closest(".server-card[data-server-name]");
+    if (!serverCard) return;
+    const cardLogo = serverCard.querySelector("[data-logo-img]");
+    const loadedLogo = cardLogo?.currentSrc || cardLogo?.src || serverCard.dataset.serverLogo || "assets/default_logo.png";
+    const initials = serverCard.dataset.serverInitials || serverCard.dataset.serverName?.slice(0, 2).toUpperCase() || "MB";
+    const guildId = serverCard.dataset.serverId || "";
+    setCurrentServer(serverCard.dataset.serverName || "Serveur ModBot", loadedLogo, initials, guildId);
+    showDashboardStage("dashboard");
+    showToast(`✅ Serveur sélectionné : ${serverCard.dataset.serverName}`);
+    if (guildId) {
+      await loadSelectedGuildConfig(guildId);
+      clearUnsavedChanges();
+      ticketNeedsPublish = false;
+      setTicketPublishVisible(false);
+    }
   });
 
   document.querySelector("[data-premium-associate-current]")?.addEventListener("click", () => {
     addPremiumServer(selectedServer);
   });
 
-  premiumServerChoices.forEach((choice) => {
-    choice.addEventListener("click", () => {
-      addPremiumServer({
-        name: choice.dataset.serverName || "Serveur ModBot",
-        logo: choice.dataset.serverLogo || "assets/default_logo.png",
-        initials: choice.dataset.serverInitials || "MB"
-      });
+  document.querySelector(".premium-choice-grid")?.addEventListener("click", (event) => {
+    const choice = event.target.closest("[data-premium-server-choice]");
+    if (!choice) return;
+    addPremiumServer({
+      name: choice.dataset.serverName || "Serveur ModBot",
+      logo: choice.dataset.serverLogo || "assets/default_logo.png",
+      initials: choice.dataset.serverInitials || "MB",
+      id: choice.dataset.serverId || ""
     });
   });
 
@@ -1501,7 +1952,9 @@ function initDashboard() {
   });
 
   document.querySelectorAll("[data-dashboard-save]").forEach((button) => {
-    button.addEventListener("click", () => saveCurrentChanges("💾 Configuration enregistrée dans la maquette"));
+    button.addEventListener("click", () => {
+      saveCurrentChanges("💾 Configuration enregistrée dans le bot");
+    });
   });
 
   document.querySelectorAll("[data-reset-section]").forEach((button) => {
@@ -1512,10 +1965,11 @@ function initDashboard() {
     });
   });
 
-  document.querySelector("[data-unsaved-save]")?.addEventListener("click", () => {
+  document.querySelector("[data-unsaved-save]")?.addEventListener("click", async () => {
     const action = pendingNavigation;
+    const saved = await saveCurrentChanges("💾 Configuration sauvegardée");
+    if (!saved) return;
     closeUnsavedModal();
-    saveCurrentChanges("💾 Configuration sauvegardée");
     pendingNavigation = null;
     action?.();
   });
@@ -1628,8 +2082,25 @@ function initDashboard() {
     showToast("Option supprimée");
   });
 
-  publishTicketButton?.addEventListener("click", () => {
+  publishTicketButton?.addEventListener("click", async () => {
     const channel = ticketChannelInput?.value.trim() || "salon ticket désigné";
+    if (!selectedServer.id) {
+      showToast("🔗 Sélectionne un serveur connecté au bot avant de publier");
+      return;
+    }
+    if (hasUnsavedChanges) {
+      const saved = await saveCurrentChanges("💾 Configuration ticket enregistrée");
+      if (!saved) return;
+    }
+    try {
+      await modbotApiFetch(`/api/guilds/${selectedServer.id}/tickets/publish`, {
+        method: "POST",
+        body: JSON.stringify({ channel_id: channel })
+      });
+    } catch (error) {
+      showToast("⚠️ Publication impossible : API du bot indisponible");
+      return;
+    }
     ticketNeedsPublish = false;
     setTicketPublishVisible(false);
     if (dirtyPanelName === "tickets") clearUnsavedChanges();
@@ -1775,6 +2246,12 @@ function initDashboard() {
     list?.querySelector(".recurring-empty")?.remove();
     const item = document.createElement("div");
     item.className = "recurring-item";
+    item.dataset.name = name;
+    item.dataset.channel = channel;
+    item.dataset.interval = interval;
+    item.dataset.unit = unit;
+    item.dataset.mode = document.querySelector("[data-recurring-mode].is-active")?.dataset.recurringMode || "repeat";
+    item.dataset.content = document.querySelector("[data-recurring-content]")?.value.trim() || "Hey @everyone, pensez à suivre les dernières annonces du serveur.";
     item.innerHTML = `
       <span>
         <strong>🔁 ${escapeHtml(name)}</strong>
@@ -1861,14 +2338,44 @@ function initDashboard() {
   const personalizationPreviewTitle = document.querySelector("[data-personalization-preview-title]");
   const personalizationPreviewFooter = document.querySelector("[data-personalization-preview-footer]");
 
+  function readFileAsDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => resolve(String(reader.result || "")));
+      reader.addEventListener("error", () => reject(reader.error || new Error("Lecture impossible")));
+      reader.readAsDataURL(file);
+    });
+  }
+
   fileInputs.forEach((input) => {
-    input.addEventListener("change", () => {
+    input.addEventListener("change", async () => {
       const file = input.files?.[0];
       const field = input.closest(".file-field");
       const fileName = field?.querySelector("[data-file-name]");
       if (fileName) fileName.textContent = file ? file.name : "Aucun fichier sélectionné";
-      if (file && input.dataset.fileInput === "logo" && liveLogo) liveLogo.src = URL.createObjectURL(file);
-      if (file && input.dataset.fileInput === "banner" && liveBanner) liveBanner.src = URL.createObjectURL(file);
+      if (!file) {
+        personalizationAssets[input.dataset.fileInput] = "";
+      } else if (file.size > 10 * 1024 * 1024) {
+        input.value = "";
+        if (fileName) fileName.textContent = "Fichier trop lourd";
+        showToast("⚠️ Image trop lourde : maximum 10 MB");
+        return;
+      } else {
+        try {
+          const dataUrl = await readFileAsDataUrl(file);
+          if (input.dataset.fileInput === "logo") {
+            personalizationAssets.logo = dataUrl;
+            if (liveLogo) liveLogo.src = dataUrl;
+          }
+          if (input.dataset.fileInput === "banner") {
+            personalizationAssets.banner = dataUrl;
+            if (liveBanner) liveBanner.src = dataUrl;
+          }
+        } catch (error) {
+          showToast("⚠️ Lecture du fichier impossible");
+          return;
+        }
+      }
       markPanelDirty("personalization");
       showToast(file ? "Fichier ajouté à l'aperçu" : "Aucun fichier sélectionné");
     });
@@ -1893,6 +2400,7 @@ function initDashboard() {
     if (personalizationPreviewFooter) personalizationPreviewFooter.textContent = personalizationDefaults.footer;
     if (liveLogo) liveLogo.src = personalizationDefaults.logo;
     if (liveBanner) liveBanner.src = personalizationDefaults.banner;
+    personalizationAssets = { logo: "", banner: "" };
     fileInputs.forEach((input) => {
       input.value = "";
       const field = input.closest(".file-field");
@@ -1924,6 +2432,8 @@ function initDashboard() {
 
 document.addEventListener("DOMContentLoaded", () => {
   resetInitialScroll();
+  initApiBridgeFromUrl();
+  initApiUrlControls();
   initStarfield();
   trackSiteAnalytics();
   initNavigation();
