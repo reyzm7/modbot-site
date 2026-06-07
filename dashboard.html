@@ -44,27 +44,27 @@
       </div>
 
       <div class="server-grid">
-        <button class="server-card" type="button" data-server-name="Hote BOT - ModBot" data-server-logo="assets/default_logo.png" data-server-initials="HB">
+        <button class="server-card" type="button" data-server-name="Hote BOT - ModBot" data-server-logo="logo.png" data-server-initials="HB">
           <span class="server-logo-shell" data-initials="HB">
-            <img class="server-logo" src="assets/default_logo.png" alt="" data-logo-img>
+            <img class="server-logo" src="logo.png" alt="" data-logo-img>
           </span>
           <span>
             <strong>Hote BOT - ModBot</strong>
             <small>Administrateur • Premium actif</small>
           </span>
         </button>
-        <button class="server-card" type="button" data-server-name="VPG Belgique" data-server-logo="assets/default_logo.png" data-server-initials="VPG">
+        <button class="server-card" type="button" data-server-name="VPG Belgique" data-server-logo="logo.png" data-server-initials="VPG">
           <span class="server-logo-shell" data-initials="VPG">
-            <img class="server-logo" src="assets/default_logo.png" alt="" data-logo-img>
+            <img class="server-logo" src="logo.png" alt="" data-logo-img>
           </span>
           <span>
             <strong>VPG Belgique</strong>
             <small>Manager • Tickets configurés</small>
           </span>
         </button>
-        <button class="server-card" type="button" data-server-name="Serveur test" data-server-logo="assets/default_logo.png" data-server-initials="ST">
+        <button class="server-card" type="button" data-server-name="Serveur test" data-server-logo="logo.png" data-server-initials="ST">
           <span class="server-logo-shell" data-initials="ST">
-            <img class="server-logo" src="assets/default_logo.png" alt="" data-logo-img>
+            <img class="server-logo" src="logo.png" alt="" data-logo-img>
           </span>
           <span>
             <strong>Serveur test</strong>
@@ -87,7 +87,7 @@
     <div class="dashboard-server">
       <span class="server-dot"></span>
       <span class="server-logo-shell server-current-logo-shell" data-current-server-logo-shell data-initials="HB">
-        <img class="server-current-logo" src="assets/default_logo.png" alt="" data-current-server-logo data-logo-img>
+        <img class="server-current-logo" src="logo.png" alt="" data-current-server-logo data-logo-img>
       </span>
       <span>Serveur actif</span>
       <strong data-current-server>Hote BOT - ModBot</strong>
@@ -127,7 +127,7 @@
           <h1>Centre de contrôle ModBot</h1>
           <p class="server-summary">
             <span class="server-logo-shell server-summary-logo-shell" data-current-server-logo-shell data-initials="HB">
-              <img src="assets/default_logo.png" alt="" data-current-server-logo-inline data-logo-img>
+              <img src="logo.png" alt="" data-current-server-logo-inline data-logo-img>
             </span>
             <span>Configuration du serveur <strong data-current-server-label>Hote BOT - ModBot</strong>.</span>
           </p>
@@ -198,11 +198,13 @@
             <h3>✨ Accès ModBot</h3>
             <p>Gratuit : 1 serveur pendant 48h. Premium : 3 serveurs. Ultra Premium : 5 serveurs. L’admin active l’offre, puis tu choisis ici les serveurs qui en profitent.</p>
             <label>Offre active
-              <select data-premium-tier>
+              <select data-premium-tier disabled>
                 <option value="free">Gratuit 48h - 1 serveur</option>
+                <option value="partner">Partenaire - 1 serveur à vie</option>
                 <option value="premium">Premium - 3 serveurs</option>
                 <option value="ultra">Ultra Premium - 5 serveurs</option>
               </select>
+              <small class="field-help">Offre verrouillée : seul un administrateur ModBot peut la modifier.</small>
             </label>
             <div class="premium-progress">
               <span>Emplacements utilisés</span>
@@ -226,16 +228,16 @@
             <span class="state active" data-premium-limit-badge>🟢 Gratuit 48h : 1 serveur</span>
           </div>
           <div class="premium-choice-grid">
-            <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="Hote BOT - ModBot" data-server-logo="assets/default_logo.png" data-server-initials="HB">
-              <span class="server-logo-shell" data-initials="HB"><img src="assets/default_logo.png" alt="" data-logo-img></span>
+            <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="Hote BOT - ModBot" data-server-logo="logo.png" data-server-initials="HB">
+              <span class="server-logo-shell" data-initials="HB"><img src="logo.png" alt="" data-logo-img></span>
               <span><strong>Hote BOT - ModBot</strong><small>Administrateur</small></span>
             </button>
-            <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="VPG Belgique" data-server-logo="assets/default_logo.png" data-server-initials="VPG">
-              <span class="server-logo-shell" data-initials="VPG"><img src="assets/default_logo.png" alt="" data-logo-img></span>
+            <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="VPG Belgique" data-server-logo="logo.png" data-server-initials="VPG">
+              <span class="server-logo-shell" data-initials="VPG"><img src="logo.png" alt="" data-logo-img></span>
               <span><strong>VPG Belgique</strong><small>Manager</small></span>
             </button>
-            <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="Serveur test" data-server-logo="assets/default_logo.png" data-server-initials="ST">
-              <span class="server-logo-shell" data-initials="ST"><img src="assets/default_logo.png" alt="" data-logo-img></span>
+            <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="Serveur test" data-server-logo="logo.png" data-server-initials="ST">
+              <span class="server-logo-shell" data-initials="ST"><img src="logo.png" alt="" data-logo-img></span>
               <span><strong>Serveur test</strong><small>Owner</small></span>
             </button>
           </div>
@@ -273,10 +275,12 @@
             </label>
             <div class="form-row">
               <label>Salon ticket
-                <input type="text" value="1510600280016818357" data-ticket-channel>
+                <input type="text" placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-ticket-channel>
               </label>
               <label>Rôle support
-                <input type="text" value="@Support Ticket" data-ticket-support-role>
+                <select data-ticket-support-role>
+                  <option value="">Choisir un rôle support</option>
+                </select>
               </label>
             </div>
           </form>
@@ -348,11 +352,11 @@
         </div>
 
         <div class="channel-table">
-          <div class="channel-row"><strong>🎫 Tickets</strong><input value="1510600280016818357"><span class="state active">🟢 Actif</span></div>
-          <div class="channel-row"><strong>🧾 Logs</strong><input value="1510422154725036062"><span class="state active">🟢 Actif</span></div>
-          <div class="channel-row"><strong>💡 Suggestions</strong><input value="1510422091340709898"><span class="state active">🟢 Actif</span></div>
-          <div class="channel-row"><strong>🚩 Reports</strong><input value="1510422117290868926"><span class="state active">🟢 Actif</span></div>
-          <div class="channel-row"><strong>📣 Staff alert</strong><input placeholder="ID du salon"><span class="state inactive">⚪ Inactif</span></div>
+          <div class="channel-row"><strong>🎫 Tickets</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions"><span class="state inactive">⚪ Inactif</span></div>
+          <div class="channel-row"><strong>🧾 Logs</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions"><span class="state inactive">⚪ Inactif</span></div>
+          <div class="channel-row"><strong>💡 Suggestions</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions"><span class="state inactive">⚪ Inactif</span></div>
+          <div class="channel-row"><strong>🚩 Reports</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions"><span class="state inactive">⚪ Inactif</span></div>
+          <div class="channel-row"><strong>📣 Staff alert</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions"><span class="state inactive">⚪ Inactif</span></div>
         </div>
       </section>
 
@@ -374,10 +378,19 @@
               <small>Envoie un message quand un membre rejoint le serveur.</small>
             </label>
             <label>Salon de bienvenue
-              <input type="text" value="151042200000000001" placeholder="ID du salon" data-welcome-channel>
+              <input type="text" placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-welcome-channel>
             </label>
             <label>Message au-dessus de l’image
               <textarea data-welcome-message>Bienvenue nom du membre sur @serveur !</textarea>
+            </label>
+            <label class="toggle-line">
+              <input type="checkbox" data-welcome-dm-enabled>
+              <span></span>
+              <strong>📩 Envoyer aussi un MP</strong>
+              <small>Le bot envoie un message privé au membre quand il rejoint.</small>
+            </label>
+            <label>Message privé d’arrivée
+              <textarea data-welcome-dm-message>Bienvenue sur @serveur ! Pense à lire les règles et amuse-toi bien.</textarea>
             </label>
             <label class="toggle-line">
               <input type="checkbox">
@@ -437,6 +450,7 @@
             <h2>Distribution de rôles</h2>
           </div>
           <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset rôles réactions</button>
+          <button class="primary-btn compact" type="button" data-publish-reaction-roles>🚀 Publier</button>
         </div>
 
         <div class="dashboard-grid two">
@@ -449,10 +463,10 @@
             </label>
             <div class="form-row">
               <label>Salon
-                <input type="text" value="151042200000000002" placeholder="ID du salon">
+                <input type="text" placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-reaction-channel>
               </label>
               <label>Mode
-                <select>
+                <select data-reaction-mode>
                   <option>Plusieurs rôles possibles</option>
                   <option>Un seul rôle à la fois</option>
                 </select>
@@ -481,9 +495,9 @@
             <button class="primary-btn compact" type="button" data-add-reaction-role>➕ Ajouter un rôle</button>
           </div>
           <div class="reaction-role-list" data-reaction-role-list>
-            <div class="reaction-role-row"><span>01</span><input class="emoji-input" value="⚽" maxlength="3"><input value="@Joueur"><input value="Joueur"><button type="button">Supprimer</button></div>
-            <div class="reaction-role-row"><span>02</span><input class="emoji-input" value="📣" maxlength="3"><input value="@Annonces"><input value="Annonces"><button type="button">Supprimer</button></div>
-            <div class="reaction-role-row"><span>03</span><input class="emoji-input" value="🎮" maxlength="3"><input value="@Matchs"><input value="Matchs"><button type="button">Supprimer</button></div>
+            <div class="reaction-role-row"><span>01</span><input class="emoji-input" value="⚽" maxlength="3"><input value="@Joueur" list="dashboardRoleOptions"><input value="Joueur"><button type="button">Supprimer</button></div>
+            <div class="reaction-role-row"><span>02</span><input class="emoji-input" value="📣" maxlength="3"><input value="@Annonces" list="dashboardRoleOptions"><input value="Annonces"><button type="button">Supprimer</button></div>
+            <div class="reaction-role-row"><span>03</span><input class="emoji-input" value="🎮" maxlength="3"><input value="@Matchs" list="dashboardRoleOptions"><input value="Matchs"><button type="button">Supprimer</button></div>
           </div>
         </div>
       </section>
@@ -582,6 +596,7 @@
             <h2>Identité des embeds</h2>
           </div>
           <div class="panel-actions">
+            <button class="primary-btn compact" type="button" data-apply-personalization>🚀 Appliquer</button>
             <button class="secondary-btn compact" type="button" data-cancel-personalization>↩️ Annuler les changements</button>
             <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset ModBot</button>
           </div>
@@ -889,10 +904,10 @@
         </div>
 
         <div class="metric-grid">
-          <article class="metric-card"><span>⭐ Moyenne</span><strong>4.8/5</strong><small>Très positif</small></article>
-          <article class="metric-card"><span>💬 Avis</span><strong>24</strong><small>Depuis 30 jours</small></article>
-          <article class="metric-card"><span>✅ Tickets fermés</span><strong>63</strong><small>Ce mois-ci</small></article>
-          <article class="metric-card"><span>⏱️ Réponse</span><strong>7 min</strong><small>Délai moyen</small></article>
+          <article class="metric-card"><span>⭐ Moyenne</span><strong data-rating-average>0.00/5</strong><small data-rating-label>Aucune note réelle</small></article>
+          <article class="metric-card"><span>💬 Avis</span><strong data-rating-count>0</strong><small>Notes envoyées après ticket</small></article>
+          <article class="metric-card"><span>✅ Tickets suivis</span><strong data-rating-ticket-count>0</strong><small>Tickets enregistrés par le bot</small></article>
+          <article class="metric-card"><span>📊 Dernière note</span><strong data-rating-last>—</strong><small>Dernière évaluation reçue</small></article>
         </div>
       </section>
 
@@ -905,11 +920,8 @@
           <button class="secondary-btn compact" type="button">📤 Exporter</button>
         </div>
 
-        <div class="log-feed">
-          <div><span>20:42</span> 🎫 Ticket support technique ouvert</div>
-          <div><span>20:35</span> 🔗 Anti-lien activé</div>
-          <div><span>20:21</span> ⚠️ Message filtré et avertissement envoyé</div>
-          <div><span>20:10</span> 👥 Rôle support ticket modifié</div>
+        <div class="log-feed" data-dashboard-log-feed>
+          <div><span>—</span> En attente des logs réels du bot.</div>
         </div>
       </section>
     </section>
@@ -917,6 +929,8 @@
   </div>
 
   <div class="dashboard-toast" id="dashboardToast" aria-live="polite">Configuration enregistrée</div>
+  <datalist id="dashboardChannelOptions"></datalist>
+  <datalist id="dashboardRoleOptions"></datalist>
 
   <div class="dashboard-modal" data-unsaved-modal hidden role="dialog" aria-modal="true" aria-labelledby="unsavedTitle">
     <div class="dashboard-modal-card">
