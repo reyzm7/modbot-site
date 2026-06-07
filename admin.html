@@ -110,7 +110,7 @@
             </article>
             <article class="admin-panel">
               <h3>💎 Règle Premium</h3>
-              <p>Chaque membre Premium peut associer jusqu’à 2 serveurs depuis son dashboard. L’admin gère ici la durée et le suivi des demandes Premium.</p>
+              <p>Gratuit : 1 serveur pendant 48h. Premium : 3 serveurs. Ultra Premium : 5 serveurs. L’admin gère ici l’offre, la durée et le suivi des demandes.</p>
             </article>
           </div>
         </section>
@@ -119,9 +119,9 @@
           <article class="admin-panel premium-manager">
             <div class="admin-panel-head">
               <h3 data-i18n="admin.premium.title">💎 Premium membre</h3>
-              <span class="admin-badge active" data-i18n="admin.premium.badge">2 serveurs maximum</span>
+              <span class="admin-badge active" data-i18n="admin.premium.badge">1 / 3 / 5 serveurs</span>
             </div>
-            <p class="premium-limit-copy" data-i18n="admin.premium.copy">L’admin attribue le Premium et sa durée. Le membre associe ensuite jusqu’à 2 serveurs depuis son dashboard.</p>
+            <p class="premium-limit-copy" data-i18n="admin.premium.copy">L’admin attribue l’offre et sa durée. Le membre associe ensuite ses serveurs depuis son dashboard selon sa limite.</p>
             <div class="premium-form">
               <label>
                 <span data-i18n="admin.premium.member">ID ou pseudo Discord</span>
@@ -130,8 +130,9 @@
               <label>
                 <span data-i18n="admin.premium.duration">Durée</span>
                 <select data-premium-duration>
+                  <option value="48 heures - Gratuit">48 heures - Gratuit 1 serveur</option>
                   <option value="2 mois">2 mois - Premium 15€</option>
-                  <option value="3 mois">3 mois - Offre complète 35€</option>
+                  <option value="3 mois">3 mois - Ultra Premium 35€</option>
                   <option value="1 an">1 an</option>
                   <option value="Permanent">Permanent</option>
                   <option value="custom">Durée personnalisée</option>
@@ -220,9 +221,9 @@
             </div>
             <p data-i18n="admin.servers.copy">Quand le backend sera branché au bot Discord, cette zone affichera automatiquement les logos réels des serveurs via les données `bot.guilds`.</p>
             <div class="admin-server-list" data-admin-server-list>
-              <div><img src="assets/default_logo.png" alt=""><span><strong>Hote BOT - ModBot</strong><small>Logo serveur synchronisable</small></span></div>
-              <div><img src="assets/default_logo.png" alt=""><span><strong>VPG Belgique</strong><small>Logo serveur synchronisable</small></span></div>
-              <div><img src="assets/default_logo.png" alt=""><span><strong>Serveur test</strong><small>Logo serveur synchronisable</small></span></div>
+              <div><span class="server-logo-shell" data-initials="HB"><img src="assets/default_logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong>Hote BOT - ModBot</strong><small>Logo serveur synchronisable</small></span></div>
+              <div><span class="server-logo-shell" data-initials="VPG"><img src="assets/default_logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong>VPG Belgique</strong><small>Logo serveur synchronisable</small></span></div>
+              <div><span class="server-logo-shell" data-initials="ST"><img src="assets/default_logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong>Serveur test</strong><small>Logo serveur synchronisable</small></span></div>
             </div>
           </article>
         </section>
