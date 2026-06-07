@@ -28,7 +28,6 @@
         <span>💬</span>
         Se connecter avec Discord
       </button>
-      <a class="secondary-btn compact oauth-invite-btn" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite>➕ Ajouter ModBot à un serveur</a>
       <a class="auth-return" href="index.html">Retour au site</a>
     </section>
   </main>
@@ -196,20 +195,27 @@
 
         <div class="dashboard-grid two">
           <div class="tool-panel premium-dashboard-card">
-            <h3>✨ Abonnement Premium</h3>
-            <p>Ton Premium peut être utilisé sur maximum 2 serveurs. L’admin active ton abonnement, puis tu choisis ici les serveurs qui en profitent.</p>
+            <h3>✨ Accès ModBot</h3>
+            <p>Gratuit : 1 serveur pendant 48h. Premium : 3 serveurs. Ultra Premium : 5 serveurs. L’admin active l’offre, puis tu choisis ici les serveurs qui en profitent.</p>
+            <label>Offre active
+              <select data-premium-tier>
+                <option value="free">Gratuit 48h - 1 serveur</option>
+                <option value="premium">Premium - 3 serveurs</option>
+                <option value="ultra">Ultra Premium - 5 serveurs</option>
+              </select>
+            </label>
             <div class="premium-progress">
               <span>Emplacements utilisés</span>
-              <strong><span data-premium-used>0</span>/2</strong>
+              <strong><span data-premium-used>0</span>/<span data-premium-limit>1</span></strong>
             </div>
             <button class="primary-btn compact" type="button" data-premium-associate-current>➕ Associer le serveur actif</button>
+            <a class="secondary-btn compact" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite>➕ Inviter ModBot sur un serveur</a>
           </div>
 
           <div class="tool-panel">
             <h3>🧩 Tes emplacements Premium</h3>
             <div class="premium-slot-grid" data-dashboard-premium-slots>
               <div class="premium-slot is-empty">Emplacement 1 libre</div>
-              <div class="premium-slot is-empty">Emplacement 2 libre</div>
             </div>
           </div>
         </div>
@@ -217,7 +223,7 @@
         <div class="tool-panel">
           <div class="table-head">
             <h3>🧭 Serveurs disponibles</h3>
-            <span class="state active">🟢 2 serveurs maximum</span>
+            <span class="state active" data-premium-limit-badge>🟢 Gratuit 48h : 1 serveur</span>
           </div>
           <div class="premium-choice-grid">
             <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="Hote BOT - ModBot" data-server-logo="assets/default_logo.png" data-server-initials="HB">
