@@ -48,23 +48,23 @@ const siteTranslations = {
     "pricing.title": "Des offres simples et claires",
     "pricing.copy": "Commence gratuitement avec la sécurité, puis ajoute les modules avancés selon les besoins de ton serveur.",
     "pricing.free.title": "Gratuit",
-    "pricing.free.copy": "Le socle essentiel pour protéger et modérer ton serveur Discord.",
+    "pricing.free.copy": "Le socle essentiel, avec un essai Premium de 48h sur 1 serveur.",
     "pricing.free.period": "/ toujours",
     "pricing.free.item1": "Sécurité serveur",
     "pricing.free.item2": "Modération",
     "pricing.free.item3": "Salons de logs",
-    "pricing.free.item4": "Configuration des salons essentiels",
+    "pricing.free.item4": "Essai Premium 48h sur 1 serveur",
     "pricing.free.cta": "Choisir cette offre",
     "pricing.premium.title": "Offre Premium",
-    "pricing.premium.copy": "Pour les serveurs qui veulent les tickets, ratings et outils de gestion complets.",
+    "pricing.premium.copy": "Pour associer jusqu’à 3 serveurs avec tickets, ratings et outils de gestion complets.",
     "pricing.premium.period": "/ 2 mois",
     "pricing.premium.item1": "Modération complète",
     "pricing.premium.item2": "Ratings support",
     "pricing.premium.item3": "Logs et salons avancés",
     "pricing.premium.item4": "Système de tickets",
     "pricing.premium.cta": "Choisir cette offre",
-    "pricing.ultimate.title": "Offre complète",
-    "pricing.ultimate.copy": "Tout ModBot avec accompagnement prioritaire et personnalisations dédiées.",
+    "pricing.ultimate.title": "Ultra Premium",
+    "pricing.ultimate.copy": "Jusqu’à 5 serveurs avec tout ModBot, accompagnement prioritaire et personnalisations dédiées.",
     "pricing.ultimate.period": "/ 3 mois",
     "pricing.ultimate.item1": "Tout le Premium",
     "pricing.ultimate.item2": "Support Discord prioritaire",
@@ -84,8 +84,8 @@ const siteTranslations = {
     "admin.stats.dashboard": "Ouvertures dashboard",
     "admin.stats.installs": "Serveurs ModBot",
     "admin.premium.title": "💎 Premium membre",
-    "admin.premium.badge": "2 serveurs maximum",
-    "admin.premium.copy": "L’admin attribue le Premium et sa durée. Le membre associe ensuite jusqu’à 2 serveurs depuis son dashboard.",
+    "admin.premium.badge": "1 / 3 / 5 serveurs",
+    "admin.premium.copy": "L’admin attribue l’offre et sa durée. Le membre associe ensuite ses serveurs depuis son dashboard selon sa limite.",
     "admin.premium.member": "ID ou pseudo Discord",
     "admin.premium.duration": "Durée",
     "admin.premium.customValue": "Durée personnalisée",
@@ -133,23 +133,23 @@ const siteTranslations = {
     "pricing.title": "Simple and clear offers",
     "pricing.copy": "Start free with security, then add advanced modules depending on your server needs.",
     "pricing.free.title": "Free",
-    "pricing.free.copy": "The essential base to protect and moderate your Discord server.",
+    "pricing.free.copy": "The essential base, with a 48-hour Premium trial on 1 server.",
     "pricing.free.period": "/ forever",
     "pricing.free.item1": "Server security",
     "pricing.free.item2": "Moderation",
     "pricing.free.item3": "Log channels",
-    "pricing.free.item4": "Essential channel setup",
+    "pricing.free.item4": "48-hour Premium trial on 1 server",
     "pricing.free.cta": "Choose this offer",
     "pricing.premium.title": "Premium offer",
-    "pricing.premium.copy": "For servers that want tickets, ratings and complete management tools.",
+    "pricing.premium.copy": "Associate up to 3 servers with tickets, ratings and complete management tools.",
     "pricing.premium.period": "/ 2 months",
     "pricing.premium.item1": "Complete moderation",
     "pricing.premium.item2": "Support ratings",
     "pricing.premium.item3": "Advanced logs and channels",
     "pricing.premium.item4": "Ticket system",
     "pricing.premium.cta": "Choose this offer",
-    "pricing.ultimate.title": "Complete offer",
-    "pricing.ultimate.copy": "All of ModBot with priority support and dedicated customizations.",
+    "pricing.ultimate.title": "Ultra Premium",
+    "pricing.ultimate.copy": "Up to 5 servers with all of ModBot, priority support and dedicated customizations.",
     "pricing.ultimate.period": "/ 3 months",
     "pricing.ultimate.item1": "Everything in Premium",
     "pricing.ultimate.item2": "Priority Discord support",
@@ -169,8 +169,8 @@ const siteTranslations = {
     "admin.stats.dashboard": "Dashboard opens",
     "admin.stats.installs": "ModBot servers",
     "admin.premium.title": "💎 Member premium",
-    "admin.premium.badge": "2 servers maximum",
-    "admin.premium.copy": "The admin grants Premium and its duration. The member then associates up to 2 servers from their dashboard.",
+    "admin.premium.badge": "1 / 3 / 5 servers",
+    "admin.premium.copy": "The admin grants the offer and duration. The member then associates servers from their dashboard according to the limit.",
     "admin.premium.member": "Discord ID or username",
     "admin.premium.duration": "Duration",
     "admin.premium.customValue": "Custom duration",
@@ -218,23 +218,23 @@ const siteTranslations = {
     "pricing.title": "عروض بسيطة وواضحة",
     "pricing.copy": "ابدأ مجاناً بالحماية، ثم أضف الوحدات المتقدمة حسب احتياجات خادمك.",
     "pricing.free.title": "مجاني",
-    "pricing.free.copy": "القاعدة الأساسية لحماية وإدارة خادم Discord الخاص بك.",
+    "pricing.free.copy": "القاعدة الأساسية، مع تجربة Premium لمدة 48 ساعة على خادم واحد.",
     "pricing.free.period": "/ دائماً",
     "pricing.free.item1": "حماية الخادم",
     "pricing.free.item2": "الإشراف",
     "pricing.free.item3": "قنوات السجلات",
-    "pricing.free.item4": "إعداد القنوات الأساسية",
+    "pricing.free.item4": "تجربة Premium لمدة 48 ساعة على خادم واحد",
     "pricing.free.cta": "اختيار هذا العرض",
     "pricing.premium.title": "عرض Premium",
-    "pricing.premium.copy": "للخوادم التي تحتاج التذاكر والتقييمات وأدوات إدارة كاملة.",
+    "pricing.premium.copy": "اربط حتى 3 خوادم مع التذاكر والتقييمات وأدوات الإدارة الكاملة.",
     "pricing.premium.period": "/ شهرين",
     "pricing.premium.item1": "إشراف كامل",
     "pricing.premium.item2": "تقييمات الدعم",
     "pricing.premium.item3": "سجلات وقنوات متقدمة",
     "pricing.premium.item4": "نظام التذاكر",
     "pricing.premium.cta": "اختيار هذا العرض",
-    "pricing.ultimate.title": "العرض الكامل",
-    "pricing.ultimate.copy": "كل ميزات ModBot مع دعم أولوية وتخصيصات مخصصة لك.",
+    "pricing.ultimate.title": "Ultra Premium",
+    "pricing.ultimate.copy": "حتى 5 خوادم مع كل ميزات ModBot ودعم أولوية وتخصيصات مخصصة لك.",
     "pricing.ultimate.period": "/ 3 أشهر",
     "pricing.ultimate.item1": "كل ميزات Premium",
     "pricing.ultimate.item2": "دعم Discord أولوية",
@@ -254,8 +254,8 @@ const siteTranslations = {
     "admin.stats.dashboard": "فتح لوحة التحكم",
     "admin.stats.installs": "خوادم ModBot",
     "admin.premium.title": "💎 Premium للعضو",
-    "admin.premium.badge": "خادمان كحد أقصى",
-    "admin.premium.copy": "يمنح المسؤول Premium ومدته، ثم يربط العضو ما يصل إلى خادمين من لوحة التحكم الخاصة به.",
+    "admin.premium.badge": "1 / 3 / 5 خوادم",
+    "admin.premium.copy": "يمنح المسؤول العرض ومدته، ثم يربط العضو خوادمه من لوحة التحكم حسب الحد المتاح.",
     "admin.premium.member": "معرف Discord أو الاسم",
     "admin.premium.duration": "المدة",
     "admin.premium.customValue": "مدة مخصصة",
@@ -296,7 +296,7 @@ const assistantAnswers = {
   },
   tarifs: {
     question: "Quels sont les tarifs ?",
-    answer: "L’offre gratuite est à 0€ avec sécurité, modération et salons/logs. L’offre Premium est à 15€ pour 2 mois avec tickets, ratings, logs, salons et modération. L’offre complète est à 35€ tous les 3 mois avec tout, support Discord prioritaire et personnalisations dédiées."
+    answer: "L’offre gratuite donne accès au socle sécurité/modération et à un essai Premium de 48h sur 1 serveur. L’offre Premium est à 15€ pour 2 mois et permet 3 serveurs. L’Ultra Premium est à 35€ tous les 3 mois et permet 5 serveurs avec support prioritaire et personnalisations dédiées."
   },
   fonctionnalite: {
     question: "Comment demander une fonctionnalité ?",
@@ -729,6 +729,16 @@ function escapeHtmlValue(value) {
   }[character]));
 }
 
+function initialsFromName(value) {
+  const words = String(value || "MB")
+    .replace(/[^\p{L}\p{N}\s-]/gu, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  if (!words.length) return "MB";
+  return words.slice(0, 2).map((word) => word[0]).join("").toUpperCase();
+}
+
 function getModbotApiBase() {
   const configured = normalizeApiBase(window.MODBOT_API_URL || document.querySelector('meta[name="modbot-api-url"]')?.content || "");
   if (configured) return configured;
@@ -828,6 +838,7 @@ function initApiBridgeFromUrl() {
       return;
     }
     sessionStorage.removeItem("modbot-oauth-state");
+    sessionStorage.setItem("modbot-direct-oauth-ok", "1");
     console.warn("Code OAuth Discord recu. Branche le callback backend ModBot pour finaliser la session dashboard.");
     history.replaceState(null, "", location.pathname);
   }
@@ -960,7 +971,12 @@ function initAdminZone() {
       const serverList = document.querySelector("[data-admin-server-list]");
       if (serverList && Array.isArray(data.guilds)) {
         serverList.innerHTML = data.guilds.map((guild) => `
-          <div><img src="${escapeHtmlValue(guild.icon || "assets/default_logo.png")}" alt=""><span><strong>${escapeHtmlValue(guild.name)}</strong><small>ID ${escapeHtmlValue(guild.id)}</small></span></div>
+          <div>
+            <span class="server-logo-shell" data-initials="${escapeHtmlValue(guild.initials || initialsFromName(guild.name))}">
+              <img src="${escapeHtmlValue(guild.icon || "assets/default_logo.png")}" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')" onload="this.parentElement.classList.remove('is-fallback')">
+            </span>
+            <span><strong>${escapeHtmlValue(guild.name)}</strong><small>ID ${escapeHtmlValue(guild.id)}</small></span>
+          </div>
         `).join("");
       }
       return;
@@ -1213,6 +1229,9 @@ function initDashboard() {
   const currentServerLogoTargets = document.querySelectorAll("[data-current-server-logo], [data-current-server-logo-inline]");
   const currentServerLogoShells = document.querySelectorAll("[data-current-server-logo-shell]");
   const premiumUsedTarget = document.querySelector("[data-premium-used]");
+  const premiumLimitTargets = document.querySelectorAll("[data-premium-limit]");
+  const premiumLimitBadge = document.querySelector("[data-premium-limit-badge]");
+  const premiumTierSelect = document.querySelector("[data-premium-tier]");
   const premiumSlots = document.querySelector("[data-dashboard-premium-slots]");
   const premiumServerChoices = document.querySelectorAll("[data-premium-server-choice]");
   const tournamentEnabled = document.querySelector("[data-tournament-enabled]");
@@ -1230,6 +1249,16 @@ function initDashboard() {
     logo: "assets/default_logo.png",
     banner: "assets/default_banner.png",
     color: "#5865F2"
+  };
+  const premiumTierLimits = {
+    free: 1,
+    premium: 3,
+    ultra: 5
+  };
+  const premiumTierLabels = {
+    free: "Gratuit 48h",
+    premium: "Premium",
+    ultra: "Ultra Premium"
   };
   let personalizationAssets = {
     logo: "",
@@ -1249,6 +1278,8 @@ function initDashboard() {
     initials: "HB"
   };
   let dashboardGuilds = [];
+  let premiumTier = readStoredPremiumTier();
+  if (premiumTierSelect) premiumTierSelect.value = premiumTier;
   let premiumDraftServers = readStoredPremiumServers();
   let tournamentDraft = readStoredTournamentConfig();
 
@@ -1296,14 +1327,29 @@ function initDashboard() {
           logo: String(server.logo || "assets/default_logo.png"),
           initials: String(server.initials || "MB")
         }))
-        .slice(0, 2);
+        .slice(0, getPremiumLimit());
     } catch (error) {
       return [];
     }
   }
 
-  function savePremiumServers() {
-    localStorage.setItem("modbot-dashboard-premium-servers", JSON.stringify(premiumDraftServers.slice(0, 2)));
+  function readStoredPremiumTier() {
+    const stored = localStorage.getItem("modbot-dashboard-premium-tier") || "free";
+    return Object.hasOwn(premiumTierLimits, stored) ? stored : "free";
+  }
+
+  function getPremiumTier() {
+    return premiumTierSelect?.value || premiumTier || "free";
+  }
+
+  function getPremiumLimit() {
+    return premiumTierLimits[getPremiumTier()] || 1;
+  }
+
+  function savePremiumState() {
+    premiumTier = getPremiumTier();
+    localStorage.setItem("modbot-dashboard-premium-tier", premiumTier);
+    localStorage.setItem("modbot-dashboard-premium-servers", JSON.stringify(premiumDraftServers.slice(0, getPremiumLimit())));
   }
 
   function defaultTournamentConfig() {
@@ -1561,6 +1607,13 @@ function initDashboard() {
       if (languageSelect) languageSelect.value = config.language === "en" ? "English" : "Français";
     }
 
+    const incomingTier = config.premium_tier || config.premium_plan;
+    if (incomingTier) {
+      premiumTier = Object.hasOwn(premiumTierLimits, incomingTier) ? incomingTier : premiumTier;
+      if (premiumTierSelect) premiumTierSelect.value = premiumTier;
+      renderPremiumAssociations();
+    }
+
     if (Array.isArray(config.premium_servers)) {
       premiumDraftServers = config.premium_servers
         .filter((server) => server && server.name)
@@ -1570,7 +1623,7 @@ function initDashboard() {
           logo: String(server.logo || "assets/default_logo.png"),
           initials: String(server.initials || "MB")
         }))
-        .slice(0, 2);
+        .slice(0, getPremiumLimit());
       renderPremiumAssociations();
     }
 
@@ -1707,6 +1760,8 @@ function initDashboard() {
       recurring_messages: recurringMessages,
       social_relays: socialRelays,
       premium_servers: premiumDraftServers,
+      premium_tier: getPremiumTier(),
+      premium_limit: getPremiumLimit(),
       language: languageValue === "English" ? "en" : "fr",
       tournament: collectTournamentConfig(),
     };
@@ -1726,11 +1781,22 @@ function initDashboard() {
   }
 
   function renderPremiumAssociations() {
+    const limit = getPremiumLimit();
+    const tier = getPremiumTier();
+    if (premiumDraftServers.length > limit) {
+      premiumDraftServers = premiumDraftServers.slice(0, limit);
+    }
     if (premiumUsedTarget) premiumUsedTarget.textContent = String(premiumDraftServers.length);
+    premiumLimitTargets.forEach((target) => {
+      target.textContent = String(limit);
+    });
+    if (premiumLimitBadge) {
+      premiumLimitBadge.textContent = `🟢 ${premiumTierLabels[tier]} : ${limit} serveur${limit > 1 ? "s" : ""}`;
+    }
 
     if (premiumSlots) {
       premiumSlots.innerHTML = "";
-      for (let index = 0; index < 2; index += 1) {
+      for (let index = 0; index < limit; index += 1) {
         const server = premiumDraftServers[index];
         const slot = document.createElement("div");
         slot.className = `premium-slot ${server ? "is-filled" : "is-empty"}`;
@@ -1742,7 +1808,7 @@ function initDashboard() {
             </span>
             <span>
               <strong>${escapeHtml(server.name)}</strong>
-              <small>Emplacement ${index + 1}/2 actif</small>
+              <small>Emplacement ${index + 1}/${limit} actif</small>
             </span>
             <button class="secondary-btn compact" type="button" data-premium-remove-slot="${index}">Retirer</button>
           `;
@@ -1768,12 +1834,13 @@ function initDashboard() {
       showToast("✅ Ce serveur est déjà associé au Premium");
       return;
     }
-    if (premiumDraftServers.length >= 2) {
-      showToast("⚠️ Maximum 2 serveurs Premium");
+    const limit = getPremiumLimit();
+    if (premiumDraftServers.length >= limit) {
+      showToast(`⚠️ Limite atteinte : ${premiumTierLabels[getPremiumTier()]} autorise ${limit} serveur${limit > 1 ? "s" : ""}`);
       return;
     }
 
-    premiumDraftServers = [...premiumDraftServers, server].slice(0, 2);
+    premiumDraftServers = [...premiumDraftServers, server].slice(0, limit);
     renderPremiumAssociations();
     markPanelDirty("premium");
     showToast(`💎 ${server.name} ajouté aux emplacements Premium`);
@@ -1835,7 +1902,7 @@ function initDashboard() {
       return true;
     }
     if (dirtyPanelName === "premium") {
-      savePremiumServers();
+      savePremiumState();
     }
     if (dirtyPanelName === "tournaments") {
       saveTournamentConfig();
@@ -1948,6 +2015,16 @@ function initDashboard() {
     showToast("♻️ Emplacements Premium vidés");
   });
 
+  premiumTierSelect?.addEventListener("change", () => {
+    premiumTier = getPremiumTier();
+    const limit = getPremiumLimit();
+    const before = premiumDraftServers.length;
+    premiumDraftServers = premiumDraftServers.slice(0, limit);
+    renderPremiumAssociations();
+    markPanelDirty("premium");
+    showToast(before > limit ? `⚠️ Offre passée à ${limit} serveur${limit > 1 ? "s" : ""}, les emplacements en trop ont été retirés` : `💎 Offre ${premiumTierLabels[premiumTier]} sélectionnée`);
+  });
+
   renderPremiumAssociations();
   applyTournamentConfig(tournamentDraft);
 
@@ -1970,6 +2047,12 @@ function initDashboard() {
   });
 
   setupLogoFallbacks();
+
+  if (sessionStorage.getItem("modbot-direct-oauth-ok") === "1") {
+    sessionStorage.removeItem("modbot-direct-oauth-ok");
+    showDashboardStage("servers");
+    showToast("✅ Connexion Discord reçue");
+  }
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -2018,6 +2101,8 @@ function initDashboard() {
       setTicketPublishVisible(false);
     }
     if (dirtyPanelName === "premium") {
+      premiumTier = readStoredPremiumTier();
+      if (premiumTierSelect) premiumTierSelect.value = premiumTier;
       premiumDraftServers = readStoredPremiumServers();
       renderPremiumAssociations();
     }
