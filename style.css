@@ -3466,6 +3466,14 @@ main,
   line-height: 1.6;
 }
 
+.field-help {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
 .premium-progress {
   min-height: 58px;
   padding: 12px;
