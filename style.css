@@ -1207,13 +1207,20 @@ h1 {
   gap: 12px;
 }
 
-.admin-server-list img {
+.admin-server-list .server-logo-shell {
+  width: 54px;
+  height: 54px;
+}
+
+.admin-server-list .server-logo-shell::before {
+  font-size: 0.72rem;
+}
+
+.admin-server-list .server-logo-shell img {
   width: 54px;
   height: 54px;
   padding: 3px;
-  border-radius: 8px;
   object-fit: contain;
-  background: rgba(255, 255, 255, 0.04);
 }
 
 .admin-server-list strong,
