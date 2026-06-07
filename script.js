@@ -902,6 +902,7 @@ function initAdminZone() {
   const protectedItems = document.querySelectorAll("[data-admin-protected]");
   const toast = document.getElementById("adminToast");
   const durationSelect = document.querySelector("[data-premium-duration]");
+  const planSelect = document.querySelector("[data-premium-plan]");
   const customDuration = document.querySelector("[data-premium-custom-duration]");
   const customDurationValue = document.querySelector("[data-premium-custom-value]");
   const customDurationUnit = document.querySelector("[data-premium-custom-unit]");
@@ -973,7 +974,7 @@ function initAdminZone() {
         serverList.innerHTML = data.guilds.map((guild) => `
           <div>
             <span class="server-logo-shell" data-initials="${escapeHtmlValue(guild.initials || initialsFromName(guild.name))}">
-              <img src="${escapeHtmlValue(guild.icon || "assets/default_logo.png")}" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')" onload="this.parentElement.classList.remove('is-fallback')">
+              <img src="${escapeHtmlValue(guild.icon || "logo.png")}" alt="" data-logo-img onerror="if(!this.dataset.logoFallbackTried){this.dataset.logoFallbackTried='1';this.src='logo.png'}else{this.parentElement.classList.add('is-fallback')}" onload="this.parentElement.classList.remove('is-fallback')">
             </span>
             <span><strong>${escapeHtmlValue(guild.name)}</strong><small>ID ${escapeHtmlValue(guild.id)}</small></span>
           </div>
@@ -1044,6 +1045,19 @@ function initAdminZone() {
     return `${value} ${unit}`;
   }
 
+  function getAdminPremiumPlanLabel(plan) {
+    return {
+      free: "Gratuit 48h",
+      partner: "Partenaire à vie",
+      premium: "Premium",
+      ultra: "Ultra Premium"
+    }[plan] || "Premium";
+  }
+
+  function getAdminPremiumServerLimit(plan) {
+    return { free: 1, partner: 1, premium: 3, ultra: 5 }[plan] || 1;
+  }
+
   durationSelect?.addEventListener("change", updateCustomDurationVisibility);
   updateCustomDurationVisibility();
 
@@ -1054,6 +1068,9 @@ function initAdminZone() {
     const member = memberInput?.value.trim();
     if (!member || !list) return;
     const duration = getPremiumDuration();
+    const plan = planSelect?.value || "free";
+    const planLabel = getAdminPremiumPlanLabel(plan);
+    const serverLimit = getAdminPremiumServerLimit(plan);
     const item = document.createElement("div");
     const identity = document.createElement("span");
     const name = document.createElement("strong");
@@ -1061,7 +1078,7 @@ function initAdminZone() {
     const meta = document.createElement("span");
     name.textContent = member;
     serverLine.textContent = "Serveurs à associer depuis le dashboard";
-    meta.textContent = `Premium ${duration}`;
+    meta.textContent = `${planLabel} • ${duration} • ${serverLimit} serveur${serverLimit > 1 ? "s" : ""}`;
     identity.append(name, serverLine);
     item.append(identity, meta);
     list.prepend(item);
@@ -1071,7 +1088,7 @@ function initAdminZone() {
       const requestName = document.createElement("strong");
       const requestMeta = document.createElement("small");
       requestName.textContent = member;
-      requestMeta.textContent = `Ticket Premium à ouvrir ou vérifier pour une durée : ${duration}`;
+      requestMeta.textContent = `Ticket Premium à ouvrir ou vérifier : ${planLabel}, durée ${duration}, limite ${serverLimit} serveur${serverLimit > 1 ? "s" : ""}`;
       requestIdentity.append(requestName, requestMeta);
       const requestState = document.createElement("span");
       requestState.textContent = "🎫 Ticket requis";
@@ -1081,7 +1098,7 @@ function initAdminZone() {
     try {
       await modbotApiFetch("/api/admin/premium", {
         method: "POST",
-        body: JSON.stringify({ member, duration })
+        body: JSON.stringify({ member, duration, plan, servers_limit: serverLimit })
       });
       showAdminToast(`💎 Premium synchronisé avec le bot pour ${member}`);
     } catch (error) {
@@ -1252,11 +1269,13 @@ function initDashboard() {
   };
   const premiumTierLimits = {
     free: 1,
+    partner: 1,
     premium: 3,
     ultra: 5
   };
   const premiumTierLabels = {
     free: "Gratuit 48h",
+    partner: "Partenaire à vie",
     premium: "Premium",
     ultra: "Ultra Premium"
   };
@@ -1274,10 +1293,11 @@ function initDashboard() {
   let selectedServer = {
     id: "",
     name: "Hote BOT - ModBot",
-    logo: "assets/default_logo.png",
+    logo: "logo.png",
     initials: "HB"
   };
   let dashboardGuilds = [];
+  let dashboardResources = { channels: [], roles: [] };
   let premiumTier = readStoredPremiumTier();
   if (premiumTierSelect) premiumTierSelect.value = premiumTier;
   let premiumDraftServers = readStoredPremiumServers();
@@ -1309,7 +1329,14 @@ function initDashboard() {
         if (!img.complete || img.naturalWidth > 0) return;
         markLogoFallback(img);
       };
-      img.addEventListener("error", () => markLogoFallback(img));
+      img.addEventListener("error", () => {
+        if (!img.dataset.logoFallbackTried) {
+          img.dataset.logoFallbackTried = "1";
+          img.src = "logo.png";
+          return;
+        }
+        markLogoFallback(img);
+      });
       img.addEventListener("load", () => img.closest(".server-logo-shell")?.classList.remove("is-fallback"));
       checkImage();
     });
@@ -1324,7 +1351,7 @@ function initDashboard() {
         .map((server) => ({
           id: String(server.id || ""),
           name: String(server.name),
-          logo: String(server.logo || "assets/default_logo.png"),
+          logo: String(server.logo || "logo.png"),
           initials: String(server.initials || "MB")
         }))
         .slice(0, getPremiumLimit());
@@ -1463,13 +1490,112 @@ function initDashboard() {
     }[character]));
   }
 
+  function channelLabel(channel) {
+    return channel?.name ? `# ${channel.name}` : `Salon ${channel?.id || ""}`;
+  }
+
+  function roleLabel(role) {
+    return role?.name ? `@${role.name}` : `Rôle ${role?.id || ""}`;
+  }
+
+  function setInputState(input) {
+    const row = input.closest(".channel-row");
+    const state = row?.querySelector(".state");
+    if (!state) return;
+    const active = Boolean(input.value.trim());
+    state.classList.toggle("active", active);
+    state.classList.toggle("inactive", !active);
+    state.textContent = active ? "🟢 Actif" : "⚪ Inactif";
+  }
+
+  function renderDashboardResources(resources = {}) {
+    dashboardResources = {
+      channels: Array.isArray(resources.channels) ? resources.channels : [],
+      roles: Array.isArray(resources.roles) ? resources.roles : []
+    };
+
+    const channelDatalist = document.getElementById("dashboardChannelOptions");
+    if (channelDatalist) {
+      channelDatalist.innerHTML = dashboardResources.channels.map((channel) => (
+        `<option value="${escapeHtml(channel.id)}" label="${escapeHtml(channelLabel(channel))}"></option>`
+      )).join("");
+    }
+
+    const roleDatalist = document.getElementById("dashboardRoleOptions");
+    if (roleDatalist) {
+      roleDatalist.innerHTML = dashboardResources.roles.map((role) => (
+        `<option value="${escapeHtml(role.id)}" label="${escapeHtml(roleLabel(role))}"></option>`
+      )).join("");
+    }
+
+    const supportRole = document.querySelector("[data-ticket-support-role]");
+    if (supportRole) {
+      const current = supportRole.value;
+      supportRole.innerHTML = `<option value="">Choisir un rôle support</option>` + dashboardResources.roles.map((role) => (
+        `<option value="${escapeHtml(role.id)}">${escapeHtml(roleLabel(role))}</option>`
+      )).join("");
+      if (current) supportRole.value = current;
+    }
+
+    document.querySelectorAll(".reaction-role-row input:nth-of-type(2)").forEach((input) => {
+      input.setAttribute("list", "dashboardRoleOptions");
+      input.placeholder = "ID du rôle ou @rôle";
+    });
+  }
+
+  function renderDashboardStats(config = {}) {
+    const ratings = config.ratings || {};
+    const logs = Array.isArray(config.logs) ? config.logs : [];
+    const tickets = config.ticket_stats || {};
+    const average = Number(ratings.average ?? ratings.avg ?? 0);
+    const count = Number(ratings.count || 0);
+    const last = Array.isArray(ratings.last) && ratings.last.length ? ratings.last[ratings.last.length - 1] : null;
+    const averageTarget = document.querySelector("[data-rating-average]");
+    const countTarget = document.querySelector("[data-rating-count]");
+    const ticketTarget = document.querySelector("[data-rating-ticket-count]");
+    const lastTarget = document.querySelector("[data-rating-last]");
+    const labelTarget = document.querySelector("[data-rating-label]");
+    if (averageTarget) averageTarget.textContent = `${average.toFixed(2)}/5`;
+    if (countTarget) countTarget.textContent = String(count);
+    if (ticketTarget) ticketTarget.textContent = String(tickets.total || 0);
+    if (lastTarget) lastTarget.textContent = last ? `${last.note || "?"}/5` : "—";
+    if (labelTarget) labelTarget.textContent = count ? "Stats réelles du bot" : "Aucune note réelle";
+
+    const logFeed = document.querySelector("[data-dashboard-log-feed]");
+    if (logFeed) {
+      if (!logs.length) {
+        logFeed.innerHTML = `<div><span>—</span> Aucun log réel enregistré pour ce serveur.</div>`;
+      } else {
+        logFeed.innerHTML = logs.slice(0, 20).map((entry) => {
+          const date = String(entry.date || entry.created_at || "").slice(11, 16) || "—";
+          const action = entry.action || "action";
+          const detail = entry.detail || entry.message || "";
+          return `<div><span>${escapeHtml(date)}</span> ${escapeHtml(action)} ${escapeHtml(detail)}</div>`;
+        }).join("");
+      }
+    }
+  }
+
+  async function loadDashboardResources(guildId) {
+    if (!guildId) {
+      renderDashboardResources({});
+      return;
+    }
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/resources`, { cache: "no-store" });
+      renderDashboardResources(data);
+    } catch (error) {
+      renderDashboardResources({});
+    }
+  }
+
   function renderGuildChoices(guilds) {
     const serverGrid = document.querySelector(".server-grid");
     if (!serverGrid || !Array.isArray(guilds) || !guilds.length) return;
     serverGrid.innerHTML = guilds.map((guild) => `
-      <button class="server-card" type="button" data-server-name="${escapeHtml(guild.name)}" data-server-id="${escapeHtml(guild.id)}" data-server-logo="${escapeHtml(guild.icon || "assets/default_logo.png")}" data-server-initials="${escapeHtml(guild.initials || "MB")}">
+      <button class="server-card" type="button" data-server-name="${escapeHtml(guild.name)}" data-server-id="${escapeHtml(guild.id)}" data-server-logo="${escapeHtml(guild.icon || "logo.png")}" data-server-initials="${escapeHtml(guild.initials || "MB")}">
         <span class="server-logo-shell" data-initials="${escapeHtml(guild.initials || "MB")}">
-          <img class="server-logo" src="${escapeHtml(guild.icon || "assets/default_logo.png")}" alt="" data-logo-img>
+          <img class="server-logo" src="${escapeHtml(guild.icon || "logo.png")}" alt="" data-logo-img>
         </span>
         <span>
           <strong>${escapeHtml(guild.name)}</strong>
@@ -1484,8 +1610,8 @@ function initDashboard() {
     const grid = document.querySelector(".premium-choice-grid");
     if (!grid || !Array.isArray(guilds) || !guilds.length) return;
     grid.innerHTML = guilds.map((guild) => `
-      <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="${escapeHtml(guild.name)}" data-server-id="${escapeHtml(guild.id)}" data-server-logo="${escapeHtml(guild.icon || "assets/default_logo.png")}" data-server-initials="${escapeHtml(guild.initials || "MB")}">
-        <span class="server-logo-shell" data-initials="${escapeHtml(guild.initials || "MB")}"><img src="${escapeHtml(guild.icon || "assets/default_logo.png")}" alt="" data-logo-img></span>
+      <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="${escapeHtml(guild.name)}" data-server-id="${escapeHtml(guild.id)}" data-server-logo="${escapeHtml(guild.icon || "logo.png")}" data-server-initials="${escapeHtml(guild.initials || "MB")}">
+        <span class="server-logo-shell" data-initials="${escapeHtml(guild.initials || "MB")}"><img src="${escapeHtml(guild.icon || "logo.png")}" alt="" data-logo-img></span>
         <span><strong>${escapeHtml(guild.name)}</strong><small>ID ${escapeHtml(guild.id)}</small></span>
       </button>
     `).join("");
@@ -1495,6 +1621,10 @@ function initDashboard() {
   async function loadDashboardGuilds() {
     const data = await modbotApiFetch("/api/guilds", { cache: "no-store" });
     dashboardGuilds = data.guilds || [];
+    if (data.premium?.plan && Object.hasOwn(premiumTierLimits, data.premium.plan)) {
+      premiumTier = data.premium.plan;
+      if (premiumTierSelect) premiumTierSelect.value = premiumTier;
+    }
     renderGuildChoices(dashboardGuilds);
     renderPremiumGuildChoices(dashboardGuilds);
     renderPremiumAssociations();
@@ -1546,7 +1676,12 @@ function initDashboard() {
     if (previewDesc && tickets.description) previewDesc.value = tickets.description;
     if (ticketChannel && channels.tickets) ticketChannel.value = channels.tickets;
     if (ticketBanner && tickets.banner) ticketBanner.value = tickets.banner;
-    if (ticketSupportRole && tickets.support_role) ticketSupportRole.value = tickets.support_role;
+    if (ticketSupportRole && tickets.support_role) {
+      if (![...ticketSupportRole.options].some((option) => option.value === String(tickets.support_role))) {
+        ticketSupportRole.insertAdjacentHTML("beforeend", `<option value="${escapeHtml(tickets.support_role)}">${escapeHtml(tickets.support_role)}</option>`);
+      }
+      ticketSupportRole.value = String(tickets.support_role);
+    }
 
     const optionList = document.getElementById("ticketOptionList");
     if (optionList && Array.isArray(tickets.options) && tickets.options.length) {
@@ -1558,7 +1693,8 @@ function initDashboard() {
     const channelRows = document.querySelectorAll("[data-dashboard-panel='channels'] .channel-row input");
     const channelValues = [channels.tickets, channels.logs, channels.suggestions, channels.reports, channels.staff_alert];
     channelRows.forEach((input, index) => {
-      if (channelValues[index]) input.value = channelValues[index];
+      input.value = channelValues[index] || "";
+      setInputState(input);
     });
 
     const securityToggles = document.querySelectorAll("[data-dashboard-panel='security'] .toggle-line input");
@@ -1595,9 +1731,25 @@ function initDashboard() {
     const welcomeBg = document.querySelector("[data-welcome-bg]");
     const welcomeFont = document.querySelector("[data-welcome-font]");
     const welcomeColor = document.querySelector("[data-welcome-color]");
+    const welcomeToggles = document.querySelectorAll("[data-dashboard-panel='welcome'] .toggle-line input");
+    const welcomeDmEnabled = document.querySelector("[data-welcome-dm-enabled]");
+    const welcomeDmMessage = document.querySelector("[data-welcome-dm-message]");
+    if (welcomeToggles[0]) {
+      welcomeToggles[0].checked = Boolean(welcome.enabled);
+      welcomeToggles[0].closest(".toggle-line")?.classList.toggle("is-on", Boolean(welcome.enabled));
+    }
+    if (welcomeToggles[2]) {
+      welcomeToggles[2].checked = Boolean(welcome.departure_enabled);
+      welcomeToggles[2].closest(".toggle-line")?.classList.toggle("is-on", Boolean(welcome.departure_enabled));
+    }
+    if (welcomeDmEnabled) {
+      welcomeDmEnabled.checked = Boolean(welcome.dm_enabled);
+      welcomeDmEnabled.closest(".toggle-line")?.classList.toggle("is-on", Boolean(welcome.dm_enabled));
+    }
     if (welcomeChannel && welcome.channel_id) welcomeChannel.value = welcome.channel_id;
     if (welcomeMessage && welcome.message) welcomeMessage.value = welcome.message;
     if (departureMessage && welcome.departure_message) departureMessage.value = welcome.departure_message;
+    if (welcomeDmMessage && welcome.dm_message) welcomeDmMessage.value = welcome.dm_message;
     if (welcomeBg && welcome.background) welcomeBg.value = welcome.background;
     if (welcomeFont && welcome.font) welcomeFont.value = welcome.font;
     if (welcomeColor && welcome.color) welcomeColor.value = welcome.color;
@@ -1620,7 +1772,7 @@ function initDashboard() {
         .map((server) => ({
           id: String(server.id || ""),
           name: String(server.name),
-          logo: String(server.logo || "assets/default_logo.png"),
+          logo: String(server.logo || "logo.png"),
           initials: String(server.initials || "MB")
         }))
         .slice(0, getPremiumLimit());
@@ -1659,18 +1811,57 @@ function initDashboard() {
       }
     }
 
+    if (Array.isArray(config.reaction_roles)) {
+      const reactionTitle = document.querySelector("[data-reaction-title]");
+      const reactionDescription = document.querySelector("[data-reaction-description]");
+      if (reactionTitle && config.reaction_title) reactionTitle.value = config.reaction_title;
+      if (reactionDescription && config.reaction_description) reactionDescription.value = config.reaction_description;
+      const reactionRoleList = document.querySelector("[data-reaction-role-list]");
+      if (reactionRoleList) {
+        reactionRoleList.innerHTML = config.reaction_roles.map((role, index) => `
+          <div class="reaction-role-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(role.emoji || "✨")}" maxlength="3"><input value="${escapeHtml(role.role_id || role.role || "")}" list="dashboardRoleOptions"><input value="${escapeHtml(role.label || role.name || "Rôle")}"><button type="button">Supprimer</button></div>
+        `).join("") || `<div class="reaction-role-row"><span>01</span><input class="emoji-input" value="✨" maxlength="3"><input value="" list="dashboardRoleOptions"><input value="Nouveau rôle"><button type="button">Supprimer</button></div>`;
+      }
+      const reactionChannel = document.querySelector("[data-reaction-channel]");
+      const reactionMode = document.querySelector("[data-reaction-mode]");
+      if (reactionChannel && config.reaction_roles_channel_id) reactionChannel.value = config.reaction_roles_channel_id;
+      if (reactionMode && config.reaction_roles_mode) reactionMode.value = config.reaction_roles_mode;
+    }
+
+    if (Array.isArray(config.social_relays)) {
+      config.social_relays.forEach((relay) => {
+        const card = [...document.querySelectorAll(".social-card")].find((item) => item.dataset.socialPlatform === relay.platform);
+        if (!card) return;
+        const link = card.querySelector("[data-social-link]");
+        const channel = card.querySelector("[data-social-channel]");
+        const enabled = card.querySelector("[data-social-enabled]");
+        const state = card.querySelector("[data-social-state]");
+        if (link) link.value = relay.link || "";
+        if (channel) channel.value = relay.channel_id || "";
+        if (enabled) enabled.checked = Boolean(relay.enabled);
+        if (state) {
+          state.classList.toggle("active", Boolean(relay.enabled));
+          state.classList.toggle("inactive", !relay.enabled);
+          state.textContent = relay.enabled ? "🟢 Actif" : "⚪ Inactif";
+        }
+      });
+    }
+
     const liveTitle = document.querySelector("[data-live-title]");
     const liveDescription = document.querySelector("[data-live-desc]");
     const liveTicketEmoji = document.querySelector("[data-live-ticket-emoji]");
     if (liveTitle) liveTitle.textContent = tickets.title || "Ouvre ton ticket";
     if (liveDescription) liveDescription.textContent = tickets.description || "Merci de sélectionner la raison de ta demande.";
     if (liveTicketEmoji) liveTicketEmoji.textContent = tickets.emoji || "📩";
+    renderDashboardStats(config);
+    document.querySelectorAll("[data-dashboard-panel='channels'] .channel-row input").forEach(setInputState);
     syncWelcomePreview();
     renderReactionPreview();
   }
 
   async function loadSelectedGuildConfig(guildId) {
     try {
+      await loadDashboardResources(guildId);
       const data = await modbotApiFetch(`/api/guilds/${guildId}/config`, { cache: "no-store" });
       applyDashboardConfig(data.config);
       showToast("✅ Configuration chargée depuis le bot");
@@ -1700,6 +1891,7 @@ function initDashboard() {
       return {
         emoji: inputs[0]?.value || "✨",
         role: inputs[1]?.value || "",
+        role_id: inputs[1]?.value || "",
         label: inputs[2]?.value || "",
       };
     });
@@ -1748,14 +1940,20 @@ function initDashboard() {
       },
       welcome_system: {
         enabled: Boolean(document.querySelector("[data-dashboard-panel='welcome'] .toggle-line input")?.checked),
-        departure_enabled: Boolean(document.querySelectorAll("[data-dashboard-panel='welcome'] .toggle-line input")[1]?.checked),
+        dm_enabled: Boolean(document.querySelector("[data-welcome-dm-enabled]")?.checked),
+        departure_enabled: Boolean(document.querySelectorAll("[data-dashboard-panel='welcome'] .toggle-line input")[2]?.checked),
         channel_id: document.querySelector("[data-welcome-channel]")?.value || "",
         message: document.querySelector("[data-welcome-message]")?.value || "",
+        dm_message: document.querySelector("[data-welcome-dm-message]")?.value || "",
         departure_message: document.querySelector("[data-departure-message]")?.value || "",
         background: document.querySelector("[data-welcome-bg]")?.value || "",
         font: document.querySelector("[data-welcome-font]")?.value || "Inter",
         color: document.querySelector("[data-welcome-color]")?.value || "#ffffff",
       },
+      reaction_title: document.querySelector("[data-reaction-title]")?.value || "Choisis tes rôles",
+      reaction_description: document.querySelector("[data-reaction-description]")?.value || "",
+      reaction_roles_channel_id: document.querySelector("[data-reaction-channel]")?.value || "",
+      reaction_roles_mode: document.querySelector("[data-reaction-mode]")?.value || "Plusieurs rôles possibles",
       reaction_roles: reactionRoles,
       recurring_messages: recurringMessages,
       social_relays: socialRelays,
@@ -1854,7 +2052,7 @@ function initDashboard() {
     showToast(removed ? `🗑️ ${removed.name} retiré du Premium` : "🗑️ Emplacement libéré");
   }
 
-  function setCurrentServer(serverName, serverLogo = "assets/default_logo.png", initials = "MB", serverId = "") {
+  function setCurrentServer(serverName, serverLogo = "logo.png", initials = "MB", serverId = "") {
     selectedServer = {
       id: serverId,
       name: serverName,
@@ -1906,6 +2104,10 @@ function initDashboard() {
     }
     if (dirtyPanelName === "tournaments") {
       saveTournamentConfig();
+    }
+    if (!selectedServer.id && dirtyPanelName !== "premium" && dirtyPanelName !== "tournaments") {
+      showToast("🔗 Le serveur actif n'est pas relié au bot : reconnecte-toi via Discord");
+      return false;
     }
     let savedToApi = false;
     try {
@@ -1973,7 +2175,7 @@ function initDashboard() {
     const serverCard = event.target.closest(".server-card[data-server-name]");
     if (!serverCard) return;
     const cardLogo = serverCard.querySelector("[data-logo-img]");
-    const loadedLogo = cardLogo?.currentSrc || cardLogo?.src || serverCard.dataset.serverLogo || "assets/default_logo.png";
+    const loadedLogo = cardLogo?.currentSrc || cardLogo?.src || serverCard.dataset.serverLogo || "logo.png";
     const initials = serverCard.dataset.serverInitials || serverCard.dataset.serverName?.slice(0, 2).toUpperCase() || "MB";
     const guildId = serverCard.dataset.serverId || "";
     setCurrentServer(serverCard.dataset.serverName || "Serveur ModBot", loadedLogo, initials, guildId);
@@ -1996,7 +2198,7 @@ function initDashboard() {
     if (!choice) return;
     addPremiumServer({
       name: choice.dataset.serverName || "Serveur ModBot",
-      logo: choice.dataset.serverLogo || "assets/default_logo.png",
+      logo: choice.dataset.serverLogo || "logo.png",
       initials: choice.dataset.serverInitials || "MB",
       id: choice.dataset.serverId || ""
     });
@@ -2119,10 +2321,16 @@ function initDashboard() {
   panels.forEach((panel) => {
     const panelName = panel.dataset.dashboardPanel;
     panel.addEventListener("input", (event) => {
-      if (event.target.matches("input, textarea, select")) markPanelDirty(panelName);
+      if (event.target.matches("input, textarea, select")) {
+        if (event.target.closest(".channel-row")) setInputState(event.target);
+        markPanelDirty(panelName);
+      }
     });
     panel.addEventListener("change", (event) => {
-      if (event.target.matches("input, textarea, select")) markPanelDirty(panelName);
+      if (event.target.matches("input, textarea, select")) {
+        if (event.target.closest(".channel-row")) setInputState(event.target);
+        markPanelDirty(panelName);
+      }
     });
   });
 
@@ -2206,7 +2414,7 @@ function initDashboard() {
   publishTicketButton?.addEventListener("click", async () => {
     const channel = ticketChannelInput?.value.trim() || "salon ticket désigné";
     if (!selectedServer.id) {
-      showToast("🔗 Sélectionne un serveur connecté au bot avant de publier");
+      showToast("🔗 Le serveur actif n'est pas encore relié au bot côté dashboard");
       return;
     }
     if (hasUnsavedChanges) {
@@ -2226,6 +2434,29 @@ function initDashboard() {
     setTicketPublishVisible(false);
     if (dirtyPanelName === "tickets") clearUnsavedChanges();
     showToast(`🚀 Message ticket publié dans le salon ${channel}`);
+  });
+
+  document.querySelector("[data-publish-reaction-roles]")?.addEventListener("click", async () => {
+    const channel = document.querySelector("[data-reaction-channel]")?.value.trim();
+    if (!selectedServer.id) {
+      showToast("🔗 Le serveur actif n'est pas encore relié au bot côté dashboard");
+      return;
+    }
+    if (!channel) {
+      showToast("⚠️ Choisis le salon des rôles réactions");
+      return;
+    }
+    const saved = await saveCurrentChanges("💾 Rôles réactions enregistrés");
+    if (!saved) return;
+    try {
+      await modbotApiFetch(`/api/guilds/${selectedServer.id}/reaction-roles/publish`, {
+        method: "POST",
+        body: JSON.stringify(collectDashboardConfig())
+      });
+      showToast(`🚀 Message rôles réactions publié dans le salon ${channel}`);
+    } catch (error) {
+      showToast("⚠️ Publication rôles réactions impossible");
+    }
   });
 
   const welcomeMessageInput = document.querySelector("[data-welcome-message]");
@@ -2307,7 +2538,7 @@ function initDashboard() {
     row.innerHTML = `
       <span>${String(count).padStart(2, "0")}</span>
       <input class="emoji-input" type="text" value="✨" maxlength="3">
-      <input type="text" value="@Nouveau rôle">
+      <input type="text" value="" placeholder="ID du rôle ou @rôle" list="dashboardRoleOptions">
       <input type="text" value="Nouveau rôle">
       <button type="button">Supprimer</button>
     `;
@@ -2385,7 +2616,7 @@ function initDashboard() {
     showToast(`✅ Message récurrent "${name}" créé`);
   });
 
-  document.querySelector("[data-recurring-list]")?.addEventListener("click", (event) => {
+  document.querySelector("[data-recurring-list]")?.addEventListener("click", async (event) => {
     const button = event.target.closest("[data-recurring-remove]");
     if (!button) return;
     const list = button.closest("[data-recurring-list]");
@@ -2397,7 +2628,11 @@ function initDashboard() {
       list.append(empty);
     }
     markPanelDirty("recurring");
-    showToast("🗑️ Message récurrent supprimé");
+    if (selectedServer.id) {
+      await saveCurrentChanges("🗑️ Message récurrent supprimé du bot");
+    } else {
+      showToast("🗑️ Message récurrent supprimé localement");
+    }
   });
 
   document.querySelector("[data-recurring-recover]")?.addEventListener("click", () => {
@@ -2428,14 +2663,30 @@ function initDashboard() {
       showToast(enabled.checked ? `📣 Relais ${platform} activé` : `⚪ Relais ${platform} désactivé`);
     });
 
-    testButton?.addEventListener("click", () => {
+    testButton?.addEventListener("click", async () => {
       const link = linkInput?.value.trim();
       const channel = channelInput?.value.trim();
       if (!link || !channel) {
         showToast(`⚠️ Ajoute le lien ${platform} et l'ID du salon`);
         return;
       }
-      showToast(`🧪 Test ${platform} envoyé dans le salon ${channel}`);
+      if (!selectedServer.id) {
+        showToast("🔗 Le serveur actif n'est pas encore relié au bot côté dashboard");
+        return;
+      }
+      if (hasUnsavedChanges && dirtyPanelName === "socials") {
+        const saved = await saveCurrentChanges(`💾 Relais ${platform} enregistré`);
+        if (!saved) return;
+      }
+      try {
+        await modbotApiFetch(`/api/guilds/${selectedServer.id}/socials/test`, {
+          method: "POST",
+          body: JSON.stringify({ platform, link, channel_id: channel })
+        });
+        showToast(`🧪 Test ${platform} envoyé dans le salon ${channel}`);
+      } catch (error) {
+        showToast(`⚠️ Test ${platform} impossible : connexion bot indisponible`);
+      }
     });
   });
 
@@ -2511,6 +2762,14 @@ function initDashboard() {
   personalizationFooter?.addEventListener("input", () => {
     if (personalizationPreviewFooter) {
       personalizationPreviewFooter.textContent = personalizationFooter.value || personalizationDefaults.footer;
+    }
+  });
+
+  document.querySelector("[data-apply-personalization]")?.addEventListener("click", async () => {
+    markPanelDirty("personalization");
+    const saved = await saveCurrentChanges("🎨 Personnalisation appliquée sur le serveur actif");
+    if (saved) {
+      personalizationAssets = { logo: "", banner: "" };
     }
   });
 
