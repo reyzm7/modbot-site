@@ -131,11 +131,21 @@
                 <span data-i18n="admin.premium.duration">Durée</span>
                 <select data-premium-duration>
                   <option value="48 heures - Gratuit">48 heures - Gratuit 1 serveur</option>
+                  <option value="Partenaire à vie">Partenaire - 1 serveur à vie</option>
                   <option value="2 mois">2 mois - Premium 15€</option>
                   <option value="3 mois">3 mois - Ultra Premium 35€</option>
                   <option value="1 an">1 an</option>
                   <option value="Permanent">Permanent</option>
                   <option value="custom">Durée personnalisée</option>
+                </select>
+              </label>
+              <label>
+                <span>Offre</span>
+                <select data-premium-plan>
+                  <option value="free">Gratuit 48h - 1 serveur</option>
+                  <option value="partner">Partenaire - 1 serveur à vie</option>
+                  <option value="premium">Premium - 3 serveurs</option>
+                  <option value="ultra">Ultra Premium - 5 serveurs</option>
                 </select>
               </label>
               <div class="premium-custom-duration" data-premium-custom-duration hidden>
@@ -221,9 +231,9 @@
             </div>
             <p data-i18n="admin.servers.copy">Quand le backend sera branché au bot Discord, cette zone affichera automatiquement les logos réels des serveurs via les données `bot.guilds`.</p>
             <div class="admin-server-list" data-admin-server-list>
-              <div><span class="server-logo-shell" data-initials="HB"><img src="assets/default_logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong>Hote BOT - ModBot</strong><small>Logo serveur synchronisable</small></span></div>
-              <div><span class="server-logo-shell" data-initials="VPG"><img src="assets/default_logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong>VPG Belgique</strong><small>Logo serveur synchronisable</small></span></div>
-              <div><span class="server-logo-shell" data-initials="ST"><img src="assets/default_logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong>Serveur test</strong><small>Logo serveur synchronisable</small></span></div>
+              <div><span class="server-logo-shell" data-initials="HB"><img src="logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong>Hote BOT - ModBot</strong><small>Logo serveur synchronisable</small></span></div>
+              <div><span class="server-logo-shell" data-initials="VPG"><img src="logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong>VPG Belgique</strong><small>Logo serveur synchronisable</small></span></div>
+              <div><span class="server-logo-shell" data-initials="ST"><img src="logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong>Serveur test</strong><small>Logo serveur synchronisable</small></span></div>
             </div>
           </article>
         </section>
