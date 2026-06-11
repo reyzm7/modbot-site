@@ -151,7 +151,7 @@
           <article class="metric-card"><span>🎫 Tickets</span><strong>Actif</strong><small>4 catégories configurées</small></article>
           <article class="metric-card"><span>🛡️ Sécurité</span><strong>3/5</strong><small>Modules actifs</small></article>
           <article class="metric-card"><span>🏆 Tournois</span><strong data-tournament-overview-state>En attente</strong><small>API IFC requise</small></article>
-          <article class="metric-card"><span>⭐ Ratings</span><strong>4.8/5</strong><small>24 évaluations</small></article>
+          <article class="metric-card"><span>⭐ Ratings</span><strong data-overview-rating-average>0.00/5</strong><small><span data-overview-rating-count>0</span> évaluations réelles</small></article>
         </div>
 
         <div class="dashboard-grid two">
@@ -329,6 +329,7 @@
 
         <div class="toggle-grid">
           <label class="toggle-line"><input type="checkbox" checked><span></span><strong>🔗 Anti-lien</strong><small>Bloque les liens et invitations Discord.</small></label>
+          <label class="toggle-line"><input type="checkbox" checked data-security-insultes><span></span><strong>🚫 Filtre insultes</strong><small>Active ou désactive les avertissements automatiques sur les mots interdits.</small></label>
           <label class="toggle-line"><input type="checkbox" checked><span></span><strong>💬 Anti-spam</strong><small>Détecte les messages trop rapides.</small></label>
           <label class="toggle-line"><input type="checkbox"><span></span><strong>🚨 Anti-raid</strong><small>Surveille les arrivées suspectes.</small></label>
           <label class="toggle-line"><input type="checkbox"><span></span><strong>📣 Staff alert</strong><small>Préviens le staff des actions importantes.</small></label>
@@ -414,7 +415,13 @@
                   <small data-welcome-member-name>nom du membre</small>
                 </div>
               </div>
-              <p class="departure-preview" data-departure-live-message>Au revoir nom du membre.</p>
+              <div class="welcome-card departure-card" data-departure-card>
+                <img class="welcome-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Photo de profil du membre">
+                <div>
+                  <strong>AU REVOIR</strong>
+                  <small data-departure-member-name>nom du membre</small>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -434,6 +441,12 @@
                 <option value="Arial Black">Arial Black</option>
                 <option value="Trebuchet MS">Trebuchet MS</option>
                 <option value="Georgia">Georgia</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Impact">Impact</option>
+                <option value="Tahoma">Tahoma</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Montserrat">Montserrat</option>
+                <option value="Poppins">Poppins</option>
               </select>
             </label>
             <label>Couleur du titre
@@ -604,23 +617,6 @@
 
         <div class="dashboard-grid two">
           <form class="tool-panel form-panel">
-            <label>Nom affiché serveur
-              <input type="text" value="ModBot" data-personalization-name>
-            </label>
-            <label class="file-field">Logo embed
-              <input type="file" accept="image/*" data-file-input="logo">
-              <span class="file-control">
-                <span class="file-button">Choisir un logo</span>
-                <span class="file-name" data-file-name>Aucun fichier sélectionné</span>
-              </span>
-            </label>
-            <label class="file-field">Bannière embed
-              <input type="file" accept="image/*" data-file-input="banner">
-              <span class="file-control">
-                <span class="file-button">Choisir une bannière</span>
-                <span class="file-name" data-file-name>Aucun fichier sélectionné</span>
-              </span>
-            </label>
             <label>Footer
               <input type="text" value="ModBot - Protection de votre communauté" data-personalization-footer>
             </label>
@@ -804,7 +800,7 @@
 
         <div class="tool-panel social-info">
           <strong>🔔 Principe</strong>
-          <p>Ajoute le lien du compte et l’ID du salon Discord. Quand ce module sera branché au bot, chaque nouveau post sera relayé automatiquement dans le salon choisi pour la plateforme.</p>
+          <p>Ajoute le lien du compte et l’ID du salon Discord. Le bot surveille la plateforme et poste une annonce dans ce salon dès qu’un nouveau contenu est détecté ou lorsqu’un test est lancé.</p>
         </div>
 
         <div class="social-grid">
