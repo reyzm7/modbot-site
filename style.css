@@ -3068,6 +3068,24 @@ main,
   line-height: 1.45;
 }
 
+.server-card.is-uninstalled {
+  opacity: 0.92;
+  border-style: dashed;
+}
+
+.server-card.is-uninstalled small {
+  color: #d0c5ff;
+}
+
+.dash-nav.is-locked {
+  opacity: 0.48;
+}
+
+.dash-nav.is-locked::after {
+  content: "🔒";
+  margin-left: auto;
+}
+
 .discord-login-btn:hover,
 .server-card:hover {
   transform: translateY(-3px);
@@ -3567,6 +3585,11 @@ main,
 .premium-choice-card small {
   margin-top: 4px;
   color: var(--muted);
+}
+
+.premium-choice-card.is-uninstalled {
+  opacity: 0.82;
+  border-style: dashed;
 }
 
 .premium-choice-card.is-associated::after {
@@ -4202,6 +4225,14 @@ main,
   font-weight: 900;
   text-shadow: 0 3px 12px rgba(0, 0, 0, 0.46);
 }
+
+.departure-card {
+  min-height: 180px;
+  background:
+    linear-gradient(90deg, rgba(70, 15, 32, 0.58), rgba(42, 94, 255, 0.62)),
+    url("assets/default_banner.png") center / cover;
+}
+
 
 .reaction-role-list,
 .recurring-list {
