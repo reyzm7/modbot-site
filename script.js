@@ -759,7 +759,7 @@ function makeOAuthState(prefix = "modbot") {
   return state;
 }
 
-function buildDiscordOAuthUrl(mode = "login") {
+function buildDiscordOAuthUrl(mode = "login", guildId = "") {
   if (!modbotDiscordClientId) return "";
   const params = new URLSearchParams({ client_id: modbotDiscordClientId });
   if (mode === "invite") {
@@ -768,6 +768,10 @@ function buildDiscordOAuthUrl(mode = "login") {
     params.set("permissions", modbotBotPermissions);
     params.set("scope", "bot applications.commands identify guilds email");
     params.set("state", makeOAuthState("invite"));
+    if (guildId) {
+      params.set("guild_id", guildId);
+      params.set("disable_guild_select", "true");
+    }
   } else {
     params.set("response_type", "code");
     params.set("redirect_uri", modbotLoginRedirectUri || currentCleanUrl());
@@ -838,8 +842,8 @@ function initApiBridgeFromUrl() {
       return;
     }
     sessionStorage.removeItem("modbot-oauth-state");
-    sessionStorage.setItem("modbot-direct-oauth-ok", "1");
-    console.warn("Code OAuth Discord recu. Branche le callback backend ModBot pour finaliser la session dashboard.");
+    sessionStorage.setItem("modbot-login-error", "oauth_backend_required");
+    console.warn("Code OAuth Discord recu sans session. Utilise /api/auth/discord/login du backend ModBot pour finaliser la connexion.");
     history.replaceState(null, "", location.pathname);
   }
   if (loginError) {
@@ -1275,14 +1279,12 @@ function initDashboard() {
   };
   const premiumTierLabels = {
     free: "Gratuit 48h",
-    partner: "Partenaire à vie",
+    partner: "Collaborateur / partenaire",
     premium: "Premium",
     ultra: "Ultra Premium"
   };
-  let personalizationAssets = {
-    logo: "",
-    banner: ""
-  };
+  const freePanels = new Set(["overview", "premium", "security", "channels", "moderation", "language"]);
+  const premiumPanels = new Set(["overview", "premium", "tickets", "security", "channels", "reactionroles", "moderation", "language", "tournaments", "socials", "ratings", "logs"]);
   const IFC_TOURNAMENT_API_READY = false;
   let activePanelName = "overview";
   let hasUnsavedChanges = false;
@@ -1294,7 +1296,8 @@ function initDashboard() {
     id: "",
     name: "Hote BOT - ModBot",
     logo: "logo.png",
-    initials: "HB"
+    initials: "HB",
+    installed: false
   };
   let dashboardGuilds = [];
   let dashboardResources = { channels: [], roles: [] };
@@ -1371,6 +1374,22 @@ function initDashboard() {
 
   function getPremiumLimit() {
     return premiumTierLimits[getPremiumTier()] || 1;
+  }
+
+  function isPanelAllowed(panelName) {
+    const tier = getPremiumTier();
+    if (tier === "ultra" || tier === "partner") return true;
+    if (tier === "premium") return premiumPanels.has(panelName);
+    return freePanels.has(panelName);
+  }
+
+  function applyPanelAccess() {
+    tabs.forEach((tab) => {
+      const locked = !isPanelAllowed(tab.dataset.dashboardTab);
+      tab.classList.toggle("is-locked", locked);
+      tab.setAttribute("aria-disabled", locked ? "true" : "false");
+      tab.title = locked ? "Rubrique réservée à une offre supérieure" : "";
+    });
   }
 
   function savePremiumState() {
@@ -1555,11 +1574,15 @@ function initDashboard() {
     const ticketTarget = document.querySelector("[data-rating-ticket-count]");
     const lastTarget = document.querySelector("[data-rating-last]");
     const labelTarget = document.querySelector("[data-rating-label]");
+    const overviewAverageTarget = document.querySelector("[data-overview-rating-average]");
+    const overviewCountTarget = document.querySelector("[data-overview-rating-count]");
     if (averageTarget) averageTarget.textContent = `${average.toFixed(2)}/5`;
     if (countTarget) countTarget.textContent = String(count);
     if (ticketTarget) ticketTarget.textContent = String(tickets.total || 0);
     if (lastTarget) lastTarget.textContent = last ? `${last.note || "?"}/5` : "—";
     if (labelTarget) labelTarget.textContent = count ? "Stats réelles du bot" : "Aucune note réelle";
+    if (overviewAverageTarget) overviewAverageTarget.textContent = `${average.toFixed(2)}/5`;
+    if (overviewCountTarget) overviewCountTarget.textContent = String(count);
 
     const logFeed = document.querySelector("[data-dashboard-log-feed]");
     if (logFeed) {
@@ -1593,13 +1616,13 @@ function initDashboard() {
     const serverGrid = document.querySelector(".server-grid");
     if (!serverGrid || !Array.isArray(guilds) || !guilds.length) return;
     serverGrid.innerHTML = guilds.map((guild) => `
-      <button class="server-card" type="button" data-server-name="${escapeHtml(guild.name)}" data-server-id="${escapeHtml(guild.id)}" data-server-logo="${escapeHtml(guild.icon || "logo.png")}" data-server-initials="${escapeHtml(guild.initials || "MB")}">
+      <button class="server-card ${guild.installed ? "is-installed" : "is-uninstalled"}" type="button" data-server-name="${escapeHtml(guild.name)}" data-server-id="${escapeHtml(guild.id)}" data-server-logo="${escapeHtml(guild.logo || guild.icon || "logo.png")}" data-server-initials="${escapeHtml(guild.initials || "MB")}" data-server-installed="${guild.installed ? "true" : "false"}">
         <span class="server-logo-shell" data-initials="${escapeHtml(guild.initials || "MB")}">
-          <img class="server-logo" src="${escapeHtml(guild.icon || "logo.png")}" alt="" data-logo-img>
+          <img class="server-logo" src="${escapeHtml(guild.logo || guild.icon || "logo.png")}" alt="" data-logo-img>
         </span>
         <span>
           <strong>${escapeHtml(guild.name)}</strong>
-          <small>ID ${escapeHtml(guild.id)}</small>
+          <small>${guild.installed ? `ID ${escapeHtml(guild.id)}` : "Installer ModBot sur ce serveur"}</small>
         </span>
       </button>
     `).join("");
@@ -1610,9 +1633,9 @@ function initDashboard() {
     const grid = document.querySelector(".premium-choice-grid");
     if (!grid || !Array.isArray(guilds) || !guilds.length) return;
     grid.innerHTML = guilds.map((guild) => `
-      <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="${escapeHtml(guild.name)}" data-server-id="${escapeHtml(guild.id)}" data-server-logo="${escapeHtml(guild.icon || "logo.png")}" data-server-initials="${escapeHtml(guild.initials || "MB")}">
-        <span class="server-logo-shell" data-initials="${escapeHtml(guild.initials || "MB")}"><img src="${escapeHtml(guild.icon || "logo.png")}" alt="" data-logo-img></span>
-        <span><strong>${escapeHtml(guild.name)}</strong><small>ID ${escapeHtml(guild.id)}</small></span>
+      <button class="premium-choice-card ${guild.installed ? "is-installed" : "is-uninstalled"}" type="button" data-premium-server-choice data-server-name="${escapeHtml(guild.name)}" data-server-id="${escapeHtml(guild.id)}" data-server-logo="${escapeHtml(guild.logo || guild.icon || "logo.png")}" data-server-initials="${escapeHtml(guild.initials || "MB")}" data-server-installed="${guild.installed ? "true" : "false"}">
+        <span class="server-logo-shell" data-initials="${escapeHtml(guild.initials || "MB")}"><img src="${escapeHtml(guild.logo || guild.icon || "logo.png")}" alt="" data-logo-img></span>
+        <span><strong>${escapeHtml(guild.name)}</strong><small>${guild.installed ? `ID ${escapeHtml(guild.id)}` : "Serveur à inviter"}</small></span>
       </button>
     `).join("");
     setupLogoFallbacks();
@@ -1647,12 +1670,7 @@ function initDashboard() {
       window.location.href = `${base}/api/auth/discord/login?redirect=${encodeURIComponent(currentCleanUrl())}`;
       return;
     }
-    const oauthUrl = buildDiscordOAuthUrl("login");
-    if (!oauthUrl) {
-      showToast("⚠️ Client ID Discord manquant pour ouvrir la connexion");
-      return;
-    }
-    window.location.href = oauthUrl;
+    showToast("⚠️ URL API ModBot manquante : ajoute modbot-api-url au dashboard");
   }
 
   function applyDashboardConfig(config) {
@@ -1700,6 +1718,7 @@ function initDashboard() {
     const securityToggles = document.querySelectorAll("[data-dashboard-panel='security'] .toggle-line input");
     [
       security.antilink,
+      security.insultes_enabled ?? true,
       security.antispam,
       security.antiraid,
       security.staff_alert,
@@ -1711,19 +1730,12 @@ function initDashboard() {
       }
     });
 
-    const personalizationName = document.querySelector("[data-personalization-name]");
     const personalizationFooter = document.querySelector("[data-personalization-footer]");
-    if (personalizationName && personalization.name) personalizationName.value = personalization.name;
     if (personalizationFooter && personalization.footer) personalizationFooter.value = personalization.footer;
     const personalizationPreviewTitle = document.querySelector("[data-personalization-preview-title]");
     const personalizationPreviewFooter = document.querySelector("[data-personalization-preview-footer]");
-    if (personalizationPreviewTitle) personalizationPreviewTitle.textContent = `${personalization.name || "ModBot"} - Panel`;
+    if (personalizationPreviewTitle) personalizationPreviewTitle.textContent = `Panel ModBot`;
     if (personalizationPreviewFooter) personalizationPreviewFooter.textContent = personalization.footer || "ModBot - Protection de votre communauté";
-    const personalizationLogo = document.querySelector("[data-dashboard-panel='personalization'] .embed-thumb img");
-    const personalizationBanner = document.querySelector("[data-dashboard-panel='personalization'] .preview-banner");
-    if (personalizationLogo && personalization.logo) personalizationLogo.src = personalization.logo;
-    if (personalizationBanner && personalization.banner) personalizationBanner.src = personalization.banner;
-    personalizationAssets = { logo: "", banner: "" };
 
     const welcomeMessage = document.querySelector("[data-welcome-message]");
     const departureMessage = document.querySelector("[data-departure-message]");
@@ -1734,6 +1746,8 @@ function initDashboard() {
     const welcomeToggles = document.querySelectorAll("[data-dashboard-panel='welcome'] .toggle-line input");
     const welcomeDmEnabled = document.querySelector("[data-welcome-dm-enabled]");
     const welcomeDmMessage = document.querySelector("[data-welcome-dm-message]");
+    const departureMemberName = document.querySelector("[data-departure-member-name]");
+    const departureCard = document.querySelector("[data-departure-card]");
     if (welcomeToggles[0]) {
       welcomeToggles[0].checked = Boolean(welcome.enabled);
       welcomeToggles[0].closest(".toggle-line")?.classList.toggle("is-on", Boolean(welcome.enabled));
@@ -1753,6 +1767,10 @@ function initDashboard() {
     if (welcomeBg && welcome.background) welcomeBg.value = welcome.background;
     if (welcomeFont && welcome.font) welcomeFont.value = welcome.font;
     if (welcomeColor && welcome.color) welcomeColor.value = welcome.color;
+    if (departureMemberName) departureMemberName.textContent = departureMessage?.value || "nom du membre";
+    if (departureCard && welcome.background) {
+      departureCard.style.backgroundImage = `linear-gradient(90deg, rgba(19, 15, 70, 0.58), rgba(42, 94, 255, 0.72)), url("${welcome.background}")`;
+    }
 
     if (config.language) {
       const languageSelect = document.querySelector("[data-dashboard-panel='language'] select");
@@ -1917,10 +1935,11 @@ function initDashboard() {
       },
       security: {
         antilink: Boolean(securityToggles[0]?.checked),
-        antispam: Boolean(securityToggles[1]?.checked),
-        antiraid: Boolean(securityToggles[2]?.checked),
-        staff_alert: Boolean(securityToggles[3]?.checked),
-        lockdown: Boolean(securityToggles[4]?.checked),
+        insultes_enabled: Boolean(securityToggles[1]?.checked),
+        antispam: Boolean(securityToggles[2]?.checked),
+        antiraid: Boolean(securityToggles[3]?.checked),
+        staff_alert: Boolean(securityToggles[4]?.checked),
+        lockdown: Boolean(securityToggles[5]?.checked),
       },
       tickets: {
         author: document.querySelector("[data-preview-author]")?.value || "ModBot Ticket System",
@@ -1932,10 +1951,7 @@ function initDashboard() {
         options: ticketOptions,
       },
       personalization: {
-        name: document.querySelector("[data-personalization-name]")?.value || "ModBot",
         footer: document.querySelector("[data-personalization-footer]")?.value || "",
-        logo: personalizationAssets.logo,
-        banner: personalizationAssets.banner,
         color: document.querySelector(".color-swatch.is-selected")?.dataset.color || "#5865F2",
       },
       welcome_system: {
@@ -1966,7 +1982,7 @@ function initDashboard() {
   }
 
   async function saveDashboardConfigToApi() {
-    if (!selectedServer.id) return false;
+    if (!selectedServer.id || !selectedServer.installed) return false;
     await modbotApiFetch(`/api/guilds/${selectedServer.id}/config`, {
       method: "PUT",
       body: JSON.stringify(collectDashboardConfig())
@@ -2024,6 +2040,7 @@ function initDashboard() {
       choice.classList.toggle("is-associated", associated);
       choice.setAttribute("aria-pressed", associated ? "true" : "false");
     });
+    applyPanelAccess();
   }
 
   function addPremiumServer(server) {
@@ -2052,12 +2069,13 @@ function initDashboard() {
     showToast(removed ? `🗑️ ${removed.name} retiré du Premium` : "🗑️ Emplacement libéré");
   }
 
-  function setCurrentServer(serverName, serverLogo = "logo.png", initials = "MB", serverId = "") {
+  function setCurrentServer(serverName, serverLogo = "logo.png", initials = "MB", serverId = "", installed = false) {
     selectedServer = {
       id: serverId,
       name: serverName,
       logo: serverLogo,
-      initials
+      initials,
+      installed: Boolean(installed)
     };
     currentServerTargets.forEach((target) => {
       target.textContent = serverName;
@@ -2105,7 +2123,7 @@ function initDashboard() {
     if (dirtyPanelName === "tournaments") {
       saveTournamentConfig();
     }
-    if (!selectedServer.id && dirtyPanelName !== "premium" && dirtyPanelName !== "tournaments") {
+    if ((!selectedServer.id || !selectedServer.installed) && dirtyPanelName !== "premium" && dirtyPanelName !== "tournaments") {
       showToast("🔗 Le serveur actif n'est pas relié au bot : reconnecte-toi via Discord");
       return false;
     }
@@ -2116,7 +2134,7 @@ function initDashboard() {
       showToast("⚠️ Connexion bot indisponible, sauvegarde non envoyée");
       return false;
     }
-    if (selectedServer.id && !savedToApi) {
+    if (selectedServer.installed && !savedToApi) {
       showToast("🔗 Connecte-toi avec Discord pour enregistrer ce serveur");
       return false;
     }
@@ -2153,6 +2171,10 @@ function initDashboard() {
   }
 
   function openPanel(panelName) {
+    if (!isPanelAllowed(panelName)) {
+      showToast("🔒 Cette rubrique demande une offre supérieure");
+      return;
+    }
     activePanelName = panelName;
     tabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.dashboardTab === panelName));
     panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.dashboardPanel === panelName));
@@ -2178,7 +2200,18 @@ function initDashboard() {
     const loadedLogo = cardLogo?.currentSrc || cardLogo?.src || serverCard.dataset.serverLogo || "logo.png";
     const initials = serverCard.dataset.serverInitials || serverCard.dataset.serverName?.slice(0, 2).toUpperCase() || "MB";
     const guildId = serverCard.dataset.serverId || "";
-    setCurrentServer(serverCard.dataset.serverName || "Serveur ModBot", loadedLogo, initials, guildId);
+    const installed = serverCard.dataset.serverInstalled === "true";
+    if (!installed) {
+      const inviteUrl = buildDiscordOAuthUrl("invite", guildId);
+      if (inviteUrl) {
+        window.open(inviteUrl, "_blank", "noreferrer");
+        showToast(`➕ Invite ModBot sur ${serverCard.dataset.serverName}`);
+      } else {
+        showToast("⚠️ Lien d'invitation Discord indisponible");
+      }
+      return;
+    }
+    setCurrentServer(serverCard.dataset.serverName || "Serveur ModBot", loadedLogo, initials, guildId, true);
     showDashboardStage("dashboard");
     showToast(`✅ Serveur sélectionné : ${serverCard.dataset.serverName}`);
     if (guildId) {
@@ -2196,11 +2229,22 @@ function initDashboard() {
   document.querySelector(".premium-choice-grid")?.addEventListener("click", (event) => {
     const choice = event.target.closest("[data-premium-server-choice]");
     if (!choice) return;
+    if (choice.dataset.serverInstalled !== "true") {
+      const inviteUrl = buildDiscordOAuthUrl("invite", choice.dataset.serverId || "");
+      if (inviteUrl) {
+        window.open(inviteUrl, "_blank", "noreferrer");
+        showToast(`➕ Invite ModBot sur ${choice.dataset.serverName}`);
+      } else {
+        showToast("⚠️ Lien d'invitation Discord indisponible");
+      }
+      return;
+    }
     addPremiumServer({
       name: choice.dataset.serverName || "Serveur ModBot",
       logo: choice.dataset.serverLogo || "logo.png",
       initials: choice.dataset.serverInitials || "MB",
-      id: choice.dataset.serverId || ""
+      id: choice.dataset.serverId || "",
+      installed: true
     });
   });
 
@@ -2250,10 +2294,10 @@ function initDashboard() {
 
   setupLogoFallbacks();
 
-  if (sessionStorage.getItem("modbot-direct-oauth-ok") === "1") {
-    sessionStorage.removeItem("modbot-direct-oauth-ok");
-    showDashboardStage("servers");
-    showToast("✅ Connexion Discord reçue");
+  if (sessionStorage.getItem("modbot-login-error") === "oauth_backend_required") {
+    sessionStorage.removeItem("modbot-login-error");
+    showDashboardStage("auth");
+    showToast("⚠️ Connexion Discord reçue, mais l'API ModBot doit finaliser la session");
   }
 
   tabs.forEach((tab) => {
@@ -2413,7 +2457,7 @@ function initDashboard() {
 
   publishTicketButton?.addEventListener("click", async () => {
     const channel = ticketChannelInput?.value.trim() || "salon ticket désigné";
-    if (!selectedServer.id) {
+    if (!selectedServer.id || !selectedServer.installed) {
       showToast("🔗 Le serveur actif n'est pas encore relié au bot côté dashboard");
       return;
     }
@@ -2438,7 +2482,7 @@ function initDashboard() {
 
   document.querySelector("[data-publish-reaction-roles]")?.addEventListener("click", async () => {
     const channel = document.querySelector("[data-reaction-channel]")?.value.trim();
-    if (!selectedServer.id) {
+    if (!selectedServer.id || !selectedServer.installed) {
       showToast("🔗 Le serveur actif n'est pas encore relié au bot côté dashboard");
       return;
     }
@@ -2467,6 +2511,8 @@ function initDashboard() {
   const welcomeLiveMessage = document.querySelector("[data-welcome-live-message]");
   const departureLiveMessage = document.querySelector("[data-departure-live-message]");
   const welcomeCard = document.querySelector("[data-welcome-card]");
+  const departureCard = document.querySelector("[data-departure-card]");
+  const departureMemberName = document.querySelector("[data-departure-member-name]");
 
   function syncWelcomePreview() {
     if (welcomeLiveMessage) {
@@ -2475,14 +2521,26 @@ function initDashboard() {
     if (departureLiveMessage) {
       departureLiveMessage.textContent = departureMessageInput?.value.trim() || "Au revoir nom du membre.";
     }
+    if (departureMemberName) {
+      departureMemberName.textContent = "nom du membre";
+    }
     if (welcomeCard && welcomeBgInput?.value.trim()) {
       welcomeCard.style.backgroundImage = `linear-gradient(90deg, rgba(19, 15, 70, 0.58), rgba(42, 94, 255, 0.72)), url("${welcomeBgInput.value.trim()}")`;
+    }
+    if (departureCard && welcomeBgInput?.value.trim()) {
+      departureCard.style.backgroundImage = `linear-gradient(90deg, rgba(70, 15, 32, 0.58), rgba(42, 94, 255, 0.62)), url("${welcomeBgInput.value.trim()}")`;
     }
     if (welcomeCard && welcomeFontSelect?.value) {
       welcomeCard.style.fontFamily = `${welcomeFontSelect.value}, Inter, sans-serif`;
     }
+    if (departureCard && welcomeFontSelect?.value) {
+      departureCard.style.fontFamily = `${welcomeFontSelect.value}, Inter, sans-serif`;
+    }
     if (welcomeCard && welcomeColorInput?.value) {
       welcomeCard.style.setProperty("--welcome-title-color", welcomeColorInput.value);
+    }
+    if (departureCard && welcomeColorInput?.value) {
+      departureCard.style.setProperty("--welcome-title-color", welcomeColorInput.value);
     }
   }
 
@@ -2628,7 +2686,7 @@ function initDashboard() {
       list.append(empty);
     }
     markPanelDirty("recurring");
-    if (selectedServer.id) {
+    if (selectedServer.id && selectedServer.installed) {
       await saveCurrentChanges("🗑️ Message récurrent supprimé du bot");
     } else {
       showToast("🗑️ Message récurrent supprimé localement");
@@ -2670,7 +2728,7 @@ function initDashboard() {
         showToast(`⚠️ Ajoute le lien ${platform} et l'ID du salon`);
         return;
       }
-      if (!selectedServer.id) {
+      if (!selectedServer.id || !selectedServer.installed) {
         showToast("🔗 Le serveur actif n'est pas encore relié au bot côté dashboard");
         return;
       }
@@ -2701,63 +2759,9 @@ function initDashboard() {
     });
   });
 
-  const personalization = document.querySelector("[data-dashboard-panel='personalization']");
-  const fileInputs = personalization ? personalization.querySelectorAll("input[type='file']") : [];
-  const liveLogo = personalization?.querySelector(".embed-thumb img");
-  const liveBanner = personalization?.querySelector(".preview-banner");
-  const personalizationName = document.querySelector("[data-personalization-name]");
   const personalizationFooter = document.querySelector("[data-personalization-footer]");
   const personalizationPreviewTitle = document.querySelector("[data-personalization-preview-title]");
   const personalizationPreviewFooter = document.querySelector("[data-personalization-preview-footer]");
-
-  function readFileAsDataUrl(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => resolve(String(reader.result || "")));
-      reader.addEventListener("error", () => reject(reader.error || new Error("Lecture impossible")));
-      reader.readAsDataURL(file);
-    });
-  }
-
-  fileInputs.forEach((input) => {
-    input.addEventListener("change", async () => {
-      const file = input.files?.[0];
-      const field = input.closest(".file-field");
-      const fileName = field?.querySelector("[data-file-name]");
-      if (fileName) fileName.textContent = file ? file.name : "Aucun fichier sélectionné";
-      if (!file) {
-        personalizationAssets[input.dataset.fileInput] = "";
-      } else if (file.size > 10 * 1024 * 1024) {
-        input.value = "";
-        if (fileName) fileName.textContent = "Fichier trop lourd";
-        showToast("⚠️ Image trop lourde : maximum 10 MB");
-        return;
-      } else {
-        try {
-          const dataUrl = await readFileAsDataUrl(file);
-          if (input.dataset.fileInput === "logo") {
-            personalizationAssets.logo = dataUrl;
-            if (liveLogo) liveLogo.src = dataUrl;
-          }
-          if (input.dataset.fileInput === "banner") {
-            personalizationAssets.banner = dataUrl;
-            if (liveBanner) liveBanner.src = dataUrl;
-          }
-        } catch (error) {
-          showToast("⚠️ Lecture du fichier impossible");
-          return;
-        }
-      }
-      markPanelDirty("personalization");
-      showToast(file ? "Fichier ajouté à l'aperçu" : "Aucun fichier sélectionné");
-    });
-  });
-
-  personalizationName?.addEventListener("input", () => {
-    if (personalizationPreviewTitle) {
-      personalizationPreviewTitle.textContent = `${personalizationName.value || personalizationDefaults.name} - Panel`;
-    }
-  });
 
   personalizationFooter?.addEventListener("input", () => {
     if (personalizationPreviewFooter) {
@@ -2767,26 +2771,13 @@ function initDashboard() {
 
   document.querySelector("[data-apply-personalization]")?.addEventListener("click", async () => {
     markPanelDirty("personalization");
-    const saved = await saveCurrentChanges("🎨 Personnalisation appliquée sur le serveur actif");
-    if (saved) {
-      personalizationAssets = { logo: "", banner: "" };
-    }
+    await saveCurrentChanges("🎨 Personnalisation appliquée sur le serveur actif");
   });
 
   document.querySelector("[data-cancel-personalization]")?.addEventListener("click", () => {
-    if (personalizationName) personalizationName.value = personalizationDefaults.name;
     if (personalizationFooter) personalizationFooter.value = personalizationDefaults.footer;
     if (personalizationPreviewTitle) personalizationPreviewTitle.textContent = "Panel ModBot";
     if (personalizationPreviewFooter) personalizationPreviewFooter.textContent = personalizationDefaults.footer;
-    if (liveLogo) liveLogo.src = personalizationDefaults.logo;
-    if (liveBanner) liveBanner.src = personalizationDefaults.banner;
-    personalizationAssets = { logo: "", banner: "" };
-    fileInputs.forEach((input) => {
-      input.value = "";
-      const field = input.closest(".file-field");
-      const fileName = field?.querySelector("[data-file-name]");
-      if (fileName) fileName.textContent = "Aucun fichier sélectionné";
-    });
     document.querySelectorAll(".color-swatch").forEach((item) => {
       const isDefault = item.dataset.color === personalizationDefaults.color;
       item.classList.toggle("is-selected", isDefault);
