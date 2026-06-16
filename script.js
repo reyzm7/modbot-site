@@ -56,17 +56,17 @@ const siteTranslations = {
     "pricing.free.item4": "Essai Premium 48h sur 1 serveur",
     "pricing.free.cta": "Choisir cette offre",
     "pricing.premium.title": "Offre Premium",
-    "pricing.premium.copy": "Pour associer jusqu’à 3 serveurs avec tickets, ratings et outils de gestion complets.",
+    "pricing.premium.copy": "Pour associer jusqu’à 3 serveurs avec rôles réactions, réseaux, ratings, tournois et logs.",
     "pricing.premium.period": "/ 2 mois",
     "pricing.premium.item1": "Modération complète",
     "pricing.premium.item2": "Ratings support",
     "pricing.premium.item3": "Logs et salons avancés",
-    "pricing.premium.item4": "Système de tickets",
+    "pricing.premium.item4": "Rôles réactions, réseaux et tournois",
     "pricing.premium.cta": "Choisir cette offre",
     "pricing.ultimate.title": "Ultra Premium",
     "pricing.ultimate.copy": "Jusqu’à 5 serveurs avec tout ModBot, accompagnement prioritaire et personnalisations dédiées.",
     "pricing.ultimate.period": "/ 3 mois",
-    "pricing.ultimate.item1": "Tout le Premium",
+    "pricing.ultimate.item1": "Tout le Premium + tickets",
     "pricing.ultimate.item2": "Support Discord prioritaire",
     "pricing.ultimate.item3": "Personnalisations juste pour vous",
     "pricing.ultimate.item4": "Accompagnement configuration avancée",
@@ -141,17 +141,17 @@ const siteTranslations = {
     "pricing.free.item4": "48-hour Premium trial on 1 server",
     "pricing.free.cta": "Choose this offer",
     "pricing.premium.title": "Premium offer",
-    "pricing.premium.copy": "Associate up to 3 servers with tickets, ratings and complete management tools.",
+    "pricing.premium.copy": "Associate up to 3 servers with reaction roles, socials, ratings, tournaments and logs.",
     "pricing.premium.period": "/ 2 months",
     "pricing.premium.item1": "Complete moderation",
     "pricing.premium.item2": "Support ratings",
     "pricing.premium.item3": "Advanced logs and channels",
-    "pricing.premium.item4": "Ticket system",
+    "pricing.premium.item4": "Reaction roles, socials and tournaments",
     "pricing.premium.cta": "Choose this offer",
     "pricing.ultimate.title": "Ultra Premium",
     "pricing.ultimate.copy": "Up to 5 servers with all of ModBot, priority support and dedicated customizations.",
     "pricing.ultimate.period": "/ 3 months",
-    "pricing.ultimate.item1": "Everything in Premium",
+    "pricing.ultimate.item1": "Everything in Premium + tickets",
     "pricing.ultimate.item2": "Priority Discord support",
     "pricing.ultimate.item3": "Customizations just for you",
     "pricing.ultimate.item4": "Advanced setup assistance",
@@ -226,17 +226,17 @@ const siteTranslations = {
     "pricing.free.item4": "تجربة Premium لمدة 48 ساعة على خادم واحد",
     "pricing.free.cta": "اختيار هذا العرض",
     "pricing.premium.title": "عرض Premium",
-    "pricing.premium.copy": "اربط حتى 3 خوادم مع التذاكر والتقييمات وأدوات الإدارة الكاملة.",
+    "pricing.premium.copy": "اربط حتى 3 خوادم مع أدوار التفاعل والشبكات والتقييمات والبطولات والسجلات.",
     "pricing.premium.period": "/ شهرين",
     "pricing.premium.item1": "إشراف كامل",
     "pricing.premium.item2": "تقييمات الدعم",
     "pricing.premium.item3": "سجلات وقنوات متقدمة",
-    "pricing.premium.item4": "نظام التذاكر",
+    "pricing.premium.item4": "أدوار التفاعل والشبكات والبطولات",
     "pricing.premium.cta": "اختيار هذا العرض",
     "pricing.ultimate.title": "Ultra Premium",
     "pricing.ultimate.copy": "حتى 5 خوادم مع كل ميزات ModBot ودعم أولوية وتخصيصات مخصصة لك.",
     "pricing.ultimate.period": "/ 3 أشهر",
-    "pricing.ultimate.item1": "كل ميزات Premium",
+    "pricing.ultimate.item1": "كل ميزات Premium + التذاكر",
     "pricing.ultimate.item2": "دعم Discord أولوية",
     "pricing.ultimate.item3": "تخصيصات خاصة بك",
     "pricing.ultimate.item4": "مساعدة إعداد متقدمة",
@@ -769,7 +769,7 @@ function buildDiscordOAuthUrl(mode = "login", guildId = "") {
   const params = new URLSearchParams({ client_id: modbotDiscordClientId });
   if (mode === "invite") {
     params.set("permissions", modbotBotPermissions);
-    params.set("scope", "bot applications.commands identify guilds email");
+    params.set("scope", "bot applications.commands");
     if (guildId) {
       params.set("guild_id", guildId);
       params.set("disable_guild_select", "true");
@@ -863,7 +863,14 @@ async function modbotApiFetch(path, options = {}) {
     let message = `Erreur connexion ModBot ${response.status}`;
     try {
       const text = await response.text();
-      if (text) message = text;
+      if (text) {
+        try {
+          const data = JSON.parse(text);
+          message = data.error || data.detail || data.message || text;
+        } catch (error) {
+          message = text;
+        }
+      }
     } catch (error) {
       // message par defaut
     }
@@ -903,6 +910,7 @@ function initApiBridgeFromUrl() {
     history.replaceState(null, "", location.pathname);
   }
   if (loginError) {
+    sessionStorage.setItem("modbot-login-error", loginError);
     console.warn("Erreur de connexion ModBot:", loginError);
     history.replaceState(null, "", location.pathname);
   }
@@ -1340,7 +1348,7 @@ function initDashboard() {
     ultra: "Ultra Premium"
   };
   const freePanels = new Set(["overview", "premium", "security", "channels", "moderation", "language"]);
-  const premiumPanels = new Set(["overview", "premium", "tickets", "security", "channels", "reactionroles", "moderation", "language", "tournaments", "socials", "ratings", "logs"]);
+  const premiumPanels = new Set(["overview", "premium", "security", "channels", "reactionroles", "moderation", "language", "tournaments", "socials", "ratings", "logs"]);
   const IFC_TOURNAMENT_API_READY = false;
   let activePanelName = "overview";
   let hasUnsavedChanges = false;
@@ -2244,7 +2252,7 @@ function initDashboard() {
     try {
       savedToApi = await saveDashboardConfigToApi();
     } catch (error) {
-      showToast("⚠️ Connexion bot indisponible, sauvegarde non envoyée");
+      showToast(`⚠️ Sauvegarde impossible : ${error.message || "connexion bot indisponible"}`);
       return false;
     }
     if (selectedServer.installed && !savedToApi) {
@@ -2411,10 +2419,17 @@ function initDashboard() {
 
   setupLogoFallbacks();
 
-  if (sessionStorage.getItem("modbot-login-error") === "oauth_backend_required") {
+  const pendingLoginError = sessionStorage.getItem("modbot-login-error");
+  if (pendingLoginError) {
     sessionStorage.removeItem("modbot-login-error");
     showDashboardStage("auth");
-    showToast("⚠️ Connexion Discord reçue, mais l'API ModBot doit finaliser la session");
+    const messages = {
+      oauth_backend_required: "⚠️ Connexion Discord reçue, mais l'API ModBot doit finaliser la session",
+      oauth_not_configured: "⚠️ OAuth Discord non configuré côté bot : ajoute CLIENT_SECRET et REDIRECT_URI",
+      oauth_token: "⚠️ Discord a refusé le code OAuth : vérifie l'URL callback dans le portail Discord",
+      missing_code: "⚠️ Discord n'a pas renvoyé de code de connexion"
+    };
+    showToast(messages[pendingLoginError] || `⚠️ Connexion Discord impossible : ${pendingLoginError}`);
   }
 
   tabs.forEach((tab) => {
@@ -2860,7 +2875,7 @@ function initDashboard() {
         });
         showToast(`🧪 Test ${platform} envoyé dans le salon ${channel}`);
       } catch (error) {
-        showToast(`⚠️ Test ${platform} impossible : connexion bot indisponible`);
+        showToast(`⚠️ Test ${platform} impossible : ${error.message || "connexion bot indisponible"}`);
       }
     });
   });
