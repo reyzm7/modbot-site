@@ -828,7 +828,9 @@ function normalizeDiscordGuild(guild, installed = false) {
     icon,
     logo: icon,
     icon_hash: String(guild?.icon_hash || ""),
+    banner: String(guild?.banner || ""),
     initials: String(guild?.initials || initialsFromName(name)),
+    member_count: Number(guild?.member_count || 0),
     installed: Boolean(guild?.installed || installed),
     can_manage: canManageDiscordGuild(guild),
     local: Boolean(guild?.local),
@@ -1366,6 +1368,9 @@ function initDashboard() {
   const authNote = authScreen?.querySelector(".oauth-note");
   const dashboardLoginButton = document.querySelector("[data-dashboard-login]");
   const serverScreen = document.querySelector("[data-server-screen]");
+  const serverSearchInput = document.querySelector("[data-server-search]");
+  const serverCountLabel = document.querySelector("[data-server-count-label]");
+  const refreshDashboardServersButton = document.querySelector("[data-refresh-dashboard-servers]");
   const dashboardApp = document.querySelector("[data-dashboard-app]");
   const currentServerTargets = document.querySelectorAll("[data-current-server], [data-current-server-label]");
   const currentServerLogoTargets = document.querySelectorAll("[data-current-server-logo], [data-current-server-logo-inline]");
@@ -1841,6 +1846,37 @@ function initDashboard() {
     `;
   }
 
+  function formatMemberCount(value) {
+    const count = Number(value || 0);
+    if (!Number.isFinite(count) || count <= 0) return "";
+    if (count >= 1000) return `${(count / 1000).toFixed(count >= 10000 ? 0 : 1)}k Membres`;
+    return `${count} Membre${count > 1 ? "s" : ""}`;
+  }
+
+  function guildActionLabel(guild) {
+    if (guild.installed) return "Ouvrir";
+    return "Ajouter ModBot";
+  }
+
+  function guildStatusLabel(guild) {
+    if (guild.local) return "Ajouter ModBot via Discord";
+    return formatMemberCount(guild.member_count) || (guild.installed ? "ModBot installé" : "Bot non installé");
+  }
+
+  function updateServerCount(guilds) {
+    if (!serverCountLabel) return;
+    const realGuilds = guilds.filter((guild) => !guild.local);
+    if (realGuilds.length) {
+      serverCountLabel.textContent = `Vous avez rejoint ${realGuilds.length} serveur${realGuilds.length > 1 ? "s" : ""}.`;
+      return;
+    }
+    serverCountLabel.textContent = "Choisis un serveur ou ajoute ModBot via Discord.";
+  }
+
+  function currentServerSearchTerm() {
+    return String(serverSearchInput?.value || "").trim().toLowerCase();
+  }
+
   function readLocalGuildChoices() {
     const cards = [...document.querySelectorAll(".server-grid .server-card[data-server-name]")];
     const guilds = cards.map((card, index) => {
@@ -1888,18 +1924,31 @@ function initDashboard() {
     const serverGrid = document.querySelector(".server-grid");
     if (!serverGrid) return;
     const safeGuilds = normalizeDashboardGuilds(guilds);
+    updateServerCount(safeGuilds);
+    const term = currentServerSearchTerm();
+    const visibleGuilds = term
+      ? safeGuilds.filter((guild) => guild.name.toLowerCase().includes(term))
+      : safeGuilds;
     if (!safeGuilds.length) {
-      serverGrid.innerHTML = emptyGuildMarkup("Connecte-toi avec Discord et vérifie que tu as Administrateur ou Gérer le serveur.");
+      serverGrid.innerHTML = emptyGuildMarkup("Connecte l'API ModBot ou utilise l'invitation Discord officielle pour installer le bot.");
       return;
     }
-    serverGrid.innerHTML = safeGuilds.map((guild) => `
+    if (!visibleGuilds.length) {
+      serverGrid.innerHTML = emptyGuildMarkup("Aucun serveur ne correspond à cette recherche.");
+      return;
+    }
+    serverGrid.innerHTML = visibleGuilds.map((guild) => `
       <button class="server-card ${guild.installed ? "is-installed" : "is-uninstalled"} ${guild.local ? "is-local" : ""}" type="button" data-server-name="${escapeHtml(guild.name)}" data-server-id="${escapeHtml(guild.id)}" data-server-logo="${escapeHtml(guild.logo || modbotDefaultLogo)}" data-server-initials="${escapeHtml(guild.initials || "MB")}" data-server-installed="${guild.installed ? "true" : "false"}" data-server-local="${guild.local ? "true" : "false"}" data-server-can-manage="${guild.can_manage ? "true" : "false"}">
-        <span class="server-logo-shell" data-initials="${escapeHtml(guild.initials || "MB")}">
-          <img class="server-logo" src="${escapeHtml(guild.logo || modbotDefaultLogo)}" alt="" data-logo-img>
-        </span>
-        <span>
-          <strong>${escapeHtml(guild.name)}</strong>
-          <small>${guild.local ? "Mode local - API ModBot à brancher" : guild.installed ? `ID ${escapeHtml(guild.id)}` : "Installer ModBot sur ce serveur"}</small>
+        <span class="server-card-banner" style="--server-banner:url('${escapeHtml(guild.banner || "assets/default_banner.png")}')"></span>
+        <span class="server-card-body">
+          <span class="server-logo-shell" data-initials="${escapeHtml(guild.initials || "MB")}">
+            <img class="server-logo" src="${escapeHtml(guild.logo || modbotDefaultLogo)}" alt="" data-logo-img>
+          </span>
+          <span class="server-card-copy">
+            <strong>${escapeHtml(guild.name)}</strong>
+            <small>${escapeHtml(guildStatusLabel(guild))}</small>
+          </span>
+          <span class="server-card-action">${escapeHtml(guildActionLabel(guild))}</span>
         </span>
       </button>
     `).join("");
@@ -1969,7 +2018,7 @@ function initDashboard() {
     }
     await loadLocalDashboardGuilds();
     showDashboardStage("servers");
-    showToast(base ? "🧪 Aperçu local activé : démarre l'API ModBot pour synchroniser Discord" : "🧪 Aperçu local : ajoute modbot-api-url pour synchroniser le bot");
+    showToast("Sélectionne un serveur ou ouvre l'invitation Discord de ModBot");
   }
 
   function applyDashboardConfig(config) {
@@ -2404,8 +2453,7 @@ function initDashboard() {
 
   function openBotInviteForGuild(guildId, guildName = "ce serveur") {
     if (!guildId || String(guildId).startsWith("local-")) {
-      showToast("⚠️ Serveur Discord réel requis pour inviter ModBot");
-      return false;
+      return openDiscordInviteSelector();
     }
     const inviteUrl = buildDiscordOAuthUrl("invite", guildId);
     if (!inviteUrl) {
@@ -2511,6 +2559,24 @@ function initDashboard() {
     showDashboardStage("auth");
   });
 
+  serverSearchInput?.addEventListener("input", () => {
+    renderGuildChoices(dashboardGuilds);
+  });
+
+  refreshDashboardServersButton?.addEventListener("click", async () => {
+    if (getModbotSessionToken() || getModbotApiToken()) {
+      try {
+        await loadDashboardGuilds();
+        showToast("↻ Serveurs Discord rafraîchis");
+        return;
+      } catch (error) {
+        showToast("⚠️ Impossible de rafraîchir les serveurs depuis l'API");
+      }
+    }
+    await loadLocalDashboardGuilds();
+    showToast("➕ Ajouter ModBot ouvrira Discord pour choisir le serveur");
+  });
+
   document.querySelector("[data-change-server]")?.addEventListener("click", () => {
     runWithUnsavedGuard(() => showDashboardStage("servers"));
   });
@@ -2529,7 +2595,7 @@ function initDashboard() {
       showToast("🔒 Permissions insuffisantes : il faut Administrateur ou Gérer le serveur");
       return;
     }
-    if (!installed && !localMode) {
+    if (!installed) {
       openBotInviteForGuild(guildId, serverCard.dataset.serverName);
       return;
     }
