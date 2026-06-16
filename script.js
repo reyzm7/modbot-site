@@ -1361,6 +1361,10 @@ function initDashboard() {
   const panels = document.querySelectorAll("[data-dashboard-panel]");
   const toast = document.getElementById("dashboardToast");
   const authScreen = document.querySelector("[data-auth-screen]");
+  const authTitle = authScreen?.querySelector("h1");
+  const authCopy = authScreen?.querySelector(".auth-card > p:not(.eyebrow):not(.oauth-note)");
+  const authNote = authScreen?.querySelector(".oauth-note");
+  const dashboardLoginButton = document.querySelector("[data-dashboard-login]");
   const serverScreen = document.querySelector("[data-server-screen]");
   const dashboardApp = document.querySelector("[data-dashboard-app]");
   const currentServerTargets = document.querySelectorAll("[data-current-server], [data-current-server-label]");
@@ -1447,6 +1451,30 @@ function initDashboard() {
     if (serverScreen) serverScreen.hidden = stage !== "servers";
     if (dashboardApp) dashboardApp.hidden = stage !== "dashboard";
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function setOfferInviteFallbackCopy() {
+    if (!requiresLiveDiscordFlow) return;
+    if (authTitle) authTitle.textContent = "Ajoute ModBot à ton serveur";
+    if (authCopy) {
+      authCopy.textContent = "Le backend dashboard n'est pas joignable ici, donc Discord ouvrira directement le choix du serveur où tu peux installer le bot.";
+    }
+    if (authNote) {
+      authNote.textContent = "Discord demandera les permissions bot et applications.commands. Choisis un serveur où tu as Administrateur ou Gérer le serveur.";
+    }
+    if (dashboardLoginButton) {
+      dashboardLoginButton.innerHTML = "<span>➕</span> Ajouter ModBot avec Discord";
+    }
+  }
+
+  function openDiscordInviteSelector() {
+    const inviteUrl = buildDiscordOAuthUrl("invite");
+    if (!inviteUrl) {
+      showToast("⚠️ Client ID Discord manquant : impossible de créer le lien d'invitation");
+      return false;
+    }
+    window.location.href = inviteUrl;
+    return true;
   }
 
   function markLogoFallback(img) {
@@ -1934,7 +1962,9 @@ function initDashboard() {
     }
     if (requiresLiveDiscordFlow) {
       showDashboardStage("auth");
-      showToast(base ? "⚠️ API ModBot indisponible : impossible de vérifier tes serveurs Discord" : "⚠️ API ModBot non configurée : ajoute modbot-api-url pour connecter Discord");
+      setOfferInviteFallbackCopy();
+      showToast("➕ Ouverture du lien officiel Discord d'invitation du bot");
+      openDiscordInviteSelector();
       return;
     }
     await loadLocalDashboardGuilds();
@@ -2590,6 +2620,7 @@ function initDashboard() {
   });
 
   setupLogoFallbacks();
+  setOfferInviteFallbackCopy();
 
   const pendingLoginError = sessionStorage.getItem("modbot-login-error");
   if (pendingLoginError) {
@@ -2606,7 +2637,7 @@ function initDashboard() {
     dashboardLogin();
   } else if (requiresLiveDiscordFlow) {
     showDashboardStage("auth");
-    showToast("🔐 Connecte-toi avec Discord pour choisir un serveur administrable");
+    showToast("➕ Clique pour ouvrir l'invitation Discord officielle de ModBot");
   }
 
   tabs.forEach((tab) => {
