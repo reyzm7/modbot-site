@@ -33,14 +33,35 @@
   </main>
 
   <main class="server-picker" data-server-screen hidden>
+    <header class="server-select-topbar">
+      <a class="server-select-brand" href="index.html" aria-label="Accueil ModBot">
+        <img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
+        <span>ModBot</span>
+      </a>
+      <nav class="server-select-nav" aria-label="Navigation">
+        <a href="dashboard.html">Tableau de bord</a>
+        <a href="index.html#pricing">M'inviter</a>
+        <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">Rejoindre mon serveur</a>
+        <a href="wiki.html">Commandes</a>
+        <a href="index.html#pricing" class="is-premium">Premium ✨</a>
+      </nav>
+      <button class="secondary-btn compact" type="button" data-auth-back>Retour</button>
+    </header>
+
     <section class="server-picker-card">
-      <div class="panel-title">
+      <div class="server-select-heading">
         <div>
-          <p class="eyebrow">🧭 Choix du serveur</p>
-          <h1>Sélectionne un serveur</h1>
-          <p>Seuls les serveurs autorisés apparaîtront ici quand la connexion Discord sera branchée.</p>
+          <h1>Sélectionnez un serveur</h1>
+          <p data-server-count-label>Vos serveurs administrables apparaissent ici.</p>
         </div>
-        <button class="secondary-btn compact" type="button" data-auth-back>↩️ Retour</button>
+      </div>
+
+      <div class="server-select-toolbar">
+        <label class="server-search">
+          <span>⌕</span>
+          <input type="search" placeholder="Rechercher" data-server-search>
+        </label>
+        <button class="secondary-btn compact" type="button" data-refresh-dashboard-servers>↻ Rafraîchir</button>
       </div>
 
       <div class="server-grid">
