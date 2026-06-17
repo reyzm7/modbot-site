@@ -1405,7 +1405,7 @@ function initDashboard() {
   const dashboardUrlParams = new URLSearchParams(location.search || "");
   const requestedFlow = dashboardUrlParams.get("flow") || "";
   const requestedOfferPlan = dashboardUrlParams.get("plan") || dashboardUrlParams.get("offer") || sessionStorage.getItem("modbot-selected-offer") || "";
-  const requiresLiveDiscordFlow = ["offer", "invite"].includes(requestedFlow) || Boolean(requestedOfferPlan);
+  const requiresLiveDiscordFlow = true;
   const tabs = document.querySelectorAll("[data-dashboard-tab]");
   const panels = document.querySelectorAll("[data-dashboard-panel]");
   const toast = document.getElementById("dashboardToast");
@@ -2070,14 +2070,8 @@ function initDashboard() {
       window.location.href = `${base}/api/auth/discord/login?redirect=${encodeURIComponent(dashboardReturnUrl())}`;
       return;
     }
-    if (requiresLiveDiscordFlow) {
-      showDashboardStage("auth");
-      showToast("⚠️ API dashboard introuvable : démarre le bot ou configure modbot-api-url");
-      return;
-    }
-    await loadLocalDashboardGuilds();
-    showDashboardStage("servers");
-    showToast("Sélectionne un serveur ou ouvre l'invitation Discord de ModBot");
+    showDashboardStage("auth");
+    showToast("⚠️ API dashboard introuvable : démarre le bot puis réessaie la connexion Discord");
   }
 
   function applyDashboardConfig(config) {
@@ -2624,8 +2618,8 @@ function initDashboard() {
         showToast("⚠️ Impossible de rafraîchir les serveurs depuis l'API");
       }
     }
-    await loadLocalDashboardGuilds();
-    showToast("➕ Ajouter ModBot ouvrira Discord pour choisir le serveur");
+    showDashboardStage("auth");
+    showToast("🔐 Connecte-toi avec Discord pour charger tes vrais serveurs");
   });
 
   document.querySelector("[data-change-server]")?.addEventListener("click", () => {
