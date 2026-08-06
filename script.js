@@ -1160,7 +1160,6 @@ function initAdminZone() {
   const adminGateItems = document.querySelectorAll("[data-admin-gate]");
   const protectedItems = document.querySelectorAll("[data-admin-protected]");
   const toast = document.getElementById("adminToast");
-  const planSelect = document.querySelector("[data-premium-plan]");
   const adminTabs = document.querySelectorAll("[data-admin-tab]");
   const adminPanels = document.querySelectorAll("[data-admin-panel]");
   let storedAdminIds = [];
@@ -1190,6 +1189,8 @@ function initAdminZone() {
   function openAdminPanel(panelName) {
     adminTabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.adminTab === panelName));
     adminPanels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.adminPanel === panelName));
+    // La liste des serveurs se charge à l'ouverture de l'onglet Premium
+    if (panelName === "premium") gpCharger();
   }
 
   function formatStat(value) {
@@ -1286,191 +1287,119 @@ function initAdminZone() {
   });
 
   /* ════════════════════════════════════════════════════════════════
-     ASSOCIATION MANUELLE DES SERVEURS À UN ABONNEMENT PREMIUM
-     Réservée à l'administration : le dashboard utilisateur ne peut plus
-     associer de serveur lui-même.
+     PREMIUM PAR SERVEUR
+     L'abonnement est attribué à un serveur, pas à un membre.
+     Seuls les administrateurs ModBot peuvent l'activer ou le révoquer.
      ════════════════════════════════════════════════════════════════ */
 
-  const psPanel = document.querySelector("[data-premium-servers-panel]");
-  const psBody = document.querySelector("[data-premium-servers-body]");
-  const psGrid = document.querySelector("[data-premium-servers-grid]");
-  const psBadge = document.querySelector("[data-premium-servers-badge]");
-  const psCount = document.querySelector("[data-premium-servers-count]");
-  const psSearch = document.querySelector("[data-premium-servers-search]");
-  const psMemberInput = document.querySelector("[data-premium-servers-member]");
+  const gpList = document.querySelector("[data-guild-premium-list]");
+  const gpSearch = document.querySelector("[data-guild-premium-search]");
+  const gpCount = document.querySelector("[data-guild-premium-count]");
+  let gpServeurs = [];
 
-  let psServeurs = [];          // tous les serveurs où ModBot est installé
-  let psSelection = new Set();  // identifiants cochés
-  let psMembre = "";
-
-  function psMajCompteur() {
-    if (!psCount) return;
-    const n = psSelection.size;
-    psCount.textContent = n === 0
-      ? "Aucun serveur sélectionné"
-      : `${n} serveur${n > 1 ? "s" : ""} sélectionné${n > 1 ? "s" : ""}`;
-  }
-
-  function psRendre() {
-    if (!psGrid) return;
-    const terme = (psSearch?.value || "").trim().toLowerCase();
+  function gpRendre() {
+    if (!gpList) return;
+    const terme = (gpSearch?.value || "").trim().toLowerCase();
     const visibles = terme
-      ? psServeurs.filter((g) => g.name.toLowerCase().includes(terme))
-      : psServeurs;
+      ? gpServeurs.filter((g) => g.name.toLowerCase().includes(terme))
+      : gpServeurs;
 
-    if (!psServeurs.length) {
-      psGrid.innerHTML = `<p class="premium-servers-empty">ModBot n'est installé sur aucun serveur.</p>`;
+    const actifs = gpServeurs.filter((g) => g.premium?.active).length;
+    if (gpCount) {
+      gpCount.textContent = `${actifs} serveur${actifs > 1 ? "s" : ""} Premium / ${gpServeurs.length}`;
+    }
+
+    if (!gpServeurs.length) {
+      gpList.innerHTML = `<p class="premium-servers-empty">ModBot n'est installé sur aucun serveur.</p>`;
       return;
     }
     if (!visibles.length) {
-      psGrid.innerHTML = `<p class="premium-servers-empty">Aucun serveur ne correspond à « ${escapeHtml(terme)} ».</p>`;
+      gpList.innerHTML = `<p class="premium-servers-empty">Aucun serveur ne correspond à « ${escapeHtmlValue(terme)} ».</p>`;
       return;
     }
 
-    psGrid.innerHTML = visibles
+    gpList.innerHTML = visibles
       .map((g) => {
-        const coche = psSelection.has(g.id);
+        const p = g.premium || {};
+        const actif = Boolean(p.active);
         const membres = Number(g.member_count || 0);
+        const fin = actif ? formatIsoDateFr(p.expires_at) : null;
+        const reste = Number(p.days_left || 0);
         return `
-      <label class="premium-server-choice${coche ? " is-checked" : ""}">
-        <input type="checkbox" value="${escapeHtml(g.id)}"${coche ? " checked" : ""} data-ps-check>
-        <span class="server-logo-shell" data-initials="${escapeHtml(g.initials || "MB")}">
-          ${g.icon ? `<img src="${escapeHtml(g.icon)}" alt="" data-logo-img>` : ""}
+      <article class="guild-premium-row${actif ? " is-premium" : ""}">
+        <span class="server-logo-shell" data-initials="${escapeHtmlValue(g.initials || "MB")}">
+          ${g.icon ? `<img src="${escapeHtmlValue(g.icon)}" alt="" data-logo-img>` : ""}
         </span>
-        <span class="premium-server-choice-text">
-          <strong>${escapeHtml(g.name)}</strong>
-          <small>${membres ? membres.toLocaleString("fr-FR") + " membres" : "ID " + escapeHtml(g.id)}</small>
+        <span class="guild-premium-info">
+          <strong>${escapeHtmlValue(g.name)}</strong>
+          <small>${membres ? membres.toLocaleString("fr-FR") + " membres · " : ""}ID ${escapeHtmlValue(g.id)}</small>
         </span>
-      </label>`;
+        <span class="guild-premium-state">
+          ${actif
+            ? `<span class="state" data-level="ok">💎 Actif</span>
+               <small>Jusqu'au ${escapeHtmlValue(fin)} · ${reste} j restants</small>`
+            : `<span class="state" data-level="idle">⚪ Gratuit</span>`}
+        </span>
+        <button class="${actif ? "secondary-btn danger" : "primary-btn"} compact" type="button"
+                data-guild-premium-toggle="${escapeHtmlValue(g.id)}"
+                data-guild-premium-active="${actif ? "true" : "false"}"
+                data-guild-premium-name="${escapeHtmlValue(g.name)}">
+          ${actif ? "Révoquer" : "Activer Premium"}
+        </button>
+      </article>`;
       })
       .join("");
-    psMajCompteur();
+
   }
 
-  async function psCharger() {
-    const membre = (psMemberInput?.value || "").trim();
-    if (!membre) {
-      showAdminToast("⚠️ Indique l'ID ou le pseudo du membre");
-      return;
-    }
+  async function gpCharger() {
     try {
-      const data = await modbotApiFetch(
-        `/api/admin/premium/servers?member=${encodeURIComponent(membre)}`,
-        { cache: "no-store" }
-      );
-      psMembre = membre;
-      psServeurs = Array.isArray(data.available) ? data.available : [];
-      psSelection = new Set((data.linked || []).map((l) => String(l.guild_id)));
-      if (psBody) psBody.hidden = false;
-      if (psBadge) {
-        const actif = data.premium?.active;
-        psBadge.textContent = actif
-          ? `${membre} · Premium actif`
-          : `${membre} · sans abonnement`;
-        psBadge.classList.toggle("active", Boolean(actif));
-      }
-      psRendre();
-      showAdminToast(`🧭 ${psSelection.size} serveur(s) déjà associé(s) à ${membre}`);
+      const data = await modbotApiFetch("/api/admin/guilds", { cache: "no-store" });
+      gpServeurs = Array.isArray(data.guilds) ? data.guilds : [];
+      gpRendre();
     } catch (error) {
-      showAdminToast(`⚠️ ${error?.message || "Chargement impossible"}`);
-    }
-  }
-
-  async function psEnregistrer() {
-    if (!psMembre) {
-      showAdminToast("⚠️ Charge d'abord un membre");
-      return;
-    }
-    try {
-      const data = await modbotApiFetch("/api/admin/premium/servers", {
-        method: "PUT",
-        body: JSON.stringify({ member: psMembre, guild_ids: [...psSelection] })
-      });
-      const n = (data.linked || []).length;
-      showAdminToast(`✅ ${n} serveur(s) associé(s) à ${psMembre}`);
-      if (data.ignored?.length) {
-        showAdminToast(`⚠️ ${data.ignored.length} identifiant(s) ignoré(s) : ModBot n'y est pas`);
+      if (gpList) {
+        gpList.innerHTML = `<p class="premium-servers-empty">⚠️ ${escapeHtmlValue(error?.message || "Chargement impossible")}</p>`;
       }
-    } catch (error) {
-      showAdminToast(`⚠️ ${error?.message || "Enregistrement impossible"}`);
     }
   }
 
-  psGrid?.addEventListener("change", (event) => {
-    const check = event.target.closest("[data-ps-check]");
-    if (!check) return;
-    if (check.checked) psSelection.add(check.value);
-    else psSelection.delete(check.value);
-    check.closest(".premium-server-choice")?.classList.toggle("is-checked", check.checked);
-    psMajCompteur();
-  });
+  async function gpBasculer(guildId, nom, etaitActif) {
+    const question = etaitActif
+      ? `Révoquer le Premium de « ${nom} » ?\n\nLes modules communautaires seront immédiatement verrouillés.`
+      : `Activer le Premium sur « ${nom} » ?\n\n29,99 € pour 5 mois. La date de fin est calculée automatiquement.`;
+    if (!window.confirm(question)) return;
 
-  psSearch?.addEventListener("input", psRendre);
-  document.querySelector("[data-premium-servers-load]")?.addEventListener("click", psCharger);
-  psMemberInput?.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") { event.preventDefault(); psCharger(); }
-  });
-  document.querySelector("[data-premium-servers-save]")?.addEventListener("click", psEnregistrer);
-  document.querySelector("[data-premium-servers-all]")?.addEventListener("click", () => {
-    psServeurs.forEach((g) => psSelection.add(g.id));
-    psRendre();
-  });
-  document.querySelector("[data-premium-servers-none]")?.addEventListener("click", () => {
-    psSelection.clear();
-    psRendre();
-  });
-
-  document.querySelector("[data-premium-apply]")?.addEventListener("click", async () => {
-    const memberInput = document.querySelector("[data-premium-member]");
-    const list = document.querySelector("[data-premium-list]");
-    const paymentInput = document.querySelector("[data-premium-payment]");
-    const member = memberInput?.value.trim();
-    if (!member) {
-      showAdminToast("⚠️ Indique l'ID ou le pseudo Discord du membre");
-      return;
-    }
-
-    // Offre unique : on active Premium (29,99 € / 5 mois) ou on le révoque.
-    const plan = planSelect?.value === "free" ? "free" : "premium";
-    const payment = paymentInput?.value.trim() || "ticket";
-
-    let result = null;
     try {
-      const response = await modbotApiFetch("/api/admin/premium", {
+      const data = await modbotApiFetch(`/api/admin/guilds/${guildId}/premium`, {
         method: "POST",
-        body: JSON.stringify({ member, plan, payment })
+        body: JSON.stringify({ active: !etaitActif })
       });
-      result = response?.premium || null;
-      showAdminToast(plan === "premium"
-        ? `💎 Premium activé pour ${member} jusqu'au ${formatIsoDateFr(result?.expires_at)}`
-        : `🚫 Abonnement révoqué pour ${member}`);
-      // Enchaîne naturellement sur l'association des serveurs
-      if (plan === "premium" && psMemberInput) {
-        psMemberInput.value = member;
-        await psCharger();
-        psPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+      const cible = gpServeurs.find((g) => g.id === guildId);
+      if (cible) cible.premium = data.premium;
+      gpRendre();
+      showAdminToast(etaitActif
+        ? `🚫 Premium révoqué sur ${nom}`
+        : `💎 Premium actif sur ${nom} jusqu'au ${formatIsoDateFr(data.premium?.expires_at)}`);
     } catch (error) {
-      showAdminToast(`⚠️ ${error?.message || "Connexion au bot impossible"}`);
-      return;
+      showAdminToast(`⚠️ ${error?.message || "Opération impossible"}`);
     }
+  }
 
-    if (list) {
-      const item = document.createElement("div");
-      const identity = document.createElement("span");
-      const name = document.createElement("strong");
-      const serverLine = document.createElement("small");
-      const meta = document.createElement("span");
-      name.textContent = member;
-      serverLine.textContent = plan === "premium"
-        ? `Actif jusqu'au ${formatIsoDateFr(result?.expires_at)} · serveurs illimités`
-        : "Abonnement révoqué";
-      meta.textContent = plan === "premium" ? "💎 Premium · 29,99 € / 5 mois" : "⚪ Sans abonnement";
-      identity.append(name, serverLine);
-      item.append(identity, meta);
-      list.prepend(item);
-    }
-    memberInput.value = "";
+  gpList?.addEventListener("click", (event) => {
+    const bouton = event.target.closest("[data-guild-premium-toggle]");
+    if (!bouton) return;
+    gpBasculer(
+      bouton.dataset.guildPremiumToggle,
+      bouton.dataset.guildPremiumName,
+      bouton.dataset.guildPremiumActive === "true"
+    );
+  });
+
+  gpSearch?.addEventListener("input", gpRendre);
+  document.querySelector("[data-guild-premium-reload]")?.addEventListener("click", () => {
+    gpCharger();
+    showAdminToast("↻ Serveurs rechargés");
   });
 
   document.querySelector("[data-add-admin]")?.addEventListener("click", () => {
@@ -2226,35 +2155,30 @@ function initDashboard() {
     setupLogoFallbacks();
   }
 
-  function renderPremiumGuildChoices(guilds) {
-    const grid = document.querySelector(".premium-choice-grid");
-    if (!grid) return;
-    const safeGuilds = normalizeDashboardGuilds(guilds);
-    if (!safeGuilds.length) {
-      grid.innerHTML = emptyGuildMarkup("Aucun serveur disponible pour cette offre.");
-      return;
-    }
-    grid.innerHTML = safeGuilds.map((guild) => `
-      <button class="premium-choice-card ${guild.installed ? "is-installed" : "is-uninstalled"} ${guild.local ? "is-local" : ""}" type="button" data-premium-server-choice data-server-name="${escapeHtml(guild.name)}" data-server-id="${escapeHtml(guild.id)}" data-server-logo="${escapeHtml(guild.logo || modbotDefaultLogo)}" data-server-initials="${escapeHtml(guild.initials || "MB")}" data-server-installed="${guild.installed ? "true" : "false"}" data-server-local="${guild.local ? "true" : "false"}" data-server-can-manage="${guild.can_manage ? "true" : "false"}">
-        <span class="server-logo-shell" data-initials="${escapeHtml(guild.initials || "MB")}"><img src="${escapeHtml(guild.logo || modbotDefaultLogo)}" alt="" data-logo-img></span>
-        <span><strong>${escapeHtml(guild.name)}</strong><small>${guild.local ? "Mode local" : guild.installed ? `ID ${escapeHtml(guild.id)}` : "Serveur à inviter"}</small></span>
-      </button>
-    `).join("");
-    setupLogoFallbacks();
+
+  // Abonnement par serveur : chaque entrée porte son propre état Premium
+  const guildPremium = new Map();
+
+  /** Applique l'état Premium du serveur actuellement ouvert. */
+  function applyPremiumForSelectedGuild() {
+    const etat = guildPremium.get(selectedServer.id);
+    premiumState = etat
+      ? { ...premiumState, ...etat }
+      : { ...premiumState, plan: "free", active: false, expires_at: null, days_left: 0 };
+    premiumTier = premiumState.active ? "premium" : "free";
+    if (premiumTierSelect) premiumTierSelect.value = premiumTier;
+    renderPremiumStatus();
   }
 
   async function loadDashboardGuilds() {
     const data = await modbotApiFetch("/api/guilds", { cache: "no-store" });
-    dashboardGuilds = normalizeDashboardGuilds(data?.guilds || []);
-    if (data.premium && typeof data.premium === "object") {
-      premiumState = { ...premiumState, ...data.premium };
-      premiumTier = premiumState.active ? "premium" : "free";
-      if (premiumTierSelect) premiumTierSelect.value = premiumTier;
-      localStorage.setItem("modbot-dashboard-premium-tier", premiumTier);
-      renderPremiumStatus();
-    }
+    const brut = Array.isArray(data?.guilds) ? data.guilds : [];
+    brut.forEach((g) => {
+      if (g?.id && g.premium) guildPremium.set(String(g.id), g.premium);
+    });
+    dashboardGuilds = normalizeDashboardGuilds(brut);
+    applyPremiumForSelectedGuild();
     renderGuildChoices(dashboardGuilds);
-    renderPremiumGuildChoices(dashboardGuilds);
     renderPremiumAssociations();
     return dashboardGuilds;
   }
@@ -2621,6 +2545,9 @@ function initDashboard() {
       await loadDashboardResources(guildId);
       const data = await modbotApiFetch(`/api/guilds/${guildId}/config`, { cache: "no-store" });
       applyDashboardConfig(data.config);
+      // L'abonnement appartient au serveur : on applique celui-ci
+      if (data.premium) guildPremium.set(String(guildId), data.premium);
+      applyPremiumForSelectedGuild();
       showToast("✅ Configuration chargée depuis le bot");
     } catch (error) {
       showToast("⚠️ Configuration locale affichée, connexion bot non disponible");
@@ -2922,11 +2849,60 @@ function initDashboard() {
     renderLogToggles(security.logs_enabled || {});
   }
 
+  /**
+   * Alimente la Vue globale avec l'état réel du serveur : protections
+   * actives, sauvegardes, volume de journal. Aucune donnée décorative.
+   */
+  function renderOverview() {
+    const txt = (sel, valeur) => {
+      const el = document.querySelector(sel);
+      if (el) el.textContent = valeur;
+    };
+
+    const s = securityState;
+    if (s) {
+      const protections = [
+        ["Anti-raid", s.antiraid?.enabled],
+        ["Anti-nuke", s.antinuke?.enabled],
+        ["Filtre de langage", s.filter?.enabled],
+        ["Restauration automatique", s.antinuke?.auto_restore],
+        ["Sauvegarde automatique", s.auto_backup?.enabled]
+      ];
+      const actives = protections.filter(([, on]) => on).length;
+      txt("[data-overview-security]", `${actives}/${protections.length}`);
+      txt("[data-overview-security-detail]",
+          s.safe_mode_active ? "🚨 Mode sécurité actif" : "Modules de protection actifs");
+
+      const liste = document.querySelector("[data-overview-checklist]");
+      if (liste) {
+        const manquantes = Object.entries(s.permissions || {})
+          .filter(([, ok]) => !ok)
+          .map(([nom]) => PERMISSION_LABELS[nom] || nom);
+        liste.innerHTML =
+          protections
+            .map(([nom, on]) => `<li>${on ? "🟢" : "⚪"} ${escapeHtml(nom)}</li>`)
+            .join("") +
+          (manquantes.length
+            ? `<li>🔴 Permissions Discord manquantes : ${escapeHtml(manquantes.join(", "))}</li>`
+            : `<li>🟢 Toutes les permissions Discord sont accordées</li>`);
+      }
+    }
+
+    const nb = backupList.length;
+    txt("[data-overview-backups]", String(nb));
+    const derniere = backupList[0]?.created_at;
+    txt("[data-overview-backups-detail]",
+        derniere ? `Dernière : ${formatIsoDateTimeFr(derniere)}` : "Aucune sauvegarde");
+
+    txt("[data-overview-logs]", String(currentLogs.length));
+  }
+
   async function loadGuildSecurity(guildId) {
     if (!guildId) return;
     try {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/security`, { cache: "no-store" });
       applySecurityState(data.security);
+      renderOverview();
     } catch (error) {
       console.warn("Sécurité indisponible :", error?.message || error);
     }
@@ -3085,6 +3061,7 @@ function initDashboard() {
       currentLogCategory = category;
       renderLogFilters();
       renderLogFeed();
+      renderOverview();
     } catch (error) {
       const feed = document.querySelector("[data-dashboard-log-feed]");
       if (feed) {
@@ -3168,6 +3145,7 @@ function initDashboard() {
       const data = await modbotApiFetch(`/api/guilds/${targetGuild}/backups`, { cache: "no-store" });
       backupList = Array.isArray(data.backups) ? data.backups : [];
       renderBackups();
+      renderOverview();
     } catch (error) {
       console.warn("Sauvegardes indisponibles :", error?.message || error);
     }

@@ -217,37 +217,47 @@
         </div>
 
         <div class="metric-grid">
-          <article class="metric-card"><span>🎫 Tickets</span><strong>Actif</strong><small>4 catégories configurées</small></article>
-          <article class="metric-card"><span>🛡️ Sécurité</span><strong>3/5</strong><small>Modules actifs</small></article>
-          <article class="metric-card"><span>🏆 Tournois</span><strong data-tournament-overview-state>En attente</strong><small>API IFC requise</small></article>
-          <article class="metric-card"><span>⭐ Ratings</span><strong data-overview-rating-average>0.00/5</strong><small><span data-overview-rating-count>0</span> évaluations réelles</small></article>
+          <article class="metric-card">
+            <span>🛡️ Protections</span>
+            <strong data-overview-security>—</strong>
+            <small data-overview-security-detail>Chargement…</small>
+          </article>
+          <article class="metric-card">
+            <span>💾 Sauvegardes</span>
+            <strong data-overview-backups>—</strong>
+            <small data-overview-backups-detail>Chargement…</small>
+          </article>
+          <article class="metric-card">
+            <span>🧾 Événements</span>
+            <strong data-overview-logs>—</strong>
+            <small>Enregistrés sur ce serveur</small>
+          </article>
+          <article class="metric-card">
+            <span>⭐ Ratings</span>
+            <strong data-overview-rating-average>0.00/5</strong>
+            <small><span data-overview-rating-count>0</span> évaluations</small>
+          </article>
         </div>
 
         <div class="dashboard-grid two">
           <div class="tool-panel">
             <h3>⚡ Actions rapides</h3>
             <div class="quick-grid">
-              <button type="button" data-dashboard-jump="tickets">🎫 Configurer tickets</button>
-              <button type="button" data-dashboard-jump="premium">💎 Associer Premium</button>
               <button type="button" data-dashboard-jump="security">🛡️ Sécurité serveur</button>
+              <button type="button" data-dashboard-jump="backups">💾 Sauvegardes</button>
+              <button type="button" data-dashboard-jump="logs">🧾 Journal du serveur</button>
+              <button type="button" data-dashboard-jump="moderation">⚒️ Modération</button>
               <button type="button" data-dashboard-jump="channels">📌 Choisir les salons</button>
+              <button type="button" data-dashboard-jump="tickets">🎫 Configurer tickets</button>
               <button type="button" data-dashboard-jump="welcome">👋 Bienvenue / départ</button>
-              <button type="button" data-dashboard-jump="reactionroles">🎭 Rôles réactions</button>
-              <button type="button" data-dashboard-jump="recurring">🔁 Messages récurrents</button>
-              <button type="button" data-dashboard-jump="personalization">🎨 Identité visuelle</button>
-              <button type="button" data-dashboard-jump="tournaments">🏆 Module tournois</button>
               <button type="button" data-dashboard-jump="socials">📣 Relais réseaux</button>
             </div>
           </div>
 
           <div class="tool-panel">
-            <h3>🔌 Synchronisé avec le bot</h3>
-            <ul class="check-list">
-              <li>💬 Connexion Discord OAuth</li>
-              <li>💾 Sauvegarde synchronisée avec ModBot</li>
-              <li>🧭 Liste réelle des serveurs du bot</li>
-              <li>👁️ Prévisualisation chargée depuis la config serveur</li>
-              <li>📣 Relais réseaux stockés côté bot</li>
+            <h3>🔒 État des protections</h3>
+            <ul class="check-list" data-overview-checklist>
+              <li>Chargement de l'état du serveur…</li>
             </ul>
           </div>
         </div>
