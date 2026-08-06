@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
+       la connexion au dashboard est automatique, rien a saisir.
+       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
+  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
   <meta name="modbot-discord-client-id" content="1510405235544424620">
   <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
   <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
@@ -50,7 +54,7 @@
     <nav class="navbar" aria-label="Navigation principale">
       <a class="brand" href="#top" aria-label="Accueil ModBot">
         <span class="brand-mark">
-          <img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
+          <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
         </span>
         <span>ModBot</span>
       </a>
@@ -223,56 +227,62 @@
     <section id="pricing" class="pricing section-shell">
       <div class="section-heading">
         <p class="eyebrow" data-i18n="pricing.eyebrow">Tarifs</p>
-        <h2 data-i18n="pricing.title">Des offres simples et claires</h2>
-        <p data-i18n="pricing.copy">Commence gratuitement avec la sécurité, puis ajoute les modules avancés selon les besoins de ton serveur.</p>
+        <h2 data-i18n="pricing.title">La protection est gratuite. Pour toujours.</h2>
+        <p data-i18n="pricing.copy">Sécurisez votre serveur sans payer. Passez Premium quand vous voulez les modules communautaires.</p>
       </div>
 
-      <div class="pricing-grid">
-        <article class="price-card">
+      <div class="pricing-duo">
+        <article class="price-card is-free">
           <div class="price-head">
-            <h3 data-i18n="pricing.free.title">Gratuit</h3>
-            <p data-i18n="pricing.free.copy">Le socle essentiel, avec un essai Premium de 48h.</p>
+            <h3 data-i18n="pricing.free.title">Protection</h3>
+            <p data-i18n="pricing.free.copy">Tout ce qui protège votre serveur, sans limite de temps ni de serveurs.</p>
           </div>
-          <div class="price">0€ <span data-i18n="pricing.free.period">/ toujours</span></div>
-          <ul>
-            <li data-i18n="pricing.free.item1">Sécurité serveur</li>
-            <li data-i18n="pricing.free.item2">Modération</li>
-            <li data-i18n="pricing.free.item3">Salons de logs</li>
-            <li data-i18n="pricing.free.item4">Essai Premium 48h</li>
+
+          <div class="price">
+            <span class="price-amount" data-i18n="pricing.free.amount">Gratuit</span>
+            <span class="price-period" data-i18n="pricing.free.period">pour toujours</span>
+          </div>
+          <p class="price-note" data-i18n="pricing.free.note">Aucune carte bancaire, aucune limite de durée.</p>
+
+          <ul class="price-features">
+            <li data-i18n="pricing.free.item1">Anti-raid et détection de comptes suspects</li>
+            <li data-i18n="pricing.free.item2">Anti-nuke avec restauration automatique</li>
+            <li data-i18n="pricing.free.item3">Filtre de langage anti-contournement</li>
+            <li data-i18n="pricing.free.item4">Sanctions graduées et historique</li>
+            <li data-i18n="pricing.free.item5">Système de logs complet</li>
+            <li data-i18n="pricing.free.item6">Sauvegardes et restauration du serveur</li>
           </ul>
-          <a class="secondary-btn stretch" href="dashboard.html?flow=offer&plan=free" data-discord-bot-invite data-offer-plan="free" data-i18n="pricing.free.cta">Choisir cette offre</a>
+
+          <a class="secondary-btn stretch" href="dashboard.html?flow=offer&plan=free" data-discord-bot-invite data-offer-plan="free" data-i18n="pricing.free.cta">Commencer gratuitement</a>
+          <p class="price-support" data-i18n="pricing.free.support">Invitez ModBot, la protection est active immédiatement.</p>
         </article>
 
-        <article class="price-card premium">
-          <span class="premium-ribbon">Premium</span>
-          <div class="price-head">
-            <h3 data-i18n="pricing.premium.title">Offre Premium</h3>
-            <p data-i18n="pricing.premium.copy">Pour activer les modules avancés dans le temps, sans limite de serveurs.</p>
-          </div>
-          <div class="price">15€ <span data-i18n="pricing.premium.period">/ 2 mois</span></div>
-          <ul>
-            <li data-i18n="pricing.premium.item1">Modération complète</li>
-            <li data-i18n="pricing.premium.item2">Ratings support</li>
-            <li data-i18n="pricing.premium.item3">Logs et salons avancés</li>
-            <li data-i18n="pricing.premium.item4">Rôles réactions, réseaux et tournois</li>
-          </ul>
-          <a class="primary-btn stretch" href="dashboard.html?flow=offer&plan=premium" data-discord-bot-invite data-offer-plan="premium" data-i18n="pricing.premium.cta">Choisir cette offre</a>
-        </article>
+        <article class="price-card premium is-highlight">
+          <span class="premium-ribbon" data-i18n="pricing.premium.ribbon">Premium</span>
 
-        <article class="price-card ultimate">
-          <span class="premium-ribbon">Ultra</span>
           <div class="price-head">
-            <h3 data-i18n="pricing.ultimate.title">Ultra Premium</h3>
-            <p data-i18n="pricing.ultimate.copy">Tout ModBot, accompagnement prioritaire et personnalisations dédiées, sans limite de serveurs.</p>
+            <h3 data-i18n="pricing.premium.title">Premium</h3>
+            <p data-i18n="pricing.premium.copy">Toute la protection, plus les modules communautaires et l'automatisation.</p>
           </div>
-          <div class="price">35€ <span data-i18n="pricing.ultimate.period">/ 3 mois</span></div>
-          <ul>
-            <li data-i18n="pricing.ultimate.item1">Tout le Premium + tickets</li>
-            <li data-i18n="pricing.ultimate.item2">Support Discord prioritaire</li>
-            <li data-i18n="pricing.ultimate.item3">Personnalisations juste pour vous</li>
-            <li data-i18n="pricing.ultimate.item4">Accompagnement configuration avancée</li>
+
+          <div class="price">
+            <span class="price-amount">29,99&nbsp;€</span>
+            <span class="price-period" data-i18n="pricing.premium.period">pour 5 mois</span>
+          </div>
+          <p class="price-note" data-i18n="pricing.premium.note">Paiement unique — aucun renouvellement automatique.</p>
+
+          <ul class="price-features">
+            <li class="is-inherited" data-i18n="pricing.premium.item0">Toute la protection gratuite incluse</li>
+            <li data-i18n="pricing.premium.item1">Système de tickets et évaluations</li>
+            <li data-i18n="pricing.premium.item2">Messages d'arrivée et de départ personnalisés</li>
+            <li data-i18n="pricing.premium.item3">Rôles réactions et messages récurrents</li>
+            <li data-i18n="pricing.premium.item4">Alertes réseaux sociaux et tournois</li>
+            <li data-i18n="pricing.premium.item5">Personnalisation complète des embeds</li>
+            <li data-i18n="pricing.premium.item6">Serveurs illimités</li>
           </ul>
-          <a class="primary-btn stretch" href="dashboard.html?flow=offer&plan=ultra" data-discord-bot-invite data-offer-plan="ultra" data-i18n="pricing.ultimate.cta">Choisir cette offre</a>
+
+          <a class="primary-btn stretch" href="dashboard.html?flow=offer&plan=premium" data-discord-bot-invite data-offer-plan="premium" data-i18n="pricing.premium.cta">Passer Premium</a>
+          <p class="price-support" data-i18n="pricing.premium.support">Activation via un ticket sur notre serveur Discord.</p>
         </article>
       </div>
     </section>
@@ -285,21 +295,33 @@
       </div>
 
       <div class="partner-grid">
-        <article class="partner-card">
-          <span class="partner-mark">VPG</span>
+        <a class="partner-card" href="https://discord.gg/mXnHBTMD2" target="_blank" rel="noreferrer">
+          <span class="partner-mark" data-initials="VPG">
+            <img src="https://cdn.discordapp.com/icons/684007733472919592/45b5d64bf092d5a86e5a97fd95c230ae.png?size=128"
+                 alt="" loading="lazy" data-partner-logo
+                 onerror="this.remove(); this.parentElement.classList.add('is-fallback');">
+          </span>
           <div>
             <h3>VPG Belgique</h3>
             <p>Compétition club pro</p>
+            <span class="partner-meta">4 100+ membres</span>
           </div>
-        </article>
+          <span class="partner-arrow" aria-hidden="true">↗</span>
+        </a>
 
-        <article class="partner-card">
-          <span class="partner-mark">VFT</span>
+        <a class="partner-card" href="https://discord.gg/6QYDZ3YGt" target="_blank" rel="noreferrer">
+          <span class="partner-mark" data-initials="MD">
+            <img src="https://cdn.discordapp.com/icons/1154718465882607659/3dee34778c48a721d3955d7fea466c0b.png?size=128"
+                 alt="" loading="lazy" data-partner-logo
+                 onerror="this.remove(); this.parentElement.classList.add('is-fallback');">
+          </span>
           <div>
-            <h3>VFT</h3>
-            <p>Tournois club pro</p>
+            <h3>MrDarryl</h3>
+            <p>Communauté et tournois</p>
+            <span class="partner-meta">700+ membres</span>
           </div>
-        </article>
+          <span class="partner-arrow" aria-hidden="true">↗</span>
+        </a>
       </div>
     </section>
 
@@ -371,7 +393,7 @@
     <header class="assistant-header">
       <div class="assistant-title">
         <span class="assistant-avatar">
-          <img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
+          <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
         </span>
         <div>
           <strong>Assistant ModBot</strong>

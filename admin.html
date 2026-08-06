@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
+       la connexion au dashboard est automatique, rien a saisir.
+       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
+  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
   <meta name="modbot-discord-client-id" content="1510405235544424620">
   <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
   <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
@@ -20,7 +24,7 @@
   <header class="dashboard-topbar admin-topbar">
     <a class="brand" href="index.html" aria-label="Retour au site ModBot">
       <span class="brand-mark">
-        <img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
+        <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
       </span>
       <span>ModBot</span>
     </a>
@@ -119,51 +123,26 @@
           <article class="admin-panel premium-manager">
             <div class="admin-panel-head">
               <h3 data-i18n="admin.premium.title">💎 Premium membre</h3>
-              <span class="admin-badge active" data-i18n="admin.premium.badge">1 / 3 / 5 serveurs</span>
+              <span class="admin-badge active" data-i18n="admin.premium.badge">29,99 € · 5 mois</span>
             </div>
-            <p class="premium-limit-copy" data-i18n="admin.premium.copy">L’admin attribue l’offre et sa durée. Le membre associe ensuite ses serveurs depuis son dashboard selon sa limite.</p>
+            <p class="premium-limit-copy" data-i18n="admin.premium.copy">Offre unique : 29,99 € pour 5 mois d'accès complet, serveurs illimités. La date de fin est calculée automatiquement à l'attribution.</p>
             <div class="premium-form">
               <label>
                 <span data-i18n="admin.premium.member">ID ou pseudo Discord</span>
                 <input type="text" placeholder="@membre ou ID Discord" data-premium-member>
               </label>
               <label>
-                <span data-i18n="admin.premium.duration">Durée</span>
-                <select data-premium-duration>
-                  <option value="48 heures - Gratuit">48 heures - Gratuit 1 serveur</option>
-                  <option value="Partenaire à vie">Partenaire - 1 serveur à vie</option>
-                  <option value="2 mois">2 mois - Premium 15€</option>
-                  <option value="3 mois">3 mois - Ultra Premium 35€</option>
-                  <option value="1 an">1 an</option>
-                  <option value="Permanent">Permanent</option>
-                  <option value="custom">Durée personnalisée</option>
+                <span>Action</span>
+                <select data-premium-plan>
+                  <option value="premium">Activer Premium — 29,99 € / 5 mois</option>
+                  <option value="free">Révoquer l'abonnement</option>
                 </select>
               </label>
               <label>
-                <span>Offre</span>
-                <select data-premium-plan>
-                  <option value="free">Gratuit 48h - 1 serveur</option>
-                  <option value="partner">Partenaire - 1 serveur à vie</option>
-                  <option value="premium">Premium - 3 serveurs</option>
-                  <option value="ultra">Ultra Premium - 5 serveurs</option>
-                </select>
+                <span>Moyen de paiement</span>
+                <input type="text" placeholder="ticket, PayPal, virement…" value="ticket" data-premium-payment>
               </label>
-              <div class="premium-custom-duration" data-premium-custom-duration hidden>
-                <label>
-                  <span data-i18n="admin.premium.customValue">Durée personnalisée</span>
-                  <input type="number" min="1" value="14" data-premium-custom-value>
-                </label>
-                <label>
-                  <span data-i18n="admin.premium.customUnit">Unité</span>
-                  <select data-premium-custom-unit>
-                    <option value="jours">jours</option>
-                    <option value="semaines">semaines</option>
-                    <option value="mois">mois</option>
-                    <option value="ans">ans</option>
-                  </select>
-                </label>
-              </div>
-              <button class="primary-btn compact" type="button" data-premium-apply data-i18n="admin.premium.apply">Attribuer le premium</button>
+              <button class="primary-btn compact" type="button" data-premium-apply data-i18n="admin.premium.apply">Appliquer</button>
             </div>
             <div class="premium-list" data-premium-list>
               <div>

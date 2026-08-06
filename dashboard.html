@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
+       la connexion au dashboard est automatique, rien a saisir.
+       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
+  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
   <meta name="modbot-discord-client-id" content="1510405235544424620">
   <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
   <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
@@ -19,23 +23,57 @@
 
   <main class="dashboard-auth" data-auth-screen>
     <section class="auth-card">
-      <img class="auth-logo" src="assets/default_logo.png" alt="ModBot" onerror="this.onerror=null; this.src='logo.png';">
+      <img class="auth-logo" src="assets/default_logo.svg" alt="ModBot" onerror="this.onerror=null; this.src='logo.png';">
       <p class="eyebrow">Connexion dashboard</p>
       <h1>Connecte-toi avec Discord</h1>
       <p>Le dashboard affichera ensuite uniquement les serveurs où tu as accès à la configuration ModBot.</p>
-      <p class="oauth-note">Tu seras redirigé vers Discord pour autoriser ModBot, comme une vraie application Discord.</p>
+
       <button class="discord-login-btn" type="button" data-dashboard-login>
-        <span>💬</span>
+        <svg viewBox="0 0 24 18" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M20.3 1.6A19.8 19.8 0 0 0 15.4.1l-.3.5c1.6.4 3 1 4.3 1.8a16.9 16.9 0 0 0-14.9 0A15.6 15.6 0 0 1 8.9.6L8.6.1A19.7 19.7 0 0 0 3.7 1.6C.6 6.2-.3 10.7.2 15.1a19.9 19.9 0 0 0 6 3l1.2-1.9c-.7-.2-1.3-.5-1.9-.9l.5-.4a14.2 14.2 0 0 0 12.1 0l.5.4c-.6.4-1.2.7-1.9.9l1.2 1.9a19.8 19.8 0 0 0 6-3c.6-5.1-.8-9.6-3.6-13.5ZM8.1 12.4c-1.2 0-2.1-1.1-2.1-2.4S6.9 7.6 8.1 7.6s2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Zm7.8 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Z"/>
+        </svg>
         Se connecter avec Discord
       </button>
-      <a class="auth-return" href="index.html">Retour au site</a>
+
+      <p class="oauth-note">Tu seras redirigé vers Discord pour autoriser ModBot, puis ramené ici automatiquement.</p>
+
+      <!-- Diagnostic de connexion : rempli par script.js -->
+      <div class="auth-status" data-auth-status hidden>
+        <span class="auth-status-dot" data-auth-status-dot></span>
+        <span data-auth-status-text></span>
+      </div>
+
+      <!-- Réglage de secours : masqué tant que la connexion fonctionne.
+           Révélé automatiquement par script.js si le bot est injoignable. -->
+      <details class="auth-advanced" data-auth-advanced hidden>
+        <summary>
+          <span>⚙️ Adresse du bot</span>
+          <span class="auth-advanced-badge" data-api-badge>à vérifier</span>
+        </summary>
+        <div class="auth-advanced-body">
+          <p>
+            Le dashboard n'arrive pas à joindre le bot. Vérifie qu'il est démarré,
+            ou corrige son adresse ci-dessous.
+          </p>
+          <label class="auth-field">
+            <span>Adresse publique du bot</span>
+            <input type="url" data-api-url-input placeholder="https://mon-bot.up.railway.app" autocomplete="off" spellcheck="false">
+          </label>
+          <div class="auth-advanced-actions">
+            <button class="primary-btn compact" type="button" data-api-url-save>Tester et connecter</button>
+            <button class="secondary-btn compact" type="button" data-api-url-clear>Rétablir l'adresse par défaut</button>
+          </div>
+        </div>
+      </details>
+
+      <a class="auth-return" href="index.html">← Retour au site</a>
     </section>
   </main>
 
   <main class="server-picker" data-server-screen hidden>
     <header class="server-select-topbar">
       <a class="server-select-brand" href="index.html" aria-label="Accueil ModBot">
-        <img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
+        <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
         <span>ModBot</span>
       </a>
       <nav class="server-select-nav" aria-label="Navigation">
@@ -64,34 +102,8 @@
         <button class="secondary-btn compact" type="button" data-refresh-dashboard-servers>↻ Rafraîchir</button>
       </div>
 
-      <div class="server-grid">
-        <button class="server-card" type="button" data-server-name="Hote BOT - ModBot" data-server-logo="assets/default_logo.png" data-server-initials="HB">
-          <span class="server-logo-shell" data-initials="HB">
-            <img class="server-logo" src="assets/default_logo.png" alt="" data-logo-img>
-          </span>
-          <span>
-            <strong>Hote BOT - ModBot</strong>
-            <small>Administrateur • Premium actif</small>
-          </span>
-        </button>
-        <button class="server-card" type="button" data-server-name="VPG Belgique" data-server-logo="assets/default_logo.png" data-server-initials="VPG">
-          <span class="server-logo-shell" data-initials="VPG">
-            <img class="server-logo" src="assets/default_logo.png" alt="" data-logo-img>
-          </span>
-          <span>
-            <strong>VPG Belgique</strong>
-            <small>Manager • Tickets configurés</small>
-          </span>
-        </button>
-        <button class="server-card" type="button" data-server-name="Serveur test" data-server-logo="assets/default_logo.png" data-server-initials="ST">
-          <span class="server-logo-shell" data-initials="ST">
-            <img class="server-logo" src="assets/default_logo.png" alt="" data-logo-img>
-          </span>
-          <span>
-            <strong>Serveur test</strong>
-            <small>Owner • Serveur de test</small>
-          </span>
-        </button>
+      <div class="server-grid" data-server-grid>
+        <div class="server-grid-loading">Recherche de vos serveurs Discord…</div>
       </div>
     </section>
   </main>
@@ -100,22 +112,51 @@
   <header class="dashboard-topbar">
     <a class="brand" href="index.html" aria-label="Retour au site ModBot">
       <span class="brand-mark">
-        <img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
+        <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
       </span>
       <span>ModBot</span>
     </a>
 
-    <div class="dashboard-server">
-      <span class="server-dot"></span>
-      <span class="server-logo-shell server-current-logo-shell" data-current-server-logo-shell data-initials="HB">
-        <img class="server-current-logo" src="assets/default_logo.png" alt="" data-current-server-logo data-logo-img>
-      </span>
-      <span>Serveur actif</span>
-      <strong data-current-server>Hote BOT - ModBot</strong>
+    <!-- Sélecteur de serveur : menu déroulant animé -->
+    <div class="server-switcher" data-server-switcher>
+      <button class="server-switcher-trigger" type="button"
+              data-server-switcher-trigger
+              aria-haspopup="listbox" aria-expanded="false" aria-label="Changer de serveur">
+        <span class="server-logo-shell server-current-logo-shell" data-current-server-logo-shell data-initials="—">
+          <img class="server-current-logo" src="assets/default_logo.svg" alt="" data-current-server-logo data-logo-img>
+        </span>
+        <span class="server-switcher-label">
+          <small>Serveur actif</small>
+          <strong data-current-server>Sélectionner…</strong>
+        </span>
+        <svg class="server-switcher-chevron" viewBox="0 0 12 8" aria-hidden="true">
+          <path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="server-switcher-menu" data-server-switcher-menu role="listbox"
+           aria-label="Vos serveurs" hidden>
+        <div class="server-switcher-search">
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <path d="m10.5 10.5 3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <input type="search" placeholder="Rechercher un serveur…"
+                 data-server-switcher-search autocomplete="off" spellcheck="false">
+        </div>
+
+        <div class="server-switcher-list" data-server-switcher-list></div>
+
+        <div class="server-switcher-footer">
+          <button type="button" data-change-server>
+            <span aria-hidden="true">⊞</span> Voir tous mes serveurs
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="dashboard-actions">
-      <button class="secondary-btn compact" type="button" data-change-server>🔁 Changer de serveur</button>
       <button class="secondary-btn compact" type="button" data-dashboard-save>💾 Enregistrer</button>
       <a class="primary-btn compact" href="index.html">🏠 Retour au site</a>
     </div>
@@ -123,22 +164,31 @@
 
   <main class="dashboard-shell">
     <aside class="dashboard-sidebar" aria-label="Navigation dashboard">
-      <p class="sidebar-label">Configuration</p>
-      <button class="dash-nav is-active" type="button" data-dashboard-tab="overview"><span>01</span>📊 Vue globale</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="premium"><span>02</span>💎 Premium</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span>03</span>🎫 Tickets</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="security"><span>04</span>🛡️ Sécurité</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="channels"><span>05</span>📌 Salons</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="welcome"><span>06</span>👋 Arrivées/Départs</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="reactionroles"><span>07</span>🎭 Rôles réactions</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="recurring"><span>08</span>🔁 Messages récurrents</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="personalization"><span>09</span>🎨 Personnalisation</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="moderation"><span>10</span>⚒️ Modération</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="language"><span>11</span>🌍 Langue</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="tournaments"><span>12</span>🏆 Tournois</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="socials"><span>13</span>📣 Réseaux</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="ratings"><span>14</span>⭐ Ratings</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="logs"><span>15</span>🧾 Logs</button>
+      <p class="sidebar-label">Pilotage</p>
+      <button class="dash-nav is-active" type="button" data-dashboard-tab="overview"><span aria-hidden="true">📊</span>Vue globale</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="premium"><span aria-hidden="true">💎</span>Premium</button>
+
+      <p class="sidebar-label">Protection</p>
+      <button class="dash-nav" type="button" data-dashboard-tab="security"><span aria-hidden="true">🛡️</span>Sécurité</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="moderation"><span aria-hidden="true">⚒️</span>Modération</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="backups"><span aria-hidden="true">💾</span>Sauvegardes</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="logs"><span aria-hidden="true">🧾</span>Logs</button>
+
+      <p class="sidebar-label">Communauté</p>
+      <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span aria-hidden="true">🎫</span>Tickets</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="welcome"><span aria-hidden="true">👋</span>Arrivées / Départs</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="reactionroles"><span aria-hidden="true">🎭</span>Rôles réactions</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="ratings"><span aria-hidden="true">⭐</span>Ratings</button>
+
+      <p class="sidebar-label">Contenus</p>
+      <button class="dash-nav" type="button" data-dashboard-tab="channels"><span aria-hidden="true">📌</span>Salons</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="recurring"><span aria-hidden="true">🔁</span>Messages récurrents</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="socials"><span aria-hidden="true">📣</span>Réseaux</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="tournaments"><span aria-hidden="true">🏆</span>Tournois</button>
+
+      <p class="sidebar-label">Apparence</p>
+      <button class="dash-nav" type="button" data-dashboard-tab="personalization"><span aria-hidden="true">🎨</span>Personnalisation</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="language"><span aria-hidden="true">🌍</span>Langue</button>
     </aside>
 
     <section class="dashboard-content">
@@ -148,9 +198,9 @@
           <h1>Centre de contrôle ModBot</h1>
           <p class="server-summary">
             <span class="server-logo-shell server-summary-logo-shell" data-current-server-logo-shell data-initials="HB">
-              <img src="assets/default_logo.png" alt="" data-current-server-logo-inline data-logo-img>
+              <img src="assets/default_logo.svg" alt="" data-current-server-logo-inline data-logo-img>
             </span>
-            <span>Configuration du serveur <strong data-current-server-label>Hote BOT - ModBot</strong>.</span>
+            <span>Configuration du serveur <strong data-current-server-label>Serveur</strong>.</span>
           </p>
         </div>
         <div class="health-pill">
@@ -215,24 +265,43 @@
         </div>
 
         <div class="dashboard-grid two">
-          <div class="tool-panel premium-dashboard-card">
-            <h3>✨ Accès ModBot</h3>
-            <p>Les offres gèrent la durée et l’accès aux modules. Tu peux associer autant de serveurs administrables que nécessaire.</p>
-            <label>Offre active
-              <select data-premium-tier disabled>
-                <option value="free">Gratuit 48h</option>
-                <option value="partner">Partenaire à vie</option>
-                <option value="premium">Premium</option>
-                <option value="ultra">Ultra Premium</option>
-              </select>
-              <small class="field-help">Offre verrouillée : seul un administrateur ModBot peut la modifier.</small>
-            </label>
-            <div class="premium-progress">
-              <span>Serveurs associés</span>
-              <strong><span data-premium-used>0</span>/<span data-premium-limit>∞</span></strong>
+          <div class="tool-panel premium-dashboard-card" data-premium-status data-active="false">
+            <div class="premium-status-head">
+              <h3>✨ Ton abonnement</h3>
+              <span class="state" data-premium-state-badge data-level="idle">⚪ Aucun abonnement</span>
             </div>
-            <button class="primary-btn compact" type="button" data-premium-associate-current>➕ Associer le serveur actif</button>
-            <a class="secondary-btn compact" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite>➕ Inviter ModBot sur un serveur</a>
+
+            <div class="premium-offer-line">
+              <strong data-premium-price>29,99 €</strong>
+              <span>pour <span data-premium-duration>5 mois</span> d'accès complet</span>
+            </div>
+
+            <dl class="premium-meta">
+              <div>
+                <dt>Expire le</dt>
+                <dd data-premium-expiry>—</dd>
+              </div>
+              <div>
+                <dt>Temps restant</dt>
+                <dd data-premium-remaining data-level="ok">—</dd>
+              </div>
+              <div>
+                <dt>Serveurs associés</dt>
+                <dd><span data-premium-used>0</span> / <span data-premium-limit>∞</span></dd>
+              </div>
+            </dl>
+
+            <select data-premium-tier hidden>
+              <option value="free">Sans abonnement</option>
+              <option value="premium">Premium</option>
+            </select>
+
+            <p class="field-help">L'abonnement est activé par un administrateur ModBot après paiement, via un ticket sur le serveur Discord.</p>
+
+            <div class="premium-actions">
+              <button class="primary-btn compact" type="button" data-premium-associate-current>➕ Associer le serveur actif</button>
+              <a class="secondary-btn compact" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">🎫 Ouvrir un ticket Premium</a>
+            </div>
           </div>
 
           <div class="tool-panel">
@@ -246,21 +315,10 @@
         <div class="tool-panel">
           <div class="table-head">
             <h3>🧭 Serveurs disponibles</h3>
-            <span class="state active" data-premium-limit-badge>🟢 Gratuit 48h : serveurs illimités</span>
+            <span class="state active" data-premium-limit-badge>⚪ Sans abonnement : passe Premium pour tout débloquer</span>
           </div>
           <div class="premium-choice-grid">
-            <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="Hote BOT - ModBot" data-server-logo="assets/default_logo.png" data-server-initials="HB">
-              <span class="server-logo-shell" data-initials="HB"><img src="assets/default_logo.png" alt="" data-logo-img></span>
-              <span><strong>Hote BOT - ModBot</strong><small>Administrateur</small></span>
-            </button>
-            <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="VPG Belgique" data-server-logo="assets/default_logo.png" data-server-initials="VPG">
-              <span class="server-logo-shell" data-initials="VPG"><img src="assets/default_logo.png" alt="" data-logo-img></span>
-              <span><strong>VPG Belgique</strong><small>Manager</small></span>
-            </button>
-            <button class="premium-choice-card" type="button" data-premium-server-choice data-server-name="Serveur test" data-server-logo="assets/default_logo.png" data-server-initials="ST">
-              <span class="server-logo-shell" data-initials="ST"><img src="assets/default_logo.png" alt="" data-logo-img></span>
-              <span><strong>Serveur test</strong><small>Owner</small></span>
-            </button>
+            <div class="server-grid-loading">Connecte-toi pour associer tes serveurs.</div>
           </div>
         </div>
       </section>
@@ -292,7 +350,7 @@
               <textarea data-preview-desc>Merci de sélectionner la raison de ta demande via le menu. Un membre du staff viendra rapidement te répondre.</textarea>
             </label>
             <label>Bannière ticket
-              <input type="text" value="assets/default_banner.png" data-ticket-banner>
+              <input type="text" value="assets/default_banner.svg" data-ticket-banner>
             </label>
             <div class="form-row">
               <label>Salon ticket
@@ -310,7 +368,7 @@
             <h3>👁️ Aperçu Discord</h3>
             <div class="ticket-preview">
               <div class="discord-embed embed-with-thumb">
-                <span class="embed-thumb"><img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';"></span>
+                <span class="embed-thumb"><img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';"></span>
                 <h3><span data-live-ticket-emoji>📩</span> <span data-live-title>Ouvre ton ticket</span></h3>
                 <p data-live-desc>Merci de sélectionner la raison de ta demande via le menu. Un membre du staff viendra rapidement te répondre.</p>
                 <div class="embed-actions">
@@ -318,7 +376,7 @@
                   <span class="action-dark">❓ Question</span>
                   <span class="action-red">🔒 Déban</span>
                 </div>
-                <img class="preview-banner" src="assets/default_banner.png" alt="">
+                <img class="preview-banner" src="assets/default_banner.svg" alt="">
                 <p class="embed-footer">ModBot - Protection de votre communauté</p>
               </div>
             </div>
@@ -345,14 +403,25 @@
             <p class="eyebrow">🛡️ Sécurité</p>
             <h2>Protections serveur</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>🚫 Tout désactiver</button>
+          <div class="panel-title-actions">
+            <span class="state" data-safe-mode-badge hidden>🚨 Mode sécurité actif</span>
+            <button class="secondary-btn compact" type="button" data-security-reload>↻ Actualiser</button>
+            <button class="primary-btn compact" type="button" data-security-save>💾 Enregistrer la sécurité</button>
+          </div>
+        </div>
+
+        <!-- Diagnostic des permissions Discord du bot -->
+        <div class="alert-panel" data-security-permissions hidden>
+          <strong>⚠️ Permissions Discord manquantes</strong>
+          <p>Sans ces permissions, certaines protections resteront inactives :</p>
+          <ul data-security-permissions-list></ul>
         </div>
 
         <div class="toggle-grid">
           <label class="toggle-line"><input type="checkbox" checked><span></span><strong>🔗 Anti-lien</strong><small>Bloque les liens et invitations Discord.</small></label>
-          <label class="toggle-line"><input type="checkbox" checked data-security-insultes><span></span><strong>🚫 Filtre insultes</strong><small>Active ou désactive les avertissements automatiques sur les mots interdits.</small></label>
+          <label class="toggle-line"><input type="checkbox" checked data-security-insultes><span></span><strong>🚫 Filtre de langage</strong><small>Supprime les insultes et applique les sanctions graduées.</small></label>
           <label class="toggle-line"><input type="checkbox" checked><span></span><strong>💬 Anti-spam</strong><small>Détecte les messages trop rapides.</small></label>
-          <label class="toggle-line"><input type="checkbox"><span></span><strong>🚨 Anti-raid</strong><small>Surveille les arrivées suspectes.</small></label>
+          <label class="toggle-line"><input type="checkbox"><span></span><strong>🚨 Anti-raid</strong><small>Surveille les vagues d'arrivées suspectes.</small></label>
           <label class="toggle-line"><input type="checkbox"><span></span><strong>📣 Staff alert</strong><small>Préviens le staff des actions importantes.</small></label>
           <label class="toggle-line danger"><input type="checkbox"><span></span><strong>🔒 Lockdown</strong><small>Masque les salons en urgence.</small></label>
         </div>
@@ -361,6 +430,160 @@
           <label class="tool-panel mini-form">💬 Messages max<input type="number" value="5"></label>
           <label class="tool-panel mini-form">⏱️ Fenêtre anti-spam<input type="number" value="5"></label>
           <label class="tool-panel mini-form">🔨 Seuil ban<input type="number" value="4"></label>
+        </div>
+
+        <!-- ANTI-RAID -->
+        <div class="tool-panel security-block">
+          <div class="table-head">
+            <h3>🚨 Anti-raid</h3>
+            <label class="switch-inline">
+              <input type="checkbox" data-antiraid-enabled>
+              <span>Activer</span>
+            </label>
+          </div>
+          <p class="field-help">Détecte les vagues d'arrivées et les comptes fraîchement créés, puis bascule le serveur en mode sécurité.</p>
+          <div class="dashboard-grid three">
+            <label class="mini-form">Arrivées déclenchant l'alerte
+              <input type="number" min="2" max="100" value="8" data-antiraid-threshold>
+            </label>
+            <label class="mini-form">Fenêtre (secondes)
+              <input type="number" min="3" max="300" value="10" data-antiraid-window>
+            </label>
+            <label class="mini-form">Âge minimum du compte (jours)
+              <input type="number" min="0" max="365" value="7" data-antiraid-age>
+            </label>
+            <label class="mini-form">Action sur compte suspect
+              <select data-antiraid-action>
+                <option value="lockdown">Mode sécurité (recommandé)</option>
+                <option value="kick">Expulser</option>
+                <option value="ban">Bannir</option>
+              </select>
+            </label>
+            <label class="mini-form">Levée automatique (minutes)
+              <input type="number" min="1" max="1440" value="15" data-antiraid-release>
+            </label>
+            <label class="toggle-line compact">
+              <input type="checkbox" data-antiraid-quarantine><span></span>
+              <strong>Quarantaine</strong><small>Isoler les arrivées pendant l'alerte.</small>
+            </label>
+          </div>
+        </div>
+
+        <!-- ANTI-NUKE -->
+        <div class="tool-panel security-block">
+          <div class="table-head">
+            <h3>💥 Anti-nuke</h3>
+            <label class="switch-inline">
+              <input type="checkbox" data-antinuke-enabled>
+              <span>Activer</span>
+            </label>
+          </div>
+          <p class="field-help">Bloque les suppressions massives de salons et de rôles, les bannissements en série et les élévations de permissions.</p>
+          <div class="dashboard-grid two">
+            <label class="mini-form">Sanction de l'attaquant
+              <select data-antinuke-punishment>
+                <option value="strip">Retirer tous ses rôles</option>
+                <option value="kick">Expulser</option>
+                <option value="ban">Bannir</option>
+              </select>
+            </label>
+            <div class="mini-form">
+              <span>Options</span>
+              <label class="toggle-line compact">
+                <input type="checkbox" data-antinuke-restore><span></span>
+                <strong>Restauration auto</strong><small>Recréer ce qui vient d'être supprimé.</small>
+              </label>
+              <label class="toggle-line compact">
+                <input type="checkbox" data-antinuke-trustowner><span></span>
+                <strong>Propriétaire de confiance</strong><small>Ne jamais sanctionner le propriétaire.</small>
+              </label>
+            </div>
+          </div>
+          <label class="mini-form">Liste blanche — IDs de membres (séparés par une virgule)
+            <input type="text" placeholder="123456789012345678, 987654321098765432" data-antinuke-users>
+          </label>
+          <label class="mini-form">Liste blanche — IDs de rôles
+            <input type="text" placeholder="123456789012345678" data-antinuke-roles>
+          </label>
+        </div>
+
+        <!-- SANCTIONS -->
+        <div class="tool-panel security-block">
+          <div class="table-head">
+            <h3>⚖️ Échelle de sanctions</h3>
+            <label class="switch-inline">
+              <input type="checkbox" data-filter-tolerant>
+              <span>Détection avancée</span>
+            </label>
+          </div>
+          <p class="field-help">
+            La détection avancée repère les contournements : <code>s a l o p e</code>, <code>s@l0pe</code>,
+            <code>s.a.l.o.p.e</code>, caractères unicode similaires.
+          </p>
+          <div class="sanction-ladder" data-sanction-ladder></div>
+          <button class="secondary-btn compact" type="button" data-sanction-reset>♻️ Rétablir l'échelle par défaut</button>
+        </div>
+
+        <!-- MOTS FILTRÉS -->
+        <div class="tool-panel security-block">
+          <h3>🚫 Mots personnalisés</h3>
+          <p class="field-help">Un mot par ligne. Ils s'ajoutent à la liste intégrée et bénéficient de la détection avancée.</p>
+          <label class="mini-form">Mots interdits supplémentaires
+            <textarea rows="4" placeholder="motinterdit1&#10;motinterdit2" data-filter-custom-words></textarea>
+          </label>
+          <label class="mini-form">Exceptions (jamais sanctionnés)
+            <textarea rows="3" placeholder="pseudo-du-serveur&#10;terme-technique" data-filter-allowlist></textarea>
+          </label>
+        </div>
+      </section>
+
+      <!-- SAUVEGARDES -->
+      <section class="dash-panel" data-dashboard-panel="backups">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow">💾 Sauvegardes</p>
+            <h2>Sauvegarde et restauration</h2>
+          </div>
+          <div class="panel-title-actions">
+            <button class="secondary-btn compact" type="button" data-backups-reload>↻ Actualiser</button>
+            <button class="primary-btn compact" type="button" data-backup-create>➕ Créer une sauvegarde</button>
+          </div>
+        </div>
+
+        <div class="dashboard-grid two">
+          <div class="tool-panel">
+            <h3>⚙️ Sauvegarde automatique</h3>
+            <p class="field-help">ModBot enregistre régulièrement la structure du serveur : rôles, catégories, salons et permissions.</p>
+            <label class="toggle-line compact">
+              <input type="checkbox" data-autobackup-enabled><span></span>
+              <strong>Activer</strong><small>Sauvegarde périodique automatique.</small>
+            </label>
+            <label class="mini-form">Intervalle (heures)
+              <input type="number" min="1" max="720" value="24" data-autobackup-interval>
+            </label>
+            <p class="field-help">Dernière sauvegarde automatique : <strong data-autobackup-last>jamais</strong></p>
+            <button class="secondary-btn compact" type="button" data-autobackup-save>💾 Enregistrer</button>
+          </div>
+
+          <div class="tool-panel">
+            <h3>ℹ️ Comment ça marche</h3>
+            <ul class="info-list">
+              <li>Une sauvegarde contient les <strong>rôles</strong>, <strong>catégories</strong>, <strong>salons</strong> et leurs <strong>permissions</strong>.</li>
+              <li>La restauration est <strong>additive</strong> : elle recrée ce qui manque, sans jamais rien supprimer.</li>
+              <li>Une <strong>confirmation</strong> est obligatoire avant toute restauration.</li>
+              <li>Les 10 sauvegardes les plus récentes sont conservées par serveur.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tool-panel">
+          <div class="table-head">
+            <h3>📦 Sauvegardes disponibles</h3>
+            <span class="state" data-backups-count>0 sauvegarde</span>
+          </div>
+          <div class="backup-list" data-backup-list>
+            <div class="backup-empty">Aucune sauvegarde pour le moment.</div>
+          </div>
         </div>
       </section>
 
@@ -454,7 +677,7 @@
           </div>
           <div class="dashboard-grid three">
             <label>Arrière-plan
-              <input type="text" value="assets/default_banner.png" data-welcome-bg>
+              <input type="text" value="assets/default_banner.svg" data-welcome-bg>
             </label>
             <label>Police d’écriture
               <select data-welcome-font>
@@ -652,10 +875,10 @@
           <div class="tool-panel preview-panel">
             <h3>👁️ Aperçu embed</h3>
             <div class="discord-embed embed-with-thumb live-color-preview">
-              <span class="embed-thumb"><img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';"></span>
+              <span class="embed-thumb"><img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';"></span>
               <h3 data-personalization-preview-title>Panel ModBot</h3>
               <p>Configuration serveur, tickets, sécurité et statistiques.</p>
-              <img class="preview-banner" src="assets/default_banner.png" alt="">
+              <img class="preview-banner" src="assets/default_banner.svg" alt="">
               <p class="embed-footer" data-personalization-preview-footer>ModBot - Protection de votre communauté</p>
             </div>
           </div>
@@ -939,13 +1162,29 @@
         <div class="panel-title">
           <div>
             <p class="eyebrow">🧾 Logs</p>
-            <h2>Dernières actions</h2>
+            <h2>Journal du serveur</h2>
           </div>
-          <button class="secondary-btn compact" type="button">📤 Exporter</button>
+          <div class="panel-title-actions">
+            <button class="secondary-btn compact" type="button" data-logs-reload>↻ Actualiser</button>
+            <button class="secondary-btn compact" type="button" data-logs-export>📤 Exporter</button>
+          </div>
+        </div>
+
+        <div class="log-filters" data-log-filters role="tablist" aria-label="Catégories de logs">
+          <button class="log-filter is-active" type="button" data-log-category="all" role="tab" aria-selected="true">🗂️ Tout</button>
+        </div>
+
+        <div class="tool-panel">
+          <div class="table-head">
+            <h3>📡 Catégories enregistrées</h3>
+            <button class="secondary-btn compact" type="button" data-logs-save>💾 Enregistrer</button>
+          </div>
+          <p class="field-help">Décoche une catégorie pour cesser de la publier sur Discord. Elle reste consultable ici.</p>
+          <div class="log-toggle-grid" data-log-toggles></div>
         </div>
 
         <div class="log-feed" data-dashboard-log-feed>
-          <div><span>—</span> En attente des logs réels du bot.</div>
+          <div class="log-empty"><span>—</span> Sélectionne un serveur pour afficher son journal.</div>
         </div>
       </section>
     </section>

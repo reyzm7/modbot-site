@@ -8,8 +8,8 @@ const modbotDiscordClientId = String(window.MODBOT_DISCORD_CLIENT_ID || document
 const modbotLoginRedirectUri = String(window.MODBOT_LOGIN_REDIRECT_URI || document.querySelector('meta[name="modbot-login-redirect-uri"]')?.content || "").trim();
 const modbotInviteRedirectUri = String(window.MODBOT_INVITE_REDIRECT_URI || document.querySelector('meta[name="modbot-invite-redirect-uri"]')?.content || "").trim();
 const modbotBotPermissions = String(window.MODBOT_BOT_PERMISSIONS || document.querySelector('meta[name="modbot-bot-permissions"]')?.content || "3124257994829047");
-const modbotDefaultLogo = "assets/default_logo.png";
-const modbotDefaultBanner = "assets/default_banner.png";
+const modbotDefaultLogo = "assets/default_logo.svg";
+const modbotDefaultBanner = "assets/default_banner.svg";
 
 const siteTranslations = {
   fr: {
@@ -47,32 +47,35 @@ const siteTranslations = {
     "features.development.title": "Automatisations",
     "features.development.copy": "Messages récurrents, rôles réactions, arrivées et départs configurables.",
     "pricing.eyebrow": "Tarifs",
-    "pricing.title": "Des offres simples et claires",
-    "pricing.copy": "Commence gratuitement avec la sécurité, puis ajoute les modules avancés selon les besoins de ton serveur.",
-    "pricing.free.title": "Gratuit",
-    "pricing.free.copy": "Le socle essentiel, avec un essai Premium de 48h.",
-    "pricing.free.period": "/ toujours",
-    "pricing.free.item1": "Sécurité serveur",
-    "pricing.free.item2": "Modération",
-    "pricing.free.item3": "Salons de logs",
-    "pricing.free.item4": "Essai Premium 48h",
-    "pricing.free.cta": "Choisir cette offre",
-    "pricing.premium.title": "Offre Premium",
-    "pricing.premium.copy": "Pour activer les modules avancés dans le temps, sans limite de serveurs.",
-    "pricing.premium.period": "/ 2 mois",
-    "pricing.premium.item1": "Modération complète",
-    "pricing.premium.item2": "Ratings support",
-    "pricing.premium.item3": "Logs et salons avancés",
-    "pricing.premium.item4": "Rôles réactions, réseaux et tournois",
-    "pricing.premium.cta": "Choisir cette offre",
-    "pricing.ultimate.title": "Ultra Premium",
-    "pricing.ultimate.copy": "Tout ModBot, accompagnement prioritaire et personnalisations dédiées, sans limite de serveurs.",
-    "pricing.ultimate.period": "/ 3 mois",
-    "pricing.ultimate.item1": "Tout le Premium + tickets",
-    "pricing.ultimate.item2": "Support Discord prioritaire",
-    "pricing.ultimate.item3": "Personnalisations juste pour vous",
-    "pricing.ultimate.item4": "Accompagnement configuration avancée",
-    "pricing.ultimate.cta": "Choisir cette offre",
+    "pricing.title": "La protection est gratuite. Pour toujours.",
+    "pricing.copy": "Sécurisez votre serveur sans payer. Passez Premium quand vous voulez les modules communautaires.",
+    "pricing.free.title": "Protection",
+    "pricing.free.copy": "Tout ce qui protège votre serveur, sans limite de temps ni de serveurs.",
+    "pricing.free.amount": "Gratuit",
+    "pricing.free.period": "pour toujours",
+    "pricing.free.note": "Aucune carte bancaire, aucune limite de durée.",
+    "pricing.free.item1": "Anti-raid et détection de comptes suspects",
+    "pricing.free.item2": "Anti-nuke avec restauration automatique",
+    "pricing.free.item3": "Filtre de langage anti-contournement",
+    "pricing.free.item4": "Sanctions graduées et historique",
+    "pricing.free.item5": "Système de logs complet",
+    "pricing.free.item6": "Sauvegardes et restauration du serveur",
+    "pricing.free.cta": "Commencer gratuitement",
+    "pricing.free.support": "Invitez ModBot, la protection est active immédiatement.",
+    "pricing.premium.ribbon": "Premium",
+    "pricing.premium.title": "Premium",
+    "pricing.premium.copy": "Toute la protection, plus les modules communautaires et l'automatisation.",
+    "pricing.premium.period": "pour 5 mois",
+    "pricing.premium.note": "Paiement unique — aucun renouvellement automatique.",
+    "pricing.premium.item0": "Toute la protection gratuite incluse",
+    "pricing.premium.item1": "Système de tickets et évaluations",
+    "pricing.premium.item2": "Messages d'arrivée et de départ personnalisés",
+    "pricing.premium.item3": "Rôles réactions et messages récurrents",
+    "pricing.premium.item4": "Alertes réseaux sociaux et tournois",
+    "pricing.premium.item5": "Personnalisation complète des embeds",
+    "pricing.premium.item6": "Serveurs illimités",
+    "pricing.premium.cta": "Passer Premium",
+    "pricing.premium.support": "Activation via un ticket sur notre serveur Discord.",
     "admin.eyebrow": "Administration",
     "admin.title": "Centre administrateur du site",
     "admin.copy": "Gérez le premium, suivez l’activité du site et préparez la synchronisation des serveurs où ModBot est installé.",
@@ -132,32 +135,35 @@ const siteTranslations = {
     "features.development.title": "Automations",
     "features.development.copy": "Recurring messages, reaction roles, welcome and departure messages you can configure.",
     "pricing.eyebrow": "Pricing",
-    "pricing.title": "Simple and clear offers",
-    "pricing.copy": "Start free with security, then add advanced modules depending on your server needs.",
-    "pricing.free.title": "Free",
-    "pricing.free.copy": "The essential base, with a 48-hour Premium trial.",
-    "pricing.free.period": "/ forever",
-    "pricing.free.item1": "Server security",
-    "pricing.free.item2": "Moderation",
-    "pricing.free.item3": "Log channels",
-    "pricing.free.item4": "48-hour Premium trial",
-    "pricing.free.cta": "Choose this offer",
-    "pricing.premium.title": "Premium offer",
-    "pricing.premium.copy": "Enable advanced modules over time, with no server quantity limit.",
-    "pricing.premium.period": "/ 2 months",
-    "pricing.premium.item1": "Complete moderation",
-    "pricing.premium.item2": "Support ratings",
-    "pricing.premium.item3": "Advanced logs and channels",
-    "pricing.premium.item4": "Reaction roles, socials and tournaments",
-    "pricing.premium.cta": "Choose this offer",
-    "pricing.ultimate.title": "Ultra Premium",
-    "pricing.ultimate.copy": "All of ModBot, priority support and dedicated customizations, with no server quantity limit.",
-    "pricing.ultimate.period": "/ 3 months",
-    "pricing.ultimate.item1": "Everything in Premium + tickets",
-    "pricing.ultimate.item2": "Priority Discord support",
-    "pricing.ultimate.item3": "Customizations just for you",
-    "pricing.ultimate.item4": "Advanced setup assistance",
-    "pricing.ultimate.cta": "Choose this offer",
+    "pricing.title": "Protection is free. Forever.",
+    "pricing.copy": "Secure your server without paying. Go Premium when you want the community modules.",
+    "pricing.free.title": "Protection",
+    "pricing.free.copy": "Everything that protects your server, with no time or server limits.",
+    "pricing.free.amount": "Free",
+    "pricing.free.period": "forever",
+    "pricing.free.note": "No credit card, no time limit.",
+    "pricing.free.item1": "Anti-raid and suspicious account detection",
+    "pricing.free.item2": "Anti-nuke with automatic restore",
+    "pricing.free.item3": "Bypass-resistant language filter",
+    "pricing.free.item4": "Graduated sanctions and history",
+    "pricing.free.item5": "Complete logging system",
+    "pricing.free.item6": "Server backups and restore",
+    "pricing.free.cta": "Start for free",
+    "pricing.free.support": "Invite ModBot — protection is active right away.",
+    "pricing.premium.ribbon": "Premium",
+    "pricing.premium.title": "Premium",
+    "pricing.premium.copy": "All the protection, plus community modules and automation.",
+    "pricing.premium.period": "for 5 months",
+    "pricing.premium.note": "One-off payment — no automatic renewal.",
+    "pricing.premium.item0": "All free protection included",
+    "pricing.premium.item1": "Ticket system and ratings",
+    "pricing.premium.item2": "Custom join and leave messages",
+    "pricing.premium.item3": "Reaction roles and recurring messages",
+    "pricing.premium.item4": "Social media alerts and tournaments",
+    "pricing.premium.item5": "Full embed customization",
+    "pricing.premium.item6": "Unlimited servers",
+    "pricing.premium.cta": "Go Premium",
+    "pricing.premium.support": "Activated through a ticket on our Discord server.",
     "admin.eyebrow": "Administration",
     "admin.title": "Site administrator center",
     "admin.copy": "Manage premium, track site activity and prepare server synchronization for guilds where ModBot is installed.",
@@ -217,32 +223,35 @@ const siteTranslations = {
     "features.development.title": "الأتمتة",
     "features.development.copy": "رسائل متكررة، أدوار تفاعلية، ورسائل ترحيب ومغادرة قابلة للإعداد.",
     "pricing.eyebrow": "الأسعار",
-    "pricing.title": "عروض بسيطة وواضحة",
-    "pricing.copy": "ابدأ مجاناً بالحماية، ثم أضف الوحدات المتقدمة حسب احتياجات خادمك.",
-    "pricing.free.title": "مجاني",
-    "pricing.free.copy": "القاعدة الأساسية، مع تجربة Premium لمدة 48 ساعة.",
-    "pricing.free.period": "/ دائماً",
-    "pricing.free.item1": "حماية الخادم",
-    "pricing.free.item2": "الإشراف",
-    "pricing.free.item3": "قنوات السجلات",
-    "pricing.free.item4": "تجربة Premium لمدة 48 ساعة",
-    "pricing.free.cta": "اختيار هذا العرض",
-    "pricing.premium.title": "عرض Premium",
-    "pricing.premium.copy": "فعّل الوحدات المتقدمة حسب المدة، بدون حد لعدد الخوادم.",
-    "pricing.premium.period": "/ شهرين",
-    "pricing.premium.item1": "إشراف كامل",
-    "pricing.premium.item2": "تقييمات الدعم",
-    "pricing.premium.item3": "سجلات وقنوات متقدمة",
-    "pricing.premium.item4": "أدوار التفاعل والشبكات والبطولات",
-    "pricing.premium.cta": "اختيار هذا العرض",
-    "pricing.ultimate.title": "Ultra Premium",
-    "pricing.ultimate.copy": "كل ميزات ModBot مع دعم أولوية وتخصيصات مخصصة، بدون حد لعدد الخوادم.",
-    "pricing.ultimate.period": "/ 3 أشهر",
-    "pricing.ultimate.item1": "كل ميزات Premium + التذاكر",
-    "pricing.ultimate.item2": "دعم Discord أولوية",
-    "pricing.ultimate.item3": "تخصيصات خاصة بك",
-    "pricing.ultimate.item4": "مساعدة إعداد متقدمة",
-    "pricing.ultimate.cta": "اختيار هذا العرض",
+    "pricing.title": "الحماية مجانية. إلى الأبد.",
+    "pricing.copy": "أمّن خادمك دون دفع. اشترك في Premium عندما تريد وحدات المجتمع.",
+    "pricing.free.title": "الحماية",
+    "pricing.free.copy": "كل ما يحمي خادمك، بدون حد زمني ولا حد للخوادم.",
+    "pricing.free.amount": "مجاني",
+    "pricing.free.period": "إلى الأبد",
+    "pricing.free.note": "بدون بطاقة بنكية، بدون حد زمني.",
+    "pricing.free.item1": "الحماية من الغارات وكشف الحسابات المشبوهة",
+    "pricing.free.item2": "الحماية من التخريب مع الاستعادة التلقائية",
+    "pricing.free.item3": "فلتر لغة مقاوم للتحايل",
+    "pricing.free.item4": "عقوبات متدرجة وسجل المخالفات",
+    "pricing.free.item5": "نظام سجلات كامل",
+    "pricing.free.item6": "نسخ احتياطي واستعادة الخادم",
+    "pricing.free.cta": "ابدأ مجاناً",
+    "pricing.free.support": "ادعُ ModBot، الحماية تعمل فوراً.",
+    "pricing.premium.ribbon": "Premium",
+    "pricing.premium.title": "Premium",
+    "pricing.premium.copy": "كل الحماية، بالإضافة إلى وحدات المجتمع والأتمتة.",
+    "pricing.premium.period": "لمدة 5 أشهر",
+    "pricing.premium.note": "دفعة واحدة — بدون تجديد تلقائي.",
+    "pricing.premium.item0": "كل الحماية المجانية مشمولة",
+    "pricing.premium.item1": "نظام التذاكر والتقييمات",
+    "pricing.premium.item2": "رسائل ترحيب ومغادرة مخصصة",
+    "pricing.premium.item3": "أدوار التفاعل والرسائل المتكررة",
+    "pricing.premium.item4": "تنبيهات الشبكات الاجتماعية والبطولات",
+    "pricing.premium.item5": "تخصيص كامل للرسائل المضمنة",
+    "pricing.premium.item6": "خوادم غير محدودة",
+    "pricing.premium.cta": "اشترك في Premium",
+    "pricing.premium.support": "التفعيل عبر تذكرة على خادم Discord الخاص بنا.",
     "admin.eyebrow": "الإدارة",
     "admin.title": "مركز إدارة الموقع",
     "admin.copy": "إدارة Premium، متابعة نشاط الموقع، وتحضير مزامنة الخوادم التي يوجد فيها ModBot.",
@@ -273,11 +282,11 @@ const commandResponses = {
   panel: {
     title: "Panneau d'administration - ModBot",
     command: "/panel",
-    body: "Panneau de contrôle de ModBot sur Hote BOT - ModBot. Toutes les modérations sont sauvegardées par serveur.",
+    body: "Panneau de contrôle de ModBot sur Mon Serveur. Toutes les modérations sont sauvegardées par serveur.",
     type: "panel"
   },
   stats: {
-    title: "Statistiques - Hote BOT - ModBot",
+    title: "Statistiques - Mon Serveur",
     command: "/serverstats",
     body: "Résumé instantané du serveur : membres, messages du jour, avertissements, bans et tickets.",
     type: "stats"
@@ -428,7 +437,7 @@ function initStarfield() {
 
 function getCommandMarkup(command) {
   const data = commandResponses[command] || commandResponses.panel;
-  const thumb = `<span class="embed-thumb"><img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';"></span>`;
+  const thumb = `<span class="embed-thumb"><img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';"></span>`;
   let embedContent = "";
 
   if (data.type === "panel") {
@@ -436,7 +445,7 @@ function getCommandMarkup(command) {
       <div class="discord-embed embed-with-thumb">
         ${thumb}
         <h3>${data.title}</h3>
-        <p>Panneau de contrôle de <strong>ModBot</strong> sur <strong>Hote BOT - ModBot</strong>.</p>
+        <p>Panneau de contrôle de <strong>ModBot</strong> sur <strong>Mon Serveur</strong>.</p>
         <p>Toutes les modérations sont <strong>sauvegardées par serveur</strong>.</p>
         <div class="embed-grid">
           <div class="embed-stat"><strong>Mots filtrés</strong><span class="embed-pill">37</span></div>
@@ -528,7 +537,7 @@ function getCommandMarkup(command) {
   return `
     <div class="discord-command-preview">
       <div class="discord-message">
-        <span class="discord-avatar"><img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">MB</span>
+        <span class="discord-avatar"><img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">MB</span>
         <div>
           <div class="discord-meta">
             <span class="used-command">LGCY a utilisé</span>
@@ -741,11 +750,21 @@ function initialsFromName(value) {
   return words.slice(0, 2).map((word) => word[0]).join("").toUpperCase();
 }
 
+/**
+ * Ordre de résolution de l'API ModBot :
+ *   1. window.MODBOT_API_URL (injection serveur, non modifiable côté client)
+ *   2. localStorage (saisie manuelle explicite depuis l'écran de connexion)
+ *   3. <meta name="modbot-api-url"> (valeur par défaut du déploiement)
+ *
+ * La saisie manuelle passe AVANT la balise meta : si l'adresse déployée
+ * devient obsolète, l'utilisateur doit pouvoir la corriger lui-même sans
+ * attendre un redéploiement du site.
+ */
 function getConfiguredModbotApiBase() {
   return normalizeApiBase(
     window.MODBOT_API_URL ||
-    document.querySelector('meta[name="modbot-api-url"]')?.content ||
     localStorage.getItem("modbot-api-url") ||
+    document.querySelector('meta[name="modbot-api-url"]')?.content ||
     ""
   );
 }
@@ -753,24 +772,86 @@ function getConfiguredModbotApiBase() {
 function getModbotApiBase() {
   const configured = getConfiguredModbotApiBase();
   if (configured) return configured;
-  const detected = normalizeApiBase(sessionStorage.getItem("modbot-api-base") || "");
+  // Base découverte automatiquement lors d'une visite précédente
+  const detected = normalizeApiBase(
+    sessionStorage.getItem("modbot-api-base") ||
+    localStorage.getItem("modbot-api-base-auto") ||
+    ""
+  );
   if (detected) return detected;
-  if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+  // Le bot peut servir le site lui-même : dans ce cas l'API est ici.
+  if (location.protocol === "http:" || location.protocol === "https:") {
     return `${location.protocol}//${location.host}`;
   }
   return "";
 }
 
+function isLocalHost() {
+  return ["localhost", "127.0.0.1", "[::1]", ""].includes(location.hostname);
+}
+
+/** Formate une date ISO en date lisible française. Renvoie "—" si invalide. */
+function formatIsoDateFr(value) {
+  if (!value) return "—";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
+  return date.toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
+}
+
+/** Date + heure lisibles, pour les journaux. */
+function formatIsoDateTimeFr(value) {
+  if (!value) return "—";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
+  return date.toLocaleString("fr-FR", {
+    day: "2-digit", month: "2-digit", year: "numeric",
+    hour: "2-digit", minute: "2-digit"
+  });
+}
+
+/** Mémorise l'URL saisie par l'utilisateur (ou l'efface si vide). */
+function setModbotApiBase(url) {
+  const clean = normalizeApiBase(url || "");
+  if (clean) {
+    localStorage.setItem("modbot-api-url", clean);
+    sessionStorage.setItem("modbot-api-base", clean);
+  } else {
+    localStorage.removeItem("modbot-api-url");
+    sessionStorage.removeItem("modbot-api-base");
+  }
+  return clean;
+}
+
 function getModbotApiCandidates() {
   const candidates = [
+    // 1. Configuration explicite (meta / localStorage) — priorité absolue
     getConfiguredModbotApiBase(),
-    normalizeApiBase(sessionStorage.getItem("modbot-api-base") || "")
+    // 2. Base ayant fonctionné précédemment
+    normalizeApiBase(sessionStorage.getItem("modbot-api-base") || ""),
+    normalizeApiBase(localStorage.getItem("modbot-api-base-auto") || "")
   ];
+  // 3. Même origine : le cas idéal, le bot sert le site lui-même
   if (location.protocol === "http:" || location.protocol === "https:") {
     candidates.push(normalizeApiBase(`${location.protocol}//${location.host}`));
   }
-  candidates.push("http://localhost:8080", "http://127.0.0.1:8080");
+  // 4. Adresses locales, uniquement en développement : depuis une page HTTPS
+  //    le navigateur bloque le contenu mixte et pollue la console d'erreurs.
+  if (isLocalHost() || location.protocol === "file:") {
+    candidates.push("http://localhost:8080", "http://127.0.0.1:8080");
+  }
   return [...new Set(candidates.filter(Boolean))];
+}
+
+/** Mémorise durablement une base d'API validée automatiquement. */
+function rememberApiBase(base) {
+  if (!base) return;
+  sessionStorage.setItem("modbot-api-base", base);
+  localStorage.setItem("modbot-api-base-auto", base);
+}
+
+function forgetAutoApiBase() {
+  sessionStorage.removeItem("modbot-api-base");
+  localStorage.removeItem("modbot-api-base-auto");
 }
 
 function currentCleanUrl() {
@@ -1068,11 +1149,7 @@ function initAdminZone() {
   const adminGateItems = document.querySelectorAll("[data-admin-gate]");
   const protectedItems = document.querySelectorAll("[data-admin-protected]");
   const toast = document.getElementById("adminToast");
-  const durationSelect = document.querySelector("[data-premium-duration]");
   const planSelect = document.querySelector("[data-premium-plan]");
-  const customDuration = document.querySelector("[data-premium-custom-duration]");
-  const customDurationValue = document.querySelector("[data-premium-custom-value]");
-  const customDurationUnit = document.querySelector("[data-premium-custom-unit]");
   const adminTabs = document.querySelectorAll("[data-admin-tab]");
   const adminPanels = document.querySelectorAll("[data-admin-panel]");
   let storedAdminIds = [];
@@ -1141,7 +1218,7 @@ function initAdminZone() {
         serverList.innerHTML = data.guilds.map((guild) => `
           <div>
             <span class="server-logo-shell" data-initials="${escapeHtmlValue(guild.initials || initialsFromName(guild.name))}">
-              <img src="${escapeHtmlValue(guild.icon || modbotDefaultLogo)}" alt="" data-logo-img onerror="if(!this.dataset.logoFallbackTried){this.dataset.logoFallbackTried='1';this.src='assets/default_logo.png'}else{this.parentElement.classList.add('is-fallback')}" onload="this.parentElement.classList.remove('is-fallback')">
+              <img src="${escapeHtmlValue(guild.icon || modbotDefaultLogo)}" alt="" data-logo-img onerror="if(!this.dataset.logoFallbackTried){this.dataset.logoFallbackTried='1';this.src='assets/default_logo.svg'}else{this.parentElement.classList.add('is-fallback')}" onload="this.parentElement.classList.remove('is-fallback')">
             </span>
             <span><strong>${escapeHtmlValue(guild.name)}</strong><small>ID ${escapeHtmlValue(guild.id)}</small></span>
           </div>
@@ -1197,78 +1274,49 @@ function initAdminZone() {
     });
   });
 
-  function updateCustomDurationVisibility() {
-    if (!customDuration || !durationSelect) return;
-    customDuration.hidden = durationSelect.value !== "custom";
-  }
-
-  function getPremiumDuration() {
-    if (durationSelect?.value !== "custom") {
-      return durationSelect?.value || "Permanent";
-    }
-
-    const value = Math.max(1, Number(customDurationValue?.value || 1));
-    const unit = customDurationUnit?.value || "jours";
-    return `${value} ${unit}`;
-  }
-
-  function getAdminPremiumPlanLabel(plan) {
-    return {
-      free: "Gratuit 48h",
-      partner: "Partenaire à vie",
-      premium: "Premium",
-      ultra: "Ultra Premium"
-    }[plan] || "Premium";
-  }
-
-  function getAdminPremiumServerLimit(plan) {
-    return null;
-  }
-
-  durationSelect?.addEventListener("change", updateCustomDurationVisibility);
-  updateCustomDurationVisibility();
-
   document.querySelector("[data-premium-apply]")?.addEventListener("click", async () => {
     const memberInput = document.querySelector("[data-premium-member]");
     const list = document.querySelector("[data-premium-list]");
-    const premiumTicketList = document.querySelector("[data-premium-ticket-list]");
+    const paymentInput = document.querySelector("[data-premium-payment]");
     const member = memberInput?.value.trim();
-    if (!member || !list) return;
-    const duration = getPremiumDuration();
-    const plan = planSelect?.value || "free";
-    const planLabel = getAdminPremiumPlanLabel(plan);
-    const item = document.createElement("div");
-    const identity = document.createElement("span");
-    const name = document.createElement("strong");
-    const serverLine = document.createElement("small");
-    const meta = document.createElement("span");
-    name.textContent = member;
-    serverLine.textContent = "Serveurs à associer depuis le dashboard";
-    meta.textContent = `${planLabel} • ${duration} • serveurs illimités`;
-    identity.append(name, serverLine);
-    item.append(identity, meta);
-    list.prepend(item);
-    if (premiumTicketList) {
-      const request = document.createElement("div");
-      const requestIdentity = document.createElement("span");
-      const requestName = document.createElement("strong");
-      const requestMeta = document.createElement("small");
-      requestName.textContent = member;
-      requestMeta.textContent = `Ticket Premium à ouvrir ou vérifier : ${planLabel}, durée ${duration}, serveurs illimités`;
-      requestIdentity.append(requestName, requestMeta);
-      const requestState = document.createElement("span");
-      requestState.textContent = "🎫 Ticket requis";
-      request.append(requestIdentity, requestState);
-      premiumTicketList.prepend(request);
+    if (!member) {
+      showAdminToast("⚠️ Indique l'ID ou le pseudo Discord du membre");
+      return;
     }
+
+    // Offre unique : on active Premium (29,99 € / 5 mois) ou on le révoque.
+    const plan = planSelect?.value === "free" ? "free" : "premium";
+    const payment = paymentInput?.value.trim() || "ticket";
+
+    let result = null;
     try {
-      await modbotApiFetch("/api/admin/premium", {
+      const response = await modbotApiFetch("/api/admin/premium", {
         method: "POST",
-        body: JSON.stringify({ member, duration, plan, servers_limit: null, premium_unlimited: true })
+        body: JSON.stringify({ member, plan, payment })
       });
-      showAdminToast(`💎 Premium synchronisé avec le bot pour ${member}`);
+      result = response?.premium || null;
+      showAdminToast(plan === "premium"
+        ? `💎 Premium activé pour ${member} jusqu'au ${formatIsoDateFr(result?.expires_at)}`
+        : `🚫 Abonnement révoqué pour ${member}`);
     } catch (error) {
-      showAdminToast(`💾 Premium ajouté localement, connexion bot non disponible`);
+      showAdminToast(`⚠️ ${error?.message || "Connexion au bot impossible"}`);
+      return;
+    }
+
+    if (list) {
+      const item = document.createElement("div");
+      const identity = document.createElement("span");
+      const name = document.createElement("strong");
+      const serverLine = document.createElement("small");
+      const meta = document.createElement("span");
+      name.textContent = member;
+      serverLine.textContent = plan === "premium"
+        ? `Actif jusqu'au ${formatIsoDateFr(result?.expires_at)} · serveurs illimités`
+        : "Abonnement révoqué";
+      meta.textContent = plan === "premium" ? "💎 Premium · 29,99 € / 5 mois" : "⚪ Sans abonnement";
+      identity.append(name, serverLine);
+      item.append(identity, meta);
+      list.prepend(item);
     }
     memberInput.value = "";
   });
@@ -1440,32 +1488,54 @@ function initDashboard() {
   const personalizationDefaults = {
     name: "ModBot",
     footer: "ModBot - Protection de votre communauté",
-    logo: "assets/default_logo.png",
-    banner: "assets/default_banner.png",
+    logo: "assets/default_logo.svg",
+    banner: "assets/default_banner.svg",
     color: "#5865F2"
+  };
+  // Offre unique : soit Premium actif, soit aucun abonnement.
+  const PREMIUM_OFFER = {
+    price: 29.99,
+    priceLabel: "29,99 €",
+    durationMonths: 5,
+    durationLabel: "5 mois"
   };
   const premiumUnlimitedLimit = Number.POSITIVE_INFINITY;
   const premiumTierLimits = {
     free: premiumUnlimitedLimit,
-    partner: premiumUnlimitedLimit,
-    premium: premiumUnlimitedLimit,
-    ultra: premiumUnlimitedLimit
+    premium: premiumUnlimitedLimit
   };
   const premiumTierLabels = {
-    free: "Gratuit 48h",
-    partner: "Collaborateur / partenaire",
-    premium: "Premium",
-    ultra: "Ultra Premium"
+    free: "Sans abonnement",
+    premium: "Premium"
   };
   function normalizePremiumTierValue(value) {
     const normalized = String(value || "").trim().toLowerCase().replace(/[\s-]+/g, "_");
-    if (normalized === "ultimate" || normalized === "ultra_premium" || normalized === "complet") return "ultra";
-    if (normalized === "partenaire" || normalized === "collaborateur") return "partner";
-    return Object.hasOwn(premiumTierLimits, normalized) ? normalized : "";
+    if (!normalized) return "";
+    // Les anciens paliers (ultra, partner…) deviennent tous « premium »
+    return ["free", "gratuit", "none", "aucun"].includes(normalized) ? "free" : "premium";
   }
 
-  const freePanels = new Set(["overview", "premium", "security", "channels", "moderation", "language"]);
-  const premiumPanels = new Set(["overview", "premium", "security", "channels", "reactionroles", "moderation", "language", "tournaments", "socials", "ratings", "logs"]);
+  // État renvoyé par l'API (/api/guilds ou /api/me)
+  let premiumState = {
+    plan: "free",
+    active: false,
+    expires_at: null,
+    days_left: 0,
+    price_label: PREMIUM_OFFER.priceLabel,
+    duration: PREMIUM_OFFER.durationLabel
+  };
+
+  // Sans abonnement : tout le socle de protection reste accessible et fonctionnel.
+  const freePanels = new Set([
+    "overview", "premium", "security", "backups", "logs",
+    "channels", "moderation", "language"
+  ]);
+  // Premium : ajoute les modules communautaires et d'automatisation.
+  const premiumPanels = new Set([
+    ...freePanels,
+    "tickets", "welcome", "reactionroles", "recurring",
+    "personalization", "tournaments", "socials", "ratings"
+  ]);
   const IFC_TOURNAMENT_API_READY = false;
   let activePanelName = "overview";
   let hasUnsavedChanges = false;
@@ -1475,7 +1545,7 @@ function initDashboard() {
   let toastTimer;
   let selectedServer = {
     id: "",
-    name: "Hote BOT - ModBot",
+    name: "",
     logo: modbotDefaultLogo,
     initials: "HB",
     installed: false
@@ -1589,18 +1659,57 @@ function initDashboard() {
   }
 
   function isPanelAllowed(panelName) {
-    const tier = getPremiumTier();
-    if (tier === "ultra" || tier === "partner") return true;
-    if (tier === "premium") return premiumPanels.has(panelName);
-    return freePanels.has(panelName);
+    // Offre gratuite : toute la protection. Premium : + modules communautaires.
+    return premiumState.active ? premiumPanels.has(panelName) : freePanels.has(panelName);
+  }
+
+  const PREMIUM_PANEL_PITCH = {
+    tickets: "Ouvre un support Discord complet : catégories, priorités, transcripts et évaluations.",
+    welcome: "Accueille tes membres avec des cartes et messages personnalisés à l'arrivée et au départ.",
+    reactionroles: "Laisse tes membres choisir leurs rôles en cliquant sur une réaction.",
+    recurring: "Publie automatiquement des messages à intervalle régulier.",
+    personalization: "Personnalise entièrement les couleurs, logos et pieds de page des embeds.",
+    tournaments: "Organise et suis tes tournois directement depuis Discord.",
+    socials: "Annonce automatiquement tes lives Twitch, vidéos YouTube et posts TikTok.",
+    ratings: "Recueille l'avis des membres après chaque ticket fermé."
+  };
+
+  /** Voile d'incitation affiché par-dessus un panneau réservé au Premium. */
+  function renderPremiumLock(panel) {
+    if (!panel || panel.querySelector(".premium-lock")) return;
+    const nom = panel.dataset.dashboardPanel;
+    const overlay = document.createElement("div");
+    overlay.className = "premium-lock";
+    overlay.innerHTML = `
+      <div class="premium-lock-card">
+        <span class="premium-lock-badge">💎 Premium</span>
+        <h3>Module réservé à l'offre Premium</h3>
+        <p>${escapeHtml(PREMIUM_PANEL_PITCH[nom] || "Ce module fait partie de l'offre Premium.")}</p>
+        <p class="premium-lock-price"><strong>29,99 €</strong> pour 5 mois · serveurs illimités</p>
+        <button class="primary-btn" type="button" data-dashboard-jump="premium">Voir l'offre Premium</button>
+        <small>La protection de ton serveur reste entièrement gratuite.</small>
+      </div>`;
+    panel.appendChild(overlay);
   }
 
   function applyPanelAccess() {
     tabs.forEach((tab) => {
       const locked = !isPanelAllowed(tab.dataset.dashboardTab);
       tab.classList.toggle("is-locked", locked);
-      tab.setAttribute("aria-disabled", locked ? "true" : "false");
-      tab.title = locked ? "Rubrique réservée à une offre supérieure" : "";
+      // Les onglets restent cliquables : on montre ce que Premium apporte
+      // plutôt que de désactiver sans explication.
+      tab.setAttribute("aria-disabled", "false");
+      tab.title = locked ? "Module Premium — clique pour en savoir plus" : "";
+    });
+
+    panels.forEach((panel) => {
+      const locked = !isPanelAllowed(panel.dataset.dashboardPanel);
+      panel.classList.toggle("is-premium-locked", locked);
+      if (locked) {
+        renderPremiumLock(panel);
+      } else {
+        panel.querySelector(".premium-lock")?.remove();
+      }
     });
   }
 
@@ -1884,10 +1993,6 @@ function initDashboard() {
     }
   }
 
-  function fallbackGuildId(name, index) {
-    return `local-${String(name || "serveur").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || index + 1}`;
-  }
-
   function emptyGuildMarkup(message = "Aucun serveur Discord administrable trouvé.") {
     return `
       <div class="dashboard-empty-state">
@@ -1928,60 +2033,153 @@ function initDashboard() {
     return String(serverSearchInput?.value || "").trim().toLowerCase();
   }
 
+  /**
+   * Aucun serveur fictif n'est jamais affiché : la liste vient uniquement de
+   * l'API Discord. En l'absence de données, l'écran reste vide avec un
+   * message explicite plutôt que de faux serveurs.
+   */
   function readLocalGuildChoices() {
-    const cards = [...document.querySelectorAll(".server-grid .server-card[data-server-name]")];
-    const guilds = cards.map((card, index) => {
-      const name = card.dataset.serverName || `Serveur ${index + 1}`;
-      const logo = card.dataset.serverLogo || card.querySelector("[data-logo-img]")?.getAttribute("src") || modbotDefaultLogo;
-      return {
-        id: card.dataset.serverId || fallbackGuildId(name, index),
-        name,
-        logo,
-        icon: logo,
-        initials: card.dataset.serverInitials || initialsFromName(name),
-        installed: false,
-        local: true
-      };
-    });
-
-    if (guilds.length) return guilds;
-    return [
-      { id: "local-hote-bot-modbot", name: "Hote BOT - ModBot", logo: modbotDefaultLogo, icon: modbotDefaultLogo, initials: "HB", installed: false, local: true },
-      { id: "local-vpg-belgique", name: "VPG Belgique", logo: modbotDefaultLogo, icon: modbotDefaultLogo, initials: "VPG", installed: false, local: true },
-      { id: "local-serveur-test", name: "Serveur test", logo: modbotDefaultLogo, icon: modbotDefaultLogo, initials: "ST", installed: false, local: true }
-    ];
+    return [];
   }
 
-  async function apiBridgeAvailable(base = getModbotApiBase()) {
-    if (!base) return false;
+  // Dernier diagnostic renvoyé par /api/health (état OAuth, nb de serveurs...)
+  let lastApiHealth = null;
+
+  async function probeApiBase(base) {
+    if (!base) return null;
     const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 3500);
+    const timeout = window.setTimeout(() => controller.abort(), 5000);
     try {
       const response = await fetch(`${base}/api/health`, {
         cache: "no-store",
         signal: controller.signal
       });
-      if (!response.ok) return false;
+      if (!response.ok) return null;
       const data = await response.json().catch(() => null);
-      return Boolean(data?.ok);
+      return data?.ok ? data : null;
     } catch (error) {
-      return false;
+      return null;
     } finally {
       window.clearTimeout(timeout);
     }
   }
 
-  async function findAvailableApiBase() {
-    for (const candidate of getModbotApiCandidates()) {
-      if (await apiBridgeAvailable(candidate)) {
-        sessionStorage.setItem("modbot-api-base", candidate);
-        return candidate;
+  /**
+   * Découverte automatique de l'API : toutes les adresses candidates sont
+   * testées EN PARALLÈLE, la première qui répond gagne. C'est bien plus
+   * rapide qu'un essai séquentiel et cela évite toute saisie manuelle.
+   */
+  let apiDiscovery = null;
+
+  async function findAvailableApiBase(force = false) {
+    if (apiDiscovery && !force) return apiDiscovery;
+
+    apiDiscovery = (async () => {
+      const candidats = getModbotApiCandidates();
+      if (!candidats.length) {
+        lastApiHealth = null;
+        renderAuthStatus();
+        return "";
+      }
+
+      // Course parallèle : la première adresse qui répond gagne.
+      const courir = (liste) => new Promise((resolve) => {
+        let restants = liste.length;
+        let resolu = false;
+        liste.forEach((candidat) => {
+          probeApiBase(candidat).then((health) => {
+            if (!resolu && health) {
+              resolu = true;
+              lastApiHealth = health;
+              resolve(candidat);
+              return;
+            }
+            if (--restants === 0 && !resolu) resolve("");
+          });
+        });
+      });
+
+      // L'adresse déjà connue est essayée SEULE en premier : cas normal,
+      // une seule requête réseau et aucune erreur dans la console.
+      const prefere = candidats[0];
+      let gagnant = await courir([prefere]);
+      if (!gagnant && candidats.length > 1) {
+        gagnant = await courir(candidats.slice(1));
+      }
+
+      if (gagnant) {
+        rememberApiBase(gagnant);
+      } else {
+        // La base mémorisée ne répond plus : on l'oublie pour ne pas rester
+        // bloqué dessus au prochain chargement.
+        forgetAutoApiBase();
+        lastApiHealth = null;
+      }
+      renderAuthStatus();
+      return gagnant;
+    })();
+
+    const resultat = await apiDiscovery;
+    // Un échec n'est pas mis en cache : la prochaine tentative resondera.
+    if (!resultat) apiDiscovery = null;
+    return resultat;
+  }
+
+  /** Affiche l'état de la liaison site ↔ bot sur l'écran de connexion. */
+  function renderAuthStatus(overrideState) {
+    const box = document.querySelector("[data-auth-status]");
+    const dot = document.querySelector("[data-auth-status-dot]");
+    const text = document.querySelector("[data-auth-status-text]");
+    const badge = document.querySelector("[data-api-badge]");
+    if (!box || !dot || !text) return;
+
+    let state = overrideState;
+    if (!state) {
+      if (!lastApiHealth) {
+        state = {
+          level: "error",
+          message: getModbotApiBase()
+            ? "API ModBot injoignable. Vérifie que le bot est démarré et que l'URL est correcte."
+            : "URL de l'API ModBot non configurée. Renseigne-la ci-dessous pour activer la connexion."
+        };
+      } else if (!lastApiHealth.oauth_configured) {
+        state = {
+          level: "warn",
+          message:
+            "Bot joignable, mais OAuth Discord incomplet. Définis DISCORD_CLIENT_SECRET " +
+            "et DISCORD_REDIRECT_URI (ou PUBLIC_BASE_URL) côté bot."
+        };
+      } else {
+        const guilds = Number(lastApiHealth.guilds || 0);
+        state = {
+          level: "ok",
+          message: `Bot connecté : ${lastApiHealth.bot || "ModBot"} · ${guilds} serveur${guilds > 1 ? "s" : ""}.`
+        };
       }
     }
-    return "";
+
+    box.hidden = false;
+    box.dataset.level = state.level;
+    dot.className = `auth-status-dot is-${state.level}`;
+    text.textContent = state.message;
+
+    if (badge) {
+      const labels = { ok: "connectée", warn: "à configurer", error: "non détectée", pending: "test…" };
+      badge.textContent = labels[state.level] || state.level;
+      badge.dataset.level = state.level;
+    }
+    // Le réglage d'adresse n'apparaît qu'en cas de problème de liaison
+    const advanced = document.querySelector("[data-auth-advanced]");
+    if (advanced) {
+      const enPanne = state.level === "error";
+      advanced.hidden = !enPanne;
+      if (enPanne && !advanced.dataset.userToggled) advanced.open = true;
+    }
   }
 
   function renderGuildChoices(guilds) {
+    // Le menu déroulant de la barre suit la même source de données
+    if (typeof renderSwitcherList === "function") renderSwitcherList();
     const serverGrid = document.querySelector(".server-grid");
     if (!serverGrid) return;
     const safeGuilds = normalizeDashboardGuilds(guilds);
@@ -2033,20 +2231,15 @@ function initDashboard() {
     setupLogoFallbacks();
   }
 
-  async function loadLocalDashboardGuilds() {
-    dashboardGuilds = normalizeDashboardGuilds(readLocalGuildChoices());
-    renderGuildChoices(dashboardGuilds);
-    renderPremiumGuildChoices(dashboardGuilds);
-    renderPremiumAssociations();
-    return dashboardGuilds;
-  }
-
   async function loadDashboardGuilds() {
     const data = await modbotApiFetch("/api/guilds", { cache: "no-store" });
     dashboardGuilds = normalizeDashboardGuilds(data?.guilds || []);
-    if (data.premium?.plan && Object.hasOwn(premiumTierLimits, data.premium.plan)) {
-      premiumTier = data.premium.plan;
+    if (data.premium && typeof data.premium === "object") {
+      premiumState = { ...premiumState, ...data.premium };
+      premiumTier = premiumState.active ? "premium" : "free";
       if (premiumTierSelect) premiumTierSelect.value = premiumTier;
+      localStorage.setItem("modbot-dashboard-premium-tier", premiumTier);
+      renderPremiumStatus();
     }
     renderGuildChoices(dashboardGuilds);
     renderPremiumGuildChoices(dashboardGuilds);
@@ -2054,24 +2247,176 @@ function initDashboard() {
     return dashboardGuilds;
   }
 
-  async function dashboardLogin() {
-    const base = await findAvailableApiBase();
-    if (getModbotSessionToken() || getModbotApiToken()) {
-      try {
-        await loadDashboardGuilds();
-        showDashboardStage("servers");
-        showToast("✅ Dashboard connecté au bot");
-        return;
-      } catch (error) {
-        showToast("⚠️ Session invalide, nouvelle connexion requise");
+  /** Envoie l'utilisateur vers Discord pour autoriser ModBot. */
+  function redirectToDiscordLogin(base) {
+    sessionStorage.setItem("modbot-login-redirected", "1");
+    window.location.href =
+      `${base}/api/auth/discord/login?redirect=${encodeURIComponent(dashboardReturnUrl())}`;
+  }
+
+  function forgetSession() {
+    localStorage.removeItem("modbot-dashboard-session");
+    sessionStorage.removeItem("modbot-dashboard-session");
+  }
+
+  /**
+   * Tente de reprendre une session existante sans aucune action de
+   * l'utilisateur. Retourne "ok", "expired" ou "unavailable".
+   */
+  async function resumeSession(base) {
+    if (!base || !(getModbotSessionToken() || getModbotApiToken())) return "unavailable";
+    try {
+      await loadDashboardGuilds();
+      localStorage.setItem("modbot-has-logged-in", "1");
+      showDashboardStage("servers");
+      renderAuthStatus();
+      return "ok";
+    } catch (error) {
+      const message = String(error?.message || "");
+      if (/401|session|expir/i.test(message)) {
+        forgetSession();
+        return "expired";
       }
+      console.warn("Reprise de session impossible :", message);
+      return "unavailable";
     }
-    if (base) {
-      window.location.href = `${base}/api/auth/discord/login?redirect=${encodeURIComponent(dashboardReturnUrl())}`;
+  }
+
+  async function dashboardLogin({ silencieux = false } = {}) {
+    if (!silencieux) {
+      renderAuthStatus({ level: "pending", message: "Connexion au bot ModBot…" });
+    }
+    const base = await findAvailableApiBase();
+
+    // 1. Session déjà valide : on entre directement
+    const reprise = await resumeSession(base);
+    if (reprise === "ok") {
+      if (!silencieux) showToast("✅ Connecté au bot");
       return;
     }
+
+    // 2. API injoignable : diagnostic précis, jamais un message vague
+    if (!base) {
+      showDashboardStage("auth");
+      renderAuthStatus();
+      if (!silencieux) {
+        showToast(getConfiguredModbotApiBase()
+          ? "⚠️ Le bot ne répond pas à cette adresse. Vérifie qu'il est démarré."
+          : "⚠️ Bot introuvable. Indique son adresse dans « Configuration de l'API ».");
+      }
+      return;
+    }
+
+    // 3. OAuth incomplet côté bot : rediriger vers Discord échouerait
+    if (lastApiHealth && !lastApiHealth.oauth_configured) {
+      showDashboardStage("auth");
+      renderAuthStatus();
+      if (!silencieux) {
+        showToast("⚠️ OAuth Discord incomplet côté bot : ajoute CLIENT_SECRET et REDIRECT_URI");
+      }
+      return;
+    }
+
+    // 4. Session expirée pendant l'usage : on relance Discord sans rien demander
+    if (reprise === "expired") {
+      showToast("🔐 Session expirée, reconnexion…");
+      redirectToDiscordLogin(base);
+      return;
+    }
+
+    redirectToDiscordLogin(base);
+  }
+
+  /**
+   * Reprise automatique au chargement de la page : aucun clic nécessaire si
+   * l'utilisateur s'est déjà connecté une fois depuis ce navigateur.
+   */
+  async function autoConnect() {
     showDashboardStage("auth");
-    showToast("⚠️ API dashboard introuvable : démarre le bot puis réessaie la connexion Discord");
+    renderAuthStatus({ level: "pending", message: "Recherche du bot ModBot…" });
+
+    const base = await findAvailableApiBase();
+    if (!base) {
+      renderAuthStatus();
+      return;
+    }
+
+    if (await resumeSession(base) === "ok") {
+      showToast("✅ Reconnecté automatiquement");
+      return;
+    }
+
+    // Reconnexion silencieuse : seulement si une connexion a déjà réussi ici,
+    // et une seule fois par onglet pour ne jamais créer de boucle.
+    const dejaConnecte = localStorage.getItem("modbot-has-logged-in") === "1";
+    const dejaRedirige = sessionStorage.getItem("modbot-login-redirected") === "1";
+    if (dejaConnecte && !dejaRedirige && lastApiHealth?.oauth_configured) {
+      redirectToDiscordLogin(base);
+      return;
+    }
+
+    renderAuthStatus();
+    if (lastApiHealth?.oauth_configured) {
+      showToast("🔐 Connecte-toi avec Discord pour voir tes serveurs");
+    }
+  }
+
+  /** Champ « URL de l'API » de l'écran de connexion. */
+  function initApiUrlControls() {
+    const input = document.querySelector("[data-api-url-input]");
+    const saveBtn = document.querySelector("[data-api-url-save]");
+    const clearBtn = document.querySelector("[data-api-url-clear]");
+    const advanced = document.querySelector("[data-auth-advanced]");
+    if (!input) return;
+
+    advanced?.addEventListener("toggle", () => {
+      advanced.dataset.userToggled = "1";
+    });
+
+    input.value = localStorage.getItem("modbot-api-url") || getConfiguredModbotApiBase() || "";
+
+    const applyUrl = async () => {
+      const value = input.value.trim();
+      if (!value) {
+        showToast("⚠️ Indique l'adresse publique de ton bot (https://…)");
+        return;
+      }
+      renderAuthStatus({ level: "pending", message: "Test de l'API en cours…" });
+      const clean = normalizeApiBase(value);
+      const health = await probeApiBase(clean);
+      if (!health) {
+        renderAuthStatus({
+          level: "error",
+          message: `Aucune API ModBot n'a répondu sur ${clean}/api/health. Vérifie l'URL, que le bot est démarré, et que CORS autorise ce site.`
+        });
+        showToast("❌ API introuvable à cette adresse");
+        return;
+      }
+      setModbotApiBase(clean);
+      lastApiHealth = health;
+      apiDiscovery = null; // force une nouvelle découverte avec cette base
+      renderAuthStatus();
+      showToast("✅ Bot trouvé, connexion en cours…");
+      dashboardLogin();
+    };
+
+    saveBtn?.addEventListener("click", applyUrl);
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        applyUrl();
+      }
+    });
+    clearBtn?.addEventListener("click", () => {
+      setModbotApiBase("");
+      forgetAutoApiBase();
+      input.value = "";
+      lastApiHealth = null;
+      apiDiscovery = null;
+      renderAuthStatus();
+      showToast("♻️ Adresse réinitialisée, nouvelle recherche…");
+      findAvailableApiBase();
+    });
   }
 
   function applyDashboardConfig(config) {
@@ -2287,7 +2632,657 @@ function initDashboard() {
     } catch (error) {
       showToast("⚠️ Configuration locale affichée, connexion bot non disponible");
     }
+    // Les modules sécurité / logs / sauvegardes ont leurs propres endpoints :
+    // on les charge en parallèle sans bloquer l'affichage de la configuration.
+    Promise.allSettled([
+      loadGuildSecurity(guildId),
+      loadGuildLogs(guildId),
+      loadGuildBackups(guildId)
+    ]);
   }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SÉLECTEUR DE SERVEUR — menu déroulant animé
+     ══════════════════════════════════════════════════════════════════ */
+
+  const switcher = document.querySelector("[data-server-switcher]");
+  const switcherTrigger = document.querySelector("[data-server-switcher-trigger]");
+  const switcherMenu = document.querySelector("[data-server-switcher-menu]");
+  const switcherList = document.querySelector("[data-server-switcher-list]");
+  const switcherSearch = document.querySelector("[data-server-switcher-search]");
+  let switcherOpen = false;
+
+  function renderSwitcherList(filtre = "") {
+    if (!switcherList) return;
+    const terme = filtre.trim().toLowerCase();
+    const visibles = dashboardGuilds.filter(
+      (g) => !terme || g.name.toLowerCase().includes(terme)
+    );
+
+    if (!dashboardGuilds.length) {
+      switcherList.innerHTML = `<p class="server-switcher-empty">Aucun serveur chargé.</p>`;
+      return;
+    }
+    if (!visibles.length) {
+      switcherList.innerHTML = `<p class="server-switcher-empty">Aucun résultat pour « ${escapeHtml(filtre)} ».</p>`;
+      return;
+    }
+
+    switcherList.innerHTML = visibles
+      .map((guild, index) => {
+        const actif = guild.id === selectedServer.id;
+        const statut = guild.installed
+          ? `${guild.member_count ? guild.member_count.toLocaleString("fr-FR") + " membres" : "ModBot installé"}`
+          : "ModBot non installé";
+        return `
+      <button class="server-switcher-item${actif ? " is-current" : ""}${guild.installed ? "" : " is-uninstalled"}"
+              type="button" role="option" aria-selected="${actif}"
+              style="--i:${index}"
+              data-switcher-guild="${escapeHtml(guild.id)}"
+              data-server-name="${escapeHtml(guild.name)}"
+              data-server-logo="${escapeHtml(guild.logo || modbotDefaultLogo)}"
+              data-server-initials="${escapeHtml(guild.initials || "MB")}"
+              data-server-installed="${guild.installed ? "true" : "false"}">
+        <span class="server-logo-shell" data-initials="${escapeHtml(guild.initials || "MB")}">
+          <img src="${escapeHtml(guild.logo || modbotDefaultLogo)}" alt="" data-logo-img>
+        </span>
+        <span class="server-switcher-item-text">
+          <strong>${escapeHtml(guild.name)}</strong>
+          <small>${escapeHtml(statut)}</small>
+        </span>
+        ${actif ? '<span class="server-switcher-check" aria-hidden="true">✓</span>' : ""}
+      </button>`;
+      })
+      .join("");
+    setupLogoFallbacks();
+  }
+
+  function openSwitcher() {
+    if (!switcher || !switcherMenu || switcherOpen) return;
+    switcherOpen = true;
+    renderSwitcherList(switcherSearch?.value || "");
+    switcherMenu.hidden = false;
+    // Force le calcul du style pour que la transition parte de l'état fermé.
+    // Un requestAnimationFrame ne conviendrait pas : il ne se déclenche pas
+    // quand l'onglet est en arrière-plan, le menu resterait invisible.
+    void switcherMenu.offsetHeight;
+    switcher.classList.add("is-open");
+    switcherTrigger?.setAttribute("aria-expanded", "true");
+    setTimeout(() => switcherSearch?.focus(), 120);
+  }
+
+  function closeSwitcher() {
+    if (!switcher || !switcherMenu || !switcherOpen) return;
+    switcherOpen = false;
+    switcher.classList.remove("is-open");
+    switcherTrigger?.setAttribute("aria-expanded", "false");
+    // Attend la fin de la transition de sortie avant de retirer du flux
+    setTimeout(() => {
+      if (!switcherOpen) switcherMenu.hidden = true;
+    }, 180);
+  }
+
+  function toggleSwitcher() {
+    switcherOpen ? closeSwitcher() : openSwitcher();
+  }
+
+  /** Déplace le focus dans la liste au clavier. */
+  function moveSwitcherFocus(direction) {
+    const items = [...switcherList.querySelectorAll(".server-switcher-item")];
+    if (!items.length) return;
+    const actuel = items.indexOf(document.activeElement);
+    const suivant = actuel === -1
+      ? (direction > 0 ? 0 : items.length - 1)
+      : (actuel + direction + items.length) % items.length;
+    items[suivant].focus();
+  }
+
+  switcherTrigger?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    toggleSwitcher();
+  });
+
+  switcherSearch?.addEventListener("input", () => renderSwitcherList(switcherSearch.value));
+
+  switcherList?.addEventListener("click", (event) => {
+    const item = event.target.closest("[data-switcher-guild]");
+    if (!item) return;
+    closeSwitcher();
+    selectGuildFromElement(item);
+  });
+
+  switcher?.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeSwitcher();
+      switcherTrigger?.focus();
+      return;
+    }
+    if (!switcherOpen) return;
+    if (event.key === "ArrowDown") { event.preventDefault(); moveSwitcherFocus(1); }
+    if (event.key === "ArrowUp") { event.preventDefault(); moveSwitcherFocus(-1); }
+  });
+
+  // Un clic hors du menu le referme
+  document.addEventListener("click", (event) => {
+    if (switcherOpen && switcher && !switcher.contains(event.target)) closeSwitcher();
+  });
+
+  /* ══════════════════════════════════════════════════════════════════
+     SÉCURITÉ — anti-raid, anti-nuke, échelle de sanctions
+     ══════════════════════════════════════════════════════════════════ */
+
+  const DEFAULT_SANCTION_LADDER = [
+    { threshold: 1, action: "warn", minutes: 0, fr: "Avertissement" },
+    { threshold: 2, action: "mute", minutes: 60, fr: "Mute 1 heure" },
+    { threshold: 3, action: "mute", minutes: 720, fr: "Mute 12 heures" },
+    { threshold: 4, action: "kick", minutes: 0, fr: "Expulsion" },
+    { threshold: 5, action: "ban", minutes: 0, fr: "Bannissement" }
+  ];
+  const SANCTION_ACTION_LABELS = {
+    warn: "⚠️ Avertissement",
+    mute: "🔇 Mute",
+    kick: "👢 Expulsion",
+    ban: "🔨 Bannissement"
+  };
+  const PERMISSION_LABELS = {
+    view_audit_log: "Voir les logs d'audit (indispensable à l'anti-nuke)",
+    ban_members: "Bannir des membres",
+    kick_members: "Expulser des membres",
+    manage_roles: "Gérer les rôles",
+    manage_channels: "Gérer les salons",
+    moderate_members: "Exclure temporairement (timeout)",
+    manage_guild: "Gérer le serveur"
+  };
+
+  let securityState = null;
+  let sanctionLadder = DEFAULT_SANCTION_LADDER.map((step) => ({ ...step }));
+
+  const idListToText = (list) => (Array.isArray(list) ? list.join(", ") : "");
+  const textToIdList = (text) =>
+    String(text || "")
+      .split(/[\s,;]+/)
+      .map((value) => value.trim())
+      .filter((value) => /^\d{5,25}$/.test(value));
+  const linesToList = (text) =>
+    String(text || "")
+      .split(/[\n,]/)
+      .map((value) => value.trim())
+      .filter(Boolean);
+
+  function setChecked(selector, value) {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    el.checked = Boolean(value);
+    el.closest(".toggle-line")?.classList.toggle("is-on", Boolean(value));
+  }
+  function setValue(selector, value) {
+    const el = document.querySelector(selector);
+    if (el && value !== undefined && value !== null) el.value = value;
+  }
+  const readChecked = (selector) => Boolean(document.querySelector(selector)?.checked);
+  const readValue = (selector) => document.querySelector(selector)?.value ?? "";
+  const readNumber = (selector, fallback) => {
+    const value = Number(document.querySelector(selector)?.value);
+    return Number.isFinite(value) ? value : fallback;
+  };
+
+  function renderSanctionLadder() {
+    const host = document.querySelector("[data-sanction-ladder]");
+    if (!host) return;
+    host.innerHTML = sanctionLadder
+      .map(
+        (step, index) => `
+      <div class="sanction-step" data-sanction-index="${index}">
+        <span class="sanction-rank">${index + 1}</span>
+        <label class="mini-form">Points
+          <input type="number" min="1" max="99" value="${Number(step.threshold) || 1}" data-sanction-threshold>
+        </label>
+        <label class="mini-form">Sanction
+          <select data-sanction-action>
+            ${Object.entries(SANCTION_ACTION_LABELS)
+              .map(([value, label]) =>
+                `<option value="${value}"${step.action === value ? " selected" : ""}>${label}</option>`)
+              .join("")}
+          </select>
+        </label>
+        <label class="mini-form">Durée (minutes)
+          <input type="number" min="0" max="40320" value="${Number(step.minutes) || 0}"
+                 data-sanction-minutes${step.action === "mute" ? "" : " disabled"}>
+        </label>
+      </div>`
+      )
+      .join("");
+
+    host.querySelectorAll("[data-sanction-index]").forEach((row) => {
+      const index = Number(row.dataset.sanctionIndex);
+      const actionSelect = row.querySelector("[data-sanction-action]");
+      const minutesInput = row.querySelector("[data-sanction-minutes]");
+      row.querySelector("[data-sanction-threshold]")?.addEventListener("input", (event) => {
+        sanctionLadder[index].threshold = Math.max(1, Number(event.target.value) || 1);
+        markPanelDirty("security");
+      });
+      actionSelect?.addEventListener("change", (event) => {
+        sanctionLadder[index].action = event.target.value;
+        if (minutesInput) minutesInput.disabled = event.target.value !== "mute";
+        markPanelDirty("security");
+      });
+      minutesInput?.addEventListener("input", (event) => {
+        sanctionLadder[index].minutes = Math.max(0, Number(event.target.value) || 0);
+        markPanelDirty("security");
+      });
+    });
+  }
+
+  function renderSecurityPermissions(permissions) {
+    const box = document.querySelector("[data-security-permissions]");
+    const list = document.querySelector("[data-security-permissions-list]");
+    if (!box || !list) return;
+    const missing = Object.entries(permissions || {})
+      .filter(([, granted]) => !granted)
+      .map(([name]) => PERMISSION_LABELS[name] || name);
+    box.hidden = missing.length === 0;
+    list.innerHTML = missing.map((label) => `<li>${escapeHtml(label)}</li>`).join("");
+  }
+
+  function applySecurityState(security) {
+    if (!security) return;
+    securityState = security;
+    const raid = security.antiraid || {};
+    const nuke = security.antinuke || {};
+    const filter = security.filter || {};
+    const autoBackup = security.auto_backup || {};
+
+    setChecked("[data-antiraid-enabled]", raid.enabled);
+    setValue("[data-antiraid-threshold]", raid.join_threshold);
+    setValue("[data-antiraid-window]", raid.join_window);
+    setValue("[data-antiraid-age]", raid.min_account_age_days);
+    setValue("[data-antiraid-action]", raid.action);
+    setValue("[data-antiraid-release]", raid.auto_release_minutes);
+    setChecked("[data-antiraid-quarantine]", raid.quarantine_new);
+
+    setChecked("[data-antinuke-enabled]", nuke.enabled);
+    setValue("[data-antinuke-punishment]", nuke.punishment);
+    setChecked("[data-antinuke-restore]", nuke.auto_restore);
+    setChecked("[data-antinuke-trustowner]", nuke.trust_owner);
+    setValue("[data-antinuke-users]", idListToText(nuke.whitelist_users));
+    setValue("[data-antinuke-roles]", idListToText(nuke.whitelist_roles));
+
+    setChecked("[data-security-insultes]", filter.enabled);
+    setChecked("[data-filter-tolerant]", filter.tolerant);
+    setValue("[data-filter-custom-words]", (filter.custom_words || []).join("\n"));
+    setValue("[data-filter-allowlist]", (filter.allowlist || []).join("\n"));
+
+    sanctionLadder = Array.isArray(filter.ladder) && filter.ladder.length
+      ? filter.ladder.map((step) => ({ ...step }))
+      : DEFAULT_SANCTION_LADDER.map((step) => ({ ...step }));
+    renderSanctionLadder();
+
+    setChecked("[data-autobackup-enabled]", autoBackup.enabled);
+    setValue("[data-autobackup-interval]", autoBackup.interval_hours);
+    const lastEl = document.querySelector("[data-autobackup-last]");
+    if (lastEl) lastEl.textContent = autoBackup.last ? formatIsoDateTimeFr(autoBackup.last) : "jamais";
+
+    const safeBadge = document.querySelector("[data-safe-mode-badge]");
+    if (safeBadge) safeBadge.hidden = !security.safe_mode_active;
+
+    renderSecurityPermissions(security.permissions);
+    renderLogToggles(security.logs_enabled || {});
+  }
+
+  async function loadGuildSecurity(guildId) {
+    if (!guildId) return;
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/security`, { cache: "no-store" });
+      applySecurityState(data.security);
+    } catch (error) {
+      console.warn("Sécurité indisponible :", error?.message || error);
+    }
+  }
+
+  function collectSecurityPayload() {
+    return {
+      antiraid: {
+        enabled: readChecked("[data-antiraid-enabled]"),
+        join_threshold: readNumber("[data-antiraid-threshold]", 8),
+        join_window: readNumber("[data-antiraid-window]", 10),
+        min_account_age_days: readNumber("[data-antiraid-age]", 7),
+        action: readValue("[data-antiraid-action]") || "lockdown",
+        auto_release_minutes: readNumber("[data-antiraid-release]", 15),
+        quarantine_new: readChecked("[data-antiraid-quarantine]")
+      },
+      antinuke: {
+        enabled: readChecked("[data-antinuke-enabled]"),
+        punishment: readValue("[data-antinuke-punishment]") || "strip",
+        auto_restore: readChecked("[data-antinuke-restore]"),
+        trust_owner: readChecked("[data-antinuke-trustowner]"),
+        whitelist_users: textToIdList(readValue("[data-antinuke-users]")),
+        whitelist_roles: textToIdList(readValue("[data-antinuke-roles]"))
+      },
+      filter: {
+        enabled: readChecked("[data-security-insultes]"),
+        tolerant: readChecked("[data-filter-tolerant]"),
+        ladder: sanctionLadder,
+        custom_words: linesToList(readValue("[data-filter-custom-words]")),
+        allowlist: linesToList(readValue("[data-filter-allowlist]"))
+      },
+      auto_backup: {
+        enabled: readChecked("[data-autobackup-enabled]"),
+        interval_hours: readNumber("[data-autobackup-interval]", 24)
+      },
+      logs_enabled: collectLogToggles()
+    };
+  }
+
+  async function saveGuildSecurity() {
+    const guildId = selectedServer.id;
+    if (!guildId) {
+      showToast("⚠️ Sélectionne d'abord un serveur");
+      return;
+    }
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/security`, {
+        method: "PUT",
+        body: JSON.stringify(collectSecurityPayload())
+      });
+      applySecurityState(data.security);
+      clearUnsavedChanges();
+      showToast("🛡️ Sécurité enregistrée dans le bot");
+    } catch (error) {
+      showToast(`⚠️ ${error?.message || "Enregistrement impossible"}`);
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     LOGS
+     ══════════════════════════════════════════════════════════════════ */
+
+  const LOG_SEVERITY_ICONS = {
+    info: "ℹ️", success: "✅", warning: "⚠️", danger: "🚫", critical: "🚨"
+  };
+  let logCategories = [];
+  let currentLogCategory = "all";
+  let currentLogs = [];
+
+  function renderLogFilters() {
+    const host = document.querySelector("[data-log-filters]");
+    if (!host) return;
+    const buttons = [{ id: "all", label: "Tout", emoji: "🗂️" }, ...logCategories.map((c) => ({
+      id: c.id, label: c.label, emoji: c.emoji
+    }))];
+    host.innerHTML = buttons
+      .map(
+        (item) => `
+      <button class="log-filter${item.id === currentLogCategory ? " is-active" : ""}" type="button"
+              data-log-category="${escapeHtml(item.id)}" role="tab"
+              aria-selected="${item.id === currentLogCategory}">
+        ${item.emoji} ${escapeHtml(item.label)}
+      </button>`
+      )
+      .join("");
+  }
+
+  function renderLogToggles(enabledMap) {
+    const host = document.querySelector("[data-log-toggles]");
+    if (!host || !logCategories.length) return;
+    host.innerHTML = logCategories
+      .map(
+        (category) => `
+      <label class="toggle-line compact">
+        <input type="checkbox" data-log-toggle="${escapeHtml(category.id)}"
+               ${enabledMap[category.id] !== false ? "checked" : ""}>
+        <span></span>
+        <strong>${category.emoji} ${escapeHtml(category.label)}</strong>
+      </label>`
+      )
+      .join("");
+    host.querySelectorAll("[data-log-toggle]").forEach((input) => {
+      input.addEventListener("change", () => {
+        input.closest(".toggle-line")?.classList.toggle("is-on", input.checked);
+        markPanelDirty("logs");
+      });
+    });
+  }
+
+  function collectLogToggles() {
+    const toggles = {};
+    document.querySelectorAll("[data-log-toggle]").forEach((input) => {
+      toggles[input.dataset.logToggle] = input.checked;
+    });
+    return toggles;
+  }
+
+  function renderLogFeed() {
+    const feed = document.querySelector("[data-dashboard-log-feed]");
+    if (!feed) return;
+    if (!currentLogs.length) {
+      feed.innerHTML = `<div class="log-empty"><span>—</span> Aucun événement enregistré pour cette catégorie.</div>`;
+      return;
+    }
+    feed.innerHTML = currentLogs
+      .map((entry) => {
+        const category = logCategories.find((c) => c.id === entry.category);
+        const icon = LOG_SEVERITY_ICONS[entry.severity] || "•";
+        const actor = entry.actor ? `<span class="log-actor">👮 ${escapeHtml(entry.actor)}</span>` : "";
+        const target = entry.target ? `<span class="log-target">🎯 ${escapeHtml(entry.target)}</span>` : "";
+        return `
+      <article class="log-entry" data-severity="${escapeHtml(entry.severity || "info")}">
+        <header>
+          <span class="log-icon">${icon}</span>
+          <strong>${escapeHtml(entry.title || "Événement")}</strong>
+          <span class="log-chip">${category ? category.emoji + " " + escapeHtml(category.label) : escapeHtml(entry.category || "")}</span>
+          <time>${escapeHtml(formatIsoDateTimeFr(entry.date))}</time>
+        </header>
+        ${entry.description ? `<p>${escapeHtml(entry.description)}</p>` : ""}
+        ${actor || target ? `<footer>${actor}${target}</footer>` : ""}
+      </article>`;
+      })
+      .join("");
+  }
+
+  async function loadGuildLogs(guildId, category = currentLogCategory) {
+    const targetGuild = guildId || selectedServer.id;
+    if (!targetGuild) return;
+    try {
+      const data = await modbotApiFetch(
+        `/api/guilds/${targetGuild}/logs?category=${encodeURIComponent(category)}&limit=150`,
+        { cache: "no-store" }
+      );
+      logCategories = Array.isArray(data.categories) ? data.categories : [];
+      currentLogs = Array.isArray(data.logs) ? data.logs : [];
+      currentLogCategory = category;
+      renderLogFilters();
+      renderLogFeed();
+    } catch (error) {
+      const feed = document.querySelector("[data-dashboard-log-feed]");
+      if (feed) {
+        feed.innerHTML = `<div class="log-empty"><span>⚠️</span> ${escapeHtml(error?.message || "Logs indisponibles")}</div>`;
+      }
+    }
+  }
+
+  function exportLogs() {
+    if (!currentLogs.length) {
+      showToast("⚠️ Aucun log à exporter");
+      return;
+    }
+    const header = ["date", "categorie", "severite", "titre", "description", "auteur", "cible"];
+    const escapeCsv = (value) => `"${String(value ?? "").replace(/"/g, '""')}"`;
+    const rows = currentLogs.map((entry) =>
+      [entry.date, entry.category, entry.severity, entry.title, entry.description, entry.actor, entry.target]
+        .map(escapeCsv)
+        .join(";")
+    );
+    const csv = [header.join(";"), ...rows].join("\n");
+    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `modbot-logs-${selectedServer.id || "serveur"}-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    showToast(`📤 ${currentLogs.length} log(s) exporté(s)`);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SAUVEGARDES
+     ══════════════════════════════════════════════════════════════════ */
+
+  let backupList = [];
+
+  function renderBackups() {
+    const host = document.querySelector("[data-backup-list]");
+    const count = document.querySelector("[data-backups-count]");
+    if (count) {
+      count.textContent = backupList.length
+        ? `${backupList.length} sauvegarde${backupList.length > 1 ? "s" : ""}`
+        : "0 sauvegarde";
+    }
+    if (!host) return;
+    if (!backupList.length) {
+      host.innerHTML = `<div class="backup-empty">Aucune sauvegarde pour le moment.</div>`;
+      return;
+    }
+    host.innerHTML = backupList
+      .map((entry) => {
+        const counts = entry.counts || {};
+        return `
+      <article class="backup-card">
+        <div class="backup-main">
+          <strong>${escapeHtml(entry.id)}</strong>
+          <small>${escapeHtml(formatIsoDateTimeFr(entry.created_at))} · par ${escapeHtml(entry.author || "ModBot")}</small>
+          ${entry.note ? `<em>${escapeHtml(entry.note)}</em>` : ""}
+        </div>
+        <div class="backup-counts">
+          <span>🎭 ${Number(counts.roles || 0)}</span>
+          <span>🗂️ ${Number(counts.categories || 0)}</span>
+          <span>📁 ${Number(counts.channels || 0)}</span>
+        </div>
+        <div class="backup-actions">
+          <button class="primary-btn compact" type="button" data-backup-restore="${escapeHtml(entry.id)}">♻️ Restaurer</button>
+          <button class="secondary-btn compact danger" type="button" data-backup-delete="${escapeHtml(entry.id)}">🗑️</button>
+        </div>
+      </article>`;
+      })
+      .join("");
+  }
+
+  async function loadGuildBackups(guildId) {
+    const targetGuild = guildId || selectedServer.id;
+    if (!targetGuild) return;
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${targetGuild}/backups`, { cache: "no-store" });
+      backupList = Array.isArray(data.backups) ? data.backups : [];
+      renderBackups();
+    } catch (error) {
+      console.warn("Sauvegardes indisponibles :", error?.message || error);
+    }
+  }
+
+  async function createBackup() {
+    const guildId = selectedServer.id;
+    if (!guildId) {
+      showToast("⚠️ Sélectionne d'abord un serveur");
+      return;
+    }
+    showToast("💾 Sauvegarde en cours…");
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/backups`, {
+        method: "POST",
+        body: JSON.stringify({ note: "Créée depuis le dashboard" })
+      });
+      await loadGuildBackups(guildId);
+      showToast(`✅ Sauvegarde ${data.backup?.id || ""} créée`);
+    } catch (error) {
+      showToast(`⚠️ ${error?.message || "Sauvegarde impossible"}`);
+    }
+  }
+
+  async function restoreBackup(backupId) {
+    const guildId = selectedServer.id;
+    if (!guildId) return;
+    const entry = backupList.find((item) => item.id === backupId);
+    const counts = entry?.counts || {};
+    // Confirmation obligatoire avant une opération aussi lourde
+    const confirmed = window.confirm(
+      `Restaurer la sauvegarde ${backupId} sur « ${selectedServer.name} » ?\n\n` +
+      `Contenu : ${counts.roles || 0} rôles, ${counts.categories || 0} catégories, ${counts.channels || 0} salons.\n\n` +
+      `La restauration est additive : elle recrée ce qui manque et ne supprime rien.\n` +
+      `L'opération peut prendre plusieurs minutes.`
+    );
+    if (!confirmed) return;
+
+    showToast("♻️ Restauration en cours, cela peut prendre plusieurs minutes…");
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/backups/${backupId}/restore`, {
+        method: "POST",
+        body: JSON.stringify({ confirm: true })
+      });
+      const report = data.report || {};
+      showToast(
+        `✅ Restauration terminée : ${report.roles || 0} rôles, ` +
+        `${report.categories || 0} catégories, ${report.channels || 0} salons`
+      );
+      loadGuildLogs(guildId);
+    } catch (error) {
+      showToast(`⚠️ ${error?.message || "Restauration impossible"}`);
+    }
+  }
+
+  async function deleteBackup(backupId) {
+    const guildId = selectedServer.id;
+    if (!guildId) return;
+    if (!window.confirm(`Supprimer définitivement la sauvegarde ${backupId} ?`)) return;
+    try {
+      await modbotApiFetch(`/api/guilds/${guildId}/backups/${backupId}`, { method: "DELETE" });
+      await loadGuildBackups(guildId);
+      showToast("🗑️ Sauvegarde supprimée");
+    } catch (error) {
+      showToast(`⚠️ ${error?.message || "Suppression impossible"}`);
+    }
+  }
+
+  /* ── Branchements des nouveaux panneaux ─────────────────────────── */
+
+  document.querySelector("[data-security-save]")?.addEventListener("click", saveGuildSecurity);
+  document.querySelector("[data-security-reload]")?.addEventListener("click", () => {
+    loadGuildSecurity(selectedServer.id);
+    showToast("↻ Sécurité rechargée");
+  });
+  document.querySelector("[data-sanction-reset]")?.addEventListener("click", () => {
+    sanctionLadder = DEFAULT_SANCTION_LADDER.map((step) => ({ ...step }));
+    renderSanctionLadder();
+    markPanelDirty("security");
+    showToast("♻️ Échelle de sanctions réinitialisée");
+  });
+  document.querySelector("[data-autobackup-save]")?.addEventListener("click", saveGuildSecurity);
+
+  document.querySelector("[data-log-filters]")?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-log-category]");
+    if (!button) return;
+    loadGuildLogs(selectedServer.id, button.dataset.logCategory);
+  });
+  document.querySelector("[data-logs-reload]")?.addEventListener("click", () => {
+    loadGuildLogs(selectedServer.id);
+    showToast("↻ Journal rechargé");
+  });
+  document.querySelector("[data-logs-export]")?.addEventListener("click", exportLogs);
+  document.querySelector("[data-logs-save]")?.addEventListener("click", saveGuildSecurity);
+
+  document.querySelector("[data-backup-create]")?.addEventListener("click", createBackup);
+  document.querySelector("[data-backups-reload]")?.addEventListener("click", () => {
+    loadGuildBackups(selectedServer.id);
+    showToast("↻ Sauvegardes rechargées");
+  });
+  document.querySelector("[data-backup-list]")?.addEventListener("click", (event) => {
+    const restoreBtn = event.target.closest("[data-backup-restore]");
+    if (restoreBtn) return restoreBackup(restoreBtn.dataset.backupRestore);
+    const deleteBtn = event.target.closest("[data-backup-delete]");
+    if (deleteBtn) return deleteBackup(deleteBtn.dataset.backupDelete);
+  });
+
+  renderSanctionLadder();
 
   function collectDashboardConfig() {
     const ticketOptions = Array.from(document.querySelectorAll("#ticketOptionList .option-row")).map((row) => {
@@ -2402,6 +3397,33 @@ function initDashboard() {
     return premiumDraftServers.some((server) => server.name === serverName);
   }
 
+  /** Met à jour l'encart d'état de l'abonnement Premium. */
+  function renderPremiumStatus() {
+    const active = Boolean(premiumState.active);
+    const card = document.querySelector("[data-premium-status]");
+    const badge = document.querySelector("[data-premium-state-badge]");
+    const expiry = document.querySelector("[data-premium-expiry]");
+    const remaining = document.querySelector("[data-premium-remaining]");
+    const priceEl = document.querySelector("[data-premium-price]");
+    const durationEl = document.querySelector("[data-premium-duration]");
+
+    if (card) card.dataset.active = active ? "true" : "false";
+    if (badge) {
+      badge.textContent = active ? "🟢 Premium actif" : "⚪ Aucun abonnement";
+      badge.dataset.level = active ? "ok" : "idle";
+    }
+    if (priceEl) priceEl.textContent = premiumState.price_label || PREMIUM_OFFER.priceLabel;
+    if (durationEl) durationEl.textContent = premiumState.duration || PREMIUM_OFFER.durationLabel;
+    if (expiry) expiry.textContent = active ? formatIsoDateFr(premiumState.expires_at) : "—";
+    if (remaining) {
+      const days = Number(premiumState.days_left || 0);
+      remaining.textContent = active ? `${days} jour${days > 1 ? "s" : ""}` : "—";
+      remaining.dataset.level = active && days <= 14 ? "warn" : "ok";
+    }
+    // L'accès aux modules suit immédiatement l'état de l'abonnement
+    applyPanelAccess();
+  }
+
   function renderPremiumAssociations() {
     const tier = getPremiumTier();
     if (premiumUsedTarget) premiumUsedTarget.textContent = String(premiumDraftServers.length);
@@ -2409,8 +3431,11 @@ function initDashboard() {
       target.textContent = getPremiumLimitLabel();
     });
     if (premiumLimitBadge) {
-      premiumLimitBadge.textContent = `🟢 ${premiumTierLabels[tier]} : serveurs illimités`;
+      premiumLimitBadge.textContent = premiumState.active
+        ? "🟢 Premium : serveurs illimités"
+        : `⚪ ${premiumTierLabels[tier] || "Sans abonnement"} : passe Premium pour tout débloquer`;
     }
+    renderPremiumStatus();
 
     if (premiumSlots) {
       premiumSlots.innerHTML = "";
@@ -2586,14 +3611,14 @@ function initDashboard() {
   }
 
   function openPanel(panelName) {
-    if (!isPanelAllowed(panelName)) {
-      showToast("🔒 Cette rubrique demande une offre supérieure");
-      return;
-    }
     activePanelName = panelName;
     tabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.dashboardTab === panelName));
     panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.dashboardPanel === panelName));
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Un panneau Premium s'ouvre quand même : le voile explique ce qu'il apporte.
+    if (!isPanelAllowed(panelName)) {
+      showToast("💎 Module Premium — la protection reste gratuite");
+    }
+    document.querySelector(".dashboard-content")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   document.querySelector("[data-dashboard-login]")?.addEventListener("click", () => {
@@ -2626,28 +3651,39 @@ function initDashboard() {
     runWithUnsavedGuard(() => showDashboardStage("servers"));
   });
 
-  document.querySelector(".server-picker .server-grid")?.addEventListener("click", async (event) => {
-    const serverCard = event.target.closest(".server-card[data-server-name]");
-    if (!serverCard) return;
-    const cardLogo = serverCard.querySelector("[data-logo-img]");
-    const loadedLogo = cardLogo?.currentSrc || cardLogo?.src || serverCard.dataset.serverLogo || modbotDefaultLogo;
-    const initials = serverCard.dataset.serverInitials || serverCard.dataset.serverName?.slice(0, 2).toUpperCase() || "MB";
-    const guildId = serverCard.dataset.serverId || "";
-    const installed = serverCard.dataset.serverInstalled === "true";
-    const localMode = serverCard.dataset.serverLocal === "true";
-    const canManage = serverCard.dataset.serverCanManage !== "false";
-    if (!canManage) {
+  /**
+   * Ouvre un serveur à partir de n'importe quel élément portant les
+   * attributs data-server-*. Partagé par la grille de sélection et le
+   * menu déroulant de la barre supérieure.
+   */
+  async function selectGuildFromElement(element) {
+    if (!element) return;
+    const logoImg = element.querySelector("[data-logo-img]");
+    const logo = logoImg?.currentSrc || logoImg?.src || element.dataset.serverLogo || modbotDefaultLogo;
+    const nom = element.dataset.serverName || "Serveur ModBot";
+    const initiales = element.dataset.serverInitials || nom.slice(0, 2).toUpperCase() || "MB";
+    const guildId = element.dataset.serverId || element.dataset.switcherGuild || "";
+    const installe = element.dataset.serverInstalled === "true";
+    const peutGerer = element.dataset.serverCanManage !== "false";
+
+    if (!peutGerer) {
       showToast("🔒 Permissions insuffisantes : il faut Administrateur ou Gérer le serveur");
       return;
     }
-    if (!installed) {
-      openBotInviteForGuild(guildId, serverCard.dataset.serverName);
+    if (!installe) {
+      openBotInviteForGuild(guildId, nom);
       return;
     }
-    setCurrentServer(serverCard.dataset.serverName || "Serveur ModBot", loadedLogo, initials, guildId, installed);
+    if (guildId && guildId === selectedServer.id) {
+      showDashboardStage("dashboard");
+      return; // déjà ouvert : on évite un rechargement inutile
+    }
+
+    setCurrentServer(nom, logo, initiales, guildId, installe);
     showDashboardStage("dashboard");
-    showToast(localMode ? "🧪 Mode local ouvert : connexion API à brancher" : `✅ Serveur sélectionné : ${serverCard.dataset.serverName}`);
-    if (guildId && installed) {
+    showToast(`✅ ${nom}`);
+
+    if (guildId) {
       await loadSelectedGuildConfig(guildId);
     } else {
       renderDashboardResources({});
@@ -2655,9 +3691,12 @@ function initDashboard() {
     clearUnsavedChanges();
     ticketNeedsPublish = false;
     setTicketPublishVisible(false);
-    if (requestedOfferPlan) {
-      openPanel("premium");
-    }
+    if (requestedOfferPlan) openPanel("premium");
+  }
+
+  document.querySelector(".server-picker .server-grid")?.addEventListener("click", (event) => {
+    const carte = event.target.closest(".server-card[data-server-name]");
+    if (carte) selectGuildFromElement(carte);
   });
 
   document.querySelector("[data-premium-associate-current]")?.addEventListener("click", () => {
@@ -2729,25 +3768,39 @@ function initDashboard() {
 
   setupLogoFallbacks();
   setOfferInviteFallbackCopy();
+  initApiUrlControls();
+
+  const LOGIN_ERROR_MESSAGES = {
+    oauth_backend_required: "⚠️ Connexion Discord reçue, mais l'API ModBot doit finaliser la session",
+    oauth_not_configured: "⚠️ OAuth Discord non configuré côté bot : ajoute DISCORD_CLIENT_SECRET et DISCORD_REDIRECT_URI",
+    oauth_state: "⚠️ Lien de connexion expiré ou déjà utilisé. Relance la connexion Discord.",
+    oauth_token: "⚠️ Discord a refusé le code : l'URL de callback du portail Discord doit correspondre exactement à DISCORD_REDIRECT_URI",
+    oauth_user: "⚠️ Discord n'a pas renvoyé le profil utilisateur",
+    oauth_guilds: "⚠️ Discord n'a pas renvoyé la liste des serveurs",
+    missing_code: "⚠️ Discord n'a pas renvoyé de code de connexion"
+  };
+  const LOGIN_ERROR_DETAILS = {
+    oauth_not_configured:
+      "Le bot répond mais l'OAuth Discord est incomplet. Sur ton hébergeur, définis DISCORD_CLIENT_SECRET et DISCORD_REDIRECT_URI (ou PUBLIC_BASE_URL).",
+    oauth_token:
+      "Dans le portail développeur Discord → OAuth2 → Redirects, l'URL doit être identique à DISCORD_REDIRECT_URI, au caractère près.",
+    oauth_state:
+      "Le jeton anti-CSRF a expiré (10 minutes) ou a déjà servi. Clique de nouveau sur « Se connecter avec Discord »."
+  };
 
   const pendingLoginError = sessionStorage.getItem("modbot-login-error");
   if (pendingLoginError) {
     sessionStorage.removeItem("modbot-login-error");
     showDashboardStage("auth");
-    const messages = {
-      oauth_backend_required: "⚠️ Connexion Discord reçue, mais l'API ModBot doit finaliser la session",
-      oauth_not_configured: "⚠️ OAuth Discord non configuré côté bot : ajoute CLIENT_SECRET et REDIRECT_URI",
-      oauth_token: "⚠️ Discord a refusé le code OAuth : vérifie l'URL callback dans le portail Discord",
-      oauth_user: "⚠️ Discord n'a pas renvoyé le profil utilisateur",
-      oauth_guilds: "⚠️ Discord n'a pas renvoyé la liste des serveurs",
-      missing_code: "⚠️ Discord n'a pas renvoyé de code de connexion"
-    };
-    showToast(messages[pendingLoginError] || `⚠️ Connexion Discord impossible : ${pendingLoginError}`);
-  } else if (getModbotSessionToken() || getModbotApiToken()) {
-    dashboardLogin();
-  } else if (requiresLiveDiscordFlow) {
-    showDashboardStage("auth");
-    showToast("🔐 Connecte-toi avec Discord pour voir tes serveurs administrables");
+    showToast(LOGIN_ERROR_MESSAGES[pendingLoginError] || `⚠️ Connexion Discord impossible : ${pendingLoginError}`);
+    if (LOGIN_ERROR_DETAILS[pendingLoginError]) {
+      renderAuthStatus({ level: "warn", message: LOGIN_ERROR_DETAILS[pendingLoginError] });
+    }
+    findAvailableApiBase();
+  } else {
+    // Connexion automatique : le jeton fraîchement reçu de Discord est déjà
+    // enregistré par initApiBridgeFromUrl, la session reprend toute seule.
+    autoConnect();
   }
 
   tabs.forEach((tab) => {
