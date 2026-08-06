@@ -929,14 +929,18 @@ function discordGuildBannerUrl(guild) {
   return modbotDefaultBanner;
 }
 
+/**
+ * Seuls le propriétaire et les administrateurs pilotent ModBot.
+ * « Gérer le serveur » (0x20) ne suffit pas : c'est une permission
+ * de modération, pas d'administration du bot.
+ */
 function canManageDiscordGuild(guild) {
-  if (guild?.local || guild?.installed || guild?.can_manage === true) return true;
+  if (guild?.can_manage === true) return true;
+  if (guild?.owner) return true;
   try {
-    const permissions = BigInt(String(guild?.permissions || "0"));
-    return Boolean(guild?.owner || (permissions & 0x8n) || (permissions & 0x20n));
+    return Boolean(BigInt(String(guild?.permissions || "0")) & 0x8n);
   } catch (error) {
-    const permissions = Number(guild?.permissions || 0);
-    return Boolean(guild?.owner || (permissions & 0x8) || (permissions & 0x20));
+    return Boolean(Number(guild?.permissions || 0) & 0x8);
   }
 }
 
@@ -962,6 +966,11 @@ function normalizeDiscordGuild(guild, installed = false) {
   };
 }
 
+/**
+ * Ne conserve que les serveurs réellement pilotables : ModBot installé
+ * ET utilisateur administrateur. Tout le reste est écarté plutôt que
+ * d'encombrer la sélection avec des serveurs non configurables.
+ */
 function normalizeDashboardGuilds(guilds) {
   if (!Array.isArray(guilds)) return [];
   const seen = new Set();
@@ -970,9 +979,11 @@ function normalizeDashboardGuilds(guilds) {
     .map((guild) => normalizeDiscordGuild(guild, guild.installed))
     .filter((guild) => {
       if (!guild.id || seen.has(guild.id)) return false;
+      if (!guild.installed || !guild.can_manage) return false;
       seen.add(guild.id);
-      return guild.local || guild.installed || guild.can_manage;
-    });
+      return true;
+    })
+    .sort((a, b) => a.name.localeCompare(b.name, "fr"));
 }
 
 async function fetchDiscordManageableGuilds() {
@@ -1274,6 +1285,141 @@ function initAdminZone() {
     });
   });
 
+  /* ════════════════════════════════════════════════════════════════
+     ASSOCIATION MANUELLE DES SERVEURS À UN ABONNEMENT PREMIUM
+     Réservée à l'administration : le dashboard utilisateur ne peut plus
+     associer de serveur lui-même.
+     ════════════════════════════════════════════════════════════════ */
+
+  const psPanel = document.querySelector("[data-premium-servers-panel]");
+  const psBody = document.querySelector("[data-premium-servers-body]");
+  const psGrid = document.querySelector("[data-premium-servers-grid]");
+  const psBadge = document.querySelector("[data-premium-servers-badge]");
+  const psCount = document.querySelector("[data-premium-servers-count]");
+  const psSearch = document.querySelector("[data-premium-servers-search]");
+  const psMemberInput = document.querySelector("[data-premium-servers-member]");
+
+  let psServeurs = [];          // tous les serveurs où ModBot est installé
+  let psSelection = new Set();  // identifiants cochés
+  let psMembre = "";
+
+  function psMajCompteur() {
+    if (!psCount) return;
+    const n = psSelection.size;
+    psCount.textContent = n === 0
+      ? "Aucun serveur sélectionné"
+      : `${n} serveur${n > 1 ? "s" : ""} sélectionné${n > 1 ? "s" : ""}`;
+  }
+
+  function psRendre() {
+    if (!psGrid) return;
+    const terme = (psSearch?.value || "").trim().toLowerCase();
+    const visibles = terme
+      ? psServeurs.filter((g) => g.name.toLowerCase().includes(terme))
+      : psServeurs;
+
+    if (!psServeurs.length) {
+      psGrid.innerHTML = `<p class="premium-servers-empty">ModBot n'est installé sur aucun serveur.</p>`;
+      return;
+    }
+    if (!visibles.length) {
+      psGrid.innerHTML = `<p class="premium-servers-empty">Aucun serveur ne correspond à « ${escapeHtml(terme)} ».</p>`;
+      return;
+    }
+
+    psGrid.innerHTML = visibles
+      .map((g) => {
+        const coche = psSelection.has(g.id);
+        const membres = Number(g.member_count || 0);
+        return `
+      <label class="premium-server-choice${coche ? " is-checked" : ""}">
+        <input type="checkbox" value="${escapeHtml(g.id)}"${coche ? " checked" : ""} data-ps-check>
+        <span class="server-logo-shell" data-initials="${escapeHtml(g.initials || "MB")}">
+          ${g.icon ? `<img src="${escapeHtml(g.icon)}" alt="" data-logo-img>` : ""}
+        </span>
+        <span class="premium-server-choice-text">
+          <strong>${escapeHtml(g.name)}</strong>
+          <small>${membres ? membres.toLocaleString("fr-FR") + " membres" : "ID " + escapeHtml(g.id)}</small>
+        </span>
+      </label>`;
+      })
+      .join("");
+    psMajCompteur();
+  }
+
+  async function psCharger() {
+    const membre = (psMemberInput?.value || "").trim();
+    if (!membre) {
+      showAdminToast("⚠️ Indique l'ID ou le pseudo du membre");
+      return;
+    }
+    try {
+      const data = await modbotApiFetch(
+        `/api/admin/premium/servers?member=${encodeURIComponent(membre)}`,
+        { cache: "no-store" }
+      );
+      psMembre = membre;
+      psServeurs = Array.isArray(data.available) ? data.available : [];
+      psSelection = new Set((data.linked || []).map((l) => String(l.guild_id)));
+      if (psBody) psBody.hidden = false;
+      if (psBadge) {
+        const actif = data.premium?.active;
+        psBadge.textContent = actif
+          ? `${membre} · Premium actif`
+          : `${membre} · sans abonnement`;
+        psBadge.classList.toggle("active", Boolean(actif));
+      }
+      psRendre();
+      showAdminToast(`🧭 ${psSelection.size} serveur(s) déjà associé(s) à ${membre}`);
+    } catch (error) {
+      showAdminToast(`⚠️ ${error?.message || "Chargement impossible"}`);
+    }
+  }
+
+  async function psEnregistrer() {
+    if (!psMembre) {
+      showAdminToast("⚠️ Charge d'abord un membre");
+      return;
+    }
+    try {
+      const data = await modbotApiFetch("/api/admin/premium/servers", {
+        method: "PUT",
+        body: JSON.stringify({ member: psMembre, guild_ids: [...psSelection] })
+      });
+      const n = (data.linked || []).length;
+      showAdminToast(`✅ ${n} serveur(s) associé(s) à ${psMembre}`);
+      if (data.ignored?.length) {
+        showAdminToast(`⚠️ ${data.ignored.length} identifiant(s) ignoré(s) : ModBot n'y est pas`);
+      }
+    } catch (error) {
+      showAdminToast(`⚠️ ${error?.message || "Enregistrement impossible"}`);
+    }
+  }
+
+  psGrid?.addEventListener("change", (event) => {
+    const check = event.target.closest("[data-ps-check]");
+    if (!check) return;
+    if (check.checked) psSelection.add(check.value);
+    else psSelection.delete(check.value);
+    check.closest(".premium-server-choice")?.classList.toggle("is-checked", check.checked);
+    psMajCompteur();
+  });
+
+  psSearch?.addEventListener("input", psRendre);
+  document.querySelector("[data-premium-servers-load]")?.addEventListener("click", psCharger);
+  psMemberInput?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") { event.preventDefault(); psCharger(); }
+  });
+  document.querySelector("[data-premium-servers-save]")?.addEventListener("click", psEnregistrer);
+  document.querySelector("[data-premium-servers-all]")?.addEventListener("click", () => {
+    psServeurs.forEach((g) => psSelection.add(g.id));
+    psRendre();
+  });
+  document.querySelector("[data-premium-servers-none]")?.addEventListener("click", () => {
+    psSelection.clear();
+    psRendre();
+  });
+
   document.querySelector("[data-premium-apply]")?.addEventListener("click", async () => {
     const memberInput = document.querySelector("[data-premium-member]");
     const list = document.querySelector("[data-premium-list]");
@@ -1298,6 +1444,12 @@ function initAdminZone() {
       showAdminToast(plan === "premium"
         ? `💎 Premium activé pour ${member} jusqu'au ${formatIsoDateFr(result?.expires_at)}`
         : `🚫 Abonnement révoqué pour ${member}`);
+      // Enchaîne naturellement sur l'association des serveurs
+      if (plan === "premium" && psMemberInput) {
+        psMemberInput.value = member;
+        await psCharger();
+        psPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     } catch (error) {
       showAdminToast(`⚠️ ${error?.message || "Connexion au bot impossible"}`);
       return;
@@ -1470,28 +1622,10 @@ function initDashboard() {
   const currentServerTargets = document.querySelectorAll("[data-current-server], [data-current-server-label]");
   const currentServerLogoTargets = document.querySelectorAll("[data-current-server-logo], [data-current-server-logo-inline]");
   const currentServerLogoShells = document.querySelectorAll("[data-current-server-logo-shell]");
-  const premiumUsedTarget = document.querySelector("[data-premium-used]");
-  const premiumLimitTargets = document.querySelectorAll("[data-premium-limit]");
-  const premiumLimitBadge = document.querySelector("[data-premium-limit-badge]");
   const premiumTierSelect = document.querySelector("[data-premium-tier]");
-  const premiumSlots = document.querySelector("[data-dashboard-premium-slots]");
-  const premiumServerChoices = document.querySelectorAll("[data-premium-server-choice]");
-  const tournamentEnabled = document.querySelector("[data-tournament-enabled]");
-  const tournamentState = document.querySelector("[data-tournament-state]");
-  const tournamentCommandState = document.querySelector("[data-tournament-command-state]");
-  const tournamentOverviewState = document.querySelector("[data-tournament-overview-state]");
-  const tournamentCommandCards = document.querySelectorAll(".tournament-command-card");
-  const tournamentNameInput = document.querySelector("[data-tournament-name]");
   const unsavedModal = document.querySelector("[data-unsaved-modal]");
   const publishTicketButton = document.querySelector("[data-publish-ticket]");
   const ticketChannelInput = document.querySelector("[data-ticket-channel]");
-  const personalizationDefaults = {
-    name: "ModBot",
-    footer: "ModBot - Protection de votre communauté",
-    logo: "assets/default_logo.svg",
-    banner: "assets/default_banner.svg",
-    color: "#5865F2"
-  };
   // Offre unique : soit Premium actif, soit aucun abonnement.
   const PREMIUM_OFFER = {
     price: 29.99,
@@ -1533,10 +1667,8 @@ function initDashboard() {
   // Premium : ajoute les modules communautaires et d'automatisation.
   const premiumPanels = new Set([
     ...freePanels,
-    "tickets", "welcome", "reactionroles", "recurring",
-    "personalization", "tournaments", "socials", "ratings"
+    "tickets", "welcome", "reactionroles", "recurring", "socials", "ratings"
   ]);
-  const IFC_TOURNAMENT_API_READY = false;
   let activePanelName = "overview";
   let hasUnsavedChanges = false;
   let dirtyPanelName = null;
@@ -1558,8 +1690,6 @@ function initDashboard() {
     sessionStorage.setItem("modbot-selected-offer", premiumTier);
     localStorage.setItem("modbot-dashboard-premium-tier", premiumTier);
   }
-  let premiumDraftServers = readStoredPremiumServers();
-  let tournamentDraft = readStoredTournamentConfig();
 
   function showToast(message) {
     if (!toast) return;
@@ -1624,22 +1754,6 @@ function initDashboard() {
     });
   }
 
-  function readStoredPremiumServers() {
-    try {
-      const parsed = JSON.parse(localStorage.getItem("modbot-dashboard-premium-servers") || "[]");
-      if (!Array.isArray(parsed)) return [];
-      return parsed
-        .filter((server) => server && server.name)
-        .map((server) => ({
-          id: String(server.id || ""),
-          name: String(server.name),
-          logo: String(server.logo || modbotDefaultLogo),
-          initials: String(server.initials || "MB")
-        }));
-    } catch (error) {
-      return [];
-    }
-  }
 
   function readStoredPremiumTier() {
     const stored = localStorage.getItem("modbot-dashboard-premium-tier") || "free";
@@ -1668,8 +1782,6 @@ function initDashboard() {
     welcome: "Accueille tes membres avec des cartes et messages personnalisés à l'arrivée et au départ.",
     reactionroles: "Laisse tes membres choisir leurs rôles en cliquant sur une réaction.",
     recurring: "Publie automatiquement des messages à intervalle régulier.",
-    personalization: "Personnalise entièrement les couleurs, logos et pieds de page des embeds.",
-    tournaments: "Organise et suis tes tournois directement depuis Discord.",
     socials: "Annonce automatiquement tes lives Twitch, vidéos YouTube et posts TikTok.",
     ratings: "Recueille l'avis des membres après chaque ticket fermé."
   };
@@ -1713,112 +1825,12 @@ function initDashboard() {
     });
   }
 
-  function savePremiumState() {
-    premiumTier = getPremiumTier();
-    localStorage.setItem("modbot-dashboard-premium-tier", premiumTier);
-    localStorage.setItem("modbot-dashboard-premium-servers", JSON.stringify(premiumDraftServers));
-  }
 
-  function defaultTournamentConfig() {
-    return {
-      enabled: false,
-      name: "EA FC 26 Club Pro Cup"
-    };
-  }
 
-  function readStoredTournamentConfig() {
-    try {
-      const stored = JSON.parse(localStorage.getItem("modbot-dashboard-tournament") || "null");
-      return {
-        ...defaultTournamentConfig(),
-        ...(stored && typeof stored === "object" ? stored : {}),
-        enabled: IFC_TOURNAMENT_API_READY ? Boolean(stored?.enabled) : false
-      };
-    } catch (error) {
-      return defaultTournamentConfig();
-    }
-  }
 
-  function collectTournamentConfig() {
-    return {
-      enabled: IFC_TOURNAMENT_API_READY && Boolean(tournamentEnabled?.checked),
-      name: tournamentNameInput?.value.trim() || defaultTournamentConfig().name
-    };
-  }
 
-  function saveTournamentConfig() {
-    tournamentDraft = collectTournamentConfig();
-    localStorage.setItem("modbot-dashboard-tournament", JSON.stringify(tournamentDraft));
-  }
 
-  function syncTournamentState(isActive = Boolean(tournamentEnabled?.checked)) {
-    if (!IFC_TOURNAMENT_API_READY) {
-      if (tournamentEnabled) {
-        tournamentEnabled.checked = false;
-        tournamentEnabled.disabled = true;
-      }
 
-      const toggleLine = tournamentEnabled?.closest(".toggle-line");
-      toggleLine?.classList.remove("is-on");
-      toggleLine?.classList.add("is-locked");
-
-      if (tournamentState) {
-        tournamentState.classList.remove("active", "inactive");
-        tournamentState.classList.add("pending");
-        tournamentState.textContent = "🟡 En attente API IFC";
-      }
-
-      if (tournamentCommandState) {
-        tournamentCommandState.classList.remove("active", "inactive");
-        tournamentCommandState.classList.add("pending");
-        tournamentCommandState.textContent = "🟡 Commandes indisponibles";
-      }
-
-      if (tournamentOverviewState) {
-        tournamentOverviewState.textContent = "En attente";
-      }
-
-      tournamentCommandCards.forEach((card) => {
-        card.classList.add("is-disabled");
-      });
-      return;
-    }
-
-    const stateText = isActive ? "🟢 Actif" : "⚪ Inactif";
-    const commandText = isActive ? "🟢 Commandes disponibles" : "⚪ Module inactif";
-
-    if (tournamentState) {
-      tournamentState.classList.toggle("active", isActive);
-      tournamentState.classList.toggle("inactive", !isActive);
-      tournamentState.textContent = stateText;
-    }
-
-    if (tournamentCommandState) {
-      tournamentCommandState.classList.toggle("active", isActive);
-      tournamentCommandState.classList.toggle("inactive", !isActive);
-      tournamentCommandState.textContent = commandText;
-    }
-
-    if (tournamentOverviewState) {
-      tournamentOverviewState.textContent = isActive ? "Actif" : "Inactif";
-    }
-
-    tournamentCommandCards.forEach((card) => {
-      card.classList.toggle("is-disabled", !isActive);
-    });
-  }
-
-  function applyTournamentConfig(config = defaultTournamentConfig()) {
-    const canEnableTournament = IFC_TOURNAMENT_API_READY && Boolean(config.enabled);
-    if (tournamentEnabled) {
-      tournamentEnabled.checked = canEnableTournament;
-      tournamentEnabled.disabled = !IFC_TOURNAMENT_API_READY;
-    }
-    if (tournamentNameInput) tournamentNameInput.value = config.name || defaultTournamentConfig().name;
-    tournamentEnabled?.closest(".toggle-line")?.classList.toggle("is-on", canEnableTournament);
-    tournamentEnabled?.closest(".toggle-line")?.classList.toggle("is-locked", !IFC_TOURNAMENT_API_READY);
-    syncTournamentState(canEnableTournament);
-  }
 
   function escapeHtml(value) {
     return String(value).replace(/[&<>"']/g, (character) => ({
@@ -2423,7 +2435,6 @@ function initDashboard() {
     if (!config) return;
     const tickets = config.tickets || {};
     const channels = config.channels || {};
-    const personalization = config.personalization || {};
     const welcome = config.welcome_system || config.welcome || {};
     const security = config.security || {};
 
@@ -2476,12 +2487,6 @@ function initDashboard() {
       }
     });
 
-    const personalizationFooter = document.querySelector("[data-personalization-footer]");
-    if (personalizationFooter && personalization.footer) personalizationFooter.value = personalization.footer;
-    const personalizationPreviewTitle = document.querySelector("[data-personalization-preview-title]");
-    const personalizationPreviewFooter = document.querySelector("[data-personalization-preview-footer]");
-    if (personalizationPreviewTitle) personalizationPreviewTitle.textContent = `Panel ModBot`;
-    if (personalizationPreviewFooter) personalizationPreviewFooter.textContent = personalization.footer || "ModBot - Protection de votre communauté";
 
     const welcomeMessage = document.querySelector("[data-welcome-message]");
     const departureMessage = document.querySelector("[data-departure-message]");
@@ -2527,18 +2532,6 @@ function initDashboard() {
     if (incomingTier) {
       premiumTier = Object.hasOwn(premiumTierLimits, incomingTier) ? incomingTier : premiumTier;
       if (premiumTierSelect) premiumTierSelect.value = premiumTier;
-      renderPremiumAssociations();
-    }
-
-    if (Array.isArray(config.premium_servers)) {
-      premiumDraftServers = config.premium_servers
-        .filter((server) => server && server.name)
-        .map((server) => ({
-          id: String(server.id || ""),
-          name: String(server.name),
-          logo: String(server.logo || modbotDefaultLogo),
-          initials: String(server.initials || "MB")
-        }));
       renderPremiumAssociations();
     }
 
@@ -3352,10 +3345,6 @@ function initDashboard() {
         support_role: document.querySelector("[data-ticket-support-role]")?.value || "",
         options: ticketOptions,
       },
-      personalization: {
-        footer: document.querySelector("[data-personalization-footer]")?.value || "",
-        color: document.querySelector(".color-swatch.is-selected")?.dataset.color || "#5865F2",
-      },
       welcome_system: {
         enabled: Boolean(document.querySelector("[data-dashboard-panel='welcome'] .toggle-line input")?.checked),
         dm_enabled: Boolean(document.querySelector("[data-welcome-dm-enabled]")?.checked),
@@ -3375,12 +3364,10 @@ function initDashboard() {
       reaction_roles: reactionRoles,
       recurring_messages: recurringMessages,
       social_relays: socialRelays,
-      premium_servers: premiumDraftServers,
-      premium_tier: getPremiumTier(),
-      premium_limit: null,
-      premium_unlimited: true,
       language: languageValue === "English" ? "en" : "fr",
-      tournament: collectTournamentConfig(),
+      // Ni premium_servers, ni premium_tier, ni personnalisation, ni tournoi :
+      // ces réglages ne sont plus pilotés depuis le dashboard utilisateur.
+      // Les envoyer écraserait des valeurs gérées côté administration.
     };
   }
 
@@ -3393,9 +3380,6 @@ function initDashboard() {
     return true;
   }
 
-  function isPremiumServerAssociated(serverName) {
-    return premiumDraftServers.some((server) => server.name === serverName);
-  }
 
   /** Met à jour l'encart d'état de l'abonnement Premium. */
   function renderPremiumStatus() {
@@ -3424,75 +3408,16 @@ function initDashboard() {
     applyPanelAccess();
   }
 
+  /**
+   * Rafraîchit l'affichage Premium. L'association des serveurs est gérée
+   * côté administration : le dashboard n'en affiche plus que l'état.
+   */
   function renderPremiumAssociations() {
-    const tier = getPremiumTier();
-    if (premiumUsedTarget) premiumUsedTarget.textContent = String(premiumDraftServers.length);
-    premiumLimitTargets.forEach((target) => {
-      target.textContent = getPremiumLimitLabel();
-    });
-    if (premiumLimitBadge) {
-      premiumLimitBadge.textContent = premiumState.active
-        ? "🟢 Premium : serveurs illimités"
-        : `⚪ ${premiumTierLabels[tier] || "Sans abonnement"} : passe Premium pour tout débloquer`;
-    }
     renderPremiumStatus();
-
-    if (premiumSlots) {
-      premiumSlots.innerHTML = "";
-      premiumDraftServers.forEach((server, index) => {
-        const slot = document.createElement("div");
-        slot.className = "premium-slot is-filled";
-
-        slot.innerHTML = `
-          <span class="server-logo-shell" data-initials="${escapeHtml(server.initials || "MB")}">
-            <img src="${escapeHtml(server.logo || modbotDefaultLogo)}" alt="" data-logo-img>
-          </span>
-          <span>
-            <strong>${escapeHtml(server.name)}</strong>
-            <small>Serveur associé au Premium</small>
-          </span>
-          <button class="secondary-btn compact" type="button" data-premium-remove-slot="${index}">Retirer</button>
-        `;
-
-        premiumSlots.append(slot);
-      });
-      const helperSlot = document.createElement("div");
-      helperSlot.className = "premium-slot is-empty";
-      helperSlot.textContent = premiumDraftServers.length
-        ? "Tu peux associer d'autres serveurs sans limite de quantité."
-        : "Aucun serveur associé pour le moment.";
-      premiumSlots.append(helperSlot);
-      setupLogoFallbacks();
-    }
-
-    document.querySelectorAll("[data-premium-server-choice]").forEach((choice) => {
-      const associated = isPremiumServerAssociated(choice.dataset.serverName);
-      choice.classList.toggle("is-associated", associated);
-      choice.setAttribute("aria-pressed", associated ? "true" : "false");
-    });
     applyPanelAccess();
   }
 
-  function addPremiumServer(server) {
-    if (!server?.name) return;
-    if (isPremiumServerAssociated(server.name)) {
-      showToast("✅ Ce serveur est déjà associé au Premium");
-      return;
-    }
 
-    premiumDraftServers = [...premiumDraftServers, server];
-    renderPremiumAssociations();
-    markPanelDirty("premium");
-    showToast(`💎 ${server.name} associé au Premium`);
-  }
-
-  function removePremiumServer(index) {
-    const removed = premiumDraftServers[index];
-    premiumDraftServers = premiumDraftServers.filter((_, serverIndex) => serverIndex !== index);
-    renderPremiumAssociations();
-    markPanelDirty("premium");
-    showToast(removed ? `🗑️ ${removed.name} retiré du Premium` : "🗑️ Serveur retiré");
-  }
 
   function setCurrentServer(serverName, serverLogo = modbotDefaultLogo, initials = "MB", serverId = "", installed = false) {
     const safeLogo = serverLogo || modbotDefaultLogo;
@@ -3557,13 +3482,7 @@ function initDashboard() {
       showToast("✅ Tout est déjà enregistré");
       return true;
     }
-    if (dirtyPanelName === "premium") {
-      savePremiumState();
-    }
-    if (dirtyPanelName === "tournaments") {
-      saveTournamentConfig();
-    }
-    if ((!selectedServer.id || !selectedServer.installed) && dirtyPanelName !== "premium" && dirtyPanelName !== "tournaments") {
+    if (!selectedServer.id || !selectedServer.installed) {
       showToast("🔗 Le serveur actif n'est pas relié au bot : reconnecte-toi via Discord");
       return false;
     }
@@ -3699,72 +3618,14 @@ function initDashboard() {
     if (carte) selectGuildFromElement(carte);
   });
 
-  document.querySelector("[data-premium-associate-current]")?.addEventListener("click", () => {
-    addPremiumServer(selectedServer);
-  });
 
-  document.querySelector(".premium-choice-grid")?.addEventListener("click", (event) => {
-    const choice = event.target.closest("[data-premium-server-choice]");
-    if (!choice) return;
-    const localMode = choice.dataset.serverLocal === "true";
-    const canManage = choice.dataset.serverCanManage !== "false";
-    if (!canManage) {
-      showToast("🔒 Permissions insuffisantes : il faut Administrateur ou Gérer le serveur");
-      return;
-    }
-    if (choice.dataset.serverInstalled !== "true" && !localMode) {
-      openBotInviteForGuild(choice.dataset.serverId || "", choice.dataset.serverName);
-      return;
-    }
-    addPremiumServer({
-      name: choice.dataset.serverName || "Serveur ModBot",
-      logo: choice.dataset.serverLogo || modbotDefaultLogo,
-      initials: choice.dataset.serverInitials || "MB",
-      id: choice.dataset.serverId || "",
-      installed: choice.dataset.serverInstalled === "true"
-    });
-  });
 
-  premiumSlots?.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-premium-remove-slot]");
-    if (!button) return;
-    removePremiumServer(Number(button.dataset.premiumRemoveSlot || 0));
-  });
 
-  document.querySelector("[data-reset-premium-associations]")?.addEventListener("click", () => {
-    premiumDraftServers = [];
-    renderPremiumAssociations();
-    markPanelDirty("premium");
-    showToast("♻️ Associations Premium vidées");
-  });
 
-  premiumTierSelect?.addEventListener("change", () => {
-    premiumTier = getPremiumTier();
-    renderPremiumAssociations();
-    markPanelDirty("premium");
-    showToast(`💎 Offre ${premiumTierLabels[premiumTier]} sélectionnée`);
-  });
 
   renderPremiumAssociations();
-  applyTournamentConfig(tournamentDraft);
 
-  tournamentEnabled?.addEventListener("change", () => {
-    if (!IFC_TOURNAMENT_API_READY) {
-      tournamentEnabled.checked = false;
-      syncTournamentState(false);
-      showToast("🔒 Module tournois en attente de l'API IFC");
-      return;
-    }
-    syncTournamentState(tournamentEnabled.checked);
-    showToast(tournamentEnabled.checked ? "🏆 Module tournois activé" : "⚪ Module tournois désactivé");
-  });
 
-  document.querySelector("[data-reset-tournament]")?.addEventListener("click", () => {
-    tournamentDraft = defaultTournamentConfig();
-    applyTournamentConfig(tournamentDraft);
-    markPanelDirty("tournaments");
-    showToast("♻️ Module tournois réinitialisé");
-  });
 
   setupLogoFallbacks();
   setOfferInviteFallbackCopy();
@@ -3849,16 +3710,6 @@ function initDashboard() {
       ticketNeedsPublish = false;
       setTicketPublishVisible(false);
     }
-    if (dirtyPanelName === "premium") {
-      premiumTier = readStoredPremiumTier();
-      if (premiumTierSelect) premiumTierSelect.value = premiumTier;
-      premiumDraftServers = readStoredPremiumServers();
-      renderPremiumAssociations();
-    }
-    if (dirtyPanelName === "tournaments") {
-      tournamentDraft = readStoredTournamentConfig();
-      applyTournamentConfig(tournamentDraft);
-    }
     clearUnsavedChanges();
     showToast("🗑️ Modifications laissées de côté");
     pendingNavigation = null;
@@ -3886,20 +3737,9 @@ function initDashboard() {
     const syncToggle = () => line?.classList.toggle("is-on", checkbox.checked);
     syncToggle();
     checkbox.addEventListener("change", () => {
-      if (checkbox.matches("[data-tournament-enabled]") && !IFC_TOURNAMENT_API_READY) {
-        checkbox.checked = false;
-        syncToggle();
-        syncTournamentState(false);
-        showToast("🔒 Module tournois en attente de l'API IFC");
-        return;
-      }
       syncToggle();
       markPanelDirty(checkbox.closest("[data-dashboard-panel]")?.dataset.dashboardPanel || activePanelName);
-      if (checkbox.matches("[data-tournament-enabled]")) {
-        showToast(checkbox.checked ? "🏆 Module tournois activé" : "⚪ Module tournois désactivé");
-      } else {
-        showToast(checkbox.checked ? "Module activé" : "Module désactivé");
-      }
+      showToast(checkbox.checked ? "Module activé" : "Module désactivé");
     });
   });
 
@@ -4249,45 +4089,6 @@ function initDashboard() {
         showToast(`⚠️ Test ${platform} impossible : ${error.message || "connexion bot indisponible"}`);
       }
     });
-  });
-
-  const colorPreview = document.querySelector(".live-color-preview");
-  document.querySelectorAll(".color-swatch").forEach((swatch) => {
-    swatch.addEventListener("click", () => {
-      document.querySelectorAll(".color-swatch").forEach((item) => item.classList.remove("is-selected"));
-      swatch.classList.add("is-selected");
-      colorPreview?.style.setProperty("--dashboard-accent", swatch.dataset.color || "#5865F2");
-      markPanelDirty("personalization");
-      showToast("Couleur d'embed mise à jour");
-    });
-  });
-
-  const personalizationFooter = document.querySelector("[data-personalization-footer]");
-  const personalizationPreviewTitle = document.querySelector("[data-personalization-preview-title]");
-  const personalizationPreviewFooter = document.querySelector("[data-personalization-preview-footer]");
-
-  personalizationFooter?.addEventListener("input", () => {
-    if (personalizationPreviewFooter) {
-      personalizationPreviewFooter.textContent = personalizationFooter.value || personalizationDefaults.footer;
-    }
-  });
-
-  document.querySelector("[data-apply-personalization]")?.addEventListener("click", async () => {
-    markPanelDirty("personalization");
-    await saveCurrentChanges("🎨 Personnalisation appliquée sur le serveur actif");
-  });
-
-  document.querySelector("[data-cancel-personalization]")?.addEventListener("click", () => {
-    if (personalizationFooter) personalizationFooter.value = personalizationDefaults.footer;
-    if (personalizationPreviewTitle) personalizationPreviewTitle.textContent = "Panel ModBot";
-    if (personalizationPreviewFooter) personalizationPreviewFooter.textContent = personalizationDefaults.footer;
-    document.querySelectorAll(".color-swatch").forEach((item) => {
-      const isDefault = item.dataset.color === personalizationDefaults.color;
-      item.classList.toggle("is-selected", isDefault);
-    });
-    colorPreview?.style.setProperty("--dashboard-accent", personalizationDefaults.color);
-    if (dirtyPanelName === "personalization") clearUnsavedChanges();
-    showToast("↩️ Personnalisation remise sur la base ModBot");
   });
 
   document.querySelectorAll(".dashboard-page button, .dashboard-page .primary-btn, .dashboard-page .secondary-btn").forEach((element) => {

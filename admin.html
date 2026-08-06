@@ -144,27 +144,60 @@
               </label>
               <button class="primary-btn compact" type="button" data-premium-apply data-i18n="admin.premium.apply">Appliquer</button>
             </div>
-            <div class="premium-list" data-premium-list>
-              <div>
-                <span><strong>gimskh</strong><small>Serveurs associés depuis le dashboard</small></span>
-                <span>Premium permanent</span>
+            <div class="premium-list" data-premium-list></div>
+          </article>
+
+          <!-- Association manuelle des serveurs à un abonnement -->
+          <article class="admin-panel" data-premium-servers-panel>
+            <div class="admin-panel-head">
+              <h3>🧭 Serveurs associés au Premium</h3>
+              <span class="admin-badge" data-premium-servers-badge>Aucun membre chargé</span>
+            </div>
+            <p>
+              Sélectionne manuellement les serveurs couverts par l'abonnement d'un membre.
+              Seuls les serveurs où ModBot est installé apparaissent ici.
+            </p>
+
+            <div class="premium-servers-toolbar">
+              <label class="premium-servers-member">
+                <span>Membre à configurer</span>
+                <input type="text" placeholder="ID ou pseudo Discord" data-premium-servers-member>
+              </label>
+              <button class="secondary-btn compact" type="button" data-premium-servers-load>↻ Charger</button>
+            </div>
+
+            <div class="premium-servers-body" data-premium-servers-body hidden>
+              <div class="premium-servers-controls">
+                <label class="server-search">
+                  <span>⌕</span>
+                  <input type="search" placeholder="Filtrer les serveurs" data-premium-servers-search>
+                </label>
+                <div class="premium-servers-bulk">
+                  <button class="secondary-btn compact" type="button" data-premium-servers-all>Tout cocher</button>
+                  <button class="secondary-btn compact" type="button" data-premium-servers-none>Tout décocher</button>
+                </div>
               </div>
-              <div>
-                <span><strong>Owner BE</strong><small>Serveurs associés depuis le dashboard</small></span>
-                <span>Premium 1 an</span>
+
+              <div class="premium-servers-grid" data-premium-servers-grid></div>
+
+              <div class="premium-servers-footer">
+                <span data-premium-servers-count>0 serveur sélectionné</span>
+                <button class="primary-btn compact" type="button" data-premium-servers-save>💾 Enregistrer les serveurs</button>
               </div>
             </div>
           </article>
 
           <article class="admin-panel">
             <div class="admin-panel-head">
-              <h3>🎫 Paiement Premium via ticket</h3>
+              <h3>🎫 Procédure Premium</h3>
               <span class="admin-badge">Action manuelle</span>
             </div>
-            <p>Pour procéder au paiement d’un Premium, le membre doit ouvrir un ticket sur le serveur Discord ModBot. Le staff confirme l’offre, la durée et les serveurs concernés directement dans ce ticket.</p>
+            <p>L'activation se fait manuellement après paiement, via un ticket sur le serveur Discord ModBot.</p>
             <div class="premium-ticket-list" data-premium-ticket-list>
               <div><span><strong>1. Ouvrir un ticket</strong><small>Le membre ouvre un ticket Premium sur le serveur support.</small></span><span>🎫 Obligatoire</span></div>
-              <div><span><strong>2. Confirmer l’offre</strong><small>15€ / 2 mois ou 35€ / 3 mois selon le besoin.</small></span><span>💎 Premium</span></div>
+              <div><span><strong>2. Encaisser le paiement</strong><small>29,99 € pour 5 mois d'accès complet.</small></span><span>💶 Paiement</span></div>
+              <div><span><strong>3. Activer l'abonnement</strong><small>Formulaire ci-dessus : la date de fin est calculée automatiquement.</small></span><span>💎 Premium</span></div>
+              <div><span><strong>4. Associer les serveurs</strong><small>Sélection manuelle dans le panneau « Serveurs associés ».</small></span><span>🧭 Serveurs</span></div>
             </div>
           </article>
         </section>

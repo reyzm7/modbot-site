@@ -184,10 +184,8 @@
       <button class="dash-nav" type="button" data-dashboard-tab="channels"><span aria-hidden="true">📌</span>Salons</button>
       <button class="dash-nav" type="button" data-dashboard-tab="recurring"><span aria-hidden="true">🔁</span>Messages récurrents</button>
       <button class="dash-nav" type="button" data-dashboard-tab="socials"><span aria-hidden="true">📣</span>Réseaux</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="tournaments"><span aria-hidden="true">🏆</span>Tournois</button>
 
       <p class="sidebar-label">Apparence</p>
-      <button class="dash-nav" type="button" data-dashboard-tab="personalization"><span aria-hidden="true">🎨</span>Personnalisation</button>
       <button class="dash-nav" type="button" data-dashboard-tab="language"><span aria-hidden="true">🌍</span>Langue</button>
     </aside>
 
@@ -259,15 +257,14 @@
         <div class="panel-title">
           <div>
             <p class="eyebrow">💎 Premium</p>
-            <h2>Serveurs associés</h2>
+            <h2>Ton abonnement</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-premium-associations>♻️ Vider les associations</button>
         </div>
 
         <div class="dashboard-grid two">
           <div class="tool-panel premium-dashboard-card" data-premium-status data-active="false">
             <div class="premium-status-head">
-              <h3>✨ Ton abonnement</h3>
+              <h3>✨ État de l'abonnement</h3>
               <span class="state" data-premium-state-badge data-level="idle">⚪ Aucun abonnement</span>
             </div>
 
@@ -286,39 +283,35 @@
                 <dd data-premium-remaining data-level="ok">—</dd>
               </div>
               <div>
-                <dt>Serveurs associés</dt>
-                <dd><span data-premium-used>0</span> / <span data-premium-limit>∞</span></dd>
+                <dt>Serveurs</dt>
+                <dd>Illimités</dd>
               </div>
             </dl>
 
-            <select data-premium-tier hidden>
-              <option value="free">Sans abonnement</option>
-              <option value="premium">Premium</option>
-            </select>
-
-            <p class="field-help">L'abonnement est activé par un administrateur ModBot après paiement, via un ticket sur le serveur Discord.</p>
+            <p class="field-help">
+              L'activation et l'association des serveurs sont gérées par
+              l'équipe ModBot après paiement. Ouvre un ticket sur le serveur
+              Discord pour lancer la procédure.
+            </p>
 
             <div class="premium-actions">
-              <button class="primary-btn compact" type="button" data-premium-associate-current>➕ Associer le serveur actif</button>
-              <a class="secondary-btn compact" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">🎫 Ouvrir un ticket Premium</a>
+              <a class="primary-btn compact" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">🎫 Ouvrir un ticket Premium</a>
             </div>
           </div>
 
           <div class="tool-panel">
-            <h3>🧩 Tes serveurs Premium</h3>
-            <div class="premium-slot-grid" data-dashboard-premium-slots>
-              <div class="premium-slot is-empty">Aucun serveur associé pour le moment.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tool-panel">
-          <div class="table-head">
-            <h3>🧭 Serveurs disponibles</h3>
-            <span class="state active" data-premium-limit-badge>⚪ Sans abonnement : passe Premium pour tout débloquer</span>
-          </div>
-          <div class="premium-choice-grid">
-            <div class="server-grid-loading">Connecte-toi pour associer tes serveurs.</div>
+            <h3>🔓 Ce que Premium débloque</h3>
+            <ul class="info-list">
+              <li><strong>Tickets</strong> et évaluations du support</li>
+              <li>Messages d'<strong>arrivée et de départ</strong> personnalisés</li>
+              <li><strong>Rôles réactions</strong> et messages récurrents</li>
+              <li>Alertes <strong>réseaux sociaux</strong></li>
+              <li><strong>Serveurs illimités</strong></li>
+            </ul>
+            <p class="field-help">
+              Toute la protection — anti-raid, anti-nuke, filtre, logs et
+              sauvegardes — reste gratuite et sans limite de durée.
+            </p>
           </div>
         </div>
       </section>
@@ -846,45 +839,6 @@
         </div>
       </section>
 
-      <section class="dash-panel" data-dashboard-panel="personalization">
-        <div class="panel-title">
-          <div>
-            <p class="eyebrow">🎨 Personnalisation</p>
-            <h2>Identité des embeds</h2>
-          </div>
-          <div class="panel-actions">
-            <button class="primary-btn compact" type="button" data-apply-personalization>🚀 Appliquer</button>
-            <button class="secondary-btn compact" type="button" data-cancel-personalization>↩️ Annuler les changements</button>
-            <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset ModBot</button>
-          </div>
-        </div>
-
-        <div class="dashboard-grid two">
-          <form class="tool-panel form-panel">
-            <label>Footer
-              <input type="text" value="ModBot - Protection de votre communauté" data-personalization-footer>
-            </label>
-            <div class="color-row">
-              <button type="button" class="color-swatch is-selected" style="--swatch:#5865F2" data-color="#5865F2"></button>
-              <button type="button" class="color-swatch" style="--swatch:#43B581" data-color="#43B581"></button>
-              <button type="button" class="color-swatch" style="--swatch:#ED4245" data-color="#ED4245"></button>
-              <button type="button" class="color-swatch" style="--swatch:#FFD700" data-color="#FFD700"></button>
-            </div>
-          </form>
-
-          <div class="tool-panel preview-panel">
-            <h3>👁️ Aperçu embed</h3>
-            <div class="discord-embed embed-with-thumb live-color-preview">
-              <span class="embed-thumb"><img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';"></span>
-              <h3 data-personalization-preview-title>Panel ModBot</h3>
-              <p>Configuration serveur, tickets, sécurité et statistiques.</p>
-              <img class="preview-banner" src="assets/default_banner.svg" alt="">
-              <p class="embed-footer" data-personalization-preview-footer>ModBot - Protection de votre communauté</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section class="dash-panel" data-dashboard-panel="moderation">
         <div class="panel-title">
           <div>
@@ -936,107 +890,6 @@
               <option>Staff strict</option>
             </select>
           </label>
-        </div>
-      </section>
-
-      <section class="dash-panel" data-dashboard-panel="tournaments">
-        <div class="panel-title">
-          <div>
-            <p class="eyebrow">🏆 Tournois</p>
-            <h2>EA FC 26 Club Pro</h2>
-          </div>
-          <button class="secondary-btn compact" type="button" data-reset-tournament>♻️ Reset tournois</button>
-        </div>
-
-        <div class="dashboard-grid two">
-          <div class="tool-panel tournament-activation-card">
-            <div class="tournament-state-line">
-              <div>
-                <h3>⚽ Module tournoi</h3>
-                <p>Module préparé pour les tournois EA FC 26 Club Pro, mais bloqué en attendant l’API IFC.</p>
-              </div>
-              <span class="state pending" data-tournament-state>🟡 En attente API IFC</span>
-            </div>
-            <label class="toggle-line tournament-toggle">
-              <input type="checkbox" data-tournament-enabled disabled>
-              <span></span>
-              <strong>🔒 Mode tournoi verrouillé</strong>
-              <small>L’activation sera possible quand l’API IFC permettra de récupérer équipes, logos, résultats, buts, wins et affiches.</small>
-            </label>
-          </div>
-
-          <form class="tool-panel form-panel">
-            <h3>🎮 Liaison IFC</h3>
-            <label>Nom exact du tournoi sur IFC
-              <input type="text" value="EA FC 26 Club Pro Cup" data-tournament-name>
-            </label>
-            <p class="tournament-api-note">Le bot utilisera uniquement ce nom exact pour retrouver le tournoi sur IFC et connecter ses stats Discord : équipes, logos, wins, buts, poules, classement, affiches et participants.</p>
-            <div class="ifc-data-list">
-              <span>📊 Stats IFC</span>
-              <span>🛡️ Équipes IFC</span>
-              <span>⚽ Résultats IFC</span>
-              <span>🏆 Bracket IFC</span>
-            </div>
-          </form>
-        </div>
-
-        <div class="tool-panel tournament-command-panel">
-          <div class="table-head">
-            <h3>⚡ Commandes spéciales prévues</h3>
-            <span class="state pending" data-tournament-command-state>🟡 En attente API IFC</span>
-          </div>
-          <div class="tournament-command-grid">
-            <article class="tournament-command-card">
-              <strong>/poules</strong>
-              <span>Génère l’embed des poules depuis les données IFC.</span>
-            </article>
-            <article class="tournament-command-card">
-              <strong>/huitieme</strong>
-              <span>Génère l’embed des huitièmes depuis les affiches IFC.</span>
-            </article>
-            <article class="tournament-command-card">
-              <strong>/quart</strong>
-              <span>Génère l’embed des quarts depuis les affiches IFC.</span>
-            </article>
-            <article class="tournament-command-card">
-              <strong>/demi</strong>
-              <span>Génère l’embed des demi-finales depuis le bracket IFC.</span>
-            </article>
-            <article class="tournament-command-card">
-              <strong>/finale</strong>
-              <span>Génère l’embed de la finale et des matchs liés depuis IFC.</span>
-            </article>
-            <article class="tournament-command-card">
-              <strong>/classement</strong>
-              <span>Génère l’embed classement avec wins, buts et statistiques IFC.</span>
-            </article>
-            <article class="tournament-command-card spotlight">
-              <strong>/podium</strong>
-              <span>Génère une image podium top 3 avec les logos des équipes récupérés via IFC.</span>
-            </article>
-            <article class="tournament-command-card spotlight">
-              <strong>/inscription</strong>
-              <span>Inscrit une équipe IFC avec GM obligatoire et co-GM facultatif. Si le tournoi est complet, l’équipe passe en liste d’attente.</span>
-            </article>
-          </div>
-        </div>
-
-        <div class="tournament-preview-grid">
-          <div class="tool-panel">
-            <h3>🏆 Aperçu /podium</h3>
-            <div class="podium-preview" aria-label="Aperçu podium">
-              <div class="podium-team second"><span></span><strong>2</strong></div>
-              <div class="podium-team first"><span></span><strong>1</strong></div>
-              <div class="podium-team third"><span></span><strong>3</strong></div>
-            </div>
-            <p class="tournament-api-note">Les ronds seront remplacés par les logos d’équipes récupérés depuis IFC.</p>
-          </div>
-        </div>
-
-        <div class="dashboard-grid three tournament-flow">
-          <article class="tool-panel"><h3>📋 Participants IFC</h3><p>/inscription vérifie l’équipe sur IFC, demande le GM, accepte le co-GM en facultatif, puis ajoute l’équipe ou la place en liste d’attente.</p></article>
-          <article class="tool-panel"><h3>🧮 Données IFC</h3><p>Toutes les commandes récupèrent leurs infos depuis IFC : résultats, wins, buts, poules, classements et affiches.</p></article>
-          <article class="tool-panel"><h3>📣 Embeds Discord</h3><p>Les commandes génèrent seulement les embeds Discord, avec des visuels propres et soignés.</p></article>
         </div>
       </section>
 
