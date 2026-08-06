@@ -1,0 +1,10 @@
+# Configuration locale de l'outil de développement
+.claude/
+
+# Base de données du bot (ne doit pas vivre dans le dépôt du site)
+*.db
+
+# Système
+.DS_Store
+Thumbs.db
+node_modules/

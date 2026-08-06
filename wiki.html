@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
+       la connexion au dashboard est automatique, rien a saisir.
+       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
+  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
   <meta name="modbot-discord-client-id" content="1510405235544424620">
   <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
   <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
@@ -21,7 +25,7 @@
     <nav class="navbar" aria-label="Navigation wiki">
       <a class="brand" href="index.html" aria-label="Accueil ModBot">
         <span class="brand-mark">
-          <img src="assets/default_logo.png" alt="" onerror="this.onerror=null; this.src='logo.png';">
+          <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
         </span>
         <span>ModBot</span>
       </a>

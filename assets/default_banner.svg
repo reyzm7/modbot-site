@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 240" width="640" height="240" role="img" aria-label="ModBot">
+  <defs>
+    <linearGradient id="mbBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1B1E3D"/>
+      <stop offset="0.5" stop-color="#2A2F63"/>
+      <stop offset="1" stop-color="#151735"/>
+    </linearGradient>
+    <radialGradient id="mbGlow" cx="0.22" cy="0.2" r="0.75">
+      <stop offset="0" stop-color="#5865F2" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#5865F2" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="mbGlow2" cx="0.85" cy="0.85" r="0.6">
+      <stop offset="0" stop-color="#9B6BFF" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#9B6BFF" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="mbGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0v40" fill="none" stroke="#FFFFFF" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="640" height="240" fill="url(#mbBg)"/>
+  <rect width="640" height="240" fill="url(#mbGrid)"/>
+  <rect width="640" height="240" fill="url(#mbGlow)"/>
+  <rect width="640" height="240" fill="url(#mbGlow2)"/>
+</svg>
