@@ -26,6 +26,11 @@ const siteTranslations = {
     "hero.dashboard": "Accéder au dashboard",
     "hero.demo": "Essayer les commandes",
     "stats.protection": "Protection active",
+    "stats.headline": "personnes protégées dans le monde entier",
+    "stats.loading": "Chiffres en direct depuis ModBot…",
+    "stats.servers": "Serveurs protégés",
+    "stats.countries": "Pays représentés",
+    "stats.note": "Répartition estimée d'après la langue configurée sur chaque serveur Discord.",
     "stats.config": "Configuration personnalisée",
     "stats.evolutions": "Évolutions possibles",
     "features.eyebrow": "Fonctionnalités",
@@ -93,6 +98,11 @@ const siteTranslations = {
     "hero.dashboard": "Open dashboard",
     "hero.demo": "Try commands",
     "stats.protection": "Active protection",
+    "stats.headline": "people protected worldwide",
+    "stats.loading": "Live figures from ModBot…",
+    "stats.servers": "Protected servers",
+    "stats.countries": "Countries represented",
+    "stats.note": "Distribution estimated from the language configured on each Discord server.",
     "stats.config": "Custom configuration",
     "stats.evolutions": "Possible evolutions",
     "features.eyebrow": "Features",
@@ -160,6 +170,11 @@ const siteTranslations = {
     "hero.dashboard": "فتح لوحة التحكم",
     "hero.demo": "تجربة الأوامر",
     "stats.protection": "حماية نشطة",
+    "stats.headline": "شخص محمي حول العالم",
+    "stats.loading": "أرقام مباشرة من ModBot…",
+    "stats.servers": "خوادم محمية",
+    "stats.countries": "دول ممثلة",
+    "stats.note": "توزيع تقديري بناءً على اللغة المضبوطة في كل خادم ديسكورد.",
     "stats.config": "إعداد مخصص",
     "stats.evolutions": "تطويرات ممكنة",
     "features.eyebrow": "الميزات",
@@ -1533,6 +1548,26 @@ function initDashboard() {
       if (current) supportRole.value = current;
     }
 
+    // Sélecteurs du captcha : ils conservent la valeur déjà chargée, car les
+    // ressources arrivent parfois après la configuration sécurité.
+    const captchaRole = document.querySelector("[data-captcha-role]");
+    if (captchaRole) {
+      const current = captchaRole.value;
+      captchaRole.innerHTML = `<option value="">— Aucun —</option>` + dashboardResources.roles.map((role) => (
+        `<option value="${escapeHtml(role.id)}">${escapeHtml(roleLabel(role))}</option>`
+      )).join("");
+      if (current) captchaRole.value = current;
+    }
+
+    const captchaChannel = document.querySelector("[data-captcha-channel]");
+    if (captchaChannel) {
+      const current = captchaChannel.value;
+      captchaChannel.innerHTML = `<option value="">— Aucun —</option>` + dashboardResources.channels.map((channel) => (
+        `<option value="${escapeHtml(channel.id)}">${escapeHtml(channelLabel(channel))}</option>`
+      )).join("");
+      if (current) captchaChannel.value = current;
+    }
+
     document.querySelectorAll(".reaction-role-row input:nth-of-type(2)").forEach((input) => {
       input.setAttribute("list", "dashboardRoleOptions");
       input.placeholder = "ID du rôle ou @rôle";
@@ -2655,6 +2690,31 @@ function initDashboard() {
     const lastEl = document.querySelector("[data-autobackup-last]");
     if (lastEl) lastEl.textContent = autoBackup.last ? formatIsoDateTimeFr(autoBackup.last) : "jamais";
 
+    const captcha = security.captcha || {};
+    setChecked("[data-captcha-enabled]", captcha.enabled);
+    setValue("[data-captcha-role]", captcha.role_id || "");
+    setValue("[data-captcha-channel]", captcha.channel_id || "");
+    const captchaEtat = document.querySelector("[data-captcha-state]");
+    if (captchaEtat) {
+      if (!captcha.enabled) {
+        captchaEtat.textContent = "Inactif";
+      } else if (!captcha.role_id) {
+        captchaEtat.textContent = "⚠️ Actif sans rôle — n'accorde rien";
+      } else {
+        const mode = captcha.image ? "image" : "texte";
+        captchaEtat.textContent = `Actif (${mode}) — ${captcha.pending || 0} en attente`;
+      }
+    }
+
+    const alerts = security.alerts || {};
+    setChecked("[data-alerts-dm]", alerts.dm_admins !== false);
+    const adminsEl = document.querySelector("[data-alerts-admins]");
+    if (adminsEl) adminsEl.textContent = String(alerts.admins_reachable ?? "—");
+    const activesEl = document.querySelector("[data-alerts-active]");
+    if (activesEl) {
+      activesEl.textContent = alerts.active ? `🚨 ${alerts.active}` : "Aucune";
+    }
+
     const safeBadge = document.querySelector("[data-safe-mode-badge]");
     if (safeBadge) safeBadge.hidden = !security.safe_mode_active;
 
@@ -2747,6 +2807,14 @@ function initDashboard() {
         custom_words: linesToList(readValue("[data-filter-custom-words]")),
         allowlist: linesToList(readValue("[data-filter-allowlist]"))
       },
+      captcha: {
+        enabled: readChecked("[data-captcha-enabled]"),
+        role_id: readValue("[data-captcha-role]") || "",
+        channel_id: readValue("[data-captcha-channel]") || ""
+      },
+      alerts: {
+        dm_admins: readChecked("[data-alerts-dm]")
+      },
       auto_backup: {
         enabled: readChecked("[data-autobackup-enabled]"),
         interval_hours: readNumber("[data-autobackup-interval]", 24)
@@ -2772,6 +2840,266 @@ function initDashboard() {
     } catch (error) {
       showToast(`⚠️ ${error?.message || "Enregistrement impossible"}`);
     }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     RECHERCHE — membres et rôles
+     ══════════════════════════════════════════════════════════════════ */
+
+  let searchMode = "members";
+  let searchTimer = null;
+  let searchSelection = null;
+  let searchPendingAction = null;   // action destructive en attente de confirmation
+
+  /** Actions destructives : elles demandent un second clic pour être appliquées. */
+  const SEARCH_DANGEROUS = new Set(["kick", "ban", "reset"]);
+
+  function searchEl(selector) {
+    return document.querySelector(selector);
+  }
+
+  function renderSearchResults(items) {
+    const host = searchEl("[data-search-results]");
+    const count = searchEl("[data-search-count]");
+    if (!host) return;
+
+    if (count) {
+      count.textContent = items.length
+        ? `${items.length} résultat${items.length > 1 ? "s" : ""}`
+        : "";
+    }
+
+    if (!items.length) {
+      host.innerHTML = `
+        <div class="dashboard-empty-state">
+          <strong>Aucun résultat</strong>
+          <span>Essaie un autre nom, ou colle un identifiant Discord.</span>
+        </div>`;
+      return;
+    }
+
+    host.innerHTML = items.map((item, index) => {
+      if (searchMode === "roles") {
+        return `
+          <button class="search-result" type="button" data-search-pick="${index}">
+            <span class="search-result-dot" style="background:${escapeHtml(item.color || "#5865F2")}"></span>
+            <span class="search-result-body">
+              <strong>${escapeHtml(item.name)}</strong>
+              <small>${item.members} membre${item.members > 1 ? "s" : ""}${item.immune ? " · 🛡️ immunisé" : ""}</small>
+            </span>
+          </button>`;
+      }
+      return `
+        <button class="search-result" type="button" data-search-pick="${index}">
+          <span class="search-result-avatar">
+            <img src="${escapeHtml(item.avatar || "assets/default_logo.svg")}" alt="" loading="lazy">
+          </span>
+          <span class="search-result-body">
+            <strong>${escapeHtml(item.display_name)}</strong>
+            <small>@${escapeHtml(item.username)}${item.points ? ` · ⚠️ ${item.points} pt` : ""}${item.immune ? " · 🛡️" : ""}</small>
+          </span>
+        </button>`;
+    }).join("");
+
+    host.querySelectorAll("[data-search-pick]").forEach((button) => {
+      button.addEventListener("click", () => {
+        host.querySelectorAll(".search-result").forEach((el) => el.classList.remove("is-active"));
+        button.classList.add("is-active");
+        searchPendingAction = null;
+        renderSearchDetail(items[Number(button.dataset.searchPick)]);
+      });
+    });
+  }
+
+  function actionButton(action, label, style = "") {
+    const pending = searchPendingAction === action;
+    const classe = pending ? "primary-btn compact is-confirming" : `secondary-btn compact ${style}`;
+    const texte = pending ? `⚠️ Confirmer : ${label}` : label;
+    return `<button class="${classe}" type="button" data-search-action="${action}">${escapeHtml(texte)}</button>`;
+  }
+
+  function renderSearchDetail(item) {
+    searchSelection = item;
+    const host = searchEl("[data-search-detail]");
+    if (!host || !item) return;
+
+    if (searchMode === "roles") {
+      const perms = item.sensitive_permissions || [];
+      host.innerHTML = `
+        <div class="search-detail-head">
+          <span class="search-result-dot large" style="background:${escapeHtml(item.color || "#5865F2")}"></span>
+          <div>
+            <h3>${escapeHtml(item.name)}</h3>
+            <p class="field-help">${item.members} membre${item.members > 1 ? "s" : ""} · position ${item.position}</p>
+          </div>
+        </div>
+        <div class="search-detail-facts">
+          <div><span>Immunité anti-nuke</span><strong>${item.immune ? "🛡️ Activée" : "Non"}</strong></div>
+          <div><span>Rôle géré par une app</span><strong>${item.managed ? "Oui" : "Non"}</strong></div>
+        </div>
+        ${perms.length ? `
+          <div class="alert-panel subtle">
+            <strong>⚠️ Permissions sensibles</strong>
+            <ul>${perms.map((p) => `<li>${escapeHtml(p)}</li>`).join("")}</ul>
+            <p>Un rôle immunisé n'est plus surveillé par l'anti-nuke. Ne l'accorde qu'à des rôles de confiance.</p>
+          </div>` : ""}
+        <div class="search-actions">
+          ${item.immune
+            ? actionButton("unimmunize", "Retirer l'immunité")
+            : actionButton("immunize", "🛡️ Immuniser contre l'anti-nuke")}
+        </div>`;
+    } else {
+      const roles = item.roles || [];
+      host.innerHTML = `
+        <div class="search-detail-head">
+          <span class="search-result-avatar large">
+            <img src="${escapeHtml(item.avatar || "assets/default_logo.svg")}" alt="">
+          </span>
+          <div>
+            <h3>${escapeHtml(item.display_name)}</h3>
+            <p class="field-help">@${escapeHtml(item.username)} · <code>${escapeHtml(item.id)}</code></p>
+          </div>
+        </div>
+        <div class="search-detail-facts">
+          <div><span>Infractions</span><strong>${item.warns} (${item.points} pt)</strong></div>
+          <div><span>Arrivée</span><strong>${item.joined_at ? formatIsoDateTimeFr(item.joined_at) : "—"}</strong></div>
+          <div><span>Compte créé</span><strong>${item.created_at ? formatIsoDateTimeFr(item.created_at) : "—"}</strong></div>
+          <div><span>État</span><strong>${item.timed_out ? "🔇 Exclu" : item.owner ? "👑 Propriétaire" : item.administrator ? "🛠️ Admin" : "Actif"}</strong></div>
+        </div>
+        ${roles.length ? `<div class="search-role-chips">${roles.map((r) =>
+          `<span class="search-role-chip" style="border-color:${escapeHtml(r.color)}">${escapeHtml(r.name)}</span>`
+        ).join("")}</div>` : ""}
+        ${!item.manageable ? `
+          <div class="alert-panel subtle">
+            <strong>⚠️ Membre hors de portée</strong>
+            <p>${item.owner
+              ? "C'est le propriétaire du serveur : ModBot ne peut pas le sanctionner."
+              : "Son rôle le plus haut est au-dessus de celui de ModBot. Déplace le rôle de ModBot plus haut pour agir."}</p>
+          </div>` : ""}
+        <label class="mini-form search-reason">Raison
+          <input type="text" data-search-reason placeholder="Visible dans les logs et l'audit Discord" maxlength="400">
+        </label>
+        <div class="search-actions">
+          ${actionButton("warn", "⚠️ Avertir")}
+          ${item.timed_out
+            ? actionButton("untimeout", "🔊 Lever l'exclusion")
+            : actionButton("timeout", "🔇 Exclure 1 h")}
+          ${item.manageable ? actionButton("kick", "👢 Expulser", "danger") : ""}
+          ${item.manageable ? actionButton("ban", "🔨 Bannir", "danger") : ""}
+          ${item.warns ? actionButton("reset", "♻️ Effacer les infractions") : ""}
+          ${item.immune
+            ? actionButton("unimmunize", "Retirer l'immunité")
+            : actionButton("immunize", "🛡️ Immuniser")}
+        </div>`;
+    }
+
+    host.querySelectorAll("[data-search-action]").forEach((button) => {
+      button.addEventListener("click", () => runSearchAction(button.dataset.searchAction));
+    });
+  }
+
+  async function runSearchAction(action) {
+    const guildId = selectedServer.id;
+    if (!guildId || !searchSelection) return;
+
+    // Deux temps pour tout ce qui est irréversible
+    if (SEARCH_DANGEROUS.has(action) && searchPendingAction !== action) {
+      searchPendingAction = action;
+      renderSearchDetail(searchSelection);
+      showToast("⚠️ Clique une seconde fois pour confirmer");
+      return;
+    }
+    searchPendingAction = null;
+
+    const raison = readValue("[data-search-reason]") || "Action depuis le dashboard";
+    const cible = searchMode === "roles"
+      ? `/api/guilds/${guildId}/roles/${searchSelection.id}/action`
+      : `/api/guilds/${guildId}/members/${searchSelection.id}/action`;
+
+    try {
+      const data = await modbotApiFetch(cible, {
+        method: "POST",
+        body: JSON.stringify({ action, reason: raison, minutes: 60 })
+      });
+      showToast(`✅ ${data.result || "Action appliquée"}`);
+      if (data.member) {
+        renderSearchDetail(data.member);
+      } else if (data.role) {
+        renderSearchDetail(data.role);
+      }
+      runSearch();               // la liste reflète le nouvel état
+      loadGuildSecurity(guildId); // l'immunité modifie la liste blanche anti-nuke
+    } catch (error) {
+      showToast(`⚠️ ${error?.message || "Action refusée"}`);
+    }
+  }
+
+  async function runSearch() {
+    const guildId = selectedServer.id;
+    const host = searchEl("[data-search-results]");
+    if (!guildId || !host) return;
+
+    const terme = readValue("[data-search-input]").trim();
+    const clear = searchEl("[data-search-clear]");
+    if (clear) clear.hidden = !terme;
+
+    try {
+      const url = `/api/guilds/${guildId}/search/${searchMode}?q=${encodeURIComponent(terme)}`;
+      const data = await modbotApiFetch(url, { cache: "no-store" });
+      renderSearchResults(searchMode === "roles" ? (data.roles || []) : (data.members || []));
+    } catch (error) {
+      host.innerHTML = `
+        <div class="dashboard-empty-state">
+          <strong>Recherche indisponible</strong>
+          <span>${escapeHtml(error?.message || "Le bot n'a pas répondu.")}</span>
+        </div>`;
+    }
+  }
+
+  function resetSearchDetail() {
+    const host = searchEl("[data-search-detail]");
+    if (host) {
+      host.innerHTML = `
+        <div class="dashboard-empty-state">
+          <strong>Aucune sélection</strong>
+          <span>Choisis un résultat pour voir sa fiche et agir dessus.</span>
+        </div>`;
+    }
+    searchSelection = null;
+    searchPendingAction = null;
+  }
+
+  function initSearchPanel() {
+    const input = searchEl("[data-search-input]");
+    if (!input) return;
+
+    input.addEventListener("input", () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(runSearch, 220);
+    });
+
+    searchEl("[data-search-clear]")?.addEventListener("click", () => {
+      input.value = "";
+      resetSearchDetail();
+      runSearch();
+      input.focus();
+    });
+
+    document.querySelectorAll("[data-search-mode]").forEach((button) => {
+      button.addEventListener("click", () => {
+        searchMode = button.dataset.searchMode;
+        document.querySelectorAll("[data-search-mode]").forEach((other) => {
+          const actif = other === button;
+          other.classList.toggle("is-active", actif);
+          other.setAttribute("aria-selected", actif ? "true" : "false");
+        });
+        input.placeholder = searchMode === "roles"
+          ? "Nom du rôle ou identifiant…"
+          : "Nom, pseudo ou identifiant Discord…";
+        resetSearchDetail();
+        runSearch();
+      });
+    });
   }
 
   /* ══════════════════════════════════════════════════════════════════
@@ -3291,6 +3619,8 @@ function initDashboard() {
     tabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.dashboardTab === panelName));
     panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.dashboardPanel === panelName));
     document.querySelector(".dashboard-content")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    // La recherche interroge Discord en direct : on ne charge qu'à l'ouverture.
+    if (panelName === "search") runSearch();
   }
 
   document.querySelector("[data-dashboard-login]")?.addEventListener("click", () => {
@@ -3422,6 +3752,8 @@ function initDashboard() {
       runWithUnsavedGuard(() => openPanel(panelName));
     });
   });
+
+  initSearchPanel();
 
   document.querySelectorAll("[data-dashboard-jump]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -3856,6 +4188,101 @@ function initDashboard() {
   });
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   STATISTIQUES PUBLIQUES — page d'accueil
+   Chiffres agrégés servis par le bot sur /api/public/stats.
+   Aucune donnée nominative n'est exposée par cette route.
+   ══════════════════════════════════════════════════════════════════ */
+
+function formatNombreFr(valeur) {
+  return Number(valeur || 0).toLocaleString("fr-FR");
+}
+
+/**
+ * Compte progressivement jusqu'à la valeur finale.
+ *
+ * L'animation n'est qu'un habillage : requestAnimationFrame ne se déclenche
+ * pas dans un onglet en arrière-plan, donc le chiffre exact est écrit tout de
+ * suite et un filet de sécurité le réaffirme. Sans cela, une page ouverte
+ * dans un onglet inactif resterait bloquée sur un tiret.
+ */
+function animerCompteur(element, cible) {
+  if (!element) return;
+  const valeurFinale = formatNombreFr(cible);
+  element.textContent = valeurFinale;
+
+  const reduit = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  if (reduit || cible <= 0 || document.hidden) return;
+
+  const duree = 1100;
+  const depart = performance.now();
+  const etape = (maintenant) => {
+    const avancement = Math.min(1, (maintenant - depart) / duree);
+    // Décélération : rapide au début, précis à l'arrivée
+    const adouci = 1 - Math.pow(1 - avancement, 3);
+    element.textContent = formatNombreFr(Math.round(cible * adouci));
+    if (avancement < 1) requestAnimationFrame(etape);
+  };
+  requestAnimationFrame(etape);
+  setTimeout(() => { element.textContent = valeurFinale; }, duree + 150);
+}
+
+async function initPublicStats() {
+  const section = document.querySelector("[data-live-stats]");
+  if (!section) return;
+
+  const membres = section.querySelector("[data-stat-members]");
+  const serveurs = section.querySelector("[data-stat-servers]");
+  const pays = section.querySelector("[data-stat-countries]");
+  const resume = section.querySelector("[data-stat-summary]");
+  const liste = section.querySelector("[data-stat-country-list]");
+  const note = section.querySelector("[data-stat-note]");
+
+  const base = getModbotApiBase();
+  if (!base) return;
+
+  try {
+    const reponse = await fetch(`${base}/api/public/stats`, {
+      cache: "no-store",
+      headers: { Accept: "application/json" }
+    });
+    if (!reponse.ok) throw new Error(`HTTP ${reponse.status}`);
+    const stats = (await reponse.json())?.stats;
+    if (!stats) throw new Error("réponse vide");
+
+    animerCompteur(membres, stats.members_protected);
+    animerCompteur(serveurs, stats.servers);
+    if (pays) pays.textContent = formatNombreFr(stats.countries);
+
+    if (resume) {
+      resume.textContent =
+        `${formatNombreFr(stats.members_protected)} membres répartis sur ` +
+        `${formatNombreFr(stats.servers)} serveur${stats.servers > 1 ? "s" : ""} Discord.`;
+    }
+
+    const top = Array.isArray(stats.top_countries) ? stats.top_countries : [];
+    if (liste && top.length) {
+      liste.innerHTML = top.map((entree) => `
+        <span class="stat-country">
+          <span class="stat-country-flag" aria-hidden="true">${escapeHtmlValue(entree.flag || "🌐")}</span>
+          <span class="stat-country-name">${escapeHtmlValue(entree.country)}</span>
+          <span class="stat-country-count">${formatNombreFr(entree.members)}</span>
+        </span>`).join("");
+      liste.hidden = false;
+      if (note) note.hidden = false;
+    }
+  } catch (error) {
+    // Le bot est injoignable : on retire les tirets plutôt que de mentir
+    // avec des chiffres inventés, et on garde la page présentable.
+    console.warn("Statistiques publiques indisponibles :", error?.message || error);
+    section.classList.add("stats-offline");
+    if (resume) resume.textContent = "Chiffres momentanément indisponibles.";
+    [membres, serveurs, pays].forEach((el) => {
+      if (el && el.textContent === "—") el.textContent = "·";
+    });
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   resetInitialScroll();
   initApiBridgeFromUrl();
@@ -3869,5 +4296,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initDemo();
   initAssistant();
   initRevealAnimations();
+  initPublicStats();
   initDashboard();
 });

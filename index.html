@@ -133,19 +133,36 @@
       </div>
     </section>
 
-    <section class="stats section-shell" aria-label="Statistiques ModBot">
-      <article class="stat">
-        <strong>24/7</strong>
-        <span data-i18n="stats.protection">Protection active</span>
-      </article>
-      <article class="stat">
-        <strong>100%</strong>
-        <span data-i18n="stats.config">Configuration personnalisée</span>
-      </article>
-      <article class="stat">
-        <strong>∞</strong>
-        <span data-i18n="stats.evolutions">Évolutions possibles</span>
-      </article>
+    <section class="stats section-shell" aria-label="Statistiques ModBot" data-live-stats>
+      <div class="stats-headline">
+        <p class="stats-big">
+          <strong data-stat-members>—</strong>
+          <span data-i18n="stats.headline">personnes protégées dans le monde entier</span>
+        </p>
+        <p class="stats-sub" data-stat-summary data-i18n="stats.loading">
+          Chiffres en direct depuis ModBot…
+        </p>
+      </div>
+
+      <div class="stats-row">
+        <article class="stat">
+          <strong data-stat-servers>—</strong>
+          <span data-i18n="stats.servers">Serveurs protégés</span>
+        </article>
+        <article class="stat">
+          <strong data-stat-countries>—</strong>
+          <span data-i18n="stats.countries">Pays représentés</span>
+        </article>
+        <article class="stat">
+          <strong>24/7</strong>
+          <span data-i18n="stats.protection">Protection active</span>
+        </article>
+      </div>
+
+      <div class="stats-countries" data-stat-country-list hidden></div>
+      <p class="stats-note" data-stat-note hidden data-i18n="stats.note">
+        Répartition estimée d'après la langue configurée sur chaque serveur Discord.
+      </p>
     </section>
 
     <section id="features" class="features section-shell">
