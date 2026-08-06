@@ -19,10 +19,10 @@ const siteTranslations = {
     "nav.wiki": "Wiki",
     "nav.admin": "Admin",
     "nav.dashboard": "Dashboard",
-    "nav.cta": "Demander ModBot",
+    "nav.cta": "Ajouter ModBot",
     "hero.eyebrow": "Protection Discord 24/7",
     "hero.lead": "La modération intelligente qui protège votre communauté, automatise les sanctions, gère les tickets et garde votre serveur clair, sain et réactif.",
-    "hero.primary": "Obtenir ModBot",
+    "hero.primary": "Ajouter ModBot à mon serveur",
     "hero.dashboard": "Accéder au dashboard",
     "hero.demo": "Essayer les commandes",
     "stats.protection": "Protection active",
@@ -62,6 +62,7 @@ const siteTranslations = {
     "donate.item7": "Dashboard web et serveurs illimités",
     "donate.cta": "💛 Faire un don",
     "donate.note": "Le don est libre et facultatif. Il ne débloque rien : tout est déjà accessible.",
+    "donate.invite": "➕ Ajouter ModBot à mon serveur",
     "admin.eyebrow": "Administration",
     "admin.title": "Centre administrateur du site",
     "admin.copy": "Suivez l’activité du site, gérez les administrateurs, la blacklist et les serveurs où ModBot est installé.",
@@ -88,7 +89,7 @@ const siteTranslations = {
     "nav.cta": "Add ModBot",
     "hero.eyebrow": "Discord protection 24/7",
     "hero.lead": "Smart moderation that protects your community, automates sanctions, manages tickets, and keeps your server clear, healthy, and responsive.",
-    "hero.primary": "Get ModBot",
+    "hero.primary": "Add ModBot to my server",
     "hero.dashboard": "Open dashboard",
     "hero.demo": "Try commands",
     "stats.protection": "Active protection",
@@ -128,6 +129,7 @@ const siteTranslations = {
     "donate.item7": "Web dashboard and unlimited servers",
     "donate.cta": "💛 Donate",
     "donate.note": "Donations are optional and unlock nothing — everything is already available.",
+    "donate.invite": "➕ Add ModBot to my server",
     "admin.eyebrow": "Administration",
     "admin.title": "Site administrator center",
     "admin.copy": "Track site activity, manage administrators, the blacklist and the servers where ModBot is installed.",
@@ -194,6 +196,7 @@ const siteTranslations = {
     "donate.item7": "لوحة تحكم ويب وخوادم غير محدودة",
     "donate.cta": "💛 تبرّع",
     "donate.note": "التبرع اختياري ولا يفتح أي شيء — كل شيء متاح بالفعل.",
+    "donate.invite": "➕ أضف ModBot إلى خادمي",
     "admin.eyebrow": "الإدارة",
     "admin.title": "مركز إدارة الموقع",
     "admin.copy": "تابع نشاط الموقع، وأدر المسؤولين والقائمة السوداء والخوادم التي يوجد فيها ModBot.",
@@ -2262,8 +2265,27 @@ function initDashboard() {
     return picker.querySelector("[data-ticket-banner], [data-ticket-logo]");
   }
 
+  /**
+   * Répercute l'image sur l'aperçu Discord, pour voir immédiatement le
+   * rendu final sans avoir à enregistrer ni ouvrir Discord.
+   */
+  function majApercuDiscord(nom, valeur) {
+    const cibles = {
+      "ticket-banner": { sel: "[data-live-banner]", defaut: "assets/default_banner.svg" },
+      "ticket-logo": { sel: "[data-live-logo]", defaut: "assets/default_logo.svg" }
+    };
+    const cible = cibles[nom];
+    if (!cible) return;
+    const img = document.querySelector(cible.sel);
+    if (!img) return;
+    img.src = valeur || cible.defaut;
+    img.style.display = "";
+    img.onerror = () => { img.src = cible.defaut; };
+  }
+
   /** Met à jour l'aperçu et l'état des boutons d'un sélecteur. */
   function rafraichirApercu(picker, valeur) {
+    majApercuDiscord(picker.dataset.imagePicker, valeur);
     const apercu = picker.querySelector("[data-image-preview]");
     const effacer = picker.querySelector("[data-image-clear]");
     if (!apercu) return;
