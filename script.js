@@ -2063,15 +2063,14 @@ function initDashboard() {
     const previewTitle = document.querySelector("[data-preview-title]");
     const previewEmoji = document.querySelector("[data-preview-emoji]");
     const previewDesc = document.querySelector("[data-preview-desc]");
-    const ticketChannel = document.querySelector("[data-ticket-channel]");
-    const ticketBanner = document.querySelector("[data-ticket-banner]");
-    const ticketSupportRole = document.querySelector("[data-ticket-support-role]");
+    const ticketChannel = document.querySelector("[data-ticket-channel]");    const ticketSupportRole = document.querySelector("[data-ticket-support-role]");
     if (previewAuthor && tickets.author) previewAuthor.value = tickets.author;
     if (previewTitle && tickets.title) previewTitle.value = tickets.title;
     if (previewEmoji && tickets.emoji) previewEmoji.value = tickets.emoji;
     if (previewDesc && tickets.description) previewDesc.value = tickets.description;
     if (ticketChannel && channels.tickets) ticketChannel.value = channels.tickets;
-    if (ticketBanner && tickets.banner) ticketBanner.value = tickets.banner;
+    setImagePicker("ticket-banner", tickets.banner || "");
+    setImagePicker("ticket-logo", tickets.logo || "");
     if (ticketSupportRole && tickets.support_role) {
       if (![...ticketSupportRole.options].some((option) => option.value === String(tickets.support_role))) {
         ticketSupportRole.insertAdjacentHTML("beforeend", `<option value="${escapeHtml(tickets.support_role)}">${escapeHtml(tickets.support_role)}</option>`);
@@ -2248,6 +2247,110 @@ function initDashboard() {
       loadGuildBackups(guildId)
     ]);
   }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SÉLECTEURS D'IMAGE (bannière et logo du ticket)
+     L'image choisie sur l'appareil est lue en base64 ; le bot l'héberge
+     ensuite sur Discord et ne conserve que l'URL définitive.
+     ══════════════════════════════════════════════════════════════════ */
+
+  const TAILLE_IMAGE_MAX = 8 * 1024 * 1024; // 8 Mo, marge sous la limite Discord
+  const TYPES_IMAGE = ["image/png", "image/jpeg", "image/gif", "image/webp"];
+
+  /** Champ caché qui porte la valeur envoyée à l'API, par sélecteur. */
+  function champCache(picker) {
+    return picker.querySelector("[data-ticket-banner], [data-ticket-logo]");
+  }
+
+  /** Met à jour l'aperçu et l'état des boutons d'un sélecteur. */
+  function rafraichirApercu(picker, valeur) {
+    const apercu = picker.querySelector("[data-image-preview]");
+    const effacer = picker.querySelector("[data-image-clear]");
+    if (!apercu) return;
+
+    if (valeur) {
+      apercu.innerHTML = `<img src="${escapeHtml(valeur)}" alt="">`;
+      apercu.classList.add("has-image");
+      // Une image cassée ne doit pas laisser un cadre vide et muet
+      apercu.querySelector("img").addEventListener("error", () => {
+        apercu.innerHTML = `<span class="image-picker-empty">Image inaccessible</span>`;
+        apercu.classList.remove("has-image");
+      });
+    } else {
+      const parDefaut = picker.dataset.imagePicker === "ticket-logo"
+        ? "Logo du serveur" : "Aucune image";
+      apercu.innerHTML = `<span class="image-picker-empty">${parDefaut}</span>`;
+      apercu.classList.remove("has-image");
+    }
+    if (effacer) effacer.hidden = !valeur;
+  }
+
+  /** Applique une valeur (URL ou data URI) à un sélecteur donné. */
+  function setImagePicker(nom, valeur) {
+    const picker = document.querySelector(`[data-image-picker="${nom}"]`);
+    if (!picker) return;
+    const champ = champCache(picker);
+    if (champ) champ.value = valeur || "";
+    const champUrl = picker.querySelector("[data-image-url]");
+    if (champUrl) champUrl.value = /^https?:\/\//i.test(valeur || "") ? valeur : "";
+    rafraichirApercu(picker, valeur);
+  }
+
+  function initImagePickers() {
+    document.querySelectorAll("[data-image-picker]").forEach((picker) => {
+      const fichier = picker.querySelector("[data-image-file]");
+      const champ = champCache(picker);
+      const champUrl = picker.querySelector("[data-image-url]");
+
+      picker.querySelector("[data-image-choose]")?.addEventListener("click", () => fichier?.click());
+
+      fichier?.addEventListener("change", () => {
+        const image = fichier.files?.[0];
+        if (!image) return;
+
+        if (!TYPES_IMAGE.includes(image.type)) {
+          showToast("⚠️ Format non accepté : PNG, JPG, GIF ou WebP uniquement");
+          fichier.value = "";
+          return;
+        }
+        if (image.size > TAILLE_IMAGE_MAX) {
+          const mo = (image.size / 1024 / 1024).toFixed(1);
+          showToast(`⚠️ Image trop lourde (${mo} Mo) — 8 Mo maximum`);
+          fichier.value = "";
+          return;
+        }
+
+        const lecteur = new FileReader();
+        lecteur.onload = () => {
+          if (champ) champ.value = String(lecteur.result || "");
+          if (champUrl) champUrl.value = "";
+          rafraichirApercu(picker, String(lecteur.result || ""));
+          markPanelDirty("tickets");
+          showToast("🖼️ Image prête — enregistre pour l'appliquer");
+        };
+        lecteur.onerror = () => showToast("⚠️ Lecture de l'image impossible");
+        lecteur.readAsDataURL(image);
+        fichier.value = ""; // permet de rechoisir le même fichier
+      });
+
+      picker.querySelector("[data-image-clear]")?.addEventListener("click", () => {
+        if (champ) champ.value = "";
+        if (champUrl) champUrl.value = "";
+        rafraichirApercu(picker, "");
+        markPanelDirty("tickets");
+        showToast("🗑️ Image retirée");
+      });
+
+      champUrl?.addEventListener("input", () => {
+        const valeur = champUrl.value.trim();
+        if (champ) champ.value = valeur;
+        rafraichirApercu(picker, valeur);
+        markPanelDirty("tickets");
+      });
+    });
+  }
+
+  initImagePickers();
 
   /* ══════════════════════════════════════════════════════════════════
      SÉLECTEUR DE SERVEUR — menu déroulant animé
@@ -3008,6 +3111,7 @@ function initDashboard() {
         emoji: document.querySelector("[data-preview-emoji]")?.value || "📩",
         description: document.querySelector("[data-preview-desc]")?.value || "",
         banner: document.querySelector("[data-ticket-banner]")?.value || "",
+        logo: document.querySelector("[data-ticket-logo]")?.value || "",
         support_role: document.querySelector("[data-ticket-support-role]")?.value || "",
         options: ticketOptions,
       },
