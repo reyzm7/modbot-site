@@ -77,7 +77,7 @@
 
       <article class="admin-panel admin-access-note">
         <h3>🛡️ Sécurité</h3>
-        <p>Les statistiques, les demandes Premium, les serveurs, les administrateurs et la blacklist restent masqués tant que l’ID Discord administrateur n’est pas validé.</p>
+        <p>Les statistiques, les serveurs, les administrateurs et la blacklist restent masqués tant que l’ID Discord administrateur n’est pas validé.</p>
       </article>
     </div>
 
@@ -85,11 +85,10 @@
       <aside class="admin-sidebar-panel">
         <p class="sidebar-label">Administration</p>
         <button class="admin-nav is-active" type="button" data-admin-tab="overview"><span>01</span>📊 Vue globale</button>
-        <button class="admin-nav" type="button" data-admin-tab="premium"><span>02</span>💎 Premium</button>
-        <button class="admin-nav" type="button" data-admin-tab="admins"><span>03</span>🔐 Administrateurs</button>
-        <button class="admin-nav" type="button" data-admin-tab="blacklist"><span>04</span>🚫 Blacklist bot</button>
-        <button class="admin-nav" type="button" data-admin-tab="servers"><span>05</span>🧭 Serveurs</button>
-        <button class="admin-nav" type="button" data-admin-tab="activity"><span>06</span>🧾 Logs globaux</button>
+        <button class="admin-nav" type="button" data-admin-tab="admins"><span>02</span>🔐 Administrateurs</button>
+        <button class="admin-nav" type="button" data-admin-tab="blacklist"><span>03</span>🚫 Blacklist bot</button>
+        <button class="admin-nav" type="button" data-admin-tab="servers"><span>04</span>🧭 Serveurs</button>
+        <button class="admin-nav" type="button" data-admin-tab="activity"><span>05</span>🧾 Logs globaux</button>
       </aside>
 
       <div class="admin-main">
@@ -109,55 +108,10 @@
 
           <div class="admin-grid two">
             <article class="admin-panel">
-              <h3>🆓 Offre gratuite</h3>
-              <p>Anti-raid, anti-nuke, filtre de langage, sanctions graduées, journal complet et sauvegardes : gratuit, sans limite de durée, sur tous les serveurs.</p>
-            </article>
-            <article class="admin-panel">
-              <h3>💎 Règle Premium</h3>
-              <p>Offre unique : 29,99 € pour 5 mois. Elle s’attribue à un serveur précis depuis l’onglet Premium et débloque tickets, arrivées/départs, rôles réactions, messages récurrents, réseaux et ratings.</p>
+              <h3>💛 Modèle économique</h3>
+              <p>ModBot est entièrement gratuit : toutes les fonctionnalités sont accessibles sur tous les serveurs. Le projet vit des dons libres, sans contrepartie ni fonctionnalité réservée.</p>
             </article>
           </div>
-        </section>
-
-        <section class="admin-view" data-admin-panel="premium">
-          <article class="admin-panel premium-manager" data-guild-premium-panel>
-            <div class="admin-panel-head">
-              <h3>💎 Premium par serveur</h3>
-              <span class="admin-badge active">29,99 € · 5 mois</span>
-            </div>
-            <p class="premium-limit-copy">
-              L'abonnement s'attribue directement à un serveur. La date de fin est
-              calculée automatiquement : 5 mois à partir de l'activation.
-            </p>
-
-            <div class="premium-servers-controls">
-              <label class="server-search">
-                <span>⌕</span>
-                <input type="search" placeholder="Rechercher un serveur" data-guild-premium-search>
-              </label>
-              <div class="premium-servers-bulk">
-                <span class="admin-badge" data-guild-premium-count>—</span>
-                <button class="secondary-btn compact" type="button" data-guild-premium-reload>↻ Actualiser</button>
-              </div>
-            </div>
-
-            <div class="guild-premium-list" data-guild-premium-list>
-              <p class="premium-servers-empty">Chargement des serveurs…</p>
-            </div>
-          </article>
-
-          <article class="admin-panel">
-            <div class="admin-panel-head">
-              <h3>🎫 Procédure Premium</h3>
-              <span class="admin-badge">Action manuelle</span>
-            </div>
-            <p>L'activation se fait manuellement après paiement, via un ticket sur le serveur Discord ModBot.</p>
-            <div class="premium-ticket-list" data-premium-ticket-list>
-              <div><span><strong>1. Ouvrir un ticket</strong><small>Le membre ouvre un ticket Premium sur le serveur support.</small></span><span>🎫 Obligatoire</span></div>
-              <div><span><strong>2. Encaisser le paiement</strong><small>29,99 € pour 5 mois d'accès complet.</small></span><span>💶 Paiement</span></div>
-              <div><span><strong>3. Activer sur le serveur</strong><small>Onglet Premium : choisir le serveur et activer. La date de fin est calculée automatiquement.</small></span><span>💎 Premium</span></div>
-            </div>
-          </article>
         </section>
 
         <section class="admin-view" data-admin-panel="admins">
@@ -218,8 +172,7 @@
               <div><span>20:42</span><strong>Hote BOT - ModBot</strong><em>Ticket publié depuis le dashboard.</em></div>
               <div><span>20:35</span><strong>VPG Belgique</strong><em>Anti-lien activé dans la sécurité.</em></div>
               <div><span>20:21</span><strong>Serveur test</strong><em>Message filtré par l’auto-modération.</em></div>
-              <div><span>19:58</span><strong>Hote BOT - ModBot</strong><em>Premium associé à 1 serveur.</em></div>
-            </div>
+              </div>
           </article>
         </section>
       </div>
