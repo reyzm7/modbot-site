@@ -174,6 +174,7 @@
       <p class="sidebar-label">Protection</p>
       <button class="dash-nav" type="button" data-dashboard-tab="security"><span aria-hidden="true">🛡️</span>Sécurité</button>
       <button class="dash-nav" type="button" data-dashboard-tab="moderation"><span aria-hidden="true">⚒️</span>Modération</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="search"><span aria-hidden="true">🔎</span>Recherche</button>
       <button class="dash-nav" type="button" data-dashboard-tab="backups"><span aria-hidden="true">💾</span>Sauvegardes</button>
       <button class="dash-nav" type="button" data-dashboard-tab="logs"><span aria-hidden="true">🧾</span>Logs</button>
 
@@ -408,6 +409,71 @@
           <label class="tool-panel mini-form">🔨 Seuil ban<input type="number" value="4"></label>
         </div>
 
+        <!-- CAPTCHA -->
+        <div class="tool-panel security-block">
+          <div class="table-head">
+            <h3>🔐 Captcha d'entrée</h3>
+            <label class="switch-inline">
+              <input type="checkbox" data-captcha-enabled>
+              <span>Activer</span>
+            </label>
+          </div>
+          <p class="field-help">
+            Les nouveaux membres cliquent sur un bouton et recopient un code affiché en image.
+            Tout se passe dans une réponse privée : aucun message privé n'est nécessaire, donc
+            personne ne reste bloqué parce qu'il a fermé ses MP.
+          </p>
+          <div class="dashboard-grid three">
+            <label class="mini-form">Rôle accordé après vérification
+              <select data-captcha-role><option value="">— Aucun —</option></select>
+            </label>
+            <label class="mini-form">Salon du panneau
+              <select data-captcha-channel><option value="">— Aucun —</option></select>
+            </label>
+            <div class="mini-form captcha-state">
+              <span>État</span>
+              <p data-captcha-state class="captcha-state-value">Non configuré</p>
+            </div>
+          </div>
+          <div class="inline-hint">
+            <strong>💡 Le plus simple :</strong> tape <code>/captcha activer</code> dans Discord.
+            ModBot crée le rôle, crée le salon, publie le panneau et propose de masquer les
+            salons aux membres non vérifiés — en une commande.
+          </div>
+        </div>
+
+        <!-- ALERTES D'ATTAQUE -->
+        <div class="tool-panel security-block">
+          <div class="table-head">
+            <h3>🚨 Alertes d'attaque</h3>
+            <label class="switch-inline">
+              <input type="checkbox" data-alerts-dm checked>
+              <span>Prévenir en MP</span>
+            </label>
+          </div>
+          <p class="field-help">
+            Quand une attaque est détectée, tous les administrateurs reçoivent un message privé
+            avec deux boutons : <strong>fausse alerte</strong> (tout est annulé et rétabli) ou
+            <strong>confirmer</strong>. Sans réponse, ModBot maintient la protection tout seul.
+          </p>
+          <div class="dashboard-grid two">
+            <div class="mini-form captcha-state">
+              <span>Administrateurs joignables</span>
+              <p data-alerts-admins class="captcha-state-value">—</p>
+            </div>
+            <div class="mini-form captcha-state">
+              <span>Alertes en cours</span>
+              <p data-alerts-active class="captcha-state-value">—</p>
+            </div>
+          </div>
+          <div class="inline-hint">
+            <strong>🛡️ Pourquoi ModBot agit avant de demander :</strong> une attaque détruit un
+            serveur en quelques secondes. La protection s'applique immédiatement, et les boutons
+            servent à la <em>lever</em> si c'était une fausse alerte.
+            Vérifie la réception avec <code>/securite alertes test:true</code>.
+          </div>
+        </div>
+
         <!-- ANTI-RAID -->
         <div class="tool-panel security-block">
           <div class="table-head">
@@ -604,6 +670,58 @@
             <h3>🔨 Bannissements du bot</h3>
             <div class="sanction-list" data-sanction-list>
               <div class="dashboard-empty-state"><strong>Aucun bannissement chargé</strong><span>La liste sera synchronisée avec les logs du bot.</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="search">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow">🔎 Recherche</p>
+            <h2>Membres et rôles</h2>
+          </div>
+          <div class="panel-title-actions">
+            <span class="state" data-search-count></span>
+          </div>
+        </div>
+
+        <div class="search-modes" role="tablist" aria-label="Type de recherche">
+          <button class="search-mode is-active" type="button" role="tab" aria-selected="true" data-search-mode="members">
+            <span aria-hidden="true">👤</span> Membres
+          </button>
+          <button class="search-mode" type="button" role="tab" aria-selected="false" data-search-mode="roles">
+            <span aria-hidden="true">🎭</span> Rôles
+          </button>
+        </div>
+
+        <div class="search-bar">
+          <span class="search-bar-icon" aria-hidden="true">🔎</span>
+          <input type="search" data-search-input
+                 placeholder="Nom, pseudo ou identifiant Discord…"
+                 aria-label="Rechercher un membre ou un rôle" autocomplete="off">
+          <button class="secondary-btn compact" type="button" data-search-clear hidden>✕ Effacer</button>
+        </div>
+        <p class="field-help" data-search-help>
+          Recherche un membre pour l'avertir, l'exclure ou l'immuniser. Recherche un rôle pour lui
+          donner l'immunité anti-nuke.
+        </p>
+
+        <div class="search-layout">
+          <div class="tool-panel search-results-panel">
+            <h3>Résultats</h3>
+            <div class="search-results" data-search-results>
+              <div class="dashboard-empty-state">
+                <strong>Commence à taper</strong>
+                <span>Les membres ayant des infractions s'affichent par défaut.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tool-panel search-detail-panel" data-search-detail>
+            <div class="dashboard-empty-state">
+              <strong>Aucune sélection</strong>
+              <span>Choisis un résultat pour voir sa fiche et agir dessus.</span>
             </div>
           </div>
         </div>
