@@ -284,9 +284,46 @@
             <label>Description
               <textarea data-preview-desc>Merci de sélectionner la raison de ta demande via le menu. Un membre du staff viendra rapidement te répondre.</textarea>
             </label>
-            <label>Bannière ticket
-              <input type="text" value="assets/default_banner.svg" data-ticket-banner>
-            </label>
+            <!-- Sélecteur d'image : depuis l'appareil ou via une adresse -->
+            <div class="image-picker" data-image-picker="ticket-banner">
+              <span class="image-picker-label">Bannière du ticket</span>
+              <div class="image-picker-body">
+                <div class="image-picker-preview" data-image-preview>
+                  <span class="image-picker-empty">Aucune image</span>
+                </div>
+                <div class="image-picker-actions">
+                  <button class="secondary-btn compact" type="button" data-image-choose>🖼️ Choisir une image</button>
+                  <button class="secondary-btn compact danger" type="button" data-image-clear hidden>Retirer</button>
+                  <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden data-image-file>
+                  <input type="hidden" data-ticket-banner value="">
+                  <small class="image-picker-hint">PNG, JPG, GIF ou WebP — 8 Mo maximum. Format conseillé : 1200×400.</small>
+                </div>
+              </div>
+              <details class="image-picker-url">
+                <summary>Ou coller une adresse d'image</summary>
+                <input type="url" placeholder="https://exemple.com/banniere.png" data-image-url>
+              </details>
+            </div>
+
+            <div class="image-picker" data-image-picker="ticket-logo">
+              <span class="image-picker-label">Logo du ticket</span>
+              <div class="image-picker-body">
+                <div class="image-picker-preview is-square" data-image-preview>
+                  <span class="image-picker-empty">Logo du serveur</span>
+                </div>
+                <div class="image-picker-actions">
+                  <button class="secondary-btn compact" type="button" data-image-choose>🖼️ Choisir une image</button>
+                  <button class="secondary-btn compact danger" type="button" data-image-clear hidden>Retirer</button>
+                  <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden data-image-file>
+                  <input type="hidden" data-ticket-logo value="">
+                  <small class="image-picker-hint">Carré de préférence. Sans image, l'icône du serveur est utilisée.</small>
+                </div>
+              </div>
+              <details class="image-picker-url">
+                <summary>Ou coller une adresse d'image</summary>
+                <input type="url" placeholder="https://exemple.com/logo.png" data-image-url>
+              </details>
+            </div>
             <div class="form-row">
               <label>Salon ticket
                 <input type="text" placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-ticket-channel>
