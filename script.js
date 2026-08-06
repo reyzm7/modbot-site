@@ -46,39 +46,25 @@ const siteTranslations = {
     "features.panel.copy": "Gestion rapide des réglages et des outils importants du serveur.",
     "features.development.title": "Automatisations",
     "features.development.copy": "Messages récurrents, rôles réactions, arrivées et départs configurables.",
-    "pricing.eyebrow": "Tarifs",
-    "pricing.title": "La protection est gratuite. Pour toujours.",
-    "pricing.copy": "Sécurisez votre serveur sans payer. Passez Premium quand vous voulez les modules communautaires.",
-    "pricing.free.title": "Protection",
-    "pricing.free.copy": "Tout ce qui protège votre serveur, sans limite de temps ni de serveurs.",
-    "pricing.free.amount": "Gratuit",
-    "pricing.free.period": "pour toujours",
-    "pricing.free.note": "Aucune carte bancaire, aucune limite de durée.",
-    "pricing.free.item1": "Anti-raid et détection de comptes suspects",
-    "pricing.free.item2": "Anti-nuke avec restauration automatique",
-    "pricing.free.item3": "Filtre de langage anti-contournement",
-    "pricing.free.item4": "Sanctions graduées et historique",
-    "pricing.free.item5": "Système de logs complet",
-    "pricing.free.item6": "Sauvegardes et restauration du serveur",
-    "pricing.free.cta": "Commencer gratuitement",
-    "pricing.free.support": "Invitez ModBot, la protection est active immédiatement.",
-    "pricing.premium.ribbon": "Premium",
-    "pricing.premium.title": "Premium",
-    "pricing.premium.copy": "Toute la protection, plus les modules communautaires et l'automatisation.",
-    "pricing.premium.period": "pour 5 mois",
-    "pricing.premium.note": "Paiement unique — aucun renouvellement automatique.",
-    "pricing.premium.item0": "Toute la protection gratuite incluse",
-    "pricing.premium.item1": "Système de tickets et évaluations",
-    "pricing.premium.item2": "Messages d'arrivée et de départ personnalisés",
-    "pricing.premium.item3": "Rôles réactions et messages récurrents",
-    "pricing.premium.item4": "Alertes réseaux sociaux et tournois",
-    "pricing.premium.item5": "Personnalisation complète des embeds",
-    "pricing.premium.item6": "Serveurs illimités",
-    "pricing.premium.cta": "Passer Premium",
-    "pricing.premium.support": "Activation via un ticket sur notre serveur Discord.",
+    "nav.pricing": "Soutenir",
+    "donate.eyebrow": "Soutien",
+    "donate.title": "ModBot est entièrement gratuit",
+    "donate.copy": "Toutes les fonctionnalités, sur tous les serveurs, sans limite de durée. Si le bot vous est utile, un don aide à payer l'hébergement.",
+    "donate.ribbon": "Gratuit",
+    "donate.card.title": "Tout est inclus",
+    "donate.card.copy": "Aucune fonctionnalité n'est réservée, aucun paiement n'est demandé.",
+    "donate.item1": "Anti-raid et anti-nuke avec restauration",
+    "donate.item2": "Filtre de langage anti-contournement",
+    "donate.item3": "Sanctions graduées et historique",
+    "donate.item4": "Système de logs complet",
+    "donate.item5": "Sauvegardes et restauration du serveur",
+    "donate.item6": "Tickets, ratings et alertes réseaux",
+    "donate.item7": "Dashboard web et serveurs illimités",
+    "donate.cta": "💛 Faire un don",
+    "donate.note": "Le don est libre et facultatif. Il ne débloque rien : tout est déjà accessible.",
     "admin.eyebrow": "Administration",
     "admin.title": "Centre administrateur du site",
-    "admin.copy": "Gérez le premium, suivez l’activité du site et préparez la synchronisation des serveurs où ModBot est installé.",
+    "admin.copy": "Suivez l’activité du site, gérez les administrateurs, la blacklist et les serveurs où ModBot est installé.",
     "admin.access.title": "🔐 Accès admin",
     "admin.access.copy": "Entre ton identifiant Discord administrateur pour ouvrir l’espace de gestion.",
     "admin.access.label": "ID Discord administrateur",
@@ -88,14 +74,6 @@ const siteTranslations = {
     "admin.stats.today": "Aujourd’hui",
     "admin.stats.dashboard": "Ouvertures dashboard",
     "admin.stats.installs": "Serveurs ModBot",
-    "admin.premium.title": "💎 Premium membre",
-    "admin.premium.badge": "Durée premium",
-    "admin.premium.copy": "L’admin attribue l’offre et sa durée. Le membre associe ensuite ses serveurs depuis son dashboard sans limite de quantité.",
-    "admin.premium.member": "ID ou pseudo Discord",
-    "admin.premium.duration": "Durée",
-    "admin.premium.customValue": "Durée personnalisée",
-    "admin.premium.customUnit": "Unité",
-    "admin.premium.apply": "Attribuer le premium",
     "admin.servers.title": "🧭 Serveurs détectés",
     "admin.servers.refresh": "Rafraîchir",
     "admin.servers.copy": "Quand le backend sera branché au bot Discord, cette zone affichera automatiquement les logos réels des serveurs via les données `bot.guilds`."
@@ -134,39 +112,25 @@ const siteTranslations = {
     "features.panel.copy": "Quick management of important server settings and tools.",
     "features.development.title": "Automations",
     "features.development.copy": "Recurring messages, reaction roles, welcome and departure messages you can configure.",
-    "pricing.eyebrow": "Pricing",
-    "pricing.title": "Protection is free. Forever.",
-    "pricing.copy": "Secure your server without paying. Go Premium when you want the community modules.",
-    "pricing.free.title": "Protection",
-    "pricing.free.copy": "Everything that protects your server, with no time or server limits.",
-    "pricing.free.amount": "Free",
-    "pricing.free.period": "forever",
-    "pricing.free.note": "No credit card, no time limit.",
-    "pricing.free.item1": "Anti-raid and suspicious account detection",
-    "pricing.free.item2": "Anti-nuke with automatic restore",
-    "pricing.free.item3": "Bypass-resistant language filter",
-    "pricing.free.item4": "Graduated sanctions and history",
-    "pricing.free.item5": "Complete logging system",
-    "pricing.free.item6": "Server backups and restore",
-    "pricing.free.cta": "Start for free",
-    "pricing.free.support": "Invite ModBot — protection is active right away.",
-    "pricing.premium.ribbon": "Premium",
-    "pricing.premium.title": "Premium",
-    "pricing.premium.copy": "All the protection, plus community modules and automation.",
-    "pricing.premium.period": "for 5 months",
-    "pricing.premium.note": "One-off payment — no automatic renewal.",
-    "pricing.premium.item0": "All free protection included",
-    "pricing.premium.item1": "Ticket system and ratings",
-    "pricing.premium.item2": "Custom join and leave messages",
-    "pricing.premium.item3": "Reaction roles and recurring messages",
-    "pricing.premium.item4": "Social media alerts and tournaments",
-    "pricing.premium.item5": "Full embed customization",
-    "pricing.premium.item6": "Unlimited servers",
-    "pricing.premium.cta": "Go Premium",
-    "pricing.premium.support": "Activated through a ticket on our Discord server.",
+    "nav.pricing": "Support us",
+    "donate.eyebrow": "Support",
+    "donate.title": "ModBot is completely free",
+    "donate.copy": "Every feature, on every server, with no time limit. If the bot is useful to you, a donation helps cover hosting.",
+    "donate.ribbon": "Free",
+    "donate.card.title": "Everything included",
+    "donate.card.copy": "No feature is locked, no payment is required.",
+    "donate.item1": "Anti-raid and anti-nuke with auto-restore",
+    "donate.item2": "Bypass-resistant language filter",
+    "donate.item3": "Graduated sanctions and history",
+    "donate.item4": "Complete logging system",
+    "donate.item5": "Server backups and restore",
+    "donate.item6": "Tickets, ratings and social alerts",
+    "donate.item7": "Web dashboard and unlimited servers",
+    "donate.cta": "💛 Donate",
+    "donate.note": "Donations are optional and unlock nothing — everything is already available.",
     "admin.eyebrow": "Administration",
     "admin.title": "Site administrator center",
-    "admin.copy": "Manage premium, track site activity and prepare server synchronization for guilds where ModBot is installed.",
+    "admin.copy": "Track site activity, manage administrators, the blacklist and the servers where ModBot is installed.",
     "admin.access.title": "🔐 Admin access",
     "admin.access.copy": "Enter your administrator Discord ID to open the management area.",
     "admin.access.label": "Administrator Discord ID",
@@ -176,14 +140,6 @@ const siteTranslations = {
     "admin.stats.today": "Today",
     "admin.stats.dashboard": "Dashboard opens",
     "admin.stats.installs": "ModBot servers",
-    "admin.premium.title": "💎 Member premium",
-    "admin.premium.badge": "Premium duration",
-    "admin.premium.copy": "The admin grants the offer and duration. The member then associates servers from the dashboard without a quantity limit.",
-    "admin.premium.member": "Discord ID or username",
-    "admin.premium.duration": "Duration",
-    "admin.premium.customValue": "Custom duration",
-    "admin.premium.customUnit": "Unit",
-    "admin.premium.apply": "Grant premium",
     "admin.servers.title": "🧭 Detected servers",
     "admin.servers.refresh": "Refresh",
     "admin.servers.copy": "When the backend is connected to the Discord bot, this area will automatically show real server logos from `bot.guilds` data."
@@ -222,39 +178,25 @@ const siteTranslations = {
     "features.panel.copy": "إدارة سريعة لإعدادات وأدوات الخادم المهمة.",
     "features.development.title": "الأتمتة",
     "features.development.copy": "رسائل متكررة، أدوار تفاعلية، ورسائل ترحيب ومغادرة قابلة للإعداد.",
-    "pricing.eyebrow": "الأسعار",
-    "pricing.title": "الحماية مجانية. إلى الأبد.",
-    "pricing.copy": "أمّن خادمك دون دفع. اشترك في Premium عندما تريد وحدات المجتمع.",
-    "pricing.free.title": "الحماية",
-    "pricing.free.copy": "كل ما يحمي خادمك، بدون حد زمني ولا حد للخوادم.",
-    "pricing.free.amount": "مجاني",
-    "pricing.free.period": "إلى الأبد",
-    "pricing.free.note": "بدون بطاقة بنكية، بدون حد زمني.",
-    "pricing.free.item1": "الحماية من الغارات وكشف الحسابات المشبوهة",
-    "pricing.free.item2": "الحماية من التخريب مع الاستعادة التلقائية",
-    "pricing.free.item3": "فلتر لغة مقاوم للتحايل",
-    "pricing.free.item4": "عقوبات متدرجة وسجل المخالفات",
-    "pricing.free.item5": "نظام سجلات كامل",
-    "pricing.free.item6": "نسخ احتياطي واستعادة الخادم",
-    "pricing.free.cta": "ابدأ مجاناً",
-    "pricing.free.support": "ادعُ ModBot، الحماية تعمل فوراً.",
-    "pricing.premium.ribbon": "Premium",
-    "pricing.premium.title": "Premium",
-    "pricing.premium.copy": "كل الحماية، بالإضافة إلى وحدات المجتمع والأتمتة.",
-    "pricing.premium.period": "لمدة 5 أشهر",
-    "pricing.premium.note": "دفعة واحدة — بدون تجديد تلقائي.",
-    "pricing.premium.item0": "كل الحماية المجانية مشمولة",
-    "pricing.premium.item1": "نظام التذاكر والتقييمات",
-    "pricing.premium.item2": "رسائل ترحيب ومغادرة مخصصة",
-    "pricing.premium.item3": "أدوار التفاعل والرسائل المتكررة",
-    "pricing.premium.item4": "تنبيهات الشبكات الاجتماعية والبطولات",
-    "pricing.premium.item5": "تخصيص كامل للرسائل المضمنة",
-    "pricing.premium.item6": "خوادم غير محدودة",
-    "pricing.premium.cta": "اشترك في Premium",
-    "pricing.premium.support": "التفعيل عبر تذكرة على خادم Discord الخاص بنا.",
+    "nav.pricing": "ادعمنا",
+    "donate.eyebrow": "الدعم",
+    "donate.title": "ModBot مجاني بالكامل",
+    "donate.copy": "كل الميزات، على كل الخوادم، بدون حد زمني. إذا كان البوت مفيداً لك، فالتبرع يساعد في تغطية الاستضافة.",
+    "donate.ribbon": "مجاني",
+    "donate.card.title": "كل شيء مشمول",
+    "donate.card.copy": "لا توجد ميزة مقفلة، ولا يُطلب أي دفع.",
+    "donate.item1": "الحماية من الغارات والتخريب مع الاستعادة",
+    "donate.item2": "فلتر لغة مقاوم للتحايل",
+    "donate.item3": "عقوبات متدرجة وسجل المخالفات",
+    "donate.item4": "نظام سجلات كامل",
+    "donate.item5": "نسخ احتياطي واستعادة الخادم",
+    "donate.item6": "التذاكر والتقييمات وتنبيهات الشبكات",
+    "donate.item7": "لوحة تحكم ويب وخوادم غير محدودة",
+    "donate.cta": "💛 تبرّع",
+    "donate.note": "التبرع اختياري ولا يفتح أي شيء — كل شيء متاح بالفعل.",
     "admin.eyebrow": "الإدارة",
     "admin.title": "مركز إدارة الموقع",
-    "admin.copy": "إدارة Premium، متابعة نشاط الموقع، وتحضير مزامنة الخوادم التي يوجد فيها ModBot.",
+    "admin.copy": "تابع نشاط الموقع، وأدر المسؤولين والقائمة السوداء والخوادم التي يوجد فيها ModBot.",
     "admin.access.title": "🔐 دخول الإدارة",
     "admin.access.copy": "أدخل معرف Discord للمسؤول لفتح مساحة الإدارة.",
     "admin.access.label": "معرف Discord للمسؤول",
@@ -264,14 +206,6 @@ const siteTranslations = {
     "admin.stats.today": "اليوم",
     "admin.stats.dashboard": "فتح لوحة التحكم",
     "admin.stats.installs": "خوادم ModBot",
-    "admin.premium.title": "💎 Premium للعضو",
-    "admin.premium.badge": "مدة Premium",
-    "admin.premium.copy": "يمنح المسؤول العرض ومدته، ثم يربط العضو خوادمه من لوحة التحكم بدون حد للعدد.",
-    "admin.premium.member": "معرف Discord أو الاسم",
-    "admin.premium.duration": "المدة",
-    "admin.premium.customValue": "مدة مخصصة",
-    "admin.premium.customUnit": "الوحدة",
-    "admin.premium.apply": "منح Premium",
     "admin.servers.title": "🧭 الخوادم المكتشفة",
     "admin.servers.refresh": "تحديث",
     "admin.servers.copy": "عند ربط الخلفية ببوت ديسكورد، ستظهر هنا شعارات الخوادم الحقيقية من بيانات `bot.guilds`."
@@ -307,7 +241,7 @@ const assistantAnswers = {
   },
   tarifs: {
     question: "Quels sont les tarifs ?",
-    answer: "L’offre gratuite donne accès au socle sécurité/modération et à un essai Premium de 48h. Le Premium est à 15€ pour 2 mois. L’Ultra Premium est à 35€ tous les 3 mois avec support prioritaire et personnalisations dédiées. Les offres ne limitent plus le nombre de serveurs."
+    answer: "ModBot est entièrement gratuit : toutes les fonctionnalités sont accessibles sur tous les serveurs, sans limite de durée. Le projet vit de dons libres, qui ne débloquent rien de plus."
   },
   fonctionnalite: {
     question: "Comment demander une fonctionnalité ?",
@@ -1106,7 +1040,6 @@ function initDiscordOAuthLinks() {
       link.target = "_self";
       link.removeAttribute("rel");
       link.addEventListener("click", () => {
-        sessionStorage.setItem("modbot-selected-offer", offerPlan);
       });
       return;
     }
@@ -1189,8 +1122,6 @@ function initAdminZone() {
   function openAdminPanel(panelName) {
     adminTabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.adminTab === panelName));
     adminPanels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.adminPanel === panelName));
-    // La liste des serveurs se charge à l'ouverture de l'onglet Premium
-    if (panelName === "premium") gpCharger();
   }
 
   function formatStat(value) {
@@ -1286,121 +1217,6 @@ function initAdminZone() {
     });
   });
 
-  /* ════════════════════════════════════════════════════════════════
-     PREMIUM PAR SERVEUR
-     L'abonnement est attribué à un serveur, pas à un membre.
-     Seuls les administrateurs ModBot peuvent l'activer ou le révoquer.
-     ════════════════════════════════════════════════════════════════ */
-
-  const gpList = document.querySelector("[data-guild-premium-list]");
-  const gpSearch = document.querySelector("[data-guild-premium-search]");
-  const gpCount = document.querySelector("[data-guild-premium-count]");
-  let gpServeurs = [];
-
-  function gpRendre() {
-    if (!gpList) return;
-    const terme = (gpSearch?.value || "").trim().toLowerCase();
-    const visibles = terme
-      ? gpServeurs.filter((g) => g.name.toLowerCase().includes(terme))
-      : gpServeurs;
-
-    const actifs = gpServeurs.filter((g) => g.premium?.active).length;
-    if (gpCount) {
-      gpCount.textContent = `${actifs} serveur${actifs > 1 ? "s" : ""} Premium / ${gpServeurs.length}`;
-    }
-
-    if (!gpServeurs.length) {
-      gpList.innerHTML = `<p class="premium-servers-empty">ModBot n'est installé sur aucun serveur.</p>`;
-      return;
-    }
-    if (!visibles.length) {
-      gpList.innerHTML = `<p class="premium-servers-empty">Aucun serveur ne correspond à « ${escapeHtmlValue(terme)} ».</p>`;
-      return;
-    }
-
-    gpList.innerHTML = visibles
-      .map((g) => {
-        const p = g.premium || {};
-        const actif = Boolean(p.active);
-        const membres = Number(g.member_count || 0);
-        const fin = actif ? formatIsoDateFr(p.expires_at) : null;
-        const reste = Number(p.days_left || 0);
-        return `
-      <article class="guild-premium-row${actif ? " is-premium" : ""}">
-        <span class="server-logo-shell" data-initials="${escapeHtmlValue(g.initials || "MB")}">
-          ${g.icon ? `<img src="${escapeHtmlValue(g.icon)}" alt="" data-logo-img>` : ""}
-        </span>
-        <span class="guild-premium-info">
-          <strong>${escapeHtmlValue(g.name)}</strong>
-          <small>${membres ? membres.toLocaleString("fr-FR") + " membres · " : ""}ID ${escapeHtmlValue(g.id)}</small>
-        </span>
-        <span class="guild-premium-state">
-          ${actif
-            ? `<span class="state" data-level="ok">💎 Actif</span>
-               <small>Jusqu'au ${escapeHtmlValue(fin)} · ${reste} j restants</small>`
-            : `<span class="state" data-level="idle">⚪ Gratuit</span>`}
-        </span>
-        <button class="${actif ? "secondary-btn danger" : "primary-btn"} compact" type="button"
-                data-guild-premium-toggle="${escapeHtmlValue(g.id)}"
-                data-guild-premium-active="${actif ? "true" : "false"}"
-                data-guild-premium-name="${escapeHtmlValue(g.name)}">
-          ${actif ? "Révoquer" : "Activer Premium"}
-        </button>
-      </article>`;
-      })
-      .join("");
-
-  }
-
-  async function gpCharger() {
-    try {
-      const data = await modbotApiFetch("/api/admin/guilds", { cache: "no-store" });
-      gpServeurs = Array.isArray(data.guilds) ? data.guilds : [];
-      gpRendre();
-    } catch (error) {
-      if (gpList) {
-        gpList.innerHTML = `<p class="premium-servers-empty">⚠️ ${escapeHtmlValue(error?.message || "Chargement impossible")}</p>`;
-      }
-    }
-  }
-
-  async function gpBasculer(guildId, nom, etaitActif) {
-    const question = etaitActif
-      ? `Révoquer le Premium de « ${nom} » ?\n\nLes modules communautaires seront immédiatement verrouillés.`
-      : `Activer le Premium sur « ${nom} » ?\n\n29,99 € pour 5 mois. La date de fin est calculée automatiquement.`;
-    if (!window.confirm(question)) return;
-
-    try {
-      const data = await modbotApiFetch(`/api/admin/guilds/${guildId}/premium`, {
-        method: "POST",
-        body: JSON.stringify({ active: !etaitActif })
-      });
-      const cible = gpServeurs.find((g) => g.id === guildId);
-      if (cible) cible.premium = data.premium;
-      gpRendre();
-      showAdminToast(etaitActif
-        ? `🚫 Premium révoqué sur ${nom}`
-        : `💎 Premium actif sur ${nom} jusqu'au ${formatIsoDateFr(data.premium?.expires_at)}`);
-    } catch (error) {
-      showAdminToast(`⚠️ ${error?.message || "Opération impossible"}`);
-    }
-  }
-
-  gpList?.addEventListener("click", (event) => {
-    const bouton = event.target.closest("[data-guild-premium-toggle]");
-    if (!bouton) return;
-    gpBasculer(
-      bouton.dataset.guildPremiumToggle,
-      bouton.dataset.guildPremiumName,
-      bouton.dataset.guildPremiumActive === "true"
-    );
-  });
-
-  gpSearch?.addEventListener("input", gpRendre);
-  document.querySelector("[data-guild-premium-reload]")?.addEventListener("click", () => {
-    gpCharger();
-    showAdminToast("↻ Serveurs rechargés");
-  });
 
   document.querySelector("[data-add-admin]")?.addEventListener("click", () => {
     const input = document.querySelector("[data-new-admin-id]");
@@ -1532,9 +1348,7 @@ function initDashboard() {
   if (!dashboard) return;
 
   const dashboardUrlParams = new URLSearchParams(location.search || "");
-  const requestedFlow = dashboardUrlParams.get("flow") || "";
-  const requestedOfferPlan = dashboardUrlParams.get("plan") || dashboardUrlParams.get("offer") || sessionStorage.getItem("modbot-selected-offer") || "";
-  const requiresLiveDiscordFlow = true;
+  const requestedFlow = dashboardUrlParams.get("flow") || "";  const requiresLiveDiscordFlow = true;
   const tabs = document.querySelectorAll("[data-dashboard-tab]");
   const panels = document.querySelectorAll("[data-dashboard-panel]");
   const toast = document.getElementById("dashboardToast");
@@ -1551,53 +1365,9 @@ function initDashboard() {
   const currentServerTargets = document.querySelectorAll("[data-current-server], [data-current-server-label]");
   const currentServerLogoTargets = document.querySelectorAll("[data-current-server-logo], [data-current-server-logo-inline]");
   const currentServerLogoShells = document.querySelectorAll("[data-current-server-logo-shell]");
-  const premiumTierSelect = document.querySelector("[data-premium-tier]");
   const unsavedModal = document.querySelector("[data-unsaved-modal]");
   const publishTicketButton = document.querySelector("[data-publish-ticket]");
   const ticketChannelInput = document.querySelector("[data-ticket-channel]");
-  // Offre unique : soit Premium actif, soit aucun abonnement.
-  const PREMIUM_OFFER = {
-    price: 29.99,
-    priceLabel: "29,99 €",
-    durationMonths: 5,
-    durationLabel: "5 mois"
-  };
-  const premiumUnlimitedLimit = Number.POSITIVE_INFINITY;
-  const premiumTierLimits = {
-    free: premiumUnlimitedLimit,
-    premium: premiumUnlimitedLimit
-  };
-  const premiumTierLabels = {
-    free: "Sans abonnement",
-    premium: "Premium"
-  };
-  function normalizePremiumTierValue(value) {
-    const normalized = String(value || "").trim().toLowerCase().replace(/[\s-]+/g, "_");
-    if (!normalized) return "";
-    // Les anciens paliers (ultra, partner…) deviennent tous « premium »
-    return ["free", "gratuit", "none", "aucun"].includes(normalized) ? "free" : "premium";
-  }
-
-  // État renvoyé par l'API (/api/guilds ou /api/me)
-  let premiumState = {
-    plan: "free",
-    active: false,
-    expires_at: null,
-    days_left: 0,
-    price_label: PREMIUM_OFFER.priceLabel,
-    duration: PREMIUM_OFFER.durationLabel
-  };
-
-  // Sans abonnement : tout le socle de protection reste accessible et fonctionnel.
-  const freePanels = new Set([
-    "overview", "premium", "security", "backups", "logs",
-    "channels", "moderation", "language"
-  ]);
-  // Premium : ajoute les modules communautaires et d'automatisation.
-  const premiumPanels = new Set([
-    ...freePanels,
-    "tickets", "welcome", "reactionroles", "recurring", "socials", "ratings"
-  ]);
   let activePanelName = "overview";
   let hasUnsavedChanges = false;
   let dirtyPanelName = null;
@@ -1613,12 +1383,6 @@ function initDashboard() {
   };
   let dashboardGuilds = [];
   let dashboardResources = { channels: [], roles: [] };
-  let premiumTier = normalizePremiumTierValue(requestedOfferPlan) || readStoredPremiumTier();
-  if (premiumTierSelect) premiumTierSelect.value = premiumTier;
-  if (requestedOfferPlan) {
-    sessionStorage.setItem("modbot-selected-offer", premiumTier);
-    localStorage.setItem("modbot-dashboard-premium-tier", premiumTier);
-  }
 
   function showToast(message) {
     if (!toast) return;
@@ -1684,73 +1448,21 @@ function initDashboard() {
   }
 
 
-  function readStoredPremiumTier() {
-    const stored = localStorage.getItem("modbot-dashboard-premium-tier") || "free";
-    return Object.hasOwn(premiumTierLimits, stored) ? stored : "free";
-  }
 
-  function getPremiumTier() {
-    return premiumTierSelect?.value || premiumTier || "free";
-  }
 
-  function getPremiumLimit() {
-    return premiumTierLimits[getPremiumTier()] || premiumUnlimitedLimit;
-  }
 
-  function getPremiumLimitLabel() {
-    return "∞";
-  }
 
-  function isPanelAllowed(panelName) {
-    // Offre gratuite : toute la protection. Premium : + modules communautaires.
-    return premiumState.active ? premiumPanels.has(panelName) : freePanels.has(panelName);
-  }
-
-  const PREMIUM_PANEL_PITCH = {
-    tickets: "Ouvre un support Discord complet : catégories, priorités, transcripts et évaluations.",
-    welcome: "Accueille tes membres avec des cartes et messages personnalisés à l'arrivée et au départ.",
-    reactionroles: "Laisse tes membres choisir leurs rôles en cliquant sur une réaction.",
-    recurring: "Publie automatiquement des messages à intervalle régulier.",
-    socials: "Annonce automatiquement tes lives Twitch, vidéos YouTube et posts TikTok.",
-    ratings: "Recueille l'avis des membres après chaque ticket fermé."
-  };
-
-  /** Voile d'incitation affiché par-dessus un panneau réservé au Premium. */
-  function renderPremiumLock(panel) {
-    if (!panel || panel.querySelector(".premium-lock")) return;
-    const nom = panel.dataset.dashboardPanel;
-    const overlay = document.createElement("div");
-    overlay.className = "premium-lock";
-    overlay.innerHTML = `
-      <div class="premium-lock-card">
-        <span class="premium-lock-badge">💎 Premium</span>
-        <h3>Module réservé à l'offre Premium</h3>
-        <p>${escapeHtml(PREMIUM_PANEL_PITCH[nom] || "Ce module fait partie de l'offre Premium.")}</p>
-        <p class="premium-lock-price"><strong>29,99 €</strong> pour 5 mois · serveurs illimités</p>
-        <button class="primary-btn" type="button" data-dashboard-jump="premium">Voir l'offre Premium</button>
-        <small>La protection de ton serveur reste entièrement gratuite.</small>
-      </div>`;
-    panel.appendChild(overlay);
-  }
-
+  /**
+   * Tous les modules sont gratuits : il n'y a plus d'offre payante.
+   * Le projet vit désormais des dons.
+   */
   function applyPanelAccess() {
     tabs.forEach((tab) => {
-      const locked = !isPanelAllowed(tab.dataset.dashboardTab);
-      tab.classList.toggle("is-locked", locked);
-      // Les onglets restent cliquables : on montre ce que Premium apporte
-      // plutôt que de désactiver sans explication.
+      tab.classList.remove("is-locked");
       tab.setAttribute("aria-disabled", "false");
-      tab.title = locked ? "Module Premium — clique pour en savoir plus" : "";
+      tab.title = "";
     });
-
     panels.forEach((panel) => {
-      const locked = !isPanelAllowed(panel.dataset.dashboardPanel);
-      panel.classList.toggle("is-premium-locked", locked);
-      if (locked) {
-        renderPremiumLock(panel);
-      } else {
-        panel.querySelector(".premium-lock")?.remove();
-      }
     });
   }
 
@@ -2156,30 +1868,15 @@ function initDashboard() {
   }
 
 
-  // Abonnement par serveur : chaque entrée porte son propre état Premium
-  const guildPremium = new Map();
 
-  /** Applique l'état Premium du serveur actuellement ouvert. */
-  function applyPremiumForSelectedGuild() {
-    const etat = guildPremium.get(selectedServer.id);
-    premiumState = etat
-      ? { ...premiumState, ...etat }
-      : { ...premiumState, plan: "free", active: false, expires_at: null, days_left: 0 };
-    premiumTier = premiumState.active ? "premium" : "free";
-    if (premiumTierSelect) premiumTierSelect.value = premiumTier;
-    renderPremiumStatus();
-  }
 
   async function loadDashboardGuilds() {
     const data = await modbotApiFetch("/api/guilds", { cache: "no-store" });
     const brut = Array.isArray(data?.guilds) ? data.guilds : [];
     brut.forEach((g) => {
-      if (g?.id && g.premium) guildPremium.set(String(g.id), g.premium);
     });
     dashboardGuilds = normalizeDashboardGuilds(brut);
-    applyPremiumForSelectedGuild();
     renderGuildChoices(dashboardGuilds);
-    renderPremiumAssociations();
     return dashboardGuilds;
   }
 
@@ -2452,12 +2149,6 @@ function initDashboard() {
       if (languageSelect) languageSelect.value = config.language === "en" ? "English" : "Français";
     }
 
-    const incomingTier = config.premium_tier || config.premium_plan;
-    if (incomingTier) {
-      premiumTier = Object.hasOwn(premiumTierLimits, incomingTier) ? incomingTier : premiumTier;
-      if (premiumTierSelect) premiumTierSelect.value = premiumTier;
-      renderPremiumAssociations();
-    }
 
     if (Array.isArray(config.recurring_messages)) {
       const recurringList = document.querySelector("[data-recurring-list]");
@@ -2545,9 +2236,6 @@ function initDashboard() {
       await loadDashboardResources(guildId);
       const data = await modbotApiFetch(`/api/guilds/${guildId}/config`, { cache: "no-store" });
       applyDashboardConfig(data.config);
-      // L'abonnement appartient au serveur : on applique celui-ci
-      if (data.premium) guildPremium.set(String(guildId), data.premium);
-      applyPremiumForSelectedGuild();
       showToast("✅ Configuration chargée depuis le bot");
     } catch (error) {
       showToast("⚠️ Configuration locale affichée, connexion bot non disponible");
@@ -3343,9 +3031,8 @@ function initDashboard() {
       recurring_messages: recurringMessages,
       social_relays: socialRelays,
       language: languageValue === "English" ? "en" : "fr",
-      // Ni premium_servers, ni premium_tier, ni personnalisation, ni tournoi :
-      // ces réglages ne sont plus pilotés depuis le dashboard utilisateur.
-      // Les envoyer écraserait des valeurs gérées côté administration.
+      // Les reglages retires ne sont plus envoyes : les omettre evite
+    // d ecraser des valeurs gerees ailleurs.
     };
   }
 
@@ -3359,41 +3046,7 @@ function initDashboard() {
   }
 
 
-  /** Met à jour l'encart d'état de l'abonnement Premium. */
-  function renderPremiumStatus() {
-    const active = Boolean(premiumState.active);
-    const card = document.querySelector("[data-premium-status]");
-    const badge = document.querySelector("[data-premium-state-badge]");
-    const expiry = document.querySelector("[data-premium-expiry]");
-    const remaining = document.querySelector("[data-premium-remaining]");
-    const priceEl = document.querySelector("[data-premium-price]");
-    const durationEl = document.querySelector("[data-premium-duration]");
 
-    if (card) card.dataset.active = active ? "true" : "false";
-    if (badge) {
-      badge.textContent = active ? "🟢 Premium actif" : "⚪ Aucun abonnement";
-      badge.dataset.level = active ? "ok" : "idle";
-    }
-    if (priceEl) priceEl.textContent = premiumState.price_label || PREMIUM_OFFER.priceLabel;
-    if (durationEl) durationEl.textContent = premiumState.duration || PREMIUM_OFFER.durationLabel;
-    if (expiry) expiry.textContent = active ? formatIsoDateFr(premiumState.expires_at) : "—";
-    if (remaining) {
-      const days = Number(premiumState.days_left || 0);
-      remaining.textContent = active ? `${days} jour${days > 1 ? "s" : ""}` : "—";
-      remaining.dataset.level = active && days <= 14 ? "warn" : "ok";
-    }
-    // L'accès aux modules suit immédiatement l'état de l'abonnement
-    applyPanelAccess();
-  }
-
-  /**
-   * Rafraîchit l'affichage Premium. L'association des serveurs est gérée
-   * côté administration : le dashboard n'en affiche plus que l'état.
-   */
-  function renderPremiumAssociations() {
-    renderPremiumStatus();
-    applyPanelAccess();
-  }
 
 
 
@@ -3511,10 +3164,6 @@ function initDashboard() {
     activePanelName = panelName;
     tabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.dashboardTab === panelName));
     panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.dashboardPanel === panelName));
-    // Un panneau Premium s'ouvre quand même : le voile explique ce qu'il apporte.
-    if (!isPanelAllowed(panelName)) {
-      showToast("💎 Module Premium — la protection reste gratuite");
-    }
     document.querySelector(".dashboard-content")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -3588,7 +3237,6 @@ function initDashboard() {
     clearUnsavedChanges();
     ticketNeedsPublish = false;
     setTicketPublishVisible(false);
-    if (requestedOfferPlan) openPanel("premium");
   }
 
   document.querySelector(".server-picker .server-grid")?.addEventListener("click", (event) => {
@@ -3601,7 +3249,6 @@ function initDashboard() {
 
 
 
-  renderPremiumAssociations();
 
 
 

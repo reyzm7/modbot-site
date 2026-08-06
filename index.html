@@ -67,7 +67,7 @@
       <div class="nav-links" id="navLinks">
         <a href="#features" data-i18n="nav.features">Fonctionnalités</a>
         <a href="#demo" data-i18n="nav.demo">Démo</a>
-        <a href="#pricing" data-i18n="nav.pricing">Tarifs</a>
+        <a href="#donate" data-i18n="nav.pricing">Soutenir</a>
         <a href="wiki.html" data-i18n="nav.wiki">Wiki</a>
         <a class="nav-action-btn nav-admin-btn" href="admin.html"><span>🔐</span><span data-i18n="nav.admin">Admin</span></a>
         <a href="#partners">Partenaires</a>
@@ -224,65 +224,36 @@
       </div>
     </section>
 
-    <section id="pricing" class="pricing section-shell">
+    <section id="donate" class="pricing section-shell">
       <div class="section-heading">
-        <p class="eyebrow" data-i18n="pricing.eyebrow">Tarifs</p>
-        <h2 data-i18n="pricing.title">La protection est gratuite. Pour toujours.</h2>
-        <p data-i18n="pricing.copy">Sécurisez votre serveur sans payer. Passez Premium quand vous voulez les modules communautaires.</p>
+        <p class="eyebrow" data-i18n="donate.eyebrow">Soutien</p>
+        <h2 data-i18n="donate.title">ModBot est entièrement gratuit</h2>
+        <p data-i18n="donate.copy">Toutes les fonctionnalités, sur tous les serveurs, sans limite de durée. Si le bot vous est utile, un don aide à payer l'hébergement.</p>
       </div>
 
-      <div class="pricing-duo">
-        <article class="price-card is-free">
-          <div class="price-head">
-            <h3 data-i18n="pricing.free.title">Protection</h3>
-            <p data-i18n="pricing.free.copy">Tout ce qui protège votre serveur, sans limite de temps ni de serveurs.</p>
-          </div>
-
-          <div class="price">
-            <span class="price-amount" data-i18n="pricing.free.amount">Gratuit</span>
-            <span class="price-period" data-i18n="pricing.free.period">pour toujours</span>
-          </div>
-          <p class="price-note" data-i18n="pricing.free.note">Aucune carte bancaire, aucune limite de durée.</p>
-
-          <ul class="price-features">
-            <li data-i18n="pricing.free.item1">Anti-raid et détection de comptes suspects</li>
-            <li data-i18n="pricing.free.item2">Anti-nuke avec restauration automatique</li>
-            <li data-i18n="pricing.free.item3">Filtre de langage anti-contournement</li>
-            <li data-i18n="pricing.free.item4">Sanctions graduées et historique</li>
-            <li data-i18n="pricing.free.item5">Système de logs complet</li>
-            <li data-i18n="pricing.free.item6">Sauvegardes et restauration du serveur</li>
-          </ul>
-
-          <a class="secondary-btn stretch" href="dashboard.html?flow=offer&plan=free" data-discord-bot-invite data-offer-plan="free" data-i18n="pricing.free.cta">Commencer gratuitement</a>
-          <p class="price-support" data-i18n="pricing.free.support">Invitez ModBot, la protection est active immédiatement.</p>
-        </article>
-
-        <article class="price-card premium is-highlight">
-          <span class="premium-ribbon" data-i18n="pricing.premium.ribbon">Premium</span>
+      <div class="pricing-solo">
+        <article class="price-card premium is-solo is-donate">
+          <span class="premium-ribbon" data-i18n="donate.ribbon">Gratuit</span>
 
           <div class="price-head">
-            <h3 data-i18n="pricing.premium.title">Premium</h3>
-            <p data-i18n="pricing.premium.copy">Toute la protection, plus les modules communautaires et l'automatisation.</p>
+            <h3 data-i18n="donate.card.title">Tout est inclus</h3>
+            <p data-i18n="donate.card.copy">Aucune fonctionnalité n'est réservée, aucun paiement n'est demandé.</p>
           </div>
-
-          <div class="price">
-            <span class="price-amount">29,99&nbsp;€</span>
-            <span class="price-period" data-i18n="pricing.premium.period">pour 5 mois</span>
-          </div>
-          <p class="price-note" data-i18n="pricing.premium.note">Paiement unique — aucun renouvellement automatique.</p>
 
           <ul class="price-features">
-            <li class="is-inherited" data-i18n="pricing.premium.item0">Toute la protection gratuite incluse</li>
-            <li data-i18n="pricing.premium.item1">Système de tickets et évaluations</li>
-            <li data-i18n="pricing.premium.item2">Messages d'arrivée et de départ personnalisés</li>
-            <li data-i18n="pricing.premium.item3">Rôles réactions et messages récurrents</li>
-            <li data-i18n="pricing.premium.item4">Alertes réseaux sociaux et tournois</li>
-            <li data-i18n="pricing.premium.item5">Personnalisation complète des embeds</li>
-            <li data-i18n="pricing.premium.item6">Serveurs illimités</li>
+            <li data-i18n="donate.item1">Anti-raid et anti-nuke avec restauration</li>
+            <li data-i18n="donate.item2">Filtre de langage anti-contournement</li>
+            <li data-i18n="donate.item3">Sanctions graduées et historique</li>
+            <li data-i18n="donate.item4">Système de logs complet</li>
+            <li data-i18n="donate.item5">Sauvegardes et restauration du serveur</li>
+            <li data-i18n="donate.item6">Tickets, ratings et alertes réseaux</li>
+            <li data-i18n="donate.item7">Dashboard web et serveurs illimités</li>
           </ul>
 
-          <a class="primary-btn stretch" href="dashboard.html?flow=offer&plan=premium" data-discord-bot-invite data-offer-plan="premium" data-i18n="pricing.premium.cta">Passer Premium</a>
-          <p class="price-support" data-i18n="pricing.premium.support">Activation via un ticket sur notre serveur Discord.</p>
+          <a class="primary-btn stretch" href="https://paypal.me/hazkes" target="_blank" rel="noreferrer noopener" data-i18n="donate.cta">
+            💛 Faire un don
+          </a>
+          <p class="price-support" data-i18n="donate.note">Le don est libre et facultatif. Il ne débloque rien : tout est déjà accessible.</p>
         </article>
       </div>
     </section>
