@@ -7721,11 +7721,18 @@ label,
    ASSISTANT IA
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
+/* La spécificité est volontairement portée à .dashboard-page :
+   `.dashboard-page button` impose position:relative avec une spécificité
+   supérieure (0,1,1), ce qui renvoyait le lanceur en bas du flux, hors écran.
+   Il doit rester visible en permanence, quel que soit le défilement. */
+.dashboard-page .ai-launcher,
 .ai-launcher {
   position: fixed;
   right: 22px;
   bottom: 22px;
-  z-index: 60;
+  z-index: 80;
+  /* Annule l'overflow/isolation hérités de la règle générique des boutons */
+  overflow: visible;
   display: inline-flex;
   align-items: center;
   gap: 9px;
@@ -7758,8 +7765,8 @@ label,
 .ai-assistant {
   position: fixed;
   right: 22px;
-  bottom: 84px;
-  z-index: 61;
+  bottom: 88px;
+  z-index: 81;
   display: flex;
   flex-direction: column;
   width: min(400px, calc(100vw - 32px));
@@ -8105,3 +8112,17 @@ label,
   .giveaway-list { grid-template-columns: minmax(0, 1fr); }
 }
 
+
+/* Le toast occupait le coin bas droit, exactement sous le lanceur de
+   l'assistant. Il passe à gauche : les deux restent lisibles ensemble. */
+.dashboard-page .dashboard-toast {
+  right: auto;
+  left: 22px;
+}
+
+@media (max-width: 560px) {
+  .dashboard-page .dashboard-toast {
+    left: 14px;
+    right: 78px;
+  }
+}
