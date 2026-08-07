@@ -11,224 +11,10 @@ const modbotBotPermissions = String(window.MODBOT_BOT_PERMISSIONS || document.qu
 const modbotDefaultLogo = "assets/default_logo.svg";
 const modbotDefaultBanner = "assets/default_banner.svg";
 
-const siteTranslations = {
-  fr: {
-    "nav.features": "Fonctionnalités",
-    "nav.demo": "Démo",
-    "nav.pricing": "Tarifs",
-    "nav.wiki": "Wiki",
-    "nav.admin": "Admin",
-    "nav.dashboard": "Dashboard",
-    "nav.cta": "Ajouter ModBot",
-    "hero.eyebrow": "Protection Discord 24/7",
-    "hero.lead": "La modération intelligente qui protège votre communauté, automatise les sanctions, gère les tickets et garde votre serveur clair, sain et réactif.",
-    "hero.primary": "Ajouter ModBot à mon serveur",
-    "hero.dashboard": "Accéder au dashboard",
-    "hero.demo": "Essayer les commandes",
-    "stats.protection": "Protection active",
-    "stats.headline": "personnes protégées dans le monde entier",
-    "stats.loading": "Chiffres en direct depuis ModBot…",
-    "stats.servers": "Serveurs protégés",
-    "stats.countries": "Pays représentés",
-    "stats.note": "Répartition estimée d'après la langue configurée sur chaque serveur Discord.",
-    "stats.config": "Configuration personnalisée",
-    "stats.evolutions": "Évolutions possibles",
-    "features.eyebrow": "Fonctionnalités",
-    "features.title": "Tout ce qu’il faut pour tenir un serveur propre.",
-    "features.moderation.title": "Modération",
-    "features.moderation.copy": "Warn, ban, deban, sanctions graduées et historique complet des actions.",
-    "features.tickets.title": "Tickets",
-    "features.tickets.copy": "Support intégré avec ouverture, suivi et fermeture de tickets depuis Discord.",
-    "features.stats.title": "Statistiques",
-    "features.stats.copy": "Analyse des membres, activité modération et indicateurs serveur utiles.",
-    "features.announcements.title": "Annonces",
-    "features.announcements.copy": "Publication d’annonces, changelogs, patch notes et messages propres.",
-    "features.translation.title": "Traduction",
-    "features.translation.copy": "Traduction rapide pour aider les membres à communiquer sans friction.",
-    "features.suggestions.title": "Suggestions",
-    "features.suggestions.copy": "Collecte et suivi des idées proposées par votre communauté.",
-    "features.panel.title": "Panel Admin",
-    "features.panel.copy": "Gestion rapide des réglages et des outils importants du serveur.",
-    "features.development.title": "Automatisations",
-    "features.development.copy": "Messages récurrents, rôles réactions, arrivées et départs configurables.",
-    "nav.pricing": "Soutenir",
-    "donate.eyebrow": "Soutien",
-    "donate.title": "ModBot est entièrement gratuit",
-    "donate.copy": "Toutes les fonctionnalités, sur tous les serveurs, sans limite de durée. Si le bot vous est utile, un don aide à payer l'hébergement.",
-    "donate.ribbon": "Gratuit",
-    "donate.card.title": "Tout est inclus",
-    "donate.card.copy": "Aucune fonctionnalité n'est réservée, aucun paiement n'est demandé.",
-    "donate.item1": "Anti-raid et anti-nuke avec restauration",
-    "donate.item2": "Filtre de langage anti-contournement",
-    "donate.item3": "Sanctions graduées et historique",
-    "donate.item4": "Système de logs complet",
-    "donate.item5": "Sauvegardes et restauration du serveur",
-    "donate.item6": "Tickets, ratings et alertes réseaux",
-    "donate.item7": "Dashboard web et serveurs illimités",
-    "donate.cta": "💛 Faire un don",
-    "donate.note": "Le don est libre et facultatif. Il ne débloque rien : tout est déjà accessible.",
-    "donate.invite": "➕ Ajouter ModBot à mon serveur",
-    "admin.eyebrow": "Administration",
-    "admin.title": "Centre administrateur du site",
-    "admin.copy": "Suivez l’activité du site, gérez les administrateurs, la blacklist et les serveurs où ModBot est installé.",
-    "admin.access.title": "🔐 Accès admin",
-    "admin.access.copy": "Entre ton identifiant Discord administrateur pour ouvrir l’espace de gestion.",
-    "admin.access.label": "ID Discord administrateur",
-    "admin.access.button": "Déverrouiller",
-    "admin.stats.title": "📈 Stats du site",
-    "admin.stats.visits": "Visites",
-    "admin.stats.today": "Aujourd’hui",
-    "admin.stats.dashboard": "Ouvertures dashboard",
-    "admin.stats.installs": "Serveurs ModBot",
-    "admin.servers.title": "🧭 Serveurs détectés",
-    "admin.servers.refresh": "Rafraîchir",
-    "admin.servers.copy": "Quand le backend sera branché au bot Discord, cette zone affichera automatiquement les logos réels des serveurs via les données `bot.guilds`."
-  },
-  en: {
-    "nav.features": "Features",
-    "nav.demo": "Demo",
-    "nav.pricing": "Pricing",
-    "nav.wiki": "Wiki",
-    "nav.admin": "Admin",
-    "nav.dashboard": "Dashboard",
-    "nav.cta": "Add ModBot",
-    "hero.eyebrow": "Discord protection 24/7",
-    "hero.lead": "Smart moderation that protects your community, automates sanctions, manages tickets, and keeps your server clear, healthy, and responsive.",
-    "hero.primary": "Add ModBot to my server",
-    "hero.dashboard": "Open dashboard",
-    "hero.demo": "Try commands",
-    "stats.protection": "Active protection",
-    "stats.headline": "people protected worldwide",
-    "stats.loading": "Live figures from ModBot…",
-    "stats.servers": "Protected servers",
-    "stats.countries": "Countries represented",
-    "stats.note": "Distribution estimated from the language configured on each Discord server.",
-    "stats.config": "Custom configuration",
-    "stats.evolutions": "Possible evolutions",
-    "features.eyebrow": "Features",
-    "features.title": "Everything needed to keep a server clean.",
-    "features.moderation.title": "Moderation",
-    "features.moderation.copy": "Warn, ban, unban, progressive sanctions and full action history.",
-    "features.tickets.title": "Tickets",
-    "features.tickets.copy": "Built-in support with ticket opening, tracking and closing from Discord.",
-    "features.stats.title": "Statistics",
-    "features.stats.copy": "Member analysis, moderation activity and useful server indicators.",
-    "features.announcements.title": "Announcements",
-    "features.announcements.copy": "Publish announcements, changelogs, patch notes and clean messages.",
-    "features.translation.title": "Translation",
-    "features.translation.copy": "Fast translation to help members communicate without friction.",
-    "features.suggestions.title": "Suggestions",
-    "features.suggestions.copy": "Collect and track ideas proposed by your community.",
-    "features.panel.title": "Admin Panel",
-    "features.panel.copy": "Quick management of important server settings and tools.",
-    "features.development.title": "Automations",
-    "features.development.copy": "Recurring messages, reaction roles, welcome and departure messages you can configure.",
-    "nav.pricing": "Support us",
-    "donate.eyebrow": "Support",
-    "donate.title": "ModBot is completely free",
-    "donate.copy": "Every feature, on every server, with no time limit. If the bot is useful to you, a donation helps cover hosting.",
-    "donate.ribbon": "Free",
-    "donate.card.title": "Everything included",
-    "donate.card.copy": "No feature is locked, no payment is required.",
-    "donate.item1": "Anti-raid and anti-nuke with auto-restore",
-    "donate.item2": "Bypass-resistant language filter",
-    "donate.item3": "Graduated sanctions and history",
-    "donate.item4": "Complete logging system",
-    "donate.item5": "Server backups and restore",
-    "donate.item6": "Tickets, ratings and social alerts",
-    "donate.item7": "Web dashboard and unlimited servers",
-    "donate.cta": "💛 Donate",
-    "donate.note": "Donations are optional and unlock nothing — everything is already available.",
-    "donate.invite": "➕ Add ModBot to my server",
-    "admin.eyebrow": "Administration",
-    "admin.title": "Site administrator center",
-    "admin.copy": "Track site activity, manage administrators, the blacklist and the servers where ModBot is installed.",
-    "admin.access.title": "🔐 Admin access",
-    "admin.access.copy": "Enter your administrator Discord ID to open the management area.",
-    "admin.access.label": "Administrator Discord ID",
-    "admin.access.button": "Unlock",
-    "admin.stats.title": "📈 Site stats",
-    "admin.stats.visits": "Visits",
-    "admin.stats.today": "Today",
-    "admin.stats.dashboard": "Dashboard opens",
-    "admin.stats.installs": "ModBot servers",
-    "admin.servers.title": "🧭 Detected servers",
-    "admin.servers.refresh": "Refresh",
-    "admin.servers.copy": "When the backend is connected to the Discord bot, this area will automatically show real server logos from `bot.guilds` data."
-  },
-  ar: {
-    "nav.features": "الميزات",
-    "nav.demo": "تجربة",
-    "nav.pricing": "الأسعار",
-    "nav.wiki": "الويكي",
-    "nav.admin": "الإدارة",
-    "nav.dashboard": "لوحة التحكم",
-    "nav.cta": "إضافة ModBot",
-    "hero.eyebrow": "حماية ديسكورد 24/7",
-    "hero.lead": "إشراف ذكي يحمي مجتمعك، يدير التذاكر، وينظم الخادم بطريقة واضحة وسريعة.",
-    "hero.primary": "الحصول على ModBot",
-    "hero.dashboard": "فتح لوحة التحكم",
-    "hero.demo": "تجربة الأوامر",
-    "stats.protection": "حماية نشطة",
-    "stats.headline": "شخص محمي حول العالم",
-    "stats.loading": "أرقام مباشرة من ModBot…",
-    "stats.servers": "خوادم محمية",
-    "stats.countries": "دول ممثلة",
-    "stats.note": "توزيع تقديري بناءً على اللغة المضبوطة في كل خادم ديسكورد.",
-    "stats.config": "إعداد مخصص",
-    "stats.evolutions": "تطويرات ممكنة",
-    "features.eyebrow": "الميزات",
-    "features.title": "كل ما تحتاجه للحفاظ على خادم منظم.",
-    "features.moderation.title": "الإشراف",
-    "features.moderation.copy": "تحذير، حظر، رفع حظر، عقوبات تدريجية وسجل كامل للإجراءات.",
-    "features.tickets.title": "التذاكر",
-    "features.tickets.copy": "دعم مدمج مع فتح وتتبع وإغلاق التذاكر من Discord.",
-    "features.stats.title": "الإحصائيات",
-    "features.stats.copy": "تحليل الأعضاء ونشاط الإشراف ومؤشرات مفيدة للخادم.",
-    "features.announcements.title": "الإعلانات",
-    "features.announcements.copy": "نشر الإعلانات وسجلات التغيير وملاحظات التحديث ورسائل منظمة.",
-    "features.translation.title": "الترجمة",
-    "features.translation.copy": "ترجمة سريعة لمساعدة الأعضاء على التواصل بسهولة.",
-    "features.suggestions.title": "الاقتراحات",
-    "features.suggestions.copy": "جمع ومتابعة الأفكار المقترحة من مجتمعك.",
-    "features.panel.title": "لوحة الإدارة",
-    "features.panel.copy": "إدارة سريعة لإعدادات وأدوات الخادم المهمة.",
-    "features.development.title": "الأتمتة",
-    "features.development.copy": "رسائل متكررة، أدوار تفاعلية، ورسائل ترحيب ومغادرة قابلة للإعداد.",
-    "nav.pricing": "ادعمنا",
-    "donate.eyebrow": "الدعم",
-    "donate.title": "ModBot مجاني بالكامل",
-    "donate.copy": "كل الميزات، على كل الخوادم، بدون حد زمني. إذا كان البوت مفيداً لك، فالتبرع يساعد في تغطية الاستضافة.",
-    "donate.ribbon": "مجاني",
-    "donate.card.title": "كل شيء مشمول",
-    "donate.card.copy": "لا توجد ميزة مقفلة، ولا يُطلب أي دفع.",
-    "donate.item1": "الحماية من الغارات والتخريب مع الاستعادة",
-    "donate.item2": "فلتر لغة مقاوم للتحايل",
-    "donate.item3": "عقوبات متدرجة وسجل المخالفات",
-    "donate.item4": "نظام سجلات كامل",
-    "donate.item5": "نسخ احتياطي واستعادة الخادم",
-    "donate.item6": "التذاكر والتقييمات وتنبيهات الشبكات",
-    "donate.item7": "لوحة تحكم ويب وخوادم غير محدودة",
-    "donate.cta": "💛 تبرّع",
-    "donate.note": "التبرع اختياري ولا يفتح أي شيء — كل شيء متاح بالفعل.",
-    "donate.invite": "➕ أضف ModBot إلى خادمي",
-    "admin.eyebrow": "الإدارة",
-    "admin.title": "مركز إدارة الموقع",
-    "admin.copy": "تابع نشاط الموقع، وأدر المسؤولين والقائمة السوداء والخوادم التي يوجد فيها ModBot.",
-    "admin.access.title": "🔐 دخول الإدارة",
-    "admin.access.copy": "أدخل معرف Discord للمسؤول لفتح مساحة الإدارة.",
-    "admin.access.label": "معرف Discord للمسؤول",
-    "admin.access.button": "فتح",
-    "admin.stats.title": "📈 إحصائيات الموقع",
-    "admin.stats.visits": "الزيارات",
-    "admin.stats.today": "اليوم",
-    "admin.stats.dashboard": "فتح لوحة التحكم",
-    "admin.stats.installs": "خوادم ModBot",
-    "admin.servers.title": "🧭 الخوادم المكتشفة",
-    "admin.servers.refresh": "تحديث",
-    "admin.servers.copy": "عند ربط الخلفية ببوت ديسكورد، ستظهر هنا شعارات الخوادم الحقيقية من بيانات `bot.guilds`."
-  }
-};
+// Les traductions vivent dans translations.js, charge avant ce fichier.
+// Repli sur un objet vide : une page sans translations.js reste utilisable,
+// elle affiche simplement les textes ecrits en dur dans le HTML.
+const siteTranslations = window.MODBOT_TRANSLATIONS || { fr: {}, en: {}, ar: {} };
 
 const commandResponses = {
   panel: {
@@ -636,38 +422,131 @@ function initNavigation() {
   const links = document.getElementById("navLinks");
   if (!toggle || !links) return;
 
+  // Voile cliquable derrière le panneau, créé une seule fois.
+  let backdrop = document.querySelector(".nav-backdrop");
+  if (!backdrop) {
+    backdrop = document.createElement("div");
+    backdrop.className = "nav-backdrop";
+    backdrop.setAttribute("aria-hidden", "true");
+    document.body.appendChild(backdrop);
+  }
+
+  function setMenuOpen(ouvert) {
+    links.classList.toggle("is-open", ouvert);
+    backdrop.classList.toggle("is-open", ouvert);
+    // Le verrou du défilement évite que la page glisse sous le panneau.
+    document.body.classList.toggle("nav-open", ouvert);
+    toggle.setAttribute("aria-expanded", String(ouvert));
+    toggle.setAttribute("aria-label", ouvert ? "Fermer le menu" : "Ouvrir le menu");
+  }
+
   toggle.addEventListener("click", () => {
-    const isOpen = links.classList.toggle("is-open");
-    toggle.setAttribute("aria-expanded", String(isOpen));
+    setMenuOpen(!links.classList.contains("is-open"));
   });
 
+  backdrop.addEventListener("click", () => setMenuOpen(false));
+
   links.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      links.classList.remove("is-open");
-      toggle.setAttribute("aria-expanded", "false");
-    });
+    link.addEventListener("click", () => setMenuOpen(false));
   });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && links.classList.contains("is-open")) {
+      setMenuOpen(false);
+      toggle.focus();
+    }
+  });
+
+  // Repasser en grand écran doit remettre la page dans un état sain :
+  // sans cela, le verrou de défilement resterait actif.
+  const grandEcran = window.matchMedia("(min-width: 901px)");
+  const surChangement = (event) => { if (event.matches) setMenuOpen(false); };
+  if (grandEcran.addEventListener) grandEcran.addEventListener("change", surChangement);
+  else grandEcran.addListener(surChangement);
+}
+
+const LANGUE_PAR_DEFAUT = "fr";
+const CLEF_LANGUE = "modbot-site-language";
+
+/** Langue retenue : celle choisie, sinon celle du navigateur, sinon le français. */
+function getSiteLanguage() {
+  const enregistree = localStorage.getItem(CLEF_LANGUE);
+  if (enregistree && siteTranslations[enregistree]) return enregistree;
+  const navigateur = (navigator.language || "").slice(0, 2).toLowerCase();
+  return siteTranslations[navigateur] ? navigateur : LANGUE_PAR_DEFAUT;
+}
+
+/** Texte traduit, avec repli sur le français puis sur la clef elle-même. */
+function t(clef, repli = "") {
+  const langue = getSiteLanguage();
+  return (siteTranslations[langue] || {})[clef]
+      || (siteTranslations[LANGUE_PAR_DEFAUT] || {})[clef]
+      || repli
+      || clef;
+}
+
+/**
+ * Applique une langue à toute la page.
+ *
+ * Quatre attributs sont pris en charge : le contenu, le placeholder, le
+ * title et l'aria-label. Une clef absente laisse le texte du HTML en place
+ * plutôt que de vider l'élément.
+ */
+function applySiteLanguage(language) {
+  const dictionnaire = siteTranslations[language] || siteTranslations[LANGUE_PAR_DEFAUT] || {};
+  const repli = siteTranslations[LANGUE_PAR_DEFAUT] || {};
+  const lire = (clef) => dictionnaire[clef] || repli[clef];
+
+  document.documentElement.lang = language;
+  document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const valeur = lire(element.dataset.i18n);
+    if (!valeur) return;
+    // Un élément qui contient d'autres balises (un <label> avec son champ,
+    // par exemple) ne doit surtout pas voir son textContent remplacé : cela
+    // supprimerait le champ. On ne remplace alors que son premier texte.
+    if (element.children.length) {
+      const noeudTexte = [...element.childNodes]
+        .find((n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim());
+      if (noeudTexte) noeudTexte.textContent = valeur;
+      return;
+    }
+    element.textContent = valeur;
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+    const valeur = lire(element.dataset.i18nPlaceholder);
+    if (valeur) element.setAttribute("placeholder", valeur);
+  });
+  document.querySelectorAll("[data-i18n-title]").forEach((element) => {
+    const valeur = lire(element.dataset.i18nTitle);
+    if (valeur) element.setAttribute("title", valeur);
+  });
+  document.querySelectorAll("[data-i18n-aria]").forEach((element) => {
+    const valeur = lire(element.dataset.i18nAria);
+    if (valeur) element.setAttribute("aria-label", valeur);
+  });
+
+  localStorage.setItem(CLEF_LANGUE, language);
+  // Les vues rendues en JavaScript doivent pouvoir se redessiner
+  document.dispatchEvent(new CustomEvent("modbot:language", { detail: { language } }));
 }
 
 function initSiteLanguage() {
-  const selector = document.getElementById("siteLanguage");
-  if (!selector) return;
+  const langue = getSiteLanguage();
+  applySiteLanguage(langue);
 
-  function applyLanguage(language) {
-    const dictionary = siteTranslations[language] || siteTranslations.fr;
-    document.documentElement.lang = language;
-    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
-    document.querySelectorAll("[data-i18n]").forEach((element) => {
-      const value = dictionary[element.dataset.i18n];
-      if (value) element.textContent = value;
+  // Chaque page peut porter son propre sélecteur ; ils restent synchronisés.
+  document.querySelectorAll("#siteLanguage, [data-language-select]").forEach((selecteur) => {
+    selecteur.value = langue;
+    selecteur.addEventListener("change", () => {
+      const choisie = selecteur.value;
+      applySiteLanguage(choisie);
+      document.querySelectorAll("#siteLanguage, [data-language-select]").forEach((autre) => {
+        autre.value = choisie;
+      });
     });
-    localStorage.setItem("modbot-site-language", language);
-  }
-
-  const savedLanguage = localStorage.getItem("modbot-site-language") || "fr";
-  selector.value = savedLanguage;
-  applyLanguage(savedLanguage);
-  selector.addEventListener("change", () => applyLanguage(selector.value));
+  });
 }
 
 function getStoredNumber(key, fallback = 0) {
@@ -1568,6 +1447,24 @@ function initDashboard() {
       if (current) captchaChannel.value = current;
     }
 
+    // Salons des messages d'arrivée et de départ.
+    // Les ressources arrivent parfois après la configuration : on retombe sur
+    // welcomeState, sinon la valeur enregistrée serait perdue à l'affichage.
+    [["[data-welcome-channel]", "— Aucun —", "channel_id"],
+     ["[data-welcome-departure-channel]", "— Même salon —", "departure_channel_id"]]
+      .forEach(([selecteur, vide, clef]) => {
+        const champ = document.querySelector(selecteur);
+        if (!champ) return;
+        const voulu = champ.value || welcomeState[clef] || "";
+        champ.innerHTML = `<option value="">${escapeHtml(vide)}</option>` +
+          dashboardResources.channels.map((channel) => (
+            `<option value="${escapeHtml(channel.id)}">${escapeHtml(channelLabel(channel))}</option>`
+          )).join("");
+        if (voulu) champ.value = voulu;
+      });
+
+    fillGiveawaySelects();
+
     document.querySelectorAll(".reaction-role-row input:nth-of-type(2)").forEach((input) => {
       input.setAttribute("list", "dashboardRoleOptions");
       input.placeholder = "ID du rôle ou @rôle";
@@ -2265,6 +2162,7 @@ function initDashboard() {
     renderDashboardStats(config);
     document.querySelectorAll("[data-dashboard-panel='channels'] .channel-row input").forEach(setInputState);
     syncWelcomePreview();
+    applyWelcomeState(welcome);
     renderReactionPreview();
   }
 
@@ -2282,8 +2180,13 @@ function initDashboard() {
     Promise.allSettled([
       loadGuildSecurity(guildId),
       loadGuildLogs(guildId),
-      loadGuildBackups(guildId)
+      loadGuildBackups(guildId),
+      loadGiveaways()
     ]);
+    // L'assistant repart de zéro : son contexte parlait de l'autre serveur.
+    aiHistory = [];
+    const salonsAi = document.querySelector("[data-ai-messages]");
+    if (salonsAi) salonsAi.innerHTML = "";
   }
 
   /* ══════════════════════════════════════════════════════════════════
@@ -2843,6 +2746,545 @@ function initDashboard() {
   }
 
   /* ══════════════════════════════════════════════════════════════════
+     BIENVENUE ET DÉPARTS
+     ══════════════════════════════════════════════════════════════════ */
+
+  const WELCOME_VARIABLES = [
+    { token: "{user}", label: "Mention du membre" },
+    { token: "{username}", label: "Nom du membre" },
+    { token: "{server}", label: "Nom du serveur" },
+    { token: "{memberCount}", label: "Nombre de membres" }
+  ];
+
+  let welcomeState = {};
+
+  /** Remplace les variables par un exemple, pour l'aperçu. */
+  function renderWelcomeTemplate(texte) {
+    const serveur = selectedServer.name || "Mon Serveur";
+    const membres = Number(selectedServer.member_count || 0) || 1248;
+    return String(texte || "")
+      .replace(/\{user\}/g, "@Lucas")
+      .replace(/\{username\}/g, "Lucas")
+      .replace(/\{server\}/g, serveur)
+      .replace(/\{memberCount\}/gi, membres.toLocaleString("fr-FR"))
+      .replace(/\{member_count\}/g, membres.toLocaleString("fr-FR"))
+      .replace(/\{tag\}/g, "Lucas#0001");
+  }
+
+  function renderWelcomePreview() {
+    const embedOn = readChecked("[data-welcome-embed-enabled]");
+    const conteneur = document.querySelector("[data-welcome-preview-embed]");
+    const titre = document.querySelector("[data-welcome-preview-title]");
+    const texte = document.querySelector("[data-welcome-preview-text]");
+    const image = document.querySelector("[data-welcome-preview-image]");
+    const pied = document.querySelector("[data-welcome-preview-footer]");
+    const bouton = document.querySelector("[data-welcome-preview-button]");
+    if (!conteneur) return;
+
+    const couleur = readValue("[data-welcome-color]") || "#5865F2";
+    conteneur.style.borderLeftColor = couleur;
+    conteneur.classList.toggle("is-plain", !embedOn);
+
+    if (titre) {
+      titre.textContent = renderWelcomeTemplate(readValue("[data-welcome-title]") || "👋 Bienvenue");
+      titre.hidden = !embedOn;
+    }
+    if (texte) {
+      texte.textContent = renderWelcomeTemplate(readValue("[data-welcome-message]"))
+        || "Écris un message pour voir l'aperçu.";
+    }
+
+    const url = readValue("[data-welcome-image]");
+    if (image) {
+      const valide = /^https?:\/\//.test(url);
+      image.hidden = !valide || !embedOn;
+      if (valide) image.src = url;
+    }
+    if (pied) {
+      const serveur = selectedServer.name || "Mon Serveur";
+      const membres = Number(selectedServer.member_count || 0) || 1248;
+      pied.textContent = embedOn ? `${serveur} — ${membres.toLocaleString("fr-FR")} membres` : "";
+    }
+
+    const lien = readValue("[data-welcome-button-url]");
+    const libelle = readValue("[data-welcome-button-label]");
+    if (bouton) {
+      const actif = /^https?:\/\//.test(lien);
+      bouton.hidden = !actif;
+      bouton.textContent = libelle || "En savoir plus";
+    }
+  }
+
+  function renderWelcomeVariables() {
+    const host = document.querySelector("[data-welcome-variables]");
+    if (!host) return;
+    host.innerHTML = WELCOME_VARIABLES.map((v) => (
+      `<button type="button" class="variable-chip" data-variable="${escapeHtml(v.token)}"
+               title="${escapeHtml(v.label)}">${escapeHtml(v.token)}</button>`
+    )).join("");
+
+    host.querySelectorAll("[data-variable]").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const zone = document.querySelector("[data-welcome-message]");
+        if (!zone) return;
+        // Insertion à la position du curseur plutôt qu'à la fin
+        const debut = zone.selectionStart ?? zone.value.length;
+        const fin = zone.selectionEnd ?? zone.value.length;
+        const jeton = chip.dataset.variable;
+        zone.value = zone.value.slice(0, debut) + jeton + zone.value.slice(fin);
+        zone.focus();
+        zone.setSelectionRange(debut + jeton.length, debut + jeton.length);
+        renderWelcomePreview();
+        markPanelDirty("welcome");
+      });
+    });
+  }
+
+  function applyWelcomeState(welcome = {}) {
+    welcomeState = welcome;
+    setChecked("[data-welcome-enabled]", welcome.enabled);
+    setChecked("[data-welcome-departure-enabled]", welcome.departure_enabled);
+    setChecked("[data-welcome-dm-enabled]", welcome.dm_enabled);
+    setChecked("[data-welcome-embed-enabled]", welcome.embed_enabled !== false);
+    setValue("[data-welcome-channel]", welcome.channel_id || "");
+    setValue("[data-welcome-departure-channel]", welcome.departure_channel_id || "");
+    setValue("[data-welcome-title]", welcome.title || "");
+    setValue("[data-welcome-message]", welcome.message || "");
+    setValue("[data-welcome-departure-message]", welcome.departure_message || "");
+    setValue("[data-welcome-dm-message]", welcome.dm_message || "");
+    setValue("[data-welcome-color]", welcome.embed_color || "#5865F2");
+    setValue("[data-welcome-image]", welcome.image || "");
+    setValue("[data-welcome-button-label]", welcome.button_label || "");
+    setValue("[data-welcome-button-url]", welcome.button_url || "");
+    renderWelcomePreview();
+  }
+
+  function collectWelcomePayload() {
+    return {
+      enabled: readChecked("[data-welcome-enabled]"),
+      departure_enabled: readChecked("[data-welcome-departure-enabled]"),
+      dm_enabled: readChecked("[data-welcome-dm-enabled]"),
+      embed_enabled: readChecked("[data-welcome-embed-enabled]"),
+      channel_id: readValue("[data-welcome-channel]"),
+      departure_channel_id: readValue("[data-welcome-departure-channel]"),
+      title: readValue("[data-welcome-title]"),
+      message: readValue("[data-welcome-message]"),
+      departure_message: readValue("[data-welcome-departure-message]"),
+      dm_message: readValue("[data-welcome-dm-message]"),
+      embed_color: readValue("[data-welcome-color]"),
+      image: readValue("[data-welcome-image]"),
+      button_label: readValue("[data-welcome-button-label]"),
+      button_url: readValue("[data-welcome-button-url]")
+    };
+  }
+
+  async function saveWelcome() {
+    const guildId = selectedServer.id;
+    if (!guildId) return showToast("⚠️ Sélectionne d'abord un serveur");
+
+    const lien = readValue("[data-welcome-button-url]");
+    if (lien && !/^https?:\/\//.test(lien)) {
+      return showToast("⚠️ Le lien du bouton doit commencer par https://");
+    }
+    if (readChecked("[data-welcome-enabled]") && !readValue("[data-welcome-channel]")) {
+      return showToast("⚠️ Choisis le salon des messages d'arrivée");
+    }
+
+    try {
+      await modbotApiFetch(`/api/guilds/${guildId}/config`, {
+        method: "PUT",
+        body: JSON.stringify({ welcome_system: collectWelcomePayload() })
+      });
+      clearUnsavedChanges();
+      showToast("👋 Messages de bienvenue enregistrés");
+    } catch (error) {
+      showToast(`⚠️ ${error?.message || "Enregistrement impossible"}`);
+    }
+  }
+
+  function initWelcomePanel() {
+    if (!document.querySelector("[data-dashboard-panel='welcome']")) return;
+    renderWelcomeVariables();
+
+    const champs = [
+      "[data-welcome-title]", "[data-welcome-message]", "[data-welcome-color]",
+      "[data-welcome-image]", "[data-welcome-button-label]", "[data-welcome-button-url]",
+      "[data-welcome-embed-enabled]"
+    ];
+    champs.forEach((selecteur) => {
+      const element = document.querySelector(selecteur);
+      element?.addEventListener("input", renderWelcomePreview);
+      element?.addEventListener("change", renderWelcomePreview);
+    });
+
+    document.querySelector("[data-welcome-save]")?.addEventListener("click", saveWelcome);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     GIVEAWAYS
+     ══════════════════════════════════════════════════════════════════ */
+
+  let giveawayList = [];
+  let giveawayEditing = null;
+
+  function formatCountdown(secondes) {
+    if (secondes <= 0) return "terminé";
+    const j = Math.floor(secondes / 86400);
+    const h = Math.floor((secondes % 86400) / 3600);
+    const m = Math.floor((secondes % 3600) / 60);
+    if (j) return `${j} j ${h} h`;
+    if (h) return `${h} h ${m} min`;
+    return `${m} min`;
+  }
+
+  function renderGiveaways() {
+    const host = document.querySelector("[data-giveaway-list]");
+    const compteur = document.querySelector("[data-giveaway-count]");
+    if (!host) return;
+
+    const enCours = giveawayList.filter((g) => !g.ended).length;
+    if (compteur) compteur.textContent = giveawayList.length ? `${enCours} en cours` : "";
+
+    if (!giveawayList.length) {
+      host.innerHTML = `
+        <div class="dashboard-empty-state">
+          <strong>Aucun giveaway</strong>
+          <span>Crée-en un, ou lance <code>/giveaway create</code> dans Discord.</span>
+        </div>`;
+      return;
+    }
+
+    host.innerHTML = giveawayList.map((g) => {
+      const conditions = [];
+      const req = g.requirements || {};
+      if (req.role_id) conditions.push("rôle requis");
+      if (req.min_messages) conditions.push(`${req.min_messages} messages`);
+      if (req.min_account_days) conditions.push(`compte de ${req.min_account_days} j`);
+
+      const gagnants = (g.winners_picked || []).length
+        ? `<p class="giveaway-winners">🏆 ${g.winners_picked.map((u) => `<@${escapeHtml(u)}>`).join(" ")}</p>`
+        : "";
+
+      return `
+        <article class="giveaway-card ${g.ended ? "is-ended" : ""}" data-giveaway-id="${escapeHtml(g.id)}">
+          <div class="giveaway-head">
+            <div>
+              <h3>🎉 ${escapeHtml(g.prize || "Giveaway")}</h3>
+              <p class="field-help">
+                #${escapeHtml(g.channel_name || "?")} ·
+                ${g.ended ? "terminé" : `fin dans ${formatCountdown(g.seconds_left)}`} ·
+                🏆 ${g.winners} · 👥 ${g.participants}
+              </p>
+            </div>
+            <span class="giveaway-state ${g.ended ? "is-ended" : "is-live"}">
+              ${g.ended ? "Terminé" : "En cours"}
+            </span>
+          </div>
+          ${conditions.length ? `<p class="giveaway-conditions">📋 ${escapeHtml(conditions.join(" · "))}</p>` : ""}
+          ${gagnants}
+          <div class="search-actions">
+            ${g.url ? `<a class="secondary-btn compact" href="${escapeHtml(g.url)}" target="_blank" rel="noreferrer">🔗 Voir</a>` : ""}
+            ${!g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-edit>✏️ Modifier</button>` : ""}
+            ${!g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-end>⏹️ Terminer</button>` : ""}
+            ${g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-reroll>🎲 Relancer</button>` : ""}
+            <button class="secondary-btn compact danger" type="button" data-giveaway-delete>🗑️ Supprimer</button>
+          </div>
+        </article>`;
+    }).join("");
+
+    host.querySelectorAll("[data-giveaway-id]").forEach((carte) => {
+      const id = carte.dataset.giveawayId;
+      carte.querySelector("[data-giveaway-edit]")?.addEventListener("click", () => openGiveawayForm(id));
+      carte.querySelector("[data-giveaway-end]")?.addEventListener("click", () => giveawayAction(id, "end"));
+      carte.querySelector("[data-giveaway-reroll]")?.addEventListener("click", () => giveawayAction(id, "reroll"));
+      carte.querySelector("[data-giveaway-delete]")?.addEventListener("click", () => deleteGiveaway(id, carte));
+    });
+  }
+
+  async function loadGiveaways() {
+    const guildId = selectedServer.id;
+    if (!guildId) return;
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/giveaways`, { cache: "no-store" });
+      giveawayList = data.giveaways || [];
+      renderGiveaways();
+    } catch (error) {
+      const host = document.querySelector("[data-giveaway-list]");
+      if (host) {
+        host.innerHTML = `
+          <div class="dashboard-empty-state">
+            <strong>Giveaways indisponibles</strong>
+            <span>${escapeHtml(error?.message || "Le bot n'a pas répondu.")}</span>
+          </div>`;
+      }
+    }
+  }
+
+  function fillGiveawaySelects() {
+    const salon = document.querySelector("[data-giveaway-channel]");
+    if (salon) {
+      const courant = salon.value;
+      salon.innerHTML = dashboardResources.channels.map((c) => (
+        `<option value="${escapeHtml(c.id)}">${escapeHtml(channelLabel(c))}</option>`
+      )).join("");
+      if (courant) salon.value = courant;
+    }
+    const role = document.querySelector("[data-giveaway-role]");
+    if (role) {
+      const courant = role.value;
+      role.innerHTML = `<option value="">— Aucun —</option>` + dashboardResources.roles.map((r) => (
+        `<option value="${escapeHtml(r.id)}">${escapeHtml(roleLabel(r))}</option>`
+      )).join("");
+      if (courant) role.value = courant;
+    }
+  }
+
+  function openGiveawayForm(id = null) {
+    const form = document.querySelector("[data-giveaway-form]");
+    if (!form) return;
+    giveawayEditing = id;
+    fillGiveawaySelects();
+
+    const titre = document.querySelector("[data-giveaway-form-title]");
+    const existant = id ? giveawayList.find((g) => g.id === id) : null;
+
+    if (existant) {
+      if (titre) titre.textContent = `✏️ Modifier : ${existant.prize}`;
+      setValue("[data-giveaway-prize]", existant.prize);
+      setValue("[data-giveaway-channel]", existant.channel_id);
+      setValue("[data-giveaway-duration]", Math.max(1, Math.round(existant.seconds_left / 60)));
+      setValue("[data-giveaway-winners]", existant.winners);
+      setValue("[data-giveaway-role]", (existant.requirements || {}).role_id || "");
+      setValue("[data-giveaway-min-messages]", (existant.requirements || {}).min_messages || 0);
+      setValue("[data-giveaway-min-account]", (existant.requirements || {}).min_account_days || 0);
+    } else {
+      if (titre) titre.textContent = "🎉 Nouveau giveaway";
+      form.reset();
+      setValue("[data-giveaway-duration]", 60);
+      setValue("[data-giveaway-winners]", 1);
+      fillGiveawaySelects();
+    }
+
+    form.hidden = false;
+    form.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    document.querySelector("[data-giveaway-prize]")?.focus();
+  }
+
+  function closeGiveawayForm() {
+    const form = document.querySelector("[data-giveaway-form]");
+    if (form) form.hidden = true;
+    giveawayEditing = null;
+  }
+
+  async function submitGiveaway(event) {
+    event.preventDefault();
+    const guildId = selectedServer.id;
+    if (!guildId) return showToast("⚠️ Sélectionne d'abord un serveur");
+
+    const charge = {
+      prize: readValue("[data-giveaway-prize]"),
+      channel_id: readValue("[data-giveaway-channel]"),
+      duration_minutes: readNumber("[data-giveaway-duration]", 60),
+      winners: readNumber("[data-giveaway-winners]", 1),
+      requirements: {
+        role_id: readValue("[data-giveaway-role]"),
+        min_messages: readNumber("[data-giveaway-min-messages]", 0),
+        min_account_days: readNumber("[data-giveaway-min-account]", 0)
+      }
+    };
+    if (!charge.prize) return showToast("⚠️ Indique la récompense");
+    if (!charge.channel_id) return showToast("⚠️ Choisis le salon de publication");
+
+    try {
+      if (giveawayEditing) {
+        await modbotApiFetch(`/api/guilds/${guildId}/giveaways/${giveawayEditing}`, {
+          method: "PUT", body: JSON.stringify(charge)
+        });
+        showToast("✏️ Giveaway modifié");
+      } else {
+        await modbotApiFetch(`/api/guilds/${guildId}/giveaways`, {
+          method: "POST", body: JSON.stringify(charge)
+        });
+        showToast("🎉 Giveaway publié dans Discord");
+      }
+      closeGiveawayForm();
+      loadGiveaways();
+    } catch (error) {
+      showToast(`⚠️ ${error?.message || "Publication impossible"}`);
+    }
+  }
+
+  async function giveawayAction(id, action) {
+    const guildId = selectedServer.id;
+    if (!guildId) return;
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/giveaways/${id}/action`, {
+        method: "POST", body: JSON.stringify({ action })
+      });
+      showToast(`✅ ${data.result || "Action appliquée"}`);
+      loadGiveaways();
+    } catch (error) {
+      showToast(`⚠️ ${error?.message || "Action refusée"}`);
+    }
+  }
+
+  /** Suppression en deux temps : le bouton devient une confirmation. */
+  async function deleteGiveaway(id, carte) {
+    const bouton = carte.querySelector("[data-giveaway-delete]");
+    if (bouton && !bouton.dataset.confirming) {
+      bouton.dataset.confirming = "1";
+      bouton.textContent = "⚠️ Confirmer";
+      bouton.classList.add("is-confirming");
+      setTimeout(() => {
+        if (!bouton.isConnected) return;
+        delete bouton.dataset.confirming;
+        bouton.textContent = "🗑️ Supprimer";
+        bouton.classList.remove("is-confirming");
+      }, 5000);
+      return;
+    }
+
+    const guildId = selectedServer.id;
+    try {
+      await modbotApiFetch(`/api/guilds/${guildId}/giveaways/${id}`, { method: "DELETE" });
+      showToast("🗑️ Giveaway supprimé");
+      loadGiveaways();
+    } catch (error) {
+      showToast(`⚠️ ${error?.message || "Suppression impossible"}`);
+    }
+  }
+
+  function initGiveawayPanel() {
+    if (!document.querySelector("[data-dashboard-panel='giveaways']")) return;
+    document.querySelector("[data-giveaway-new]")?.addEventListener("click", () => openGiveawayForm());
+    document.querySelector("[data-giveaway-cancel]")?.addEventListener("click", closeGiveawayForm);
+    document.querySelector("[data-giveaway-reload]")?.addEventListener("click", loadGiveaways);
+    document.querySelector("[data-giveaway-form]")?.addEventListener("submit", submitGiveaway);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     ASSISTANT IA
+     ══════════════════════════════════════════════════════════════════ */
+
+  let aiHistory = [];
+  let aiBusy = false;
+
+  function aiAddMessage(role, texte, panneau = "", libelle = "") {
+    const host = document.querySelector("[data-ai-messages]");
+    if (!host) return null;
+
+    const bulle = document.createElement("div");
+    bulle.className = `ai-message is-${role}`;
+
+    const corps = document.createElement("div");
+    corps.className = "ai-bubble";
+    // Rendu volontairement minimal : gras, code, sauts de ligne. Pas de HTML
+    // brut, la réponse vient d'un modèle et ne doit jamais être injectée.
+    corps.innerHTML = escapeHtml(texte)
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/`([^`]+)`/g, "<code>$1</code>")
+      .replace(/\n/g, "<br>");
+    bulle.appendChild(corps);
+
+    if (panneau) {
+      const lien = document.createElement("button");
+      lien.type = "button";
+      lien.className = "ai-panel-link";
+      lien.textContent = `→ Ouvrir « ${libelle.split("—")[0].trim() || panneau} »`;
+      lien.addEventListener("click", () => {
+        openPanel(panneau);
+        setAiOpen(false);
+      });
+      bulle.appendChild(lien);
+    }
+
+    host.appendChild(bulle);
+    host.scrollTop = host.scrollHeight;
+    return bulle;
+  }
+
+  function setAiOpen(ouvert) {
+    const panneau = document.querySelector("[data-ai-panel]");
+    const bouton = document.querySelector("[data-ai-launcher]");
+    if (!panneau || !bouton) return;
+
+    if (ouvert) {
+      panneau.hidden = false;
+      void panneau.offsetHeight;  // reflow forcé : rAF ne suffit pas en arrière-plan
+      panneau.classList.add("is-open");
+      document.querySelector("[data-ai-input]")?.focus();
+      if (!aiHistory.length) {
+        aiAddMessage("bot",
+          "Bonjour ! Je connais la configuration de ce serveur.\n" +
+          "Demande-moi comment activer une protection, créer des tickets, " +
+          "ou pourquoi une commande ne répond pas.");
+      }
+    } else {
+      panneau.classList.remove("is-open");
+      setTimeout(() => { if (!panneau.classList.contains("is-open")) panneau.hidden = true; }, 220);
+    }
+    panneau.setAttribute("aria-hidden", String(!ouvert));
+    bouton.setAttribute("aria-expanded", String(ouvert));
+    bouton.classList.toggle("is-active", ouvert);
+  }
+
+  async function askAI(question) {
+    const guildId = selectedServer.id;
+    if (!guildId) return showToast("⚠️ Sélectionne d'abord un serveur");
+    if (aiBusy || !question.trim()) return;
+
+    aiBusy = true;
+    const champ = document.querySelector("[data-ai-input]");
+    if (champ) champ.value = "";
+    aiAddMessage("user", question);
+
+    const attente = aiAddMessage("bot", "…");
+    attente?.classList.add("is-thinking");
+
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/assistant`, {
+        method: "POST",
+        body: JSON.stringify({ question, history: aiHistory.slice(-10) })
+      });
+      attente?.remove();
+      aiAddMessage("bot", data.answer, data.panel, data.panel_label);
+      aiHistory.push({ role: "user", content: question });
+      aiHistory.push({ role: "assistant", content: data.answer });
+      aiHistory = aiHistory.slice(-20);
+    } catch (error) {
+      attente?.remove();
+      const message = error?.message || "L'assistant n'a pas répondu.";
+      aiAddMessage("bot", `⚠️ ${message}`);
+    } finally {
+      aiBusy = false;
+    }
+  }
+
+  function initAiAssistant() {
+    const bouton = document.querySelector("[data-ai-launcher]");
+    if (!bouton) return;
+
+    bouton.addEventListener("click", () => {
+      const panneau = document.querySelector("[data-ai-panel]");
+      setAiOpen(!panneau?.classList.contains("is-open"));
+    });
+    document.querySelector("[data-ai-close]")?.addEventListener("click", () => setAiOpen(false));
+
+    document.querySelector("[data-ai-form]")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      askAI(readValue("[data-ai-input]"));
+    });
+
+    document.querySelectorAll("[data-ai-ask]").forEach((suggestion) => {
+      suggestion.addEventListener("click", () => askAI(suggestion.dataset.aiAsk));
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setAiOpen(false);
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
      RECHERCHE — membres et rôles
      ══════════════════════════════════════════════════════════════════ */
 
@@ -2911,6 +3353,24 @@ function initDashboard() {
     });
   }
 
+  /**
+   * Les deux notions se confondent facilement — on explique laquelle fait quoi
+   * au moment où l'utilisateur s'apprête à cliquer.
+   */
+  function immunityHelp(item) {
+    if (!item.immune && !item.trusted) return "";
+    const lignes = [];
+    if (item.immune) {
+      lignes.push("<strong>🛡️ Immunisé</strong> — échappe au filtre de langage, " +
+                  "à l'anti-spam et à l'anti-lien. Aucun avertissement automatique.");
+    }
+    if (item.trusted) {
+      lignes.push("<strong>🤝 Confiance anti-nuke</strong> — peut supprimer des salons " +
+                  "ou bannir en masse sans déclencher la protection.");
+    }
+    return `<div class="alert-panel subtle">${lignes.map((l) => `<p>${l}</p>`).join("")}</div>`;
+  }
+
   function actionButton(action, label, style = "") {
     const pending = searchPendingAction === action;
     const classe = pending ? "primary-btn compact is-confirming" : `secondary-btn compact ${style}`;
@@ -2934,19 +3394,24 @@ function initDashboard() {
           </div>
         </div>
         <div class="search-detail-facts">
-          <div><span>Immunité anti-nuke</span><strong>${item.immune ? "🛡️ Activée" : "Non"}</strong></div>
+          <div><span>Immunité</span><strong>${item.immune ? "🛡️ Activée" : "Non"}</strong></div>
+          <div><span>Confiance anti-nuke</span><strong>${item.trusted ? "🤝 Activée" : "Non"}</strong></div>
           <div><span>Rôle géré par une app</span><strong>${item.managed ? "Oui" : "Non"}</strong></div>
         </div>
+        ${immunityHelp(item)}
         ${perms.length ? `
           <div class="alert-panel subtle">
             <strong>⚠️ Permissions sensibles</strong>
             <ul>${perms.map((p) => `<li>${escapeHtml(p)}</li>`).join("")}</ul>
-            <p>Un rôle immunisé n'est plus surveillé par l'anti-nuke. Ne l'accorde qu'à des rôles de confiance.</p>
+            <p>Ce rôle peut déjà faire des dégâts sans ModBot. Réfléchis à deux fois avant de lui retirer une surveillance.</p>
           </div>` : ""}
         <div class="search-actions">
           ${item.immune
             ? actionButton("unimmunize", "Retirer l'immunité")
-            : actionButton("immunize", "🛡️ Immuniser contre l'anti-nuke")}
+            : actionButton("immunize", "🛡️ Immuniser")}
+          ${item.trusted
+            ? actionButton("untrust", "Retirer la confiance anti-nuke")
+            : actionButton("trust", "🤝 Confiance anti-nuke")}
         </div>`;
     } else {
       const roles = item.roles || [];
@@ -2966,6 +3431,7 @@ function initDashboard() {
           <div><span>Compte créé</span><strong>${item.created_at ? formatIsoDateTimeFr(item.created_at) : "—"}</strong></div>
           <div><span>État</span><strong>${item.timed_out ? "🔇 Exclu" : item.owner ? "👑 Propriétaire" : item.administrator ? "🛠️ Admin" : "Actif"}</strong></div>
         </div>
+        ${immunityHelp(item)}
         ${roles.length ? `<div class="search-role-chips">${roles.map((r) =>
           `<span class="search-role-chip" style="border-color:${escapeHtml(r.color)}">${escapeHtml(r.name)}</span>`
         ).join("")}</div>` : ""}
@@ -2990,6 +3456,9 @@ function initDashboard() {
           ${item.immune
             ? actionButton("unimmunize", "Retirer l'immunité")
             : actionButton("immunize", "🛡️ Immuniser")}
+          ${item.trusted
+            ? actionButton("untrust", "Retirer la confiance anti-nuke")
+            : actionButton("trust", "🤝 Confiance anti-nuke")}
         </div>`;
     }
 
@@ -3619,8 +4088,10 @@ function initDashboard() {
     tabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.dashboardTab === panelName));
     panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.dashboardPanel === panelName));
     document.querySelector(".dashboard-content")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    // La recherche interroge Discord en direct : on ne charge qu'à l'ouverture.
+    // Ces panneaux interrogent Discord en direct : on ne charge qu'à l'ouverture.
     if (panelName === "search") runSearch();
+    if (panelName === "giveaways") loadGiveaways();
+    if (panelName === "welcome") renderWelcomePreview();
   }
 
   document.querySelector("[data-dashboard-login]")?.addEventListener("click", () => {
@@ -3754,6 +4225,9 @@ function initDashboard() {
   });
 
   initSearchPanel();
+  initWelcomePanel();
+  initGiveawayPanel();
+  initAiAssistant();
 
   document.querySelectorAll("[data-dashboard-jump]").forEach((button) => {
     button.addEventListener("click", () => {

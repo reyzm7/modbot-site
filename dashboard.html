@@ -161,8 +161,16 @@
     </div>
 
     <div class="dashboard-actions">
-      <button class="secondary-btn compact" type="button" data-dashboard-save>💾 Enregistrer</button>
-      <a class="primary-btn compact" href="index.html">🏠 Retour au site</a>
+      <label class="language-switch compact" aria-label="Langue du dashboard">
+        <span aria-hidden="true">🌍</span>
+        <select data-language-select>
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+          <option value="ar">العربية</option>
+        </select>
+      </label>
+      <button class="secondary-btn compact" type="button" data-dashboard-save data-i18n="dash.save">💾 Enregistrer</button>
+      <a class="primary-btn compact" href="index.html" data-i18n="dash.backToSite">🏠 Retour au site</a>
     </div>
   </header>
 
@@ -179,7 +187,9 @@
       <button class="dash-nav" type="button" data-dashboard-tab="logs"><span aria-hidden="true">🧾</span>Logs</button>
 
       <p class="sidebar-label">Communauté</p>
-      <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span aria-hidden="true">🎫</span>Tickets</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span aria-hidden="true">🎫</span><span data-i18n="nav.tickets">Tickets</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="welcome"><span aria-hidden="true">👋</span><span data-i18n="nav.welcome">Bienvenue</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="giveaways"><span aria-hidden="true">🎉</span><span data-i18n="nav.giveaways">Giveaways</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="ratings"><span aria-hidden="true">⭐</span>Ratings</button>
 
       <p class="sidebar-label">Contenus</p>
@@ -675,6 +685,172 @@
         </div>
       </section>
 
+      <section class="dash-panel" data-dashboard-panel="welcome">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="welcome.eyebrow">👋 Arrivées et départs</p>
+            <h2 data-i18n="welcome.title">Messages de bienvenue</h2>
+          </div>
+          <div class="panel-title-actions">
+            <button class="primary-btn compact" type="button" data-welcome-save data-i18n="welcome.save">💾 Enregistrer</button>
+          </div>
+        </div>
+
+        <div class="toggle-grid">
+          <label class="toggle-line">
+            <input type="checkbox" data-welcome-enabled><span></span>
+            <strong data-i18n="welcome.onJoin">👋 Message d'arrivée</strong>
+            <small data-i18n="welcome.onJoinHelp">Publié dans un salon quand quelqu'un rejoint.</small>
+          </label>
+          <label class="toggle-line">
+            <input type="checkbox" data-welcome-departure-enabled><span></span>
+            <strong data-i18n="welcome.onLeave">🚪 Message de départ</strong>
+            <small data-i18n="welcome.onLeaveHelp">Publié quand quelqu'un quitte le serveur.</small>
+          </label>
+          <label class="toggle-line">
+            <input type="checkbox" data-welcome-dm-enabled><span></span>
+            <strong data-i18n="welcome.dm">✉️ Message privé</strong>
+            <small data-i18n="welcome.dmHelp">Envoyé directement au nouveau membre.</small>
+          </label>
+          <label class="toggle-line">
+            <input type="checkbox" data-welcome-embed-enabled><span></span>
+            <strong data-i18n="welcome.embed">🎨 Format embed</strong>
+            <small data-i18n="welcome.embedHelp">Décoché, le message est envoyé en texte simple.</small>
+          </label>
+        </div>
+
+        <div class="welcome-layout">
+          <div class="tool-panel welcome-form">
+            <h3 data-i18n="welcome.settings">Réglages</h3>
+
+            <div class="dashboard-grid two">
+              <label class="mini-form"><span data-i18n="welcome.channel">Salon d'arrivée</span>
+                <select data-welcome-channel><option value="">— Aucun —</option></select>
+              </label>
+              <label class="mini-form"><span data-i18n="welcome.departureChannel">Salon de départ</span>
+                <select data-welcome-departure-channel><option value="">— Même salon —</option></select>
+              </label>
+            </div>
+
+            <label class="mini-form"><span data-i18n="welcome.msgTitle">Titre</span>
+              <input type="text" data-welcome-title maxlength="200" placeholder="👋 Bienvenue">
+            </label>
+
+            <label class="mini-form"><span data-i18n="welcome.message">Message d'arrivée</span>
+              <textarea data-welcome-message rows="4" maxlength="1800"></textarea>
+            </label>
+
+            <div class="variable-chips" data-welcome-variables aria-label="Variables disponibles"></div>
+
+            <label class="mini-form"><span data-i18n="welcome.departureMessage">Message de départ</span>
+              <textarea data-welcome-departure-message rows="3" maxlength="1800"></textarea>
+            </label>
+
+            <label class="mini-form"><span data-i18n="welcome.dmMessage">Message privé</span>
+              <textarea data-welcome-dm-message rows="3" maxlength="1800"></textarea>
+            </label>
+
+            <div class="dashboard-grid two">
+              <label class="mini-form"><span data-i18n="welcome.color">Couleur de l'embed</span>
+                <input type="color" data-welcome-color value="#5865F2">
+              </label>
+              <label class="mini-form"><span data-i18n="welcome.image">Image (URL)</span>
+                <input type="url" data-welcome-image placeholder="https://…">
+              </label>
+              <label class="mini-form"><span data-i18n="welcome.buttonLabel">Texte du bouton</span>
+                <input type="text" data-welcome-button-label maxlength="80" placeholder="Lire les règles">
+              </label>
+              <label class="mini-form"><span data-i18n="welcome.buttonUrl">Lien du bouton</span>
+                <input type="url" data-welcome-button-url placeholder="https://…">
+              </label>
+            </div>
+          </div>
+
+          <div class="tool-panel welcome-preview-panel">
+            <h3 data-i18n="welcome.preview">Aperçu en direct</h3>
+            <p class="field-help" data-i18n="welcome.previewHelp">
+              Rendu approximatif du message tel qu'il apparaîtra dans Discord.
+            </p>
+            <div class="discord-preview" data-welcome-preview>
+              <div class="discord-preview-row">
+                <span class="discord-preview-avatar"></span>
+                <div class="discord-preview-body">
+                  <p class="discord-preview-author">ModBot <span class="discord-preview-tag">APP</span></p>
+                  <div class="discord-preview-embed" data-welcome-preview-embed>
+                    <strong data-welcome-preview-title>👋 Bienvenue</strong>
+                    <p data-welcome-preview-text></p>
+                    <img data-welcome-preview-image alt="" hidden>
+                    <span class="discord-preview-footer" data-welcome-preview-footer></span>
+                  </div>
+                  <a class="discord-preview-button" data-welcome-preview-button hidden></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="giveaways">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="gw.eyebrow">🎉 Tirages au sort</p>
+            <h2 data-i18n="gw.title">Giveaways</h2>
+          </div>
+          <div class="panel-title-actions">
+            <span class="state" data-giveaway-count></span>
+            <button class="secondary-btn compact" type="button" data-giveaway-reload data-i18n="gw.reload">↻ Actualiser</button>
+            <button class="primary-btn compact" type="button" data-giveaway-new data-i18n="gw.new">➕ Nouveau giveaway</button>
+          </div>
+        </div>
+
+        <form class="tool-panel giveaway-form" data-giveaway-form hidden>
+          <h3 data-giveaway-form-title data-i18n="gw.create">Nouveau giveaway</h3>
+
+          <div class="dashboard-grid two">
+            <label class="mini-form"><span data-i18n="gw.prize">Récompense</span>
+              <input type="text" data-giveaway-prize maxlength="200" required placeholder="Nitro 1 mois">
+            </label>
+            <label class="mini-form"><span data-i18n="gw.channel">Salon</span>
+              <select data-giveaway-channel required></select>
+            </label>
+            <label class="mini-form"><span data-i18n="gw.duration">Durée (minutes)</span>
+              <input type="number" data-giveaway-duration min="1" max="86400" value="60" required>
+            </label>
+            <label class="mini-form"><span data-i18n="gw.winners">Nombre de gagnants</span>
+              <input type="number" data-giveaway-winners min="1" max="20" value="1" required>
+            </label>
+          </div>
+
+          <h4 data-i18n="gw.conditions">Conditions de participation</h4>
+          <p class="field-help" data-i18n="gw.conditionsHelp">
+            Laisse vide ou à zéro pour ne rien exiger.
+          </p>
+          <div class="dashboard-grid three">
+            <label class="mini-form"><span data-i18n="gw.role">Rôle obligatoire</span>
+              <select data-giveaway-role><option value="">— Aucun —</option></select>
+            </label>
+            <label class="mini-form"><span data-i18n="gw.minMessages">Messages minimum</span>
+              <input type="number" data-giveaway-min-messages min="0" max="100000" value="0">
+            </label>
+            <label class="mini-form"><span data-i18n="gw.minAccount">Ancienneté du compte (jours)</span>
+              <input type="number" data-giveaway-min-account min="0" max="3650" value="0">
+            </label>
+          </div>
+
+          <div class="search-actions">
+            <button class="primary-btn compact" type="submit" data-i18n="gw.publish">🎉 Publier</button>
+            <button class="secondary-btn compact" type="button" data-giveaway-cancel data-i18n="gw.cancel">Annuler</button>
+          </div>
+        </form>
+
+        <div class="giveaway-list" data-giveaway-list>
+          <div class="dashboard-empty-state">
+            <strong data-i18n="gw.emptyTitle">Aucun giveaway</strong>
+            <span data-i18n="gw.emptyText">Crée-en un, ou lance <code>/giveaway create</code> dans Discord.</span>
+          </div>
+        </div>
+      </section>
+
       <section class="dash-panel" data-dashboard-panel="search">
         <div class="panel-title">
           <div>
@@ -703,8 +879,10 @@
           <button class="secondary-btn compact" type="button" data-search-clear hidden>✕ Effacer</button>
         </div>
         <p class="field-help" data-search-help>
-          Recherche un membre pour l'avertir, l'exclure ou l'immuniser. Recherche un rôle pour lui
-          donner l'immunité anti-nuke.
+          Recherche un membre ou un rôle pour agir dessus.
+          <strong>Immuniser</strong> = plus aucune sanction automatique (filtre de langage,
+          anti-spam, anti-lien). <strong>Confiance anti-nuke</strong> = ne plus surveiller
+          les suppressions et bannissements en masse. Ce sont deux réglages distincts.
         </p>
 
         <div class="search-layout">
@@ -904,6 +1082,43 @@
   </main>
   </div>
 
+  <!-- Assistant IA : bouton flottant + fenêtre de discussion -->
+  <button class="ai-launcher" type="button" data-ai-launcher
+          aria-expanded="false" aria-controls="aiAssistant"
+          aria-label="Ouvrir l'assistant IA">
+    <span class="ai-launcher-icon" aria-hidden="true">✨</span>
+    <span class="ai-launcher-label" data-i18n="ai.launcher">Assistant IA</span>
+  </button>
+
+  <section class="ai-assistant" id="aiAssistant" data-ai-panel aria-hidden="true" hidden>
+    <header class="ai-header">
+      <div class="ai-header-title">
+        <span class="ai-avatar" aria-hidden="true">✨</span>
+        <div>
+          <strong data-i18n="ai.title">Assistant ModBot</strong>
+          <small data-ai-status data-i18n="ai.subtitle">Pose ta question sur la configuration</small>
+        </div>
+      </div>
+      <button class="ai-close" type="button" data-ai-close aria-label="Fermer l'assistant">✕</button>
+    </header>
+
+    <div class="ai-messages" data-ai-messages role="log" aria-live="polite"></div>
+
+    <div class="ai-suggestions" data-ai-suggestions>
+      <button type="button" data-ai-ask="Comment configurer le bot ?" data-i18n="ai.q1">Comment configurer le bot ?</button>
+      <button type="button" data-ai-ask="Comment améliorer la sécurité de mon serveur ?" data-i18n="ai.q2">Améliorer la sécurité</button>
+      <button type="button" data-ai-ask="Comment créer un système de tickets ?" data-i18n="ai.q3">Créer des tickets</button>
+      <button type="button" data-ai-ask="Pourquoi une commande ne fonctionne pas ?" data-i18n="ai.q4">Une commande ne marche pas</button>
+    </div>
+
+    <form class="ai-composer" data-ai-form>
+      <input type="text" data-ai-input maxlength="1200" autocomplete="off"
+             data-i18n-placeholder="ai.placeholder"
+             placeholder="Écris ta question…" aria-label="Votre question">
+      <button class="primary-btn compact" type="submit" data-ai-send aria-label="Envoyer">➤</button>
+    </form>
+  </section>
+
   <div class="dashboard-toast" id="dashboardToast" aria-live="polite">Configuration enregistrée</div>
   <datalist id="dashboardChannelOptions"></datalist>
   <datalist id="dashboardRoleOptions"></datalist>
@@ -920,6 +1135,7 @@
     </div>
   </div>
 
+  <script src="translations.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
