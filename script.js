@@ -2052,8 +2052,6 @@ function initDashboard() {
     const welcomeToggles = document.querySelectorAll("[data-dashboard-panel='welcome'] .toggle-line input");
     const welcomeDmEnabled = document.querySelector("[data-welcome-dm-enabled]");
     const welcomeDmMessage = document.querySelector("[data-welcome-dm-message]");
-    const departureMemberName = document.querySelector("[data-departure-member-name]");
-    const departureCard = document.querySelector("[data-departure-card]");
     if (welcomeToggles[0]) {
       welcomeToggles[0].checked = Boolean(welcome.enabled);
       welcomeToggles[0].closest(".toggle-line")?.classList.toggle("is-on", Boolean(welcome.enabled));
@@ -2073,10 +2071,6 @@ function initDashboard() {
     if (welcomeBg && welcome.background) welcomeBg.value = welcome.background;
     if (welcomeFont && welcome.font) welcomeFont.value = welcome.font;
     if (welcomeColor && welcome.color) welcomeColor.value = welcome.color;
-    if (departureMemberName) departureMemberName.textContent = departureMessage?.value || "nom du membre";
-    if (departureCard && welcome.background) {
-      departureCard.style.backgroundImage = `linear-gradient(90deg, rgba(19, 15, 70, 0.58), rgba(42, 94, 255, 0.72)), url("${welcome.background}")`;
-    }
 
     if (config.language) {
       const languageSelect = document.querySelector("[data-dashboard-panel='language'] select");
@@ -2161,7 +2155,6 @@ function initDashboard() {
     renderModerationConfig(config);
     renderDashboardStats(config);
     document.querySelectorAll("[data-dashboard-panel='channels'] .channel-row input").forEach(setInputState);
-    syncWelcomePreview();
     applyWelcomeState(welcome);
     renderReactionPreview();
   }
@@ -4403,52 +4396,10 @@ function initDashboard() {
     }
   });
 
-  const welcomeMessageInput = document.querySelector("[data-welcome-message]");
-  const welcomeBgInput = document.querySelector("[data-welcome-bg]");
-  const welcomeFontSelect = document.querySelector("[data-welcome-font]");
-  const welcomeColorInput = document.querySelector("[data-welcome-color]");
-  const departureMessageInput = document.querySelector("[data-departure-message]");
-  const welcomeLiveMessage = document.querySelector("[data-welcome-live-message]");
-  const departureLiveMessage = document.querySelector("[data-departure-live-message]");
-  const welcomeCard = document.querySelector("[data-welcome-card]");
-  const departureCard = document.querySelector("[data-departure-card]");
-  const departureMemberName = document.querySelector("[data-departure-member-name]");
-
-  function syncWelcomePreview() {
-    if (welcomeLiveMessage) {
-      welcomeLiveMessage.textContent = welcomeMessageInput?.value.trim() || "Bienvenue nom du membre sur @serveur !";
-    }
-    if (departureLiveMessage) {
-      departureLiveMessage.textContent = departureMessageInput?.value.trim() || "Au revoir nom du membre.";
-    }
-    if (departureMemberName) {
-      departureMemberName.textContent = "nom du membre";
-    }
-    if (welcomeCard && welcomeBgInput?.value.trim()) {
-      welcomeCard.style.backgroundImage = `linear-gradient(90deg, rgba(19, 15, 70, 0.58), rgba(42, 94, 255, 0.72)), url("${welcomeBgInput.value.trim()}")`;
-    }
-    if (departureCard && welcomeBgInput?.value.trim()) {
-      departureCard.style.backgroundImage = `linear-gradient(90deg, rgba(70, 15, 32, 0.58), rgba(42, 94, 255, 0.62)), url("${welcomeBgInput.value.trim()}")`;
-    }
-    if (welcomeCard && welcomeFontSelect?.value) {
-      welcomeCard.style.fontFamily = `${welcomeFontSelect.value}, Inter, sans-serif`;
-    }
-    if (departureCard && welcomeFontSelect?.value) {
-      departureCard.style.fontFamily = `${welcomeFontSelect.value}, Inter, sans-serif`;
-    }
-    if (welcomeCard && welcomeColorInput?.value) {
-      welcomeCard.style.setProperty("--welcome-title-color", welcomeColorInput.value);
-    }
-    if (departureCard && welcomeColorInput?.value) {
-      departureCard.style.setProperty("--welcome-title-color", welcomeColorInput.value);
-    }
-  }
-
-  [welcomeMessageInput, departureMessageInput, welcomeBgInput, welcomeFontSelect, welcomeColorInput].forEach((field) => {
-    field?.addEventListener("input", syncWelcomePreview);
-    field?.addEventListener("change", syncWelcomePreview);
-  });
-  syncWelcomePreview();
+  // L'aperçu de bienvenue vit maintenant dans applyWelcomeState() : l'ancien
+  // syncWelcomePreview() visait des éléments supprimés avec le panneau
+  // précédent (data-welcome-card, data-departure-card…) et n'écrivait plus
+  // nulle part.
 
   const reactionTitleInput = document.querySelector("[data-reaction-title]");
   const reactionDescriptionInput = document.querySelector("[data-reaction-description]");
@@ -4707,9 +4658,9 @@ async function initPublicStats() {
 
   const membres = section.querySelector("[data-stat-members]");
   const serveurs = section.querySelector("[data-stat-servers]");
-  const pays = section.querySelector("[data-stat-countries]");
+  const langues = section.querySelector("[data-stat-languages]");
   const resume = section.querySelector("[data-stat-summary]");
-  const liste = section.querySelector("[data-stat-country-list]");
+  const liste = section.querySelector("[data-stat-language-list]");
   const note = section.querySelector("[data-stat-note]");
 
   const base = getModbotApiBase();
@@ -4726,7 +4677,7 @@ async function initPublicStats() {
 
     animerCompteur(membres, stats.members_protected);
     animerCompteur(serveurs, stats.servers);
-    if (pays) pays.textContent = formatNombreFr(stats.countries);
+    if (langues) langues.textContent = formatNombreFr(stats.languages);
 
     if (resume) {
       resume.textContent =
@@ -4734,12 +4685,12 @@ async function initPublicStats() {
         `${formatNombreFr(stats.servers)} serveur${stats.servers > 1 ? "s" : ""} Discord.`;
     }
 
-    const top = Array.isArray(stats.top_countries) ? stats.top_countries : [];
+    const top = Array.isArray(stats.top_languages) ? stats.top_languages : [];
     if (liste && top.length) {
       liste.innerHTML = top.map((entree) => `
-        <span class="stat-country">
+        <span class="stat-country${entree.unknown ? " is-unknown" : ""}">
           <span class="stat-country-flag" aria-hidden="true">${escapeHtmlValue(entree.flag || "🌐")}</span>
-          <span class="stat-country-name">${escapeHtmlValue(entree.country)}</span>
+          <span class="stat-country-name">${escapeHtmlValue(entree.language)}</span>
           <span class="stat-country-count">${formatNombreFr(entree.members)}</span>
         </span>`).join("");
       liste.hidden = false;
@@ -4751,7 +4702,7 @@ async function initPublicStats() {
     console.warn("Statistiques publiques indisponibles :", error?.message || error);
     section.classList.add("stats-offline");
     if (resume) resume.textContent = "Chiffres momentanément indisponibles.";
-    [membres, serveurs, pays].forEach((el) => {
+    [membres, serveurs, langues].forEach((el) => {
       if (el && el.textContent === "—") el.textContent = "·";
     });
   }

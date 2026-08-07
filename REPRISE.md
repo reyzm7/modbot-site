@@ -74,3 +74,22 @@ arrière-plan.** Pour une animation qui doit aboutir même là, force un reflow
 `window.MODBOT_API_URL` → `localStorage` → balise `<meta name="modbot-api-url">`.
 Le `localStorage` passe **avant** la balise, volontairement : une URL déployée
 obsolète peut ainsi être corrigée sans redéploiement.
+
+**4. Les statistiques de l'accueil comptent des LANGUES, pas des pays.**
+Discord ne communique pas le pays d'un serveur — le point est clos, ne le
+rouvre pas. `/api/public/stats` renvoie `languages`, `top_languages` et
+`unspecified` ; la dernière entrée de la liste porte `unknown: true` et
+regroupe les serveurs dont personne n'a choisi la langue. Détail dans
+`modbot/ETAT-DU-PROJET.md` §14.
+
+### Tester le rendu en local
+
+`devserver.js` sert les fichiers, mais la page vise l'API de production. Pour
+la brancher sur un bot local, ouvre la console et pose l'URL une fois :
+
+```js
+localStorage.setItem("modbot-api-url", "http://127.0.0.1:8080")
+```
+
+Le bot peut aussi servir le site lui-même (`MODBOT_SITE_DIR`) : même origine,
+plus rien à configurer.
