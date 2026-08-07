@@ -995,8 +995,7 @@ h1 {
   line-height: 1.65;
 }
 
-.admin-panel label,
-.premium-form label {
+.admin-panel label {
   display: grid;
   gap: 8px;
   color: var(--soft);
@@ -1016,8 +1015,7 @@ h1 {
   color: var(--text);
 }
 
-.admin-login-panel,
-.premium-form {
+.admin-login-panel {
   display: grid;
   gap: 14px;
 }
@@ -1073,8 +1071,6 @@ h1 {
 }
 
 .site-stat-grid div,
-.premium-list div,
-.premium-ticket-list div,
 .admin-list div,
 .blacklist-list div,
 .server-log-feed div,
@@ -1097,13 +1093,10 @@ h1 {
 }
 
 .site-stat-grid small,
-.premium-list span,
 .admin-server-list small {
   color: var(--muted);
 }
 
-.premium-list,
-.premium-ticket-list,
 .admin-list,
 .blacklist-list,
 .server-log-feed,
@@ -1113,18 +1106,6 @@ h1 {
   gap: 10px;
 }
 
-.premium-limit-copy {
-  margin-bottom: 14px;
-}
-
-.premium-custom-duration {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.premium-list div,
-.premium-ticket-list div,
 .admin-list div,
 .blacklist-list div {
   padding: 12px;
@@ -1134,10 +1115,6 @@ h1 {
   gap: 12px;
 }
 
-.premium-list strong,
-.premium-list small,
-.premium-ticket-list strong,
-.premium-ticket-list small,
 .admin-list strong,
 .admin-list small,
 .blacklist-list strong,
@@ -1145,8 +1122,6 @@ h1 {
   display: block;
 }
 
-.premium-list small,
-.premium-ticket-list small,
 .admin-list small,
 .blacklist-list small {
   margin-top: 3px;
@@ -2000,8 +1975,7 @@ h1 {
   .admin-gate-grid,
   .wiki-card-grid,
   .wiki-plan-grid,
-  .command-doc-grid,
-  .premium-custom-duration {
+  .command-doc-grid {
     grid-template-columns: 1fr;
   }
 
@@ -3704,131 +3678,12 @@ main,
   color: var(--green);
 }
 
-.premium-dashboard-card {
-  display: grid;
-  align-content: start;
-  gap: 14px;
-}
-
-.premium-dashboard-card p {
-  color: var(--soft);
-  line-height: 1.6;
-}
-
 .field-help {
   display: block;
   margin-top: 6px;
   color: var(--muted);
   font-size: 0.78rem;
   line-height: 1.35;
-}
-
-.premium-progress {
-  min-height: 58px;
-  padding: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  border: 1px solid rgba(158, 110, 255, 0.22);
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.045);
-}
-
-.premium-progress span {
-  color: var(--soft);
-  font-weight: 900;
-}
-
-.premium-progress strong {
-  font-size: 1.32rem;
-}
-
-.premium-slot-grid,
-.premium-choice-grid {
-  display: grid;
-  gap: 10px;
-}
-
-.premium-slot {
-  min-height: 72px;
-  padding: 12px;
-  display: grid;
-  grid-template-columns: 48px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 12px;
-  border: 1px solid rgba(158, 110, 255, 0.22);
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.045);
-}
-
-.premium-slot.is-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-style: dashed;
-  color: var(--muted);
-  font-weight: 900;
-}
-
-.premium-slot strong,
-.premium-slot small {
-  display: block;
-}
-
-.premium-slot small {
-  margin-top: 3px;
-  color: var(--muted);
-}
-
-.premium-choice-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.premium-choice-card {
-  min-height: 86px;
-  padding: 12px;
-  display: grid;
-  grid-template-columns: 52px minmax(0, 1fr);
-  align-items: center;
-  gap: 12px;
-  border: 1px solid rgba(158, 110, 255, 0.22);
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text);
-  text-align: left;
-  transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
-}
-
-.premium-choice-card:hover,
-.premium-choice-card.is-associated {
-  transform: translateY(-2px);
-  border-color: rgba(101, 245, 150, 0.42);
-  background: rgba(101, 245, 150, 0.1);
-  box-shadow: 0 14px 34px rgba(101, 245, 150, 0.12);
-}
-
-.premium-choice-card strong,
-.premium-choice-card small {
-  display: block;
-}
-
-.premium-choice-card small {
-  margin-top: 4px;
-  color: var(--muted);
-}
-
-.premium-choice-card.is-uninstalled {
-  opacity: 0.82;
-  border-style: dashed;
-}
-
-.premium-choice-card.is-associated::after {
-  content: "Associé";
-  grid-column: 1 / -1;
-  color: #baffcf;
-  font-size: 0.78rem;
-  font-weight: 900;
 }
 
 .tournament-activation-card {
@@ -4483,7 +4338,6 @@ main,
 }
 
 .welcome-preview-panel,
-.premium-welcome-panel,
 .recurring-list-panel {
   overflow: hidden;
 }
@@ -4551,7 +4405,6 @@ main,
     linear-gradient(90deg, rgba(70, 15, 32, 0.58), rgba(42, 94, 255, 0.62)),
     url("assets/default_banner.svg") center / cover;
 }
-
 
 .reaction-role-list,
 .recurring-list {
@@ -4761,11 +4614,10 @@ main,
   .toggle-grid,
   .server-grid,
   .social-grid,
-    .premium-choice-grid,
-    .tournament-command-grid,
-    .wiki-card-grid,
-    .wiki-plan-grid,
-    .command-doc-grid {
+  .tournament-command-grid,
+  .wiki-card-grid,
+  .wiki-plan-grid,
+  .command-doc-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -4833,7 +4685,6 @@ main,
   .toggle-grid,
   .server-grid,
   .social-grid,
-  .premium-choice-grid,
   .tournament-command-grid,
   .wiki-card-grid,
   .wiki-plan-grid,
@@ -4853,14 +4704,11 @@ main,
   .option-row,
   .reaction-role-row,
   .channel-row,
-  .premium-slot,
   .sanction-row {
     grid-template-columns: 1fr;
   }
 
   .recurring-item,
-  .premium-list div,
-  .premium-ticket-list div,
   .admin-list div,
   .blacklist-list div {
     align-items: stretch;
@@ -4868,7 +4716,6 @@ main,
   }
 
   .server-card,
-  .premium-choice-card,
   .file-control {
     grid-template-columns: 1fr;
   }
@@ -4893,7 +4740,7 @@ main,
 
 /* ═══════════════════════════════════════════════════════════════════════
    MODBOT — COUCHE DESIGN v2
-   Nouveaux composants (sécurité, logs, sauvegardes, premium, connexion),
+   Nouveaux composants (sécurité, logs, sauvegardes, connexion),
    accessibilité, animations et corrections responsive.
    Placée en fin de feuille : elle complète et surcharge les règles
    ci-dessus sans les réécrire.
@@ -4955,8 +4802,7 @@ main,
 .server-card,
 .price-card,
 .log-filter,
-.backup-card,
-.premium-choice-card {
+.backup-card {
   transition: transform var(--dur) var(--ease),
               box-shadow var(--dur) var(--ease),
               border-color var(--dur) var(--ease),
@@ -5337,61 +5183,8 @@ main,
   text-align: center;
 }
 
-/* ── Carte d'abonnement Premium ────────────────────────────────────── */
-
-.premium-status-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.premium-dashboard-card[data-active="true"] {
-  border-color: rgba(241, 196, 15, 0.5);
-  box-shadow: 0 0 0 1px rgba(241, 196, 15, 0.16), var(--shadow);
-}
-
 .state[data-level="ok"]   { background: rgba(101, 245, 150, 0.14); color: #baffcf; }
 .state[data-level="idle"] { background: rgba(255, 255, 255, 0.07); color: var(--muted); }
-
-.premium-offer-line {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 8px;
-  margin-bottom: 14px;
-  color: var(--muted);
-}
-.premium-offer-line strong {
-  font-size: 1.9rem;
-  font-weight: 900;
-  color: var(--text);
-}
-
-.premium-meta {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 12px;
-  margin: 0 0 14px;
-}
-.premium-meta div {
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--surface-1);
-}
-.premium-meta dt {
-  color: var(--muted);
-  font-size: 0.76rem;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-.premium-meta dd { margin: 4px 0 0; color: var(--text); font-size: 0.95rem; font-weight: 700; }
-.premium-meta dd[data-level="warn"] { color: var(--warn); }
-
-.premium-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 
 /* ── Navigation latérale : emoji au lieu du numéro ─────────────────── */
 
@@ -5447,7 +5240,6 @@ main,
     align-items: flex-start;
   }
 
-  .premium-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .log-entry header time { margin-left: 0; width: 100%; }
 }
 
@@ -5485,9 +5277,6 @@ main,
   }
   .backup-actions > * { flex: 1; }
 
-  .premium-meta { grid-template-columns: 1fr; }
-  .premium-actions > * { flex: 1 1 100%; }
-
   .log-filters {
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -5509,7 +5298,7 @@ main,
 }
 
 @media (max-width: 480px) {
-  .premium-offer-line strong { font-size: 1.5rem; }
+
   .log-entry { padding: 12px; }
   .log-entry header strong { font-size: 0.88rem; }
 }
@@ -5519,7 +5308,6 @@ main,
 .tool-panel table,
 .log-feed,
 .backup-list { max-width: 100%; }
-
 
 /* ── Correctif : conteneur des interrupteurs ─────────────────────────
    .toggle-line input est en position:absolute ; sans ancetre positionne
@@ -5547,7 +5335,6 @@ main,
   grid-template-areas: "switch title";
 }
 
-
 /* Les badges d etat peuvent contenir un texte long : sur petit ecran ils
    passent a la ligne au lieu de deborder (.state est en nowrap par defaut). */
 @media (max-width: 860px) {
@@ -5560,7 +5347,6 @@ main,
     line-height: 1.4;
   }
 }
-
 
 /* Meme cause que .toggle-line : les cases masquees en position:absolute
    doivent etre contenues par leur label, sinon elles se calent sur le
@@ -6079,52 +5865,6 @@ label,
   font-weight: 500;
 }
 
-/* ── Voile Premium ────────────────────────────────────────────────── */
-
-.dash-panel.is-premium-locked { position: relative; }
-.dash-panel.is-premium-locked > *:not(.premium-lock) {
-  filter: blur(3px) saturate(0.6);
-  opacity: 0.4;
-  pointer-events: none;
-  user-select: none;
-}
-
-.premium-lock {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  z-index: 5;
-}
-
-.premium-lock-card {
-  width: min(460px, 100%);
-  padding: 30px 28px;
-  display: grid;
-  justify-items: center;
-  gap: 12px;
-  text-align: center;
-  border: 1px solid var(--accent-line);
-  border-radius: var(--radius-lg);
-  background: var(--panel-strong);
-  box-shadow: var(--shadow-lg);
-}
-.premium-lock-badge {
-  padding: 4px 11px;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: #b6bdff;
-  font-size: 0.74rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-.premium-lock-card h3 { font-size: 1.15rem; }
-.premium-lock-card p { color: var(--muted); font-size: 0.92rem; }
-.premium-lock-price { color: var(--soft) !important; font-size: 0.95rem !important; }
-.premium-lock-price strong { color: var(--text); font-size: 1.15rem; font-weight: 700; }
-.premium-lock-card small { color: var(--muted); font-size: 0.8rem; }
-
 /* ── Cartes serveur ───────────────────────────────────────────────── */
 
 .server-card {
@@ -6207,9 +5947,7 @@ label,
   .hero { padding: 60px 0 44px; }
   .auth-card { padding: 28px 20px; }
   .price-card { padding: 22px; }
-  .premium-lock-card { padding: 22px 18px; }
 }
-
 
 /* État de chargement des listes de serveurs — jamais de données fictives */
 .server-grid-loading {
@@ -6806,180 +6544,6 @@ label,
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   ADMIN — association manuelle des serveurs Premium
-   ═══════════════════════════════════════════════════════════════════════ */
-
-.premium-servers-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 10px;
-  margin: 14px 0;
-}
-.premium-servers-member { flex: 1 1 240px; display: grid; gap: 6px; }
-.premium-servers-member input { width: 100%; min-height: 40px; padding: 9px 12px; }
-
-.premium-servers-controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-.premium-servers-bulk { display: flex; gap: 8px; }
-
-.premium-servers-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 8px;
-  max-height: 400px;
-  padding: 4px;
-  overflow-y: auto;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: rgba(0, 0, 0, 0.16);
-}
-
-.premium-server-choice {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 10px;
-  border: 1px solid transparent;
-  border-radius: 9px;
-  color: var(--soft);
-  cursor: pointer;
-  transition: background-color 150ms var(--ease), border-color 150ms var(--ease);
-}
-.premium-server-choice:hover { background: rgba(255, 255, 255, 0.05); }
-.premium-server-choice.is-checked {
-  border-color: var(--accent-line);
-  background: var(--accent-soft);
-  color: var(--text);
-}
-.premium-server-choice input {
-  flex: 0 0 auto;
-  width: 16px;
-  height: 16px;
-  accent-color: var(--accent);
-  cursor: pointer;
-}
-.premium-server-choice .server-logo-shell {
-  flex: 0 0 auto;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--panel-strong);
-}
-.premium-server-choice-text { display: grid; gap: 1px; min-width: 0; }
-.premium-server-choice-text strong {
-  overflow: hidden;
-  font-size: 0.87rem;
-  font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.premium-server-choice-text small { color: var(--muted); font-size: 0.76rem; }
-
-.premium-servers-empty {
-  grid-column: 1 / -1;
-  padding: 28px 16px;
-  color: var(--muted);
-  font-size: 0.88rem;
-  text-align: center;
-}
-
-.premium-servers-footer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 14px;
-  color: var(--muted);
-  font-size: 0.86rem;
-}
-
-@media (max-width: 760px) {
-  .premium-servers-grid { grid-template-columns: 1fr; max-height: 320px; }
-  .premium-servers-footer > * { flex: 1 1 100%; }
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   ADMIN — Premium attribué par serveur
-   ═══════════════════════════════════════════════════════════════════════ */
-
-.guild-premium-list {
-  display: grid;
-  gap: 8px;
-  max-height: 520px;
-  padding: 4px;
-  overflow-y: auto;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: rgba(0, 0, 0, 0.16);
-}
-
-.guild-premium-row {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 14px;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  transition: background-color 150ms var(--ease), border-color 150ms var(--ease);
-}
-.guild-premium-row:hover { background: rgba(255, 255, 255, 0.04); }
-.guild-premium-row.is-premium {
-  border-color: rgba(241, 196, 15, 0.35);
-  background: rgba(241, 196, 15, 0.06);
-}
-
-.guild-premium-row .server-logo-shell {
-  flex: 0 0 auto;
-  width: 38px;
-  height: 38px;
-  border-radius: 11px;
-  overflow: hidden;
-  background: var(--panel-strong);
-}
-
-.guild-premium-info { display: grid; gap: 2px; min-width: 0; }
-.guild-premium-info strong {
-  overflow: hidden;
-  color: var(--text);
-  font-size: 0.92rem;
-  font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.guild-premium-info small { color: var(--muted); font-size: 0.78rem; }
-
-.guild-premium-state {
-  display: grid;
-  gap: 3px;
-  justify-items: end;
-  text-align: right;
-}
-.guild-premium-state small { color: var(--muted); font-size: 0.75rem; }
-
-@media (max-width: 860px) {
-  .guild-premium-row {
-    grid-template-columns: auto minmax(0, 1fr);
-    row-gap: 10px;
-  }
-  .guild-premium-state,
-  .guild-premium-row > button {
-    grid-column: 1 / -1;
-    justify-items: start;
-    text-align: left;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
    SÉLECTEUR D'IMAGE — bannière et logo du ticket
    ═══════════════════════════════════════════════════════════════════════ */
 
@@ -7447,7 +7011,9 @@ label,
 
 .stats-row .stat strong { font-variant-numeric: tabular-nums; }
 
-/* ── Répartition par pays ───────────────────────────────────────── */
+/* ── Répartition par langue ─────────────────────────────────────── */
+/* Les classes gardent leur nom historique (.stat-country) : elles servent
+   aussi à d'autres règles et un renommage n'apporterait rien. */
 
 .stats-countries {
   display: flex;
@@ -7476,6 +7042,16 @@ label,
 
 .stat-country-flag { font-size: 1.05rem; line-height: 1; }
 .stat-country-name { color: var(--soft); }
+
+/* Serveurs dont personne n'a choisi la langue : comptés dans le total, mais
+   visuellement en retrait — ce n'est pas une langue, c'est une absence. */
+.stat-country.is-unknown {
+  background: transparent;
+  border-style: dashed;
+  opacity: 0.72;
+}
+
+.stat-country.is-unknown .stat-country-count { color: var(--soft); font-weight: 600; }
 
 .stat-country-count {
   color: var(--text);
