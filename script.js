@@ -16,51 +16,19 @@ const modbotDefaultBanner = "assets/default_banner.svg";
 // elle affiche simplement les textes ecrits en dur dans le HTML.
 const siteTranslations = window.MODBOT_TRANSLATIONS || { fr: {}, en: {}, ar: {} };
 
+// Les titres sont des clefs de traduction : la demo suit la langue du site.
 const commandResponses = {
-  panel: {
-    title: "Panneau d'administration - ModBot",
-    command: "/panel",
-    body: "Panneau de contrôle de ModBot sur Mon Serveur. Toutes les modérations sont sauvegardées par serveur.",
-    type: "panel"
-  },
-  stats: {
-    title: "Statistiques - Mon Serveur",
-    command: "/serverstats",
-    body: "Résumé instantané du serveur : membres, messages du jour, avertissements, bans et tickets.",
-    type: "stats"
-  },
-  avert: {
-    title: "Dossier de modération",
-    command: "/avert-count",
-    body: "Dossier membre avec progression, statut et prochain niveau d'avertissement.",
-    type: "avert"
-  }
+  panel: { title: "js.demo.panelTitre", command: "/panel", type: "panel" },
+  stats: { title: "js.demo.statsTitre", command: "/serverstats", type: "stats" },
+  avert: { title: "js.demo.avertTitre", command: "/avert-count", type: "avert" }
 };
 
 const assistantAnswers = {
-  obtenir: {
-    question: "Comment obtenir ModBot ?",
-    answer: "ModBot peut être demandé depuis le Discord. L’offre gratuite donne accès à la sécurité, à la modération et aux salons/logs essentiels. Les offres payantes ajoutent tickets, ratings, support prioritaire et personnalisations.",
-    link: "Ouvrir le Discord"
-  },
-  tarifs: {
-    question: "Quels sont les tarifs ?",
-    answer: "ModBot est entièrement gratuit : toutes les fonctionnalités sont accessibles sur tous les serveurs, sans limite de durée. Le projet vit de dons libres, qui ne débloquent rien de plus."
-  },
-  fonctionnalite: {
-    question: "Comment demander une fonctionnalité ?",
-    answer: "Passez par le Discord ModBot. Décrivez votre besoin, votre serveur et le résultat attendu : les évolutions sont étudiées selon votre usage."
-  },
-  support: {
-    question: "Comment contacter le support ?",
-    answer: "Le support se fait sur le serveur Discord ModBot. Vous pouvez ouvrir une demande et expliquer votre problème ou votre projet.",
-    link: "Contacter le support"
-  },
-  patch: {
-    question: "Où voir les patch notes ?",
-    answer: "Les patch notes sont dans le salon Discord dédié. Si vous êtes déjà sur le serveur, ouvrez le salon Patch notes. Sinon, rejoignez d’abord le serveur ModBot.",
-    link: "Voir le Discord"
-  }
+  obtenir: { question: "home.commentObtenirModbot2", answer: "js.faq.obtenir", link: "js.faq.ouvrirDiscord" },
+  tarifs: { question: "home.quelsSontLesTarifs", answer: "js.faq.tarifs" },
+  fonctionnalite: { question: "home.commentDemanderUneFonctionnalite", answer: "js.faq.fonctionnalite" },
+  support: { question: "home.commentContacterLeSupport", answer: "js.faq.support", link: "js.faq.contacterSupport" },
+  patch: { question: "home.ouVoirLesPatch", answer: "js.faq.patch", link: "js.faq.voirDiscord" }
 };
 
 function resetInitialScroll() {
@@ -175,6 +143,7 @@ function initStarfield() {
 
 function getCommandMarkup(command) {
   const data = commandResponses[command] || commandResponses.panel;
+  const inactif = t("js.demo.inactif");
   const thumb = `<span class="embed-thumb"><img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';"></span>`;
   let embedContent = "";
 
@@ -182,26 +151,26 @@ function getCommandMarkup(command) {
     embedContent = `
       <div class="discord-embed embed-with-thumb">
         ${thumb}
-        <h3>${data.title}</h3>
-        <p>Panneau de contrôle de <strong>ModBot</strong> sur <strong>Mon Serveur</strong>.</p>
-        <p>Toutes les modérations sont <strong>sauvegardées par serveur</strong>.</p>
+        <h3>${t(data.title)}</h3>
+        <p>${t("js.demo.panelLigne1")}</p>
+        <p>${t("js.demo.panelLigne2")}</p>
         <div class="embed-grid">
-          <div class="embed-stat"><strong>Mots filtrés</strong><span class="embed-pill">37</span></div>
-          <div class="embed-stat"><strong>Anti-Raid</strong><span class="embed-pill">Inactif</span></div>
-          <div class="embed-stat"><strong>Anti-Invite</strong><span class="embed-pill">Inactif</span></div>
-          <div class="embed-stat"><strong>Anti-Spam</strong><span class="embed-pill">Inactif</span></div>
-          <div class="embed-stat"><strong>Lockdown</strong><span class="embed-pill">Inactif</span></div>
-          <div class="embed-stat"><strong>Staff Alert</strong><span class="embed-pill">Inactif</span></div>
+          <div class="embed-stat"><strong>${t("js.demo.motsFiltres")}</strong><span class="embed-pill">37</span></div>
+          <div class="embed-stat"><strong>Anti-Raid</strong><span class="embed-pill">${inactif}</span></div>
+          <div class="embed-stat"><strong>Anti-Invite</strong><span class="embed-pill">${inactif}</span></div>
+          <div class="embed-stat"><strong>Anti-Spam</strong><span class="embed-pill">${inactif}</span></div>
+          <div class="embed-stat"><strong>Lockdown</strong><span class="embed-pill">${inactif}</span></div>
+          <div class="embed-stat"><strong>Staff Alert</strong><span class="embed-pill">${inactif}</span></div>
         </div>
         <div class="embed-actions">
-          <span class="action-red">Insultes</span>
-          <span class="action-blue">Sécurité</span>
-          <span class="action-green">Salons</span>
-          <span class="action-dark">Stats & Bans</span>
-          <span class="action-blue">Staff</span>
-          <span class="action-dark">Personnalisation</span>
+          <span class="action-red">${t("js.demo.insultes")}</span>
+          <span class="action-blue">${t("js.demo.securite")}</span>
+          <span class="action-green">${t("js.demo.salons")}</span>
+          <span class="action-dark">${t("js.demo.statsBans")}</span>
+          <span class="action-blue">${t("js.demo.staff")}</span>
+          <span class="action-dark">${t("js.demo.personnalisation")}</span>
         </div>
-        <p class="embed-footer">ModBot - Protection de votre communauté - Aujourd'hui à 14:57</p>
+        <p class="embed-footer">${t("js.demo.piedProtection")} - 14:57</p>
       </div>
     `;
   }
@@ -210,15 +179,15 @@ function getCommandMarkup(command) {
     embedContent = `
       <div class="discord-embed embed-with-thumb">
         ${thumb}
-        <h3>${data.title}</h3>
+        <h3>${t(data.title)}</h3>
         <div class="embed-grid">
-          <div class="embed-stat"><strong>Membres</strong><span class="embed-pill">7</span></div>
-          <div class="embed-stat"><strong>Messages aujourd'hui</strong><span class="embed-pill">0</span></div>
-          <div class="embed-stat"><strong>Membres avertis</strong><span class="embed-pill">0</span></div>
-          <div class="embed-stat"><strong>Total bans</strong><span class="embed-pill">0</span></div>
-          <div class="embed-stat"><strong>Tickets aujourd'hui</strong><span class="embed-pill">0</span></div>
+          <div class="embed-stat"><strong>${t("js.demo.membres")}</strong><span class="embed-pill">7</span></div>
+          <div class="embed-stat"><strong>${t("js.demo.messagesJour")}</strong><span class="embed-pill">0</span></div>
+          <div class="embed-stat"><strong>${t("js.demo.membresAvertis")}</strong><span class="embed-pill">0</span></div>
+          <div class="embed-stat"><strong>${t("js.demo.totalBans")}</strong><span class="embed-pill">0</span></div>
+          <div class="embed-stat"><strong>${t("js.demo.ticketsJour")}</strong><span class="embed-pill">0</span></div>
         </div>
-        <p class="embed-footer">ModBot - Protection de votre communauté - Aujourd'hui à 14:58</p>
+        <p class="embed-footer">${t("js.demo.piedProtection")} - 14:58</p>
       </div>
     `;
   }
@@ -229,14 +198,14 @@ function getCommandMarkup(command) {
         <div class="avert-head">
           <div>
             <h3>gimskh</h3>
-            <h4>${data.title}</h4>
+            <h4>${t(data.title)}</h4>
           </div>
           <div class="mod-photo" aria-hidden="true"></div>
         </div>
 
         <div class="avert-main-fields">
           <div class="avert-field member">
-            <strong>Membre</strong>
+            <strong>${t("js.demo.membre")}</strong>
             <span class="embed-pill">@</span>
           </div>
           <div class="avert-field id">
@@ -244,30 +213,30 @@ function getCommandMarkup(command) {
             <span class="embed-pill">1189681599965573131</span>
           </div>
           <div class="avert-field joined">
-            <strong>Rejoint le</strong>
+            <strong>${t("js.demo.rejointLe")}</strong>
             <span>30/05/2026<br>à 23:51</span>
           </div>
         </div>
 
         <div class="avert-secondary-fields">
           <div class="avert-field progress">
-            <strong>Progression</strong>
+            <strong>${t("js.demo.progression")}</strong>
             <div class="progress-line">
               <div class="meter"><span></span></div>
               <span class="embed-pill">0/4</span>
             </div>
           </div>
           <div class="avert-field">
-            <strong>Prochain</strong>
+            <strong>${t("js.demo.prochain")}</strong>
             <span>warn</span>
           </div>
           <div class="avert-field">
-            <strong>Statut</strong>
-            <span>Aucun</span>
+            <strong>${t("js.demo.statut")}</strong>
+            <span>${t("js.demo.aucun")}</span>
           </div>
         </div>
 
-        <p class="embed-footer">ModBot - Dossier de modération - Aujourd'hui à 14:59</p>
+        <p class="embed-footer">${t("js.demo.piedDossier")} - 14:59</p>
       </div>
     `;
   }
@@ -278,7 +247,7 @@ function getCommandMarkup(command) {
         <span class="discord-avatar"><img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">MB</span>
         <div>
           <div class="discord-meta">
-            <span class="used-command">LGCY a utilisé</span>
+            <span class="used-command">${t("js.demo.aUtilise")}</span>
             <span class="slash-chip">${data.command}</span>
           </div>
           <div class="discord-meta">
@@ -369,14 +338,14 @@ function askAssistant(key) {
   const data = assistantAnswers[key];
   if (!data) return;
 
-  addAssistantMessage("user", data.question);
+  addAssistantMessage("user", t(data.question));
 
   window.setTimeout(() => {
-    const link = data.link && key !== "patch" ? `<a href="${discordInvite}" target="_blank" rel="noreferrer">${data.link} →</a>` : "";
+    const link = data.link && key !== "patch" ? `<a href="${discordInvite}" target="_blank" rel="noreferrer">${t(data.link)} →</a>` : "";
     const patchLinks = key === "patch"
-      ? `<a href="${patchDiscordChannel}" target="_blank" rel="noreferrer">Ouvrir le salon →</a><a href="${discordInvite}" target="_blank" rel="noreferrer">Rejoindre le serveur →</a>`
+      ? `<a href="${patchDiscordChannel}" target="_blank" rel="noreferrer">${t("home.ouvrirLeSalon")} →</a><a href="${discordInvite}" target="_blank" rel="noreferrer">${t("home.rejoindreLeServeur")} →</a>`
       : "";
-    addAssistantMessage("bot", `${data.answer}${link}${patchLinks}`);
+    addAssistantMessage("bot", `${t(data.answer)}${link}${patchLinks}`);
   }, 220);
 }
 
@@ -437,7 +406,7 @@ function initNavigation() {
     // Le verrou du défilement évite que la page glisse sous le panneau.
     document.body.classList.toggle("nav-open", ouvert);
     toggle.setAttribute("aria-expanded", String(ouvert));
-    toggle.setAttribute("aria-label", ouvert ? "Fermer le menu" : "Ouvrir le menu");
+    toggle.setAttribute("aria-label", ouvert ? t("js.fermerLeMenu") : t("js.ouvrirLeMenu"));
   }
 
   toggle.addEventListener("click", () => {
@@ -486,11 +455,32 @@ function t(clef, repli = "") {
 }
 
 /**
+ * Texte traduit avec substitution : tp(clef, { membre: "Léa" }).
+ *
+ * Les valeurs se notent {nom} dans la traduction. Une phrase reste ainsi
+ * d'un seul tenant, et chaque langue place le nombre ou le pseudo là où sa
+ * grammaire l'exige — ce qu'une concaténation de morceaux interdit.
+ */
+function tp(clef, valeurs = {}, repli = "") {
+  return Object.entries(valeurs).reduce(
+    (texte, [nom, valeur]) => texte.split(`{${nom}}`).join(String(valeur)),
+    t(clef, repli));
+}
+
+/**
+ * Pluriel : le français et l'anglais basculent à 2, l'arabe a d'autres
+ * règles mais « un / plusieurs » suffit pour les compteurs affichés ici.
+ */
+function tn(clefUn, clefPlusieurs, nombre, valeurs = {}) {
+  return tp(nombre > 1 ? clefPlusieurs : clefUn, { n: nombre, ...valeurs });
+}
+
+/**
  * Applique une langue à toute la page.
  *
- * Quatre attributs sont pris en charge : le contenu, le placeholder, le
- * title et l'aria-label. Une clef absente laisse le texte du HTML en place
- * plutôt que de vider l'élément.
+ * Cinq attributs sont pris en charge : le contenu texte, le contenu riche,
+ * le placeholder, le title et l'aria-label. Une clef absente laisse le texte
+ * du HTML en place plutôt que de vider l'élément.
  */
 function applySiteLanguage(language) {
   const dictionnaire = siteTranslations[language] || siteTranslations[LANGUE_PAR_DEFAUT] || {};
@@ -513,6 +503,18 @@ function applySiteLanguage(language) {
       return;
     }
     element.textContent = valeur;
+  });
+  // Un paragraphe qui mêle du texte et de la mise en forme (« la restauration
+  // est <strong>additive</strong> : elle recrée… ») ne peut pas se traduire
+  // morceau par morceau : l'ordre des mots change d'une langue à l'autre. On
+  // remplace alors tout son contenu.
+  //
+  // Le HTML injecté vient de translations.js, un fichier du site écrit à la
+  // main et livré tel quel : ce n'est jamais une saisie d'utilisateur. Les
+  // textes venant du bot ou d'un membre passent, eux, par escapeHtml().
+  document.querySelectorAll("[data-i18n-html]").forEach((element) => {
+    const valeur = lire(element.dataset.i18nHtml);
+    if (valeur) element.innerHTML = valeur;
   });
   document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
     const valeur = lire(element.dataset.i18nPlaceholder);
@@ -621,12 +623,24 @@ function isLocalHost() {
   return ["localhost", "127.0.0.1", "[::1]", ""].includes(location.hostname);
 }
 
-/** Formate une date ISO en date lisible française. Renvoie "—" si invalide. */
+/**
+ * Étiquette de locale pour les dates et les nombres.
+ *
+ * En arabe on force les chiffres latins : le reste de l'écran affiche des
+ * identifiants Discord et des compteurs en chiffres latins, et mélanger les
+ * deux systèmes dans une même page se lit mal.
+ */
+function localeAffichage() {
+  const langue = getSiteLanguage();
+  return langue === "ar" ? "ar-u-nu-latn" : langue;
+}
+
+/** Formate une date ISO dans la langue du site. Renvoie "—" si invalide. */
 function formatIsoDateFr(value) {
   if (!value) return "—";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
+  return date.toLocaleDateString(localeAffichage(), { day: "2-digit", month: "long", year: "numeric" });
 }
 
 /** Date + heure lisibles, pour les journaux. */
@@ -634,7 +648,7 @@ function formatIsoDateTimeFr(value) {
   if (!value) return "—";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleString("fr-FR", {
+  return date.toLocaleString(localeAffichage(), {
     day: "2-digit", month: "2-digit", year: "numeric",
     hour: "2-digit", minute: "2-digit"
   });
@@ -778,7 +792,7 @@ function canManageDiscordGuild(guild) {
 function normalizeDiscordGuild(guild, installed = false) {
   const icon = discordGuildIconUrl(guild);
   const banner = discordGuildBannerUrl(guild);
-  const name = String(guild?.name || "Serveur Discord");
+  const name = String(guild?.name || t("js.serveurDiscord"));
   return {
     id: String(guild?.id || ""),
     name,
@@ -826,7 +840,7 @@ async function fetchDiscordManageableGuilds() {
   if (!response.ok) {
     localStorage.removeItem("modbot-discord-access-token");
     sessionStorage.removeItem("modbot-discord-access-token");
-    throw new Error("Session Discord expirée.");
+    throw new Error(t("js.auth.sessionExpiree"));
   }
   const guilds = await response.json();
   if (!Array.isArray(guilds)) return [];
@@ -860,7 +874,7 @@ async function modbotApiFetch(path, options = {}) {
   }
   const response = await fetch(`${base}${path}`, { ...options, headers });
   if (!response.ok) {
-    let message = `Erreur connexion ModBot ${response.status}`;
+    let message = tp("js.auth.erreurConnexion", { code: response.status });
     try {
       const text = await response.text();
       if (text) {
@@ -917,7 +931,7 @@ function initApiBridgeFromUrl() {
   }
   if (loginError) {
     sessionStorage.setItem("modbot-login-error", loginError);
-    console.warn("Erreur de connexion ModBot:", loginError);
+    console.warn(t("js.auth.erreurConnexionCourte"), loginError);
     cleanOAuthUrl();
   }
 }
@@ -1022,7 +1036,7 @@ function initAdminZone() {
   }
 
   function formatStat(value) {
-    return Number(value || 0).toLocaleString("fr-FR");
+    return Number(value || 0).toLocaleString(localeAffichage());
   }
 
   function getLocalAdminStats() {
@@ -1079,18 +1093,18 @@ function initAdminZone() {
     protectedItems.forEach((item) => {
       item.hidden = false;
     });
-    if (adminStatus) adminStatus.innerHTML = "<span></span> ✅ Admin validé";
+    if (adminStatus) adminStatus.innerHTML = `<span></span> ${escapeHtml(t("js.adm.adminValide"))}`;
     if (adminError) adminError.hidden = true;
     sessionStorage.setItem("modbot-admin-id", adminId);
     loadAdminStats();
-    showAdminToast("✅ Accès administrateur ouvert");
+    showAdminToast(t("js.adm.accesOuvert"));
   }
 
   function tryUnlockAdmin() {
     const adminId = adminIdInput?.value.trim() || "";
     if (!allowedAdminIds.has(adminId)) {
       if (adminError) adminError.hidden = false;
-      showAdminToast("❌ ID Discord non autorisé");
+      showAdminToast(t("js.adm.idNonAutorise"));
       return;
     }
     unlockAdmin(adminId);
@@ -1120,11 +1134,11 @@ function initAdminZone() {
     const list = document.querySelector("[data-admin-list]");
     const adminId = input?.value.trim();
     if (!adminId || !list) {
-      showAdminToast("⚠️ Ajoute un ID Discord administrateur");
+      showAdminToast(t("js.adm.ajouteUnId"));
       return;
     }
     if (allowedAdminIds.has(adminId)) {
-      showAdminToast("✅ Cet administrateur est déjà autorisé");
+      showAdminToast(t("js.adm.dejaAutorise"));
       return;
     }
     allowedAdminIds.add(adminId);
@@ -1132,12 +1146,12 @@ function initAdminZone() {
     localStorage.setItem("modbot-admin-ids", JSON.stringify(nextStoredIds));
     const item = document.createElement("div");
     item.innerHTML = `
-      <span><strong>${adminId}</strong><small>Administrateur ajouté manuellement</small></span>
-      <button type="button" data-remove-admin="${adminId}">Retirer</button>
+      <span><strong>${escapeHtml(adminId)}</strong><small>${escapeHtml(t("js.adm.ajouteManuellement"))}</small></span>
+      <button type="button" data-remove-admin="${escapeHtml(adminId)}">${escapeHtml(t("js.retirer"))}</button>
     `;
     list.append(item);
     input.value = "";
-    showAdminToast(`🔐 Administrateur ${adminId} ajouté`);
+    showAdminToast(tp("js.adm.adminAjoute", { id: adminId }));
   });
 
   document.querySelector("[data-admin-list]")?.addEventListener("click", (event) => {
@@ -1148,7 +1162,7 @@ function initAdminZone() {
     allowedAdminIds.delete(adminId);
     localStorage.setItem("modbot-admin-ids", JSON.stringify(Array.from(allowedAdminIds)));
     button.closest("div")?.remove();
-    showAdminToast(`🗑️ Administrateur ${adminId} retiré`);
+    showAdminToast(tp("js.adm.adminRetire", { id: adminId }));
   });
 
   document.querySelector("[data-blacklist-add]")?.addEventListener("click", async () => {
@@ -1156,17 +1170,17 @@ function initAdminZone() {
     const reasonInput = document.querySelector("[data-blacklist-reason]");
     const list = document.querySelector("[data-blacklist-list]");
     const member = memberInput?.value.trim();
-    const reason = reasonInput?.value.trim() || "Aucune raison renseignée";
+    const reason = reasonInput?.value.trim() || t("js.adm.aucuneRaison");
     if (!member || !list) {
-      showAdminToast("⚠️ Ajoute un membre à blacklister");
+      showAdminToast(t("js.adm.ajouteUnMembre"));
       return;
     }
-    const emptyRow = Array.from(list.children).find((row) => row.textContent.includes("Aucun membre blacklisté"));
+    const emptyRow = list.querySelector("[data-i18n='adm.aucunMembreBlackliste']")?.closest("div");
     emptyRow?.remove();
     const item = document.createElement("div");
     item.innerHTML = `
-      <span><strong>${member}</strong><small>${reason}</small></span>
-      <button type="button" data-blacklist-remove>Retirer</button>
+      <span><strong>${escapeHtml(member)}</strong><small>${escapeHtml(reason)}</small></span>
+      <button type="button" data-blacklist-remove>${escapeHtml(t("js.retirer"))}</button>
     `;
     list.prepend(item);
     memberInput.value = "";
@@ -1176,9 +1190,9 @@ function initAdminZone() {
         method: "POST",
         body: JSON.stringify({ member, reason })
       });
-      showAdminToast(`🚫 ${member} blacklisté côté bot`);
+      showAdminToast(tp("js.adm.blacklisteBot", { membre: member }));
     } catch (error) {
-      showAdminToast(`💾 ${member} blacklisté localement, connexion bot non disponible`);
+      showAdminToast(tp("js.adm.blacklisteLocal", { membre: member }));
     }
   });
 
@@ -1186,14 +1200,14 @@ function initAdminZone() {
     const button = event.target.closest("[data-blacklist-remove]");
     if (!button) return;
     button.closest("div")?.remove();
-    showAdminToast("✅ Membre retiré de la blacklist");
+    showAdminToast(t("js.adm.retireBlacklist"));
   });
 
   document.querySelector("[data-refresh-servers]")?.addEventListener("click", () => {
     const list = document.querySelector("[data-admin-server-list]");
     if (!list) return;
     list.querySelectorAll("small").forEach((item) => {
-      item.textContent = "Prêt pour sync bot.guilds";
+      item.textContent = t("js.adm.pretPourSync");
     });
   });
 }
@@ -1279,6 +1293,7 @@ function initDashboard() {
     installed: false
   };
   let dashboardGuilds = [];
+  let dernierConfig = null;   // derniere config reçue, pour le redessin
   let dashboardResources = { channels: [], roles: [] };
 
   function showToast(message) {
@@ -1298,22 +1313,22 @@ function initDashboard() {
 
   function setOfferInviteFallbackCopy() {
     if (!requiresLiveDiscordFlow) return;
-    if (authTitle) authTitle.textContent = "Connecte-toi avec Discord";
+    if (authTitle) authTitle.textContent = t("dash.connecteToiAvecDiscord");
     if (authCopy) {
-      authCopy.textContent = "Le dashboard chargera ensuite tous les serveurs où tu as Administrateur ou Gérer le serveur.";
+      authCopy.textContent = t("js.auth.chargeraServeurs");
     }
     if (authNote) {
-      authNote.textContent = "Après connexion, choisis un serveur. Si ModBot n'y est pas encore, le dashboard proposera l'invitation officielle du bot.";
+      authNote.textContent = t("js.auth.apresConnexion");
     }
     if (dashboardLoginButton) {
-      dashboardLoginButton.innerHTML = "<span>💬</span> Se connecter avec Discord";
+      dashboardLoginButton.innerHTML = `<span>💬</span> ${escapeHtml(t("dash.seConnecterAvecDiscord"))}`;
     }
   }
 
   function openDiscordInviteSelector() {
     const inviteUrl = buildDiscordOAuthUrl("invite");
     if (!inviteUrl) {
-      showToast("⚠️ Client ID Discord manquant : impossible de créer le lien d'invitation");
+      showToast(t("js.auth.clientIdManquant"));
       return false;
     }
     window.location.href = inviteUrl;
@@ -1381,11 +1396,11 @@ function initDashboard() {
   }
 
   function channelLabel(channel) {
-    return channel?.name ? `# ${channel.name}` : `Salon ${channel?.id || ""}`;
+    return channel?.name ? `# ${channel.name}` : tp("js.salonNumero", { id: channel?.id || "" });
   }
 
   function roleLabel(role) {
-    return role?.name ? `@${role.name}` : `Rôle ${role?.id || ""}`;
+    return role?.name ? `@${role.name}` : tp("js.roleNumero", { id: role?.id || "" });
   }
 
   function setInputState(input) {
@@ -1395,7 +1410,7 @@ function initDashboard() {
     const active = Boolean(input.value.trim());
     state.classList.toggle("active", active);
     state.classList.toggle("inactive", !active);
-    state.textContent = active ? "🟢 Actif" : "⚪ Inactif";
+    state.textContent = t(active ? "js.actif" : "js.inactif");
   }
 
   function renderDashboardResources(resources = {}) {
@@ -1421,7 +1436,7 @@ function initDashboard() {
     const supportRole = document.querySelector("[data-ticket-support-role]");
     if (supportRole) {
       const current = supportRole.value;
-      supportRole.innerHTML = `<option value="">Choisir un rôle support</option>` + dashboardResources.roles.map((role) => (
+      supportRole.innerHTML = `<option value="">${escapeHtml(t("js.choisirRoleSupport"))}</option>` + dashboardResources.roles.map((role) => (
         `<option value="${escapeHtml(role.id)}">${escapeHtml(roleLabel(role))}</option>`
       )).join("");
       if (current) supportRole.value = current;
@@ -1432,7 +1447,7 @@ function initDashboard() {
     const captchaRole = document.querySelector("[data-captcha-role]");
     if (captchaRole) {
       const current = captchaRole.value;
-      captchaRole.innerHTML = `<option value="">— Aucun —</option>` + dashboardResources.roles.map((role) => (
+      captchaRole.innerHTML = `<option value="">${escapeHtml(t("js.aucun"))}</option>` + dashboardResources.roles.map((role) => (
         `<option value="${escapeHtml(role.id)}">${escapeHtml(roleLabel(role))}</option>`
       )).join("");
       if (current) captchaRole.value = current;
@@ -1441,7 +1456,7 @@ function initDashboard() {
     const captchaChannel = document.querySelector("[data-captcha-channel]");
     if (captchaChannel) {
       const current = captchaChannel.value;
-      captchaChannel.innerHTML = `<option value="">— Aucun —</option>` + dashboardResources.channels.map((channel) => (
+      captchaChannel.innerHTML = `<option value="">${escapeHtml(t("js.aucun"))}</option>` + dashboardResources.channels.map((channel) => (
         `<option value="${escapeHtml(channel.id)}">${escapeHtml(channelLabel(channel))}</option>`
       )).join("");
       if (current) captchaChannel.value = current;
@@ -1450,13 +1465,13 @@ function initDashboard() {
     // Salons des messages d'arrivée et de départ.
     // Les ressources arrivent parfois après la configuration : on retombe sur
     // welcomeState, sinon la valeur enregistrée serait perdue à l'affichage.
-    [["[data-welcome-channel]", "— Aucun —", "channel_id"],
-     ["[data-welcome-departure-channel]", "— Même salon —", "departure_channel_id"]]
+    [["[data-welcome-channel]", "js.aucun", "channel_id"],
+     ["[data-welcome-departure-channel]", "js.memeSalon", "departure_channel_id"]]
       .forEach(([selecteur, vide, clef]) => {
         const champ = document.querySelector(selecteur);
         if (!champ) return;
         const voulu = champ.value || welcomeState[clef] || "";
-        champ.innerHTML = `<option value="">${escapeHtml(vide)}</option>` +
+        champ.innerHTML = `<option value="">${escapeHtml(t(vide))}</option>` +
           dashboardResources.channels.map((channel) => (
             `<option value="${escapeHtml(channel.id)}">${escapeHtml(channelLabel(channel))}</option>`
           )).join("");
@@ -1467,11 +1482,12 @@ function initDashboard() {
 
     document.querySelectorAll(".reaction-role-row input:nth-of-type(2)").forEach((input) => {
       input.setAttribute("list", "dashboardRoleOptions");
-      input.placeholder = "ID du rôle ou @rôle";
+      input.placeholder = t("js.idDuRoleOuRole");
     });
   }
 
   function renderModerationConfig(config = {}) {
+    dernierConfig = config;
     const moderation = config?.moderation || {};
     const security = config?.security || {};
     const customWords = Array.isArray(moderation.custom_words)
@@ -1480,8 +1496,8 @@ function initDashboard() {
     const filteredWords = Array.isArray(moderation.filtered_words)
       ? moderation.filtered_words
       : [
-          ...(Array.isArray(security.default_words) ? security.default_words.map((word) => ({ word, source: "default", label: "par défaut" })) : []),
-          ...customWords.map((word) => ({ word, source: "custom", label: "personnalisé" }))
+          ...(Array.isArray(security.default_words) ? security.default_words.map((word) => ({ word, source: "default" })) : []),
+          ...customWords.map((word) => ({ word, source: "custom" }))
         ];
     const sanctions = Array.isArray(moderation.sanctions)
       ? moderation.sanctions
@@ -1503,30 +1519,30 @@ function initDashboard() {
       wordList.innerHTML = words.length ? words.map((item) => {
         const word = String(item.word || item).trim();
         const source = item.source === "custom" ? "custom" : "default";
-        const label = source === "custom" ? "personnalisé" : "par défaut";
+        const label = t(source === "custom" ? "js.personnalise" : "js.parDefaut");
         return `<span class="filtered-word-chip is-${source}"><strong>${escapeHtml(word)}</strong><em>${label}</em></span>`;
-      }).join("") : `<div class="dashboard-empty-state"><strong>Aucun mot filtré</strong><span>La liste sera chargée depuis le bot.</span></div>`;
+      }).join("") : `<div class="dashboard-empty-state"><strong>${escapeHtml(t("js.aucunMotFiltre"))}</strong><span>${escapeHtml(t("js.listeChargeeDepuisBot"))}</span></div>`;
     }
 
     const sanctionList = document.querySelector("[data-sanction-list]");
     if (sanctionList) {
       sanctionList.innerHTML = sanctions.length ? sanctions.slice(0, 30).map((item) => {
-        const pseudo = item.pseudo || item.username || "Utilisateur inconnu";
-        const userId = item.id || item.user_id || "ID inconnu";
-        const reason = item.reason || item.raison || "Aucune raison fournie";
-        const duration = item.duration || item.duree || "Permanent";
-        const date = item.date || item.created_at || "Date inconnue";
+        const pseudo = item.pseudo || item.username || t("js.utilisateurInconnu");
+        const userId = item.id || item.user_id || t("js.idInconnu");
+        const reason = item.reason || item.raison || t("js.aucuneRaisonFournie");
+        const duration = item.duration || item.duree || t("js.permanent");
+        const date = item.date || item.created_at || t("js.dateInconnue");
         const guildName = item.guild_name || item.server_name || "";
         return `
           <article class="sanction-row">
-            <span class="state inactive">Ban</span>
+            <span class="state inactive">${escapeHtml(t("js.ban"))}</span>
             <strong>${escapeHtml(pseudo)}</strong>
             <code>${escapeHtml(userId)}</code>
             <small>${escapeHtml(reason)}</small>
             <small>${escapeHtml(duration)} • ${escapeHtml(date)}${guildName ? ` • ${escapeHtml(guildName)}` : ""}</small>
           </article>
         `;
-      }).join("") : `<div class="dashboard-empty-state"><strong>Aucun bannissement enregistré</strong><span>Les prochains bans effectués par ModBot apparaîtront ici.</span></div>`;
+      }).join("") : `<div class="dashboard-empty-state"><strong>${escapeHtml(t("js.aucunBanEnregistre"))}</strong><span>${escapeHtml(t("js.prochainsBansIci"))}</span></div>`;
     }
   }
 
@@ -1549,14 +1565,14 @@ function initDashboard() {
     if (countTarget) countTarget.textContent = String(count);
     if (ticketTarget) ticketTarget.textContent = String(tickets.total || 0);
     if (lastTarget) lastTarget.textContent = last ? `${last.note || "?"}/5` : "—";
-    if (labelTarget) labelTarget.textContent = count ? "Stats réelles du bot" : "Aucune note réelle";
+    if (labelTarget) labelTarget.textContent = t(count ? "js.statsReellesDuBot" : "dash.aucuneNoteReelle");
     if (overviewAverageTarget) overviewAverageTarget.textContent = `${safeAverage.toFixed(2)}/5`;
     if (overviewCountTarget) overviewCountTarget.textContent = String(count);
 
     const logFeed = document.querySelector("[data-dashboard-log-feed]");
     if (logFeed) {
       if (!logs.length) {
-        logFeed.innerHTML = `<div><span>—</span> Aucun log réel enregistré pour ce serveur.</div>`;
+        logFeed.innerHTML = `<div><span>—</span> ${escapeHtml(t("js.aucunLogReel"))}</div>`;
       } else {
         logFeed.innerHTML = logs.slice(0, 20).map((entry) => {
           const date = String(entry.date || entry.created_at || "").slice(11, 16) || "—";
@@ -1581,10 +1597,10 @@ function initDashboard() {
     }
   }
 
-  function emptyGuildMarkup(message = "Aucun serveur Discord administrable trouvé.") {
+  function emptyGuildMarkup(message = t("js.aucunServeurAdministrable")) {
     return `
       <div class="dashboard-empty-state">
-        <strong>Serveur indisponible</strong>
+        <strong>${escapeHtml(t("js.serveurIndisponible"))}</strong>
         <span>${escapeHtml(message)}</span>
       </div>
     `;
@@ -1593,28 +1609,29 @@ function initDashboard() {
   function formatMemberCount(value) {
     const count = Number(value || 0);
     if (!Number.isFinite(count) || count <= 0) return "";
-    if (count >= 1000) return `${(count / 1000).toFixed(count >= 10000 ? 0 : 1)}k Membres`;
-    return `${count} Membre${count > 1 ? "s" : ""}`;
+    const arrondi = `${(count / 1000).toFixed(count >= 10000 ? 0 : 1)}k`;
+    if (count >= 1000) return tp("js.membresPluriel", { n: arrondi });
+    return tn("js.membreSingulier", "js.membresPluriel", count);
   }
 
   function guildActionLabel(guild) {
-    if (guild.installed) return "Ouvrir";
-    return "Ajouter ModBot";
+    if (guild.installed) return t("js.ouvrir");
+    return t("js.ajouterModbot");
   }
 
   function guildStatusLabel(guild) {
-    if (guild.local) return "Ajouter ModBot via Discord";
-    return formatMemberCount(guild.member_count) || (guild.installed ? "ModBot installé" : "Bot non installé");
+    if (guild.local) return t("js.ajouterViaDiscord");
+    return formatMemberCount(guild.member_count) || t(guild.installed ? "js.modbotInstalle" : "js.botNonInstalle");
   }
 
   function updateServerCount(guilds) {
     if (!serverCountLabel) return;
     const realGuilds = guilds.filter((guild) => !guild.local);
     if (realGuilds.length) {
-      serverCountLabel.textContent = `Vous avez rejoint ${realGuilds.length} serveur${realGuilds.length > 1 ? "s" : ""}.`;
+      serverCountLabel.textContent = tn("js.rejointUnServeur", "js.rejointDesServeurs", realGuilds.length);
       return;
     }
-    serverCountLabel.textContent = "Choisis un serveur ou ajoute ModBot via Discord.";
+    serverCountLabel.textContent = t("js.choisisOuAjoute");
   }
 
   function currentServerSearchTerm() {
@@ -1727,21 +1744,21 @@ function initDashboard() {
         state = {
           level: "error",
           message: getModbotApiBase()
-            ? "API ModBot injoignable. Vérifie que le bot est démarré et que l'URL est correcte."
-            : "URL de l'API ModBot non configurée. Renseigne-la ci-dessous pour activer la connexion."
+            ? t("js.apiInjoignable")
+            : t("js.apiNonConfiguree")
         };
       } else if (!lastApiHealth.oauth_configured) {
         state = {
           level: "warn",
           message:
-            "Bot joignable, mais OAuth Discord incomplet. Définis DISCORD_CLIENT_SECRET " +
-            "et DISCORD_REDIRECT_URI (ou PUBLIC_BASE_URL) côté bot."
+            t("js.oauthIncomplet")
         };
       } else {
         const guilds = Number(lastApiHealth.guilds || 0);
         state = {
           level: "ok",
-          message: `Bot connecté : ${lastApiHealth.bot || "ModBot"} · ${guilds} serveur${guilds > 1 ? "s" : ""}.`
+          message: tn("js.botConnecteUnServeur", "js.botConnecteDesServeurs", guilds,
+                      { bot: lastApiHealth.bot || "ModBot" })
         };
       }
     }
@@ -1752,7 +1769,8 @@ function initDashboard() {
     text.textContent = state.message;
 
     if (badge) {
-      const labels = { ok: "connectée", warn: "à configurer", error: "non détectée", pending: "test…" };
+      const labels = { ok: t("js.badgeConnectee"), warn: t("js.badgeAConfigurer"),
+                       error: t("js.badgeNonDetectee"), pending: t("js.badgeTest") };
       badge.textContent = labels[state.level] || state.level;
       badge.dataset.level = state.level;
     }
@@ -1777,11 +1795,11 @@ function initDashboard() {
       ? safeGuilds.filter((guild) => guild.name.toLowerCase().includes(term))
       : safeGuilds;
     if (!safeGuilds.length) {
-      serverGrid.innerHTML = emptyGuildMarkup("Connecte l'API ModBot ou utilise l'invitation Discord officielle pour installer le bot.");
+      serverGrid.innerHTML = emptyGuildMarkup(t("js.connecteApiOuInvitation"));
       return;
     }
     if (!visibleGuilds.length) {
-      serverGrid.innerHTML = emptyGuildMarkup("Aucun serveur ne correspond à cette recherche.");
+      serverGrid.innerHTML = emptyGuildMarkup(t("js.aucunServeurRecherche"));
       return;
     }
     serverGrid.innerHTML = visibleGuilds.map((guild) => `
@@ -1845,7 +1863,7 @@ function initDashboard() {
         forgetSession();
         return "expired";
       }
-      console.warn("Reprise de session impossible :", message);
+      console.warn(t("js.repriseImpossible"), message);
       return "unavailable";
     }
   }
@@ -1859,7 +1877,7 @@ function initDashboard() {
     // 1. Session déjà valide : on entre directement
     const reprise = await resumeSession(base);
     if (reprise === "ok") {
-      if (!silencieux) showToast("✅ Connecté au bot");
+      if (!silencieux) showToast(t("js.connecteAuBot"));
       return;
     }
 
@@ -1869,8 +1887,8 @@ function initDashboard() {
       renderAuthStatus();
       if (!silencieux) {
         showToast(getConfiguredModbotApiBase()
-          ? "⚠️ Le bot ne répond pas à cette adresse. Vérifie qu'il est démarré."
-          : "⚠️ Bot introuvable. Indique son adresse dans « Configuration de l'API ».");
+          ? t("js.botNeRepondPas")
+          : t("js.botIntrouvable"));
       }
       return;
     }
@@ -1880,14 +1898,14 @@ function initDashboard() {
       showDashboardStage("auth");
       renderAuthStatus();
       if (!silencieux) {
-        showToast("⚠️ OAuth Discord incomplet côté bot : ajoute CLIENT_SECRET et REDIRECT_URI");
+        showToast(t("js.oauthIncompletCourt"));
       }
       return;
     }
 
     // 4. Session expirée pendant l'usage : on relance Discord sans rien demander
     if (reprise === "expired") {
-      showToast("🔐 Session expirée, reconnexion…");
+      showToast(t("js.sessionExpireeReconnexion"));
       redirectToDiscordLogin(base);
       return;
     }
@@ -1901,7 +1919,7 @@ function initDashboard() {
    */
   async function autoConnect() {
     showDashboardStage("auth");
-    renderAuthStatus({ level: "pending", message: "Recherche du bot ModBot…" });
+    renderAuthStatus({ level: "pending", message: t("js.rechercheDuBot") });
 
     const base = await findAvailableApiBase();
     if (!base) {
@@ -1910,7 +1928,7 @@ function initDashboard() {
     }
 
     if (await resumeSession(base) === "ok") {
-      showToast("✅ Reconnecté automatiquement");
+      showToast(t("js.reconnecteAuto"));
       return;
     }
 
@@ -1925,7 +1943,7 @@ function initDashboard() {
 
     renderAuthStatus();
     if (lastApiHealth?.oauth_configured) {
-      showToast("🔐 Connecte-toi avec Discord pour voir tes serveurs");
+      showToast(t("js.connecteToiPourVoir"));
     }
   }
 
@@ -1946,25 +1964,25 @@ function initDashboard() {
     const applyUrl = async () => {
       const value = input.value.trim();
       if (!value) {
-        showToast("⚠️ Indique l'adresse publique de ton bot (https://…)");
+        showToast(t("js.indiqueAdressePublique"));
         return;
       }
-      renderAuthStatus({ level: "pending", message: "Test de l'API en cours…" });
+      renderAuthStatus({ level: "pending", message: t("js.testApiEnCours") });
       const clean = normalizeApiBase(value);
       const health = await probeApiBase(clean);
       if (!health) {
         renderAuthStatus({
           level: "error",
-          message: `Aucune API ModBot n'a répondu sur ${clean}/api/health. Vérifie l'URL, que le bot est démarré, et que CORS autorise ce site.`
+          message: tp("js.aucuneApiRepondu", { url: `${clean}/api/health` })
         });
-        showToast("❌ API introuvable à cette adresse");
+        showToast(t("js.apiIntrouvableAdresse"));
         return;
       }
       setModbotApiBase(clean);
       lastApiHealth = health;
       apiDiscovery = null; // force une nouvelle découverte avec cette base
       renderAuthStatus();
-      showToast("✅ Bot trouvé, connexion en cours…");
+      showToast(t("js.botTrouveConnexion"));
       dashboardLogin();
     };
 
@@ -1982,7 +2000,7 @@ function initDashboard() {
       lastApiHealth = null;
       apiDiscovery = null;
       renderAuthStatus();
-      showToast("♻️ Adresse réinitialisée, nouvelle recherche…");
+      showToast(t("js.adresseReinitialisee"));
       findAvailableApiBase();
     });
   }
@@ -2016,7 +2034,7 @@ function initDashboard() {
     const optionList = document.getElementById("ticketOptionList");
     if (optionList && Array.isArray(tickets.options) && tickets.options.length) {
       optionList.innerHTML = tickets.options.map((option, index) => `
-        <div class="option-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(option.emoji || "🎫")}" maxlength="3"><input value="${escapeHtml(option.label || "Ticket")}"><input value="${escapeHtml(option.desc || "Ouvrir un ticket")}"><button type="button">Supprimer</button></div>
+        <div class="option-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(option.emoji || "🎫")}" maxlength="3"><input value="${escapeHtml(option.label || "Ticket")}"><input value="${escapeHtml(option.desc || t("js.ouvrirUnTicket"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>
       `).join("");
     }
 
@@ -2074,7 +2092,7 @@ function initDashboard() {
 
     if (config.language) {
       const languageSelect = document.querySelector("[data-dashboard-panel='language'] select");
-      if (languageSelect) languageSelect.value = config.language === "en" ? "English" : "Français";
+      if (languageSelect) languageSelect.value = config.language === "en" ? "English" : "Français";  // valeurs du <select>, pas des libellés traduits
     }
 
 
@@ -2085,13 +2103,13 @@ function initDashboard() {
         if (!config.recurring_messages.length) {
           const empty = document.createElement("div");
           empty.className = "recurring-empty";
-          empty.textContent = "Aucun message récurrent créé pour le moment.";
+          empty.textContent = t("js.aucunMessageRecurrent");
           recurringList.append(empty);
         }
         config.recurring_messages.forEach((message) => {
           const item = document.createElement("div");
           item.className = "recurring-item";
-          item.dataset.name = message.name || "Message récurrent";
+          item.dataset.name = message.name || t("js.messageRecurrent");
           item.dataset.channel = message.channel_id || "";
           item.dataset.interval = message.interval || "30";
           item.dataset.unit = message.unit || "minutes";
@@ -2118,8 +2136,8 @@ function initDashboard() {
       const reactionRoleList = document.querySelector("[data-reaction-role-list]");
       if (reactionRoleList) {
         reactionRoleList.innerHTML = config.reaction_roles.map((role, index) => `
-          <div class="reaction-role-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(role.emoji || "✨")}" maxlength="3"><input value="${escapeHtml(role.role_id || role.role || "")}" list="dashboardRoleOptions"><input value="${escapeHtml(role.label || role.name || "Rôle")}"><button type="button">Supprimer</button></div>
-        `).join("") || `<div class="reaction-role-row"><span>01</span><input class="emoji-input" value="✨" maxlength="3"><input value="" list="dashboardRoleOptions"><input value="Nouveau rôle"><button type="button">Supprimer</button></div>`;
+          <div class="reaction-role-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(role.emoji || "✨")}" maxlength="3"><input value="${escapeHtml(role.role_id || role.role || "")}" list="dashboardRoleOptions"><input value="${escapeHtml(role.label || role.name || t("js.role"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>
+        `).join("") || `<div class="reaction-role-row"><span>01</span><input class="emoji-input" value="✨" maxlength="3"><input value="" list="dashboardRoleOptions"><input value="${escapeHtml(t("js.nouveauRole"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>`;
       }
       const reactionChannel = document.querySelector("[data-reaction-channel]");
       const reactionMode = document.querySelector("[data-reaction-mode]");
@@ -2141,7 +2159,7 @@ function initDashboard() {
         if (state) {
           state.classList.toggle("active", Boolean(relay.enabled));
           state.classList.toggle("inactive", !relay.enabled);
-          state.textContent = relay.enabled ? "🟢 Actif" : "⚪ Inactif";
+          state.textContent = t(relay.enabled ? "js.actif" : "js.inactif");
         }
       });
     }
@@ -2149,8 +2167,8 @@ function initDashboard() {
     const liveTitle = document.querySelector("[data-live-title]");
     const liveDescription = document.querySelector("[data-live-desc]");
     const liveTicketEmoji = document.querySelector("[data-live-ticket-emoji]");
-    if (liveTitle) liveTitle.textContent = tickets.title || "Ouvre ton ticket";
-    if (liveDescription) liveDescription.textContent = tickets.description || "Merci de sélectionner la raison de ta demande.";
+    if (liveTitle) liveTitle.textContent = tickets.title || t("dash.ouvreTonTicket");
+    if (liveDescription) liveDescription.textContent = tickets.description || t("js.merciDeSelectionner");
     if (liveTicketEmoji) liveTicketEmoji.textContent = tickets.emoji || "📩";
     renderModerationConfig(config);
     renderDashboardStats(config);
@@ -2164,9 +2182,9 @@ function initDashboard() {
       await loadDashboardResources(guildId);
       const data = await modbotApiFetch(`/api/guilds/${guildId}/config`, { cache: "no-store" });
       applyDashboardConfig(data.config);
-      showToast("✅ Configuration chargée depuis le bot");
+      showToast(t("js.configChargee"));
     } catch (error) {
-      showToast("⚠️ Configuration locale affichée, connexion bot non disponible");
+      showToast(t("js.configLocale"));
     }
     // Les modules sécurité / logs / sauvegardes ont leurs propres endpoints :
     // on les charge en parallèle sans bloquer l'affichage de la configuration.
@@ -2231,7 +2249,7 @@ function initDashboard() {
       });
     } else {
       const parDefaut = picker.dataset.imagePicker === "ticket-logo"
-        ? "Logo du serveur" : "Aucune image";
+        ? t("dash.logoDuServeur") : t("dash.aucuneImage");
       apercu.innerHTML = `<span class="image-picker-empty">${parDefaut}</span>`;
       apercu.classList.remove("has-image");
     }
@@ -2262,7 +2280,7 @@ function initDashboard() {
         if (!image) return;
 
         if (!TYPES_IMAGE.includes(image.type)) {
-          showToast("⚠️ Format non accepté : PNG, JPG, GIF ou WebP uniquement");
+          showToast(t("js.formatNonAccepte"));
           fichier.value = "";
           return;
         }
@@ -2279,9 +2297,9 @@ function initDashboard() {
           if (champUrl) champUrl.value = "";
           rafraichirApercu(picker, String(lecteur.result || ""));
           markPanelDirty("tickets");
-          showToast("🖼️ Image prête — enregistre pour l'appliquer");
+          showToast(t("js.imagePrete"));
         };
-        lecteur.onerror = () => showToast("⚠️ Lecture de l'image impossible");
+        lecteur.onerror = () => showToast(t("js.lectureImageImpossible"));
         lecteur.readAsDataURL(image);
         fichier.value = ""; // permet de rechoisir le même fichier
       });
@@ -2291,7 +2309,7 @@ function initDashboard() {
         if (champUrl) champUrl.value = "";
         rafraichirApercu(picker, "");
         markPanelDirty("tickets");
-        showToast("🗑️ Image retirée");
+        showToast(t("js.imageRetiree"));
       });
 
       champUrl?.addEventListener("input", () => {
@@ -2324,11 +2342,11 @@ function initDashboard() {
     );
 
     if (!dashboardGuilds.length) {
-      switcherList.innerHTML = `<p class="server-switcher-empty">Aucun serveur chargé.</p>`;
+      switcherList.innerHTML = `<p class="server-switcher-empty">${escapeHtml(t("js.aucunServeurCharge"))}</p>`;
       return;
     }
     if (!visibles.length) {
-      switcherList.innerHTML = `<p class="server-switcher-empty">Aucun résultat pour « ${escapeHtml(filtre)} ».</p>`;
+      switcherList.innerHTML = `<p class="server-switcher-empty">${escapeHtml(tp("js.aucunResultatPour", { terme: filtre }))}</p>`;
       return;
     }
 
@@ -2336,8 +2354,8 @@ function initDashboard() {
       .map((guild, index) => {
         const actif = guild.id === selectedServer.id;
         const statut = guild.installed
-          ? `${guild.member_count ? guild.member_count.toLocaleString("fr-FR") + " membres" : "ModBot installé"}`
-          : "ModBot non installé";
+          ? `${guild.member_count ? tp("js.membresPluriel", { n: guild.member_count.toLocaleString(localeAffichage()) }) : t("js.modbotInstalle")}`
+          : t("js.modbotNonInstalle");
         return `
       <button class="server-switcher-item${actif ? " is-current" : ""}${guild.installed ? "" : " is-uninstalled"}"
               type="button" role="option" aria-selected="${actif}"
@@ -2449,13 +2467,13 @@ function initDashboard() {
     ban: "🔨 Bannissement"
   };
   const PERMISSION_LABELS = {
-    view_audit_log: "Voir les logs d'audit (indispensable à l'anti-nuke)",
-    ban_members: "Bannir des membres",
-    kick_members: "Expulser des membres",
-    manage_roles: "Gérer les rôles",
-    manage_channels: "Gérer les salons",
+    view_audit_log: t("js.permVoirAudit"),
+    ban_members: t("js.permBannir"),
+    kick_members: t("js.permExpulser"),
+    manage_roles: t("js.permGererRoles"),
+    manage_channels: t("js.permGererSalons"),
     moderate_members: "Exclure temporairement (timeout)",
-    manage_guild: "Gérer le serveur"
+    manage_guild: t("js.permGererServeur")
   };
 
   let securityState = null;
@@ -2584,7 +2602,7 @@ function initDashboard() {
     setChecked("[data-autobackup-enabled]", autoBackup.enabled);
     setValue("[data-autobackup-interval]", autoBackup.interval_hours);
     const lastEl = document.querySelector("[data-autobackup-last]");
-    if (lastEl) lastEl.textContent = autoBackup.last ? formatIsoDateTimeFr(autoBackup.last) : "jamais";
+    if (lastEl) lastEl.textContent = autoBackup.last ? formatIsoDateTimeFr(autoBackup.last) : t("js.jamais");
 
     const captcha = security.captcha || {};
     setChecked("[data-captcha-enabled]", captcha.enabled);
@@ -2593,12 +2611,12 @@ function initDashboard() {
     const captchaEtat = document.querySelector("[data-captcha-state]");
     if (captchaEtat) {
       if (!captcha.enabled) {
-        captchaEtat.textContent = "Inactif";
+        captchaEtat.textContent = t("js.inactifSimple");
       } else if (!captcha.role_id) {
-        captchaEtat.textContent = "⚠️ Actif sans rôle — n'accorde rien";
+        captchaEtat.textContent = t("js.actifSansRole");
       } else {
-        const mode = captcha.image ? "image" : "texte";
-        captchaEtat.textContent = `Actif (${mode}) — ${captcha.pending || 0} en attente`;
+        const mode = t(captcha.image ? "js.modeImage" : "js.modeTexte");
+        captchaEtat.textContent = tp("js.actifEnAttente", { mode, n: captcha.pending || 0 });
       }
     }
 
@@ -2608,7 +2626,7 @@ function initDashboard() {
     if (adminsEl) adminsEl.textContent = String(alerts.admins_reachable ?? "—");
     const activesEl = document.querySelector("[data-alerts-active]");
     if (activesEl) {
-      activesEl.textContent = alerts.active ? `🚨 ${alerts.active}` : "Aucune";
+      activesEl.textContent = alerts.active ? `🚨 ${alerts.active}` : t("js.aucuneAlerte");
     }
 
     const safeBadge = document.querySelector("[data-safe-mode-badge]");
@@ -2631,16 +2649,16 @@ function initDashboard() {
     const s = securityState;
     if (s) {
       const protections = [
-        ["Anti-raid", s.antiraid?.enabled],
-        ["Anti-nuke", s.antinuke?.enabled],
-        ["Filtre de langage", s.filter?.enabled],
-        ["Restauration automatique", s.antinuke?.auto_restore],
-        ["Sauvegarde automatique", s.auto_backup?.enabled]
+        [t("js.protAntiRaid"), s.antiraid?.enabled],
+        [t("js.protAntiNuke"), s.antinuke?.enabled],
+        [t("js.protFiltreLangage"), s.filter?.enabled],
+        [t("js.protRestaurationAuto"), s.antinuke?.auto_restore],
+        [t("js.protSauvegardeAuto"), s.auto_backup?.enabled]
       ];
       const actives = protections.filter(([, on]) => on).length;
       txt("[data-overview-security]", `${actives}/${protections.length}`);
       txt("[data-overview-security-detail]",
-          s.safe_mode_active ? "🚨 Mode sécurité actif" : "Modules de protection actifs");
+          t(s.safe_mode_active ? "dash.modeSecuriteActif" : "js.modulesProtectionActifs"));
 
       const liste = document.querySelector("[data-overview-checklist]");
       if (liste) {
@@ -2652,8 +2670,8 @@ function initDashboard() {
             .map(([nom, on]) => `<li>${on ? "🟢" : "⚪"} ${escapeHtml(nom)}</li>`)
             .join("") +
           (manquantes.length
-            ? `<li>🔴 Permissions Discord manquantes : ${escapeHtml(manquantes.join(", "))}</li>`
-            : `<li>🟢 Toutes les permissions Discord sont accordées</li>`);
+            ? `<li>🔴 ${escapeHtml(tp("js.permissionsManquantes", { liste: manquantes.join(", ") }))}</li>`
+            : `<li>🟢 ${escapeHtml(t("js.toutesPermissionsAccordees"))}</li>`);
       }
     }
 
@@ -2661,7 +2679,7 @@ function initDashboard() {
     txt("[data-overview-backups]", String(nb));
     const derniere = backupList[0]?.created_at;
     txt("[data-overview-backups-detail]",
-        derniere ? `Dernière : ${formatIsoDateTimeFr(derniere)}` : "Aucune sauvegarde");
+        derniere ? tp("js.derniereSauvegarde", { date: formatIsoDateTimeFr(derniere) }) : t("js.aucuneSauvegarde"));
 
     txt("[data-overview-logs]", String(currentLogs.length));
   }
@@ -2673,7 +2691,7 @@ function initDashboard() {
       applySecurityState(data.security);
       renderOverview();
     } catch (error) {
-      console.warn("Sécurité indisponible :", error?.message || error);
+      console.warn("Securite indisponible :", error?.message || error);
     }
   }
 
@@ -2722,7 +2740,7 @@ function initDashboard() {
   async function saveGuildSecurity() {
     const guildId = selectedServer.id;
     if (!guildId) {
-      showToast("⚠️ Sélectionne d'abord un serveur");
+      showToast(t("js.selectionneDabord"));
       return;
     }
     try {
@@ -2732,9 +2750,9 @@ function initDashboard() {
       });
       applySecurityState(data.security);
       clearUnsavedChanges();
-      showToast("🛡️ Sécurité enregistrée dans le bot");
+      showToast(t("js.securiteEnregistree"));
     } catch (error) {
-      showToast(`⚠️ ${error?.message || "Enregistrement impossible"}`);
+      showToast(`⚠️ ${error?.message || t("js.enregistrementImpossible")}`);
     }
   }
 
@@ -2743,24 +2761,24 @@ function initDashboard() {
      ══════════════════════════════════════════════════════════════════ */
 
   const WELCOME_VARIABLES = [
-    { token: "{user}", label: "Mention du membre" },
-    { token: "{username}", label: "Nom du membre" },
-    { token: "{server}", label: "Nom du serveur" },
-    { token: "{memberCount}", label: "Nombre de membres" }
+    { token: "{user}", label: "js.varMention" },
+    { token: "{username}", label: "js.varNomMembre" },
+    { token: "{server}", label: "js.varNomServeur" },
+    { token: "{memberCount}", label: "js.varNombreMembres" }
   ];
 
   let welcomeState = {};
 
   /** Remplace les variables par un exemple, pour l'aperçu. */
   function renderWelcomeTemplate(texte) {
-    const serveur = selectedServer.name || "Mon Serveur";
+    const serveur = selectedServer.name || t("js.monServeur");
     const membres = Number(selectedServer.member_count || 0) || 1248;
     return String(texte || "")
       .replace(/\{user\}/g, "@Lucas")
       .replace(/\{username\}/g, "Lucas")
       .replace(/\{server\}/g, serveur)
-      .replace(/\{memberCount\}/gi, membres.toLocaleString("fr-FR"))
-      .replace(/\{member_count\}/g, membres.toLocaleString("fr-FR"))
+      .replace(/\{memberCount\}/gi, membres.toLocaleString(localeAffichage()))
+      .replace(/\{member_count\}/g, membres.toLocaleString(localeAffichage()))
       .replace(/\{tag\}/g, "Lucas#0001");
   }
 
@@ -2779,12 +2797,12 @@ function initDashboard() {
     conteneur.classList.toggle("is-plain", !embedOn);
 
     if (titre) {
-      titre.textContent = renderWelcomeTemplate(readValue("[data-welcome-title]") || "👋 Bienvenue");
+      titre.textContent = renderWelcomeTemplate(readValue("[data-welcome-title]") || t("dash.bienvenue"));
       titre.hidden = !embedOn;
     }
     if (texte) {
       texte.textContent = renderWelcomeTemplate(readValue("[data-welcome-message]"))
-        || "Écris un message pour voir l'aperçu.";
+        || t("js.ecrisUnMessage");
     }
 
     const url = readValue("[data-welcome-image]");
@@ -2794,9 +2812,11 @@ function initDashboard() {
       if (valide) image.src = url;
     }
     if (pied) {
-      const serveur = selectedServer.name || "Mon Serveur";
+      const serveur = selectedServer.name || t("js.monServeur");
       const membres = Number(selectedServer.member_count || 0) || 1248;
-      pied.textContent = embedOn ? `${serveur} — ${membres.toLocaleString("fr-FR")} membres` : "";
+      pied.textContent = embedOn
+        ? tp("js.piedApercu", { serveur, n: membres.toLocaleString(localeAffichage()) })
+        : "";
     }
 
     const lien = readValue("[data-welcome-button-url]");
@@ -2804,7 +2824,7 @@ function initDashboard() {
     if (bouton) {
       const actif = /^https?:\/\//.test(lien);
       bouton.hidden = !actif;
-      bouton.textContent = libelle || "En savoir plus";
+      bouton.textContent = libelle || t("js.enSavoirPlus");
     }
   }
 
@@ -2873,14 +2893,14 @@ function initDashboard() {
 
   async function saveWelcome() {
     const guildId = selectedServer.id;
-    if (!guildId) return showToast("⚠️ Sélectionne d'abord un serveur");
+    if (!guildId) return showToast(t("js.selectionneDabord"));
 
     const lien = readValue("[data-welcome-button-url]");
     if (lien && !/^https?:\/\//.test(lien)) {
-      return showToast("⚠️ Le lien du bouton doit commencer par https://");
+      return showToast(t("js.lienBoutonHttps"));
     }
     if (readChecked("[data-welcome-enabled]") && !readValue("[data-welcome-channel]")) {
-      return showToast("⚠️ Choisis le salon des messages d'arrivée");
+      return showToast(t("js.choisisSalonArrivee"));
     }
 
     try {
@@ -2889,9 +2909,9 @@ function initDashboard() {
         body: JSON.stringify({ welcome_system: collectWelcomePayload() })
       });
       clearUnsavedChanges();
-      showToast("👋 Messages de bienvenue enregistrés");
+      showToast(t("js.bienvenueEnregistree"));
     } catch (error) {
-      showToast(`⚠️ ${error?.message || "Enregistrement impossible"}`);
+      showToast(`⚠️ ${error?.message || t("js.enregistrementImpossible")}`);
     }
   }
 
@@ -2921,7 +2941,7 @@ function initDashboard() {
   let giveawayEditing = null;
 
   function formatCountdown(secondes) {
-    if (secondes <= 0) return "terminé";
+    if (secondes <= 0) return t("js.termine");
     const j = Math.floor(secondes / 86400);
     const h = Math.floor((secondes % 86400) / 3600);
     const m = Math.floor((secondes % 3600) / 60);
@@ -2936,13 +2956,13 @@ function initDashboard() {
     if (!host) return;
 
     const enCours = giveawayList.filter((g) => !g.ended).length;
-    if (compteur) compteur.textContent = giveawayList.length ? `${enCours} en cours` : "";
+    if (compteur) compteur.textContent = giveawayList.length ? tp("js.nEnCours", { n: enCours }) : "";
 
     if (!giveawayList.length) {
       host.innerHTML = `
         <div class="dashboard-empty-state">
-          <strong>Aucun giveaway</strong>
-          <span>Crée-en un, ou lance <code>/giveaway create</code> dans Discord.</span>
+          <strong>${escapeHtml(t("gw.emptyTitle"))}</strong>
+          <span>${t("gw.emptyText")}</span>
         </div>`;
       return;
     }
@@ -2950,9 +2970,9 @@ function initDashboard() {
     host.innerHTML = giveawayList.map((g) => {
       const conditions = [];
       const req = g.requirements || {};
-      if (req.role_id) conditions.push("rôle requis");
-      if (req.min_messages) conditions.push(`${req.min_messages} messages`);
-      if (req.min_account_days) conditions.push(`compte de ${req.min_account_days} j`);
+      if (req.role_id) conditions.push(t("js.condRoleRequis"));
+      if (req.min_messages) conditions.push(tp("js.condMessages", { n: req.min_messages }));
+      if (req.min_account_days) conditions.push(tp("js.condCompte", { n: req.min_account_days }));
 
       const gagnants = (g.winners_picked || []).length
         ? `<p class="giveaway-winners">🏆 ${g.winners_picked.map((u) => `<@${escapeHtml(u)}>`).join(" ")}</p>`
@@ -2965,12 +2985,12 @@ function initDashboard() {
               <h3>🎉 ${escapeHtml(g.prize || "Giveaway")}</h3>
               <p class="field-help">
                 #${escapeHtml(g.channel_name || "?")} ·
-                ${g.ended ? "terminé" : `fin dans ${formatCountdown(g.seconds_left)}`} ·
+                ${g.ended ? escapeHtml(t("js.termine")) : escapeHtml(tp("js.finDans", { delai: formatCountdown(g.seconds_left) }))} ·
                 🏆 ${g.winners} · 👥 ${g.participants}
               </p>
             </div>
             <span class="giveaway-state ${g.ended ? "is-ended" : "is-live"}">
-              ${g.ended ? "Terminé" : "En cours"}
+              ${escapeHtml(t(g.ended ? "js.termineMaj" : "js.enCours"))}
             </span>
           </div>
           ${conditions.length ? `<p class="giveaway-conditions">📋 ${escapeHtml(conditions.join(" · "))}</p>` : ""}
@@ -3007,7 +3027,7 @@ function initDashboard() {
         host.innerHTML = `
           <div class="dashboard-empty-state">
             <strong>Giveaways indisponibles</strong>
-            <span>${escapeHtml(error?.message || "Le bot n'a pas répondu.")}</span>
+            <span>${escapeHtml(error?.message || t("js.botNaPasRepondu"))}</span>
           </div>`;
       }
     }
@@ -3025,7 +3045,7 @@ function initDashboard() {
     const role = document.querySelector("[data-giveaway-role]");
     if (role) {
       const courant = role.value;
-      role.innerHTML = `<option value="">— Aucun —</option>` + dashboardResources.roles.map((r) => (
+      role.innerHTML = `<option value="">${escapeHtml(t("js.aucun"))}</option>` + dashboardResources.roles.map((r) => (
         `<option value="${escapeHtml(r.id)}">${escapeHtml(roleLabel(r))}</option>`
       )).join("");
       if (courant) role.value = courant;
@@ -3072,7 +3092,7 @@ function initDashboard() {
   async function submitGiveaway(event) {
     event.preventDefault();
     const guildId = selectedServer.id;
-    if (!guildId) return showToast("⚠️ Sélectionne d'abord un serveur");
+    if (!guildId) return showToast(t("js.selectionneDabord"));
 
     const charge = {
       prize: readValue("[data-giveaway-prize]"),
@@ -3085,25 +3105,25 @@ function initDashboard() {
         min_account_days: readNumber("[data-giveaway-min-account]", 0)
       }
     };
-    if (!charge.prize) return showToast("⚠️ Indique la récompense");
-    if (!charge.channel_id) return showToast("⚠️ Choisis le salon de publication");
+    if (!charge.prize) return showToast(t("js.indiqueRecompense"));
+    if (!charge.channel_id) return showToast(t("js.choisisSalonPublication"));
 
     try {
       if (giveawayEditing) {
         await modbotApiFetch(`/api/guilds/${guildId}/giveaways/${giveawayEditing}`, {
           method: "PUT", body: JSON.stringify(charge)
         });
-        showToast("✏️ Giveaway modifié");
+        showToast(t("js.giveawayModifie"));
       } else {
         await modbotApiFetch(`/api/guilds/${guildId}/giveaways`, {
           method: "POST", body: JSON.stringify(charge)
         });
-        showToast("🎉 Giveaway publié dans Discord");
+        showToast(t("js.giveawayPublie"));
       }
       closeGiveawayForm();
       loadGiveaways();
     } catch (error) {
-      showToast(`⚠️ ${error?.message || "Publication impossible"}`);
+      showToast(`⚠️ ${error?.message || t("js.publicationImpossibleCourt")}`);
     }
   }
 
@@ -3114,10 +3134,10 @@ function initDashboard() {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/giveaways/${id}/action`, {
         method: "POST", body: JSON.stringify({ action })
       });
-      showToast(`✅ ${data.result || "Action appliquée"}`);
+      showToast(`✅ ${data.result || t("js.actionAppliquee")}`);
       loadGiveaways();
     } catch (error) {
-      showToast(`⚠️ ${error?.message || "Action refusée"}`);
+      showToast(`⚠️ ${error?.message || t("js.actionRefusee")}`);
     }
   }
 
@@ -3140,10 +3160,10 @@ function initDashboard() {
     const guildId = selectedServer.id;
     try {
       await modbotApiFetch(`/api/guilds/${guildId}/giveaways/${id}`, { method: "DELETE" });
-      showToast("🗑️ Giveaway supprimé");
+      showToast(t("js.giveawaySupprime"));
       loadGiveaways();
     } catch (error) {
-      showToast(`⚠️ ${error?.message || "Suppression impossible"}`);
+      showToast(`⚠️ ${error?.message || t("js.suppressionImpossible")}`);
     }
   }
 
@@ -3207,10 +3227,7 @@ function initDashboard() {
       panneau.classList.add("is-open");
       document.querySelector("[data-ai-input]")?.focus();
       if (!aiHistory.length) {
-        aiAddMessage("bot",
-          "Bonjour ! Je connais la configuration de ce serveur.\n" +
-          "Demande-moi comment activer une protection, créer des tickets, " +
-          "ou pourquoi une commande ne répond pas.");
+        aiAddMessage("bot", t("js.ai.accueil"));
       }
     } else {
       panneau.classList.remove("is-open");
@@ -3223,7 +3240,7 @@ function initDashboard() {
 
   async function askAI(question) {
     const guildId = selectedServer.id;
-    if (!guildId) return showToast("⚠️ Sélectionne d'abord un serveur");
+    if (!guildId) return showToast(t("js.selectionneDabord"));
     if (aiBusy || !question.trim()) return;
 
     aiBusy = true;
@@ -3246,7 +3263,7 @@ function initDashboard() {
       aiHistory = aiHistory.slice(-20);
     } catch (error) {
       attente?.remove();
-      const message = error?.message || "L'assistant n'a pas répondu.";
+      const message = error?.message || t("js.assistantNaPasRepondu");
       aiAddMessage("bot", `⚠️ ${message}`);
     } finally {
       aiBusy = false;
@@ -3300,15 +3317,15 @@ function initDashboard() {
 
     if (count) {
       count.textContent = items.length
-        ? `${items.length} résultat${items.length > 1 ? "s" : ""}`
+        ? tn("js.unResultat", "js.desResultats", items.length)
         : "";
     }
 
     if (!items.length) {
       host.innerHTML = `
         <div class="dashboard-empty-state">
-          <strong>Aucun résultat</strong>
-          <span>Essaie un autre nom, ou colle un identifiant Discord.</span>
+          <strong>${escapeHtml(t("js.aucunResultat"))}</strong>
+          <span>${escapeHtml(t("js.essaieUnAutreNom"))}</span>
         </div>`;
       return;
     }
@@ -3320,7 +3337,7 @@ function initDashboard() {
             <span class="search-result-dot" style="background:${escapeHtml(item.color || "#5865F2")}"></span>
             <span class="search-result-body">
               <strong>${escapeHtml(item.name)}</strong>
-              <small>${item.members} membre${item.members > 1 ? "s" : ""}${item.immune ? " · 🛡️ immunisé" : ""}</small>
+              <small>${escapeHtml(tn("js.membreSingulier", "js.membresPluriel", item.members))}${item.immune ? ` · 🛡️ ${escapeHtml(t("js.immunise"))}` : ""}</small>
             </span>
           </button>`;
       }
@@ -3354,12 +3371,10 @@ function initDashboard() {
     if (!item.immune && !item.trusted) return "";
     const lignes = [];
     if (item.immune) {
-      lignes.push("<strong>🛡️ Immunisé</strong> — échappe au filtre de langage, " +
-                  "à l'anti-spam et à l'anti-lien. Aucun avertissement automatique.");
+      lignes.push(t("js.aideImmunise"));
     }
     if (item.trusted) {
-      lignes.push("<strong>🤝 Confiance anti-nuke</strong> — peut supprimer des salons " +
-                  "ou bannir en masse sans déclencher la protection.");
+      lignes.push(t("js.aideConfiance"));
     }
     return `<div class="alert-panel subtle">${lignes.map((l) => `<p>${l}</p>`).join("")}</div>`;
   }
@@ -3367,7 +3382,7 @@ function initDashboard() {
   function actionButton(action, label, style = "") {
     const pending = searchPendingAction === action;
     const classe = pending ? "primary-btn compact is-confirming" : `secondary-btn compact ${style}`;
-    const texte = pending ? `⚠️ Confirmer : ${label}` : label;
+    const texte = pending ? tp("js.confirmerAction", { action: label }) : label;
     return `<button class="${classe}" type="button" data-search-action="${action}">${escapeHtml(texte)}</button>`;
   }
 
@@ -3383,28 +3398,28 @@ function initDashboard() {
           <span class="search-result-dot large" style="background:${escapeHtml(item.color || "#5865F2")}"></span>
           <div>
             <h3>${escapeHtml(item.name)}</h3>
-            <p class="field-help">${item.members} membre${item.members > 1 ? "s" : ""} · position ${item.position}</p>
+            <p class="field-help">${escapeHtml(tn("js.membreSingulier", "js.membresPluriel", item.members))} · ${escapeHtml(tp("js.position", { n: item.position }))}</p>
           </div>
         </div>
         <div class="search-detail-facts">
-          <div><span>Immunité</span><strong>${item.immune ? "🛡️ Activée" : "Non"}</strong></div>
-          <div><span>Confiance anti-nuke</span><strong>${item.trusted ? "🤝 Activée" : "Non"}</strong></div>
-          <div><span>Rôle géré par une app</span><strong>${item.managed ? "Oui" : "Non"}</strong></div>
+          <div><span>${escapeHtml(t("js.immunite"))}</span><strong>${item.immune ? `🛡️ ${escapeHtml(t("js.activee"))}` : escapeHtml(t("js.non"))}</strong></div>
+          <div><span>${escapeHtml(t("js.confianceAntiNuke"))}</span><strong>${item.trusted ? `🤝 ${escapeHtml(t("js.activee"))}` : escapeHtml(t("js.non"))}</strong></div>
+          <div><span>${escapeHtml(t("js.roleGerePar"))}</span><strong>${escapeHtml(t(item.managed ? "js.oui" : "js.non"))}</strong></div>
         </div>
         ${immunityHelp(item)}
         ${perms.length ? `
           <div class="alert-panel subtle">
-            <strong>⚠️ Permissions sensibles</strong>
+            <strong>${escapeHtml(t("js.permissionsSensibles"))}</strong>
             <ul>${perms.map((p) => `<li>${escapeHtml(p)}</li>`).join("")}</ul>
-            <p>Ce rôle peut déjà faire des dégâts sans ModBot. Réfléchis à deux fois avant de lui retirer une surveillance.</p>
+            <p>${escapeHtml(t("js.roleDejaDangereux"))}</p>
           </div>` : ""}
         <div class="search-actions">
           ${item.immune
-            ? actionButton("unimmunize", "Retirer l'immunité")
-            : actionButton("immunize", "🛡️ Immuniser")}
+            ? actionButton("unimmunize", t("js.retirerImmunite"))
+            : actionButton("immunize", t("js.immuniser"))}
           ${item.trusted
-            ? actionButton("untrust", "Retirer la confiance anti-nuke")
-            : actionButton("trust", "🤝 Confiance anti-nuke")}
+            ? actionButton("untrust", t("js.retirerConfiance"))
+            : actionButton("trust", t("js.donnerConfiance"))}
         </div>`;
     } else {
       const roles = item.roles || [];
@@ -3419,10 +3434,10 @@ function initDashboard() {
           </div>
         </div>
         <div class="search-detail-facts">
-          <div><span>Infractions</span><strong>${item.warns} (${item.points} pt)</strong></div>
-          <div><span>Arrivée</span><strong>${item.joined_at ? formatIsoDateTimeFr(item.joined_at) : "—"}</strong></div>
-          <div><span>Compte créé</span><strong>${item.created_at ? formatIsoDateTimeFr(item.created_at) : "—"}</strong></div>
-          <div><span>État</span><strong>${item.timed_out ? "🔇 Exclu" : item.owner ? "👑 Propriétaire" : item.administrator ? "🛠️ Admin" : "Actif"}</strong></div>
+          <div><span>${escapeHtml(t("js.infractions"))}</span><strong>${item.warns} (${item.points} pt)</strong></div>
+          <div><span>${escapeHtml(t("js.arrivee"))}</span><strong>${item.joined_at ? formatIsoDateTimeFr(item.joined_at) : "—"}</strong></div>
+          <div><span>${escapeHtml(t("js.compteCree"))}</span><strong>${item.created_at ? formatIsoDateTimeFr(item.created_at) : "—"}</strong></div>
+          <div><span>${escapeHtml(t("js.etatMembre"))}</span><strong>${escapeHtml(item.timed_out ? t("js.exclu") : item.owner ? t("js.proprietaire") : item.administrator ? t("js.admin") : t("js.actifSimple"))}</strong></div>
         </div>
         ${immunityHelp(item)}
         ${roles.length ? `<div class="search-role-chips">${roles.map((r) =>
@@ -3430,28 +3445,26 @@ function initDashboard() {
         ).join("")}</div>` : ""}
         ${!item.manageable ? `
           <div class="alert-panel subtle">
-            <strong>⚠️ Membre hors de portée</strong>
-            <p>${item.owner
-              ? "C'est le propriétaire du serveur : ModBot ne peut pas le sanctionner."
-              : "Son rôle le plus haut est au-dessus de celui de ModBot. Déplace le rôle de ModBot plus haut pour agir."}</p>
+            <strong>${escapeHtml(t("js.membreHorsPortee"))}</strong>
+            <p>${escapeHtml(t(item.owner ? "js.cestLeProprietaire" : "js.roleTropHaut"))}</p>
           </div>` : ""}
-        <label class="mini-form search-reason">Raison
-          <input type="text" data-search-reason placeholder="Visible dans les logs et l'audit Discord" maxlength="400">
+        <label class="mini-form search-reason">${escapeHtml(t("adm.raison"))}
+          <input type="text" data-search-reason placeholder="${escapeHtml(t("js.visibleDansLogs"))}" maxlength="400">
         </label>
         <div class="search-actions">
-          ${actionButton("warn", "⚠️ Avertir")}
+          ${actionButton("warn", t("js.avertir"))}
           ${item.timed_out
-            ? actionButton("untimeout", "🔊 Lever l'exclusion")
-            : actionButton("timeout", "🔇 Exclure 1 h")}
-          ${item.manageable ? actionButton("kick", "👢 Expulser", "danger") : ""}
-          ${item.manageable ? actionButton("ban", "🔨 Bannir", "danger") : ""}
-          ${item.warns ? actionButton("reset", "♻️ Effacer les infractions") : ""}
+            ? actionButton("untimeout", t("js.leverExclusion"))
+            : actionButton("timeout", t("js.exclureUneHeure"))}
+          ${item.manageable ? actionButton("kick", t("js.expulser"), "danger") : ""}
+          ${item.manageable ? actionButton("ban", t("js.bannir"), "danger") : ""}
+          ${item.warns ? actionButton("reset", t("js.effacerInfractions")) : ""}
           ${item.immune
-            ? actionButton("unimmunize", "Retirer l'immunité")
-            : actionButton("immunize", "🛡️ Immuniser")}
+            ? actionButton("unimmunize", t("js.retirerImmunite"))
+            : actionButton("immunize", t("js.immuniser"))}
           ${item.trusted
-            ? actionButton("untrust", "Retirer la confiance anti-nuke")
-            : actionButton("trust", "🤝 Confiance anti-nuke")}
+            ? actionButton("untrust", t("js.retirerConfiance"))
+            : actionButton("trust", t("js.donnerConfiance"))}
         </div>`;
     }
 
@@ -3468,12 +3481,12 @@ function initDashboard() {
     if (SEARCH_DANGEROUS.has(action) && searchPendingAction !== action) {
       searchPendingAction = action;
       renderSearchDetail(searchSelection);
-      showToast("⚠️ Clique une seconde fois pour confirmer");
+      showToast(t("js.cliqueDeuxFois"));
       return;
     }
     searchPendingAction = null;
 
-    const raison = readValue("[data-search-reason]") || "Action depuis le dashboard";
+    const raison = readValue("[data-search-reason]") || t("js.actionDepuisDashboard");
     const cible = searchMode === "roles"
       ? `/api/guilds/${guildId}/roles/${searchSelection.id}/action`
       : `/api/guilds/${guildId}/members/${searchSelection.id}/action`;
@@ -3483,7 +3496,7 @@ function initDashboard() {
         method: "POST",
         body: JSON.stringify({ action, reason: raison, minutes: 60 })
       });
-      showToast(`✅ ${data.result || "Action appliquée"}`);
+      showToast(`✅ ${data.result || t("js.actionAppliquee")}`);
       if (data.member) {
         renderSearchDetail(data.member);
       } else if (data.role) {
@@ -3492,7 +3505,7 @@ function initDashboard() {
       runSearch();               // la liste reflète le nouvel état
       loadGuildSecurity(guildId); // l'immunité modifie la liste blanche anti-nuke
     } catch (error) {
-      showToast(`⚠️ ${error?.message || "Action refusée"}`);
+      showToast(`⚠️ ${error?.message || t("js.actionRefusee")}`);
     }
   }
 
@@ -3513,7 +3526,7 @@ function initDashboard() {
       host.innerHTML = `
         <div class="dashboard-empty-state">
           <strong>Recherche indisponible</strong>
-          <span>${escapeHtml(error?.message || "Le bot n'a pas répondu.")}</span>
+          <span>${escapeHtml(error?.message || t("js.botNaPasRepondu"))}</span>
         </div>`;
     }
   }
@@ -3556,8 +3569,8 @@ function initDashboard() {
           other.setAttribute("aria-selected", actif ? "true" : "false");
         });
         input.placeholder = searchMode === "roles"
-          ? "Nom du rôle ou identifiant…"
-          : "Nom, pseudo ou identifiant Discord…";
+          ? t("js.nomRoleOuId")
+          : t("dash.nomPseudoOuIdentifiant");
         resetSearchDetail();
         runSearch();
       });
@@ -3627,7 +3640,7 @@ function initDashboard() {
     const feed = document.querySelector("[data-dashboard-log-feed]");
     if (!feed) return;
     if (!currentLogs.length) {
-      feed.innerHTML = `<div class="log-empty"><span>—</span> Aucun événement enregistré pour cette catégorie.</div>`;
+      feed.innerHTML = `<div class="log-empty"><span>—</span> ${escapeHtml(t("js.aucunEvenementCategorie"))}</div>`;
       return;
     }
     feed.innerHTML = currentLogs
@@ -3640,7 +3653,7 @@ function initDashboard() {
       <article class="log-entry" data-severity="${escapeHtml(entry.severity || "info")}">
         <header>
           <span class="log-icon">${icon}</span>
-          <strong>${escapeHtml(entry.title || "Événement")}</strong>
+          <strong>${escapeHtml(entry.title || t("js.evenement"))}</strong>
           <span class="log-chip">${category ? category.emoji + " " + escapeHtml(category.label) : escapeHtml(entry.category || "")}</span>
           <time>${escapeHtml(formatIsoDateTimeFr(entry.date))}</time>
         </header>
@@ -3675,7 +3688,7 @@ function initDashboard() {
 
   function exportLogs() {
     if (!currentLogs.length) {
-      showToast("⚠️ Aucun log à exporter");
+      showToast(t("js.aucunLogAExporter"));
       return;
     }
     const header = ["date", "categorie", "severite", "titre", "description", "auteur", "cible"];
@@ -3695,7 +3708,7 @@ function initDashboard() {
     link.click();
     link.remove();
     URL.revokeObjectURL(url);
-    showToast(`📤 ${currentLogs.length} log(s) exporté(s)`);
+    showToast(tp("js.logsExportes", { n: currentLogs.length }));
   }
 
   /* ══════════════════════════════════════════════════════════════════
@@ -3714,7 +3727,7 @@ function initDashboard() {
     }
     if (!host) return;
     if (!backupList.length) {
-      host.innerHTML = `<div class="backup-empty">Aucune sauvegarde pour le moment.</div>`;
+      host.innerHTML = `<div class="backup-empty">${escapeHtml(t("dash.aucuneSauvegardePourLe"))}</div>`;
       return;
     }
     host.innerHTML = backupList
@@ -3757,19 +3770,19 @@ function initDashboard() {
   async function createBackup() {
     const guildId = selectedServer.id;
     if (!guildId) {
-      showToast("⚠️ Sélectionne d'abord un serveur");
+      showToast(t("js.selectionneDabord"));
       return;
     }
     showToast("💾 Sauvegarde en cours…");
     try {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/backups`, {
         method: "POST",
-        body: JSON.stringify({ note: "Créée depuis le dashboard" })
+        body: JSON.stringify({ note: t("js.creeeDepuisDashboard") })
       });
       await loadGuildBackups(guildId);
-      showToast(`✅ Sauvegarde ${data.backup?.id || ""} créée`);
+      showToast(tp("js.sauvegardeCreee", { id: data.backup?.id || "" }));
     } catch (error) {
-      showToast(`⚠️ ${error?.message || "Sauvegarde impossible"}`);
+      showToast(`⚠️ ${error?.message || t("js.sauvegardeImpossible")}`);
     }
   }
 
@@ -3780,14 +3793,14 @@ function initDashboard() {
     const counts = entry?.counts || {};
     // Confirmation obligatoire avant une opération aussi lourde
     const confirmed = window.confirm(
-      `Restaurer la sauvegarde ${backupId} sur « ${selectedServer.name} » ?\n\n` +
-      `Contenu : ${counts.roles || 0} rôles, ${counts.categories || 0} catégories, ${counts.channels || 0} salons.\n\n` +
-      `La restauration est additive : elle recrée ce qui manque et ne supprime rien.\n` +
-      `L'opération peut prendre plusieurs minutes.`
+      tp("js.confirmerRestauration", { id: backupId, serveur: selectedServer.name }) + "\n\n" +
+      tp("js.contenuSauvegarde", { roles: counts.roles || 0, categories: counts.categories || 0,
+                                   salons: counts.channels || 0 }) + "\n\n" +
+      t("js.restaurationAdditive") + "\n" + t("js.operationLongue")
     );
     if (!confirmed) return;
 
-    showToast("♻️ Restauration en cours, cela peut prendre plusieurs minutes…");
+    showToast(t("js.restaurationEnCours"));
     try {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/backups/${backupId}/restore`, {
         method: "POST",
@@ -3795,25 +3808,26 @@ function initDashboard() {
       });
       const report = data.report || {};
       showToast(
-        `✅ Restauration terminée : ${report.roles || 0} rôles, ` +
-        `${report.categories || 0} catégories, ${report.channels || 0} salons`
+        tp("js.restaurationTerminee", { roles: report.roles || 0,
+                                        categories: report.categories || 0,
+                                        salons: report.channels || 0 })
       );
       loadGuildLogs(guildId);
     } catch (error) {
-      showToast(`⚠️ ${error?.message || "Restauration impossible"}`);
+      showToast(`⚠️ ${error?.message || t("js.restaurationImpossible")}`);
     }
   }
 
   async function deleteBackup(backupId) {
     const guildId = selectedServer.id;
     if (!guildId) return;
-    if (!window.confirm(`Supprimer définitivement la sauvegarde ${backupId} ?`)) return;
+    if (!window.confirm(tp("js.confirmerSuppressionSauvegarde", { id: backupId }))) return;
     try {
       await modbotApiFetch(`/api/guilds/${guildId}/backups/${backupId}`, { method: "DELETE" });
       await loadGuildBackups(guildId);
-      showToast("🗑️ Sauvegarde supprimée");
+      showToast(t("js.sauvegardeSupprimee"));
     } catch (error) {
-      showToast(`⚠️ ${error?.message || "Suppression impossible"}`);
+      showToast(`⚠️ ${error?.message || t("js.suppressionImpossible")}`);
     }
   }
 
@@ -3822,13 +3836,13 @@ function initDashboard() {
   document.querySelector("[data-security-save]")?.addEventListener("click", saveGuildSecurity);
   document.querySelector("[data-security-reload]")?.addEventListener("click", () => {
     loadGuildSecurity(selectedServer.id);
-    showToast("↻ Sécurité rechargée");
+    showToast(t("js.securiteRechargee"));
   });
   document.querySelector("[data-sanction-reset]")?.addEventListener("click", () => {
     sanctionLadder = DEFAULT_SANCTION_LADDER.map((step) => ({ ...step }));
     renderSanctionLadder();
     markPanelDirty("security");
-    showToast("♻️ Échelle de sanctions réinitialisée");
+    showToast(t("js.echelleReinitialisee"));
   });
   document.querySelector("[data-autobackup-save]")?.addEventListener("click", saveGuildSecurity);
 
@@ -3839,7 +3853,7 @@ function initDashboard() {
   });
   document.querySelector("[data-logs-reload]")?.addEventListener("click", () => {
     loadGuildLogs(selectedServer.id);
-    showToast("↻ Journal rechargé");
+    showToast(t("js.journalRecharge"));
   });
   document.querySelector("[data-logs-export]")?.addEventListener("click", exportLogs);
   document.querySelector("[data-logs-save]")?.addEventListener("click", saveGuildSecurity);
@@ -3847,7 +3861,7 @@ function initDashboard() {
   document.querySelector("[data-backup-create]")?.addEventListener("click", createBackup);
   document.querySelector("[data-backups-reload]")?.addEventListener("click", () => {
     loadGuildBackups(selectedServer.id);
-    showToast("↻ Sauvegardes rechargées");
+    showToast(t("js.sauvegardesRechargees"));
   });
   document.querySelector("[data-backup-list]")?.addEventListener("click", (event) => {
     const restoreBtn = event.target.closest("[data-backup-restore]");
@@ -3864,7 +3878,7 @@ function initDashboard() {
       return {
         emoji: inputs[0]?.value || "🎫",
         label: inputs[1]?.value || "Ticket",
-        desc: inputs[2]?.value || "Ouvrir un ticket",
+        desc: inputs[2]?.value || t("js.ouvrirUnTicket"),
       };
     });
     const channelRows = document.querySelectorAll("[data-dashboard-panel='channels'] .channel-row input");
@@ -3885,11 +3899,11 @@ function initDashboard() {
     });
     const recurringMessages = Array.from(document.querySelectorAll(".recurring-item")).map((item) => ({
       enabled: true,
-      name: item.dataset.name || item.querySelector("strong")?.textContent?.replace(/^🔁\s*/, "") || "Message récurrent",
+      name: item.dataset.name || item.querySelector("strong")?.textContent?.replace(/^🔁\s*/, "") || t("js.messageRecurrent"),
       channel_id: item.dataset.channel || "",
       interval: Number(item.dataset.interval || 30),
       unit: item.dataset.unit || "minutes",
-      content: item.dataset.content || "Hey @everyone, pensez à suivre les dernières annonces du serveur.",
+      content: item.dataset.content || t("js.exempleMessageRecurrent"),
       mode: item.dataset.mode || "repeat",
       last_sent: item.dataset.lastSent || "",
     }));
@@ -3939,10 +3953,10 @@ function initDashboard() {
         font: document.querySelector("[data-welcome-font]")?.value || "Inter",
         color: document.querySelector("[data-welcome-color]")?.value || "#ffffff",
       },
-      reaction_title: document.querySelector("[data-reaction-title]")?.value || "Choisis tes rôles",
+      reaction_title: document.querySelector("[data-reaction-title]")?.value || t("js.choisisTesRoles"),
       reaction_description: document.querySelector("[data-reaction-description]")?.value || "",
       reaction_roles_channel_id: document.querySelector("[data-reaction-channel]")?.value || "",
-      reaction_roles_mode: document.querySelector("[data-reaction-mode]")?.value || "Plusieurs rôles possibles",
+      reaction_roles_mode: document.querySelector("[data-reaction-mode]")?.value || t("js.plusieursRolesPossibles"),
       reaction_roles: reactionRoles,
       recurring_messages: recurringMessages,
       social_relays: socialRelays,
@@ -3993,17 +4007,17 @@ function initDashboard() {
     publishTicketButton.hidden = !isVisible;
   }
 
-  function openBotInviteForGuild(guildId, guildName = "ce serveur") {
+  function openBotInviteForGuild(guildId, guildName = t("js.ceServeur")) {
     if (!guildId || String(guildId).startsWith("local-")) {
       return openDiscordInviteSelector();
     }
     const inviteUrl = buildDiscordOAuthUrl("invite", guildId);
     if (!inviteUrl) {
-      showToast("⚠️ Lien d'invitation Discord indisponible");
+      showToast(t("js.lienInvitationIndisponible"));
       return false;
     }
     window.open(inviteUrl, "_blank", "noreferrer");
-    showToast(`➕ Invite ModBot sur ${guildName}`);
+    showToast(tp("js.inviteModbotSur", { serveur: guildName }));
     return true;
   }
 
@@ -4024,28 +4038,29 @@ function initDashboard() {
     dashboard.classList.remove("has-unsaved");
   }
 
-  async function saveCurrentChanges(message = "💾 Configuration enregistrée") {
+  async function saveCurrentChanges(message = null) {
+    message = message || t("dash.configurationEnregistree");
     if (!hasUnsavedChanges) {
-      showToast("✅ Tout est déjà enregistré");
+      showToast(t("js.toutDejaEnregistre"));
       return true;
     }
     if (!selectedServer.id || !selectedServer.installed) {
-      showToast("🔗 Le serveur actif n'est pas relié au bot : reconnecte-toi via Discord");
+      showToast(t("js.serveurNonRelieReconnecte"));
       return false;
     }
     let savedToApi = false;
     try {
       savedToApi = await saveDashboardConfigToApi();
     } catch (error) {
-      showToast(`⚠️ Sauvegarde impossible : ${error.message || "connexion bot indisponible"}`);
+      showToast(tp("js.sauvegardeImpossibleDetail", { detail: error.message || t("js.connexionBotIndisponible") }));
       return false;
     }
     if (selectedServer.installed && !savedToApi) {
-      showToast("🔗 Connecte-toi avec Discord pour enregistrer ce serveur");
+      showToast(t("js.connecteToiPourEnregistrer"));
       return false;
     }
     clearUnsavedChanges();
-    showToast(savedToApi ? message : "💾 Configuration gardée dans cette page");
+    showToast(savedToApi ? message : t("js.configGardeeDansPage"));
     return true;
   }
 
@@ -4103,14 +4118,14 @@ function initDashboard() {
     if (getModbotSessionToken() || getModbotApiToken()) {
       try {
         await loadDashboardGuilds();
-        showToast("↻ Serveurs Discord rafraîchis");
+        showToast(t("js.serveursRafraichis"));
         return;
       } catch (error) {
-        showToast("⚠️ Impossible de rafraîchir les serveurs depuis l'API");
+        showToast(t("js.rafraichissementImpossible"));
       }
     }
     showDashboardStage("auth");
-    showToast("🔐 Connecte-toi avec Discord pour charger tes vrais serveurs");
+    showToast(t("js.connecteToiPourCharger"));
   });
 
   document.querySelector("[data-change-server]")?.addEventListener("click", () => {
@@ -4126,14 +4141,14 @@ function initDashboard() {
     if (!element) return;
     const logoImg = element.querySelector("[data-logo-img]");
     const logo = logoImg?.currentSrc || logoImg?.src || element.dataset.serverLogo || modbotDefaultLogo;
-    const nom = element.dataset.serverName || "Serveur ModBot";
+    const nom = element.dataset.serverName || t("js.serveurModbot");
     const initiales = element.dataset.serverInitials || nom.slice(0, 2).toUpperCase() || "MB";
     const guildId = element.dataset.serverId || element.dataset.switcherGuild || "";
     const installe = element.dataset.serverInstalled === "true";
     const peutGerer = element.dataset.serverCanManage !== "false";
 
     if (!peutGerer) {
-      showToast("🔒 Permissions insuffisantes : il faut Administrateur ou Gérer le serveur");
+      showToast(t("js.permissionsInsuffisantes"));
       return;
     }
     if (!installe) {
@@ -4176,31 +4191,33 @@ function initDashboard() {
   setOfferInviteFallbackCopy();
   initApiUrlControls();
 
+  // Clefs de traduction : le message est resolu au moment de l'affichage,
+  // donc apres un changement de langue il sort dans la bonne.
   const LOGIN_ERROR_MESSAGES = {
-    oauth_backend_required: "⚠️ Connexion Discord reçue, mais l'API ModBot doit finaliser la session",
-    oauth_not_configured: "⚠️ OAuth Discord non configuré côté bot : ajoute DISCORD_CLIENT_SECRET et DISCORD_REDIRECT_URI",
-    oauth_state: "⚠️ Lien de connexion expiré ou déjà utilisé. Relance la connexion Discord.",
-    oauth_token: "⚠️ Discord a refusé le code : l'URL de callback du portail Discord doit correspondre exactement à DISCORD_REDIRECT_URI",
-    oauth_user: "⚠️ Discord n'a pas renvoyé le profil utilisateur",
-    oauth_guilds: "⚠️ Discord n'a pas renvoyé la liste des serveurs",
-    missing_code: "⚠️ Discord n'a pas renvoyé de code de connexion"
+    oauth_backend_required: "js.oauth.backendRequis",
+    oauth_not_configured: "js.oauth.nonConfigure",
+    oauth_state: "js.oauth.lienExpire",
+    oauth_token: "js.oauth.codeRefuse",
+    oauth_user: "js.oauth.profilManquant",
+    oauth_guilds: "js.oauth.serveursManquants",
+    missing_code: "js.oauth.codeManquant"
   };
   const LOGIN_ERROR_DETAILS = {
-    oauth_not_configured:
-      "Le bot répond mais l'OAuth Discord est incomplet. Sur ton hébergeur, définis DISCORD_CLIENT_SECRET et DISCORD_REDIRECT_URI (ou PUBLIC_BASE_URL).",
-    oauth_token:
-      "Dans le portail développeur Discord → OAuth2 → Redirects, l'URL doit être identique à DISCORD_REDIRECT_URI, au caractère près.",
-    oauth_state:
-      "Le jeton anti-CSRF a expiré (10 minutes) ou a déjà servi. Clique de nouveau sur « Se connecter avec Discord »."
+    oauth_not_configured: "js.oauth.detailNonConfigure",
+    oauth_token: "js.oauth.detailCodeRefuse",
+    oauth_state: "js.oauth.detailLienExpire"
   };
 
   const pendingLoginError = sessionStorage.getItem("modbot-login-error");
   if (pendingLoginError) {
     sessionStorage.removeItem("modbot-login-error");
     showDashboardStage("auth");
-    showToast(LOGIN_ERROR_MESSAGES[pendingLoginError] || `⚠️ Connexion Discord impossible : ${pendingLoginError}`);
+    const clefErreur = LOGIN_ERROR_MESSAGES[pendingLoginError];
+    showToast(clefErreur
+      ? t(clefErreur)
+      : tp("js.oauth.impossible", { detail: pendingLoginError }));
     if (LOGIN_ERROR_DETAILS[pendingLoginError]) {
-      renderAuthStatus({ level: "warn", message: LOGIN_ERROR_DETAILS[pendingLoginError] });
+      renderAuthStatus({ level: "warn", message: t(LOGIN_ERROR_DETAILS[pendingLoginError]) });
     }
     findAvailableApiBase();
   } else {
@@ -4232,7 +4249,7 @@ function initDashboard() {
 
   document.querySelectorAll("[data-dashboard-save]").forEach((button) => {
     button.addEventListener("click", () => {
-      saveCurrentChanges("💾 Configuration enregistrée dans le bot");
+      saveCurrentChanges(t("js.configEnregistreeDansBot"));
     });
   });
 
@@ -4240,13 +4257,13 @@ function initDashboard() {
     button.addEventListener("click", () => {
       const panel = button.closest("[data-dashboard-panel]");
       markPanelDirty(panel?.dataset.dashboardPanel || activePanelName);
-      showToast("♻️ Section réinitialisée");
+      showToast(t("js.sectionReinitialisee"));
     });
   });
 
   document.querySelector("[data-unsaved-save]")?.addEventListener("click", async () => {
     const action = pendingNavigation;
-    const saved = await saveCurrentChanges("💾 Configuration sauvegardée");
+    const saved = await saveCurrentChanges(t("js.configSauvegardee"));
     if (!saved) return;
     closeUnsavedModal();
     pendingNavigation = null;
@@ -4261,7 +4278,7 @@ function initDashboard() {
       setTicketPublishVisible(false);
     }
     clearUnsavedChanges();
-    showToast("🗑️ Modifications laissées de côté");
+    showToast(t("js.modificationsAbandonnees"));
     pendingNavigation = null;
     action?.();
   });
@@ -4289,7 +4306,7 @@ function initDashboard() {
     checkbox.addEventListener("change", () => {
       syncToggle();
       markPanelDirty(checkbox.closest("[data-dashboard-panel]")?.dataset.dashboardPanel || activePanelName);
-      showToast(checkbox.checked ? "Module activé" : "Module désactivé");
+      showToast(t(checkbox.checked ? "js.moduleActive" : "js.moduleDesactive"));
     });
   });
 
@@ -4301,11 +4318,11 @@ function initDashboard() {
   const liveTicketEmoji = document.querySelector("[data-live-ticket-emoji]");
 
   previewTitle?.addEventListener("input", () => {
-    if (liveTitle) liveTitle.textContent = previewTitle.value || "Ouvre ton ticket";
+    if (liveTitle) liveTitle.textContent = previewTitle.value || t("dash.ouvreTonTicket");
   });
 
   previewDescription?.addEventListener("input", () => {
-    if (liveDescription) liveDescription.textContent = previewDescription.value || "Merci de sélectionner la raison de ta demande.";
+    if (liveDescription) liveDescription.textContent = previewDescription.value || t("js.merciDeSelectionner");
   });
 
   previewEmoji?.addEventListener("input", () => {
@@ -4323,13 +4340,13 @@ function initDashboard() {
     option.innerHTML = `
       <span>${String(count).padStart(2, "0")}</span>
       <input class="emoji-input" type="text" value="✨" maxlength="3">
-      <input type="text" value="Nouvelle option">
-      <input type="text" value="Description de l'option">
-      <button type="button">Supprimer</button>
+      <input type="text" value="${escapeHtml(t("js.nouvelleOption"))}">
+      <input type="text" value="${escapeHtml(t("js.descriptionOption"))}">
+      <button type="button">${escapeHtml(t("js.supprimer"))}</button>
     `;
     optionList.appendChild(option);
     markPanelDirty("tickets");
-    showToast("Option de ticket ajoutée");
+    showToast(t("js.optionAjoutee"));
   });
 
   optionList?.addEventListener("click", (event) => {
@@ -4337,7 +4354,7 @@ function initDashboard() {
     if (!button) return;
     const rows = optionList.querySelectorAll(".option-row");
     if (rows.length <= 1) {
-      showToast("Il faut garder au moins une option");
+      showToast(t("js.garderUneOption"));
       return;
     }
     button.closest(".option-row")?.remove();
@@ -4345,17 +4362,17 @@ function initDashboard() {
       label.textContent = String(index + 1).padStart(2, "0");
     });
     markPanelDirty("tickets");
-    showToast("Option supprimée");
+    showToast(t("js.optionSupprimee"));
   });
 
   publishTicketButton?.addEventListener("click", async () => {
-    const channel = ticketChannelInput?.value.trim() || "salon ticket désigné";
+    const channel = ticketChannelInput?.value.trim() || t("js.salonTicketDesigne");
     if (!selectedServer.id || !selectedServer.installed) {
-      showToast("🔗 Le serveur actif n'est pas encore relié au bot côté dashboard");
+      showToast(t("js.serveurNonRelie"));
       return;
     }
     if (hasUnsavedChanges) {
-      const saved = await saveCurrentChanges("💾 Configuration ticket enregistrée");
+      const saved = await saveCurrentChanges(t("js.configTicketEnregistree"));
       if (!saved) return;
     }
     try {
@@ -4364,35 +4381,35 @@ function initDashboard() {
         body: JSON.stringify({ channel_id: channel })
       });
     } catch (error) {
-      showToast("⚠️ Publication impossible : connexion bot indisponible");
+      showToast(t("js.publicationImpossible"));
       return;
     }
     ticketNeedsPublish = false;
     setTicketPublishVisible(false);
     if (dirtyPanelName === "tickets") clearUnsavedChanges();
-    showToast(`🚀 Message ticket publié dans le salon ${channel}`);
+    showToast(tp("js.ticketPublieDans", { salon: channel }));
   });
 
   document.querySelector("[data-publish-reaction-roles]")?.addEventListener("click", async () => {
     const channel = document.querySelector("[data-reaction-channel]")?.value.trim();
     if (!selectedServer.id || !selectedServer.installed) {
-      showToast("🔗 Le serveur actif n'est pas encore relié au bot côté dashboard");
+      showToast(t("js.serveurNonRelie"));
       return;
     }
     if (!channel) {
-      showToast("⚠️ Choisis le salon des rôles réactions");
+      showToast(t("js.choisisSalonRoles"));
       return;
     }
-    const saved = await saveCurrentChanges("💾 Rôles réactions enregistrés");
+    const saved = await saveCurrentChanges(t("js.rolesReactionsEnregistres"));
     if (!saved) return;
     try {
       await modbotApiFetch(`/api/guilds/${selectedServer.id}/reaction-roles/publish`, {
         method: "POST",
         body: JSON.stringify(collectDashboardConfig())
       });
-      showToast(`🚀 Message rôles réactions publié dans le salon ${channel}`);
+      showToast(tp("js.rolesReactionsPublies", { salon: channel }));
     } catch (error) {
-      showToast("⚠️ Publication rôles réactions impossible");
+      showToast(t("js.publicationRolesImpossible"));
     }
   });
 
@@ -4411,10 +4428,10 @@ function initDashboard() {
 
   function renderReactionPreview() {
     if (reactionLiveTitle) {
-      reactionLiveTitle.textContent = `🎭 ${reactionTitleInput?.value.trim() || "Choisis tes rôles"}`;
+      reactionLiveTitle.textContent = `🎭 ${reactionTitleInput?.value.trim() || t("js.choisisTesRoles")}`;
     }
     if (reactionLiveDescription) {
-      reactionLiveDescription.textContent = reactionDescriptionInput?.value.trim() || "Clique sur une réaction pour recevoir ou retirer le rôle correspondant.";
+      reactionLiveDescription.textContent = reactionDescriptionInput?.value.trim() || t("js.cliqueSurUneReaction");
     }
     if (!reactionPreviewList || !reactionRoleList) return;
 
@@ -4422,7 +4439,7 @@ function initDashboard() {
     reactionRoleList.querySelectorAll(".reaction-role-row").forEach((row) => {
       const inputs = row.querySelectorAll("input");
       const emoji = inputs[0]?.value.trim() || "✨";
-      const label = inputs[2]?.value.trim() || inputs[1]?.value.trim() || "Rôle";
+      const label = inputs[2]?.value.trim() || inputs[1]?.value.trim() || t("js.role");
       const chip = document.createElement("span");
       chip.textContent = `${emoji} ${label}`;
       reactionPreviewList.append(chip);
@@ -4447,14 +4464,14 @@ function initDashboard() {
     row.innerHTML = `
       <span>${String(count).padStart(2, "0")}</span>
       <input class="emoji-input" type="text" value="✨" maxlength="3">
-      <input type="text" value="" placeholder="ID du rôle ou @rôle" list="dashboardRoleOptions">
-      <input type="text" value="Nouveau rôle">
+      <input type="text" value="" placeholder="${escapeHtml(t("js.idDuRoleOuRole"))}" list="dashboardRoleOptions">
+      <input type="text" value="${escapeHtml(t("js.nouveauRole"))}">
       <button type="button">Supprimer</button>
     `;
     reactionRoleList.append(row);
     renderReactionPreview();
     markPanelDirty("reactionroles");
-    showToast("🎭 Rôle réaction ajouté");
+    showToast(t("js.roleReactionAjoute"));
   });
 
   reactionRoleList?.addEventListener("click", (event) => {
@@ -4462,14 +4479,14 @@ function initDashboard() {
     if (!button) return;
     const rows = reactionRoleList.querySelectorAll(".reaction-role-row");
     if (rows.length <= 1) {
-      showToast("⚠️ Garde au moins un rôle réaction");
+      showToast(t("js.gardeUnRoleReaction"));
       return;
     }
     button.closest(".reaction-role-row")?.remove();
     renumberReactionRoles();
     renderReactionPreview();
     markPanelDirty("reactionroles");
-    showToast("🗑️ Rôle réaction supprimé");
+    showToast(t("js.roleReactionSupprime"));
   });
   renderReactionPreview();
 
@@ -4478,7 +4495,7 @@ function initDashboard() {
       document.querySelectorAll("[data-recurring-mode]").forEach((item) => item.classList.remove("is-active"));
       button.classList.add("is-active");
       markPanelDirty("recurring");
-      showToast(button.dataset.recurringMode === "target" ? "⏰ Mode heure ciblée sélectionné" : "🔁 Mode répétition sélectionné");
+      showToast(button.dataset.recurringMode === "target" ? t("js.modeHeureCiblee") : t("js.modeRepetition"));
     });
   });
 
@@ -4495,13 +4512,13 @@ function initDashboard() {
   });
 
   document.querySelector("[data-create-recurring]")?.addEventListener("click", () => {
-    const name = document.querySelector("[data-recurring-name]")?.value.trim() || "Message récurrent";
+    const name = document.querySelector("[data-recurring-name]")?.value.trim() || t("js.messageRecurrent");
     const channel = document.querySelector("[data-recurring-channel]")?.value.trim();
     const interval = document.querySelector("[data-recurring-interval]")?.value || "30";
     const unit = document.querySelector("[data-recurring-unit]")?.value || "minutes";
     const list = document.querySelector("[data-recurring-list]");
     if (!channel) {
-      showToast("⚠️ Ajoute l'ID du salon pour créer le message");
+      showToast(t("js.ajouteIdSalon"));
       return;
     }
     list?.querySelector(".recurring-empty")?.remove();
@@ -4512,7 +4529,7 @@ function initDashboard() {
     item.dataset.interval = interval;
     item.dataset.unit = unit;
     item.dataset.mode = document.querySelector("[data-recurring-mode].is-active")?.dataset.recurringMode || "repeat";
-    item.dataset.content = document.querySelector("[data-recurring-content]")?.value.trim() || "Hey @everyone, pensez à suivre les dernières annonces du serveur.";
+    item.dataset.content = document.querySelector("[data-recurring-content]")?.value.trim() || t("js.exempleMessageRecurrent");
     item.innerHTML = `
       <span>
         <strong>🔁 ${escapeHtml(name)}</strong>
@@ -4522,7 +4539,7 @@ function initDashboard() {
     `;
     list?.prepend(item);
     markPanelDirty("recurring");
-    showToast(`✅ Message récurrent "${name}" créé`);
+    showToast(tp("js.messageRecurrentCree", { nom: name }));
   });
 
   document.querySelector("[data-recurring-list]")?.addEventListener("click", async (event) => {
@@ -4533,19 +4550,19 @@ function initDashboard() {
     if (list && !list.querySelector(".recurring-item")) {
       const empty = document.createElement("div");
       empty.className = "recurring-empty";
-      empty.textContent = "Aucun message récurrent créé pour le moment.";
+      empty.textContent = t("js.aucunMessageRecurrent");
       list.append(empty);
     }
     markPanelDirty("recurring");
     if (selectedServer.id && selectedServer.installed) {
-      await saveCurrentChanges("🗑️ Message récurrent supprimé du bot");
+      await saveCurrentChanges(t("js.messageRecurrentSupprimeBot"));
     } else {
-      showToast("🗑️ Message récurrent supprimé localement");
+      showToast(t("js.messageRecurrentSupprimeLocal"));
     }
   });
 
   document.querySelector("[data-recurring-recover]")?.addEventListener("click", () => {
-    showToast("♻️ Récupération prête pour le futur backend du bot");
+    showToast(t("js.recuperationPrete"));
   });
 
   document.querySelectorAll(".social-card").forEach((card) => {
@@ -4554,14 +4571,14 @@ function initDashboard() {
     const linkInput = card.querySelector("[data-social-link]");
     const channelInput = card.querySelector("[data-social-channel]");
     const testButton = card.querySelector("[data-social-test]");
-    const platform = card.dataset.socialPlatform || "Réseau";
+    const platform = card.dataset.socialPlatform || t("js.reseau");
 
     function syncSocialState() {
       const isActive = Boolean(enabled?.checked);
       if (!state) return;
       state.classList.toggle("active", isActive);
       state.classList.toggle("inactive", !isActive);
-      state.textContent = isActive ? "🟢 Actif" : "⚪ Inactif";
+      state.textContent = t(isActive ? "js.actif" : "js.inactif");
     }
 
     syncSocialState();
@@ -4569,22 +4586,22 @@ function initDashboard() {
     enabled?.addEventListener("change", () => {
       syncSocialState();
       markPanelDirty("socials");
-      showToast(enabled.checked ? `📣 Relais ${platform} activé` : `⚪ Relais ${platform} désactivé`);
+      showToast(tp(enabled.checked ? "js.relaisActive" : "js.relaisDesactive", { plateforme: platform }));
     });
 
     testButton?.addEventListener("click", async () => {
       const link = linkInput?.value.trim();
       const channel = channelInput?.value.trim();
       if (!link || !channel) {
-        showToast(`⚠️ Ajoute le lien ${platform} et l'ID du salon`);
+        showToast(tp("js.ajouteLienEtSalon", { plateforme: platform }));
         return;
       }
       if (!selectedServer.id || !selectedServer.installed) {
-        showToast("🔗 Le serveur actif n'est pas encore relié au bot côté dashboard");
+        showToast(t("js.serveurNonRelie"));
         return;
       }
       if (hasUnsavedChanges && dirtyPanelName === "socials") {
-        const saved = await saveCurrentChanges(`💾 Relais ${platform} enregistré`);
+        const saved = await saveCurrentChanges(tp("js.relaisEnregistre", { plateforme: platform }));
         if (!saved) return;
       }
       try {
@@ -4592,11 +4609,41 @@ function initDashboard() {
           method: "POST",
           body: JSON.stringify({ platform, link, channel_id: channel })
         });
-        showToast(`🧪 Test ${platform} envoyé dans le salon ${channel}`);
+        showToast(tp("js.testEnvoye", { plateforme: platform, salon: channel }));
       } catch (error) {
-        showToast(`⚠️ Test ${platform} impossible : ${error.message || "connexion bot indisponible"}`);
+        showToast(tp("js.testImpossible", { plateforme: platform, detail: error.message || t("js.connexionBotIndisponible") }));
       }
     });
+  });
+
+  // Changement de langue : applySiteLanguage ne touche que le HTML statique.
+  // Tout ce que le JavaScript a peint doit être redessiné, sinon la moitié de
+  // l'écran resterait dans la langue précédente jusqu'au prochain chargement.
+  document.addEventListener("modbot:language", () => {
+    const redessiner = [
+      renderAuthStatus, renderSwitcherList, renderOverview, renderSanctionLadder,
+      renderWelcomePreview, renderWelcomeVariables, renderGiveaways,
+      renderLogFilters, renderLogFeed, renderBackups, renderReactionPreview,
+    ];
+    redessiner.forEach((dessine) => {
+      try {
+        dessine();
+      } catch (error) {
+        console.warn("Redessin impossible apres changement de langue :", error);
+      }
+    });
+    renderGuildChoices(dashboardGuilds);
+    if (dernierConfig) renderModerationConfig(dernierConfig);
+    if (dernierConfig) renderDashboardStats(dernierConfig);
+    if (securityState) {
+      renderSecurityPermissions(securityState.permissions);
+      applySecurityState(securityState);
+    }
+    if (selectedServer.name) {
+      currentServerTargets.forEach((cible) => { cible.textContent = selectedServer.name; });
+    }
+    if (searchSelection) renderSearchDetail(searchSelection);
+    setOfferInviteFallbackCopy();
   });
 
   document.querySelectorAll(".dashboard-page button, .dashboard-page .primary-btn, .dashboard-page .secondary-btn").forEach((element) => {
@@ -4620,7 +4667,7 @@ function initDashboard() {
    ══════════════════════════════════════════════════════════════════ */
 
 function formatNombreFr(valeur) {
-  return Number(valeur || 0).toLocaleString("fr-FR");
+  return Number(valeur || 0).toLocaleString(localeAffichage());
 }
 
 /**
@@ -4652,6 +4699,27 @@ function animerCompteur(element, cible) {
   setTimeout(() => { element.textContent = valeurFinale; }, duree + 150);
 }
 
+/**
+ * Nom d'une langue dans la langue du visiteur.
+ *
+ * Le bot renvoie le code ISO et un nom français de repli : le navigateur sait
+ * traduire « de » en « German » ou « الألمانية » sans que le site embarque une
+ * table de 40 langues fois 3.
+ */
+function nomDeLangue(code, repli) {
+  if (!code) return repli;
+  try {
+    const noms = new Intl.DisplayNames([getSiteLanguage()], { type: "language" });
+    const nom = noms.of(code);
+    if (nom && nom.toLowerCase() !== code.toLowerCase()) return nom;
+  } catch (error) {
+    // Intl.DisplayNames absent : le repli français fait l'affaire
+  }
+  return repli;
+}
+
+let derniersStatsPubliques = null;
+
 async function initPublicStats() {
   const section = document.querySelector("[data-live-stats]");
   if (!section) return;
@@ -4673,7 +4741,8 @@ async function initPublicStats() {
     });
     if (!reponse.ok) throw new Error(`HTTP ${reponse.status}`);
     const stats = (await reponse.json())?.stats;
-    if (!stats) throw new Error("réponse vide");
+    if (!stats) throw new Error(t("js.reponseVide"));
+    derniersStatsPubliques = stats;
 
     animerCompteur(membres, stats.members_protected);
     animerCompteur(serveurs, stats.servers);
@@ -4681,8 +4750,9 @@ async function initPublicStats() {
 
     if (resume) {
       resume.textContent =
-        `${formatNombreFr(stats.members_protected)} membres répartis sur ` +
-        `${formatNombreFr(stats.servers)} serveur${stats.servers > 1 ? "s" : ""} Discord.`;
+      tn("js.repartisUnServeur", "js.repartisDesServeurs", stats.servers,
+         { membres: formatNombreFr(stats.members_protected),
+           serveurs: formatNombreFr(stats.servers) });
     }
 
     const top = Array.isArray(stats.top_languages) ? stats.top_languages : [];
@@ -4690,7 +4760,9 @@ async function initPublicStats() {
       liste.innerHTML = top.map((entree) => `
         <span class="stat-country${entree.unknown ? " is-unknown" : ""}">
           <span class="stat-country-flag" aria-hidden="true">${escapeHtmlValue(entree.flag || "🌐")}</span>
-          <span class="stat-country-name">${escapeHtmlValue(entree.language)}</span>
+          <span class="stat-country-name">${escapeHtmlValue(entree.unknown
+            ? t("js.langueNonRenseignee")
+            : nomDeLangue(entree.code, entree.language))}</span>
           <span class="stat-country-count">${formatNombreFr(entree.members)}</span>
         </span>`).join("");
       liste.hidden = false;
@@ -4701,12 +4773,43 @@ async function initPublicStats() {
     // avec des chiffres inventés, et on garde la page présentable.
     console.warn("Statistiques publiques indisponibles :", error?.message || error);
     section.classList.add("stats-offline");
-    if (resume) resume.textContent = "Chiffres momentanément indisponibles.";
+    if (resume) resume.textContent = t("js.chiffresIndisponibles");
     [membres, serveurs, langues].forEach((el) => {
       if (el && el.textContent === "—") el.textContent = "·";
     });
   }
 }
+
+// La démo de l'accueil est du HTML généré : elle se redessine elle aussi.
+document.addEventListener("modbot:language", () => {
+  const stage = document.getElementById("heroCommandStage");
+  const actifHero = document.querySelector(".command-card.is-active");
+  if (stage) renderCommand(stage, actifHero?.dataset.command || "panel");
+
+  const actifDemo = document.querySelector(".demo-command.is-active");
+  if (document.getElementById("demoFeed")) runDemoCommand(actifDemo?.dataset.command || "panel");
+
+  // Les chiffres sont déjà chargés : on ne redemande rien au bot, on réécrit
+  // simplement les noms de langues dans la nouvelle langue.
+  const stats = derniersStatsPubliques;
+  const liste = document.querySelector("[data-stat-language-list]");
+  const resume = document.querySelector("[data-stat-summary]");
+  if (!stats || !liste) return;
+  if (resume) {
+    resume.textContent = tn("js.repartisUnServeur", "js.repartisDesServeurs", stats.servers,
+                            { membres: formatNombreFr(stats.members_protected),
+                              serveurs: formatNombreFr(stats.servers) });
+  }
+  const top = Array.isArray(stats.top_languages) ? stats.top_languages : [];
+  liste.innerHTML = top.map((entree) => `
+    <span class="stat-country${entree.unknown ? " is-unknown" : ""}">
+      <span class="stat-country-flag" aria-hidden="true">${escapeHtmlValue(entree.flag || "🌐")}</span>
+      <span class="stat-country-name">${escapeHtmlValue(entree.unknown
+        ? t("js.langueNonRenseignee")
+        : nomDeLangue(entree.code, entree.language))}</span>
+      <span class="stat-country-count">${formatNombreFr(entree.members)}</span>
+    </span>`).join("");
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   resetInitialScroll();
