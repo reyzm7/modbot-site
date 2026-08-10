@@ -51,15 +51,15 @@
   </div>
 
   <header class="site-header">
-    <nav class="navbar" aria-label="Navigation principale">
-      <a class="brand" href="#top" aria-label="Accueil ModBot">
+    <nav class="navbar" aria-label="Navigation principale" data-i18n-aria="home.navigationPrincipale">
+      <a class="brand" href="#top" aria-label="Accueil ModBot" data-i18n-aria="home.accueilModbot">
         <span class="brand-mark">
           <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
         </span>
         <span>ModBot</span>
       </a>
 
-      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="home.ouvrirLeMenu">
         <span></span>
         <span></span>
       </button>
@@ -70,12 +70,12 @@
         <a href="#donate" data-i18n="nav.pricing">Soutenir</a>
         <a href="wiki.html" data-i18n="nav.wiki">Wiki</a>
         <a class="nav-action-btn nav-admin-btn" href="admin.html"><span>🔐</span><span data-i18n="nav.admin">Admin</span></a>
-        <a href="#partners">Partenaires</a>
-        <a href="#patch-notes">Patch notes</a>
-        <a href="#faq">FAQ</a>
+        <a href="#partners" data-i18n="home.partenaires">Partenaires</a>
+        <a href="#patch-notes" data-i18n="home.patchNotes">Patch notes</a>
+        <a href="#faq" data-i18n="home.faq">FAQ</a>
         <a class="nav-action-btn nav-dashboard-btn" href="dashboard.html"><span>📊</span><span data-i18n="nav.dashboard">Dashboard</span></a>
         <a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite data-i18n="nav.cta">Ajouter ModBot</a>
-        <label class="language-switch" aria-label="Choisir la langue du site">
+        <label class="language-switch" aria-label="Choisir la langue du site" data-i18n-aria="home.choisirLaLangueDu">
           <span>🌍</span>
           <select id="siteLanguage">
             <option value="fr">Français</option>
@@ -103,37 +103,37 @@
         </div>
       </div>
 
-      <div class="hero-panel" aria-label="Aperçu de ModBot">
+      <div class="hero-panel" aria-label="Aperçu de ModBot" data-i18n-aria="home.apercuDeModbot">
         <div class="panel-top">
           <span class="dot red"></span>
           <span class="dot yellow"></span>
           <span class="dot green"></span>
-          <span class="channel-name"># commandes-modbot</span>
+          <span class="channel-name" data-i18n="home.commandesModbot"># commandes-modbot</span>
         </div>
 
         <div class="command-stage" id="heroCommandStage">
-          <div class="empty-state">Choisissez une commande dans le panneau pour lancer la démo.</div>
+          <div class="empty-state" data-i18n="home.choisissezUneCommandeDans">Choisissez une commande dans le panneau pour lancer la démo.</div>
         </div>
 
-        <aside class="command-rail" aria-label="Commandes disponibles">
-          <p>Commandes disponibles</p>
+        <aside class="command-rail" aria-label="Commandes disponibles" data-i18n-aria="home.commandesDisponibles">
+          <p data-i18n="home.commandesDisponibles2">Commandes disponibles</p>
           <button type="button" class="command-card is-active" data-command="panel">
             <span class="command-icon">!</span>
-            <span><strong>/panel</strong><small>Panneau admin</small></span>
+            <span><strong>/panel</strong><small data-i18n="home.panneauAdmin">Panneau admin</small></span>
           </button>
           <button type="button" class="command-card" data-command="stats">
             <span class="command-icon">?</span>
-            <span><strong>/serverstats</strong><small>Stats serveur</small></span>
+            <span><strong>/serverstats</strong><small data-i18n="home.statsServeur">Stats serveur</small></span>
           </button>
           <button type="button" class="command-card" data-command="avert">
             <span class="command-icon">#</span>
-            <span><strong>/avert-count</strong><small>Dossier modération</small></span>
+            <span><strong>/avert-count</strong><small data-i18n="home.dossierModeration">Dossier modération</small></span>
           </button>
         </aside>
       </div>
     </section>
 
-    <section class="stats section-shell" aria-label="Statistiques ModBot" data-live-stats>
+    <section class="stats section-shell" aria-label="Statistiques ModBot" data-live-stats data-i18n-aria="home.statistiquesModbot">
       <div class="stats-headline">
         <p class="stats-big">
           <strong data-stat-members>—</strong>
@@ -218,9 +218,9 @@
 
     <section id="demo" class="demo section-shell">
       <div class="section-heading">
-        <p class="eyebrow">Démo</p>
-        <h2>Essayez les commandes</h2>
-        <p>Cliquez sur une commande pour voir la réponse de ModBot en direct.</p>
+        <p class="eyebrow" data-i18n="home.demo">Démo</p>
+        <h2 data-i18n="home.essayezLesCommandes">Essayez les commandes</h2>
+        <p data-i18n="home.cliquezSurUneCommande">Cliquez sur une commande pour voir la réponse de ModBot en direct.</p>
       </div>
 
       <div class="demo-layout">
@@ -229,7 +229,7 @@
             <span class="dot red"></span>
             <span class="dot yellow"></span>
             <span class="dot green"></span>
-            <span class="channel-name"># salon-test</span>
+            <span class="channel-name" data-i18n="home.salonTest"># salon-test</span>
           </div>
           <div class="chat-feed" id="demoFeed" aria-live="polite"></div>
         </div>
@@ -279,9 +279,9 @@
 
     <section id="partners" class="partners section-shell">
       <div class="section-heading">
-        <p class="eyebrow">Partenaires</p>
-        <h2>Ils avancent avec ModBot</h2>
-        <p>Des communautés liées au club pro et aux tournois qui font confiance à l’écosystème ModBot.</p>
+        <p class="eyebrow" data-i18n="home.partenaires2">Partenaires</p>
+        <h2 data-i18n="home.ilsAvancentAvecModbot">Ils avancent avec ModBot</h2>
+        <p data-i18n="home.desCommunautesLieesAu">Des communautés liées au club pro et aux tournois qui font confiance à l’écosystème ModBot.</p>
       </div>
 
       <div class="partner-grid">
@@ -292,9 +292,9 @@
                  onerror="this.remove(); this.parentElement.classList.add('is-fallback');">
           </span>
           <div>
-            <h3>VPG Belgique</h3>
-            <p>Compétition club pro</p>
-            <span class="partner-meta">4 100+ membres</span>
+            <h3 data-i18n="home.vpgBelgique">VPG Belgique</h3>
+            <p data-i18n="home.competitionClubPro">Compétition club pro</p>
+            <span class="partner-meta" data-i18n="home.membres">4 100+ membres</span>
           </div>
           <span class="partner-arrow" aria-hidden="true">↗</span>
         </a>
@@ -306,9 +306,9 @@
                  onerror="this.remove(); this.parentElement.classList.add('is-fallback');">
           </span>
           <div>
-            <h3>MrDarryl</h3>
-            <p>Communauté et tournois</p>
-            <span class="partner-meta">700+ membres</span>
+            <h3 data-i18n="home.mrdarryl">MrDarryl</h3>
+            <p data-i18n="home.communauteEtTournois">Communauté et tournois</p>
+            <span class="partner-meta" data-i18n="home.membres2">700+ membres</span>
           </div>
           <span class="partner-arrow" aria-hidden="true">↗</span>
         </a>
@@ -317,9 +317,9 @@
 
     <section id="patch-notes" class="patch-notes section-shell">
       <div class="section-heading">
-        <p class="eyebrow">Patch notes</p>
-        <h2>Les dernières évolutions ModBot</h2>
-        <p>Les nouveautés sont publiées directement dans le salon Discord officiel.</p>
+        <p class="eyebrow" data-i18n="home.patchNotes2">Patch notes</p>
+        <h2 data-i18n="home.lesDernieresEvolutionsModbot">Les dernières évolutions ModBot</h2>
+        <p data-i18n="home.lesNouveautesSontPubliees">Les nouveautés sont publiées directement dans le salon Discord officiel.</p>
       </div>
 
       <article class="patch-redirect">
@@ -329,15 +329,15 @@
           <span></span>
         </div>
         <div class="patch-redirect-content">
-          <span class="patch-mini-label"># patch-notes</span>
-          <h3>Consultez les mises à jour sur Discord</h3>
-          <p>
+          <span class="patch-mini-label" data-i18n="home.patchNotes3"># patch-notes</span>
+          <h3 data-i18n="home.consultezLesMisesJour">Consultez les mises à jour sur Discord</h3>
+          <p data-i18n="home.siVousEtesDeja">
             Si vous êtes déjà sur le serveur, le bouton ouvre directement le salon Patch notes.
             Sinon, rejoignez d’abord le serveur ModBot.
           </p>
           <div class="patch-actions">
-            <a class="primary-btn" href="https://discord.com/channels/1510421934435729586/1510440693070430324" target="_blank" rel="noreferrer">Ouvrir le salon</a>
-            <a class="secondary-btn" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">Rejoindre le serveur</a>
+            <a class="primary-btn" href="https://discord.com/channels/1510421934435729586/1510440693070430324" target="_blank" rel="noreferrer" data-i18n="home.ouvrirLeSalon">Ouvrir le salon</a>
+            <a class="secondary-btn" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="home.rejoindreLeServeur">Rejoindre le serveur</a>
           </div>
         </div>
       </article>
@@ -345,68 +345,68 @@
 
     <section id="faq" class="faq section-shell">
       <div class="section-heading">
-        <p class="eyebrow">FAQ</p>
-        <h2>Questions fréquentes</h2>
+        <p class="eyebrow" data-i18n="home.faq2">FAQ</p>
+        <h2 data-i18n="home.questionsFrequentes">Questions fréquentes</h2>
       </div>
 
       <div class="faq-list">
         <details class="faq-box" open>
-          <summary>Comment obtenir ModBot ?</summary>
-          <p>Rejoignez notre serveur Discord et nous effectuerons l’installation avec vous.</p>
+          <summary data-i18n="home.commentObtenirModbot">Comment obtenir ModBot ?</summary>
+          <p data-i18n="home.rejoignezNotreServeurDiscord">Rejoignez notre serveur Discord et nous effectuerons l’installation avec vous.</p>
         </details>
         <details class="faq-box">
-          <summary>Puis-je demander des fonctionnalités ?</summary>
-          <p>Oui. Les évolutions sont étudiées selon les besoins et peuvent être intégrées à l’offre sur mesure.</p>
+          <summary data-i18n="home.puisJeDemanderDes">Puis-je demander des fonctionnalités ?</summary>
+          <p data-i18n="home.ouiLesEvolutionsSont">Oui. Les évolutions sont étudiées selon les besoins et peuvent être intégrées à l’offre sur mesure.</p>
         </details>
         <details class="faq-box">
-          <summary>Le bot est-il configuré pour mon serveur ?</summary>
-          <p>Oui. Chaque installation est adaptée à votre communauté, vos salons, vos rôles et vos règles.</p>
+          <summary data-i18n="home.leBotEstIl">Le bot est-il configuré pour mon serveur ?</summary>
+          <p data-i18n="home.ouiChaqueInstallationEst">Oui. Chaque installation est adaptée à votre communauté, vos salons, vos rôles et vos règles.</p>
         </details>
       </div>
     </section>
 
     <section class="cta section-shell">
-      <p class="eyebrow">Serveur prêt</p>
-      <h2>Prêt à protéger votre Discord ?</h2>
-      <p>Rejoignez le serveur ModBot et demandez votre installation.</p>
-      <a class="primary-btn" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">Rejoindre Discord</a>
+      <p class="eyebrow" data-i18n="home.serveurPret">Serveur prêt</p>
+      <h2 data-i18n="home.pretProtegerVotreDiscord">Prêt à protéger votre Discord ?</h2>
+      <p data-i18n="home.rejoignezLeServeurModbot">Rejoignez le serveur ModBot et demandez votre installation.</p>
+      <a class="primary-btn" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="home.rejoindreDiscord">Rejoindre Discord</a>
     </section>
   </main>
 
   <div class="assistant-overlay" id="assistantOverlay" aria-hidden="true"></div>
 
-  <button class="assistant-launcher" type="button" aria-label="Ouvrir l’assistant ModBot" aria-expanded="false">
+  <button class="assistant-launcher" type="button" aria-label="Ouvrir l’assistant ModBot" aria-expanded="false" data-i18n-aria="home.ouvrirAssistantModbot">
     <span></span>
   </button>
 
-  <section class="assistant" id="assistant" aria-label="Assistant ModBot" aria-hidden="true">
+  <section class="assistant" id="assistant" aria-label="Assistant ModBot" aria-hidden="true" data-i18n-aria="home.assistantModbot">
     <header class="assistant-header">
       <div class="assistant-title">
         <span class="assistant-avatar">
           <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
         </span>
         <div>
-          <strong>Assistant ModBot</strong>
-          <small><span class="online-dot"></span>En ligne</small>
+          <strong data-i18n="home.assistantModbot2">Assistant ModBot</strong>
+          <small data-i18n="home.enLigne"><span class="online-dot"></span>En ligne</small>
         </div>
       </div>
-      <button class="assistant-close" type="button" aria-label="Fermer l’assistant">×</button>
+      <button class="assistant-close" type="button" aria-label="Fermer l’assistant" data-i18n-aria="home.fermerAssistant">×</button>
     </header>
 
     <div class="assistant-messages" id="assistantMessages" aria-live="polite"></div>
 
-    <div class="quick-questions" aria-label="Questions fréquentes assistant">
-      <p>Questions fréquentes</p>
-      <button type="button" data-question="obtenir">Comment obtenir ModBot ?</button>
-      <button type="button" data-question="tarifs">Quels sont les tarifs ?</button>
-      <button type="button" data-question="fonctionnalite">Comment demander une fonctionnalité ?</button>
-      <button type="button" data-question="support">Comment contacter le support ?</button>
-      <button type="button" data-question="patch">Où voir les patch notes ?</button>
+    <div class="quick-questions" aria-label="Questions fréquentes assistant" data-i18n-aria="home.questionsFrequentesAssistant">
+      <p data-i18n="home.questionsFrequentes2">Questions fréquentes</p>
+      <button type="button" data-question="obtenir" data-i18n="home.commentObtenirModbot2">Comment obtenir ModBot ?</button>
+      <button type="button" data-question="tarifs" data-i18n="home.quelsSontLesTarifs">Quels sont les tarifs ?</button>
+      <button type="button" data-question="fonctionnalite" data-i18n="home.commentDemanderUneFonctionnalite">Comment demander une fonctionnalité ?</button>
+      <button type="button" data-question="support" data-i18n="home.commentContacterLeSupport">Comment contacter le support ?</button>
+      <button type="button" data-question="patch" data-i18n="home.ouVoirLesPatch">Où voir les patch notes ?</button>
     </div>
   </section>
 
   <footer class="footer">
-    <p>© 2026 ModBot - Respect - Non-toxicité - Bienveillance</p>
+    <p data-i18n="home.modbotRespectNonToxicite">© 2026 ModBot - Respect - Non-toxicité - Bienveillance</p>
   </footer>
 
   <script src="translations.js"></script>

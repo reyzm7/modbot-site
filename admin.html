@@ -22,7 +22,7 @@
   <div class="page-glow" aria-hidden="true"></div>
 
   <header class="dashboard-topbar admin-topbar">
-    <a class="brand" href="index.html" aria-label="Retour au site ModBot">
+    <a class="brand" href="index.html" aria-label="Retour au site ModBot" data-i18n-aria="adm.retourAuSiteModbot">
       <span class="brand-mark">
         <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
       </span>
@@ -31,12 +31,12 @@
 
     <div class="dashboard-server">
       <span class="server-dot"></span>
-      <span>🔐 Espace actif</span>
-      <strong>Administration</strong>
+      <span data-i18n="adm.espaceActif">🔐 Espace actif</span>
+      <strong data-i18n="adm.administration">Administration</strong>
     </div>
 
     <div class="dashboard-actions">
-      <label class="language-switch" aria-label="Choisir la langue du site">
+      <label class="language-switch" aria-label="Choisir la langue du site" data-i18n-aria="adm.choisirLaLangueDu">
         <span>🌍</span>
         <select id="siteLanguage">
           <option value="fr">Français</option>
@@ -44,8 +44,8 @@
           <option value="ar">العربية</option>
         </select>
       </label>
-      <a class="secondary-btn compact" href="dashboard.html">📊 Dashboard</a>
-      <a class="primary-btn compact" href="index.html">🏠 Retour au site</a>
+      <a class="secondary-btn compact" href="dashboard.html" data-i18n="adm.dashboard">📊 Dashboard</a>
+      <a class="primary-btn compact" href="index.html" data-i18n="adm.retourAuSite">🏠 Retour au site</a>
     </div>
   </header>
 
@@ -56,7 +56,7 @@
         <h1 data-i18n="admin.title">Centre administrateur du site</h1>
         <p data-i18n="admin.copy">Suivez l’activité du site, gérez les administrateurs, la blacklist et les serveurs où ModBot est installé.</p>
       </div>
-      <div class="health-pill" data-admin-status>
+      <div class="health-pill" data-admin-status data-i18n="adm.verrouille">
         <span></span>
         🔒 Verrouillé
       </div>
@@ -68,27 +68,27 @@
         <p data-i18n="admin.access.copy">Entre ton identifiant Discord administrateur pour ouvrir l’espace de gestion.</p>
         <label>
           <span data-i18n="admin.access.label">ID Discord administrateur</span>
-          <input type="text" inputmode="numeric" autocomplete="off" placeholder="Exemple : 1189681599965573131" data-admin-id>
+          <input type="text" inputmode="numeric" autocomplete="off" placeholder="Exemple : 1189681599965573131" data-admin-id data-i18n-placeholder="adm.exemple">
         </label>
-        <p class="oauth-note">La connexion réelle se fait via l’autorisation Discord de ModBot, puis l’accès admin est vérifié avec ton identifiant Discord autorisé.</p>
-        <p class="admin-error" data-admin-error hidden>❌ ID non autorisé pour cet espace administrateur.</p>
+        <p class="oauth-note" data-i18n="adm.laConnexionReelleSe">La connexion réelle se fait via l’autorisation Discord de ModBot, puis l’accès admin est vérifié avec ton identifiant Discord autorisé.</p>
+        <p class="admin-error" data-admin-error hidden data-i18n="adm.idNonAutorisePour">❌ ID non autorisé pour cet espace administrateur.</p>
         <button class="primary-btn compact" type="button" data-admin-unlock data-i18n="admin.access.button">Déverrouiller</button>
       </article>
 
       <article class="admin-panel admin-access-note">
-        <h3>🛡️ Sécurité</h3>
-        <p>Les statistiques, les serveurs, les administrateurs et la blacklist restent masqués tant que l’ID Discord administrateur n’est pas validé.</p>
+        <h3 data-i18n="adm.securite">🛡️ Sécurité</h3>
+        <p data-i18n="adm.lesStatistiquesLesServeurs">Les statistiques, les serveurs, les administrateurs et la blacklist restent masqués tant que l’ID Discord administrateur n’est pas validé.</p>
       </article>
     </div>
 
     <section class="admin-workspace" data-admin-protected hidden>
       <aside class="admin-sidebar-panel">
-        <p class="sidebar-label">Administration</p>
-        <button class="admin-nav is-active" type="button" data-admin-tab="overview"><span>01</span>📊 Vue globale</button>
-        <button class="admin-nav" type="button" data-admin-tab="admins"><span>02</span>🔐 Administrateurs</button>
-        <button class="admin-nav" type="button" data-admin-tab="blacklist"><span>03</span>🚫 Blacklist bot</button>
-        <button class="admin-nav" type="button" data-admin-tab="servers"><span>04</span>🧭 Serveurs</button>
-        <button class="admin-nav" type="button" data-admin-tab="activity"><span>05</span>🧾 Logs globaux</button>
+        <p class="sidebar-label" data-i18n="adm.administration2">Administration</p>
+        <button class="admin-nav is-active" type="button" data-admin-tab="overview" data-i18n="adm.navVueGlobale"><span>01</span>📊 Vue globale</button>
+        <button class="admin-nav" type="button" data-admin-tab="admins" data-i18n="adm.navAdministrateurs"><span>02</span>🔐 Administrateurs</button>
+        <button class="admin-nav" type="button" data-admin-tab="blacklist" data-i18n="adm.navBlacklist"><span>03</span>🚫 Blacklist bot</button>
+        <button class="admin-nav" type="button" data-admin-tab="servers" data-i18n="adm.navServeurs"><span>04</span>🧭 Serveurs</button>
+        <button class="admin-nav" type="button" data-admin-tab="activity" data-i18n="adm.navLogs"><span>05</span>🧾 Logs globaux</button>
       </aside>
 
       <div class="admin-main">
@@ -96,7 +96,7 @@
           <article class="admin-panel admin-stats-panel">
             <div class="admin-panel-head">
               <h3 data-i18n="admin.stats.title">📈 Stats du site</h3>
-              <span class="admin-badge" data-admin-stats-badge>En attente</span>
+              <span class="admin-badge" data-admin-stats-badge data-i18n="adm.enAttente">En attente</span>
             </div>
             <div class="site-stat-grid">
               <div><span data-admin-stat="visits">—</span><small data-i18n="admin.stats.visits">Visites</small></div>
@@ -108,8 +108,8 @@
 
           <div class="admin-grid two">
             <article class="admin-panel">
-              <h3>💛 Modèle économique</h3>
-              <p>ModBot est entièrement gratuit : toutes les fonctionnalités sont accessibles sur tous les serveurs. Le projet vit des dons libres, sans contrepartie ni fonctionnalité réservée.</p>
+              <h3 data-i18n="adm.modeleEconomique">💛 Modèle économique</h3>
+              <p data-i18n="adm.modbotEstEntierementGratuit">ModBot est entièrement gratuit : toutes les fonctionnalités sont accessibles sur tous les serveurs. Le projet vit des dons libres, sans contrepartie ni fonctionnalité réservée.</p>
             </article>
           </div>
         </section>
@@ -117,15 +117,15 @@
         <section class="admin-view" data-admin-panel="admins">
           <article class="admin-panel">
             <div class="admin-panel-head">
-              <h3>🔐 Administrateurs autorisés</h3>
-              <span class="admin-badge active">Accès sensible</span>
+              <h3 data-i18n="adm.administrateursAutorises">🔐 Administrateurs autorisés</h3>
+              <span class="admin-badge active" data-i18n="adm.accesSensible">Accès sensible</span>
             </div>
             <div class="admin-action-row">
-              <input type="text" inputmode="numeric" placeholder="ID Discord administrateur" data-new-admin-id>
-              <button class="primary-btn compact" type="button" data-add-admin>➕ Ajouter</button>
+              <input type="text" inputmode="numeric" placeholder="ID Discord administrateur" data-new-admin-id data-i18n-placeholder="adm.idDiscordAdministrateur">
+              <button class="primary-btn compact" type="button" data-add-admin data-i18n="adm.ajouter">➕ Ajouter</button>
             </div>
             <div class="admin-list" data-admin-list>
-              <div><span><strong>1189681599965573131</strong><small>Propriétaire</small></span><button type="button" disabled>Protégé</button></div>
+              <div><span><strong>1189681599965573131</strong><small data-i18n="adm.proprietaire">Propriétaire</small></span><button type="button" disabled data-i18n="adm.protege">Protégé</button></div>
             </div>
           </article>
         </section>
@@ -133,16 +133,16 @@
         <section class="admin-view" data-admin-panel="blacklist">
           <article class="admin-panel">
             <div class="admin-panel-head">
-              <h3>🚫 Blacklist membres du bot</h3>
-              <span class="admin-badge">Bloque l’usage ModBot</span>
+              <h3 data-i18n="adm.blacklistMembresDuBot">🚫 Blacklist membres du bot</h3>
+              <span class="admin-badge" data-i18n="adm.bloqueUsageModbot">Bloque l’usage ModBot</span>
             </div>
             <div class="admin-action-row split">
-              <input type="text" placeholder="ID Discord ou pseudo" data-blacklist-member>
-              <input type="text" placeholder="Raison" data-blacklist-reason>
-              <button class="primary-btn compact danger-btn" type="button" data-blacklist-add>🚫 Blacklist</button>
+              <input type="text" placeholder="ID Discord ou pseudo" data-blacklist-member data-i18n-placeholder="adm.idDiscordOuPseudo">
+              <input type="text" placeholder="Raison" data-blacklist-reason data-i18n-placeholder="adm.raison">
+              <button class="primary-btn compact danger-btn" type="button" data-blacklist-add data-i18n="adm.blacklist">🚫 Blacklist</button>
             </div>
             <div class="blacklist-list" data-blacklist-list>
-              <div><span><strong>Aucun membre blacklisté</strong><small>La liste sera synchronisée avec le backend.</small></span></div>
+              <div><span><strong data-i18n="adm.aucunMembreBlackliste">Aucun membre blacklisté</strong><small data-i18n="adm.laListeSeraSynchronisee">La liste sera synchronisée avec le backend.</small></span></div>
             </div>
           </article>
         </section>
@@ -155,9 +155,9 @@
             </div>
             <p data-i18n="admin.servers.copy">Quand le backend sera branché au bot Discord, cette zone affichera automatiquement les logos réels des serveurs via les données `bot.guilds`.</p>
             <div class="admin-server-list" data-admin-server-list>
-              <div><span class="server-logo-shell" data-initials="HB"><img src="logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong>Hote BOT - ModBot</strong><small>Logo serveur synchronisable</small></span></div>
-              <div><span class="server-logo-shell" data-initials="VPG"><img src="logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong>VPG Belgique</strong><small>Logo serveur synchronisable</small></span></div>
-              <div><span class="server-logo-shell" data-initials="ST"><img src="logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong>Serveur test</strong><small>Logo serveur synchronisable</small></span></div>
+              <div><span class="server-logo-shell" data-initials="HB"><img src="logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong data-i18n="adm.hoteBotModbot">Hote BOT - ModBot</strong><small data-i18n="adm.logoServeurSynchronisable">Logo serveur synchronisable</small></span></div>
+              <div><span class="server-logo-shell" data-initials="VPG"><img src="logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong data-i18n="adm.vpgBelgique">VPG Belgique</strong><small data-i18n="adm.logoServeurSynchronisable2">Logo serveur synchronisable</small></span></div>
+              <div><span class="server-logo-shell" data-initials="ST"><img src="logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong data-i18n="adm.serveurTest">Serveur test</strong><small data-i18n="adm.logoServeurSynchronisable3">Logo serveur synchronisable</small></span></div>
             </div>
           </article>
         </section>
@@ -165,20 +165,20 @@
         <section class="admin-view" data-admin-panel="activity">
           <article class="admin-panel">
             <div class="admin-panel-head">
-              <h3>🧾 Logs globaux du bot</h3>
-              <span class="admin-badge">API bot connectée</span>
+              <h3 data-i18n="adm.logsGlobauxDuBot">🧾 Logs globaux du bot</h3>
+              <span class="admin-badge" data-i18n="adm.apiBotConnectee">API bot connectée</span>
             </div>
             <div class="server-log-feed" data-server-log-feed>
-              <div><span>20:42</span><strong>Hote BOT - ModBot</strong><em>Ticket publié depuis le dashboard.</em></div>
-              <div><span>20:35</span><strong>VPG Belgique</strong><em>Anti-lien activé dans la sécurité.</em></div>
-              <div><span>20:21</span><strong>Serveur test</strong><em>Message filtré par l’auto-modération.</em></div>
+              <div><span>20:42</span><strong data-i18n="adm.hoteBotModbot2">Hote BOT - ModBot</strong><em data-i18n="adm.ticketPublieDepuisLe">Ticket publié depuis le dashboard.</em></div>
+              <div><span>20:35</span><strong data-i18n="adm.vpgBelgique2">VPG Belgique</strong><em data-i18n="adm.antiLienActiveDans">Anti-lien activé dans la sécurité.</em></div>
+              <div><span>20:21</span><strong data-i18n="adm.serveurTest2">Serveur test</strong><em data-i18n="adm.messageFiltreParAuto">Message filtré par l’auto-modération.</em></div>
               </div>
           </article>
         </section>
       </div>
     </section>
 
-    <div class="dashboard-toast" id="adminToast" aria-live="polite">Action admin enregistrée</div>
+    <div class="dashboard-toast" id="adminToast" aria-live="polite" data-i18n="adm.actionAdminEnregistree">Action admin enregistrée</div>
   </main>
 
   <script src="translations.js"></script>

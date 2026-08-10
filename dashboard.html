@@ -24,18 +24,18 @@
   <main class="dashboard-auth" data-auth-screen>
     <section class="auth-card">
       <img class="auth-logo" src="assets/default_logo.svg" alt="ModBot" onerror="this.onerror=null; this.src='logo.png';">
-      <p class="eyebrow">Connexion dashboard</p>
-      <h1>Connecte-toi avec Discord</h1>
-      <p>Le dashboard affichera ensuite uniquement les serveurs où tu as accès à la configuration ModBot.</p>
+      <p class="eyebrow" data-i18n="dash.connexionDashboard">Connexion dashboard</p>
+      <h1 data-i18n="dash.connecteToiAvecDiscord">Connecte-toi avec Discord</h1>
+      <p data-i18n="dash.leDashboardAfficheraEnsuite">Le dashboard affichera ensuite uniquement les serveurs où tu as accès à la configuration ModBot.</p>
 
       <button class="discord-login-btn" type="button" data-dashboard-login>
         <svg viewBox="0 0 24 18" aria-hidden="true" focusable="false">
           <path fill="currentColor" d="M20.3 1.6A19.8 19.8 0 0 0 15.4.1l-.3.5c1.6.4 3 1 4.3 1.8a16.9 16.9 0 0 0-14.9 0A15.6 15.6 0 0 1 8.9.6L8.6.1A19.7 19.7 0 0 0 3.7 1.6C.6 6.2-.3 10.7.2 15.1a19.9 19.9 0 0 0 6 3l1.2-1.9c-.7-.2-1.3-.5-1.9-.9l.5-.4a14.2 14.2 0 0 0 12.1 0l.5.4c-.6.4-1.2.7-1.9.9l1.2 1.9a19.8 19.8 0 0 0 6-3c.6-5.1-.8-9.6-3.6-13.5ZM8.1 12.4c-1.2 0-2.1-1.1-2.1-2.4S6.9 7.6 8.1 7.6s2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Zm7.8 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Z"/>
         </svg>
-        Se connecter avec Discord
+        <span data-i18n="dash.seConnecterAvecDiscord">Se connecter avec Discord</span>
       </button>
 
-      <p class="oauth-note">Tu seras redirigé vers Discord pour autoriser ModBot, puis ramené ici automatiquement.</p>
+      <p class="oauth-note" data-i18n="dash.tuSerasRedirigeVers">Tu seras redirigé vers Discord pour autoriser ModBot, puis ramené ici automatiquement.</p>
 
       <!-- Diagnostic de connexion : rempli par script.js -->
       <div class="auth-status" data-auth-status hidden>
@@ -47,71 +47,71 @@
            Révélé automatiquement par script.js si le bot est injoignable. -->
       <details class="auth-advanced" data-auth-advanced hidden>
         <summary>
-          <span>⚙️ Adresse du bot</span>
-          <span class="auth-advanced-badge" data-api-badge>à vérifier</span>
+          <span data-i18n="dash.adresseDuBot">⚙️ Adresse du bot</span>
+          <span class="auth-advanced-badge" data-api-badge data-i18n="dash.verifier">à vérifier</span>
         </summary>
         <div class="auth-advanced-body">
-          <p>
+          <p data-i18n="dash.leDashboardArrivePas">
             Le dashboard n'arrive pas à joindre le bot. Vérifie qu'il est démarré,
             ou corrige son adresse ci-dessous.
           </p>
           <label class="auth-field">
-            <span>Adresse publique du bot</span>
+            <span data-i18n="dash.adressePubliqueDuBot">Adresse publique du bot</span>
             <input type="url" data-api-url-input placeholder="https://mon-bot.up.railway.app" autocomplete="off" spellcheck="false">
           </label>
           <div class="auth-advanced-actions">
-            <button class="primary-btn compact" type="button" data-api-url-save>Tester et connecter</button>
-            <button class="secondary-btn compact" type="button" data-api-url-clear>Rétablir l'adresse par défaut</button>
+            <button class="primary-btn compact" type="button" data-api-url-save data-i18n="dash.testerEtConnecter">Tester et connecter</button>
+            <button class="secondary-btn compact" type="button" data-api-url-clear data-i18n="dash.retablirAdresseParDefaut">Rétablir l'adresse par défaut</button>
           </div>
         </div>
       </details>
 
-      <a class="auth-return" href="index.html">← Retour au site</a>
+      <a class="auth-return" href="index.html" data-i18n="dash.retourAuSite">← Retour au site</a>
     </section>
   </main>
 
   <main class="server-picker" data-server-screen hidden>
     <header class="server-select-topbar">
-      <a class="server-select-brand" href="index.html" aria-label="Accueil ModBot">
+      <a class="server-select-brand" href="index.html" aria-label="Accueil ModBot" data-i18n-aria="dash.accueilModbot">
         <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
         <span>ModBot</span>
       </a>
-      <nav class="server-select-nav" aria-label="Navigation">
-        <a href="dashboard.html">Tableau de bord</a>
-        <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite>➕ Ajouter ModBot</a>
-        <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">Rejoindre mon serveur</a>
-        <a href="wiki.html">Commandes</a>
-        <a href="https://paypal.me/hazkes" target="_blank" rel="noreferrer noopener" class="is-premium">💛 Soutenir</a>
+      <nav class="server-select-nav" aria-label="Navigation" data-i18n-aria="dash.navigation">
+        <a href="dashboard.html" data-i18n="dash.tableauDeBord">Tableau de bord</a>
+        <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite data-i18n="dash.ajouterModbot">➕ Ajouter ModBot</a>
+        <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="dash.rejoindreMonServeur">Rejoindre mon serveur</a>
+        <a href="wiki.html" data-i18n="dash.commandes">Commandes</a>
+        <a href="https://paypal.me/hazkes" target="_blank" rel="noreferrer noopener" class="is-premium" data-i18n="dash.soutenir">💛 Soutenir</a>
       </nav>
-      <button class="secondary-btn compact" type="button" data-auth-back>Retour</button>
+      <button class="secondary-btn compact" type="button" data-auth-back data-i18n="dash.retour">Retour</button>
     </header>
 
     <section class="server-picker-card">
       <div class="server-select-heading">
         <div>
-          <h1>Sélectionnez un serveur</h1>
-          <p data-server-count-label>Vos serveurs administrables apparaissent ici.</p>
+          <h1 data-i18n="dash.selectionnezUnServeur">Sélectionnez un serveur</h1>
+          <p data-server-count-label data-i18n="dash.vosServeursAdministrablesApparaissent">Vos serveurs administrables apparaissent ici.</p>
         </div>
       </div>
 
       <div class="server-select-toolbar">
         <label class="server-search">
           <span>⌕</span>
-          <input type="search" placeholder="Rechercher" data-server-search>
+          <input type="search" placeholder="Rechercher" data-server-search data-i18n-placeholder="dash.rechercher">
         </label>
-        <button class="secondary-btn compact" type="button" data-refresh-dashboard-servers>↻ Rafraîchir</button>
-        <a class="primary-btn compact" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite>➕ Ajouter ModBot à un serveur</a>
+        <button class="secondary-btn compact" type="button" data-refresh-dashboard-servers data-i18n="dash.rafraichir">↻ Rafraîchir</button>
+        <a class="primary-btn compact" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite data-i18n="dash.ajouterModbotUnServeur">➕ Ajouter ModBot à un serveur</a>
       </div>
 
       <div class="server-grid" data-server-grid>
-        <div class="server-grid-loading">Recherche de vos serveurs Discord…</div>
+        <div class="server-grid-loading" data-i18n="dash.rechercheDeVosServeurs">Recherche de vos serveurs Discord…</div>
       </div>
     </section>
   </main>
 
   <div class="dashboard-app" data-dashboard-app hidden>
   <header class="dashboard-topbar">
-    <a class="brand" href="index.html" aria-label="Retour au site ModBot">
+    <a class="brand" href="index.html" aria-label="Retour au site ModBot" data-i18n-aria="dash.retourAuSiteModbot">
       <span class="brand-mark">
         <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
       </span>
@@ -122,13 +122,13 @@
     <div class="server-switcher" data-server-switcher>
       <button class="server-switcher-trigger" type="button"
               data-server-switcher-trigger
-              aria-haspopup="listbox" aria-expanded="false" aria-label="Changer de serveur">
+              aria-haspopup="listbox" aria-expanded="false" aria-label="Changer de serveur" data-i18n-aria="dash.changerDeServeur">
         <span class="server-logo-shell server-current-logo-shell" data-current-server-logo-shell data-initials="—">
           <img class="server-current-logo" src="assets/default_logo.svg" alt="" data-current-server-logo data-logo-img>
         </span>
         <span class="server-switcher-label">
-          <small>Serveur actif</small>
-          <strong data-current-server>Sélectionner…</strong>
+          <small data-i18n="dash.serveurActif">Serveur actif</small>
+          <strong data-current-server data-i18n="dash.selectionner">Sélectionner…</strong>
         </span>
         <svg class="server-switcher-chevron" viewBox="0 0 12 8" aria-hidden="true">
           <path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor"
@@ -137,23 +137,23 @@
       </button>
 
       <div class="server-switcher-menu" data-server-switcher-menu role="listbox"
-           aria-label="Vos serveurs" hidden>
+           aria-label="Vos serveurs" hidden data-i18n-aria="dash.vosServeurs">
         <div class="server-switcher-search">
           <svg viewBox="0 0 16 16" aria-hidden="true">
             <circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
             <path d="m10.5 10.5 3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
           </svg>
           <input type="search" placeholder="Rechercher un serveur…"
-                 data-server-switcher-search autocomplete="off" spellcheck="false">
+                 data-server-switcher-search autocomplete="off" spellcheck="false" data-i18n-placeholder="dash.rechercherUnServeur">
         </div>
 
         <div class="server-switcher-list" data-server-switcher-list></div>
 
         <div class="server-switcher-footer">
-          <button type="button" data-change-server>
+          <button type="button" data-change-server data-i18n="dash.voirTousMesServeurs">
             <span aria-hidden="true">⊞</span> Voir tous mes serveurs
           </button>
-          <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite>
+          <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite data-i18n="dash.ajouterModbotServeur">
             <span aria-hidden="true">➕</span> Ajouter ModBot à un serveur
           </a>
         </div>
@@ -161,7 +161,7 @@
     </div>
 
     <div class="dashboard-actions">
-      <label class="language-switch compact" aria-label="Langue du dashboard">
+      <label class="language-switch compact" aria-label="Langue du dashboard" data-i18n-aria="dash.langueDuDashboard">
         <span aria-hidden="true">🌍</span>
         <select data-language-select>
           <option value="fr">Français</option>
@@ -175,44 +175,44 @@
   </header>
 
   <main class="dashboard-shell">
-    <aside class="dashboard-sidebar" aria-label="Navigation dashboard">
-      <p class="sidebar-label">Pilotage</p>
-      <button class="dash-nav is-active" type="button" data-dashboard-tab="overview"><span aria-hidden="true">📊</span>Vue globale</button>
+    <aside class="dashboard-sidebar" aria-label="Navigation dashboard" data-i18n-aria="dash.navigationDashboard">
+      <p class="sidebar-label" data-i18n="dash.pilotage">Pilotage</p>
+      <button class="dash-nav is-active" type="button" data-dashboard-tab="overview" data-i18n="dash.navVueGlobale"><span aria-hidden="true">📊</span>Vue globale</button>
 
-      <p class="sidebar-label">Protection</p>
-      <button class="dash-nav" type="button" data-dashboard-tab="security"><span aria-hidden="true">🛡️</span>Sécurité</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="moderation"><span aria-hidden="true">⚒️</span>Modération</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="search"><span aria-hidden="true">🔎</span>Recherche</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="backups"><span aria-hidden="true">💾</span>Sauvegardes</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="logs"><span aria-hidden="true">🧾</span>Logs</button>
+      <p class="sidebar-label" data-i18n="dash.protection">Protection</p>
+      <button class="dash-nav" type="button" data-dashboard-tab="security" data-i18n="dash.navSecurite"><span aria-hidden="true">🛡️</span>Sécurité</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="moderation" data-i18n="dash.navModeration"><span aria-hidden="true">⚒️</span>Modération</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="search" data-i18n="dash.navRecherche"><span aria-hidden="true">🔎</span>Recherche</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="backups" data-i18n="dash.navSauvegardes"><span aria-hidden="true">💾</span>Sauvegardes</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="logs" data-i18n="dash.navLogs"><span aria-hidden="true">🧾</span>Logs</button>
 
-      <p class="sidebar-label">Communauté</p>
+      <p class="sidebar-label" data-i18n="dash.communaute">Communauté</p>
       <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span aria-hidden="true">🎫</span><span data-i18n="nav.tickets">Tickets</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="welcome"><span aria-hidden="true">👋</span><span data-i18n="nav.welcome">Bienvenue</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="giveaways"><span aria-hidden="true">🎉</span><span data-i18n="nav.giveaways">Giveaways</span></button>
-      <button class="dash-nav" type="button" data-dashboard-tab="ratings"><span aria-hidden="true">⭐</span>Ratings</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="ratings" data-i18n="dash.navRatings"><span aria-hidden="true">⭐</span>Ratings</button>
 
-      <p class="sidebar-label">Contenus</p>
-      <button class="dash-nav" type="button" data-dashboard-tab="channels"><span aria-hidden="true">📌</span>Salons</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="socials"><span aria-hidden="true">📣</span>Réseaux</button>
+      <p class="sidebar-label" data-i18n="dash.contenus">Contenus</p>
+      <button class="dash-nav" type="button" data-dashboard-tab="channels" data-i18n="dash.navSalons"><span aria-hidden="true">📌</span>Salons</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="socials" data-i18n="dash.navReseaux"><span aria-hidden="true">📣</span>Réseaux</button>
 
-      <p class="sidebar-label">Apparence</p>
-      <button class="dash-nav" type="button" data-dashboard-tab="language"><span aria-hidden="true">🌍</span>Langue</button>
+      <p class="sidebar-label" data-i18n="dash.apparence">Apparence</p>
+      <button class="dash-nav" type="button" data-dashboard-tab="language" data-i18n="dash.navLangue"><span aria-hidden="true">🌍</span>Langue</button>
     </aside>
 
     <section class="dashboard-content">
       <div class="dashboard-banner">
         <div>
-          <p class="eyebrow">⚡ Dashboard ModBot</p>
-          <h1>Centre de contrôle ModBot</h1>
+          <p class="eyebrow" data-i18n="dash.dashboardModbot">⚡ Dashboard ModBot</p>
+          <h1 data-i18n="dash.centreDeControleModbot">Centre de contrôle ModBot</h1>
           <p class="server-summary">
             <span class="server-logo-shell server-summary-logo-shell" data-current-server-logo-shell data-initials="HB">
               <img src="assets/default_logo.svg" alt="" data-current-server-logo-inline data-logo-img>
             </span>
-            <span>Configuration du serveur <strong data-current-server-label>Serveur</strong>.</span>
+            <span data-i18n="dash.configurationDuServeur">Configuration du serveur <strong data-current-server-label data-i18n="js.serveurAttente">Serveur</strong>.</span>
           </p>
         </div>
-        <div class="health-pill">
+        <div class="health-pill" data-i18n="dash.connecteAuBot">
           <span></span>
           🟢 Connecté au bot
         </div>
@@ -221,53 +221,53 @@
       <section class="dash-panel is-active" data-dashboard-panel="overview">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">📊 Résumé</p>
-            <h2>État du serveur</h2>
+            <p class="eyebrow" data-i18n="dash.resume">📊 Résumé</p>
+            <h2 data-i18n="dash.etatDuServeur">État du serveur</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Réinitialiser la vue</button>
+          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.reinitialiserLaVue">♻️ Réinitialiser la vue</button>
         </div>
 
         <div class="metric-grid">
           <article class="metric-card">
-            <span>🛡️ Protections</span>
+            <span data-i18n="dash.protections">🛡️ Protections</span>
             <strong data-overview-security>—</strong>
-            <small data-overview-security-detail>Chargement…</small>
+            <small data-overview-security-detail data-i18n="dash.chargement">Chargement…</small>
           </article>
           <article class="metric-card">
-            <span>💾 Sauvegardes</span>
+            <span data-i18n="dash.sauvegardes">💾 Sauvegardes</span>
             <strong data-overview-backups>—</strong>
-            <small data-overview-backups-detail>Chargement…</small>
+            <small data-overview-backups-detail data-i18n="dash.chargement2">Chargement…</small>
           </article>
           <article class="metric-card">
-            <span>🧾 Événements</span>
+            <span data-i18n="dash.evenements">🧾 Événements</span>
             <strong data-overview-logs>—</strong>
-            <small>Enregistrés sur ce serveur</small>
+            <small data-i18n="dash.enregistresSurCeServeur">Enregistrés sur ce serveur</small>
           </article>
           <article class="metric-card">
-            <span>⭐ Ratings</span>
+            <span data-i18n="dash.ratings">⭐ Ratings</span>
             <strong data-overview-rating-average>0.00/5</strong>
-            <small><span data-overview-rating-count>0</span> évaluations</small>
+            <small data-i18n="dash.evaluations"><span data-overview-rating-count>0</span> évaluations</small>
           </article>
         </div>
 
         <div class="dashboard-grid two">
           <div class="tool-panel">
-            <h3>⚡ Actions rapides</h3>
+            <h3 data-i18n="dash.actionsRapides">⚡ Actions rapides</h3>
             <div class="quick-grid">
-              <button type="button" data-dashboard-jump="security">🛡️ Sécurité serveur</button>
-              <button type="button" data-dashboard-jump="backups">💾 Sauvegardes</button>
-              <button type="button" data-dashboard-jump="logs">🧾 Journal du serveur</button>
-              <button type="button" data-dashboard-jump="moderation">⚒️ Modération</button>
-              <button type="button" data-dashboard-jump="channels">📌 Choisir les salons</button>
-              <button type="button" data-dashboard-jump="tickets">🎫 Configurer tickets</button>
-              <button type="button" data-dashboard-jump="socials">📣 Relais réseaux</button>
+              <button type="button" data-dashboard-jump="security" data-i18n="dash.securiteServeur">🛡️ Sécurité serveur</button>
+              <button type="button" data-dashboard-jump="backups" data-i18n="dash.sauvegardes2">💾 Sauvegardes</button>
+              <button type="button" data-dashboard-jump="logs" data-i18n="dash.journalDuServeur">🧾 Journal du serveur</button>
+              <button type="button" data-dashboard-jump="moderation" data-i18n="dash.moderation">⚒️ Modération</button>
+              <button type="button" data-dashboard-jump="channels" data-i18n="dash.choisirLesSalons">📌 Choisir les salons</button>
+              <button type="button" data-dashboard-jump="tickets" data-i18n="dash.configurerTickets">🎫 Configurer tickets</button>
+              <button type="button" data-dashboard-jump="socials" data-i18n="dash.relaisReseaux">📣 Relais réseaux</button>
             </div>
           </div>
 
           <div class="tool-panel">
-            <h3>🔒 État des protections</h3>
+            <h3 data-i18n="dash.etatDesProtections">🔒 État des protections</h3>
             <ul class="check-list" data-overview-checklist>
-              <li>Chargement de l'état du serveur…</li>
+              <li data-i18n="dash.chargementDeEtatDu">Chargement de l'état du serveur…</li>
             </ul>
           </div>
         </div>
@@ -276,74 +276,74 @@
       <section class="dash-panel" data-dashboard-panel="tickets">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">🎫 Tickets</p>
-            <h2>Message public et options</h2>
+            <p class="eyebrow" data-i18n="dash.tickets">🎫 Tickets</p>
+            <h2 data-i18n="dash.messagePublicEtOptions">Message public et options</h2>
           </div>
           <div class="panel-actions">
-            <button class="primary-btn compact ticket-publish-btn" type="button" data-publish-ticket hidden>🚀 Publier</button>
-            <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset tickets</button>
+            <button class="primary-btn compact ticket-publish-btn" type="button" data-publish-ticket hidden data-i18n="dash.publier">🚀 Publier</button>
+            <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetTickets">♻️ Reset tickets</button>
           </div>
         </div>
 
         <div class="dashboard-grid two">
           <form class="tool-panel form-panel">
-            <label>Auteur du message
+            <label data-i18n="dash.auteurDuMessage">Auteur du message
               <input type="text" value="ModBot Ticket System" data-preview-author>
             </label>
-            <label>Titre
+            <label data-i18n="dash.titre">Titre
               <input type="text" value="Ouvre ton ticket" data-preview-title>
             </label>
-            <label>Emoji du message
+            <label data-i18n="dash.emojiDuMessage">Emoji du message
               <input class="emoji-input-wide" type="text" value="📩" maxlength="3" data-preview-emoji>
             </label>
-            <label>Description
-              <textarea data-preview-desc>Merci de sélectionner la raison de ta demande via le menu. Un membre du staff viendra rapidement te répondre.</textarea>
+            <label data-i18n="dash.description">Description
+              <textarea data-preview-desc data-i18n="dash.ticketDescriptionDefaut">Merci de sélectionner la raison de ta demande via le menu. Un membre du staff viendra rapidement te répondre.</textarea>
             </label>
             <!-- Sélecteur d'image : depuis l'appareil ou via une adresse -->
             <div class="image-picker" data-image-picker="ticket-banner">
-              <span class="image-picker-label">Bannière du ticket</span>
+              <span class="image-picker-label" data-i18n="dash.banniereDuTicket">Bannière du ticket</span>
               <div class="image-picker-body">
                 <div class="image-picker-preview" data-image-preview>
-                  <span class="image-picker-empty">Aucune image</span>
+                  <span class="image-picker-empty" data-i18n="dash.aucuneImage">Aucune image</span>
                 </div>
                 <div class="image-picker-actions">
-                  <button class="secondary-btn compact" type="button" data-image-choose>🖼️ Choisir une image</button>
-                  <button class="secondary-btn compact danger" type="button" data-image-clear hidden>Retirer</button>
+                  <button class="secondary-btn compact" type="button" data-image-choose data-i18n="dash.choisirUneImage">🖼️ Choisir une image</button>
+                  <button class="secondary-btn compact danger" type="button" data-image-clear hidden data-i18n="dash.retirer">Retirer</button>
                   <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden data-image-file>
                   <input type="hidden" data-ticket-banner value="">
-                  <small class="image-picker-hint">PNG, JPG, GIF ou WebP — 8 Mo maximum. Format conseillé : 1200×400.</small>
+                  <small class="image-picker-hint" data-i18n="dash.pngJpgGifOu">PNG, JPG, GIF ou WebP — 8 Mo maximum. Format conseillé : 1200×400.</small>
                 </div>
               </div>
               <details class="image-picker-url">
-                <summary>Ou coller une adresse d'image</summary>
+                <summary data-i18n="dash.ouCollerUneAdresse">Ou coller une adresse d'image</summary>
                 <input type="url" placeholder="https://exemple.com/banniere.png" data-image-url>
               </details>
             </div>
 
             <div class="image-picker" data-image-picker="ticket-logo">
-              <span class="image-picker-label">Logo du ticket</span>
+              <span class="image-picker-label" data-i18n="dash.logoDuTicket">Logo du ticket</span>
               <div class="image-picker-body">
                 <div class="image-picker-preview is-square" data-image-preview>
-                  <span class="image-picker-empty">Logo du serveur</span>
+                  <span class="image-picker-empty" data-i18n="dash.logoDuServeur">Logo du serveur</span>
                 </div>
                 <div class="image-picker-actions">
-                  <button class="secondary-btn compact" type="button" data-image-choose>🖼️ Choisir une image</button>
-                  <button class="secondary-btn compact danger" type="button" data-image-clear hidden>Retirer</button>
+                  <button class="secondary-btn compact" type="button" data-image-choose data-i18n="dash.choisirUneImage2">🖼️ Choisir une image</button>
+                  <button class="secondary-btn compact danger" type="button" data-image-clear hidden data-i18n="dash.retirer2">Retirer</button>
                   <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden data-image-file>
                   <input type="hidden" data-ticket-logo value="">
-                  <small class="image-picker-hint">Carré de préférence. Sans image, l'icône du serveur est utilisée.</small>
+                  <small class="image-picker-hint" data-i18n="dash.carreDePreferenceSans">Carré de préférence. Sans image, l'icône du serveur est utilisée.</small>
                 </div>
               </div>
               <details class="image-picker-url">
-                <summary>Ou coller une adresse d'image</summary>
+                <summary data-i18n="dash.ouCollerUneAdresse2">Ou coller une adresse d'image</summary>
                 <input type="url" placeholder="https://exemple.com/logo.png" data-image-url>
               </details>
             </div>
             <div class="form-row">
-              <label>Salon ticket
-                <input type="text" placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-ticket-channel>
+              <label data-i18n="dash.salonTicket">Salon ticket
+                <input type="text" placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-ticket-channel data-i18n-placeholder="dash.exemple">
               </label>
-              <label>Rôle support
+              <label data-i18n="dash.roleSupport">Rôle support
                 <select data-ticket-support-role>
                   <option value="">Choisir un rôle support</option>
                 </select>
@@ -352,19 +352,19 @@
           </form>
 
           <div class="tool-panel preview-panel">
-            <h3>👁️ Aperçu Discord</h3>
+            <h3 data-i18n="dash.apercuDiscord">👁️ Aperçu Discord</h3>
             <div class="ticket-preview">
               <div class="discord-embed embed-with-thumb">
                 <span class="embed-thumb"><img src="assets/default_logo.svg" alt="" data-live-logo onerror="this.onerror=null; this.src='assets/default_logo.svg';"></span>
-                <h3><span data-live-ticket-emoji>📩</span> <span data-live-title>Ouvre ton ticket</span></h3>
-                <p data-live-desc>Merci de sélectionner la raison de ta demande via le menu. Un membre du staff viendra rapidement te répondre.</p>
+                <h3><span data-live-ticket-emoji>📩</span> <span data-live-title data-i18n="dash.ouvreTonTicket">Ouvre ton ticket</span></h3>
+                <p data-live-desc data-i18n="dash.merciDeSelectionnerLa">Merci de sélectionner la raison de ta demande via le menu. Un membre du staff viendra rapidement te répondre.</p>
                 <div class="embed-actions">
-                  <span class="action-blue">🛠️ Support technique</span>
-                  <span class="action-dark">❓ Question</span>
-                  <span class="action-red">🔒 Déban</span>
+                  <span class="action-blue" data-i18n="dash.supportTechnique">🛠️ Support technique</span>
+                  <span class="action-dark" data-i18n="dash.question">❓ Question</span>
+                  <span class="action-red" data-i18n="dash.deban">🔒 Déban</span>
                 </div>
                 <img class="preview-banner" src="assets/default_banner.svg" alt="" data-live-banner>
-                <p class="embed-footer">ModBot - Protection de votre communauté</p>
+                <p class="embed-footer" data-i18n="dash.modbotProtectionDeVotre">ModBot - Protection de votre communauté</p>
               </div>
             </div>
           </div>
@@ -372,14 +372,14 @@
 
         <div class="tool-panel">
           <div class="table-head">
-            <h3>Options du menu</h3>
-            <button type="button" class="primary-btn compact" data-add-ticket-option>➕ Ajouter</button>
+            <h3 data-i18n="dash.optionsDuMenu">Options du menu</h3>
+            <button type="button" class="primary-btn compact" data-add-ticket-option data-i18n="dash.ajouter">➕ Ajouter</button>
           </div>
           <div class="option-list" id="ticketOptionList">
-            <div class="option-row"><span>01</span><input class="emoji-input" value="🛠️" maxlength="3"><input value="Support technique"><input value="Problème technique, bug ou aide"><button type="button">Supprimer</button></div>
-            <div class="option-row"><span>02</span><input class="emoji-input" value="❓" maxlength="3"><input value="Question"><input value="Poser une question au staff"><button type="button">Supprimer</button></div>
-            <div class="option-row"><span>03</span><input class="emoji-input" value="🔒" maxlength="3"><input value="Déban"><input value="Contester un bannissement"><button type="button">Supprimer</button></div>
-            <div class="option-row"><span>04</span><input class="emoji-input" value="📋" maxlength="3"><input value="Administration"><input value="Demande administrative"><button type="button">Supprimer</button></div>
+            <div class="option-row"><span>01</span><input class="emoji-input" value="🛠️" maxlength="3"><input value="Support technique"><input value="Problème technique, bug ou aide"><button type="button" data-i18n="dash.supprimer">Supprimer</button></div>
+            <div class="option-row"><span>02</span><input class="emoji-input" value="❓" maxlength="3"><input value="Question"><input value="Poser une question au staff"><button type="button" data-i18n="dash.supprimer2">Supprimer</button></div>
+            <div class="option-row"><span>03</span><input class="emoji-input" value="🔒" maxlength="3"><input value="Déban"><input value="Contester un bannissement"><button type="button" data-i18n="dash.supprimer3">Supprimer</button></div>
+            <div class="option-row"><span>04</span><input class="emoji-input" value="📋" maxlength="3"><input value="Administration"><input value="Demande administrative"><button type="button" data-i18n="dash.supprimer4">Supprimer</button></div>
           </div>
         </div>
       </section>
@@ -387,65 +387,65 @@
       <section class="dash-panel" data-dashboard-panel="security">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">🛡️ Sécurité</p>
-            <h2>Protections serveur</h2>
+            <p class="eyebrow" data-i18n="dash.securite">🛡️ Sécurité</p>
+            <h2 data-i18n="dash.protectionsServeur">Protections serveur</h2>
           </div>
           <div class="panel-title-actions">
-            <span class="state" data-safe-mode-badge hidden>🚨 Mode sécurité actif</span>
-            <button class="secondary-btn compact" type="button" data-security-reload>↻ Actualiser</button>
-            <button class="primary-btn compact" type="button" data-security-save>💾 Enregistrer la sécurité</button>
+            <span class="state" data-safe-mode-badge hidden data-i18n="dash.modeSecuriteActif">🚨 Mode sécurité actif</span>
+            <button class="secondary-btn compact" type="button" data-security-reload data-i18n="dash.actualiser">↻ Actualiser</button>
+            <button class="primary-btn compact" type="button" data-security-save data-i18n="dash.enregistrerLaSecurite">💾 Enregistrer la sécurité</button>
           </div>
         </div>
 
         <!-- Diagnostic des permissions Discord du bot -->
         <div class="alert-panel" data-security-permissions hidden>
-          <strong>⚠️ Permissions Discord manquantes</strong>
-          <p>Sans ces permissions, certaines protections resteront inactives :</p>
+          <strong data-i18n="dash.permissionsDiscordManquantes">⚠️ Permissions Discord manquantes</strong>
+          <p data-i18n="dash.sansCesPermissionsCertaines">Sans ces permissions, certaines protections resteront inactives :</p>
           <ul data-security-permissions-list></ul>
         </div>
 
         <div class="toggle-grid">
-          <label class="toggle-line"><input type="checkbox" checked><span></span><strong>🔗 Anti-lien</strong><small>Bloque les liens et invitations Discord.</small></label>
-          <label class="toggle-line"><input type="checkbox" checked data-security-insultes><span></span><strong>🚫 Filtre de langage</strong><small>Supprime les insultes et applique les sanctions graduées.</small></label>
-          <label class="toggle-line"><input type="checkbox" checked><span></span><strong>💬 Anti-spam</strong><small>Détecte les messages trop rapides.</small></label>
-          <label class="toggle-line"><input type="checkbox"><span></span><strong>🚨 Anti-raid</strong><small>Surveille les vagues d'arrivées suspectes.</small></label>
-          <label class="toggle-line"><input type="checkbox"><span></span><strong>📣 Staff alert</strong><small>Préviens le staff des actions importantes.</small></label>
-          <label class="toggle-line danger"><input type="checkbox"><span></span><strong>🔒 Lockdown</strong><small>Masque les salons en urgence.</small></label>
+          <label class="toggle-line"><input type="checkbox" checked><span></span><strong data-i18n="dash.antiLien">🔗 Anti-lien</strong><small data-i18n="dash.bloqueLesLiensEt">Bloque les liens et invitations Discord.</small></label>
+          <label class="toggle-line"><input type="checkbox" checked data-security-insultes><span></span><strong data-i18n="dash.filtreDeLangage">🚫 Filtre de langage</strong><small data-i18n="dash.supprimeLesInsultesEt">Supprime les insultes et applique les sanctions graduées.</small></label>
+          <label class="toggle-line"><input type="checkbox" checked><span></span><strong data-i18n="dash.antiSpam">💬 Anti-spam</strong><small data-i18n="dash.detecteLesMessagesTrop">Détecte les messages trop rapides.</small></label>
+          <label class="toggle-line"><input type="checkbox"><span></span><strong data-i18n="dash.antiRaid">🚨 Anti-raid</strong><small data-i18n="dash.surveilleLesVaguesArrivees">Surveille les vagues d'arrivées suspectes.</small></label>
+          <label class="toggle-line"><input type="checkbox"><span></span><strong data-i18n="dash.staffAlert">📣 Staff alert</strong><small data-i18n="dash.previensLeStaffDes">Préviens le staff des actions importantes.</small></label>
+          <label class="toggle-line danger"><input type="checkbox"><span></span><strong data-i18n="dash.lockdown">🔒 Lockdown</strong><small data-i18n="dash.masqueLesSalonsEn">Masque les salons en urgence.</small></label>
         </div>
 
         <div class="dashboard-grid three">
-          <label class="tool-panel mini-form">💬 Messages max<input type="number" value="5"></label>
-          <label class="tool-panel mini-form">⏱️ Fenêtre anti-spam<input type="number" value="5"></label>
-          <label class="tool-panel mini-form">🔨 Seuil ban<input type="number" value="4"></label>
+          <label class="tool-panel mini-form" data-i18n="dash.messagesMax">💬 Messages max<input type="number" value="5"></label>
+          <label class="tool-panel mini-form" data-i18n="dash.fenetreAntiSpam">⏱️ Fenêtre anti-spam<input type="number" value="5"></label>
+          <label class="tool-panel mini-form" data-i18n="dash.seuilBan">🔨 Seuil ban<input type="number" value="4"></label>
         </div>
 
         <!-- CAPTCHA -->
         <div class="tool-panel security-block">
           <div class="table-head">
-            <h3>🔐 Captcha d'entrée</h3>
+            <h3 data-i18n="dash.captchaEntree">🔐 Captcha d'entrée</h3>
             <label class="switch-inline">
               <input type="checkbox" data-captcha-enabled>
-              <span>Activer</span>
+              <span data-i18n="dash.activer">Activer</span>
             </label>
           </div>
-          <p class="field-help">
+          <p class="field-help" data-i18n="dash.lesNouveauxMembresCliquent">
             Les nouveaux membres cliquent sur un bouton et recopient un code affiché en image.
             Tout se passe dans une réponse privée : aucun message privé n'est nécessaire, donc
             personne ne reste bloqué parce qu'il a fermé ses MP.
           </p>
           <div class="dashboard-grid three">
-            <label class="mini-form">Rôle accordé après vérification
+            <label class="mini-form" data-i18n="dash.roleAccordeApresVerification">Rôle accordé après vérification
               <select data-captcha-role><option value="">— Aucun —</option></select>
             </label>
-            <label class="mini-form">Salon du panneau
+            <label class="mini-form" data-i18n="dash.salonDuPanneau">Salon du panneau
               <select data-captcha-channel><option value="">— Aucun —</option></select>
             </label>
             <div class="mini-form captcha-state">
-              <span>État</span>
-              <p data-captcha-state class="captcha-state-value">Non configuré</p>
+              <span data-i18n="dash.etat">État</span>
+              <p data-captcha-state class="captcha-state-value" data-i18n="dash.nonConfigure">Non configuré</p>
             </div>
           </div>
-          <div class="inline-hint">
+          <div class="inline-hint" data-i18n-html="dash.captchaAstuce">
             <strong>💡 Le plus simple :</strong> tape <code>/captcha activer</code> dans Discord.
             ModBot crée le rôle, crée le salon, publie le panneau et propose de masquer les
             salons aux membres non vérifiés — en une commande.
@@ -455,28 +455,28 @@
         <!-- ALERTES D'ATTAQUE -->
         <div class="tool-panel security-block">
           <div class="table-head">
-            <h3>🚨 Alertes d'attaque</h3>
+            <h3 data-i18n="dash.alertesAttaque">🚨 Alertes d'attaque</h3>
             <label class="switch-inline">
               <input type="checkbox" data-alerts-dm checked>
-              <span>Prévenir en MP</span>
+              <span data-i18n="dash.prevenirEnMp">Prévenir en MP</span>
             </label>
           </div>
-          <p class="field-help">
+          <p class="field-help" data-i18n-html="dash.quandUneAttaqueEst">
             Quand une attaque est détectée, tous les administrateurs reçoivent un message privé
             avec deux boutons : <strong>fausse alerte</strong> (tout est annulé et rétabli) ou
             <strong>confirmer</strong>. Sans réponse, ModBot maintient la protection tout seul.
           </p>
           <div class="dashboard-grid two">
             <div class="mini-form captcha-state">
-              <span>Administrateurs joignables</span>
+              <span data-i18n="dash.administrateursJoignables">Administrateurs joignables</span>
               <p data-alerts-admins class="captcha-state-value">—</p>
             </div>
             <div class="mini-form captcha-state">
-              <span>Alertes en cours</span>
+              <span data-i18n="dash.alertesEnCours">Alertes en cours</span>
               <p data-alerts-active class="captcha-state-value">—</p>
             </div>
           </div>
-          <div class="inline-hint">
+          <div class="inline-hint" data-i18n-html="dash.pourquoiModbotAgitAvant">
             <strong>🛡️ Pourquoi ModBot agit avant de demander :</strong> une attaque détruit un
             serveur en quelques secondes. La protection s'applique immédiatement, et les boutons
             servent à la <em>lever</em> si c'était une fausse alerte.
@@ -487,36 +487,36 @@
         <!-- ANTI-RAID -->
         <div class="tool-panel security-block">
           <div class="table-head">
-            <h3>🚨 Anti-raid</h3>
+            <h3 data-i18n="dash.antiRaid2">🚨 Anti-raid</h3>
             <label class="switch-inline">
               <input type="checkbox" data-antiraid-enabled>
-              <span>Activer</span>
+              <span data-i18n="dash.activer2">Activer</span>
             </label>
           </div>
-          <p class="field-help">Détecte les vagues d'arrivées et les comptes fraîchement créés, puis bascule le serveur en mode sécurité.</p>
+          <p class="field-help" data-i18n="dash.detecteLesVaguesArrivees">Détecte les vagues d'arrivées et les comptes fraîchement créés, puis bascule le serveur en mode sécurité.</p>
           <div class="dashboard-grid three">
-            <label class="mini-form">Arrivées déclenchant l'alerte
+            <label class="mini-form" data-i18n="dash.arriveesDeclenchantAlerte">Arrivées déclenchant l'alerte
               <input type="number" min="2" max="100" value="8" data-antiraid-threshold>
             </label>
-            <label class="mini-form">Fenêtre (secondes)
+            <label class="mini-form" data-i18n="dash.fenetreSecondes">Fenêtre (secondes)
               <input type="number" min="3" max="300" value="10" data-antiraid-window>
             </label>
-            <label class="mini-form">Âge minimum du compte (jours)
+            <label class="mini-form" data-i18n="dash.ageMinimumDuCompte">Âge minimum du compte (jours)
               <input type="number" min="0" max="365" value="7" data-antiraid-age>
             </label>
-            <label class="mini-form">Action sur compte suspect
+            <label class="mini-form" data-i18n="dash.actionSurCompteSuspect">Action sur compte suspect
               <select data-antiraid-action>
                 <option value="lockdown">Mode sécurité (recommandé)</option>
                 <option value="kick">Expulser</option>
                 <option value="ban">Bannir</option>
               </select>
             </label>
-            <label class="mini-form">Levée automatique (minutes)
+            <label class="mini-form" data-i18n="dash.leveeAutomatiqueMinutes">Levée automatique (minutes)
               <input type="number" min="1" max="1440" value="15" data-antiraid-release>
             </label>
             <label class="toggle-line compact">
               <input type="checkbox" data-antiraid-quarantine><span></span>
-              <strong>Quarantaine</strong><small>Isoler les arrivées pendant l'alerte.</small>
+              <strong data-i18n="dash.quarantaine">Quarantaine</strong><small data-i18n="dash.isolerLesArriveesPendant">Isoler les arrivées pendant l'alerte.</small>
             </label>
           </div>
         </div>
@@ -524,15 +524,15 @@
         <!-- ANTI-NUKE -->
         <div class="tool-panel security-block">
           <div class="table-head">
-            <h3>💥 Anti-nuke</h3>
+            <h3 data-i18n="dash.antiNuke">💥 Anti-nuke</h3>
             <label class="switch-inline">
               <input type="checkbox" data-antinuke-enabled>
-              <span>Activer</span>
+              <span data-i18n="dash.activer3">Activer</span>
             </label>
           </div>
-          <p class="field-help">Bloque les suppressions massives de salons et de rôles, les bannissements en série et les élévations de permissions.</p>
+          <p class="field-help" data-i18n="dash.bloqueLesSuppressionsMassives">Bloque les suppressions massives de salons et de rôles, les bannissements en série et les élévations de permissions.</p>
           <div class="dashboard-grid two">
-            <label class="mini-form">Sanction de l'attaquant
+            <label class="mini-form" data-i18n="dash.sanctionDeAttaquant">Sanction de l'attaquant
               <select data-antinuke-punishment>
                 <option value="strip">Retirer tous ses rôles</option>
                 <option value="kick">Expulser</option>
@@ -540,21 +540,21 @@
               </select>
             </label>
             <div class="mini-form">
-              <span>Options</span>
+              <span data-i18n="dash.options">Options</span>
               <label class="toggle-line compact">
                 <input type="checkbox" data-antinuke-restore><span></span>
-                <strong>Restauration auto</strong><small>Recréer ce qui vient d'être supprimé.</small>
+                <strong data-i18n="dash.restaurationAuto">Restauration auto</strong><small data-i18n="dash.recreerCeQuiVient">Recréer ce qui vient d'être supprimé.</small>
               </label>
               <label class="toggle-line compact">
                 <input type="checkbox" data-antinuke-trustowner><span></span>
-                <strong>Propriétaire de confiance</strong><small>Ne jamais sanctionner le propriétaire.</small>
+                <strong data-i18n="dash.proprietaireDeConfiance">Propriétaire de confiance</strong><small data-i18n="dash.neJamaisSanctionnerLe">Ne jamais sanctionner le propriétaire.</small>
               </label>
             </div>
           </div>
-          <label class="mini-form">Liste blanche — IDs de membres (séparés par une virgule)
+          <label class="mini-form" data-i18n="dash.listeBlancheIdsDe">Liste blanche — IDs de membres (séparés par une virgule)
             <input type="text" placeholder="123456789012345678, 987654321098765432" data-antinuke-users>
           </label>
-          <label class="mini-form">Liste blanche — IDs de rôles
+          <label class="mini-form" data-i18n="dash.listeBlancheIdsDe2">Liste blanche — IDs de rôles
             <input type="text" placeholder="123456789012345678" data-antinuke-roles>
           </label>
         </div>
@@ -562,29 +562,29 @@
         <!-- SANCTIONS -->
         <div class="tool-panel security-block">
           <div class="table-head">
-            <h3>⚖️ Échelle de sanctions</h3>
+            <h3 data-i18n="dash.echelleDeSanctions">⚖️ Échelle de sanctions</h3>
             <label class="switch-inline">
               <input type="checkbox" data-filter-tolerant>
-              <span>Détection avancée</span>
+              <span data-i18n="dash.detectionAvancee">Détection avancée</span>
             </label>
           </div>
-          <p class="field-help">
+          <p class="field-help" data-i18n-html="dash.laDetectionAvanceeRepere">
             La détection avancée repère les contournements : <code>s a l o p e</code>, <code>s@l0pe</code>,
             <code>s.a.l.o.p.e</code>, caractères unicode similaires.
           </p>
           <div class="sanction-ladder" data-sanction-ladder></div>
-          <button class="secondary-btn compact" type="button" data-sanction-reset>♻️ Rétablir l'échelle par défaut</button>
+          <button class="secondary-btn compact" type="button" data-sanction-reset data-i18n="dash.retablirEchelleParDefaut">♻️ Rétablir l'échelle par défaut</button>
         </div>
 
         <!-- MOTS FILTRÉS -->
         <div class="tool-panel security-block">
-          <h3>🚫 Mots personnalisés</h3>
-          <p class="field-help">Un mot par ligne. Ils s'ajoutent à la liste intégrée et bénéficient de la détection avancée.</p>
-          <label class="mini-form">Mots interdits supplémentaires
-            <textarea rows="4" placeholder="motinterdit1&#10;motinterdit2" data-filter-custom-words></textarea>
+          <h3 data-i18n="dash.motsPersonnalises">🚫 Mots personnalisés</h3>
+          <p class="field-help" data-i18n="dash.unMotParLigne">Un mot par ligne. Ils s'ajoutent à la liste intégrée et bénéficient de la détection avancée.</p>
+          <label class="mini-form" data-i18n="dash.motsInterditsSupplementaires">Mots interdits supplémentaires
+            <textarea rows="4" placeholder="motinterdit1&#10;motinterdit2" data-filter-custom-words data-i18n-placeholder="dash.motinterditMotinterdit"></textarea>
           </label>
-          <label class="mini-form">Exceptions (jamais sanctionnés)
-            <textarea rows="3" placeholder="pseudo-du-serveur&#10;terme-technique" data-filter-allowlist></textarea>
+          <label class="mini-form" data-i18n="dash.exceptionsJamaisSanctionnes">Exceptions (jamais sanctionnés)
+            <textarea rows="3" placeholder="pseudo-du-serveur&#10;terme-technique" data-filter-allowlist data-i18n-placeholder="dash.pseudoDuServeurTerme"></textarea>
           </label>
         </div>
       </section>
@@ -593,48 +593,48 @@
       <section class="dash-panel" data-dashboard-panel="backups">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">💾 Sauvegardes</p>
-            <h2>Sauvegarde et restauration</h2>
+            <p class="eyebrow" data-i18n="dash.sauvegardes3">💾 Sauvegardes</p>
+            <h2 data-i18n="dash.sauvegardeEtRestauration">Sauvegarde et restauration</h2>
           </div>
           <div class="panel-title-actions">
-            <button class="secondary-btn compact" type="button" data-backups-reload>↻ Actualiser</button>
-            <button class="primary-btn compact" type="button" data-backup-create>➕ Créer une sauvegarde</button>
+            <button class="secondary-btn compact" type="button" data-backups-reload data-i18n="dash.actualiser2">↻ Actualiser</button>
+            <button class="primary-btn compact" type="button" data-backup-create data-i18n="dash.creerUneSauvegarde">➕ Créer une sauvegarde</button>
           </div>
         </div>
 
         <div class="dashboard-grid two">
           <div class="tool-panel">
-            <h3>⚙️ Sauvegarde automatique</h3>
-            <p class="field-help">ModBot enregistre régulièrement la structure du serveur : rôles, catégories, salons et permissions.</p>
+            <h3 data-i18n="dash.sauvegardeAutomatique">⚙️ Sauvegarde automatique</h3>
+            <p class="field-help" data-i18n="dash.modbotEnregistreRegulierementLa">ModBot enregistre régulièrement la structure du serveur : rôles, catégories, salons et permissions.</p>
             <label class="toggle-line compact">
               <input type="checkbox" data-autobackup-enabled><span></span>
-              <strong>Activer</strong><small>Sauvegarde périodique automatique.</small>
+              <strong data-i18n="dash.activer4">Activer</strong><small data-i18n="dash.sauvegardePeriodiqueAutomatique">Sauvegarde périodique automatique.</small>
             </label>
-            <label class="mini-form">Intervalle (heures)
+            <label class="mini-form" data-i18n="dash.intervalleHeures">Intervalle (heures)
               <input type="number" min="1" max="720" value="24" data-autobackup-interval>
             </label>
-            <p class="field-help">Dernière sauvegarde automatique : <strong data-autobackup-last>jamais</strong></p>
-            <button class="secondary-btn compact" type="button" data-autobackup-save>💾 Enregistrer</button>
+            <p class="field-help" data-i18n="dash.derniereSauvegardeAutomatique">Dernière sauvegarde automatique : <strong data-autobackup-last data-i18n="js.jamais">jamais</strong></p>
+            <button class="secondary-btn compact" type="button" data-autobackup-save data-i18n="dash.enregistrer">💾 Enregistrer</button>
           </div>
 
           <div class="tool-panel">
-            <h3>ℹ️ Comment ça marche</h3>
+            <h3 data-i18n="dash.commentCaMarche">ℹ️ Comment ça marche</h3>
             <ul class="info-list">
-              <li>Une sauvegarde contient les <strong>rôles</strong>, <strong>catégories</strong>, <strong>salons</strong> et leurs <strong>permissions</strong>.</li>
-              <li>La restauration est <strong>additive</strong> : elle recrée ce qui manque, sans jamais rien supprimer.</li>
-              <li>Une <strong>confirmation</strong> est obligatoire avant toute restauration.</li>
-              <li>Les 10 sauvegardes les plus récentes sont conservées par serveur.</li>
+              <li data-i18n-html="dash.uneSauvegardeContientLes">Une sauvegarde contient les <strong>rôles</strong>, <strong>catégories</strong>, <strong>salons</strong> et leurs <strong>permissions</strong>.</li>
+              <li data-i18n-html="dash.laRestaurationEst">La restauration est <strong>additive</strong> : elle recrée ce qui manque, sans jamais rien supprimer.</li>
+              <li data-i18n-html="dash.confirmationObligatoire">Une <strong>confirmation</strong> est obligatoire avant toute restauration.</li>
+              <li data-i18n="dash.lesSauvegardesLesPlus">Les 10 sauvegardes les plus récentes sont conservées par serveur.</li>
             </ul>
           </div>
         </div>
 
         <div class="tool-panel">
           <div class="table-head">
-            <h3>📦 Sauvegardes disponibles</h3>
-            <span class="state" data-backups-count>0 sauvegarde</span>
+            <h3 data-i18n="dash.sauvegardesDisponibles">📦 Sauvegardes disponibles</h3>
+            <span class="state" data-backups-count data-i18n="dash.sauvegarde">0 sauvegarde</span>
           </div>
           <div class="backup-list" data-backup-list>
-            <div class="backup-empty">Aucune sauvegarde pour le moment.</div>
+            <div class="backup-empty" data-i18n="dash.aucuneSauvegardePourLe">Aucune sauvegarde pour le moment.</div>
           </div>
         </div>
       </section>
@@ -642,44 +642,44 @@
       <section class="dash-panel" data-dashboard-panel="channels">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">📌 Salons</p>
-            <h2>Routage des systèmes</h2>
+            <p class="eyebrow" data-i18n="dash.salons">📌 Salons</p>
+            <h2 data-i18n="dash.routageDesSystemes">Routage des systèmes</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset salons</button>
+          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetSalons">♻️ Reset salons</button>
         </div>
 
         <div class="channel-table">
-          <div class="channel-row"><strong>🎫 Tickets</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions"><span class="state inactive">⚪ Inactif</span></div>
-          <div class="channel-row"><strong>🧾 Logs</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions"><span class="state inactive">⚪ Inactif</span></div>
-          <div class="channel-row"><strong>💡 Suggestions</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions"><span class="state inactive">⚪ Inactif</span></div>
-          <div class="channel-row"><strong>🚩 Reports</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions"><span class="state inactive">⚪ Inactif</span></div>
-          <div class="channel-row"><strong>📣 Staff alert</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions"><span class="state inactive">⚪ Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.tickets2">🎫 Tickets</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple2"><span class="state inactive" data-i18n="dash.inactif">⚪ Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.logs">🧾 Logs</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple3"><span class="state inactive" data-i18n="dash.inactif2">⚪ Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.suggestions">💡 Suggestions</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple4"><span class="state inactive" data-i18n="dash.inactif3">⚪ Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.reports">🚩 Reports</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple5"><span class="state inactive" data-i18n="dash.inactif4">⚪ Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.staffAlert2">📣 Staff alert</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple6"><span class="state inactive" data-i18n="dash.inactif5">⚪ Inactif</span></div>
         </div>
       </section>
 
       <section class="dash-panel" data-dashboard-panel="moderation">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">⚒️ Modération</p>
-            <h2>Mots filtrés et sanctions</h2>
+            <p class="eyebrow" data-i18n="dash.moderation2">⚒️ Modération</p>
+            <h2 data-i18n="dash.motsFiltresEtSanctions">Mots filtrés et sanctions</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset modération</button>
+          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetModeration">♻️ Reset modération</button>
         </div>
 
         <div class="dashboard-grid two">
           <div class="tool-panel moderation-word-panel">
-            <h3>🚫 Mots filtrés</h3>
-            <textarea data-custom-words placeholder="Ajoute des mots personnalisés séparés par une virgule ou une ligne">spam, scam, insultes personnalisées</textarea>
+            <h3 data-i18n="dash.motsFiltres">🚫 Mots filtrés</h3>
+            <textarea data-custom-words placeholder="Ajoute des mots personnalisés séparés par une virgule ou une ligne" data-i18n-placeholder="dash.ajouteDesMotsPersonnalises" data-i18n="dash.spamScamInsultesPersonnalisees">spam, scam, insultes personnalisées</textarea>
             <div class="filtered-word-list" data-filtered-word-list>
-              <div class="dashboard-empty-state"><strong>Chargement</strong><span>Les mots par défaut et personnalisés arrivent depuis ModBot.</span></div>
+              <div class="dashboard-empty-state"><strong data-i18n="dash.chargement3">Chargement</strong><span data-i18n="dash.lesMotsParDefaut">Les mots par défaut et personnalisés arrivent depuis ModBot.</span></div>
             </div>
           </div>
           <div class="tool-panel moderation-sanction-panel">
-            <h3>⚡ Progression sanctions</h3>
-            <div class="sanction-flow"><span>⚠️ 1 Warn</span><span>🔇 2 Mute 4h</span><span>⏳ 3 Mute 24h</span><span>🔨 4 Ban</span></div>
-            <h3>🔨 Bannissements du bot</h3>
+            <h3 data-i18n="dash.progressionSanctions">⚡ Progression sanctions</h3>
+            <div class="sanction-flow"><span data-i18n="dash.warn">⚠️ 1 Warn</span><span data-i18n="dash.mute">🔇 2 Mute 4h</span><span data-i18n="dash.mute2">⏳ 3 Mute 24h</span><span data-i18n="dash.ban">🔨 4 Ban</span></div>
+            <h3 data-i18n="dash.bannissementsDuBot">🔨 Bannissements du bot</h3>
             <div class="sanction-list" data-sanction-list>
-              <div class="dashboard-empty-state"><strong>Aucun bannissement chargé</strong><span>La liste sera synchronisée avec les logs du bot.</span></div>
+              <div class="dashboard-empty-state"><strong data-i18n="dash.aucunBannissementCharge">Aucun bannissement chargé</strong><span data-i18n="dash.laListeSeraSynchronisee">La liste sera synchronisée avec les logs du bot.</span></div>
             </div>
           </div>
         </div>
@@ -733,14 +733,14 @@
             </div>
 
             <label class="mini-form"><span data-i18n="welcome.msgTitle">Titre</span>
-              <input type="text" data-welcome-title maxlength="200" placeholder="👋 Bienvenue">
+              <input type="text" data-welcome-title maxlength="200" placeholder="👋 Bienvenue" data-i18n-placeholder="dash.bienvenue">
             </label>
 
             <label class="mini-form"><span data-i18n="welcome.message">Message d'arrivée</span>
               <textarea data-welcome-message rows="4" maxlength="1800"></textarea>
             </label>
 
-            <div class="variable-chips" data-welcome-variables aria-label="Variables disponibles"></div>
+            <div class="variable-chips" data-welcome-variables aria-label="Variables disponibles" data-i18n-aria="dash.variablesDisponibles"></div>
 
             <label class="mini-form"><span data-i18n="welcome.departureMessage">Message de départ</span>
               <textarea data-welcome-departure-message rows="3" maxlength="1800"></textarea>
@@ -758,7 +758,7 @@
                 <input type="url" data-welcome-image placeholder="https://…">
               </label>
               <label class="mini-form"><span data-i18n="welcome.buttonLabel">Texte du bouton</span>
-                <input type="text" data-welcome-button-label maxlength="80" placeholder="Lire les règles">
+                <input type="text" data-welcome-button-label maxlength="80" placeholder="Lire les règles" data-i18n-placeholder="dash.lireLesRegles">
               </label>
               <label class="mini-form"><span data-i18n="welcome.buttonUrl">Lien du bouton</span>
                 <input type="url" data-welcome-button-url placeholder="https://…">
@@ -775,9 +775,9 @@
               <div class="discord-preview-row">
                 <span class="discord-preview-avatar"></span>
                 <div class="discord-preview-body">
-                  <p class="discord-preview-author">ModBot <span class="discord-preview-tag">APP</span></p>
+                  <p class="discord-preview-author">ModBot <span class="discord-preview-tag" data-i18n="dash.app">APP</span></p>
                   <div class="discord-preview-embed" data-welcome-preview-embed>
-                    <strong data-welcome-preview-title>👋 Bienvenue</strong>
+                    <strong data-welcome-preview-title data-i18n="dash.bienvenue2">👋 Bienvenue</strong>
                     <p data-welcome-preview-text></p>
                     <img data-welcome-preview-image alt="" hidden>
                     <span class="discord-preview-footer" data-welcome-preview-footer></span>
@@ -808,7 +808,7 @@
 
           <div class="dashboard-grid two">
             <label class="mini-form"><span data-i18n="gw.prize">Récompense</span>
-              <input type="text" data-giveaway-prize maxlength="200" required placeholder="Nitro 1 mois">
+              <input type="text" data-giveaway-prize maxlength="200" required placeholder="Nitro 1 mois" data-i18n-placeholder="dash.nitroMois">
             </label>
             <label class="mini-form"><span data-i18n="gw.channel">Salon</span>
               <select data-giveaway-channel required></select>
@@ -846,7 +846,7 @@
         <div class="giveaway-list" data-giveaway-list>
           <div class="dashboard-empty-state">
             <strong data-i18n="gw.emptyTitle">Aucun giveaway</strong>
-            <span data-i18n="gw.emptyText">Crée-en un, ou lance <code>/giveaway create</code> dans Discord.</span>
+            <span data-i18n-html="gw.emptyText">Crée-en un, ou lance <code>/giveaway create</code> dans Discord.</span>
           </div>
         </div>
       </section>
@@ -854,19 +854,19 @@
       <section class="dash-panel" data-dashboard-panel="search">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">🔎 Recherche</p>
-            <h2>Membres et rôles</h2>
+            <p class="eyebrow" data-i18n="dash.recherche">🔎 Recherche</p>
+            <h2 data-i18n="dash.membresEtRoles">Membres et rôles</h2>
           </div>
           <div class="panel-title-actions">
             <span class="state" data-search-count></span>
           </div>
         </div>
 
-        <div class="search-modes" role="tablist" aria-label="Type de recherche">
-          <button class="search-mode is-active" type="button" role="tab" aria-selected="true" data-search-mode="members">
+        <div class="search-modes" role="tablist" aria-label="Type de recherche" data-i18n-aria="dash.typeDeRecherche">
+          <button class="search-mode is-active" type="button" role="tab" aria-selected="true" data-search-mode="members" data-i18n="dash.rechercheMembres">
             <span aria-hidden="true">👤</span> Membres
           </button>
-          <button class="search-mode" type="button" role="tab" aria-selected="false" data-search-mode="roles">
+          <button class="search-mode" type="button" role="tab" aria-selected="false" data-search-mode="roles" data-i18n="dash.rechercheRoles">
             <span aria-hidden="true">🎭</span> Rôles
           </button>
         </div>
@@ -875,10 +875,10 @@
           <span class="search-bar-icon" aria-hidden="true">🔎</span>
           <input type="search" data-search-input
                  placeholder="Nom, pseudo ou identifiant Discord…"
-                 aria-label="Rechercher un membre ou un rôle" autocomplete="off">
-          <button class="secondary-btn compact" type="button" data-search-clear hidden>✕ Effacer</button>
+                 aria-label="Rechercher un membre ou un rôle" autocomplete="off" data-i18n-placeholder="dash.nomPseudoOuIdentifiant" data-i18n-aria="dash.rechercherUnMembreOu">
+          <button class="secondary-btn compact" type="button" data-search-clear hidden data-i18n="dash.effacer">✕ Effacer</button>
         </div>
-        <p class="field-help" data-search-help>
+        <p class="field-help" data-search-help data-i18n-html="dash.rechercheUnMembreOu">
           Recherche un membre ou un rôle pour agir dessus.
           <strong>Immuniser</strong> = plus aucune sanction automatique (filtre de langage,
           anti-spam, anti-lien). <strong>Confiance anti-nuke</strong> = ne plus surveiller
@@ -887,19 +887,19 @@
 
         <div class="search-layout">
           <div class="tool-panel search-results-panel">
-            <h3>Résultats</h3>
+            <h3 data-i18n="dash.resultats">Résultats</h3>
             <div class="search-results" data-search-results>
               <div class="dashboard-empty-state">
-                <strong>Commence à taper</strong>
-                <span>Les membres ayant des infractions s'affichent par défaut.</span>
+                <strong data-i18n="dash.commenceTaper">Commence à taper</strong>
+                <span data-i18n="dash.lesMembresAyantDes">Les membres ayant des infractions s'affichent par défaut.</span>
               </div>
             </div>
           </div>
 
           <div class="tool-panel search-detail-panel" data-search-detail>
             <div class="dashboard-empty-state">
-              <strong>Aucune sélection</strong>
-              <span>Choisis un résultat pour voir sa fiche et agir dessus.</span>
+              <strong data-i18n="dash.aucuneSelection">Aucune sélection</strong>
+              <span data-i18n="dash.choisisUnResultatPour">Choisis un résultat pour voir sa fiche et agir dessus.</span>
             </div>
           </div>
         </div>
@@ -908,20 +908,20 @@
       <section class="dash-panel" data-dashboard-panel="language">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">🌍 Langue</p>
-            <h2>Textes du bot</h2>
+            <p class="eyebrow" data-i18n="dash.langue">🌍 Langue</p>
+            <h2 data-i18n="dash.textesDuBot">Textes du bot</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset langue</button>
+          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetLangue">♻️ Reset langue</button>
         </div>
 
         <div class="tool-panel form-panel narrow">
-          <label>Langue principale
+          <label data-i18n="dash.languePrincipale">Langue principale
             <select>
               <option>Français</option>
               <option>English</option>
             </select>
           </label>
-          <label>Ton des messages
+          <label data-i18n="dash.tonDesMessages">Ton des messages
             <select>
               <option>Professionnel</option>
               <option>Simple</option>
@@ -934,15 +934,15 @@
       <section class="dash-panel" data-dashboard-panel="socials">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">📣 Réseaux sociaux</p>
-            <h2>Relais automatique des publications</h2>
+            <p class="eyebrow" data-i18n="dash.reseauxSociaux">📣 Réseaux sociaux</p>
+            <h2 data-i18n="dash.relaisAutomatiqueDesPublications">Relais automatique des publications</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset réseaux</button>
+          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetReseaux">♻️ Reset réseaux</button>
         </div>
 
         <div class="tool-panel social-info">
-          <strong>🔔 Principe</strong>
-          <p>Ajoute le lien du compte et l’ID du salon Discord. Le bot surveille la plateforme et poste une annonce dans ce salon dès qu’un nouveau contenu est détecté ou lorsqu’un test est lancé.</p>
+          <strong data-i18n="dash.principe">🔔 Principe</strong>
+          <p data-i18n="dash.ajouteLeLienDu">Ajoute le lien du compte et l’ID du salon Discord. Le bot surveille la plateforme et poste une annonce dans ce salon dès qu’un nouveau contenu est détecté ou lorsqu’un test est lancé.</p>
         </div>
 
         <div class="social-grid">
@@ -950,20 +950,20 @@
             <div class="social-card-head">
               <span class="social-icon">𝕏</span>
               <div>
-                <h3>Twitter / X</h3>
-                <p>Posts, annonces et threads publics.</p>
+                <h3 data-i18n="dash.twitter">Twitter / X</h3>
+                <p data-i18n="dash.postsAnnoncesEtThreads">Posts, annonces et threads publics.</p>
               </div>
-              <span class="state inactive" data-social-state>⚪ Inactif</span>
+              <span class="state inactive" data-social-state data-i18n="dash.inactif6">⚪ Inactif</span>
             </div>
-            <label>Lien du compte
+            <label data-i18n="dash.lienDuCompte">Lien du compte
               <input type="url" placeholder="https://x.com/ton_compte" data-social-link>
             </label>
-            <label>Salon de publication
-              <input type="text" placeholder="ID du salon Discord" data-social-channel>
+            <label data-i18n="dash.salonDePublication">Salon de publication
+              <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord">
             </label>
             <div class="social-actions">
-              <label class="mini-toggle"><input type="checkbox" data-social-enabled><span></span>Activer</label>
-              <button class="secondary-btn compact" type="button" data-social-test>🧪 Tester</button>
+              <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
+              <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester">🧪 Tester</button>
             </div>
           </article>
 
@@ -971,20 +971,20 @@
             <div class="social-card-head">
               <span class="social-icon">🎵</span>
               <div>
-                <h3>TikTok</h3>
-                <p>Nouvelles vidéos et clips publiés.</p>
+                <h3 data-i18n="dash.tiktok">TikTok</h3>
+                <p data-i18n="dash.nouvellesVideosEtClips">Nouvelles vidéos et clips publiés.</p>
               </div>
-              <span class="state inactive" data-social-state>⚪ Inactif</span>
+              <span class="state inactive" data-social-state data-i18n="dash.inactif7">⚪ Inactif</span>
             </div>
-            <label>Lien du compte
+            <label data-i18n="dash.lienDuCompte2">Lien du compte
               <input type="url" placeholder="https://www.tiktok.com/@ton_compte" data-social-link>
             </label>
-            <label>Salon de publication
-              <input type="text" placeholder="ID du salon Discord" data-social-channel>
+            <label data-i18n="dash.salonDePublication2">Salon de publication
+              <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord2">
             </label>
             <div class="social-actions">
-              <label class="mini-toggle"><input type="checkbox" data-social-enabled><span></span>Activer</label>
-              <button class="secondary-btn compact" type="button" data-social-test>🧪 Tester</button>
+              <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
+              <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester2">🧪 Tester</button>
             </div>
           </article>
 
@@ -993,19 +993,19 @@
               <span class="social-icon">🟣</span>
               <div>
                 <h3>Twitch</h3>
-                <p>Annonce live, rediffusion ou nouveau contenu.</p>
+                <p data-i18n="dash.annonceLiveRediffusionOu">Annonce live, rediffusion ou nouveau contenu.</p>
               </div>
-              <span class="state inactive" data-social-state>⚪ Inactif</span>
+              <span class="state inactive" data-social-state data-i18n="dash.inactif8">⚪ Inactif</span>
             </div>
-            <label>Lien du compte
+            <label data-i18n="dash.lienDuCompte3">Lien du compte
               <input type="url" placeholder="https://www.twitch.tv/ton_compte" data-social-link>
             </label>
-            <label>Salon de publication
-              <input type="text" placeholder="ID du salon Discord" data-social-channel>
+            <label data-i18n="dash.salonDePublication3">Salon de publication
+              <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord3">
             </label>
             <div class="social-actions">
-              <label class="mini-toggle"><input type="checkbox" data-social-enabled><span></span>Activer</label>
-              <button class="secondary-btn compact" type="button" data-social-test>🧪 Tester</button>
+              <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
+              <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester3">🧪 Tester</button>
             </div>
           </article>
 
@@ -1013,20 +1013,20 @@
             <div class="social-card-head">
               <span class="social-icon">📸</span>
               <div>
-                <h3>Instagram</h3>
-                <p>Posts, reels et annonces publiques.</p>
+                <h3 data-i18n="dash.instagram">Instagram</h3>
+                <p data-i18n="dash.postsReelsEtAnnonces">Posts, reels et annonces publiques.</p>
               </div>
-              <span class="state inactive" data-social-state>⚪ Inactif</span>
+              <span class="state inactive" data-social-state data-i18n="dash.inactif9">⚪ Inactif</span>
             </div>
-            <label>Lien du compte
+            <label data-i18n="dash.lienDuCompte4">Lien du compte
               <input type="url" placeholder="https://www.instagram.com/ton_compte" data-social-link>
             </label>
-            <label>Salon de publication
-              <input type="text" placeholder="ID du salon Discord" data-social-channel>
+            <label data-i18n="dash.salonDePublication4">Salon de publication
+              <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord4">
             </label>
             <div class="social-actions">
-              <label class="mini-toggle"><input type="checkbox" data-social-enabled><span></span>Activer</label>
-              <button class="secondary-btn compact" type="button" data-social-test>🧪 Tester</button>
+              <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
+              <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester4">🧪 Tester</button>
             </div>
           </article>
         </div>
@@ -1035,47 +1035,47 @@
       <section class="dash-panel" data-dashboard-panel="ratings">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">⭐ Ratings</p>
-            <h2>Qualité du support</h2>
+            <p class="eyebrow" data-i18n="dash.ratings2">⭐ Ratings</p>
+            <h2 data-i18n="dash.qualiteDuSupport">Qualité du support</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section>♻️ Reset ratings</button>
+          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetRatings">♻️ Reset ratings</button>
         </div>
 
         <div class="metric-grid">
-          <article class="metric-card"><span>⭐ Moyenne</span><strong data-rating-average>0.00/5</strong><small data-rating-label>Aucune note réelle</small></article>
-          <article class="metric-card"><span>💬 Avis</span><strong data-rating-count>0</strong><small>Notes envoyées après ticket</small></article>
-          <article class="metric-card"><span>✅ Tickets suivis</span><strong data-rating-ticket-count>0</strong><small>Tickets enregistrés par le bot</small></article>
-          <article class="metric-card"><span>📊 Dernière note</span><strong data-rating-last>—</strong><small>Dernière évaluation reçue</small></article>
+          <article class="metric-card"><span data-i18n="dash.moyenne">⭐ Moyenne</span><strong data-rating-average>0.00/5</strong><small data-rating-label data-i18n="dash.aucuneNoteReelle">Aucune note réelle</small></article>
+          <article class="metric-card"><span data-i18n="dash.avis">💬 Avis</span><strong data-rating-count>0</strong><small data-i18n="dash.notesEnvoyeesApresTicket">Notes envoyées après ticket</small></article>
+          <article class="metric-card"><span data-i18n="dash.ticketsSuivis">✅ Tickets suivis</span><strong data-rating-ticket-count>0</strong><small data-i18n="dash.ticketsEnregistresParLe">Tickets enregistrés par le bot</small></article>
+          <article class="metric-card"><span data-i18n="dash.derniereNote">📊 Dernière note</span><strong data-rating-last>—</strong><small data-i18n="dash.derniereEvaluationRecue">Dernière évaluation reçue</small></article>
         </div>
       </section>
 
       <section class="dash-panel" data-dashboard-panel="logs">
         <div class="panel-title">
           <div>
-            <p class="eyebrow">🧾 Logs</p>
-            <h2>Journal du serveur</h2>
+            <p class="eyebrow" data-i18n="dash.logs2">🧾 Logs</p>
+            <h2 data-i18n="dash.journalDuServeur2">Journal du serveur</h2>
           </div>
           <div class="panel-title-actions">
-            <button class="secondary-btn compact" type="button" data-logs-reload>↻ Actualiser</button>
-            <button class="secondary-btn compact" type="button" data-logs-export>📤 Exporter</button>
+            <button class="secondary-btn compact" type="button" data-logs-reload data-i18n="dash.actualiser3">↻ Actualiser</button>
+            <button class="secondary-btn compact" type="button" data-logs-export data-i18n="dash.exporter">📤 Exporter</button>
           </div>
         </div>
 
-        <div class="log-filters" data-log-filters role="tablist" aria-label="Catégories de logs">
-          <button class="log-filter is-active" type="button" data-log-category="all" role="tab" aria-selected="true">🗂️ Tout</button>
+        <div class="log-filters" data-log-filters role="tablist" aria-label="Catégories de logs" data-i18n-aria="dash.categoriesDeLogs">
+          <button class="log-filter is-active" type="button" data-log-category="all" role="tab" aria-selected="true" data-i18n="dash.tout">🗂️ Tout</button>
         </div>
 
         <div class="tool-panel">
           <div class="table-head">
-            <h3>📡 Catégories enregistrées</h3>
-            <button class="secondary-btn compact" type="button" data-logs-save>💾 Enregistrer</button>
+            <h3 data-i18n="dash.categoriesEnregistrees">📡 Catégories enregistrées</h3>
+            <button class="secondary-btn compact" type="button" data-logs-save data-i18n="dash.enregistrer2">💾 Enregistrer</button>
           </div>
-          <p class="field-help">Décoche une catégorie pour cesser de la publier sur Discord. Elle reste consultable ici.</p>
+          <p class="field-help" data-i18n="dash.decocheUneCategoriePour">Décoche une catégorie pour cesser de la publier sur Discord. Elle reste consultable ici.</p>
           <div class="log-toggle-grid" data-log-toggles></div>
         </div>
 
         <div class="log-feed" data-dashboard-log-feed>
-          <div class="log-empty"><span>—</span> Sélectionne un serveur pour afficher son journal.</div>
+          <div class="log-empty" data-i18n="dash.journalChoisirServeur"><span>—</span> Sélectionne un serveur pour afficher son journal.</div>
         </div>
       </section>
     </section>
@@ -1085,7 +1085,7 @@
   <!-- Assistant IA : bouton flottant + fenêtre de discussion -->
   <button class="ai-launcher" type="button" data-ai-launcher
           aria-expanded="false" aria-controls="aiAssistant"
-          aria-label="Ouvrir l'assistant IA">
+          aria-label="Ouvrir l'assistant IA" data-i18n-aria="dash.ouvrirAssistantIa">
     <span class="ai-launcher-icon" aria-hidden="true">✨</span>
     <span class="ai-launcher-label" data-i18n="ai.launcher">Assistant IA</span>
   </button>
@@ -1099,7 +1099,7 @@
           <small data-ai-status data-i18n="ai.subtitle">Pose ta question sur la configuration</small>
         </div>
       </div>
-      <button class="ai-close" type="button" data-ai-close aria-label="Fermer l'assistant">✕</button>
+      <button class="ai-close" type="button" data-ai-close aria-label="Fermer l'assistant" data-i18n-aria="dash.fermerAssistant">✕</button>
     </header>
 
     <div class="ai-messages" data-ai-messages role="log" aria-live="polite"></div>
@@ -1114,23 +1114,23 @@
     <form class="ai-composer" data-ai-form>
       <input type="text" data-ai-input maxlength="1200" autocomplete="off"
              data-i18n-placeholder="ai.placeholder"
-             placeholder="Écris ta question…" aria-label="Votre question">
-      <button class="primary-btn compact" type="submit" data-ai-send aria-label="Envoyer">➤</button>
+             placeholder="Écris ta question…" aria-label="Votre question" data-i18n-aria="dash.votreQuestion">
+      <button class="primary-btn compact" type="submit" data-ai-send aria-label="Envoyer" data-i18n-aria="dash.envoyer">➤</button>
     </form>
   </section>
 
-  <div class="dashboard-toast" id="dashboardToast" aria-live="polite">Configuration enregistrée</div>
+  <div class="dashboard-toast" id="dashboardToast" aria-live="polite" data-i18n="dash.configurationEnregistree">Configuration enregistrée</div>
   <datalist id="dashboardChannelOptions"></datalist>
   <datalist id="dashboardRoleOptions"></datalist>
 
   <div class="dashboard-modal" data-unsaved-modal hidden role="dialog" aria-modal="true" aria-labelledby="unsavedTitle">
     <div class="dashboard-modal-card">
-      <p class="eyebrow">⚠️ Modifications non sauvegardées</p>
-      <h2 id="unsavedTitle">Veuillez sauvegarder ce que vous avez fait</h2>
-      <p>Tu as modifié cette partie du dashboard. Choisis quoi faire avant de changer de configuration.</p>
+      <p class="eyebrow" data-i18n="dash.modificationsNonSauvegardees">⚠️ Modifications non sauvegardées</p>
+      <h2 id="unsavedTitle" data-i18n="dash.veuillezSauvegarderCeQue">Veuillez sauvegarder ce que vous avez fait</h2>
+      <p data-i18n="dash.tuAsModifieCette">Tu as modifié cette partie du dashboard. Choisis quoi faire avant de changer de configuration.</p>
       <div class="dashboard-modal-actions">
-        <button class="primary-btn compact" type="button" data-unsaved-save>💾 Sauvegarder</button>
-        <button class="secondary-btn compact" type="button" data-unsaved-discard>🗑️ Laisser tomber</button>
+        <button class="primary-btn compact" type="button" data-unsaved-save data-i18n="dash.sauvegarder">💾 Sauvegarder</button>
+        <button class="secondary-btn compact" type="button" data-unsaved-discard data-i18n="dash.laisserTomber">🗑️ Laisser tomber</button>
       </div>
     </div>
   </div>
