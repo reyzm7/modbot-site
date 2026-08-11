@@ -1843,8 +1843,128 @@ function initDashboard() {
   }
 
   function forgetSession() {
-    localStorage.removeItem("modbot-dashboard-session");
-    sessionStorage.removeItem("modbot-dashboard-session");
+    // Tout, des deux cotes : une seule trace oubliee et le dashboard se
+    // reconnecte sur l'ancien compte sans rien demander.
+    ["modbot-dashboard-session", "modbot-discord-access-token",
+     "modbot-oauth-state", "modbot-login-redirected"].forEach((clef) => {
+      localStorage.removeItem(clef);
+      sessionStorage.removeItem(clef);
+    });
+  }
+
+  /**
+   * Ferme la session puis renvoie vers Discord pour en ouvrir une autre.
+   *
+   * L'ordre compte : on previent d'abord le bot (sinon la session
+   * resterait valable de son cote), on efface ensuite localement, et on
+   * ne redirige qu'a la fin. Le bot injoignable n'empeche pas de changer
+   * de compte — le jeton local, lui, est bien parti.
+   *
+   * Cote Discord, la route de connexion demande `prompt=consent` : l'ecran
+   * d'autorisation s'affiche, avec le lien pour basculer de compte. Sans
+   * cela Discord re-autoriserait le meme compte en silence.
+   */
+  async function changerDeCompte({ reconnecter = true } = {}) {
+    const jeton = getModbotSessionToken();
+    const base = getModbotApiBase();
+    if (jeton && base) {
+      try {
+        await fetch(`${base}/api/logout`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${jeton}` },
+        });
+      } catch (error) {
+        // Bot injoignable : la session locale part quand meme
+      }
+    }
+    forgetSession();
+    selectedServer = { id: "", name: "", logo: modbotDefaultLogo, initials: "HB", installed: false };
+    dashboardGuilds = [];
+    majBlocCompte(null);
+    if (!reconnecter) {
+      showToast(t("js.compte.deconnecte"));
+      showDashboardStage("auth");
+      return;
+    }
+    if (!base) {
+      showToast(t("js.auth.clientIdManquant"));
+      return;
+    }
+    showToast(t("js.compte.redirection"));
+    redirectToDiscordLogin(base);
+  }
+
+  /**
+   * Remplit — ou masque — les blocs du compte connecté.
+   *
+   * Il y en a deux : un dans la barre du dashboard, un sur l'écran de
+   * sélection de serveur. Le second compte au moins autant : c'est là
+   * qu'on s'aperçoit qu'on est sur le mauvais compte, en ne voyant pas
+   * les serveurs attendus.
+   */
+  function majBlocCompte(utilisateur) {
+    const connu = Boolean(utilisateur && (utilisateur.username || utilisateur.user_id));
+    document.querySelectorAll("[data-account]").forEach((bloc) => {
+      bloc.hidden = !connu;
+      if (!connu) return;
+      const nom = bloc.querySelector("[data-account-name]");
+      if (nom) nom.textContent = utilisateur.username || utilisateur.user_id;
+      const image = bloc.querySelector("[data-account-avatar]");
+      if (image && utilisateur.avatar_url) image.src = utilisateur.avatar_url;
+    });
+  }
+
+  /** Demande au bot qui est connecte, pour alimenter le bloc du compte. */
+  async function chargerCompteConnecte() {
+    if (!getModbotSessionToken()) {
+      majBlocCompte(null);
+      return null;
+    }
+    try {
+      const data = await modbotApiFetch("/api/me", { cache: "no-store" });
+      majBlocCompte(data?.user || null);
+      return data?.user || null;
+    } catch (error) {
+      majBlocCompte(null);
+      return null;
+    }
+  }
+
+  function initBlocCompte() {
+    document.querySelectorAll("[data-account]").forEach((bloc) => {
+      const declencheur = bloc.querySelector("[data-account-trigger]");
+      const menu = bloc.querySelector("[data-account-menu]");
+      if (!declencheur || !menu) return;
+
+      const ouvrir = (etat) => {
+        menu.hidden = !etat;
+        declencheur.setAttribute("aria-expanded", String(etat));
+        bloc.classList.toggle("is-open", etat);
+      };
+
+      declencheur.addEventListener("click", (event) => {
+        event.stopPropagation();
+        ouvrir(menu.hidden);
+      });
+      document.addEventListener("click", (event) => {
+        if (!bloc.contains(event.target)) ouvrir(false);
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !menu.hidden) {
+          ouvrir(false);
+          declencheur.focus();
+        }
+      });
+
+      bloc.querySelector("[data-switch-account]")?.addEventListener("click", () => {
+        ouvrir(false);
+        changerDeCompte({ reconnecter: true });
+      });
+      bloc.querySelector("[data-logout-account]")?.addEventListener("click", () => {
+        ouvrir(false);
+        changerDeCompte({ reconnecter: false });
+      });
+    });
   }
 
   /**
@@ -1856,6 +1976,7 @@ function initDashboard() {
     try {
       await loadDashboardGuilds();
       localStorage.setItem("modbot-has-logged-in", "1");
+      chargerCompteConnecte();     // sans attendre : n'empeche pas l'affichage
       showDashboardStage("servers");
       renderAuthStatus();
       return "ok";
@@ -4199,6 +4320,7 @@ function initDashboard() {
   setupLogoFallbacks();
   setOfferInviteFallbackCopy();
   initApiUrlControls();
+  initBlocCompte();
 
   // Clefs de traduction : le message est resolu au moment de l'affichage,
   // donc apres un changement de langue il sort dans la bonne.

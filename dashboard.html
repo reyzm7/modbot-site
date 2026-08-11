@@ -83,6 +83,33 @@
         <a href="wiki.html" data-i18n="dash.commandes">Commandes</a>
         <a href="https://paypal.me/hazkes" target="_blank" rel="noreferrer noopener" class="is-premium" data-i18n="dash.soutenir">💛 Soutenir</a>
       </nav>
+      <div class="account-switch" data-account hidden>
+        <button class="account-trigger" type="button" data-account-trigger
+                aria-haspopup="menu" aria-expanded="false"
+                aria-label="Compte connecté" data-i18n-aria="dash.compteConnecte">
+          <span class="account-avatar">
+            <img src="assets/default_logo.svg" alt="" data-account-avatar>
+          </span>
+          <span class="account-label">
+            <small data-i18n="dash.connecteEnTant">Connecté en tant que</small>
+            <strong data-account-name>—</strong>
+          </span>
+          <svg class="account-chevron" viewBox="0 0 12 8" aria-hidden="true">
+            <path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor"
+                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="account-menu" data-account-menu role="menu" hidden>
+          <p class="account-menu-note" data-i18n="dash.plusieursComptes">Plusieurs comptes Discord ? Change sans fermer le dashboard.</p>
+          <button type="button" data-switch-account role="menuitem" data-i18n="dash.changerDeCompte">
+            <span aria-hidden="true">🔄</span> Changer de compte
+          </button>
+          <button type="button" data-logout-account role="menuitem" class="is-danger" data-i18n="dash.seDeconnecter">
+            <span aria-hidden="true">🚪</span> Se déconnecter
+          </button>
+        </div>
+      </div>
       <button class="secondary-btn compact" type="button" data-auth-back data-i18n="dash.retour">Retour</button>
     </header>
 
@@ -161,6 +188,36 @@
     </div>
 
     <div class="dashboard-actions">
+      <!-- Compte Discord connecte. Masque tant qu'on ne sait pas qui c'est :
+           un bloc vide vaudrait moins que pas de bloc du tout. -->
+      <div class="account-switch" data-account hidden>
+        <button class="account-trigger" type="button" data-account-trigger
+                aria-haspopup="menu" aria-expanded="false"
+                aria-label="Compte connecté" data-i18n-aria="dash.compteConnecte">
+          <span class="account-avatar">
+            <img src="assets/default_logo.svg" alt="" data-account-avatar>
+          </span>
+          <span class="account-label">
+            <small data-i18n="dash.connecteEnTant">Connecté en tant que</small>
+            <strong data-account-name>—</strong>
+          </span>
+          <svg class="account-chevron" viewBox="0 0 12 8" aria-hidden="true">
+            <path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor"
+                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="account-menu" data-account-menu role="menu" hidden>
+          <p class="account-menu-note" data-i18n="dash.plusieursComptes">Plusieurs comptes Discord ? Change sans fermer le dashboard.</p>
+          <button type="button" data-switch-account role="menuitem" data-i18n="dash.changerDeCompte">
+            <span aria-hidden="true">🔄</span> Changer de compte
+          </button>
+          <button type="button" data-logout-account role="menuitem" class="is-danger" data-i18n="dash.seDeconnecter">
+            <span aria-hidden="true">🚪</span> Se déconnecter
+          </button>
+        </div>
+      </div>
+
       <label class="language-switch compact" aria-label="Langue du dashboard" data-i18n-aria="dash.langueDuDashboard">
         <span aria-hidden="true">🌍</span>
         <select data-language-select>

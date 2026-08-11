@@ -179,6 +179,11 @@ window.MODBOT_TRANSLATIONS = {
     "dash.rechercherUnServeur": "Rechercher un serveur…",
     "dash.voirTousMesServeurs": "Voir tous mes serveurs",
     "dash.ajouterModbotServeur": "Ajouter ModBot à un serveur",
+    "dash.compteConnecte": "Compte connecté",
+    "dash.connecteEnTant": "Connecté en tant que",
+    "dash.plusieursComptes": "Plusieurs comptes Discord ? Change sans fermer le dashboard.",
+    "dash.changerDeCompte": "Changer de compte",
+    "dash.seDeconnecter": "Se déconnecter",
     "dash.langueDuDashboard": "Langue du dashboard",
     "dash.save": "💾 Enregistrer",
     "dash.backToSite": "🏠 Retour au site",
@@ -708,6 +713,8 @@ window.MODBOT_TRANSLATIONS = {
     "wiki.espaceAdministrateurEstSepare": "L’espace administrateur est séparé du dashboard serveur. Il sert à gérer les accès admin, la blacklist des membres du bot, les serveurs détectés et les logs globaux d’utilisation.",
 
     // ── Textes rendus par script.js ───────────────────────────────
+    "js.compte.redirection": "🔄 Redirection vers Discord pour choisir un compte…",
+    "js.compte.deconnecte": "🚪 Déconnecté. Reconnecte-toi pour revenir au dashboard.",
     "js.demo.panelTitre": "Panneau d'administration - ModBot",
     "js.demo.statsTitre": "Statistiques - Mon Serveur",
     "js.demo.avertTitre": "Dossier de modération",
@@ -1191,6 +1198,11 @@ window.MODBOT_TRANSLATIONS = {
     "dash.rechercherUnServeur": "Search for a server…",
     "dash.voirTousMesServeurs": "See all my servers",
     "dash.ajouterModbotServeur": "Add ModBot to a server",
+    "dash.compteConnecte": "Connected account",
+    "dash.connecteEnTant": "Signed in as",
+    "dash.plusieursComptes": "Several Discord accounts? Switch without leaving the dashboard.",
+    "dash.changerDeCompte": "🔄 Switch account",
+    "dash.seDeconnecter": "🚪 Sign out",
     "dash.langueDuDashboard": "Dashboard language",
     "dash.save": "💾 Save",
     "dash.backToSite": "🏠 Back to site",
@@ -1720,6 +1732,8 @@ window.MODBOT_TRANSLATIONS = {
     "wiki.espaceAdministrateurEstSepare": "The administrator area is separate from the server dashboard. It manages admin access, the bot's member blacklist, the detected servers and the global usage logs.",
 
     // ── Textes rendus par script.js ───────────────────────────────
+    "js.compte.redirection": "🔄 Redirecting to Discord to pick an account…",
+    "js.compte.deconnecte": "🚪 Signed out. Sign in again to come back to the dashboard.",
     "js.demo.panelTitre": "Administration panel - ModBot",
     "js.demo.statsTitre": "Statistics - My Server",
     "js.demo.avertTitre": "Moderation record",
@@ -2203,6 +2217,11 @@ window.MODBOT_TRANSLATIONS = {
     "dash.rechercherUnServeur": "ابحث عن خادم…",
     "dash.voirTousMesServeurs": "عرض كل خوادمي",
     "dash.ajouterModbotServeur": "إضافة ModBot إلى خادم",
+    "dash.compteConnecte": "الحساب المتصل",
+    "dash.connecteEnTant": "متصل باسم",
+    "dash.plusieursComptes": "عدة حسابات ديسكورد؟ بدّل بينها دون مغادرة لوحة التحكم.",
+    "dash.changerDeCompte": "🔄 تبديل الحساب",
+    "dash.seDeconnecter": "🚪 تسجيل الخروج",
     "dash.langueDuDashboard": "لغة لوحة التحكم",
     "dash.save": "💾 حفظ",
     "dash.backToSite": "🏠 العودة إلى الموقع",
@@ -2732,6 +2751,8 @@ window.MODBOT_TRANSLATIONS = {
     "wiki.espaceAdministrateurEstSepare": "مساحة الإدارة منفصلة عن لوحة تحكم الخادم. تُستخدم لإدارة صلاحيات المشرفين والقائمة السوداء لأعضاء البوت والخوادم المكتشَفة وسجلات الاستخدام العامة.",
 
     // ── Textes rendus par script.js ───────────────────────────────
+    "js.compte.redirection": "🔄 جارٍ التحويل إلى ديسكورد لاختيار حساب…",
+    "js.compte.deconnecte": "🚪 تم تسجيل الخروج. سجّل الدخول من جديد للعودة إلى لوحة التحكم.",
     "js.demo.panelTitre": "لوحة الإدارة - ModBot",
     "js.demo.statsTitre": "الإحصائيات - خادمي",
     "js.demo.avertTitre": "ملف الإشراف",
