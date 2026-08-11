@@ -168,9 +168,10 @@
       <p class="stats-list-title" data-stat-languages-title hidden data-i18n="stats.byLanguage">Par langue</p>
       <div class="stats-countries" data-stat-language-list hidden></div>
       <p class="stats-note" data-stat-note hidden data-i18n="stats.note">
-        Le pays est déclaré par chaque serveur dans son dashboard, la langue vient de son
-        réglage ModBot. Discord ne communique ni l'un ni l'autre : ce qui n'a pas été
-        renseigné reste « Non renseigné », plutôt que deviné.
+        Le pays est déduit de la langue du serveur, et remplacé par le pays exact dès qu'un
+        serveur le choisit dans son dashboard. Une langue n'étant pas un pays, la déduction
+        se trompe parfois : un serveur belge en français est compté en France tant qu'il
+        n'a pas fait ce choix.
       </p>
     </section>
 
