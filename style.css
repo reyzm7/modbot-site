@@ -7083,9 +7083,25 @@ label,
 .welcome-form textarea {
   width: 100%;
   resize: vertical;
-  min-height: 72px;
+  min-height: 104px;
   font-family: inherit;
-  line-height: 1.55;
+  line-height: 1.6;
+}
+
+/*
+ * Ce panneau sert a ECRIRE puis a RELIRE un message : ses champs et son
+ * apercu ne peuvent pas garder la taille des petits libelles du reste du
+ * dashboard, ou l'on ne fait que cocher des cases.
+ */
+.welcome-form textarea,
+.welcome-form input[type="text"],
+.welcome-form input[type="url"] {
+  font-size: 1.02rem;
+}
+
+.welcome-form .mini-form > span {
+  font-size: 0.95rem;
+  color: var(--soft);
 }
 
 /* Puces de variables insÃ©rables au curseur */
@@ -7113,7 +7129,7 @@ label,
 
 /* AperÃ§u faÃ§on Discord */
 .discord-preview {
-  padding: 14px;
+  padding: 18px;
   background: #313338;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -7123,8 +7139,8 @@ label,
 
 .discord-preview-avatar {
   flex: none;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--purple), var(--cyan));
 }
@@ -7132,9 +7148,9 @@ label,
 .discord-preview-body { min-width: 0; flex: 1; }
 
 .discord-preview-author {
-  margin: 0 0 4px;
+  margin: 0 0 6px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 1.02rem;
   color: #f2f3f5;
 }
 
@@ -7144,13 +7160,13 @@ label,
   border-radius: 4px;
   background: var(--accent);
   color: #fff;
-  font-size: 0.62rem;
+  font-size: 0.7rem;
   font-weight: 700;
   vertical-align: middle;
 }
 
 .discord-preview-embed {
-  padding: 10px 14px;
+  padding: 14px 18px;
   border-left: 4px solid var(--accent);
   border-radius: 4px;
   background: #2b2d31;
@@ -7165,15 +7181,16 @@ label,
 
 .discord-preview-embed strong {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   color: #f2f3f5;
-  font-size: 0.95rem;
+  font-size: 1.2rem;
+  line-height: 1.35;
 }
 
 .discord-preview-embed p {
   margin: 0;
-  font-size: 0.88rem;
-  line-height: 1.5;
+  font-size: 1.06rem;
+  line-height: 1.6;
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -7189,19 +7206,19 @@ label,
 
 .discord-preview-footer {
   display: block;
-  margin-top: 8px;
+  margin-top: 10px;
   color: #949ba4;
-  font-size: 0.74rem;
+  font-size: 0.88rem;
 }
 
 .discord-preview-button {
   display: inline-block;
-  margin-top: 8px;
-  padding: 7px 14px;
+  margin-top: 10px;
+  padding: 9px 18px;
   border-radius: 4px;
   background: #4e5058;
   color: #fff;
-  font-size: 0.84rem;
+  font-size: 0.98rem;
   font-weight: 500;
   text-decoration: none;
 }
