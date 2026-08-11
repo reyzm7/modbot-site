@@ -150,6 +150,10 @@
           <span data-i18n="stats.servers">Serveurs protégés</span>
         </article>
         <article class="stat">
+          <strong data-stat-countries>—</strong>
+          <span data-i18n="stats.countries">Pays représentés</span>
+        </article>
+        <article class="stat">
           <strong data-stat-languages>—</strong>
           <span data-i18n="stats.languages">Langues représentées</span>
         </article>
@@ -159,10 +163,14 @@
         </article>
       </div>
 
+      <p class="stats-list-title" data-stat-countries-title hidden data-i18n="stats.byCountry">Par pays</p>
+      <div class="stats-countries" data-stat-country-list hidden></div>
+      <p class="stats-list-title" data-stat-languages-title hidden data-i18n="stats.byLanguage">Par langue</p>
       <div class="stats-countries" data-stat-language-list hidden></div>
       <p class="stats-note" data-stat-note hidden data-i18n="stats.note">
-        Répartition d'après la langue choisie sur chaque serveur. Discord ne communique
-        pas le pays d'un serveur : les serveurs sans langue définie restent « Non renseigné ».
+        Le pays est déclaré par chaque serveur dans son dashboard, la langue vient de son
+        réglage ModBot. Discord ne communique ni l'un ni l'autre : ce qui n'a pas été
+        renseigné reste « Non renseigné », plutôt que deviné.
       </p>
     </section>
 

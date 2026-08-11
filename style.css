@@ -7000,7 +7000,18 @@ label,
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
+  margin-top: 12px;
+}
+
+/* Intitule de chaque repartition : « Par pays », « Par langue ». */
+.stats-list-title {
   margin-top: 26px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .stat-country {

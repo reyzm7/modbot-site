@@ -2092,6 +2092,12 @@ function initDashboard() {
     if (welcomeFont && welcome.font) welcomeFont.value = welcome.font;
     if (welcomeColor && welcome.color) welcomeColor.value = welcome.color;
 
+    const champPays = document.querySelector("[data-guild-country]");
+    if (champPays) {
+      remplirSelecteurPays();
+      champPays.value = String(config.country || "").toUpperCase();
+    }
+
     if (config.language) {
       const languageSelect = document.querySelector("[data-dashboard-panel='language'] select");
       if (languageSelect) languageSelect.value = config.language === "en" ? "English" : "Français";  // valeurs du <select>, pas des libellés traduits
@@ -3963,6 +3969,7 @@ function initDashboard() {
       recurring_messages: recurringMessages,
       social_relays: socialRelays,
       language: languageValue === "English" ? "en" : "fr",
+      country: document.querySelector("[data-guild-country]")?.value || "",
       // Les reglages retires ne sont plus envoyes : les omettre evite
     // d ecraser des valeurs gerees ailleurs.
     };
@@ -4634,6 +4641,7 @@ function initDashboard() {
         console.warn("Redessin impossible apres changement de langue :", error);
       }
     });
+    remplirSelecteurPays();
     renderGuildChoices(dashboardGuilds);
     if (dernierConfig) renderModerationConfig(dernierConfig);
     if (dernierConfig) renderDashboardStats(dernierConfig);
@@ -4718,6 +4726,116 @@ function nomDeLangue(code, repli) {
     // Intl.DisplayNames absent : le repli français fait l'affaire
   }
   return repli;
+}
+
+/*
+ * Codes ISO-3166 alpha-2. Seuls les codes sont embarqués : le nom du pays
+ * est produit par le navigateur dans la langue du visiteur, et le drapeau
+ * se calcule à partir des deux lettres. Pas de table de 250 noms à tenir
+ * à jour, en trois langues.
+ */
+const CODES_PAYS = ("AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI "
+  + "BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW "
+  + "CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH "
+  + "GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE "
+  + "JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME "
+  + "MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR "
+  + "NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG "
+  + "SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV "
+  + "TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW").split(" ");
+
+/** Nom d'un pays dans la langue du visiteur, le code servant de repli. */
+function nomDePays(code) {
+  if (!code) return code;
+  try {
+    const noms = new Intl.DisplayNames([getSiteLanguage()], { type: "region" });
+    const nom = noms.of(code);
+    if (nom && nom !== code) return nom;
+  } catch (error) {
+    // Intl.DisplayNames absent : on affichera le code
+  }
+  return code;
+}
+
+/** « BE » donne 🇧🇪 : chaque lettre devient son indicateur régional. */
+function drapeauDuPays(code) {
+  const net = String(code || "").trim().toUpperCase();
+  if (!/^[A-Z]{2}$/.test(net)) return "🌐";
+  return String.fromCodePoint(...[...net].map((l) => 0x1F1E6 + l.charCodeAt(0) - 65));
+}
+
+/**
+ * Une ligne de répartition : drapeau, nom, nombre de membres.
+ *
+ * Les pays et les langues partagent exactement la même présentation ;
+ * les écrire deux fois, c'est les voir diverger au premier changement.
+ */
+function rendreRepartition(liste, entrees, nommer) {
+  if (!liste) return false;
+  const lignes = (Array.isArray(entrees) ? entrees : []).filter(Boolean);
+  if (!lignes.length) return false;
+  liste.innerHTML = lignes.map((entree) => `
+    <span class="stat-country${entree.unknown ? " is-unknown" : ""}">
+      <span class="stat-country-flag" aria-hidden="true">${escapeHtmlValue(entree.flag || "🌐")}</span>
+      <span class="stat-country-name">${escapeHtmlValue(nommer(entree))}</span>
+      <span class="stat-country-count">${formatNombreFr(entree.members)}</span>
+    </span>`).join("");
+  liste.hidden = false;
+  return true;
+}
+
+const nommerPays = (e) => e.unknown ? t("js.paysNonRenseigne") : nomDePays(e.code);
+const nommerLangue = (e) => e.unknown ? t("js.langueNonRenseignee")
+                                      : nomDeLangue(e.code, e.language);
+
+/** Peint les deux répartitions et le résumé à partir des chiffres reçus. */
+function peindreStatsPubliques(stats) {
+  if (!stats) return;
+  const resume = document.querySelector("[data-stat-summary]");
+  if (resume) {
+    resume.textContent = tn("js.repartisUnServeur", "js.repartisDesServeurs", stats.servers,
+                            { membres: formatNombreFr(stats.members_protected),
+                              serveurs: formatNombreFr(stats.servers) });
+  }
+  const paires = [
+    ["[data-stat-country-list]", "[data-stat-countries-title]", stats.top_countries, nommerPays],
+    ["[data-stat-language-list]", "[data-stat-languages-title]", stats.top_languages, nommerLangue],
+  ];
+  let quelqueChose = false;
+  paires.forEach(([selListe, selTitre, entrees, nommer]) => {
+    const rempli = rendreRepartition(document.querySelector(selListe), entrees, nommer);
+    const titre = document.querySelector(selTitre);
+    if (titre) titre.hidden = !rempli;
+    quelqueChose = quelqueChose || rempli;
+  });
+  const note = document.querySelector("[data-stat-note]");
+  if (note) note.hidden = !quelqueChose;
+}
+
+/**
+ * Remplit le sélecteur de pays, trié selon la langue affichée.
+ *
+ * L'ordre alphabétique n'est pas le même en français, en anglais et en
+ * arabe : la liste est donc reconstruite à chaque changement de langue.
+ * L'option « Non renseigné » est conservée telle quelle, avec sa clef.
+ */
+function remplirSelecteurPays() {
+  const champ = document.querySelector("[data-guild-country]");
+  if (!champ) return;
+  const choisi = champ.value;
+  const vide = champ.querySelector('option[value=""]');
+  champ.textContent = "";
+  if (vide) champ.appendChild(vide);
+  CODES_PAYS
+    .map((code) => ({ code, nom: nomDePays(code) }))
+    .sort((a, b) => a.nom.localeCompare(b.nom, getSiteLanguage()))
+    .forEach(({ code, nom }) => {
+      const option = document.createElement("option");
+      option.value = code;
+      option.textContent = `${drapeauDuPays(code)} ${nom}`;
+      champ.appendChild(option);
+    });
+  champ.value = choisi;
 }
 
 let derniersStatsPubliques = null;
@@ -4809,9 +4927,8 @@ async function initPublicStats() {
   const membres = section.querySelector("[data-stat-members]");
   const serveurs = section.querySelector("[data-stat-servers]");
   const langues = section.querySelector("[data-stat-languages]");
+  const pays = section.querySelector("[data-stat-countries]");
   const resume = section.querySelector("[data-stat-summary]");
-  const liste = section.querySelector("[data-stat-language-list]");
-  const note = section.querySelector("[data-stat-note]");
 
   const base = getModbotApiBase();
   if (!base) return;
@@ -4829,34 +4946,15 @@ async function initPublicStats() {
     animerCompteur(membres, stats.members_protected);
     animerCompteur(serveurs, stats.servers);
     if (langues) langues.textContent = formatNombreFr(stats.languages);
-
-    if (resume) {
-      resume.textContent =
-      tn("js.repartisUnServeur", "js.repartisDesServeurs", stats.servers,
-         { membres: formatNombreFr(stats.members_protected),
-           serveurs: formatNombreFr(stats.servers) });
-    }
-
-    const top = Array.isArray(stats.top_languages) ? stats.top_languages : [];
-    if (liste && top.length) {
-      liste.innerHTML = top.map((entree) => `
-        <span class="stat-country${entree.unknown ? " is-unknown" : ""}">
-          <span class="stat-country-flag" aria-hidden="true">${escapeHtmlValue(entree.flag || "🌐")}</span>
-          <span class="stat-country-name">${escapeHtmlValue(entree.unknown
-            ? t("js.langueNonRenseignee")
-            : nomDeLangue(entree.code, entree.language))}</span>
-          <span class="stat-country-count">${formatNombreFr(entree.members)}</span>
-        </span>`).join("");
-      liste.hidden = false;
-      if (note) note.hidden = false;
-    }
+    if (pays) pays.textContent = formatNombreFr(stats.countries);
+    peindreStatsPubliques(stats);
   } catch (error) {
     // Le bot est injoignable : on retire les tirets plutôt que de mentir
     // avec des chiffres inventés, et on garde la page présentable.
     console.warn("Statistiques publiques indisponibles :", error?.message || error);
     section.classList.add("stats-offline");
     if (resume) resume.textContent = t("js.chiffresIndisponibles");
-    [membres, serveurs, langues].forEach((el) => {
+    [membres, serveurs, langues, pays].forEach((el) => {
       if (el && el.textContent === "—") el.textContent = "·";
     });
   }
@@ -4872,25 +4970,8 @@ document.addEventListener("modbot:language", () => {
   if (document.getElementById("demoFeed")) runDemoCommand(actifDemo?.dataset.command || "panel");
 
   // Les chiffres sont déjà chargés : on ne redemande rien au bot, on réécrit
-  // simplement les noms de langues dans la nouvelle langue.
-  const stats = derniersStatsPubliques;
-  const liste = document.querySelector("[data-stat-language-list]");
-  const resume = document.querySelector("[data-stat-summary]");
-  if (!stats || !liste) return;
-  if (resume) {
-    resume.textContent = tn("js.repartisUnServeur", "js.repartisDesServeurs", stats.servers,
-                            { membres: formatNombreFr(stats.members_protected),
-                              serveurs: formatNombreFr(stats.servers) });
-  }
-  const top = Array.isArray(stats.top_languages) ? stats.top_languages : [];
-  liste.innerHTML = top.map((entree) => `
-    <span class="stat-country${entree.unknown ? " is-unknown" : ""}">
-      <span class="stat-country-flag" aria-hidden="true">${escapeHtmlValue(entree.flag || "🌐")}</span>
-      <span class="stat-country-name">${escapeHtmlValue(entree.unknown
-        ? t("js.langueNonRenseignee")
-        : nomDeLangue(entree.code, entree.language))}</span>
-      <span class="stat-country-count">${formatNombreFr(entree.members)}</span>
-    </span>`).join("");
+  // seulement les noms de pays et de langues dans la nouvelle langue.
+  peindreStatsPubliques(derniersStatsPubliques);
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -4909,4 +4990,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initPublicStats();
   resoudreLogosPartenaires();
   initDashboard();
+  remplirSelecteurPays();
 });
