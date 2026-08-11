@@ -232,7 +232,22 @@
   </header>
 
   <main class="dashboard-shell">
-    <aside class="dashboard-sidebar" aria-label="Navigation dashboard" data-i18n-aria="dash.navigationDashboard">
+    <!-- Ouvre la navigation sur petit ecran. Invisible au-dela : la barre
+         laterale y est deja affichee en entier. -->
+    <button class="sidebar-toggle" type="button" data-sidebar-toggle
+            aria-expanded="false" aria-controls="dashboard-menu">
+      <span class="sidebar-toggle-burger" aria-hidden="true">☰</span>
+      <span class="sidebar-toggle-label">
+        <small data-i18n="dash.menuSection">Section</small>
+        <strong data-sidebar-current data-i18n="dash.navVueGlobale">Vue globale</strong>
+      </span>
+      <svg class="sidebar-toggle-chevron" viewBox="0 0 12 8" aria-hidden="true">
+        <path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <aside class="dashboard-sidebar" id="dashboard-menu" aria-label="Navigation dashboard" data-i18n-aria="dash.navigationDashboard">
       <p class="sidebar-label" data-i18n="dash.pilotage">Pilotage</p>
       <button class="dash-nav is-active" type="button" data-dashboard-tab="overview" data-i18n="dash.navVueGlobale"><span aria-hidden="true">📊</span>Vue globale</button>
 
@@ -811,9 +826,20 @@
               <label class="mini-form"><span data-i18n="welcome.color">Couleur de l'embed</span>
                 <input type="color" data-welcome-color value="#5865F2">
               </label>
-              <label class="mini-form"><span data-i18n="welcome.image">Image (URL)</span>
-                <input type="url" data-welcome-image placeholder="https://…">
-              </label>
+              <div class="mini-form image-picker">
+                <span data-i18n="welcome.image">Image de la carte</span>
+                <!-- Le fichier ne part jamais tel quel : il est redimensionne
+                     et recompresse dans le navigateur, puis range en data:
+                     avec le reste des reglages. -->
+                <input type="file" accept="image/*" data-welcome-image-file hidden>
+                <input type="hidden" data-welcome-image>
+                <div class="image-picker-actions">
+                  <button class="secondary-btn compact" type="button" data-welcome-image-pick data-i18n="welcome.imageChoisir">🖼️ Choisir une image</button>
+                  <button class="secondary-btn compact" type="button" data-welcome-image-clear hidden data-i18n="welcome.imageRetirer">Retirer</button>
+                </div>
+                <img class="image-picker-preview" data-welcome-image-preview alt="" hidden>
+                <small class="field-help" data-i18n="welcome.imageAide">Depuis ton téléphone ou ton ordinateur. L'image est réduite automatiquement.</small>
+              </div>
               <label class="mini-form"><span data-i18n="welcome.buttonLabel">Texte du bouton</span>
                 <input type="text" data-welcome-button-label maxlength="80" placeholder="Lire les règles" data-i18n-placeholder="dash.lireLesRegles">
               </label>

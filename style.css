@@ -5214,26 +5214,97 @@ main,
   .log-entry header time { margin-left: 0; width: 100%; }
 }
 
+/* ── Bouton d'ouverture de la navigation dashboard ────────────────── */
+/* Masqué par défaut : au-dessus de 760 px la barre latérale est déjà
+   entièrement visible, un bouton n'y ajouterait rien. La règle qui
+   l'affiche vit dans la media query, avec le reste du menu déroulant. */
+.sidebar-toggle {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  margin-bottom: 8px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(11, 7, 24, 0.76);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sidebar-toggle-burger {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.sidebar-toggle-label {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.sidebar-toggle-label small {
+  color: var(--muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sidebar-toggle-label strong {
+  overflow: hidden;
+  font-size: 0.94rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-toggle-chevron {
+  width: 12px;
+  flex: 0 0 auto;
+  transition: transform 0.2s ease;
+}
+
+.sidebar-toggle[aria-expanded="true"] .sidebar-toggle-chevron {
+  transform: rotate(180deg);
+}
+
 @media (max-width: 760px) {
-  /* La barre latérale devient un ruban horizontal défilable */
+  /* La barre latérale devient un menu déroulant.
+     Avant : un ruban horizontal défilable. Treize entrées y tenaient sur
+     près de trois écrans de large, les intitulés de groupe étaient masqués,
+     et rien n'annonçait qu'il fallait faire défiler — le menu passait
+     simplement pour absent. */
+  .sidebar-toggle { display: flex; }
+
   .dashboard-sidebar {
-    display: flex;
-    overflow-x: auto;
-    overflow-y: hidden;
-    gap: 8px;
-    padding: 10px;
-    scroll-snap-type: x proximity;
-    -webkit-overflow-scrolling: touch;
+    display: none;
+    position: static;      /* le sticky n'a plus de sens hors colonne */
+    height: auto;
+    min-height: 0;
+    max-height: min(68vh, 560px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 12px;
+    margin-bottom: 4px;
   }
-  .dashboard-sidebar .sidebar-label { display: none; }
+  .dashboard-sidebar.is-open { display: block; }
+
+  /* Les intitulés de groupe reviennent : c'est ce qui rend une liste de
+     treize entrées lisible d'un coup d'œil. */
+  .dashboard-sidebar .sidebar-label { display: block; }
+  .dashboard-sidebar .sidebar-label:first-child { margin-top: 0; }
+
   .dash-nav {
-    flex: 0 0 auto;
-    width: auto;
-    margin: 0;
-    padding: 0 14px 0 8px;
-    grid-template-columns: auto auto;
-    scroll-snap-align: start;
-    white-space: nowrap;
+    width: 100%;
+    margin: 0 0 2px;
+    padding: 0 12px;
+    grid-template-columns: 28px minmax(0, 1fr);
+    white-space: normal;
   }
 
   .sanction-step {
@@ -7849,4 +7920,32 @@ label,
     left: 14px;
     right: 78px;
   }
+}
+
+/* ── Selecteur d'image (bienvenue) ─────────────────────────────────── */
+/* Le champ fichier natif est masque : son rendu varie selon les
+   navigateurs et ne se style pas. Le bouton visible le declenche. */
+.image-picker {
+  gap: 8px;
+}
+
+.image-picker-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.image-picker-preview {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1000 / 380;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.image-picker-preview[hidden] {
+  display: none;
 }

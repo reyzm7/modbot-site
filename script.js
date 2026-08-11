@@ -2943,7 +2943,9 @@ function initDashboard() {
 
     const url = readValue("[data-welcome-image]");
     if (image) {
-      const valide = /^https?:\/\//.test(url);
+      // data: compte comme valide : c'est desormais la forme normale d'une
+      // image choisie depuis la galerie.
+      const valide = /^(https?:\/\/|data:image\/)/.test(url);
       image.hidden = !valide || !embedOn;
       if (valide) image.src = url;
     }
@@ -3002,7 +3004,12 @@ function initDashboard() {
     setValue("[data-welcome-departure-message]", welcome.departure_message || "");
     setValue("[data-welcome-dm-message]", welcome.dm_message || "");
     setValue("[data-welcome-color]", welcome.embed_color || "#5865F2");
-    setValue("[data-welcome-image]", welcome.image || "");
+    // `background` est l'image de la carte, celle que le bot dessine. On
+    // retombe sur l'ancien `image` pour les serveurs configures avant le
+    // selecteur de fichier, sinon leur reglage disparaitrait de l'ecran.
+    const imageCarte = welcome.background || welcome.image || "";
+    setValue("[data-welcome-image]", imageCarte);
+    majApercuImage(imageCarte);
     setValue("[data-welcome-button-label]", welcome.button_label || "");
     setValue("[data-welcome-button-url]", welcome.button_url || "");
     renderWelcomePreview();
@@ -3021,7 +3028,12 @@ function initDashboard() {
       departure_message: readValue("[data-welcome-departure-message]"),
       dm_message: readValue("[data-welcome-dm-message]"),
       embed_color: readValue("[data-welcome-color]"),
-      image: readValue("[data-welcome-image]"),
+      // Envoye comme `background` : c'est la cle que lit le dessinateur de
+      // carte. `image` n'est pas transmis, et sanitize_welcome_system() repart
+      // des valeurs par defaut — l'ancienne URL est donc remise a vide. C'est
+      // voulu : le selecteur de fichier remplace le champ URL, une seule
+      // source pour l'image evite qu'un ancien lien ressorte tout seul.
+      background: readValue("[data-welcome-image]"),
       button_label: readValue("[data-welcome-button-label]"),
       button_url: readValue("[data-welcome-button-url]")
     };
@@ -3051,9 +3063,113 @@ function initDashboard() {
     }
   }
 
+  /* Taille maximale du data: stocké en configuration. Le bot accepte
+     400 000 caractères ; on garde une marge pour le reste des réglages. */
+  const IMAGE_MAX_CARACTERES = 360000;
+  /* Dimensions de la carte dessinée par le bot : inutile de conserver
+     davantage de pixels, ils seraient jetés au rendu. */
+  const IMAGE_LARGEUR = 1000;
+  const IMAGE_HAUTEUR = 380;
+
+  /**
+   * Réduit une image choisie par l'utilisateur et la rend en data: URI.
+   *
+   * Une photo de téléphone pèse plusieurs mégaoctets — impossible à ranger
+   * dans la configuration. On la recadre aux dimensions de la carte, puis on
+   * baisse la qualité JPEG par paliers jusqu'à passer sous la limite. C'est
+   * fait dans le navigateur : rien de lourd ne transite par le bot.
+   */
+  async function reduireImage(fichier) {
+    const source = await new Promise((resoudre, rejeter) => {
+      const lecteur = new FileReader();
+      lecteur.onload = () => resoudre(lecteur.result);
+      lecteur.onerror = () => rejeter(new Error("lecture"));
+      lecteur.readAsDataURL(fichier);
+    });
+    const image = await new Promise((resoudre, rejeter) => {
+      const img = new Image();
+      img.onload = () => resoudre(img);
+      img.onerror = () => rejeter(new Error("decodage"));
+      img.src = source;
+    });
+
+    const toile = document.createElement("canvas");
+    toile.width = IMAGE_LARGEUR;
+    toile.height = IMAGE_HAUTEUR;
+    const ctx = toile.getContext("2d");
+    // Recadrage « cover » : on remplit la carte sans déformer l'image.
+    const echelle = Math.max(IMAGE_LARGEUR / image.width, IMAGE_HAUTEUR / image.height);
+    const l = image.width * echelle;
+    const h = image.height * echelle;
+    ctx.drawImage(image, (IMAGE_LARGEUR - l) / 2, (IMAGE_HAUTEUR - h) / 2, l, h);
+
+    for (const qualite of [0.85, 0.72, 0.6, 0.48, 0.36]) {
+      const rendu = toile.toDataURL("image/jpeg", qualite);
+      if (rendu.length <= IMAGE_MAX_CARACTERES) return rendu;
+    }
+    return null;
+  }
+
+  function majApercuImage(valeur) {
+    const apercu = document.querySelector("[data-welcome-image-preview]");
+    const retirer = document.querySelector("[data-welcome-image-clear]");
+    if (apercu) {
+      apercu.hidden = !valeur;
+      if (valeur) apercu.src = valeur;
+      else apercu.removeAttribute("src");
+    }
+    if (retirer) retirer.hidden = !valeur;
+  }
+
+  function initSelecteurImage() {
+    const champ = document.querySelector("[data-welcome-image]");
+    const fichier = document.querySelector("[data-welcome-image-file]");
+    if (!champ || !fichier) return;
+
+    document.querySelector("[data-welcome-image-pick]")
+      ?.addEventListener("click", () => fichier.click());
+
+    fichier.addEventListener("change", async () => {
+      const choisi = fichier.files?.[0];
+      if (!choisi) return;
+      if (!choisi.type.startsWith("image/")) {
+        showToast(t("js.image.pasUneImage"));
+        fichier.value = "";
+        return;
+      }
+      showToast(t("js.image.traitement"));
+      try {
+        const reduit = await reduireImage(choisi);
+        if (!reduit) {
+          showToast(t("js.image.tropLourde"));
+          return;
+        }
+        champ.value = reduit;
+        majApercuImage(reduit);
+        markPanelDirty("welcome");
+        renderWelcomePreview();
+        showToast(t("js.image.prete"));
+      } catch (error) {
+        showToast(t("js.image.illisible"));
+      } finally {
+        // Remis à zéro : sans cela, rechoisir le même fichier ne
+        // déclencherait aucun évènement `change`.
+        fichier.value = "";
+      }
+    });
+
+    document.querySelector("[data-welcome-image-clear]")?.addEventListener("click", () => {
+      champ.value = "";
+      majApercuImage("");
+      markPanelDirty("welcome");
+      renderWelcomePreview();
+    });
+  }
+
   function initWelcomePanel() {
     if (!document.querySelector("[data-dashboard-panel='welcome']")) return;
     renderWelcomeVariables();
+    initSelecteurImage();
 
     const champs = [
       "[data-welcome-title]", "[data-welcome-message]", "[data-welcome-color]",
@@ -4228,10 +4344,88 @@ function initDashboard() {
     action();
   }
 
+  /* ── Navigation repliable (petits ecrans) ─────────────────────────── */
+
+  const sidebarToggle = document.querySelector("[data-sidebar-toggle]");
+  const sidebarMenu = document.querySelector(".dashboard-sidebar");
+
+  function sidebarDeroulante() {
+    // La bascule n'est visible que sous 760 px ; au-dessus, la barre est
+    // toujours ouverte et « fermer » n'aurait aucun sens.
+    return !!sidebarToggle && getComputedStyle(sidebarToggle).display !== "none";
+  }
+
+  function ouvrirSidebar(ouvrir) {
+    if (!sidebarMenu || !sidebarToggle) return;
+    sidebarMenu.classList.toggle("is-open", ouvrir);
+    sidebarToggle.setAttribute("aria-expanded", ouvrir ? "true" : "false");
+    if (!ouvrir) {
+      sidebarMenu.style.maxHeight = "";
+      return;
+    }
+    // Hauteur calculee sur la place reellement disponible sous le bouton.
+    // Une valeur en vh ne suffit pas : la barre du haut se replie sur trois
+    // lignes en petit ecran, et le bas du menu finissait sous le pli — les
+    // dernieres sections devenaient inatteignables sans faire defiler deux
+    // fois, la page puis le menu.
+    if (sidebarDeroulante()) {
+      // Mesure prise sur le menu lui-meme, pas sur le bouton : la grille
+      // insere un ecart entre les deux, et partir du bouton laissait
+      // depasser le bas du menu d'exactement cet ecart.
+      const haut = sidebarMenu.getBoundingClientRect().top;
+      const place = Math.max(220, window.innerHeight - haut - 16);
+      sidebarMenu.style.maxHeight = `${place}px`;
+    }
+  }
+
+  function majLibelleSidebar(panelName) {
+    const cible = document.querySelector("[data-sidebar-current]");
+    const onglet = [...tabs].find((tab) => tab.dataset.dashboardTab === panelName);
+    if (!cible || !onglet) return;
+    // On passe par la clef, pas par le texte affiche de l'onglet : celui-ci
+    // commence par une emoji decorative (« 👋Bienvenue ») qui n'a rien a
+    // faire dans le libelle.
+    const clef = onglet.dataset.i18n
+      || onglet.querySelector("[data-i18n]")?.dataset.i18n;
+    if (!clef) return;
+    // La clef reste posee sur l'element : sans elle, changer de langue
+    // rendrait au libelle sa valeur d'origine (« Vue globale »).
+    cible.dataset.i18n = clef;
+    cible.textContent = t(clef, cible.textContent);
+  }
+
+  sidebarToggle?.addEventListener("click", () => {
+    ouvrirSidebar(!sidebarMenu?.classList.contains("is-open"));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && sidebarMenu?.classList.contains("is-open")) {
+      ouvrirSidebar(false);
+      sidebarToggle?.focus();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!sidebarMenu?.classList.contains("is-open")) return;
+    if (sidebarMenu.contains(event.target) || sidebarToggle?.contains(event.target)) return;
+    ouvrirSidebar(false);
+  });
+
+  // Repasse en grand ecran alors que le menu etait ferme : sans ce
+  // nettoyage la classe resterait posee et la barre laterale reapparaitrait
+  // dans un etat incoherent au retour en petit ecran.
+  window.addEventListener("resize", () => {
+    if (!sidebarDeroulante()) ouvrirSidebar(false);
+  });
+
   function openPanel(panelName) {
     activePanelName = panelName;
     tabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.dashboardTab === panelName));
     panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.dashboardPanel === panelName));
+    majLibelleSidebar(panelName);
+    // Choisir une section referme le menu : le garder ouvert masquerait le
+    // panneau qu'on vient d'ouvrir.
+    if (sidebarDeroulante()) ouvrirSidebar(false);
     document.querySelector(".dashboard-content")?.scrollIntoView({ behavior: "smooth", block: "start" });
     // Ces panneaux interrogent Discord en direct : on ne charge qu'à l'ouverture.
     if (panelName === "search") runSearch();
