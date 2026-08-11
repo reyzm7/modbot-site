@@ -1869,10 +1869,17 @@ function initDashboard() {
     const base = getModbotApiBase();
     if (jeton && base) {
       try {
-        await fetch(`${base}/api/logout`, {
+        // Le bot expose /api/auth/logout, pas /api/logout : c'est la seule
+        // route qui invalide vraiment la session cote serveur.
+        const reponse = await fetch(`${base}/api/auth/logout`, {
           method: "POST",
           headers: { Authorization: `Bearer ${jeton}` },
         });
+        // fetch ne leve pas sur un 404 : sans ce controle, une mauvaise route
+        // laisserait le jeton vivant sur le bot sans que rien ne le signale.
+        if (!reponse.ok) {
+          console.warn(`ModBot : le bot a refuse la deconnexion (${reponse.status})`);
+        }
       } catch (error) {
         // Bot injoignable : la session locale part quand meme
       }
