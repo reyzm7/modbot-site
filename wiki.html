@@ -66,6 +66,9 @@
         <a href="#createur" data-i18n="wiki.creation">👤 Création</a>
         <a href="#offres" data-i18n="wiki.offres">💎 Offres</a>
         <a href="#dashboard" data-i18n="wiki.dashboard">📊 Dashboard</a>
+        <a href="#verification" data-i18n="wiki.verification">🔒 Vérification</a>
+        <a href="#bienvenue" data-i18n="wiki.bienvenueSommaire">👋 Bienvenue</a>
+        <a href="#compte" data-i18n="wiki.compteSommaire">🌍 Compte et langue</a>
         <a href="#commandes" data-i18n="wiki.commandes">⌨️ Commandes</a>
         <a href="#tickets" data-i18n="wiki.tickets">🎫 Tickets</a>
         <a href="#tournois" data-i18n="wiki.tournoisIfc">🏆 Tournois IFC</a>
@@ -98,15 +101,52 @@
 
         <section id="dashboard" class="wiki-section">
           <h2 data-i18n="wiki.modulesDuDashboard">📊 Modules du dashboard</h2>
+          <p data-i18n="wiki.dashboardTreizeSections">Le dashboard compte treize sections, regroupées par thème dans le menu de gauche. Sur téléphone, ce menu devient une liste déroulante qui affiche les treize entrées avec leurs intitulés de groupe.</p>
           <ul class="wiki-check-list">
-            <li data-i18n="wiki.vueGlobaleEtatDu">Vue globale : état du serveur et raccourcis de configuration.</li>
+            <li data-i18n="wiki.vueGlobaleEtatDu">Vue globale : état du serveur, membres, sanctions récentes et raccourcis.</li>
+            <li data-i18n="wiki.securiteProtectionsAntiSpam">Sécurité : anti-spam, anti-lien, anti-raid, anti-nuke, captcha et alertes staff.</li>
+            <li data-i18n="wiki.moderationSanctions">Modération : sanctions, avertissements, seuils automatiques et immunités.</li>
+            <li data-i18n="wiki.rechercheMembresRoles">Recherche : retrouver un membre ou un rôle, et agir dessus sans quitter la page.</li>
+            <li data-i18n="wiki.sauvegardesRestauration">Sauvegardes : copie des salons et rôles, puis restauration additive.</li>
+            <li data-i18n="wiki.logsHistorique">Logs : historique des actions du bot et du staff, filtrable.</li>
             <li data-i18n="wiki.ticketsMessagePublicOptions">Tickets : message public, options, emojis, salon, rôle support et publication.</li>
-            <li data-i18n="wiki.securiteProtectionsAntiSpam">Sécurité : protections, anti-spam, anti-lien, anti-raid et alertes.</li>
-            <li data-i18n="wiki.salonsIdsDesSalons">Salons : IDs des salons utilisés par les systèmes du bot.</li>
-            <li data-i18n="wiki.rolesReactionsEmojisRoles">Rôles réactions : emojis, rôles, labels et mode d’attribution.</li>
-            <li data-i18n="wiki.messagesRecurrentsNomSalon">Messages récurrents : nom, salon, intervalle, jours, contenu et options d’envoi.</li>
-            <li data-i18n="wiki.personnalisationLogoBanniereFooter">Personnalisation : logo, bannière, footer et couleur des embeds.</li>
-            <li data-i18n="wiki.reseauxRelaisAutomatiqueTwitter">Réseaux : relais automatique Twitter/X, TikTok, Twitch et Instagram à connecter au backend.</li>
+            <li data-i18n="wiki.bienvenueModule">Bienvenue : messages d’arrivée et de départ, message privé et carte illustrée.</li>
+            <li data-i18n="wiki.giveawaysModule">Giveaways : création, durée, nombre de gagnants, relance et tirage.</li>
+            <li data-i18n="wiki.ratingsModule">Ratings : notes laissées par les membres après un ticket.</li>
+            <li data-i18n="wiki.salonsIdsDesSalons">Salons : salons utilisés par les systèmes du bot, et rôles réactions.</li>
+            <li data-i18n="wiki.reseauxRelaisAutomatiqueTwitter">Réseaux : relais automatique Twitter/X, TikTok, Twitch et Instagram.</li>
+            <li data-i18n="wiki.langueModule">Langue : langue des messages du bot et pays du serveur.</li>
+          </ul>
+        </section>
+
+        <section id="verification" class="wiki-section">
+          <h2 data-i18n="wiki.verificationTitre">🔒 Vérification à l’arrivée</h2>
+          <p data-i18n="wiki.verificationTexte">Le captcha demande au nouveau membre de recopier un code affiché en image. Les lettres occupent la majeure partie de l’image : elles se lisent sur un téléphone sans zoomer, tout en restant déformées pour gêner un robot.</p>
+          <ul class="wiki-check-list">
+            <li data-i18n-html="wiki.captchaRole">Code validé, le membre reçoit automatiquement le rôle <strong>Verifier</strong> — ou celui que tu as choisi dans la section Sécurité.</li>
+            <li data-i18n="wiki.captchaRoleCree">Si le rôle n’existe pas encore, le bot le crée au premier usage : rien à préparer à la main.</li>
+            <li data-i18n="wiki.captchaDelai">Un délai d’expulsion facultatif écarte ceux qui ne se vérifient jamais.</li>
+          </ul>
+        </section>
+
+        <section id="bienvenue" class="wiki-section">
+          <h2 data-i18n="wiki.bienvenueTitre">👋 Arrivées et départs</h2>
+          <p data-i18n="wiki.bienvenueTexte">À chaque arrivée et à chaque départ, ModBot publie une carte : l’avatar du membre en rond, la phrase d’accueil et son numéro d’inscription. Le texte s’adapte à la longueur du pseudo au lieu d’être coupé.</p>
+          <ul class="wiki-check-list">
+            <li data-i18n="wiki.bienvenueImage">L’image de fond se choisit depuis la galerie du téléphone ou l’explorateur de l’ordinateur : aucune URL à coller. Elle est réduite automatiquement.</li>
+            <li data-i18n="wiki.bienvenueSalons">Salon d’arrivée et salon de départ peuvent être différents.</li>
+            <li data-i18n="wiki.bienvenueMp">Un message privé facultatif accueille le membre directement.</li>
+            <li data-i18n-html="wiki.bienvenueVariables">Les variables <code>{user}</code>, <code>{server}</code> et <code>{memberCount}</code> sont remplacées à l’envoi.</li>
+          </ul>
+        </section>
+
+        <section id="compte" class="wiki-section">
+          <h2 data-i18n="wiki.compteTitre">🌍 Compte Discord et langue</h2>
+          <p data-i18n="wiki.compteTexte">La pastille en haut du dashboard indique avec quel compte Discord tu es connecté. Son menu permet de changer de compte sans fermer la page — utile quand on gère des serveurs depuis deux comptes différents — ou de se déconnecter.</p>
+          <ul class="wiki-check-list">
+            <li data-i18n="wiki.compteChangement">« Changer de compte » prévient le bot, efface la session locale, puis rouvre l’écran de connexion Discord avec le sélecteur de comptes.</li>
+            <li data-i18n="wiki.langueSite">Le site et le dashboard existent en français, anglais et arabe. Le choix est retenu d’une visite à l’autre.</li>
+            <li data-i18n="wiki.languePays">La section Langue règle aussi la langue des messages du bot et le pays du serveur, affiché sur la carte publique de l’accueil.</li>
           </ul>
         </section>
 
@@ -121,9 +161,28 @@
             <article><code>/suggest</code><span data-i18n="wiki.envoieUneSuggestionAu">Envoie une suggestion au salon configuré.</span></article>
             <article><code>/patchnotes</code><span data-i18n="wiki.publieDesPatchNotes">Publie des patch notes dans le salon où la commande est faite.</span></article>
             <article><code>/annonce</code><span data-i18n="wiki.publieUneAnnonceDans">Publie une annonce dans le salon choisi par ID.</span></article>
+            <article><code>/warn</code><span data-i18n="wiki.cmdWarn">Avertit un membre ; les seuils configurés peuvent sanctionner seuls.</span></article>
+            <article><code>/reset-avert</code><span data-i18n="wiki.cmdResetAvert">Remet à zéro les avertissements d’un membre.</span></article>
+            <article><code>/avert-count</code><span data-i18n="wiki.cmdAvertCount">Affiche le nombre d’avertissements d’un membre.</span></article>
+            <article><code>/ban</code><span data-i18n="wiki.cmdBan">Bannit un membre, avec motif enregistré dans les logs.</span></article>
+            <article><code>/deban</code><span data-i18n="wiki.cmdDeban">Lève un bannissement.</span></article>
+            <article><code>/ban-list</code><span data-i18n="wiki.cmdBanList">Liste les membres bannis du serveur.</span></article>
+            <article><code>/infractions</code><span data-i18n="wiki.cmdInfractions">Historique des sanctions d’un membre.</span></article>
+            <article><code>/report</code><span data-i18n="wiki.cmdReport">Permet à un membre de signaler un abus au staff.</span></article>
+            <article><code>/serverstats</code><span data-i18n="wiki.cmdServerStats">Statistiques du serveur : membres, activité, sanctions.</span></article>
+            <article><code>/modstats</code><span data-i18n="wiki.cmdModStats">Activité de modération, par modérateur.</span></article>
+            <article><code>/insultes</code><span data-i18n="wiki.cmdInsultes">Gère la liste des mots filtrés.</span></article>
+            <article><code>/info-bot</code><span data-i18n="wiki.cmdInfoBot">État du bot : version, latence, serveurs protégés.</span></article>
             <article><code data-i18n="wiki.addchannel">!addchannel</code><span data-i18n="wiki.ajouteUnMembreUn">Ajoute un membre à un salon précis.</span></article>
             <article><code data-i18n="wiki.deletechannel">!deletechannel</code><span data-i18n="wiki.retireAccesUnMembre">Retire l’accès d’un membre à un salon précis.</span></article>
+            <article><code>/addticket</code><span data-i18n="wiki.cmdAddTicket">Ajoute un membre au ticket courant.</span></article>
+            <article><code>/infractions-reset</code><span data-i18n="wiki.cmdInfractionsReset">Efface l’historique des sanctions d’un membre.</span></article>
+            <article><code>/profilestats</code><span data-i18n="wiki.cmdProfileStats">Statistiques d’activité d’un membre.</span></article>
+            <article><code>/massdm</code><span data-i18n="wiki.cmdMassDm">Envoie un message privé à un groupe de membres, réservé aux administrateurs.</span></article>
+            <article><code>!addroles</code><span data-i18n="wiki.cmdAddRoles">Donne un rôle à un membre depuis le salon.</span></article>
+            <article><code>!deleteroles</code><span data-i18n="wiki.cmdDeleteRoles">Retire un rôle à un membre depuis le salon.</span></article>
           </div>
+          <p class="field-help" data-i18n="wiki.commandesPermissions">Les commandes de modération sont réservées au staff : Discord n’affiche à chacun que celles qu’il a le droit d’utiliser.</p>
         </section>
 
         <section id="tickets" class="wiki-section">
@@ -134,6 +193,7 @@
         <section id="tournois" class="wiki-section">
           <h2 data-i18n="wiki.tournoisIfc2">🏆 Tournois IFC</h2>
           <p data-i18n="wiki.leModuleTournoiEa">Le module tournoi EA FC 26 Club Pro reste en attente tant que l’API IFC n’est pas disponible. Quand elle sera prête, le bot utilisera le nom exact du tournoi IFC pour récupérer participants, logos, wins, buts, classements, poules et affiches.</p>
+          <p class="field-help" data-i18n="wiki.tournoisPasEncore">⚠️ Les commandes ci-dessous ne sont pas encore disponibles : elles décrivent ce qui est prévu. Les taper dans Discord ne donnera rien pour l'instant.</p>
           <div class="command-doc-grid">
             <article><code>/poules</code><span data-i18n="wiki.afficheLesPoulesDepuis">Affiche les poules depuis IFC.</span></article>
             <article><code>/huitieme</code><span data-i18n="wiki.afficheLesHuitiemesDepuis">Affiche les huitièmes depuis IFC.</span></article>

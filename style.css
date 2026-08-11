@@ -7168,11 +7168,24 @@ label,
 .account-menu button.is-danger:hover { background: rgba(240, 71, 71, 0.14); color: #ff8a8a; }
 
 @media (max-width: 900px) {
-  /* Sur mobile la barre est deja chargee : le libelle disparait, l'avatar
-     et le chevron suffisent a retrouver le menu. */
+  /* Le libelle disparait la ou la place manque vraiment. Dans la barre du
+     dashboard il revient (voir plus bas) : la pastille y a sa propre ligne,
+     et un avatar seul dans une bande vide ne dit pas a qui on est connecte. */
   .account-label { display: none; }
   .account-trigger { padding: 6px; }
   .account-menu { width: min(268px, calc(100vw - 32px)); }
+}
+
+/* Barre du dashboard : le compte partage la ligne du logo, il y a la place
+   d'annoncer qui est connecte. En dessous de 360 px on repasse a l'avatar
+   seul, le pseudo n'aurait plus que quelques pixels. */
+@media (min-width: 360px) and (max-width: 900px) {
+  .dashboard-topbar .account-label { display: grid; }
+  .dashboard-topbar .account-trigger { padding: 5px 10px 5px 5px; }
+  /* Le pseudo seul : « Connecte en tant que » prend deux fois sa largeur
+     pour ne rien apprendre que le pseudo ne dise deja. */
+  .dashboard-topbar .account-label small { display: none; }
+  .dashboard-topbar .account-label strong { max-width: 34vw; font-size: 0.9rem; }
 }
 
 /* Intitule de chaque repartition : « Par pays », « Par langue ». */
@@ -7948,4 +7961,62 @@ label,
 
 .image-picker-preview[hidden] {
   display: none;
+}
+
+/* ── Barre du haut du dashboard, écrans réduits ───────────────────── */
+/* Sous 1120 px la barre passait en grille d'une seule colonne : ses trois
+   blocs s'empilaient alors sur toute la largeur, 184 px de haut, et sur
+   téléphone `.dashboard-actions` était renvoyée seule sur une ligne — la
+   pastille du compte se retrouvait isolée tout à droite avec une large
+   bande noire vide entre le logo et elle. `flex-wrap` était bien déclaré,
+   mais sur un conteneur grille, où il ne s'applique pas.
+
+   `display: contents` fait disparaître la boîte de `.dashboard-actions`
+   sans toucher au HTML : ses enfants deviennent des éléments flexibles de
+   la barre elle-même, et peuvent donc être ordonnés librement. */
+@media (max-width: 1120px) {
+  .dashboard-topbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+  }
+
+  .dashboard-actions { display: contents; }
+
+  /* Ligne 1 : le logo pousse la pastille du compte contre le bord droit. */
+  .dashboard-topbar .brand { order: 1; flex: 1 1 auto; }
+  .dashboard-topbar .account-switch { order: 2; flex: 0 0 auto; }
+
+  /* Puis le serveur, la langue et les deux boutons, qui se replient
+     d'eux-memes selon la place. */
+  .dashboard-topbar .server-switcher { order: 3; flex: 1 1 260px; min-width: 0; }
+  /* `width: auto` : avec flex-basis auto, c'est la largeur declaree qui
+     sert de base, et le selecteur de langue est a 100 % sur ces
+     ecrans — il occupait donc une ligne entiere pour lui seul. */
+  .dashboard-topbar .language-switch {
+    order: 4;
+    flex: 0 1 auto;
+    width: auto;
+    min-width: 0;
+  }
+  .dashboard-topbar [data-dashboard-save] { order: 5; flex: 0 1 auto; }
+  .dashboard-topbar .primary-btn { order: 6; flex: 0 1 auto; }
+}
+
+/* Téléphone : le serveur prend sa propre ligne, la langue occupe la place
+   restante à côté des deux boutons. */
+@media (max-width: 760px) {
+  .dashboard-topbar .server-switcher { flex: 1 1 100%; }
+  .dashboard-topbar .language-switch { flex: 1 1 130px; }
+  .dashboard-topbar .language-switch select { width: 100%; min-width: 0; }
+}
+
+/* Sous 430 px, les deux boutons prennent chacun la moitié d'une ligne :
+   côte à côte avec la langue, leurs libellés se tronquaient. */
+@media (max-width: 430px) {
+  .dashboard-topbar .language-switch { flex: 1 1 100%; }
+  .dashboard-topbar [data-dashboard-save],
+  .dashboard-topbar .primary-btn { flex: 1 1 0; }
 }
