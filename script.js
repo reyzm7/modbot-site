@@ -4709,25 +4709,6 @@ function animerCompteur(element, cible) {
   setTimeout(() => { element.textContent = valeurFinale; }, duree + 150);
 }
 
-/**
- * Nom d'une langue dans la langue du visiteur.
- *
- * Le bot renvoie le code ISO et un nom français de repli : le navigateur sait
- * traduire « de » en « German » ou « الألمانية » sans que le site embarque une
- * table de 40 langues fois 3.
- */
-function nomDeLangue(code, repli) {
-  if (!code) return repli;
-  try {
-    const noms = new Intl.DisplayNames([getSiteLanguage()], { type: "language" });
-    const nom = noms.of(code);
-    if (nom && nom.toLowerCase() !== code.toLowerCase()) return nom;
-  } catch (error) {
-    // Intl.DisplayNames absent : le repli français fait l'affaire
-  }
-  return repli;
-}
-
 /*
  * Codes ISO-3166 alpha-2. Seuls les codes sont embarqués : le nom du pays
  * est produit par le navigateur dans la langue du visiteur, et le drapeau
@@ -4784,9 +4765,7 @@ function rendreRepartition(liste, entrees, nommer) {
   return true;
 }
 
-const nommerPays = (e) => e.unknown ? t("js.paysNonRenseigne") : nomDePays(e.code);
-const nommerLangue = (e) => e.unknown ? t("js.langueNonRenseignee")
-                                      : nomDeLangue(e.code, e.language);
+const nommerPays = (e) => nomDePays(e.code);
 
 /** Peint les deux répartitions et le résumé à partir des chiffres reçus. */
 function peindreStatsPubliques(stats) {
@@ -4797,19 +4776,10 @@ function peindreStatsPubliques(stats) {
                             { membres: formatNombreFr(stats.members_protected),
                               serveurs: formatNombreFr(stats.servers) });
   }
-  const paires = [
-    ["[data-stat-country-list]", "[data-stat-countries-title]", stats.top_countries, nommerPays],
-    ["[data-stat-language-list]", "[data-stat-languages-title]", stats.top_languages, nommerLangue],
-  ];
-  let quelqueChose = false;
-  paires.forEach(([selListe, selTitre, entrees, nommer]) => {
-    const rempli = rendreRepartition(document.querySelector(selListe), entrees, nommer);
-    const titre = document.querySelector(selTitre);
-    if (titre) titre.hidden = !rempli;
-    quelqueChose = quelqueChose || rempli;
-  });
+  const rempli = rendreRepartition(document.querySelector("[data-stat-country-list]"),
+                                   stats.top_countries, nommerPays);
   const note = document.querySelector("[data-stat-note]");
-  if (note) note.hidden = !quelqueChose;
+  if (note) note.hidden = !rempli;
 }
 
 /**
@@ -4926,7 +4896,6 @@ async function initPublicStats() {
 
   const membres = section.querySelector("[data-stat-members]");
   const serveurs = section.querySelector("[data-stat-servers]");
-  const langues = section.querySelector("[data-stat-languages]");
   const pays = section.querySelector("[data-stat-countries]");
   const resume = section.querySelector("[data-stat-summary]");
 
@@ -4945,7 +4914,6 @@ async function initPublicStats() {
 
     animerCompteur(membres, stats.members_protected);
     animerCompteur(serveurs, stats.servers);
-    if (langues) langues.textContent = formatNombreFr(stats.languages);
     if (pays) pays.textContent = formatNombreFr(stats.countries);
     peindreStatsPubliques(stats);
   } catch (error) {
@@ -4954,7 +4922,7 @@ async function initPublicStats() {
     console.warn("Statistiques publiques indisponibles :", error?.message || error);
     section.classList.add("stats-offline");
     if (resume) resume.textContent = t("js.chiffresIndisponibles");
-    [membres, serveurs, langues, pays].forEach((el) => {
+    [membres, serveurs, pays].forEach((el) => {
       if (el && el.textContent === "—") el.textContent = "·";
     });
   }

@@ -54,10 +54,7 @@ window.MODBOT_TRANSLATIONS = {
     "stats.loading": "Chiffres en direct depuis ModBot…",
     "stats.servers": "Serveurs protégés",
     "stats.countries": "Pays représentés",
-    "stats.languages": "Langues représentées",
     "stats.protection": "Protection active",
-    "stats.byCountry": "Par pays",
-    "stats.byLanguage": "Par langue",
     "stats.note": "Répartition d'après la langue choisie sur chaque serveur. Discord ne communique pas le pays d'un serveur : les serveurs sans langue définie restent « Non renseigné ».",
     "features.eyebrow": "Fonctionnalités",
     "features.title": "Tout ce qu’il faut pour tenir un serveur propre.",
@@ -1034,8 +1031,6 @@ window.MODBOT_TRANSLATIONS = {
     "js.repartisUnServeur": "{membres} membres répartis sur {serveurs} serveur Discord.",
     "js.repartisDesServeurs": "{membres} membres répartis sur {serveurs} serveurs Discord.",
     "js.chiffresIndisponibles": "Chiffres momentanément indisponibles.",
-    "js.langueNonRenseignee": "Non renseigné",
-    "js.paysNonRenseigne": "Non renseigné",
   },
   en: {
     // ── Page d'accueil ────────────────────────────────────────────
@@ -1071,10 +1066,7 @@ window.MODBOT_TRANSLATIONS = {
     "stats.loading": "Live figures from ModBot…",
     "stats.servers": "Protected servers",
     "stats.countries": "Countries represented",
-    "stats.languages": "Languages represented",
     "stats.protection": "Active protection",
-    "stats.byCountry": "By country",
-    "stats.byLanguage": "By language",
     "stats.note": "Breakdown by the language chosen on each server. Discord does not expose a server's country: servers with no language set stay \"Unspecified\".",
     "features.eyebrow": "Features",
     "features.title": "Everything needed to keep a server clean.",
@@ -2051,8 +2043,6 @@ window.MODBOT_TRANSLATIONS = {
     "js.repartisUnServeur": "{membres} members across {serveurs} Discord server.",
     "js.repartisDesServeurs": "{membres} members across {serveurs} Discord servers.",
     "js.chiffresIndisponibles": "Figures temporarily unavailable.",
-    "js.langueNonRenseignee": "Not specified",
-    "js.paysNonRenseigne": "Not specified",
   },
   ar: {
     // ── Page d'accueil ────────────────────────────────────────────
@@ -2088,10 +2078,7 @@ window.MODBOT_TRANSLATIONS = {
     "stats.loading": "أرقام مباشرة من ModBot…",
     "stats.servers": "خوادم محمية",
     "stats.countries": "البلدان الممثَّلة",
-    "stats.languages": "اللغات الممثلة",
     "stats.protection": "حماية نشطة",
-    "stats.byCountry": "حسب البلد",
-    "stats.byLanguage": "حسب اللغة",
     "stats.note": "التوزيع حسب اللغة المختارة في كل خادم. ديسكورد لا يوفّر بلد الخادم: الخوادم بلا لغة محددة تبقى «غير محددة».",
     "features.eyebrow": "الميزات",
     "features.title": "كل ما تحتاجه للحفاظ على خادم منظم.",
@@ -3068,7 +3055,5 @@ window.MODBOT_TRANSLATIONS = {
     "js.repartisUnServeur": "{membres} عضوًا موزّعين على {serveurs} خادم ديسكورد.",
     "js.repartisDesServeurs": "{membres} عضوًا موزّعين على {serveurs} خادم ديسكورد.",
     "js.chiffresIndisponibles": "الأرقام غير متاحة مؤقتًا.",
-    "js.langueNonRenseignee": "غير محدَّد",
-    "js.paysNonRenseigne": "غير محدَّد",
   }
 };
