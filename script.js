@@ -428,7 +428,9 @@ function initNavigation() {
 
   // Repasser en grand écran doit remettre la page dans un état sain :
   // sans cela, le verrou de défilement resterait actif.
-  const grandEcran = window.matchMedia("(min-width: 901px)");
+  // Le seuil suit celui du CSS (le tiroir s'arrête à 980px) : les deux
+  // désaccordés, le menu se fermait tout seul entre 901 et 980 px.
+  const grandEcran = window.matchMedia("(min-width: 981px)");
   const surChangement = (event) => { if (event.matches) setMenuOpen(false); };
   if (grandEcran.addEventListener) grandEcran.addEventListener("change", surChangement);
   else grandEcran.addListener(surChangement);

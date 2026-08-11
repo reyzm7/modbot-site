@@ -1875,37 +1875,8 @@ h1 {
 }
 
 @media (max-width: 980px) {
-  .nav-toggle {
-    display: block;
-  }
-
   .navbar {
     border-radius: 24px;
-  }
-
-  .nav-links {
-    position: absolute;
-    top: calc(100% + 10px);
-    left: 20px;
-    right: 20px;
-    padding: 18px;
-    display: none;
-    flex-direction: column;
-    align-items: stretch;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    background: rgba(8, 5, 18, 0.94);
-    box-shadow: var(--shadow);
-  }
-
-  .nav-links.is-open {
-    display: flex;
-  }
-
-  .nav-links a {
-    min-height: 42px;
-    display: flex;
-    align-items: center;
   }
 
   .language-switch {
@@ -5565,6 +5536,16 @@ p { color: var(--soft); }
 }
 .nav-links a:hover { color: var(--text); }
 
+/*
+ * Le bouton d'appel principal garde son texte blanc.
+ *
+ * `.nav-links a` (specificite 0-1-1) l'emportait sur `.nav-cta` (0-1-0) et
+ * lui imposait le gris des liens : le libelle tombait a 1,5:1 de contraste
+ * sur le violet sature, soit trois fois moins que le minimum lisible. Le
+ * defaut valait pour l'ordinateur comme pour le tiroir mobile.
+ */
+.nav-links a.nav-cta { color: #fff; }
+
 /* ── Section héro ─────────────────────────────────────────────────── */
 
 .hero {
@@ -7569,14 +7550,41 @@ label,
   transform: translateY(-6px);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 980px) {
   .nav-toggle { display: block; }
+
+  /*
+   * L'en-tete doit cesser d'etre un piege pour le tiroir qu'il contient.
+   *
+   * `backdrop-filter` (comme `transform`) fait d'un element le bloc
+   * conteneur de ses descendants `position: fixed` : `bottom: 0` valait
+   * alors le bas de l'en-tete, et le tiroir mesurait 114 px de haut au
+   * lieu de toute la hauteur de l'ecran.
+   *
+   * Le meme attribut, avec `position: sticky`, cree aussi un contexte
+   * d'empilement : le `z-index: 101` du tiroir restait enferme sous le
+   * `z-index: 50` de l'en-tete, donc sous le voile (100) et son flou.
+   * C'est ce qui rendait le menu flou une fois ouvert.
+   *
+   * Le fond de l'en-tete est deja opaque a 85 % : perdre le flou sur
+   * mobile ne se voit pratiquement pas, et c'est le prix d'un menu qui
+   * fonctionne.
+   */
+  .site-header {
+    backdrop-filter: none;
+    animation: none;
+    transform: none;
+    z-index: 120;
+  }
 
   .nav-links {
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
+    /* Explicite : sans cela une regle plus ancienne pourrait de nouveau
+       ancrer le tiroir a gauche, ce qui annule `right`. */
+    left: auto;
     z-index: 101;
     display: flex;
     flex-direction: column;
@@ -7655,6 +7663,18 @@ label,
   }
 
   body.nav-open { overflow: hidden; }
+
+  /*
+   * Le tiroir ferme est pousse hors de l'ecran a droite. Un element
+   * `position: fixed` compte malgre tout dans la largeur defilable de la
+   * page : sans ce clip, on pouvait faire glisser tout le site vers la
+   * droite et decouvrir une bande vide de 320 px.
+   *
+   * `clip` et non `hidden` : `hidden` ferait de la racine un conteneur de
+   * defilement, ce qui casserait l'en-tete colle. `clip` se contente de
+   * couper, et reste compatible avec `overflow-y: visible`.
+   */
+  html { overflow-x: clip; }
 }
 
 @media (prefers-reduced-motion: reduce) {
