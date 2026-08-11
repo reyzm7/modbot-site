@@ -4722,6 +4722,86 @@ function nomDeLangue(code, repli) {
 
 let derniersStatsPubliques = null;
 
+/* ══════════════════════════════════════════════════════════════════
+   LOGOS DES PARTENAIRES
+   Une carte peut porter `data-partner-invite="<code>"` au lieu d'une
+   adresse d'image figée. Le navigateur du visiteur interroge alors
+   Discord pour obtenir le logo du serveur.
+   ══════════════════════════════════════════════════════════════════ */
+
+const PARTENAIRE_CACHE_MS = 24 * 60 * 60 * 1000;
+
+/** Lit le cache local d'une invitation, ou null s'il est absent ou périmé. */
+function partenaireEnCache(code) {
+  try {
+    const brut = localStorage.getItem(`modbot-partenaire-${code}`);
+    if (!brut) return null;
+    const garde = JSON.parse(brut);
+    return garde.expire > Date.now() ? garde : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+/**
+ * Complète les cartes partenaires dont le logo n'est pas connu.
+ *
+ * Construire l'adresse du CDN Discord exige l'identifiant du serveur ET
+ * le hash de son icône ; un lien d'invitation ne contient ni l'un ni
+ * l'autre. Seule l'API publique des invitations les donne, et elle n'est
+ * joignable que depuis un vrai navigateur.
+ *
+ * En cas d'échec — hors ligne, invitation expirée, requête refusée — la
+ * carte garde ses initiales sur dégradé. Rien ne casse, rien ne clignote.
+ */
+async function resoudreLogosPartenaires() {
+  const cartes = document.querySelectorAll("[data-partner-invite]");
+  if (!cartes.length) return;
+
+  await Promise.all([...cartes].map(async (carte) => {
+    const code = carte.dataset.partnerInvite;
+    const marque = carte.querySelector(".partner-mark");
+    if (!code || !marque || marque.querySelector("img")) return;
+
+    let infos = partenaireEnCache(code);
+    if (!infos) {
+      try {
+        const reponse = await fetch(
+          `https://discord.com/api/v10/invites/${encodeURIComponent(code)}?with_counts=true`,
+          { cache: "no-store", headers: { Accept: "application/json" } });
+        if (!reponse.ok) return;
+        const guilde = (await reponse.json())?.guild;
+        if (!guilde?.id || !guilde?.icon) return;
+        infos = { id: guilde.id, icon: guilde.icon, expire: Date.now() + PARTENAIRE_CACHE_MS };
+        try {
+          localStorage.setItem(`modbot-partenaire-${code}`, JSON.stringify(infos));
+        } catch (error) {
+          // Stockage plein ou refusé : on affiche quand même le logo
+        }
+      } catch (error) {
+        return;  // Discord injoignable : les initiales font l'affaire
+      }
+    }
+
+    // `.gif` pour les icônes animées, que Discord préfixe par « a_ »
+    const extension = infos.icon.startsWith("a_") ? "gif" : "png";
+    const image = new Image();
+    // Surtout pas `loading="lazy"` : l'image n'est pas encore dans le
+    // document, donc elle n'entre jamais dans le champ de vision et le
+    // navigateur diffère son chargement indéfiniment — alors qu'on
+    // attend justement `load` pour l'insérer. Les deux s'attendraient.
+    image.alt = "";
+    image.dataset.partnerLogo = "";
+    // On n'affiche l'image qu'une fois chargée : une adresse fausse ne
+    // doit jamais remplacer les initiales par un cadre vide.
+    image.addEventListener("load", () => {
+      marque.classList.remove("is-fallback");
+      marque.appendChild(image);
+    }, { once: true });
+    image.src = `https://cdn.discordapp.com/icons/${infos.id}/${infos.icon}.${extension}?size=128`;
+  }));
+}
+
 async function initPublicStats() {
   const section = document.querySelector("[data-live-stats]");
   if (!section) return;
@@ -4827,5 +4907,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initAssistant();
   initRevealAnimations();
   initPublicStats();
+  resoudreLogosPartenaires();
   initDashboard();
 });
