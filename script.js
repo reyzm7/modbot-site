@@ -4200,6 +4200,80 @@ function initDashboard() {
   document.querySelector("[data-logs-save]")?.addEventListener("click", saveGuildSecurity);
 
   document.querySelector("[data-backup-create]")?.addEventListener("click", createBackup);
+  /* ── Sauvegarde des réglages ───────────────────────────────────────
+     Distincte de la sauvegarde de structure juste à côté : celle-ci
+     emporte ce que ModBot a retenu du serveur — modules actifs, seuils,
+     textes — dans un fichier que tu gardes chez toi. */
+
+  async function exporterReglages() {
+    const guildId = selectedServer.id;
+    if (!guildId) return showToast(t("js.selectionneDabord"));
+    const base = getModbotApiBase();
+    if (!base) return showToast(t("js.auth.clientIdManquant"));
+    showToast(t("js.reglages.preparation"));
+    try {
+      const reponse = await fetch(`${base}/api/guilds/${guildId}/config/export`,
+                                  { headers: modbotAuthHeaders(), cache: "no-store" });
+      if (!reponse.ok) throw new Error(await reponse.text());
+      const blob = await reponse.blob();
+      // Le nom vient du serveur (Content-Disposition) ; on le reprend pour
+      // que le fichier porte la date et l'identifiant du serveur.
+      const entete = reponse.headers.get("Content-Disposition") || "";
+      const trouve = /filename="([^"]+)"/.exec(entete);
+      // Repli daté : si un proxy masque l'en-tête, le fichier reste
+      // reconnaissable au milieu d'un dossier de téléchargements.
+      const jour = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+      const lien = document.createElement("a");
+      lien.href = URL.createObjectURL(blob);
+      lien.download = trouve ? trouve[1] : `modbot-${guildId}-${jour}.json`;
+      document.body.appendChild(lien);
+      lien.click();
+      lien.remove();
+      URL.revokeObjectURL(lien.href);
+      showToast(t("js.reglages.telecharges"));
+    } catch (error) {
+      showToast(`⚠️ ${String(error?.message || error).slice(0, 120)}`);
+    }
+  }
+
+  async function importerReglages(fichier) {
+    const guildId = selectedServer.id;
+    if (!guildId) return showToast(t("js.selectionneDabord"));
+    let contenu;
+    try {
+      contenu = JSON.parse(await fichier.text());
+    } catch (error) {
+      return showToast(t("js.reglages.illisible"));
+    }
+    showToast(t("js.reglages.restauration"));
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/config/import`, {
+        method: "POST",
+        body: JSON.stringify(contenu),
+      });
+      // Le serveur dit s'il a dû écarter les salons et rôles d'origine.
+      showToast(data?.meme_serveur === false
+        ? t("js.reglages.restaureAutreServeur")
+        : t("js.reglages.restaure"));
+      if (data?.config) applyDashboardConfig(data.config);
+      clearUnsavedChanges();
+    } catch (error) {
+      showToast(`⚠️ ${String(error?.message || error).slice(0, 140)}`);
+    }
+  }
+
+  document.querySelector("[data-config-export]")?.addEventListener("click", exporterReglages);
+  document.querySelector("[data-config-import-pick]")?.addEventListener("click", () => {
+    document.querySelector("[data-config-import-file]")?.click();
+  });
+  document.querySelector("[data-config-import-file]")?.addEventListener("change", async (event) => {
+    const fichier = event.target.files?.[0];
+    if (fichier) await importerReglages(fichier);
+    // Remis a zero : sans cela, reprendre le meme fichier ne declencherait
+    // aucun evenement `change`.
+    event.target.value = "";
+  });
+
   document.querySelector("[data-backups-reload]")?.addEventListener("click", () => {
     loadGuildBackups(selectedServer.id);
     showToast(t("js.sauvegardesRechargees"));

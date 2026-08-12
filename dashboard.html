@@ -676,6 +676,17 @@
 
         <div class="dashboard-grid two">
           <div class="tool-panel">
+            <h3 data-i18n="dash.reglagesTitre">🧷 Sauvegarde des réglages</h3>
+            <p class="field-help" data-i18n="dash.reglagesAide">Les réglages de ModBot — modules actifs, seuils, textes, salons choisis. Télécharge-les pour en garder une copie hors du serveur, et remets-les en place quand tu veux.</p>
+            <div class="image-picker-actions">
+              <button class="primary-btn compact" type="button" data-config-export data-i18n="dash.reglagesExporter">⬇️ Télécharger mes réglages</button>
+              <button class="secondary-btn compact" type="button" data-config-import-pick data-i18n="dash.reglagesImporter">⬆️ Restaurer un fichier</button>
+            </div>
+            <input type="file" accept="application/json,.json" data-config-import-file hidden>
+            <p class="field-help" data-i18n="dash.reglagesNote">Un fichier venu d'un AUTRE serveur est accepté : les salons et rôles, qui n'existent que là-bas, sont alors ignorés.</p>
+          </div>
+
+          <div class="tool-panel">
             <h3 data-i18n="dash.sauvegardeAutomatique">⚙️ Sauvegarde automatique</h3>
             <p class="field-help" data-i18n="dash.modbotEnregistreRegulierementLa">ModBot enregistre régulièrement la structure du serveur : rôles, catégories, salons et permissions.</p>
             <label class="toggle-line compact">
