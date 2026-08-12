@@ -1151,7 +1151,12 @@ function initAdminZone() {
     protectedItems.forEach((item) => {
       item.hidden = false;
     });
-    if (adminStatus) adminStatus.innerHTML = `<span></span> ${escapeHtmlValue(t("js.adm.adminValide"))}`;
+    if (adminStatus) {
+      // La pastille passe au vert SEULEMENT ici : elle annoncait « Verrouille »
+      // sur fond vert, ce qui disait le contraire de son texte.
+      adminStatus.classList.remove("is-locked");
+      adminStatus.innerHTML = `<span></span> ${escapeHtmlValue(t("js.adm.adminValide"))}`;
+    }
     if (adminError) adminError.hidden = true;
     sessionStorage.setItem("modbot-admin-id", adminId);
     loadAdminStats();

@@ -922,7 +922,6 @@ h1 {
 .admin-sidebar-panel {
   position: sticky;
   top: 96px;
-  min-height: 520px;
   align-self: start;
   padding: 16px;
   border: 1px solid rgba(158, 110, 255, 0.24);
@@ -1022,7 +1021,7 @@ h1 {
 
 .admin-access-note {
   display: grid;
-  align-content: center;
+  align-content: start;
 }
 
 .admin-error {
@@ -8043,4 +8042,60 @@ label,
 .admin-topbar .dashboard-server > span:not(.server-dot),
 .admin-topbar .dashboard-server > strong {
   white-space: nowrap;
+}
+
+/* ── Espace d'administration : finitions ──────────────────────────── */
+/* Ces règles corrigent des vides et des signaux contradictoires : une
+   colonne réservait 520 px pour cinq entrées, une carte flottait au milieu
+   d'une boîte étirée, une pastille verte annonçait « Verrouillé ». */
+
+/* Les deux cartes de la porte d'entrée se calent en haut. Sans cela la
+   grille les étire à la même hauteur, et la plus courte donnait
+   l'impression d'un bloc vide avec du texte au milieu. */
+.admin-gate-grid {
+  align-items: start;
+}
+
+/* Une carte seule occupait une demi-largeur, laissant un trou à sa droite. */
+.admin-grid.two > :only-child {
+  grid-column: 1 / -1;
+}
+
+/* Note d'explication : à l'intérieur d'une carte, l'encadré et la largeur
+   centrée la faisaient passer pour un avertissement technique. */
+.admin-login-panel .oauth-note {
+  width: auto;
+  margin: 4px 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 0.82rem;
+}
+
+/* La pastille d'état était verte quel que soit l'état — y compris pour
+   annoncer que l'espace est verrouillé. */
+.health-pill.is-locked {
+  background: rgba(255, 196, 84, 0.14);
+  color: #ffdda6;
+}
+
+.health-pill.is-locked span {
+  background: #ffc454;
+}
+
+/* Tuiles de chiffres : un peu plus compactes, le chiffre et son libellé
+   étaient séparés par un vide qui les faisait paraître sans rapport. */
+.site-stat-grid div {
+  min-height: 88px;
+  gap: 6px;
+  align-content: center;
+}
+
+/* Sous 620 px, deux colonnes de chiffres deviennent illisibles. */
+@media (max-width: 620px) {
+  .site-stat-grid,
+  .admin-gate-grid,
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
 }
