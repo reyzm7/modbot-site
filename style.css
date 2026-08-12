@@ -8172,3 +8172,65 @@ label,
   color: var(--text);
   text-decoration: underline;
 }
+
+/* ── Barres du haut sur téléphone : lisibles et cliquables ────────── */
+/* Constat avant correction, mesuré à 390 px :
+     - la barre de l'admin ne faisait que 358 px de large (un retrait de
+       32 px pensé pour le bureau, qui ampute un écran déjà étroit) ;
+     - ses libellés tombaient à 13,6 px et ses boutons à 36 px de haut,
+       contre 16 px et 46 px ailleurs ;
+     - la pastille du compte du dashboard faisait 106 × 40 px, avec un
+       avatar de 28 px et un chevron de 10 × 7 px, alors que le sélecteur
+       de serveur juste en dessous fait 46 px de haut. */
+@media (max-width: 760px) {
+  /* La barre de l'admin prend toute la largeur, comme celle du dashboard. */
+  .admin-page .dashboard-topbar {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  /* Cibles tactiles : 44 px, la taille sous laquelle on rate le bouton.
+     Le logo en fait partie : c'est un lien vers l'accueil. */
+  .dashboard-topbar .brand {
+    min-height: 44px;
+  }
+
+  .dashboard-topbar .compact,
+  .dashboard-topbar .secondary-btn,
+  .dashboard-topbar .primary-btn {
+    min-height: 44px;
+    font-size: 0.95rem;
+  }
+
+  .dashboard-topbar .language-switch {
+    min-height: 44px;
+  }
+
+  .dashboard-topbar .language-switch select {
+    font-size: 0.95rem;
+  }
+
+  /* La pastille du compte se met au niveau de ce qui l'entoure. */
+  .dashboard-topbar .account-trigger {
+    min-height: 44px;
+    gap: 8px;
+  }
+
+  .dashboard-topbar .account-avatar {
+    width: 34px;
+    height: 34px;
+  }
+
+  .dashboard-topbar .account-label strong {
+    font-size: 0.95rem;
+  }
+
+  .dashboard-topbar .account-chevron {
+    width: 14px;
+  }
+
+  /* Le bandeau « Espace actif » de l'admin, meme traitement. */
+  .admin-topbar .dashboard-server {
+    min-height: 44px;
+  }
+}
