@@ -8099,3 +8099,57 @@ label,
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Tableaux des pages légales ───────────────────────────────────── */
+/* Un tableau à trois colonnes ne rétrécit pas indéfiniment : il défile
+   dans son propre cadre, pour que la PAGE, elle, ne défile jamais
+   horizontalement. */
+.table-scroll {
+  overflow-x: auto;
+  margin: 4px 0 8px;
+  border-radius: var(--radius);
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll table {
+  min-width: 520px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-scroll th,
+.table-scroll td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.9rem;
+}
+
+.table-scroll th {
+  color: var(--soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.table-scroll td { color: var(--muted); }
+.table-scroll tr:last-child td { border-bottom: 0; }
+
+/* Liens légaux du pied de page. */
+.footer-links {
+  margin-top: 6px;
+  font-size: 0.86rem;
+}
+
+.footer-links a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--text);
+  text-decoration: underline;
+}

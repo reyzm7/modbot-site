@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conditions d'utilisation — ModBot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
+       la connexion au dashboard est automatique, rien a saisir.
+       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
+  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
+  <meta name="modbot-discord-client-id" content="1510405235544424620">
+  <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
+  <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
+  <meta name="modbot-bot-permissions" content="3124257994829047">
+</head>
+<body class="wiki-page">
+  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
+  <div class="page-glow" aria-hidden="true"></div>
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navigation ModBot" data-i18n-aria="cgu.navigation">
+      <a class="brand" href="index.html" aria-label="Accueil ModBot" data-i18n-aria="cgu.accueilModbot">
+        <span class="brand-mark">
+          <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
+        </span>
+        <span>ModBot</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="cgu.ouvrirLeMenu">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#features" data-i18n="cgu.fonctionnalites">Fonctionnalités</a>
+        <a href="index.html#pricing" data-i18n="cgu.tarifs">Tarifs</a>
+        <a class="nav-action-btn nav-dashboard-btn" href="dashboard.html"><span>📊</span><span data-i18n="nav.dashboard">Dashboard</span></a>
+        <a class="nav-action-btn nav-admin-btn" href="admin.html"><span>🔐</span><span data-i18n="nav.admin">Admin</span></a>
+        <a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="cgu.supportDiscord">Support Discord</a>
+        <label class="language-switch" aria-label="Choisir la langue du site" data-i18n-aria="cgu.choisirLaLangue">
+          <span>🌍</span>
+          <select id="siteLanguage">
+            <option value="fr">Français</option>
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+          </select>
+        </label>
+      </div>
+    </nav>
+  </header>
+
+
+  <main class="wiki-shell section-shell">
+    <section class="wiki-hero">
+      <p class="eyebrow" data-i18n="cgu.eyebrow">📜 Conditions</p>
+      <h1 data-i18n="cgu.titre">Conditions d'utilisation</h1>
+      <p data-i18n="cgu.chapo">Les règles du service, en clair. Ajouter ModBot à un serveur vaut acceptation de ce qui suit.</p>
+      <p class="field-help" data-i18n="cgu.maj">Dernière mise à jour : 12 août 2026.</p>
+    </section>
+
+    <div class="wiki-layout">
+      <aside class="wiki-toc" aria-label="Sommaire" data-i18n-aria="cgu.sommaire">
+        <a href="#objet" data-i18n="cgu.tocObjet">🎯 Objet</a>
+        <a href="#acces" data-i18n="cgu.tocAcces">👤 Qui peut l'utiliser</a>
+        <a href="#gratuit" data-i18n="cgu.tocGratuit">💛 Gratuité et dons</a>
+        <a href="#permissions" data-i18n="cgu.tocPermissions">🔑 Permissions demandées</a>
+        <a href="#admin" data-i18n="cgu.tocAdmin">🛠️ Rôle de l'administrateur</a>
+        <a href="#interdits" data-i18n="cgu.tocInterdits">🚫 Usages interdits</a>
+        <a href="#dispo" data-i18n="cgu.tocDispo">📡 Disponibilité</a>
+        <a href="#suspension" data-i18n="cgu.tocSuspension">⛔ Suspension</a>
+        <a href="#responsabilite" data-i18n="cgu.tocResponsabilite">⚖️ Responsabilité</a>
+        <a href="#fin" data-i18n="cgu.tocFin">👋 Arrêter</a>
+      </aside>
+
+      <div class="wiki-content">
+        <section id="objet" class="wiki-section">
+          <h2 data-i18n="cgu.objetTitre">🎯 Objet</h2>
+          <p data-i18n="cgu.objetTexte">ModBot est un bot Discord de modération et d'animation de communauté, accompagné d'un site et d'un tableau de bord. Le service est fourni tel quel, gratuitement, par un particulier. Ces conditions encadrent son usage.</p>
+          <p data-i18n="cgu.objetDiscord">L'usage de ModBot passe par Discord : les conditions et les règles communautaires de Discord s'appliquent en plus de celles-ci, et priment en cas de contradiction.</p>
+        </section>
+
+        <section id="acces" class="wiki-section">
+          <h2 data-i18n="cgu.accesTitre">👤 Qui peut l'utiliser</h2>
+          <ul class="wiki-check-list">
+            <li data-i18n="cgu.acces1">Il faut avoir l'âge minimum exigé par Discord — 13 ans, davantage dans certains pays.</li>
+            <li data-i18n="cgu.acces2">Seule une personne disposant de la permission « Gérer le serveur » peut ajouter ModBot et le configurer.</li>
+            <li data-i18n="cgu.acces3">L'espace d'administration du site est réservé aux comptes explicitement autorisés par le propriétaire du bot.</li>
+          </ul>
+        </section>
+
+        <section id="gratuit" class="wiki-section">
+          <h2 data-i18n="cgu.gratuitTitre">💛 Gratuité et dons</h2>
+          <p data-i18n="cgu.gratuitTexte">Toutes les fonctionnalités sont accessibles sur tous les serveurs, sans limite de durée et sans contrepartie. Il n'existe ni offre payante, ni fonctionnalité réservée.</p>
+          <p data-i18n-html="cgu.gratuitDons">Les dons sont libres et servent à couvrir l'hébergement. <strong>Un don ne débloque rien</strong>, n'ouvre aucun droit particulier, et n'est pas remboursable : il n'achète pas un service, il soutient un projet.</p>
+        </section>
+
+        <section id="permissions" class="wiki-section">
+          <h2 data-i18n="cgu.permTitre">🔑 Ce que ModBot demande</h2>
+          <p data-i18n="cgu.permTexte">À l'installation, Discord affiche la liste des permissions demandées. Elles servent aux fonctions que tu actives : supprimer des messages pour l'automodération, gérer les rôles pour le captcha et les rôles-réactions, créer des salons pour les tickets, bannir ou exclure pour les sanctions.</p>
+          <p data-i18n="cgu.permReduire">Tu peux retirer une permission dans les réglages du serveur : les fonctions correspondantes cesseront simplement de marcher, sans casser le reste. ModBot n'utilise jamais une permission pour autre chose que la fonction qui la justifie.</p>
+        </section>
+
+        <section id="admin" class="wiki-section">
+          <h2 data-i18n="cgu.adminTitre">🛠️ Ce qui relève de l'administrateur</h2>
+          <p data-i18n="cgu.adminTexte">ModBot exécute ce que la configuration lui dit de faire. L'administrateur qui l'installe reste responsable de son serveur et de ce qu'il choisit d'activer.</p>
+          <ul class="wiki-check-list">
+            <li data-i18n="cgu.admin1">Informer ses membres que le serveur est modéré par un bot, et de ce que cela implique.</li>
+            <li data-i18n="cgu.admin2">Choisir des sanctions proportionnées : les seuils automatiques agissent sans intervention humaine.</li>
+            <li data-i18n="cgu.admin3">Vérifier les permissions accordées, notamment la hiérarchie des rôles.</li>
+            <li data-i18n="cgu.admin4">Répondre aux demandes de ses membres concernant leurs données sur son serveur.</li>
+          </ul>
+        </section>
+
+        <section id="interdits" class="wiki-section">
+          <h2 data-i18n="cgu.interditsTitre">🚫 Usages interdits</h2>
+          <ul class="wiki-check-list">
+            <li data-i18n="cgu.interdit1">Se servir de ModBot pour harceler, espionner ou nuire à quelqu'un.</li>
+            <li data-i18n="cgu.interdit2">Détourner l'envoi de messages privés ou les annonces pour du spam ou de la publicité non sollicitée.</li>
+            <li data-i18n="cgu.interdit3">Tenter de contourner les protections, de surcharger l'API, ou d'accéder aux données d'un serveur qu'on n'administre pas.</li>
+            <li data-i18n="cgu.interdit4">Employer le bot dans un cadre illégal, ou contraire aux règles de Discord.</li>
+            <li data-i18n="cgu.interdit5">Se faire passer pour le propriétaire du bot ou pour l'équipe de support.</li>
+          </ul>
+        </section>
+
+        <section id="dispo" class="wiki-section">
+          <h2 data-i18n="cgu.dispoTitre">📡 Disponibilité</h2>
+          <p data-i18n-html="cgu.dispoTexte">ModBot est fourni <strong>tel quel, sans garantie</strong>. Le service peut être interrompu pour une mise à jour, une panne d'hébergement, une limitation de Discord, ou s'arrêter définitivement. Aucune continuité n'est promise et aucune indemnité n'est due en cas d'interruption.</p>
+          <p data-i18n="cgu.dispoSauvegarde">Les sauvegardes de salons et de rôles sont un confort, pas une assurance : garde tes propres copies de ce qui compte.</p>
+        </section>
+
+        <section id="suspension" class="wiki-section">
+          <h2 data-i18n="cgu.suspTitre">⛔ Suspension</h2>
+          <p data-i18n="cgu.suspTexte">L'accès à ModBot peut être retiré à un compte ou à un serveur en cas d'usage abusif, notamment ceux listés plus haut. La décision est prise par le propriétaire du bot, et peut être discutée sur le serveur de support.</p>
+        </section>
+
+        <section id="responsabilite" class="wiki-section">
+          <h2 data-i18n="cgu.respTitre">⚖️ Responsabilité</h2>
+          <p data-i18n="cgu.respTexte">Dans la limite permise par la loi, la responsabilité du propriétaire de ModBot ne saurait être engagée pour les conséquences d'une sanction automatique, d'une perte de données, d'une interruption de service, ni pour l'usage qu'un administrateur fait du bot sur son serveur.</p>
+          <p data-i18n="cgu.respRappel">Ce service est gratuit et maintenu sur du temps personnel. Cela n'excuse pas les défauts, mais cela fixe le cadre : il n'existe ni contrat de service, ni engagement de délai.</p>
+        </section>
+
+        <section id="fin" class="wiki-section">
+          <h2 data-i18n="cgu.finTitre">👋 Arrêter d'utiliser ModBot</h2>
+          <p data-i18n="cgu.finTexte">Retirer ModBot du serveur met fin au service et à tout traitement, immédiatement. Pour l'effacement des données déjà enregistrées, la marche à suivre est décrite dans la politique de confidentialité.</p>
+        </section>
+
+        <section class="wiki-section">
+          <h2 data-i18n="cgu.modifTitre">📝 Modifications</h2>
+          <p data-i18n="cgu.modifTexte">Ces conditions peuvent évoluer avec le bot. La date en tête de page indique la dernière version, et l'historique complet est public dans le dépôt du projet. Continuer à utiliser ModBot après une modification vaut acceptation de la nouvelle version.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p data-i18n-html="cgu.pied">© 2026 ModBot — <a href="index.html">Accueil</a> · <a href="confidentialite.html">Politique de confidentialité</a></p>
+  </footer>
+
+  <script src="translations.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
