@@ -2003,10 +2003,39 @@ function initDashboard() {
       const menu = bloc.querySelector("[data-account-menu]");
       if (!declencheur || !menu) return;
 
+      /**
+       * Recadre le menu pour qu'il reste dans la fenêtre.
+       *
+       * Il est ancré par sa droite sur la pastille (`right: 0`). Tant que la
+       * pastille est au bord droit de l'écran, cela suffit. Mais la barre se
+       * replie selon la place : sur une tablette, la pastille se retrouve au
+       * milieu d'une ligne, et un menu plus large qu'elle débordait alors par
+       * la GAUCHE — jusqu'à sortir de l'écran de plus de cent pixels.
+       */
+      const recadrer = () => {
+        menu.style.right = "";
+        menu.style.left = "";
+        const boite = menu.getBoundingClientRect();
+        const marge = 8;
+        if (boite.left >= marge) return;
+        // On décale vers la droite du manque constaté, sans jamais dépasser
+        // le bord droit de la fenêtre.
+        const parent = bloc.getBoundingClientRect();
+        const decalage = Math.min(marge - boite.left,
+                                  window.innerWidth - marge - boite.right);
+        menu.style.right = `${-decalage}px`;
+        // Si le menu reste plus large que la fenêtre, on l'y colle a gauche.
+        if (menu.getBoundingClientRect().left < marge) {
+          menu.style.right = "auto";
+          menu.style.left = `${marge - parent.left}px`;
+        }
+      };
+
       const ouvrir = (etat) => {
         menu.hidden = !etat;
         declencheur.setAttribute("aria-expanded", String(etat));
         bloc.classList.toggle("is-open", etat);
+        if (etat) recadrer();
       };
 
       declencheur.addEventListener("click", (event) => {

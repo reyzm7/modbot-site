@@ -6235,7 +6235,10 @@ label,
   padding: 6px;
   border-top: 1px solid var(--line);
 }
-.server-switcher-footer button {
+/* Le pied contient un <button> ET un <a> : ne styler que le bouton laissait
+   le lien avec sa taille et son alignement par defaut, decale du reste. */
+.server-switcher-footer button,
+.server-switcher-footer a {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -6251,7 +6254,12 @@ label,
   cursor: pointer;
   transition: background-color 140ms var(--ease), color 140ms var(--ease);
 }
-.server-switcher-footer button:hover {
+.server-switcher-footer a {
+  text-decoration: none;
+}
+
+.server-switcher-footer button:hover,
+.server-switcher-footer a:hover {
   background: rgba(255, 255, 255, 0.06);
   color: var(--text);
 }
@@ -6266,13 +6274,22 @@ label,
 }
 
 @media (max-width: 760px) {
+  /* Le menu epouse la largeur de son bouton, qui occupe toute la ligne.
+     Bride a 320 px et ancre a droite, il demarrait plus etroit que ce qui
+     l'ouvre — decale sur la gauche, et son contenu a l'etroit. */
   .server-switcher-menu {
-    left: auto;
+    left: 0;
     right: 0;
-    transform-origin: top right;
-    width: min(320px, calc(100vw - 24px));
+    width: auto;
+    transform-origin: top center;
   }
   .server-switcher-label small { display: none; }
+
+  /* Plus de place pour la liste : sur telephone, la moitie de l'ecran ne
+     laissait voir que deux ou trois serveurs. */
+  .server-switcher-list {
+    max-height: min(420px, 58vh);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -7172,7 +7189,9 @@ label,
      et un avatar seul dans une bande vide ne dit pas a qui on est connecte. */
   .account-label { display: none; }
   .account-trigger { padding: 6px; }
-  .account-menu { width: min(268px, calc(100vw - 32px)); }
+  /* 268 px sur un telephone obligeaient la note a se replier sur trois
+     lignes ; on prend la largeur disponible. */
+  .account-menu { width: min(330px, calc(100vw - 24px)); }
 }
 
 /* Barre du dashboard : le compte partage la ligne du logo, il y a la place
