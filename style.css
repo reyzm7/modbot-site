@@ -8008,7 +8008,11 @@ label,
      page d'administration. Les deux barres partagent ces regles : donner un
      ordre aux seules classes du dashboard laissait celles de l'admin a
      l'ordre 0, c'est-a-dire AVANT le logo. */
-  .dashboard-topbar .brand { order: 1; flex: 1 1 auto; }
+  /* `margin-right: auto` et NON `flex: 1 1 auto` : la marge absorbe
+     l'espace libre sans agrandir le lien. Etendu, il faisait 238 px
+     de large et un clic au milieu de la barre renvoyait a l'accueil,
+     alors qu'on visait le vide. */
+  .dashboard-topbar .brand { order: 1; flex: 0 0 auto; margin-right: auto; }
   .dashboard-topbar .account-switch,
   .dashboard-topbar .dashboard-server { order: 2; flex: 0 0 auto; }
 
@@ -8233,4 +8237,68 @@ label,
   .admin-topbar .dashboard-server {
     min-height: 44px;
   }
+}
+
+/* ── Barre de l'ecran de choix du serveur, sur telephone ──────────── */
+/* Elle mesurait 586 px de large dans un parent de 390 : le logo sortait
+   par la gauche (x = -132) et la navigation par la droite (jusqu'a 522).
+   La regle qui devait faire passer la navigation a la ligne posait
+   `width: 100%`, sans effet : un `flex: 1 1 0%` heritable prend le pas sur
+   la largeur pour la taille principale d'un element flexible. Il faut agir
+   sur la BASE flexible. */
+@media (max-width: 760px) {
+  .server-select-topbar {
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px;
+  }
+
+  /* Ligne 1 : logo, puis compte et retour pousses a droite. La marge
+     evite d'agrandir la zone cliquable du logo. */
+  .server-select-brand {
+    order: 1;
+    flex: 0 0 auto;
+    margin-right: auto;
+  }
+
+  .server-select-topbar .account-switch { order: 2; flex: 0 0 auto; }
+  .server-select-topbar .secondary-btn { order: 3; flex: 0 0 auto; }
+
+  /* Ligne 2 : la navigation, sur toute la largeur, defilante si besoin. */
+  .server-select-nav {
+    order: 4;
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+  }
+
+  /* La pastille du compte se met au niveau du reste, comme dans la barre
+     du dashboard : elle etait a 61 x 42 avec un avatar de 28 px. */
+  .server-select-topbar .account-trigger {
+    min-height: 44px;
+    gap: 8px;
+  }
+
+  .server-select-topbar .account-avatar {
+    width: 34px;
+    height: 34px;
+  }
+
+  .server-select-topbar .account-chevron { width: 14px; }
+
+  .server-select-topbar .account-label { display: grid; }
+  .server-select-topbar .account-label small { display: none; }
+
+  .server-select-topbar .account-label strong {
+    max-width: 30vw;
+    font-size: 0.95rem;
+  }
+}
+
+/* Sous 360 px, le pseudo cede la place : l'avatar suffit a retrouver le menu. */
+@media (max-width: 360px) {
+  .server-select-topbar .account-label { display: none; }
 }
