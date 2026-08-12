@@ -99,11 +99,12 @@
               <span class="admin-badge" data-admin-stats-badge data-i18n="adm.enAttente">En attente</span>
             </div>
             <div class="site-stat-grid">
-              <div><span data-admin-stat="visits">—</span><small data-i18n="admin.stats.visits">Visites</small></div>
-              <div><span data-admin-stat="today">—</span><small data-i18n="admin.stats.today">Aujourd’hui</small></div>
-              <div><span data-admin-stat="dashboard">—</span><small data-i18n="admin.stats.dashboard">Ouvertures dashboard</small></div>
               <div><span data-admin-stat="installs">—</span><small data-i18n="admin.stats.installs">Serveurs ModBot</small></div>
+              <div><span data-admin-stat="members">—</span><small data-i18n="adm.statMembres">Membres protégés</small></div>
+              <div><span data-admin-stat="events">—</span><small data-i18n="adm.statEvenements">Actions enregistrées</small></div>
+              <div><span data-admin-stat="sanctions">—</span><small data-i18n="adm.statSanctions">Sanctions</small></div>
             </div>
+            <p class="field-help" data-admin-stats-note data-i18n="adm.statsAide">Chiffres lus en direct sur le bot. Le nombre de visites du site n'est pas mesuré : rien n'est collecté sur les visiteurs.</p>
           </article>
 
           <div class="admin-grid two">
@@ -153,11 +154,9 @@
               <h3 data-i18n="admin.servers.title">🧭 Serveurs détectés</h3>
               <button class="secondary-btn compact" type="button" data-refresh-servers data-i18n="admin.servers.refresh">Rafraîchir</button>
             </div>
-            <p data-i18n="admin.servers.copy">Quand le backend sera branché au bot Discord, cette zone affichera automatiquement les logos réels des serveurs via les données `bot.guilds`.</p>
+            <p data-i18n="admin.servers.copy">Les serveurs où ModBot est installé, lus en direct sur le bot. Le bouton Rafraîchir relance la lecture.</p>
             <div class="admin-server-list" data-admin-server-list>
-              <div><span class="server-logo-shell" data-initials="HB"><img src="logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong data-i18n="adm.hoteBotModbot">Hote BOT - ModBot</strong><small data-i18n="adm.logoServeurSynchronisable">Logo serveur synchronisable</small></span></div>
-              <div><span class="server-logo-shell" data-initials="VPG"><img src="logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong data-i18n="adm.vpgBelgique">VPG Belgique</strong><small data-i18n="adm.logoServeurSynchronisable2">Logo serveur synchronisable</small></span></div>
-              <div><span class="server-logo-shell" data-initials="ST"><img src="logo.png" alt="" data-logo-img onerror="this.parentElement.classList.add('is-fallback')"></span><span><strong data-i18n="adm.serveurTest">Serveur test</strong><small data-i18n="adm.logoServeurSynchronisable3">Logo serveur synchronisable</small></span></div>
+              <p class="field-help" data-i18n="adm.serveursChargement">Chargement des serveurs…</p>
             </div>
           </article>
         </section>
@@ -166,13 +165,11 @@
           <article class="admin-panel">
             <div class="admin-panel-head">
               <h3 data-i18n="adm.logsGlobauxDuBot">🧾 Logs globaux du bot</h3>
-              <span class="admin-badge" data-i18n="adm.apiBotConnectee">API bot connectée</span>
+              <span class="admin-badge" data-admin-logs-badge data-i18n="adm.enAttente">En attente</span>
             </div>
             <div class="server-log-feed" data-server-log-feed>
-              <div><span>20:42</span><strong data-i18n="adm.hoteBotModbot2">Hote BOT - ModBot</strong><em data-i18n="adm.ticketPublieDepuisLe">Ticket publié depuis le dashboard.</em></div>
-              <div><span>20:35</span><strong data-i18n="adm.vpgBelgique2">VPG Belgique</strong><em data-i18n="adm.antiLienActiveDans">Anti-lien activé dans la sécurité.</em></div>
-              <div><span>20:21</span><strong data-i18n="adm.serveurTest2">Serveur test</strong><em data-i18n="adm.messageFiltreParAuto">Message filtré par l’auto-modération.</em></div>
-              </div>
+              <p class="field-help" data-i18n="adm.logsChargement">Chargement des logs…</p>
+            </div>
           </article>
         </section>
       </div>

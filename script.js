@@ -995,11 +995,12 @@ function initAdminZone() {
   const allowedAdminIds = new Set([
     "1189681599965573131"
   ]);
-  const visits = document.querySelector("[data-admin-stat='visits']");
-  const today = document.querySelector("[data-admin-stat='today']");
-  const dashboard = document.querySelector("[data-admin-stat='dashboard']");
   const installs = document.querySelector("[data-admin-stat='installs']");
+  const membresProteges = document.querySelector("[data-admin-stat='members']");
+  const actionsEnregistrees = document.querySelector("[data-admin-stat='events']");
+  const sanctionsTotal = document.querySelector("[data-admin-stat='sanctions']");
   const statsBadge = document.querySelector("[data-admin-stats-badge]");
+  const logsBadge = document.querySelector("[data-admin-logs-badge]");
   const adminIdInput = document.querySelector("[data-admin-id]");
   const adminError = document.querySelector("[data-admin-error]");
   const adminStatus = document.querySelector("[data-admin-status]");
@@ -1038,54 +1039,109 @@ function initAdminZone() {
   }
 
   function formatStat(value) {
-    return Number(value || 0).toLocaleString(localeAffichage());
-  }
-
-  function getLocalAdminStats() {
-    return {
-      visits: getStoredNumber("modbot-analytics-visits"),
-      today: getStoredNumber("modbot-analytics-today"),
-      dashboard: getStoredNumber("modbot-analytics-dashboard"),
-      installs: document.querySelectorAll("[data-admin-server-list] > div").length
-    };
+    // Une valeur non chiffree — le tiret affiche quand le bot ne repond pas —
+    // sortait en « NaN » : Number("—") ne vaut pas zero, il ne vaut rien.
+    const nombre = Number(value);
+    if (value === null || value === undefined || value === "" || Number.isNaN(nombre)) {
+      return "—";
+    }
+    return nombre.toLocaleString(localeAffichage());
   }
 
   function setAdminStats(stats, sourceLabel) {
-    if (visits) visits.textContent = formatStat(stats.visits);
-    if (today) today.textContent = formatStat(stats.today);
-    if (dashboard) dashboard.textContent = formatStat(stats.dashboard);
     if (installs) installs.textContent = formatStat(stats.installs);
+    if (membresProteges) membresProteges.textContent = formatStat(stats.members);
+    if (actionsEnregistrees) actionsEnregistrees.textContent = formatStat(stats.events);
+    if (sanctionsTotal) sanctionsTotal.textContent = formatStat(stats.sanctions);
     if (statsBadge) statsBadge.textContent = sourceLabel;
   }
 
+  /**
+   * Message d'echec lisible, a la place des donnees.
+   *
+   * Ce panneau affichait auparavant des lignes de demonstration figees
+   * (« Serveur test », « VPG Belgique », des heures inventees) que rien ne
+   * remplacait quand l'appel echouait. On croyait donc lire de vraies
+   * donnees, fausses. Mieux vaut dire pourquoi il n'y en a pas.
+   */
+  function etatAdminIndisponible(erreur) {
+    const message = String(erreur?.message || "");
+    if (/401|expir|connexion discord/i.test(message)) return t("js.adm.sessionRequise");
+    if (/403|refus/i.test(message)) return t("js.adm.pasAdmin");
+    return tp("js.adm.botInjoignable", { detail: message.slice(0, 120) });
+  }
+
+  function peindreServeursAdmin(guilds) {
+    const liste = document.querySelector("[data-admin-server-list]");
+    if (!liste) return;
+    if (!guilds.length) {
+      liste.innerHTML = `<p class="field-help">${escapeHtmlValue(t("js.adm.aucunServeur"))}</p>`;
+      return;
+    }
+    liste.innerHTML = guilds.map((guild) => `
+      <div>
+        <span class="server-logo-shell" data-initials="${escapeHtmlValue(guild.initials || initialsFromName(guild.name))}">
+          <img src="${escapeHtmlValue(guild.icon || modbotDefaultLogo)}" alt="" data-logo-img onerror="if(!this.dataset.logoFallbackTried){this.dataset.logoFallbackTried='1';this.src='assets/default_logo.svg'}else{this.parentElement.classList.add('is-fallback')}" onload="this.parentElement.classList.remove('is-fallback')">
+        </span>
+        <span><strong>${escapeHtmlValue(guild.name)}</strong><small>${
+          tn("js.adm.membreUn", "js.adm.membrePlusieurs",
+             Number(guild.member_count || 0),
+             { n: Number(guild.member_count || 0).toLocaleString(localeAffichage()) })
+        } — ID ${escapeHtmlValue(guild.id)}</small></span>
+      </div>
+    `).join("");
+  }
+
+  function peindreLogsAdmin(logs) {
+    const flux = document.querySelector("[data-server-log-feed]");
+    if (!flux) return;
+    if (!logs.length) {
+      flux.innerHTML = `<p class="field-help">${escapeHtmlValue(t("js.adm.aucunLog"))}</p>`;
+      if (logsBadge) logsBadge.textContent = t("js.adm.aucuneEntree");
+      return;
+    }
+    flux.innerHTML = logs.map((entree) => {
+      // La date arrive en ISO ; on n'affiche l'heure que si elle est lisible.
+      const quand = new Date(entree.date || entree.time || 0);
+      const heure = Number.isNaN(quand.getTime())
+        ? "—"
+        : quand.toLocaleString(localeAffichage(),
+            { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+      const ou = entree.guild_name || entree.guild_id || t("js.adm.horsServeur");
+      const quoi = entree.detail || entree.action || "";
+      const qui = entree.actor ? ` — ${entree.actor}` : "";
+      return `<div><span>${escapeHtmlValue(heure)}</span><strong>${escapeHtmlValue(ou)}</strong>`
+           + `<em>${escapeHtmlValue(quoi)}${escapeHtmlValue(qui)}</em></div>`;
+    }).join("");
+    if (logsBadge) {
+      logsBadge.textContent = tn("js.adm.entreeUne", "js.adm.entreesPlusieurs", logs.length,
+                                 { n: logs.length });
+    }
+  }
+
   async function loadAdminStats() {
-    if (statsBadge) statsBadge.textContent = "Chargement";
+    if (statsBadge) statsBadge.textContent = t("js.adm.chargement");
+    if (logsBadge) logsBadge.textContent = t("js.adm.chargement");
 
     try {
       const data = await modbotApiFetch("/api/admin/stats", { cache: "no-store" });
       setAdminStats({
-        visits: data.visits,
-        today: data.today,
-        dashboard: data.dashboardOpens ?? data.dashboard,
-        installs: data.installs ?? data.servers
-      }, "Connexion bot active");
-      const serverList = document.querySelector("[data-admin-server-list]");
-      if (serverList && Array.isArray(data.guilds)) {
-        serverList.innerHTML = data.guilds.map((guild) => `
-          <div>
-            <span class="server-logo-shell" data-initials="${escapeHtmlValue(guild.initials || initialsFromName(guild.name))}">
-              <img src="${escapeHtmlValue(guild.icon || modbotDefaultLogo)}" alt="" data-logo-img onerror="if(!this.dataset.logoFallbackTried){this.dataset.logoFallbackTried='1';this.src='assets/default_logo.svg'}else{this.parentElement.classList.add('is-fallback')}" onload="this.parentElement.classList.remove('is-fallback')">
-            </span>
-            <span><strong>${escapeHtmlValue(guild.name)}</strong><small>ID ${escapeHtmlValue(guild.id)}</small></span>
-          </div>
-        `).join("");
-      }
-      return;
+        installs: data.installs ?? data.servers,
+        members: data.members,
+        events: data.events_total,
+        sanctions: data.sanctions_total
+      }, t("js.adm.connexionActive"));
+      peindreServeursAdmin(Array.isArray(data.guilds) ? data.guilds : []);
+      peindreLogsAdmin(Array.isArray(data.logs) ? data.logs : []);
     } catch (error) {
-      // Le site garde un secours local si la connexion bot n'est pas encore branchee.
+      const raison = etatAdminIndisponible(error);
+      setAdminStats({ installs: "—", members: "—", events: "—", sanctions: "—" }, raison);
+      const liste = document.querySelector("[data-admin-server-list]");
+      if (liste) liste.innerHTML = `<p class="field-help">${escapeHtmlValue(raison)}</p>`;
+      const flux = document.querySelector("[data-server-log-feed]");
+      if (flux) flux.innerHTML = `<p class="field-help">${escapeHtmlValue(raison)}</p>`;
+      if (logsBadge) logsBadge.textContent = raison;
     }
-
-    setAdminStats(getLocalAdminStats(), "Stats locales");
   }
 
   function unlockAdmin(adminId) {
@@ -1095,7 +1151,7 @@ function initAdminZone() {
     protectedItems.forEach((item) => {
       item.hidden = false;
     });
-    if (adminStatus) adminStatus.innerHTML = `<span></span> ${escapeHtml(t("js.adm.adminValide"))}`;
+    if (adminStatus) adminStatus.innerHTML = `<span></span> ${escapeHtmlValue(t("js.adm.adminValide"))}`;
     if (adminError) adminError.hidden = true;
     sessionStorage.setItem("modbot-admin-id", adminId);
     loadAdminStats();
@@ -1148,8 +1204,8 @@ function initAdminZone() {
     localStorage.setItem("modbot-admin-ids", JSON.stringify(nextStoredIds));
     const item = document.createElement("div");
     item.innerHTML = `
-      <span><strong>${escapeHtml(adminId)}</strong><small>${escapeHtml(t("js.adm.ajouteManuellement"))}</small></span>
-      <button type="button" data-remove-admin="${escapeHtml(adminId)}">${escapeHtml(t("js.retirer"))}</button>
+      <span><strong>${escapeHtmlValue(adminId)}</strong><small>${escapeHtmlValue(t("js.adm.ajouteManuellement"))}</small></span>
+      <button type="button" data-remove-admin="${escapeHtmlValue(adminId)}">${escapeHtmlValue(t("js.retirer"))}</button>
     `;
     list.append(item);
     input.value = "";
@@ -1181,8 +1237,8 @@ function initAdminZone() {
     emptyRow?.remove();
     const item = document.createElement("div");
     item.innerHTML = `
-      <span><strong>${escapeHtml(member)}</strong><small>${escapeHtml(reason)}</small></span>
-      <button type="button" data-blacklist-remove>${escapeHtml(t("js.retirer"))}</button>
+      <span><strong>${escapeHtmlValue(member)}</strong><small>${escapeHtmlValue(reason)}</small></span>
+      <button type="button" data-blacklist-remove>${escapeHtmlValue(t("js.retirer"))}</button>
     `;
     list.prepend(item);
     memberInput.value = "";
@@ -1205,12 +1261,11 @@ function initAdminZone() {
     showAdminToast(t("js.adm.retireBlacklist"));
   });
 
-  document.querySelector("[data-refresh-servers]")?.addEventListener("click", () => {
-    const list = document.querySelector("[data-admin-server-list]");
-    if (!list) return;
-    list.querySelectorAll("small").forEach((item) => {
-      item.textContent = t("js.adm.pretPourSync");
-    });
+  // Rafraichir relit vraiment le bot. Le bouton se contentait auparavant de
+  // reecrire le sous-titre des lignes deja affichees : rien n'etait recharge.
+  document.querySelector("[data-refresh-servers]")?.addEventListener("click", async () => {
+    await loadAdminStats();
+    showAdminToast(t("js.adm.listeRafraichie"));
   });
 }
 
