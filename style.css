@@ -734,12 +734,36 @@ h1 {
 
 .demo-controls {
   display: grid;
-  gap: 12px;
+  gap: 8px;
   align-content: start;
+  /* La demo est passee de 3 a 19 commandes : la colonne doit defiler au lieu
+     d'etirer la page sur trois ecrans de haut. */
+  max-height: 430px;
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-width: thin;
+}
+
+.demo-group {
+  margin: 10px 0 2px;
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--soft);
+  opacity: 0.75;
+  position: sticky;
+  top: 0;
+  background: var(--panel, #14101f);
+  padding: 4px 0;
+  z-index: 1;
+}
+
+.demo-group:first-child {
+  margin-top: 0;
 }
 
 .demo-command {
-  min-height: 54px;
+  min-height: 44px;
   padding: 0 18px;
   border-radius: var(--radius);
   border: 1px solid rgba(158, 110, 255, 0.2);
@@ -1895,6 +1919,21 @@ h1 {
   .hero-panel,
   .demo-layout {
     grid-template-columns: 1fr;
+  }
+
+  .demo-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-height: 300px;
+  }
+
+  .demo-group {
+    grid-column: 1 / -1;
+  }
+
+  .demo-command {
+    text-align: center;
+    padding: 0 10px;
+    font-size: 0.9rem;
   }
 
   .command-rail {

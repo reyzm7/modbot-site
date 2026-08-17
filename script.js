@@ -18,9 +18,114 @@ const siteTranslations = window.MODBOT_TRANSLATIONS || { fr: {}, en: {}, ar: {} 
 
 // Les titres sont des clefs de traduction : la demo suit la langue du site.
 const commandResponses = {
-  panel: { title: "js.demo.panelTitre", command: "/panel", type: "panel" },
-  stats: { title: "js.demo.statsTitre", command: "/serverstats", type: "stats" },
-  avert: { title: "js.demo.avertTitre", command: "/avert-count", type: "avert" }
+  // Outils
+  panel: { command: "/panel", type: "panel", categorie: "js.demo.catOutils",
+    title: "js.demo.panelTitre" },
+  aide: { command: "/aide", type: "generique", categorie: "js.demo.catOutils",
+    title: "js.demo.aideTitre", lignes: ["js.demo.aideLigne"],
+    champs: [["js.demo.catProtection", "2"], ["js.demo.catModeration", "9"],
+             ["js.demo.catMessages", "5"], ["js.demo.catSupport", "3"]],
+    actions: ["js.demo.actDashboard", "js.demo.actWiki", "js.demo.actSupport"],
+    footer: "js.demo.piedOutils", heure: "15:01" },
+  infobot: { command: "/info-bot", type: "generique", categorie: "js.demo.catOutils",
+    title: "js.demo.infoBotTitre", lignes: ["js.demo.infoBotLigne"],
+    champs: [["js.demo.enLigneDepuis", "4 j 06 h"], ["js.demo.latence", "48 ms"],
+             ["js.demo.membresProteges", "1 284"], ["js.demo.versionBot", "2.4"]],
+    actions: ["js.demo.actDashboard", "js.demo.actWiki"],
+    footer: "js.demo.piedOutils", heure: "15:02" },
+
+  // Protection
+  securite: { command: "/securite", type: "generique", categorie: "js.demo.catProtection",
+    title: "js.demo.securiteTitre", lignes: ["js.demo.securiteLigne"],
+    champs: [["Anti-Raid", "js.demo.actif"], ["Anti-Nuke", "js.demo.actif"],
+             ["Anti-Spam", "js.demo.actif"], ["js.demo.seuilRaid", "5 / 10 s"]],
+    footer: "js.demo.piedProtection", heure: "15:03" },
+  captcha: { command: "/captcha", type: "generique", categorie: "js.demo.catProtection",
+    title: "js.demo.captchaTitre", lignes: ["js.demo.captchaLigne"],
+    champs: [["js.demo.statut", "js.demo.actif"], ["js.demo.salon", "#verification"],
+             ["js.demo.roleDonne", "@Verifie"], ["js.demo.validesAujourdhui", "23"]],
+    footer: "js.demo.piedProtection", heure: "15:04" },
+
+  // Moderation
+  ban: { command: "/ban", type: "generique", categorie: "js.demo.catModeration",
+    title: "js.demo.banTitre", lignes: ["js.demo.banLigne"],
+    champs: [["js.demo.membre", "@spammeur"], ["js.demo.raison", "js.demo.raisonPub"],
+             ["js.demo.moderateur", "@Buffl"], ["js.demo.messagesSupprimes", "24"]],
+    footer: "js.demo.piedModeration", heure: "15:05" },
+  warn: { command: "/warn", type: "generique", categorie: "js.demo.catModeration",
+    title: "js.demo.warnTitre", lignes: ["js.demo.warnLigne"],
+    champs: [["js.demo.membre", "@gimskh"], ["js.demo.avertissements", "2 / 4"],
+             ["js.demo.prochain", "mute 1 h"], ["js.demo.raison", "js.demo.raisonInsulte"]],
+    footer: "js.demo.piedModeration", heure: "15:06" },
+  avert: { command: "/avert-count", type: "avert", categorie: "js.demo.catModeration",
+    title: "js.demo.avertTitre" },
+  infractions: { command: "/infractions", type: "generique", categorie: "js.demo.catModeration",
+    title: "js.demo.infractionsTitre", lignes: ["js.demo.infractionsLigne"],
+    champs: [["js.demo.membre", "@gimskh"], ["js.demo.total", "3"],
+             ["js.demo.derniere", "12/08 - 14:22"], ["js.demo.statut", "js.demo.sousSurveillance"]],
+    footer: "js.demo.piedModeration", heure: "15:07" },
+
+  // Messages
+  clear: { command: "/clear-message", type: "generique", categorie: "js.demo.catMessages",
+    title: "js.demo.clearTitre", lignes: ["js.demo.clearLigne"],
+    champs: [["js.demo.salon", "#general"], ["js.demo.supprimes", "50"],
+             ["js.demo.moderateur", "@Buffl"]],
+    footer: "js.demo.piedMessages", heure: "15:08" },
+  annonce: { command: "/annonce", type: "generique", categorie: "js.demo.catMessages",
+    title: "js.demo.annonceTitre", lignes: ["js.demo.annonceLigne"],
+    champs: [["js.demo.salon", "#annonces"], ["js.demo.mention", "@everyone"],
+             ["js.demo.statut", "js.demo.publiee"]],
+    footer: "js.demo.piedMessages", heure: "15:09" },
+
+  // Support
+  ticket: { command: "/addticket", type: "generique", categorie: "js.demo.catSupport",
+    title: "js.demo.ticketTitre", lignes: ["js.demo.ticketLigne"],
+    champs: [["js.demo.salon", "#ticket-042"], ["js.demo.ouvertPar", "@gimskh"],
+             ["js.demo.categorie", "js.demo.categorieAide"], ["js.demo.statut", "js.demo.ouvert"]],
+    actions: ["js.demo.actFermer", "js.demo.actAssigner"],
+    footer: "js.demo.piedSupport", heure: "15:10" },
+  suggest: { command: "/suggest", type: "generique", categorie: "js.demo.catSupport",
+    title: "js.demo.suggestTitre", lignes: ["js.demo.suggestLigne"],
+    champs: [["js.demo.auteur", "@gimskh"], ["js.demo.pour", "12"],
+             ["js.demo.contre", "1"], ["js.demo.statut", "js.demo.aLetude"]],
+    actions: ["js.demo.actPour", "js.demo.actContre"],
+    footer: "js.demo.piedSupport", heure: "15:11" },
+
+  // Communaute
+  giveaway: { command: "/giveaway", type: "generique", categorie: "js.demo.catCommunaute",
+    title: "js.demo.giveawayTitre", lignes: ["js.demo.giveawayLigne"],
+    champs: [["js.demo.lot", "Nitro 1 mois"], ["js.demo.finDans", "2 j 04 h"],
+             ["js.demo.participants", "87"], ["js.demo.gagnants", "1"]],
+    actions: ["js.demo.actParticiper"],
+    footer: "js.demo.piedCommunaute", heure: "15:12" },
+  translate: { command: "/translate", type: "generique", categorie: "js.demo.catCommunaute",
+    title: "js.demo.translateTitre", lignes: ["js.demo.translateLigne"],
+    champs: [["js.demo.detectee", "js.demo.langueAnglais"], ["js.demo.vers", "js.demo.langueFrancais"]],
+    footer: "js.demo.piedCommunaute", heure: "15:13" },
+
+  // Sauvegardes
+  backup: { command: "/backup", type: "generique", categorie: "js.demo.catSauvegardes",
+    title: "js.demo.backupTitre", lignes: ["js.demo.backupLigne"],
+    champs: [["js.demo.salonsSauves", "34"], ["js.demo.rolesSauves", "18"],
+             ["js.demo.creeeLe", "12/08 - 15:14"], ["js.demo.taille", "42 Ko"]],
+    actions: ["js.demo.actRestaurer", "js.demo.actTelecharger"],
+    footer: "js.demo.piedSauvegardes", heure: "15:14" },
+
+  // Assistant IA
+  ia: { command: "/ia", type: "generique", categorie: "js.demo.catIa",
+    title: "js.demo.iaTitre", lignes: ["js.demo.iaLigne"],
+    champs: [["js.demo.question", "js.demo.iaQuestion"], ["js.demo.modele", "Mistral"],
+             ["js.demo.tempsReponse", "1,2 s"]],
+    footer: "js.demo.piedIa", heure: "15:15" },
+
+  // Statistiques
+  stats: { command: "/serverstats", type: "stats", categorie: "js.demo.catStatistiques",
+    title: "js.demo.statsTitre" },
+  modstats: { command: "/modstats", type: "generique", categorie: "js.demo.catStatistiques",
+    title: "js.demo.modstatsTitre", lignes: ["js.demo.modstatsLigne"],
+    champs: [["js.demo.moderateur", "@Buffl"], ["js.demo.sanctions", "48"],
+             ["js.demo.ticketsTraites", "31"], ["js.demo.rang", "#1"]],
+    footer: "js.demo.piedStatistiques", heure: "15:16" }
 };
 
 const assistantAnswers = {
@@ -141,11 +246,69 @@ function initStarfield() {
   window.addEventListener("resize", resize);
 }
 
+/**
+ * Rendu d'un embed de demonstration a partir de donnees.
+ *
+ * Les trois premieres commandes de la demo avaient chacune leur HTML ecrit a
+ * la main. C'est ce qui a limite la demo a trois commandes sur cinquante-cinq
+ * pendant des mois : en ajouter une demandait d'ecrire un bloc entier.
+ *
+ * Ici la commande est une donnee. Le HTML, lui, n'existe qu'une fois.
+ */
+function renderEmbedGenerique(data, thumb) {
+  const champs = (data.champs || [])
+    .map(([label, valeur]) => `
+          <div class="embed-stat">
+            <strong>${escapeHtmlValue(tSiClef(label))}</strong>
+            <span class="embed-pill">${escapeHtmlValue(tSiClef(valeur))}</span>
+          </div>`)
+    .join("");
+
+  const lignes = (data.lignes || [])
+    .map((ligne) => `<p>${escapeHtmlValue(tSiClef(ligne))}</p>`)
+    .join("");
+
+  const actions = (data.actions || [])
+    .map((action, index) => {
+      const tons = ["action-blue", "action-green", "action-dark", "action-red"];
+      return `<span class="${tons[index % tons.length]}">${escapeHtmlValue(tSiClef(action))}</span>`;
+    })
+    .join("");
+
+  return `
+      <div class="discord-embed embed-with-thumb">
+        ${thumb}
+        <h3>${escapeHtmlValue(tSiClef(data.title))}</h3>
+        ${lignes}
+        ${champs ? `<div class="embed-grid">${champs}</div>` : ""}
+        ${actions ? `<div class="embed-actions">${actions}</div>` : ""}
+        <p class="embed-footer">${escapeHtmlValue(tSiClef(data.footer))} - ${escapeHtmlValue(data.heure || "15:00")}</p>
+      </div>
+  `;
+}
+
+/**
+ * Traduit une valeur si c'est une clef, la rend telle quelle sinon.
+ *
+ * Les tableaux de demonstration melangent des libelles traduisibles
+ * (« Statut ») et des donnees qui ne se traduisent pas (« #general »,
+ * « 48 ms », « @Buffl »). Le prefixe « js. » les distingue sans avoir a
+ * baliser chaque valeur.
+ */
+function tSiClef(valeur) {
+  if (typeof valeur !== "string") return "";
+  return valeur.startsWith("js.") ? t(valeur) : valeur;
+}
+
 function getCommandMarkup(command) {
   const data = commandResponses[command] || commandResponses.panel;
   const inactif = t("js.demo.inactif");
   const thumb = `<span class="embed-thumb"><img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';"></span>`;
   let embedContent = "";
+
+  if (data.type === "generique") {
+    embedContent = renderEmbedGenerique(data, thumb);
+  }
 
   if (data.type === "panel") {
     embedContent = `
@@ -309,7 +472,28 @@ function runDemoCommand(command) {
 }
 
 function initDemo() {
-  const buttons = document.querySelectorAll(".demo-command");
+  const rail = document.getElementById("demoControls");
+  if (!rail) return;
+
+  // Les boutons naissent de la table : impossible d'avoir un bouton sans
+  // reponse, ou une commande que personne ne peut cliquer.
+  const parCategorie = new Map();
+  Object.entries(commandResponses).forEach(([clef, data]) => {
+    const cat = data.categorie || "js.demo.catOutils";
+    if (!parCategorie.has(cat)) parCategorie.set(cat, []);
+    parCategorie.get(cat).push([clef, data]);
+  });
+
+  rail.innerHTML = Array.from(parCategorie.entries())
+    .map(([cat, entrees]) => `
+      <p class="demo-group" data-i18n="${escapeHtmlValue(cat)}">${escapeHtmlValue(t(cat))}</p>
+      ${entrees.map(([clef, data]) =>
+        `<button type="button" class="demo-command" data-command="${escapeHtmlValue(clef)}">${escapeHtmlValue(data.command)}</button>`
+      ).join("")}
+    `)
+    .join("");
+
+  const buttons = rail.querySelectorAll(".demo-command");
   if (!buttons.length) return;
 
   buttons.forEach((button) => {
@@ -320,7 +504,15 @@ function initDemo() {
     });
   });
 
+  buttons[0].classList.add("is-active");
   runDemoCommand("panel");
+
+  // L'embed affiche est du HTML deja genere : changer de langue ne le
+  // retraduit pas tout seul, il faut le redessiner avec la commande courante.
+  document.addEventListener("modbot:language", () => {
+    const actif = rail.querySelector(".demo-command.is-active");
+    runDemoCommand(actif?.dataset.command || "panel");
+  });
 }
 
 function addAssistantMessage(type, html) {
