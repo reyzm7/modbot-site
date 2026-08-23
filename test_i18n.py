@@ -20,7 +20,7 @@ from html.parser import HTMLParser
 SITE = os.path.dirname(os.path.abspath(__file__))
 PAGES = ["index.html", "dashboard.html", "admin.html", "wiki.html",
          "confidentialite.html", "conditions.html"]
-LANGUES = ["fr", "en", "ar"]
+LANGUES = ["fr", "en", "ar", "es", "de"]
 
 # Balises dont le contenu n'est pas du texte affiche
 IGNOREES = {"script", "style", "title", "svg", "path", "canvas", "option"}
