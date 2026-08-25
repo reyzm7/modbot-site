@@ -16,6 +16,9 @@
   <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
   <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
   <meta name="modbot-bot-permissions" content="3124257994829047">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="assets/modbot-mark.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 </head>
 <body class="dashboard-page">
   <!-- Jeu d'icônes SVG, défini une fois et réutilisé par <use href="#id">.
@@ -106,6 +109,64 @@
               d="M13.2 2.8 5 13.4h5.4l-.6 7.8 8.2-10.6h-5.4Z"/>
       </symbol>
 
+      <!-- ── Interface ───────────────────────────────────────────────
+           Toutes sur la grille 24, au trait de 1.7 : posées côte à côte,
+           aucune ne paraît plus lourde que sa voisine. -->
+      <symbol id="u-save" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4.5 4.5h11L19.5 8.5v11a1 1 0 0 1-1 1h-14a1 1 0 0 1-1-1v-14a1 1 0 0 1 1-1Z"/><path d="M8 4.5v5h7v-5M8 20.5v-6h8v6"/></g></symbol>
+      <symbol id="u-reset" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20.5 4v4.2h-4.2"/></g></symbol>
+      <symbol id="u-refresh" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.4 9.5A8.5 8.5 0 0 0 5.6 6.4M3.6 14.5a8.5 8.5 0 0 0 14.8 3.1"/><path d="M20.8 4.8v4.7h-4.7M3.2 19.2v-4.7h4.7"/></g></symbol>
+      <symbol id="u-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" d="M12 5.5v13M5.5 12h13"/></symbol>
+      <symbol id="u-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
+      <symbol id="u-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5 10 17.5 19 7"/></symbol>
+      <symbol id="u-arrow-left" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M19 12H5.5M11 5.5 4.5 12l6.5 6.5"/></symbol>
+      <symbol id="u-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/></g></symbol>
+      <symbol id="u-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="4"/><path d="m11 11 8.5 8.5M16 16l2-2M18.5 18.5l2-2"/></g></symbol>
+      <symbol id="u-alert" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.8 21 19.5H3Z"/><path d="M12 9.5v4.2M12 16.8h.01"/></g></symbol>
+      <symbol id="u-siren" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 17v-4a6 6 0 0 1 12 0v4"/><rect x="3.5" y="17" width="17" height="3.5" rx="1.2"/><path d="M12 3.5V2M4.6 6 3.5 5M19.4 6l1.1-1"/></g></symbol>
+      <symbol id="u-ban" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.2"/><path d="m6.2 6.2 11.6 11.6" stroke-linecap="round"/></g></symbol>
+      <symbol id="u-hammer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m11.5 8.5-7 7a2 2 0 0 0 2.8 2.8l7-7"/><path d="M13 3.5 20.5 11l-3 3L10 6.5Z"/></g></symbol>
+      <symbol id="u-tools" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 6.5a3.8 3.8 0 0 0 5 5l-8.4 8.4a2.1 2.1 0 0 1-3-3Z"/><path d="M6 4.5 9.5 8 8 9.5 4.5 6Z"/></g></symbol>
+      <symbol id="u-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M4.5 7.5l2 1.2M17.5 15.3l2 1.2M4.5 16.5l2-1.2M17.5 8.7l2-1.2"/></g></symbol>
+      <symbol id="u-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="m15.2 15.2 4.3 4.3"/></g></symbol>
+      <symbol id="u-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12Z" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.8"/></g></symbol>
+      <symbol id="u-gift" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="3.8" rx="1"/><path d="M5 12.8v6.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6.5M12 9v11.3"/><path d="M12 9S10.8 4 8.4 4a2.2 2.2 0 0 0 0 5M12 9s1.2-5 3.6-5a2.2 2.2 0 0 1 0 5"/></g></symbol>
+      <symbol id="u-star" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="m12 3.6 2.6 5.6 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 10l6-.8Z"/></symbol>
+      <symbol id="u-heart" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M12 20.2S3.5 15.3 3.5 9.4A4.4 4.4 0 0 1 12 7.6a4.4 4.4 0 0 1 8.5 1.8c0 5.9-8.5 10.8-8.5 10.8Z"/></symbol>
+      <symbol id="u-hand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.4a1.6 1.6 0 0 1 3.2 0V11"/><path d="M12.2 10.4V4.6a1.6 1.6 0 0 1 3.2 0V11"/><path d="M15.4 11V7a1.6 1.6 0 0 1 3.2 0v7.4a6 6 0 0 1-6 6h-1.2a5 5 0 0 1-4-2l-3-4a1.6 1.6 0 0 1 2.4-2L9 14.4V11"/></g></symbol>
+      <symbol id="u-door" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3.5H6.5a1 1 0 0 0-1 1v15a1 1 0 0 0 1 1H14"/><path d="M18.5 12h-8M15 8.5l3.5 3.5-3.5 3.5"/></g></symbol>
+      <symbol id="u-home" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 10.2 12 3.6l8 6.6v9.2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"/><path d="M9.5 20.4v-6h5v6"/></g></symbol>
+      <symbol id="u-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8M12 3.6c2.2 2.4 3.3 5.3 3.3 8.4s-1.1 6-3.3 8.4c-2.2-2.4-3.3-5.3-3.3-8.4s1.1-6 3.3-8.4Z"/></g></symbol>
+      <symbol id="u-image" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="m3.9 16.5 4.4-4.4 3.6 3.6 3-3 5.2 5.2"/><circle cx="8.6" cy="9.2" r="1.5"/></g></symbol>
+      <symbol id="u-message" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M20.5 13.5a2 2 0 0 1-2 2H8.5l-4 4v-15a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2Z"/></symbol>
+      <symbol id="u-inbox" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3.5 13.5 6 5.2a1 1 0 0 1 1-.7h10a1 1 0 0 1 1 .7l2.5 8.3v5a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1Z"/><path d="M3.5 13.5h4l1.2 2.4h6.6l1.2-2.4h4"/></g></symbol>
+      <symbol id="u-clipboard" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M9 4.5H6.5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-14a1 1 0 0 0-1-1H15"/><rect x="9" y="2.8" width="6" height="3.4" rx="1"/><path d="M8.8 11h6.4M8.8 15h4.4" stroke-linecap="round"/></g></symbol>
+      <symbol id="u-link" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10.4 13.6a4 4 0 0 0 5.7 0l2.8-2.8a4 4 0 0 0-5.7-5.7l-1.4 1.4"/><path d="M13.6 10.4a4 4 0 0 0-5.7 0l-2.8 2.8a4 4 0 1 0 5.7 5.7l1.4-1.4"/></g></symbol>
+      <symbol id="u-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3.5h5l-.8 5 3 3v2h-11v-2l3-3Z"/><path d="M12 13.5v7"/></g></symbol>
+      <symbol id="u-timer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="13.2" r="7.4"/><path d="M12 9.4v3.8l2.6 2M9.5 2.8h5"/></g></symbol>
+      <symbol id="u-flask" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3.5v6L4.6 18a1.6 1.6 0 0 0 1.4 2.4h12a1.6 1.6 0 0 0 1.4-2.4l-4.9-8.5v-6"/><path d="M8.4 3.5h7.2M7 14.5h10"/></g></symbol>
+      <symbol id="u-question" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.4"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.3 2.4c-.6.2-.9.8-.9 1.4v.5M12 16.6h.01"/></g></symbol>
+      <symbol id="u-sparkles" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="m12 3.5 1.8 4.7 4.7 1.8-4.7 1.8L12 16.5l-1.8-4.7L5.5 10l4.7-1.8Z"/><path d="M18.5 15.5 19.4 18l2.5.9-2.5.9-.9 2.5-.9-2.5-2.5-.9 2.5-.9Z"/></g></symbol>
+      <symbol id="u-rocket" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13.6 3.6c3.4 1.5 5.6 4.8 5.8 8.5l-4.3 4.3-6.5-6.5 4.3-4.3a9.6 9.6 0 0 1 .7-2Z"/><path d="m8.6 9.9-4 1.3 2.2 2.2M14.1 15.4l-1.3 4 2.2 2.2M6 18l-2 2"/></g></symbol>
+      <symbol id="u-menu" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></symbol>
+      <symbol id="u-compass" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><circle cx="12" cy="12" r="8.4"/><path d="m15.5 8.5-2 5-5 2 2-5Z"/></g></symbol>
+      <symbol id="u-trend" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 16.5 5-5 3.5 3.5 6.5-6.5"/><path d="M14.5 8.5h4.5V13"/></g></symbol>
+      <symbol id="u-burst" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="m12 2.8 2.2 4.6 4.9-1.4-1.4 4.9 4.5 2.2-4.5 2.2 1.4 4.9-4.9-1.4L12 21.2l-2.2-4.4-4.9 1.4 1.4-4.9L1.8 13l4.5-2.2-1.4-4.9 4.9 1.4Z"/></symbol>
+      <symbol id="u-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="currentColor"/></symbol>
+      <symbol id="u-scales" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M7.5 20.5h9M5 7.5h14l-1 .3-6-1.3-6 1.3Z"/><path d="M6 8 3.2 14.2a2.9 2.9 0 0 0 5.6 0ZM18 8l-2.8 6.2a2.9 2.9 0 0 0 5.6 0Z"/></g></symbol>
+      <symbol id="u-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11M7.8 10.5 12 14.7l4.2-4.2"/><path d="M4.5 16v3a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-3"/></g></symbol>
+      <symbol id="u-upload" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14.7v-11M7.8 7.7 12 3.5l4.2 4.2"/><path d="M4.5 16v3a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-3"/></g></symbol>
+      <symbol id="u-box" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3.5 7.5 12 3.5l8.5 4v9L12 20.5 3.5 16.5Z"/><path d="M3.5 7.5 12 11.5l8.5-4M12 11.5v9"/></g></symbol>
+      <symbol id="u-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="m3.9 6.4 8.1 6 8.1-6"/></g></symbol>
+      <symbol id="u-palette" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.4 0 2-.9 2-1.8 0-1.3-1.2-1.7-1.2-2.9 0-.8.7-1.4 1.6-1.4h1.7a4.4 4.4 0 0 0 4.4-4.4c0-3.6-3.8-6.5-8.5-6.5Z"/><circle cx="7.6" cy="11.6" r="1.2" fill="currentColor" stroke="none"/><circle cx="10.4" cy="7.6" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="8.4" r="1.2" fill="currentColor" stroke="none"/></g></symbol>
+      <symbol id="u-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><circle cx="12" cy="8.2" r="3.9"/><path d="M4.8 20.2a7.2 7.2 0 0 1 14.4 0"/></g></symbol>
+      <symbol id="u-mask" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3.5 6.5h17v5.8a6.2 6.2 0 0 1-6.2 6.2H9.7a6.2 6.2 0 0 1-6.2-6.2Z"/><path d="M8.2 10.6h1.6M14.2 10.6h1.6M10 14.4a3 3 0 0 0 4 0" stroke-linecap="round"/></g></symbol>
+      <symbol id="u-bell" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M6.2 10.5a5.8 5.8 0 0 1 11.6 0v4l1.7 2.8H4.5l1.7-2.8Z"/><path d="M10 20a2.2 2.2 0 0 0 4 0" stroke-linecap="round"/></g></symbol>
+      <symbol id="u-folders" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3.5 8.5V6a1.5 1.5 0 0 1 1.5-1.5h3.6l1.8 2h7.1A1.5 1.5 0 0 1 19 8v.5"/><path d="M3.5 9.5h17l-1.6 9.2a1.5 1.5 0 0 1-1.5 1.3H6.6a1.5 1.5 0 0 1-1.5-1.3Z"/></g></symbol>
+      <symbol id="u-broadcast" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="11" r="2.2"/><path d="M8.4 7.4a5 5 0 0 0 0 7.2M15.6 7.4a5 5 0 0 1 0 7.2M5.6 4.6a9 9 0 0 0 0 12.8M18.4 4.6a9 9 0 0 1 0 12.8M12 13.2v7.2"/></g></symbol>
+      <symbol id="u-send" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M20.5 3.5 3.5 10.2l7 2.3 2.3 7Z"/></symbol>
+      <symbol id="u-trash" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 6.5h15M9.5 6.5V4.8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v1.7"/><path d="M6.5 6.5 7.4 19a1.5 1.5 0 0 0 1.5 1.4h6.2a1.5 1.5 0 0 0 1.5-1.4l.9-12.5M10.4 10v6.6M13.6 10v6.6"/></g></symbol>
+      <symbol id="u-mute" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 5 6.8 9H3.5v6h3.3l4.7 4Z"/><path d="m15.5 9.5 5 5M20.5 9.5l-5 5"/></g></symbol>
+      <symbol id="u-flag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 21V3.8M5.5 4.6h11.9l-2.2 4 2.2 4H5.5"/></g></symbol>
     </defs>
   </svg>
   <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
@@ -113,7 +174,7 @@
 
   <main class="dashboard-auth" data-auth-screen>
     <section class="auth-card">
-      <img class="auth-logo" src="assets/default_logo.svg" alt="ModBot" onerror="this.onerror=null; this.src='logo.png';">
+      <img class="auth-logo" src="assets/modbot-logo.png" alt="ModBot" width="485" height="512">
       <p class="eyebrow" data-i18n="dash.connexionDashboard">Connexion dashboard</p>
       <h1 data-i18n="dash.connecteToiAvecDiscord">Connecte-toi avec Discord</h1>
       <p data-i18n="dash.leDashboardAfficheraEnsuite">Le dashboard affichera ensuite uniquement les serveurs où tu as accès à la configuration ModBot.</p>
@@ -137,7 +198,7 @@
            Révélé automatiquement par script.js si le bot est injoignable. -->
       <details class="auth-advanced" data-auth-advanced hidden>
         <summary>
-          <span data-i18n="dash.adresseDuBot">⚙️ Adresse du bot</span>
+          <span data-i18n="dash.adresseDuBot"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gear"/></svg> Adresse du bot</span>
           <span class="auth-advanced-badge" data-api-badge data-i18n="dash.verifier">à vérifier</span>
         </summary>
         <div class="auth-advanced-body">
@@ -156,22 +217,22 @@
         </div>
       </details>
 
-      <a class="auth-return" href="index.html" data-i18n="dash.retourAuSite">← Retour au site</a>
+      <a class="auth-return" href="index.html" data-i18n="dash.retourAuSite"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-arrow-left"/></svg> Retour au site</a>
     </section>
   </main>
 
   <main class="server-picker" data-server-screen hidden>
     <header class="server-select-topbar">
       <a class="server-select-brand" href="index.html" aria-label="Accueil ModBot" data-i18n-aria="dash.accueilModbot">
-        <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
+        <img src="assets/modbot-mark.png" alt="" width="128" height="128" decoding="async" fetchpriority="high">
         <span>ModBot</span>
       </a>
       <nav class="server-select-nav" aria-label="Navigation" data-i18n-aria="dash.navigation">
         <a href="dashboard.html" data-i18n="dash.tableauDeBord">Tableau de bord</a>
-        <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite data-i18n="dash.ajouterModbot">➕ Ajouter ModBot</a>
+        <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite data-i18n="dash.ajouterModbot"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Ajouter ModBot</a>
         <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="dash.rejoindreMonServeur">Rejoindre mon serveur</a>
         <a href="wiki.html" data-i18n="dash.commandes">Commandes</a>
-        <a href="https://paypal.me/hazkes" target="_blank" rel="noreferrer noopener" class="is-premium" data-i18n="dash.soutenir">💛 Soutenir</a>
+        <a href="https://paypal.me/hazkes" target="_blank" rel="noreferrer noopener" class="is-premium" data-i18n="dash.soutenir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-heart"/></svg> Soutenir</a>
       </nav>
       <div class="account-switch" data-account hidden>
         <button class="account-trigger" type="button" data-account-trigger
@@ -193,10 +254,10 @@
         <div class="account-menu" data-account-menu role="menu" hidden>
           <p class="account-menu-note" data-i18n="dash.plusieursComptes">Plusieurs comptes Discord ? Change sans fermer le dashboard.</p>
           <button type="button" data-switch-account role="menuitem" data-i18n="dash.changerDeCompte">
-            <span aria-hidden="true">🔄</span> Changer de compte
+            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg></span> Changer de compte
           </button>
           <button type="button" data-logout-account role="menuitem" class="is-danger" data-i18n="dash.seDeconnecter">
-            <span aria-hidden="true">🚪</span> Se déconnecter
+            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-door"/></svg></span> Se déconnecter
           </button>
         </div>
       </div>
@@ -213,11 +274,11 @@
 
       <div class="server-select-toolbar">
         <label class="server-search">
-          <span>⌕</span>
+          <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-search"/></svg></span>
           <input type="search" placeholder="Rechercher" data-server-search data-i18n-placeholder="dash.rechercher">
         </label>
-        <button class="secondary-btn compact" type="button" data-refresh-dashboard-servers data-i18n="dash.rafraichir">↻ Rafraîchir</button>
-        <a class="primary-btn compact" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite data-i18n="dash.ajouterModbotUnServeur">➕ Ajouter ModBot à un serveur</a>
+        <button class="secondary-btn compact" type="button" data-refresh-dashboard-servers data-i18n="dash.rafraichir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg> Rafraîchir</button>
+        <a class="primary-btn compact" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite data-i18n="dash.ajouterModbotUnServeur"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Ajouter ModBot à un serveur</a>
       </div>
 
       <div class="server-grid" data-server-grid>
@@ -230,7 +291,7 @@
   <header class="dashboard-topbar">
     <a class="brand" href="index.html" aria-label="Retour au site ModBot" data-i18n-aria="dash.retourAuSiteModbot">
       <span class="brand-mark">
-        <img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';">
+        <img src="assets/modbot-mark.png" alt="" width="128" height="128" decoding="async" fetchpriority="high">
       </span>
       <span>ModBot</span>
     </a>
@@ -271,7 +332,7 @@
             <span aria-hidden="true">⊞</span> Voir tous mes serveurs
           </button>
           <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite data-i18n="dash.ajouterModbotServeur">
-            <span aria-hidden="true">➕</span> Ajouter ModBot à un serveur
+            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg></span> Ajouter ModBot à un serveur
           </a>
         </div>
       </div>
@@ -300,16 +361,16 @@
         <div class="account-menu" data-account-menu role="menu" hidden>
           <p class="account-menu-note" data-i18n="dash.plusieursComptes">Plusieurs comptes Discord ? Change sans fermer le dashboard.</p>
           <button type="button" data-switch-account role="menuitem" data-i18n="dash.changerDeCompte">
-            <span aria-hidden="true">🔄</span> Changer de compte
+            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg></span> Changer de compte
           </button>
           <button type="button" data-logout-account role="menuitem" class="is-danger" data-i18n="dash.seDeconnecter">
-            <span aria-hidden="true">🚪</span> Se déconnecter
+            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-door"/></svg></span> Se déconnecter
           </button>
         </div>
       </div>
 
       <label class="language-switch compact" aria-label="Langue du dashboard" data-i18n-aria="dash.langueDuDashboard">
-        <span aria-hidden="true">🌍</span>
+        <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg></span>
         <select data-language-select>
           <option value="fr">Français</option>
           <option value="en">English</option>
@@ -318,8 +379,8 @@
           <option value="de">Deutsch</option>
           </select>
       </label>
-      <button class="secondary-btn compact" type="button" data-dashboard-save data-i18n="dash.save">💾 Enregistrer</button>
-      <a class="primary-btn compact" href="index.html" data-i18n="dash.backToSite">🏠 Retour au site</a>
+      <button class="secondary-btn compact" type="button" data-dashboard-save data-i18n="dash.save"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg> Enregistrer</button>
+      <a class="primary-btn compact" href="index.html" data-i18n="dash.backToSite"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-home"/></svg> Retour au site</a>
     </div>
   </header>
 
@@ -328,7 +389,7 @@
          laterale y est deja affichee en entier. -->
     <button class="sidebar-toggle" type="button" data-sidebar-toggle
             aria-expanded="false" aria-controls="dashboard-menu">
-      <span class="sidebar-toggle-burger" aria-hidden="true">☰</span>
+      <span class="sidebar-toggle-burger" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-menu"/></svg></span>
       <span class="sidebar-toggle-label">
         <small data-i18n="dash.menuSection">Section</small>
         <strong data-sidebar-current data-i18n="dash.navVueGlobale">Vue globale</strong>
@@ -341,33 +402,33 @@
 
     <aside class="dashboard-sidebar" id="dashboard-menu" aria-label="Navigation dashboard" data-i18n-aria="dash.navigationDashboard">
       <p class="sidebar-label" data-i18n="dash.pilotage">Pilotage</p>
-      <button class="dash-nav is-active" type="button" data-dashboard-tab="overview" data-i18n="dash.navVueGlobale"><span aria-hidden="true">📊</span>Vue globale</button>
+      <button class="dash-nav is-active" type="button" data-dashboard-tab="overview" data-i18n="dash.navVueGlobale"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg></span>Vue globale</button>
 
       <p class="sidebar-label" data-i18n="dash.protection">Protection</p>
-      <button class="dash-nav" type="button" data-dashboard-tab="security" data-i18n="dash.navSecurite"><span aria-hidden="true">🛡️</span>Sécurité</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="moderation" data-i18n="dash.navModeration"><span aria-hidden="true">⚒️</span>Modération</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="search" data-i18n="dash.navRecherche"><span aria-hidden="true">🔎</span>Recherche</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="backups" data-i18n="dash.navSauvegardes"><span aria-hidden="true">💾</span>Sauvegardes</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="logs" data-i18n="dash.navLogs"><span aria-hidden="true">🧾</span>Logs</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="security" data-i18n="dash.navSecurite"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg></span>Sécurité</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="moderation" data-i18n="dash.navModeration"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg></span>Modération</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="search" data-i18n="dash.navRecherche"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-search"/></svg></span>Recherche</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="backups" data-i18n="dash.navSauvegardes"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg></span>Sauvegardes</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="logs" data-i18n="dash.navLogs"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg></span>Logs</button>
 
       <p class="sidebar-label" data-i18n="dash.communaute">Communauté</p>
-      <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span aria-hidden="true">🎫</span><span data-i18n="nav.tickets">Tickets</span></button>
-      <button class="dash-nav" type="button" data-dashboard-tab="welcome"><span aria-hidden="true">👋</span><span data-i18n="nav.welcome">Bienvenue</span></button>
-      <button class="dash-nav" type="button" data-dashboard-tab="giveaways"><span aria-hidden="true">🎉</span><span data-i18n="nav.giveaways">Giveaways</span></button>
-      <button class="dash-nav" type="button" data-dashboard-tab="ratings" data-i18n="dash.navRatings"><span aria-hidden="true">⭐</span>Ratings</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg></span><span data-i18n="nav.tickets">Tickets</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="welcome"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg></span><span data-i18n="nav.welcome">Bienvenue</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="giveaways"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg></span><span data-i18n="nav.giveaways">Giveaways</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="ratings" data-i18n="dash.navRatings"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span>Ratings</button>
 
       <p class="sidebar-label" data-i18n="dash.contenus">Contenus</p>
-      <button class="dash-nav" type="button" data-dashboard-tab="channels" data-i18n="dash.navSalons"><span aria-hidden="true">📌</span>Salons</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="socials" data-i18n="dash.navReseaux"><span aria-hidden="true">📣</span>Réseaux</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="channels" data-i18n="dash.navSalons"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-pin"/></svg></span>Salons</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="socials" data-i18n="dash.navReseaux"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg></span>Réseaux</button>
 
       <p class="sidebar-label" data-i18n="dash.apparence">Apparence</p>
-      <button class="dash-nav" type="button" data-dashboard-tab="language" data-i18n="dash.navLangue"><span aria-hidden="true">🌍</span>Langue</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="language" data-i18n="dash.navLangue"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg></span>Langue</button>
     </aside>
 
     <section class="dashboard-content">
       <div class="dashboard-banner">
         <div>
-          <p class="eyebrow" data-i18n="dash.dashboardModbot">⚡ Dashboard ModBot</p>
+          <p class="eyebrow" data-i18n="dash.dashboardModbot"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg> Dashboard ModBot</p>
           <h1 data-i18n="dash.centreDeControleModbot">Centre de contrôle ModBot</h1>
           <p class="server-summary">
             <span class="server-logo-shell server-summary-logo-shell" data-current-server-logo-shell data-initials="HB">
@@ -385,30 +446,30 @@
       <section class="dash-panel is-active" data-dashboard-panel="overview">
         <div class="panel-title">
           <div>
-            <p class="eyebrow" data-i18n="dash.resume">📊 Résumé</p>
+            <p class="eyebrow" data-i18n="dash.resume"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg> Résumé</p>
             <h2 data-i18n="dash.etatDuServeur">État du serveur</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.reinitialiserLaVue">♻️ Réinitialiser la vue</button>
+          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.reinitialiserLaVue"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-reset"/></svg> Réinitialiser la vue</button>
         </div>
 
         <div class="metric-grid">
           <article class="metric-card">
-            <span data-i18n="dash.protections">🛡️ Protections</span>
+            <span data-i18n="dash.protections"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg> Protections</span>
             <strong data-overview-security>—</strong>
             <small data-overview-security-detail data-i18n="dash.chargement">Chargement…</small>
           </article>
           <article class="metric-card">
-            <span data-i18n="dash.sauvegardes">💾 Sauvegardes</span>
+            <span data-i18n="dash.sauvegardes"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg> Sauvegardes</span>
             <strong data-overview-backups>—</strong>
             <small data-overview-backups-detail data-i18n="dash.chargement2">Chargement…</small>
           </article>
           <article class="metric-card">
-            <span data-i18n="dash.evenements">🧾 Événements</span>
+            <span data-i18n="dash.evenements"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Événements</span>
             <strong data-overview-logs>—</strong>
             <small data-i18n="dash.enregistresSurCeServeur">Enregistrés sur ce serveur</small>
           </article>
           <article class="metric-card">
-            <span data-i18n="dash.ratings">⭐ Ratings</span>
+            <span data-i18n="dash.ratings"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Ratings</span>
             <strong data-overview-rating-average>0.00/5</strong>
             <small data-i18n="dash.evaluations"><span data-overview-rating-count>0</span> évaluations</small>
           </article>
@@ -416,20 +477,20 @@
 
         <div class="dashboard-grid two">
           <div class="tool-panel">
-            <h3 data-i18n="dash.actionsRapides">⚡ Actions rapides</h3>
+            <h3 data-i18n="dash.actionsRapides"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg> Actions rapides</h3>
             <div class="quick-grid">
-              <button type="button" data-dashboard-jump="security" data-i18n="dash.securiteServeur">🛡️ Sécurité serveur</button>
-              <button type="button" data-dashboard-jump="backups" data-i18n="dash.sauvegardes2">💾 Sauvegardes</button>
-              <button type="button" data-dashboard-jump="logs" data-i18n="dash.journalDuServeur">🧾 Journal du serveur</button>
-              <button type="button" data-dashboard-jump="moderation" data-i18n="dash.moderation">⚒️ Modération</button>
-              <button type="button" data-dashboard-jump="channels" data-i18n="dash.choisirLesSalons">📌 Choisir les salons</button>
-              <button type="button" data-dashboard-jump="tickets" data-i18n="dash.configurerTickets">🎫 Configurer tickets</button>
-              <button type="button" data-dashboard-jump="socials" data-i18n="dash.relaisReseaux">📣 Relais réseaux</button>
+              <button type="button" data-dashboard-jump="security" data-i18n="dash.securiteServeur"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg> Sécurité serveur</button>
+              <button type="button" data-dashboard-jump="backups" data-i18n="dash.sauvegardes2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg> Sauvegardes</button>
+              <button type="button" data-dashboard-jump="logs" data-i18n="dash.journalDuServeur"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Journal du serveur</button>
+              <button type="button" data-dashboard-jump="moderation" data-i18n="dash.moderation"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg> Modération</button>
+              <button type="button" data-dashboard-jump="channels" data-i18n="dash.choisirLesSalons"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-pin"/></svg> Choisir les salons</button>
+              <button type="button" data-dashboard-jump="tickets" data-i18n="dash.configurerTickets"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg> Configurer tickets</button>
+              <button type="button" data-dashboard-jump="socials" data-i18n="dash.relaisReseaux"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Relais réseaux</button>
             </div>
           </div>
 
           <div class="tool-panel">
-            <h3 data-i18n="dash.etatDesProtections">🔒 État des protections</h3>
+            <h3 data-i18n="dash.etatDesProtections"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg> État des protections</h3>
             <ul class="check-list" data-overview-checklist>
               <li data-i18n="dash.chargementDeEtatDu">Chargement de l'état du serveur…</li>
             </ul>
@@ -440,12 +501,12 @@
       <section class="dash-panel" data-dashboard-panel="tickets">
         <div class="panel-title">
           <div>
-            <p class="eyebrow" data-i18n="dash.tickets">🎫 Tickets</p>
+            <p class="eyebrow" data-i18n="dash.tickets"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg> Tickets</p>
             <h2 data-i18n="dash.messagePublicEtOptions">Message public et options</h2>
           </div>
           <div class="panel-actions">
-            <button class="primary-btn compact ticket-publish-btn" type="button" data-publish-ticket hidden data-i18n="dash.publier">🚀 Publier</button>
-            <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetTickets">♻️ Reset tickets</button>
+            <button class="primary-btn compact ticket-publish-btn" type="button" data-publish-ticket hidden data-i18n="dash.publier"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-rocket"/></svg> Publier</button>
+            <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetTickets"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-reset"/></svg> Reset tickets</button>
           </div>
         </div>
 
@@ -471,7 +532,7 @@
                   <span class="image-picker-empty" data-i18n="dash.aucuneImage">Aucune image</span>
                 </div>
                 <div class="image-picker-actions">
-                  <button class="secondary-btn compact" type="button" data-image-choose data-i18n="dash.choisirUneImage">🖼️ Choisir une image</button>
+                  <button class="secondary-btn compact" type="button" data-image-choose data-i18n="dash.choisirUneImage"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Choisir une image</button>
                   <button class="secondary-btn compact danger" type="button" data-image-clear hidden data-i18n="dash.retirer">Retirer</button>
                   <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden data-image-file>
                   <input type="hidden" data-ticket-banner value="">
@@ -491,7 +552,7 @@
                   <span class="image-picker-empty" data-i18n="dash.logoDuServeur">Logo du serveur</span>
                 </div>
                 <div class="image-picker-actions">
-                  <button class="secondary-btn compact" type="button" data-image-choose data-i18n="dash.choisirUneImage2">🖼️ Choisir une image</button>
+                  <button class="secondary-btn compact" type="button" data-image-choose data-i18n="dash.choisirUneImage2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Choisir une image</button>
                   <button class="secondary-btn compact danger" type="button" data-image-clear hidden data-i18n="dash.retirer2">Retirer</button>
                   <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden data-image-file>
                   <input type="hidden" data-ticket-logo value="">
@@ -516,16 +577,16 @@
           </form>
 
           <div class="tool-panel preview-panel">
-            <h3 data-i18n="dash.apercuDiscord">👁️ Aperçu Discord</h3>
+            <h3 data-i18n="dash.apercuDiscord"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-eye"/></svg> Aperçu Discord</h3>
             <div class="ticket-preview">
               <div class="discord-embed embed-with-thumb">
                 <span class="embed-thumb"><img src="assets/default_logo.svg" alt="" data-live-logo onerror="this.onerror=null; this.src='assets/default_logo.svg';"></span>
-                <h3><span data-live-ticket-emoji>📩</span> <span data-live-title data-i18n="dash.ouvreTonTicket">Ouvre ton ticket</span></h3>
+                <h3><span data-live-ticket-emoji><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-inbox"/></svg></span> <span data-live-title data-i18n="dash.ouvreTonTicket">Ouvre ton ticket</span></h3>
                 <p data-live-desc data-i18n="dash.merciDeSelectionnerLa">Merci de sélectionner la raison de ta demande via le menu. Un membre du staff viendra rapidement te répondre.</p>
                 <div class="embed-actions">
-                  <span class="action-blue" data-i18n="dash.supportTechnique">🛠️ Support technique</span>
-                  <span class="action-dark" data-i18n="dash.question">❓ Question</span>
-                  <span class="action-red" data-i18n="dash.deban">🔒 Déban</span>
+                  <span class="action-blue" data-i18n="dash.supportTechnique"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-tools"/></svg> Support technique</span>
+                  <span class="action-dark" data-i18n="dash.question"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-question"/></svg> Question</span>
+                  <span class="action-red" data-i18n="dash.deban"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg> Déban</span>
                 </div>
                 <img class="preview-banner" src="assets/default_banner.svg" alt="" data-live-banner>
                 <p class="embed-footer" data-i18n="dash.modbotProtectionDeVotre">ModBot - Protection de votre communauté</p>
@@ -537,7 +598,7 @@
         <div class="tool-panel">
           <div class="table-head">
             <h3 data-i18n="dash.optionsDuMenu">Options du menu</h3>
-            <button type="button" class="primary-btn compact" data-add-ticket-option data-i18n="dash.ajouter">➕ Ajouter</button>
+            <button type="button" class="primary-btn compact" data-add-ticket-option data-i18n="dash.ajouter"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Ajouter</button>
           </div>
           <div class="option-list" id="ticketOptionList">
             <div class="option-row"><span>01</span><input class="emoji-input" value="🛠️" maxlength="3"><input value="Support technique"><input value="Problème technique, bug ou aide"><button type="button" data-i18n="dash.supprimer">Supprimer</button></div>
@@ -551,42 +612,42 @@
       <section class="dash-panel" data-dashboard-panel="security">
         <div class="panel-title">
           <div>
-            <p class="eyebrow" data-i18n="dash.securite">🛡️ Sécurité</p>
+            <p class="eyebrow" data-i18n="dash.securite"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg> Sécurité</p>
             <h2 data-i18n="dash.protectionsServeur">Protections serveur</h2>
           </div>
           <div class="panel-title-actions">
-            <span class="state" data-safe-mode-badge hidden data-i18n="dash.modeSecuriteActif">🚨 Mode sécurité actif</span>
-            <button class="secondary-btn compact" type="button" data-security-reload data-i18n="dash.actualiser">↻ Actualiser</button>
-            <button class="primary-btn compact" type="button" data-security-save data-i18n="dash.enregistrerLaSecurite">💾 Enregistrer la sécurité</button>
+            <span class="state" data-safe-mode-badge hidden data-i18n="dash.modeSecuriteActif"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-siren"/></svg> Mode sécurité actif</span>
+            <button class="secondary-btn compact" type="button" data-security-reload data-i18n="dash.actualiser"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg> Actualiser</button>
+            <button class="primary-btn compact" type="button" data-security-save data-i18n="dash.enregistrerLaSecurite"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg> Enregistrer la sécurité</button>
           </div>
         </div>
 
         <!-- Diagnostic des permissions Discord du bot -->
         <div class="alert-panel" data-security-permissions hidden>
-          <strong data-i18n="dash.permissionsDiscordManquantes">⚠️ Permissions Discord manquantes</strong>
+          <strong data-i18n="dash.permissionsDiscordManquantes"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-alert"/></svg> Permissions Discord manquantes</strong>
           <p data-i18n="dash.sansCesPermissionsCertaines">Sans ces permissions, certaines protections resteront inactives :</p>
           <ul data-security-permissions-list></ul>
         </div>
 
         <div class="toggle-grid">
-          <label class="toggle-line"><input type="checkbox" checked><span></span><strong data-i18n="dash.antiLien">🔗 Anti-lien</strong><small data-i18n="dash.bloqueLesLiensEt">Bloque les liens et invitations Discord.</small></label>
-          <label class="toggle-line"><input type="checkbox" checked data-security-insultes><span></span><strong data-i18n="dash.filtreDeLangage">🚫 Filtre de langage</strong><small data-i18n="dash.supprimeLesInsultesEt">Supprime les insultes et applique les sanctions graduées.</small></label>
-          <label class="toggle-line"><input type="checkbox" checked><span></span><strong data-i18n="dash.antiSpam">💬 Anti-spam</strong><small data-i18n="dash.detecteLesMessagesTrop">Détecte les messages trop rapides.</small></label>
-          <label class="toggle-line"><input type="checkbox"><span></span><strong data-i18n="dash.antiRaid">🚨 Anti-raid</strong><small data-i18n="dash.surveilleLesVaguesArrivees">Surveille les vagues d'arrivées suspectes.</small></label>
-          <label class="toggle-line"><input type="checkbox"><span></span><strong data-i18n="dash.staffAlert">📣 Staff alert</strong><small data-i18n="dash.previensLeStaffDes">Préviens le staff des actions importantes.</small></label>
-          <label class="toggle-line danger"><input type="checkbox"><span></span><strong data-i18n="dash.lockdown">🔒 Lockdown</strong><small data-i18n="dash.masqueLesSalonsEn">Masque les salons en urgence.</small></label>
+          <label class="toggle-line"><input type="checkbox" checked><span></span><strong data-i18n="dash.antiLien"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-link"/></svg> Anti-lien</strong><small data-i18n="dash.bloqueLesLiensEt">Bloque les liens et invitations Discord.</small></label>
+          <label class="toggle-line"><input type="checkbox" checked data-security-insultes><span></span><strong data-i18n="dash.filtreDeLangage"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-ban"/></svg> Filtre de langage</strong><small data-i18n="dash.supprimeLesInsultesEt">Supprime les insultes et applique les sanctions graduées.</small></label>
+          <label class="toggle-line"><input type="checkbox" checked><span></span><strong data-i18n="dash.antiSpam"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-message"/></svg> Anti-spam</strong><small data-i18n="dash.detecteLesMessagesTrop">Détecte les messages trop rapides.</small></label>
+          <label class="toggle-line"><input type="checkbox"><span></span><strong data-i18n="dash.antiRaid"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-siren"/></svg> Anti-raid</strong><small data-i18n="dash.surveilleLesVaguesArrivees">Surveille les vagues d'arrivées suspectes.</small></label>
+          <label class="toggle-line"><input type="checkbox"><span></span><strong data-i18n="dash.staffAlert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Staff alert</strong><small data-i18n="dash.previensLeStaffDes">Préviens le staff des actions importantes.</small></label>
+          <label class="toggle-line danger"><input type="checkbox"><span></span><strong data-i18n="dash.lockdown"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg> Lockdown</strong><small data-i18n="dash.masqueLesSalonsEn">Masque les salons en urgence.</small></label>
         </div>
 
         <div class="dashboard-grid three">
-          <label class="tool-panel mini-form" data-i18n="dash.messagesMax">💬 Messages max<input type="number" value="5"></label>
-          <label class="tool-panel mini-form" data-i18n="dash.fenetreAntiSpam">⏱️ Fenêtre anti-spam<input type="number" value="5"></label>
-          <label class="tool-panel mini-form" data-i18n="dash.seuilBan">🔨 Seuil ban<input type="number" value="4"></label>
+          <label class="tool-panel mini-form" data-i18n="dash.messagesMax"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-message"/></svg> Messages max<input type="number" value="5"></label>
+          <label class="tool-panel mini-form" data-i18n="dash.fenetreAntiSpam"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-timer"/></svg> Fenêtre anti-spam<input type="number" value="5"></label>
+          <label class="tool-panel mini-form" data-i18n="dash.seuilBan"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg> Seuil ban<input type="number" value="4"></label>
         </div>
 
         <!-- CAPTCHA -->
         <div class="tool-panel security-block">
           <div class="table-head">
-            <h3 data-i18n="dash.captchaEntree">🔐 Captcha d'entrée</h3>
+            <h3 data-i18n="dash.captchaEntree"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg> Captcha d'entrée</h3>
             <label class="switch-inline">
               <input type="checkbox" data-captcha-enabled>
               <span data-i18n="dash.activer">Activer</span>
@@ -610,7 +671,7 @@
             </div>
           </div>
           <div class="inline-hint" data-i18n-html="dash.captchaAstuce">
-            <strong>💡 Le plus simple :</strong> tape <code>/captcha activer</code> dans Discord.
+            <strong><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Le plus simple :</strong> tape <code>/captcha activer</code> dans Discord.
             ModBot crée le rôle, crée le salon, publie le panneau et propose de masquer les
             salons aux membres non vérifiés — en une commande.
           </div>
@@ -619,7 +680,7 @@
         <!-- ALERTES D'ATTAQUE -->
         <div class="tool-panel security-block">
           <div class="table-head">
-            <h3 data-i18n="dash.alertesAttaque">🚨 Alertes d'attaque</h3>
+            <h3 data-i18n="dash.alertesAttaque"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-siren"/></svg> Alertes d'attaque</h3>
             <label class="switch-inline">
               <input type="checkbox" data-alerts-dm checked>
               <span data-i18n="dash.prevenirEnMp">Prévenir en MP</span>
@@ -641,7 +702,7 @@
             </div>
           </div>
           <div class="inline-hint" data-i18n-html="dash.pourquoiModbotAgitAvant">
-            <strong>🛡️ Pourquoi ModBot agit avant de demander :</strong> une attaque détruit un
+            <strong><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg> Pourquoi ModBot agit avant de demander :</strong> une attaque détruit un
             serveur en quelques secondes. La protection s'applique immédiatement, et les boutons
             servent à la <em>lever</em> si c'était une fausse alerte.
             Vérifie la réception avec <code>/securite alertes test:true</code>.
@@ -651,7 +712,7 @@
         <!-- ANTI-RAID -->
         <div class="tool-panel security-block">
           <div class="table-head">
-            <h3 data-i18n="dash.antiRaid2">🚨 Anti-raid</h3>
+            <h3 data-i18n="dash.antiRaid2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-siren"/></svg> Anti-raid</h3>
             <label class="switch-inline">
               <input type="checkbox" data-antiraid-enabled>
               <span data-i18n="dash.activer2">Activer</span>
@@ -688,7 +749,7 @@
         <!-- ANTI-NUKE -->
         <div class="tool-panel security-block">
           <div class="table-head">
-            <h3 data-i18n="dash.antiNuke">💥 Anti-nuke</h3>
+            <h3 data-i18n="dash.antiNuke"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-burst"/></svg> Anti-nuke</h3>
             <label class="switch-inline">
               <input type="checkbox" data-antinuke-enabled>
               <span data-i18n="dash.activer3">Activer</span>
@@ -726,7 +787,7 @@
         <!-- SANCTIONS -->
         <div class="tool-panel security-block">
           <div class="table-head">
-            <h3 data-i18n="dash.echelleDeSanctions">⚖️ Échelle de sanctions</h3>
+            <h3 data-i18n="dash.echelleDeSanctions"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-scales"/></svg> Échelle de sanctions</h3>
             <label class="switch-inline">
               <input type="checkbox" data-filter-tolerant>
               <span data-i18n="dash.detectionAvancee">Détection avancée</span>
@@ -737,12 +798,12 @@
             <code>s.a.l.o.p.e</code>, caractères unicode similaires.
           </p>
           <div class="sanction-ladder" data-sanction-ladder></div>
-          <button class="secondary-btn compact" type="button" data-sanction-reset data-i18n="dash.retablirEchelleParDefaut">♻️ Rétablir l'échelle par défaut</button>
+          <button class="secondary-btn compact" type="button" data-sanction-reset data-i18n="dash.retablirEchelleParDefaut"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-reset"/></svg> Rétablir l'échelle par défaut</button>
         </div>
 
         <!-- MOTS FILTRÉS -->
         <div class="tool-panel security-block">
-          <h3 data-i18n="dash.motsPersonnalises">🚫 Mots personnalisés</h3>
+          <h3 data-i18n="dash.motsPersonnalises"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-ban"/></svg> Mots personnalisés</h3>
           <p class="field-help" data-i18n="dash.unMotParLigne">Un mot par ligne. Ils s'ajoutent à la liste intégrée et bénéficient de la détection avancée.</p>
           <label class="mini-form" data-i18n="dash.motsInterditsSupplementaires">Mots interdits supplémentaires
             <textarea rows="4" placeholder="motinterdit1&#10;motinterdit2" data-filter-custom-words data-i18n-placeholder="dash.motinterditMotinterdit"></textarea>
@@ -757,29 +818,29 @@
       <section class="dash-panel" data-dashboard-panel="backups">
         <div class="panel-title">
           <div>
-            <p class="eyebrow" data-i18n="dash.sauvegardes3">💾 Sauvegardes</p>
+            <p class="eyebrow" data-i18n="dash.sauvegardes3"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg> Sauvegardes</p>
             <h2 data-i18n="dash.sauvegardeEtRestauration">Sauvegarde et restauration</h2>
           </div>
           <div class="panel-title-actions">
-            <button class="secondary-btn compact" type="button" data-backups-reload data-i18n="dash.actualiser2">↻ Actualiser</button>
-            <button class="primary-btn compact" type="button" data-backup-create data-i18n="dash.creerUneSauvegarde">➕ Créer une sauvegarde</button>
+            <button class="secondary-btn compact" type="button" data-backups-reload data-i18n="dash.actualiser2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg> Actualiser</button>
+            <button class="primary-btn compact" type="button" data-backup-create data-i18n="dash.creerUneSauvegarde"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Créer une sauvegarde</button>
           </div>
         </div>
 
         <div class="dashboard-grid two">
           <div class="tool-panel">
-            <h3 data-i18n="dash.reglagesTitre">🧷 Sauvegarde des réglages</h3>
+            <h3 data-i18n="dash.reglagesTitre"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg> Sauvegarde des réglages</h3>
             <p class="field-help" data-i18n="dash.reglagesAide">Les réglages de ModBot — modules actifs, seuils, textes, salons choisis. Télécharge-les pour en garder une copie hors du serveur, et remets-les en place quand tu veux.</p>
             <div class="image-picker-actions">
-              <button class="primary-btn compact" type="button" data-config-export data-i18n="dash.reglagesExporter">⬇️ Télécharger mes réglages</button>
-              <button class="secondary-btn compact" type="button" data-config-import-pick data-i18n="dash.reglagesImporter">⬆️ Restaurer un fichier</button>
+              <button class="primary-btn compact" type="button" data-config-export data-i18n="dash.reglagesExporter"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-download"/></svg> Télécharger mes réglages</button>
+              <button class="secondary-btn compact" type="button" data-config-import-pick data-i18n="dash.reglagesImporter"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-upload"/></svg> Restaurer un fichier</button>
             </div>
             <input type="file" accept="application/json,.json" data-config-import-file hidden>
             <p class="field-help" data-i18n="dash.reglagesNote">Un fichier venu d'un AUTRE serveur est accepté : les salons et rôles, qui n'existent que là-bas, sont alors ignorés.</p>
           </div>
 
           <div class="tool-panel">
-            <h3 data-i18n="dash.sauvegardeAutomatique">⚙️ Sauvegarde automatique</h3>
+            <h3 data-i18n="dash.sauvegardeAutomatique"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gear"/></svg> Sauvegarde automatique</h3>
             <p class="field-help" data-i18n="dash.modbotEnregistreRegulierementLa">ModBot enregistre régulièrement la structure du serveur : rôles, catégories, salons et permissions.</p>
             <label class="toggle-line compact">
               <input type="checkbox" data-autobackup-enabled><span></span>
@@ -789,7 +850,7 @@
               <input type="number" min="1" max="720" value="24" data-autobackup-interval>
             </label>
             <p class="field-help" data-i18n="dash.derniereSauvegardeAutomatique">Dernière sauvegarde automatique : <strong data-autobackup-last data-i18n="js.jamais">jamais</strong></p>
-            <button class="secondary-btn compact" type="button" data-autobackup-save data-i18n="dash.enregistrer">💾 Enregistrer</button>
+            <button class="secondary-btn compact" type="button" data-autobackup-save data-i18n="dash.enregistrer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg> Enregistrer</button>
           </div>
 
           <div class="tool-panel">
@@ -805,7 +866,7 @@
 
         <div class="tool-panel">
           <div class="table-head">
-            <h3 data-i18n="dash.sauvegardesDisponibles">📦 Sauvegardes disponibles</h3>
+            <h3 data-i18n="dash.sauvegardesDisponibles"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg> Sauvegardes disponibles</h3>
             <span class="state" data-backups-count data-i18n="dash.sauvegarde">0 sauvegarde</span>
           </div>
           <div class="backup-list" data-backup-list>
@@ -817,42 +878,42 @@
       <section class="dash-panel" data-dashboard-panel="channels">
         <div class="panel-title">
           <div>
-            <p class="eyebrow" data-i18n="dash.salons">📌 Salons</p>
+            <p class="eyebrow" data-i18n="dash.salons"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-pin"/></svg> Salons</p>
             <h2 data-i18n="dash.routageDesSystemes">Routage des systèmes</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetSalons">♻️ Reset salons</button>
+          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetSalons"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-reset"/></svg> Reset salons</button>
         </div>
 
         <div class="channel-table">
-          <div class="channel-row"><strong data-i18n="dash.tickets2">🎫 Tickets</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple2"><span class="state inactive" data-i18n="dash.inactif">⚪ Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.logs">🧾 Logs</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple3"><span class="state inactive" data-i18n="dash.inactif2">⚪ Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.suggestions">💡 Suggestions</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple4"><span class="state inactive" data-i18n="dash.inactif3">⚪ Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.reports">🚩 Reports</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple5"><span class="state inactive" data-i18n="dash.inactif4">⚪ Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.staffAlert2">📣 Staff alert</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple6"><span class="state inactive" data-i18n="dash.inactif5">⚪ Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.tickets2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg> Tickets</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple2"><span class="state inactive" data-i18n="dash.inactif">⚪ Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.logs"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple3"><span class="state inactive" data-i18n="dash.inactif2">⚪ Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.suggestions"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Suggestions</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple4"><span class="state inactive" data-i18n="dash.inactif3">⚪ Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.reports"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flag"/></svg> Reports</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple5"><span class="state inactive" data-i18n="dash.inactif4">⚪ Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.staffAlert2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Staff alert</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple6"><span class="state inactive" data-i18n="dash.inactif5">⚪ Inactif</span></div>
         </div>
       </section>
 
       <section class="dash-panel" data-dashboard-panel="moderation">
         <div class="panel-title">
           <div>
-            <p class="eyebrow" data-i18n="dash.moderation2">⚒️ Modération</p>
+            <p class="eyebrow" data-i18n="dash.moderation2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg> Modération</p>
             <h2 data-i18n="dash.motsFiltresEtSanctions">Mots filtrés et sanctions</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetModeration">♻️ Reset modération</button>
+          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetModeration"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-reset"/></svg> Reset modération</button>
         </div>
 
         <div class="dashboard-grid two">
           <div class="tool-panel moderation-word-panel">
-            <h3 data-i18n="dash.motsFiltres">🚫 Mots filtrés</h3>
+            <h3 data-i18n="dash.motsFiltres"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-ban"/></svg> Mots filtrés</h3>
             <textarea data-custom-words placeholder="Ajoute des mots personnalisés séparés par une virgule ou une ligne" data-i18n-placeholder="dash.ajouteDesMotsPersonnalises" data-i18n="dash.spamScamInsultesPersonnalisees">spam, scam, insultes personnalisées</textarea>
             <div class="filtered-word-list" data-filtered-word-list>
               <div class="dashboard-empty-state"><strong data-i18n="dash.chargement3">Chargement</strong><span data-i18n="dash.lesMotsParDefaut">Les mots par défaut et personnalisés arrivent depuis ModBot.</span></div>
             </div>
           </div>
           <div class="tool-panel moderation-sanction-panel">
-            <h3 data-i18n="dash.progressionSanctions">⚡ Progression sanctions</h3>
-            <div class="sanction-flow"><span data-i18n="dash.warn">⚠️ 1 Warn</span><span data-i18n="dash.mute">🔇 2 Mute 4h</span><span data-i18n="dash.mute2">⏳ 3 Mute 24h</span><span data-i18n="dash.ban">🔨 4 Ban</span></div>
-            <h3 data-i18n="dash.bannissementsDuBot">🔨 Bannissements du bot</h3>
+            <h3 data-i18n="dash.progressionSanctions"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg> Progression sanctions</h3>
+            <div class="sanction-flow"><span data-i18n="dash.warn"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-alert"/></svg> 1 Warn</span><span data-i18n="dash.mute"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-mute"/></svg> 2 Mute 4h</span><span data-i18n="dash.mute2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-timer"/></svg> 3 Mute 24h</span><span data-i18n="dash.ban"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg> 4 Ban</span></div>
+            <h3 data-i18n="dash.bannissementsDuBot"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg> Bannissements du bot</h3>
             <div class="sanction-list" data-sanction-list>
               <div class="dashboard-empty-state"><strong data-i18n="dash.aucunBannissementCharge">Aucun bannissement chargé</strong><span data-i18n="dash.laListeSeraSynchronisee">La liste sera synchronisée avec les logs du bot.</span></div>
             </div>
@@ -863,33 +924,33 @@
       <section class="dash-panel" data-dashboard-panel="welcome">
         <div class="panel-title">
           <div>
-            <p class="eyebrow" data-i18n="welcome.eyebrow">👋 Arrivées et départs</p>
+            <p class="eyebrow" data-i18n="welcome.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg> Arrivées et départs</p>
             <h2 data-i18n="welcome.title">Messages de bienvenue</h2>
           </div>
           <div class="panel-title-actions">
-            <button class="primary-btn compact" type="button" data-welcome-save data-i18n="welcome.save">💾 Enregistrer</button>
+            <button class="primary-btn compact" type="button" data-welcome-save data-i18n="welcome.save"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg> Enregistrer</button>
           </div>
         </div>
 
         <div class="toggle-grid">
           <label class="toggle-line">
             <input type="checkbox" data-welcome-enabled><span></span>
-            <strong data-i18n="welcome.onJoin">👋 Message d'arrivée</strong>
+            <strong data-i18n="welcome.onJoin"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg> Message d'arrivée</strong>
             <small data-i18n="welcome.onJoinHelp">Publié dans un salon quand quelqu'un rejoint.</small>
           </label>
           <label class="toggle-line">
             <input type="checkbox" data-welcome-departure-enabled><span></span>
-            <strong data-i18n="welcome.onLeave">🚪 Message de départ</strong>
+            <strong data-i18n="welcome.onLeave"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-door"/></svg> Message de départ</strong>
             <small data-i18n="welcome.onLeaveHelp">Publié quand quelqu'un quitte le serveur.</small>
           </label>
           <label class="toggle-line">
             <input type="checkbox" data-welcome-dm-enabled><span></span>
-            <strong data-i18n="welcome.dm">✉️ Message privé</strong>
+            <strong data-i18n="welcome.dm"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-mail"/></svg> Message privé</strong>
             <small data-i18n="welcome.dmHelp">Envoyé directement au nouveau membre.</small>
           </label>
           <label class="toggle-line">
             <input type="checkbox" data-welcome-embed-enabled><span></span>
-            <strong data-i18n="welcome.embed">🎨 Format embed</strong>
+            <strong data-i18n="welcome.embed"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-palette"/></svg> Format embed</strong>
             <small data-i18n="welcome.embedHelp">Décoché, le message est envoyé en texte simple.</small>
           </label>
         </div>
@@ -937,7 +998,7 @@
                 <input type="file" accept="image/*" data-welcome-image-file hidden>
                 <input type="hidden" data-welcome-image>
                 <div class="image-picker-actions">
-                  <button class="secondary-btn compact" type="button" data-welcome-image-pick data-i18n="welcome.imageChoisir">🖼️ Choisir une image</button>
+                  <button class="secondary-btn compact" type="button" data-welcome-image-pick data-i18n="welcome.imageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Choisir une image</button>
                   <button class="secondary-btn compact" type="button" data-welcome-image-clear hidden data-i18n="welcome.imageRetirer">Retirer</button>
                 </div>
                 <img class="image-picker-preview" data-welcome-image-preview alt="" hidden>
@@ -963,7 +1024,7 @@
                 <div class="discord-preview-body">
                   <p class="discord-preview-author">ModBot <span class="discord-preview-tag" data-i18n="dash.app">APP</span></p>
                   <div class="discord-preview-embed" data-welcome-preview-embed>
-                    <strong data-welcome-preview-title data-i18n="dash.bienvenue2">👋 Bienvenue</strong>
+                    <strong data-welcome-preview-title data-i18n="dash.bienvenue2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg> Bienvenue</strong>
                     <p data-welcome-preview-text></p>
                     <img data-welcome-preview-image alt="" hidden>
                     <span class="discord-preview-footer" data-welcome-preview-footer></span>
@@ -979,13 +1040,13 @@
       <section class="dash-panel" data-dashboard-panel="giveaways">
         <div class="panel-title">
           <div>
-            <p class="eyebrow" data-i18n="gw.eyebrow">🎉 Tirages au sort</p>
+            <p class="eyebrow" data-i18n="gw.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg> Tirages au sort</p>
             <h2 data-i18n="gw.title">Giveaways</h2>
           </div>
           <div class="panel-title-actions">
             <span class="state" data-giveaway-count></span>
-            <button class="secondary-btn compact" type="button" data-giveaway-reload data-i18n="gw.reload">↻ Actualiser</button>
-            <button class="primary-btn compact" type="button" data-giveaway-new data-i18n="gw.new">➕ Nouveau giveaway</button>
+            <button class="secondary-btn compact" type="button" data-giveaway-reload data-i18n="gw.reload"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg> Actualiser</button>
+            <button class="primary-btn compact" type="button" data-giveaway-new data-i18n="gw.new"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Nouveau giveaway</button>
           </div>
         </div>
 
@@ -1024,7 +1085,7 @@
           </div>
 
           <div class="search-actions">
-            <button class="primary-btn compact" type="submit" data-i18n="gw.publish">🎉 Publier</button>
+            <button class="primary-btn compact" type="submit" data-i18n="gw.publish"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg> Publier</button>
             <button class="secondary-btn compact" type="button" data-giveaway-cancel data-i18n="gw.cancel">Annuler</button>
           </div>
         </form>
@@ -1040,7 +1101,7 @@
       <section class="dash-panel" data-dashboard-panel="search">
         <div class="panel-title">
           <div>
-            <p class="eyebrow" data-i18n="dash.recherche">🔎 Recherche</p>
+            <p class="eyebrow" data-i18n="dash.recherche"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-search"/></svg> Recherche</p>
             <h2 data-i18n="dash.membresEtRoles">Membres et rôles</h2>
           </div>
           <div class="panel-title-actions">
@@ -1050,19 +1111,19 @@
 
         <div class="search-modes" role="tablist" aria-label="Type de recherche" data-i18n-aria="dash.typeDeRecherche">
           <button class="search-mode is-active" type="button" role="tab" aria-selected="true" data-search-mode="members" data-i18n="dash.rechercheMembres">
-            <span aria-hidden="true">👤</span> Membres
+            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-user"/></svg></span> Membres
           </button>
           <button class="search-mode" type="button" role="tab" aria-selected="false" data-search-mode="roles" data-i18n="dash.rechercheRoles">
-            <span aria-hidden="true">🎭</span> Rôles
+            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-mask"/></svg></span> Rôles
           </button>
         </div>
 
         <div class="search-bar">
-          <span class="search-bar-icon" aria-hidden="true">🔎</span>
+          <span class="search-bar-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-search"/></svg></span>
           <input type="search" data-search-input
                  placeholder="Nom, pseudo ou identifiant Discord…"
                  aria-label="Rechercher un membre ou un rôle" autocomplete="off" data-i18n-placeholder="dash.nomPseudoOuIdentifiant" data-i18n-aria="dash.rechercherUnMembreOu">
-          <button class="secondary-btn compact" type="button" data-search-clear hidden data-i18n="dash.effacer">✕ Effacer</button>
+          <button class="secondary-btn compact" type="button" data-search-clear hidden data-i18n="dash.effacer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg> Effacer</button>
         </div>
         <p class="field-help" data-search-help data-i18n-html="dash.rechercheUnMembreOu">
           Recherche un membre ou un rôle pour agir dessus.
@@ -1094,10 +1155,10 @@
       <section class="dash-panel" data-dashboard-panel="language">
         <div class="panel-title">
           <div>
-            <p class="eyebrow" data-i18n="dash.langue">🌍 Langue</p>
+            <p class="eyebrow" data-i18n="dash.langue"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg> Langue</p>
             <h2 data-i18n="dash.textesDuBot">Textes du bot</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetLangue">♻️ Reset langue</button>
+          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetLangue"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-reset"/></svg> Reset langue</button>
         </div>
 
         <div class="tool-panel form-panel narrow">
@@ -1126,14 +1187,14 @@
       <section class="dash-panel" data-dashboard-panel="socials">
         <div class="panel-title">
           <div>
-            <p class="eyebrow" data-i18n="dash.reseauxSociaux">📣 Réseaux sociaux</p>
+            <p class="eyebrow" data-i18n="dash.reseauxSociaux"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Réseaux sociaux</p>
             <h2 data-i18n="dash.relaisAutomatiqueDesPublications">Relais automatique des publications</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetReseaux">♻️ Reset réseaux</button>
+          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetReseaux"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-reset"/></svg> Reset réseaux</button>
         </div>
 
         <div class="tool-panel social-info">
-          <strong data-i18n="dash.principe">🔔 Principe</strong>
+          <strong data-i18n="dash.principe"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-bell"/></svg> Principe</strong>
           <p data-i18n="dash.ajouteLeLienDu">Ajoute le lien du compte et l’ID du salon Discord. Le bot surveille la plateforme et poste une annonce dans ce salon dès qu’un nouveau contenu est détecté ou lorsqu’un test est lancé.</p>
         </div>
 
@@ -1155,7 +1216,7 @@
             </label>
             <div class="social-actions">
               <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
-              <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester">🧪 Tester</button>
+              <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flask"/></svg> Tester</button>
             </div>
           </article>
 
@@ -1176,7 +1237,7 @@
             </label>
             <div class="social-actions">
               <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
-              <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester2">🧪 Tester</button>
+              <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flask"/></svg> Tester</button>
             </div>
           </article>
 
@@ -1197,7 +1258,7 @@
             </label>
             <div class="social-actions">
               <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
-              <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester3">🧪 Tester</button>
+              <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester3"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flask"/></svg> Tester</button>
             </div>
           </article>
 
@@ -1218,7 +1279,7 @@
             </label>
             <div class="social-actions">
               <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
-              <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester4">🧪 Tester</button>
+              <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester4"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flask"/></svg> Tester</button>
             </div>
           </article>
         </div>
@@ -1227,40 +1288,40 @@
       <section class="dash-panel" data-dashboard-panel="ratings">
         <div class="panel-title">
           <div>
-            <p class="eyebrow" data-i18n="dash.ratings2">⭐ Ratings</p>
+            <p class="eyebrow" data-i18n="dash.ratings2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Ratings</p>
             <h2 data-i18n="dash.qualiteDuSupport">Qualité du support</h2>
           </div>
-          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetRatings">♻️ Reset ratings</button>
+          <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetRatings"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-reset"/></svg> Reset ratings</button>
         </div>
 
         <div class="metric-grid">
-          <article class="metric-card"><span data-i18n="dash.moyenne">⭐ Moyenne</span><strong data-rating-average>0.00/5</strong><small data-rating-label data-i18n="dash.aucuneNoteReelle">Aucune note réelle</small></article>
-          <article class="metric-card"><span data-i18n="dash.avis">💬 Avis</span><strong data-rating-count>0</strong><small data-i18n="dash.notesEnvoyeesApresTicket">Notes envoyées après ticket</small></article>
-          <article class="metric-card"><span data-i18n="dash.ticketsSuivis">✅ Tickets suivis</span><strong data-rating-ticket-count>0</strong><small data-i18n="dash.ticketsEnregistresParLe">Tickets enregistrés par le bot</small></article>
-          <article class="metric-card"><span data-i18n="dash.derniereNote">📊 Dernière note</span><strong data-rating-last>—</strong><small data-i18n="dash.derniereEvaluationRecue">Dernière évaluation reçue</small></article>
+          <article class="metric-card"><span data-i18n="dash.moyenne"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Moyenne</span><strong data-rating-average>0.00/5</strong><small data-rating-label data-i18n="dash.aucuneNoteReelle">Aucune note réelle</small></article>
+          <article class="metric-card"><span data-i18n="dash.avis"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-message"/></svg> Avis</span><strong data-rating-count>0</strong><small data-i18n="dash.notesEnvoyeesApresTicket">Notes envoyées après ticket</small></article>
+          <article class="metric-card"><span data-i18n="dash.ticketsSuivis"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-check"/></svg> Tickets suivis</span><strong data-rating-ticket-count>0</strong><small data-i18n="dash.ticketsEnregistresParLe">Tickets enregistrés par le bot</small></article>
+          <article class="metric-card"><span data-i18n="dash.derniereNote"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg> Dernière note</span><strong data-rating-last>—</strong><small data-i18n="dash.derniereEvaluationRecue">Dernière évaluation reçue</small></article>
         </div>
       </section>
 
       <section class="dash-panel" data-dashboard-panel="logs">
         <div class="panel-title">
           <div>
-            <p class="eyebrow" data-i18n="dash.logs2">🧾 Logs</p>
+            <p class="eyebrow" data-i18n="dash.logs2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs</p>
             <h2 data-i18n="dash.journalDuServeur2">Journal du serveur</h2>
           </div>
           <div class="panel-title-actions">
-            <button class="secondary-btn compact" type="button" data-logs-reload data-i18n="dash.actualiser3">↻ Actualiser</button>
-            <button class="secondary-btn compact" type="button" data-logs-export data-i18n="dash.exporter">📤 Exporter</button>
+            <button class="secondary-btn compact" type="button" data-logs-reload data-i18n="dash.actualiser3"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg> Actualiser</button>
+            <button class="secondary-btn compact" type="button" data-logs-export data-i18n="dash.exporter"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-download"/></svg> Exporter</button>
           </div>
         </div>
 
         <div class="log-filters" data-log-filters role="tablist" aria-label="Catégories de logs" data-i18n-aria="dash.categoriesDeLogs">
-          <button class="log-filter is-active" type="button" data-log-category="all" role="tab" aria-selected="true" data-i18n="dash.tout">🗂️ Tout</button>
+          <button class="log-filter is-active" type="button" data-log-category="all" role="tab" aria-selected="true" data-i18n="dash.tout"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-folders"/></svg> Tout</button>
         </div>
 
         <div class="tool-panel">
           <div class="table-head">
-            <h3 data-i18n="dash.categoriesEnregistrees">📡 Catégories enregistrées</h3>
-            <button class="secondary-btn compact" type="button" data-logs-save data-i18n="dash.enregistrer2">💾 Enregistrer</button>
+            <h3 data-i18n="dash.categoriesEnregistrees"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-broadcast"/></svg> Catégories enregistrées</h3>
+            <button class="secondary-btn compact" type="button" data-logs-save data-i18n="dash.enregistrer2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg> Enregistrer</button>
           </div>
           <p class="field-help" data-i18n="dash.decocheUneCategoriePour">Décoche une catégorie pour cesser de la publier sur Discord. Elle reste consultable ici.</p>
           <div class="log-toggle-grid" data-log-toggles></div>
@@ -1278,20 +1339,20 @@
   <button class="ai-launcher" type="button" data-ai-launcher
           aria-expanded="false" aria-controls="aiAssistant"
           aria-label="Ouvrir l'assistant IA" data-i18n-aria="dash.ouvrirAssistantIa">
-    <span class="ai-launcher-icon" aria-hidden="true">✨</span>
+    <span class="ai-launcher-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg></span>
     <span class="ai-launcher-label" data-i18n="ai.launcher">Assistant IA</span>
   </button>
 
   <section class="ai-assistant" id="aiAssistant" data-ai-panel aria-hidden="true" hidden>
     <header class="ai-header">
       <div class="ai-header-title">
-        <span class="ai-avatar" aria-hidden="true">✨</span>
+        <span class="ai-avatar" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg></span>
         <div>
           <strong data-i18n="ai.title">Assistant ModBot</strong>
           <small data-ai-status data-i18n="ai.subtitle">Pose ta question sur la configuration</small>
         </div>
       </div>
-      <button class="ai-close" type="button" data-ai-close aria-label="Fermer l'assistant" data-i18n-aria="dash.fermerAssistant">✕</button>
+      <button class="ai-close" type="button" data-ai-close aria-label="Fermer l'assistant" data-i18n-aria="dash.fermerAssistant"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button>
     </header>
 
     <div class="ai-messages" data-ai-messages role="log" aria-live="polite"></div>
@@ -1307,7 +1368,7 @@
       <input type="text" data-ai-input maxlength="1200" autocomplete="off"
              data-i18n-placeholder="ai.placeholder"
              placeholder="Écris ta question…" aria-label="Votre question" data-i18n-aria="dash.votreQuestion">
-      <button class="primary-btn compact" type="submit" data-ai-send aria-label="Envoyer" data-i18n-aria="dash.envoyer">➤</button>
+      <button class="primary-btn compact" type="submit" data-ai-send aria-label="Envoyer" data-i18n-aria="dash.envoyer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-send"/></svg></button>
     </form>
   </section>
 
@@ -1317,12 +1378,12 @@
 
   <div class="dashboard-modal" data-unsaved-modal hidden role="dialog" aria-modal="true" aria-labelledby="unsavedTitle">
     <div class="dashboard-modal-card">
-      <p class="eyebrow" data-i18n="dash.modificationsNonSauvegardees">⚠️ Modifications non sauvegardées</p>
+      <p class="eyebrow" data-i18n="dash.modificationsNonSauvegardees"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-alert"/></svg> Modifications non sauvegardées</p>
       <h2 id="unsavedTitle" data-i18n="dash.veuillezSauvegarderCeQue">Veuillez sauvegarder ce que vous avez fait</h2>
       <p data-i18n="dash.tuAsModifieCette">Tu as modifié cette partie du dashboard. Choisis quoi faire avant de changer de configuration.</p>
       <div class="dashboard-modal-actions">
-        <button class="primary-btn compact" type="button" data-unsaved-save data-i18n="dash.sauvegarder">💾 Sauvegarder</button>
-        <button class="secondary-btn compact" type="button" data-unsaved-discard data-i18n="dash.laisserTomber">🗑️ Laisser tomber</button>
+        <button class="primary-btn compact" type="button" data-unsaved-save data-i18n="dash.sauvegarder"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg> Sauvegarder</button>
+        <button class="secondary-btn compact" type="button" data-unsaved-discard data-i18n="dash.laisserTomber"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-trash"/></svg> Laisser tomber</button>
       </div>
     </div>
   </div>

@@ -8626,3 +8626,74 @@ label,
   .integration svg { width: 16px; height: 16px; }
   .integrations-title { font-size: 0.76rem; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   SYMBOLES D'INTERFACE
+   Ils remplacent les emoji : ceux-ci changeaient de dessin d'un système
+   à l'autre, n'héritaient pas de la couleur du texte, et leur graisse
+   ne s'accordait à rien. Un tracé suit la couleur et la taille de son
+   libellé, partout pareil.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.ui-icon {
+  width: 1.05em;
+  height: 1.05em;
+  flex: none;
+  /* Alignement sur la ligne de base du texte voisin : sans ce décalage
+     l'icône flotte trop haut à côté d'une majuscule. */
+  vertical-align: -0.16em;
+  color: inherit;
+}
+
+/* Un titre porte son symbole un peu plus grand, et légèrement en retrait */
+h2 > .ui-icon,
+h3 > .ui-icon,
+.panel-title h2 > .ui-icon {
+  width: 1.1em;
+  height: 1.1em;
+  margin-right: 0.42em;
+  color: var(--purple-2);
+}
+
+/* Dans un bouton, l'icône se sépare du libellé sans espace insécable */
+.primary-btn > .ui-icon,
+.secondary-btn > .ui-icon,
+.dash-nav .ui-icon,
+.admin-nav .ui-icon,
+.log-filter > .ui-icon,
+.search-mode > .ui-icon {
+  margin-right: 0.5em;
+}
+
+/* Les entrées de navigation gardent leur symbole en gris tant qu'elles
+   ne sont pas actives : l'accent doit désigner une seule chose. */
+.dash-nav .ui-icon,
+.admin-nav .ui-icon { color: var(--muted); transition: color 0.16s ease; }
+.dash-nav:hover .ui-icon,
+.admin-nav:hover .ui-icon { color: var(--soft); }
+.dash-nav.is-active .ui-icon,
+.admin-nav.is-active .ui-icon { color: var(--purple-2); }
+
+/* Les boutons pleins portent un symbole de la couleur du texte */
+.primary-btn > .ui-icon { color: currentColor; }
+
+/* Danger : le symbole prend la teinte de l'action */
+.secondary-btn.danger > .ui-icon,
+.danger-btn > .ui-icon { color: #ff8b8d; }
+
+/* Les alertes et encarts colorent leur symbole comme leur bordure */
+.alert-panel > strong > .ui-icon { color: var(--warn); }
+.inline-hint > strong > .ui-icon { color: var(--purple-2); }
+
+/* Le bouton d'envoi de l'assistant est rond : le symbole se centre */
+.ai-composer button > .ui-icon {
+  margin: 0;
+  width: 1.15em;
+  height: 1.15em;
+  vertical-align: middle;
+}
+
+@media (max-width: 560px) {
+  .dash-nav .ui-icon,
+  .admin-nav .ui-icon { margin-right: 0.35em; }
+}
