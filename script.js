@@ -373,7 +373,7 @@ function getCommandMarkup(command) {
           </div>
           <div class="avert-field id">
             <strong>ID</strong>
-            <span class="embed-pill">1189681599965573131</span>
+            <span class="embed-pill">000000000000000000</span>
           </div>
           <div class="avert-field joined">
             <strong>${t("js.demo.rejointLe")}</strong>
@@ -1184,38 +1184,20 @@ function initAdminZone() {
   const adminZone = document.getElementById("admin");
   if (!adminZone) return;
 
-  const allowedAdminIds = new Set([
-    "1189681599965573131"
-  ]);
   const installs = document.querySelector("[data-admin-stat='installs']");
   const membresProteges = document.querySelector("[data-admin-stat='members']");
   const actionsEnregistrees = document.querySelector("[data-admin-stat='events']");
   const sanctionsTotal = document.querySelector("[data-admin-stat='sanctions']");
   const statsBadge = document.querySelector("[data-admin-stats-badge]");
   const logsBadge = document.querySelector("[data-admin-logs-badge]");
-  const adminIdInput = document.querySelector("[data-admin-id]");
-  const adminError = document.querySelector("[data-admin-error]");
   const adminStatus = document.querySelector("[data-admin-status]");
   const adminGateItems = document.querySelectorAll("[data-admin-gate]");
   const protectedItems = document.querySelectorAll("[data-admin-protected]");
   const toast = document.getElementById("adminToast");
   const adminTabs = document.querySelectorAll("[data-admin-tab]");
   const adminPanels = document.querySelectorAll("[data-admin-panel]");
-  let storedAdminIds = [];
-  try {
-    storedAdminIds = JSON.parse(localStorage.getItem("modbot-admin-ids") || "[]");
-  } catch (error) {
-    storedAdminIds = [];
-  }
   let adminToastTimer;
 
-  if (Array.isArray(storedAdminIds)) {
-    storedAdminIds.forEach((adminId) => {
-      if (typeof adminId === "string" && adminId.trim()) {
-        allowedAdminIds.add(adminId.trim());
-      }
-    });
-  }
 
   function showAdminToast(message) {
     if (!toast) return;
@@ -1336,7 +1318,7 @@ function initAdminZone() {
     }
   }
 
-  function unlockAdmin(adminId) {
+  function unlockAdmin(utilisateur) {
     adminGateItems.forEach((item) => {
       item.hidden = true;
     });
@@ -1349,30 +1331,116 @@ function initAdminZone() {
       adminStatus.classList.remove("is-locked");
       adminStatus.innerHTML = `<span></span> ${escapeHtmlValue(t("js.adm.adminValide"))}`;
     }
-    if (adminError) adminError.hidden = true;
-    sessionStorage.setItem("modbot-admin-id", adminId);
+    afficherIdentite(utilisateur);
     loadAdminStats();
+    chargerAdministrateurs();
     showAdminToast(t("js.adm.accesOuvert"));
   }
 
-  function tryUnlockAdmin() {
-    const adminId = adminIdInput?.value.trim() || "";
-    if (!allowedAdminIds.has(adminId)) {
-      if (adminError) adminError.hidden = false;
-      showAdminToast(t("js.adm.idNonAutorise"));
+  /**
+   * Ferme l'espace et vide reellement les zones deja chargees : un `hidden`
+   * retire a la main dans les devtools ne doit rien laisser voir.
+   */
+  function verrouiller(niveau, message) {
+    adminGateItems.forEach((item) => { item.hidden = false; });
+    protectedItems.forEach((item) => {
+      item.hidden = true;
+      item.querySelectorAll("[data-admin-sensitive]").forEach((zone) => {
+        zone.innerHTML = "";
+      });
+    });
+    if (adminStatus) {
+      adminStatus.classList.add("is-locked");
+      adminStatus.innerHTML = `<span></span> ${escapeHtmlValue(t("adm.verrouille"))}`;
+    }
+    if (niveau) afficherEtat(niveau, message);
+  }
+
+  function afficherEtat(niveau, message) {
+    const boite = document.querySelector("[data-admin-gate-state]");
+    const point = document.querySelector("[data-admin-gate-dot]");
+    const texte = document.querySelector("[data-admin-gate-text]");
+    if (!boite) return;
+    boite.hidden = false;
+    boite.dataset.level = niveau;
+    if (point) point.dataset.level = niveau;
+    if (texte) texte.textContent = message;
+  }
+
+  function afficherIdentite(utilisateur) {
+    const boite = document.querySelector("[data-admin-identity]");
+    if (!boite || !utilisateur) return;
+    boite.hidden = false;
+    const nom = boite.querySelector("[data-admin-username]");
+    const id = boite.querySelector("[data-admin-userid]");
+    const avatar = boite.querySelector("[data-admin-avatar]");
+    if (nom) nom.textContent = utilisateur.username || "Discord";
+    if (id) id.textContent = `ID ${utilisateur.user_id || "\u2014"}`;
+    if (avatar && utilisateur.avatar) avatar.src = utilisateur.avatar;
+  }
+
+  function oublierSession() {
+    localStorage.removeItem("modbot-dashboard-session");
+    sessionStorage.removeItem("modbot-dashboard-session");
+  }
+
+  /**
+   * C'est le bot qui decide, pas le navigateur.
+   *
+   * L'ancienne version comparait un identifiant saisi a une liste ecrite en
+   * clair dans ce fichier : l'identifiant etait public, et n'importe qui
+   * pouvait s'ajouter a la liste via localStorage. Ici, on demande a l'API
+   * « suis-je administrateur ? » et on se contente d'afficher la reponse.
+   * Meme forcee, la page reste vide : chaque route /api/admin/ reverifie.
+   */
+  async function verifierAcces() {
+    if (!getModbotSessionToken() && !getModbotApiToken()) {
+      verrouiller("attente", t("js.adm.sessionRequise"));
       return;
     }
-    unlockAdmin(adminId);
+
+    afficherEtat("attente", t("js.adm.verificationEnCours"));
+    try {
+      const data = await modbotApiFetch("/api/me", { cache: "no-store" });
+      const utilisateur = data.user || {};
+
+      if (utilisateur.admin === true) {
+        unlockAdmin(utilisateur);
+        return;
+      }
+
+      // Session valide, compte non autorise : on affiche l'identifiant pour
+      // que la personne sache quoi faire ajouter.
+      afficherIdentite(utilisateur);
+      verrouiller("refus", t("js.adm.pasAdmin"));
+      showAdminToast(t("js.adm.accesRefuse"));
+    } catch (error) {
+      const message = String(error?.message || "");
+      if (/401|expir|session/i.test(message)) {
+        oublierSession();
+        verrouiller("attente", t("js.adm.sessionRequise"));
+      } else {
+        verrouiller("erreur", t("js.adm.botInjoignable").replace("{detail}", message));
+      }
+    }
   }
 
-  const savedAdminId = sessionStorage.getItem("modbot-admin-id");
-  if (savedAdminId && allowedAdminIds.has(savedAdminId)) {
-    unlockAdmin(savedAdminId);
-  }
+  document.querySelector("[data-admin-login]")?.addEventListener("click", () => {
+    const base = getModbotApiBase();
+    if (!base) {
+      afficherEtat("erreur", t("js.adm.adresseIntrouvable"));
+      return;
+    }
+    const retour = location.origin + location.pathname;
+    location.href = `${base}/api/auth/discord/login?redirect=${encodeURIComponent(retour)}`;
+  });
 
-  document.querySelector("[data-admin-unlock]")?.addEventListener("click", tryUnlockAdmin);
-  adminIdInput?.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") tryUnlockAdmin();
+  document.querySelector("[data-admin-logout]")?.addEventListener("click", () => {
+    oublierSession();
+    const boite = document.querySelector("[data-admin-identity]");
+    if (boite) boite.hidden = true;
+    verrouiller("attente", t("js.adm.sessionRequise"));
+    showAdminToast(t("js.adm.deconnecte"));
   });
 
   adminTabs.forEach((tab) => {
@@ -1384,41 +1452,32 @@ function initAdminZone() {
   });
 
 
-  document.querySelector("[data-add-admin]")?.addEventListener("click", () => {
-    const input = document.querySelector("[data-new-admin-id]");
-    const list = document.querySelector("[data-admin-list]");
-    const adminId = input?.value.trim();
-    if (!adminId || !list) {
-      showAdminToast(t("js.adm.ajouteUnId"));
-      return;
+  /**
+   * Liste des administrateurs, fournie par le bot et non modifiable ici.
+   *
+   * L'ancienne version ajoutait l'identifiant au localStorage du visiteur :
+   * cela ne donnait aucun droit reel, et laissait croire le contraire. La
+   * seule source est DASHBOARD_ADMIN_IDS, cote hebergeur.
+   */
+  async function chargerAdministrateurs() {
+    const liste = document.querySelector("[data-admin-list]");
+    if (!liste) return;
+    try {
+      const data = await modbotApiFetch("/api/admin/admins", { cache: "no-store" });
+      const admins = data.admins || [];
+      liste.innerHTML = admins.map((admin) => `
+        <div>
+          <span>
+            <strong>${escapeHtmlValue(admin.username || admin.id)}</strong>
+            <small>ID ${escapeHtmlValue(admin.id)}${admin.is_you ? " \u2014 " + escapeHtmlValue(t("js.adm.cestToi")) : ""}</small>
+          </span>
+          <button type="button" disabled>${escapeHtmlValue(t("js.adm.definiSurLeServeur"))}</button>
+        </div>`).join("")
+        || `<div><span><strong>${escapeHtmlValue(t("js.adm.aucunAdmin"))}</strong></span></div>`;
+    } catch (error) {
+      liste.innerHTML = `<p class="field-help">${escapeHtmlValue(error?.message || "")}</p>`;
     }
-    if (allowedAdminIds.has(adminId)) {
-      showAdminToast(t("js.adm.dejaAutorise"));
-      return;
-    }
-    allowedAdminIds.add(adminId);
-    const nextStoredIds = Array.from(allowedAdminIds);
-    localStorage.setItem("modbot-admin-ids", JSON.stringify(nextStoredIds));
-    const item = document.createElement("div");
-    item.innerHTML = `
-      <span><strong>${escapeHtmlValue(adminId)}</strong><small>${escapeHtmlValue(t("js.adm.ajouteManuellement"))}</small></span>
-      <button type="button" data-remove-admin="${escapeHtmlValue(adminId)}">${escapeHtmlValue(t("js.retirer"))}</button>
-    `;
-    list.append(item);
-    input.value = "";
-    showAdminToast(tp("js.adm.adminAjoute", { id: adminId }));
-  });
-
-  document.querySelector("[data-admin-list]")?.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-remove-admin]");
-    if (!button) return;
-    const adminId = button.dataset.removeAdmin;
-    if (!adminId) return;
-    allowedAdminIds.delete(adminId);
-    localStorage.setItem("modbot-admin-ids", JSON.stringify(Array.from(allowedAdminIds)));
-    button.closest("div")?.remove();
-    showAdminToast(tp("js.adm.adminRetire", { id: adminId }));
-  });
+  }
 
   document.querySelector("[data-blacklist-add]")?.addEventListener("click", async () => {
     const memberInput = document.querySelector("[data-blacklist-member]");
@@ -1464,6 +1523,9 @@ function initAdminZone() {
     await loadAdminStats();
     showAdminToast(t("js.adm.listeRafraichie"));
   });
+
+  // Le bot tranche a l'ouverture, et au retour d'une connexion Discord.
+  verifierAcces();
 }
 
 let revealObserver;

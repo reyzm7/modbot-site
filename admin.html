@@ -67,19 +67,38 @@
     <div class="admin-gate-grid" data-admin-gate>
       <article class="admin-panel admin-login-panel">
         <h3 data-i18n="admin.access.title">🔐 Accès admin</h3>
-        <p data-i18n="admin.access.copy">Entre ton identifiant Discord administrateur pour ouvrir l’espace de gestion.</p>
-        <label>
-          <span data-i18n="admin.access.label">ID Discord administrateur</span>
-          <input type="text" inputmode="numeric" autocomplete="off" placeholder="Exemple : 1189681599965573131" data-admin-id data-i18n-placeholder="adm.exemple">
-        </label>
-        <p class="oauth-note" data-i18n="adm.laConnexionReelleSe">La connexion réelle se fait via l’autorisation Discord de ModBot, puis l’accès admin est vérifié avec ton identifiant Discord autorisé.</p>
-        <p class="admin-error" data-admin-error hidden data-i18n="adm.idNonAutorisePour">❌ ID non autorisé pour cet espace administrateur.</p>
-        <button class="primary-btn compact" type="button" data-admin-unlock data-i18n="admin.access.button">Déverrouiller</button>
+        <p data-i18n="admin.access.copy">Cet espace est réservé aux administrateurs de ModBot. Connecte-toi avec Discord : c'est le bot qui vérifiera si ton compte y a droit.</p>
+
+        <button class="discord-login-btn" type="button" data-admin-login>
+          <svg viewBox="0 0 24 18" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M20.3 1.6A19.8 19.8 0 0 0 15.4.1l-.3.5c1.6.4 3 1 4.3 1.8a16.9 16.9 0 0 0-14.9 0A15.6 15.6 0 0 1 8.9.6L8.6.1A19.7 19.7 0 0 0 3.7 1.6C.6 6.2-.3 10.7.2 15.1a19.9 19.9 0 0 0 6 3l1.2-1.9c-.7-.2-1.3-.5-1.9-.9l.5-.4a14.2 14.2 0 0 0 12.1 0l.5.4c-.6.4-1.2.7-1.9.9l1.2 1.9a19.8 19.8 0 0 0 6-3c.6-5.1-.8-9.6-3.6-13.5ZM8.1 12.4c-1.2 0-2.1-1.1-2.1-2.4S6.9 7.6 8.1 7.6s2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Zm7.8 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Z"/>
+          </svg>
+          <span data-i18n="admin.access.button">Se connecter avec Discord</span>
+        </button>
+
+        <div class="admin-gate-state" data-admin-gate-state hidden>
+          <span class="admin-gate-dot" data-admin-gate-dot></span>
+          <span data-admin-gate-text></span>
+        </div>
+
+        <div class="admin-identity" data-admin-identity hidden>
+          <img src="assets/default_logo.svg" alt="" data-admin-avatar>
+          <div>
+            <strong data-admin-username>—</strong>
+            <small data-admin-userid>—</small>
+          </div>
+          <button class="secondary-btn compact" type="button" data-admin-logout data-i18n="adm.seDeconnecter">Se déconnecter</button>
+        </div>
       </article>
 
       <article class="admin-panel admin-access-note">
         <h3 data-i18n="adm.securite">🛡️ Sécurité</h3>
-        <p data-i18n="adm.lesStatistiquesLesServeurs">Les statistiques, les serveurs, les administrateurs et la blacklist restent masqués tant que l’ID Discord administrateur n’est pas validé.</p>
+        <ol class="admin-steps">
+          <li data-i18n="adm.etape1">Tu autorises ModBot sur ton compte Discord.</li>
+          <li data-i18n="adm.etape2">Le bot crée une session et retient ton identifiant.</li>
+          <li data-i18n="adm.etape3">À chaque requête, il compare cet identifiant à la liste DASHBOARD_ADMIN_IDS, qui vit sur le serveur.</li>
+        </ol>
+        <p class="oauth-note" data-i18n="adm.lesStatistiquesLesServeurs">Cette liste n'est jamais envoyée au navigateur. Même en modifiant cette page, on n'obtient aucune donnée : le bot refuse les requêtes des comptes non autorisés.</p>
       </article>
     </div>
 
@@ -127,8 +146,8 @@
               <input type="text" inputmode="numeric" placeholder="ID Discord administrateur" data-new-admin-id data-i18n-placeholder="adm.idDiscordAdministrateur">
               <button class="primary-btn compact" type="button" data-add-admin data-i18n="adm.ajouter">➕ Ajouter</button>
             </div>
-            <div class="admin-list" data-admin-list>
-              <div><span><strong>1189681599965573131</strong><small data-i18n="adm.proprietaire">Propriétaire</small></span><button type="button" disabled data-i18n="adm.protege">Protégé</button></div>
+            <div class="admin-list" data-admin-list data-admin-sensitive>
+              <div><span><strong data-i18n="adm.chargement">Chargement…</strong><small data-i18n="adm.listeFournieParLeBot">Liste fournie par le bot</small></span></div>
             </div>
           </article>
         </section>
@@ -144,7 +163,7 @@
               <input type="text" placeholder="Raison" data-blacklist-reason data-i18n-placeholder="adm.raison">
               <button class="primary-btn compact danger-btn" type="button" data-blacklist-add data-i18n="adm.blacklist">🚫 Blacklist</button>
             </div>
-            <div class="blacklist-list" data-blacklist-list>
+            <div class="blacklist-list" data-blacklist-list data-admin-sensitive>
               <div><span><strong data-i18n="adm.aucunMembreBlackliste">Aucun membre blacklisté</strong><small data-i18n="adm.laListeSeraSynchronisee">La liste sera synchronisée avec le backend.</small></span></div>
             </div>
           </article>
@@ -157,7 +176,7 @@
               <button class="secondary-btn compact" type="button" data-refresh-servers data-i18n="admin.servers.refresh">Rafraîchir</button>
             </div>
             <p data-i18n="admin.servers.copy">Les serveurs où ModBot est installé, lus en direct sur le bot. Le bouton Rafraîchir relance la lecture.</p>
-            <div class="admin-server-list" data-admin-server-list>
+            <div class="admin-server-list" data-admin-server-list data-admin-sensitive>
               <p class="field-help" data-i18n="adm.serveursChargement">Chargement des serveurs…</p>
             </div>
           </article>
@@ -169,7 +188,7 @@
               <h3 data-i18n="adm.logsGlobauxDuBot">🧾 Logs globaux du bot</h3>
               <span class="admin-badge" data-admin-logs-badge data-i18n="adm.enAttente">En attente</span>
             </div>
-            <div class="server-log-feed" data-server-log-feed>
+            <div class="server-log-feed" data-server-log-feed data-admin-sensitive>
               <p class="field-help" data-i18n="adm.logsChargement">Chargement des logs…</p>
             </div>
           </article>
