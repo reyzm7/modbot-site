@@ -8697,3 +8697,71 @@ h3 > .ui-icon,
   .dash-nav .ui-icon,
   .admin-nav .ui-icon { margin-right: 0.35em; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   PASTILLES D'ÉTAT
+   Le point coloré était un emoji (⚪ 🟢 🔴) collé au libellé. Il devient
+   une puce dessinée en CSS : même information, une seule teinte par état,
+   et un alignement qui ne dépend plus de la police d'emoji du système.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.state,
+.health-pill,
+.admin-badge,
+.giveaway-state,
+.auth-advanced-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.state::before,
+.health-pill::before,
+.admin-badge::before,
+.auth-advanced-badge::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  /* Actif par défaut : c'est l'état le plus fréquent. */
+  background: var(--ok);
+  box-shadow: 0 0 0 3px rgba(59, 165, 93, 0.16);
+}
+
+.state.inactive::before,
+.admin-badge:not(.active)::before,
+.auth-advanced-badge::before {
+  background: var(--muted);
+  box-shadow: 0 0 0 3px rgba(139, 149, 167, 0.14);
+}
+
+.state.warning::before,
+.health-pill.is-warning::before {
+  background: var(--warn);
+  box-shadow: 0 0 0 3px rgba(232, 163, 61, 0.16);
+}
+
+.state.danger::before,
+.health-pill.is-locked::before {
+  background: var(--err);
+  box-shadow: 0 0 0 3px rgba(237, 66, 69, 0.16);
+}
+
+/* Le premier <span> vide de .health-pill servait de puce : il n'a plus
+   lieu d'être maintenant que ::before s'en charge. */
+.health-pill > span:empty { display: none; }
+
+/* Un état qui change doit se voir sans clignoter */
+.state::before,
+.health-pill::before { transition: background 0.2s ease, box-shadow 0.2s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .state::before,
+  .health-pill::before { transition: none; }
+}
+
+/* Un compteur n'est pas un état : « 0 sauvegarde » ne mérite pas de
+   pastille verte, qui laisserait croire à une confirmation. */
+.state.is-count::before { display: none; }
+.state.is-count { gap: 0; }

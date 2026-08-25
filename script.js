@@ -533,9 +533,9 @@ function askAssistant(key) {
   addAssistantMessage("user", t(data.question));
 
   window.setTimeout(() => {
-    const link = data.link && key !== "patch" ? `<a href="${discordInvite}" target="_blank" rel="noreferrer">${t(data.link)} →</a>` : "";
+    const link = data.link && key !== "patch" ? `<a href="${discordInvite}" target="_blank" rel="noreferrer">${t(data.link)}</a>` : "";
     const patchLinks = key === "patch"
-      ? `<a href="${patchDiscordChannel}" target="_blank" rel="noreferrer">${t("home.ouvrirLeSalon")} →</a><a href="${discordInvite}" target="_blank" rel="noreferrer">${t("home.rejoindreLeServeur")} →</a>`
+      ? `<a href="${patchDiscordChannel}" target="_blank" rel="noreferrer">${t("home.ouvrirLeSalon")}</a><a href="${discordInvite}" target="_blank" rel="noreferrer">${t("home.rejoindreLeServeur")}</a>`
       : "";
     addAssistantMessage("bot", `${t(data.answer)}${link}${patchLinks}`);
   }, 220);
@@ -1637,7 +1637,7 @@ function initDashboard() {
       authNote.textContent = t("js.auth.apresConnexion");
     }
     if (dashboardLoginButton) {
-      dashboardLoginButton.innerHTML = `<span>💬</span> ${escapeHtml(t("dash.seConnecterAvecDiscord"))}`;
+      dashboardLoginButton.innerHTML = `<span></span> ${escapeHtml(t("dash.seConnecterAvecDiscord"))}`;
     }
   }
 
@@ -2046,7 +2046,7 @@ function initDashboard() {
     return resultat;
   }
 
-  /** Affiche l'état de la liaison site ↔ bot sur l'écran de connexion. */
+  /** Affiche l'état de la liaison site bot sur l'écran de connexion. */
   function renderAuthStatus(overrideState) {
     const box = document.querySelector("[data-auth-status]");
     const dot = document.querySelector("[data-auth-status-dot]");
@@ -2507,7 +2507,7 @@ function initDashboard() {
     const optionList = document.getElementById("ticketOptionList");
     if (optionList && Array.isArray(tickets.options) && tickets.options.length) {
       optionList.innerHTML = tickets.options.map((option, index) => `
-        <div class="option-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(option.emoji || "🎫")}" maxlength="3"><input value="${escapeHtml(option.label || "Ticket")}"><input value="${escapeHtml(option.desc || t("js.ouvrirUnTicket"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>
+        <div class="option-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(option.emoji || "")}" maxlength="3"><input value="${escapeHtml(option.label || "Ticket")}"><input value="${escapeHtml(option.desc || t("js.ouvrirUnTicket"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>
       `).join("");
     }
 
@@ -2597,7 +2597,7 @@ function initDashboard() {
           item.dataset.lastSent = message.last_sent || "";
           item.innerHTML = `
             <span>
-              <strong>🔁 ${escapeHtml(item.dataset.name)}</strong>
+              <strong>${escapeHtml(item.dataset.name)}</strong>
               <small>Toutes les ${escapeHtml(item.dataset.interval)} ${escapeHtml(item.dataset.unit)} dans ${escapeHtml(item.dataset.channel)}</small>
             </span>
             <button class="secondary-btn compact" type="button" data-recurring-remove>Supprimer</button>
@@ -2615,8 +2615,8 @@ function initDashboard() {
       const reactionRoleList = document.querySelector("[data-reaction-role-list]");
       if (reactionRoleList) {
         reactionRoleList.innerHTML = config.reaction_roles.map((role, index) => `
-          <div class="reaction-role-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(role.emoji || "✨")}" maxlength="3"><input value="${escapeHtml(role.role_id || role.role || "")}" list="dashboardRoleOptions"><input value="${escapeHtml(role.label || role.name || t("js.role"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>
-        `).join("") || `<div class="reaction-role-row"><span>01</span><input class="emoji-input" value="✨" maxlength="3"><input value="" list="dashboardRoleOptions"><input value="${escapeHtml(t("js.nouveauRole"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>`;
+          <div class="reaction-role-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(role.emoji || "")}" maxlength="3"><input value="${escapeHtml(role.role_id || role.role || "")}" list="dashboardRoleOptions"><input value="${escapeHtml(role.label || role.name || t("js.role"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>
+        `).join("") || `<div class="reaction-role-row"><span>01</span><input class="emoji-input" value="" maxlength="3"><input value="" list="dashboardRoleOptions"><input value="${escapeHtml(t("js.nouveauRole"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>`;
       }
       const reactionChannel = document.querySelector("[data-reaction-channel]");
       const reactionMode = document.querySelector("[data-reaction-mode]");
@@ -2648,7 +2648,7 @@ function initDashboard() {
     const liveTicketEmoji = document.querySelector("[data-live-ticket-emoji]");
     if (liveTitle) liveTitle.textContent = tickets.title || t("dash.ouvreTonTicket");
     if (liveDescription) liveDescription.textContent = tickets.description || t("js.merciDeSelectionner");
-    if (liveTicketEmoji) liveTicketEmoji.textContent = tickets.emoji || "📩";
+    if (liveTicketEmoji) liveTicketEmoji.textContent = tickets.emoji || "";
     renderModerationConfig(config);
     renderDashboardStats(config);
     document.querySelectorAll("[data-dashboard-panel='channels'] .channel-row input").forEach(setInputState);
@@ -2765,7 +2765,7 @@ function initDashboard() {
         }
         if (image.size > TAILLE_IMAGE_MAX) {
           const mo = (image.size / 1024 / 1024).toFixed(1);
-          showToast(`⚠️ Image trop lourde (${mo} Mo) — 8 Mo maximum`);
+          showToast(`Image trop lourde (${mo} Mo) — 8 Mo maximum`);
           fichier.value = "";
           return;
         }
@@ -2851,7 +2851,7 @@ function initDashboard() {
           <strong>${escapeHtml(guild.name)}</strong>
           <small>${escapeHtml(statut)}</small>
         </span>
-        ${actif ? '<span class="server-switcher-check" aria-hidden="true">✓</span>' : ""}
+        ${actif ? '<span class="server-switcher-check" aria-hidden="true"></span>' : ""}
       </button>`;
       })
       .join("");
@@ -2940,10 +2940,10 @@ function initDashboard() {
     { threshold: 5, action: "ban", minutes: 0, fr: "Bannissement" }
   ];
   const SANCTION_ACTION_LABELS = {
-    warn: "⚠️ Avertissement",
-    mute: "🔇 Mute",
-    kick: "👢 Expulsion",
-    ban: "🔨 Bannissement"
+    warn: "Avertissement",
+    mute: "Mute",
+    kick: "Expulsion",
+    ban: "Bannissement"
   };
   const PERMISSION_LABELS = {
     view_audit_log: t("js.permVoirAudit"),
@@ -3105,7 +3105,7 @@ function initDashboard() {
     if (adminsEl) adminsEl.textContent = String(alerts.admins_reachable ?? "—");
     const activesEl = document.querySelector("[data-alerts-active]");
     if (activesEl) {
-      activesEl.textContent = alerts.active ? `🚨 ${alerts.active}` : t("js.aucuneAlerte");
+      activesEl.textContent = alerts.active ? `${alerts.active}` : t("js.aucuneAlerte");
     }
 
     const safeBadge = document.querySelector("[data-safe-mode-badge]");
@@ -3146,11 +3146,11 @@ function initDashboard() {
           .map(([nom]) => PERMISSION_LABELS[nom] || nom);
         liste.innerHTML =
           protections
-            .map(([nom, on]) => `<li>${on ? "🟢" : "⚪"} ${escapeHtml(nom)}</li>`)
+            .map(([nom, on]) => `<li>${on ? "" : ""} ${escapeHtml(nom)}</li>`)
             .join("") +
           (manquantes.length
-            ? `<li>🔴 ${escapeHtml(tp("js.permissionsManquantes", { liste: manquantes.join(", ") }))}</li>`
-            : `<li>🟢 ${escapeHtml(t("js.toutesPermissionsAccordees"))}</li>`);
+            ? `<li>${escapeHtml(tp("js.permissionsManquantes", { liste: manquantes.join(", ") }))}</li>`
+            : `<li>${escapeHtml(t("js.toutesPermissionsAccordees"))}</li>`);
       }
     }
 
@@ -3231,7 +3231,7 @@ function initDashboard() {
       clearUnsavedChanges();
       showToast(t("js.securiteEnregistree"));
     } catch (error) {
-      showToast(`⚠️ ${error?.message || t("js.enregistrementImpossible")}`);
+      showToast(`${error?.message || t("js.enregistrementImpossible")}`);
     }
   }
 
@@ -3402,7 +3402,7 @@ function initDashboard() {
       clearUnsavedChanges();
       showToast(t("js.bienvenueEnregistree"));
     } catch (error) {
-      showToast(`⚠️ ${error?.message || t("js.enregistrementImpossible")}`);
+      showToast(`${error?.message || t("js.enregistrementImpossible")}`);
     }
   }
 
@@ -3570,32 +3570,32 @@ function initDashboard() {
       if (req.min_account_days) conditions.push(tp("js.condCompte", { n: req.min_account_days }));
 
       const gagnants = (g.winners_picked || []).length
-        ? `<p class="giveaway-winners">🏆 ${g.winners_picked.map((u) => `<@${escapeHtml(u)}>`).join(" ")}</p>`
+        ? `<p class="giveaway-winners">${g.winners_picked.map((u) => `<@${escapeHtml(u)}>`).join(" ")}</p>`
         : "";
 
       return `
         <article class="giveaway-card ${g.ended ? "is-ended" : ""}" data-giveaway-id="${escapeHtml(g.id)}">
           <div class="giveaway-head">
             <div>
-              <h3>🎉 ${escapeHtml(g.prize || "Giveaway")}</h3>
+              <h3>${escapeHtml(g.prize || "Giveaway")}</h3>
               <p class="field-help">
                 #${escapeHtml(g.channel_name || "?")} ·
                 ${g.ended ? escapeHtml(t("js.termine")) : escapeHtml(tp("js.finDans", { delai: formatCountdown(g.seconds_left) }))} ·
-                🏆 ${g.winners} · 👥 ${g.participants}
+                ${g.winners} · ${g.participants}
               </p>
             </div>
             <span class="giveaway-state ${g.ended ? "is-ended" : "is-live"}">
               ${escapeHtml(t(g.ended ? "js.termineMaj" : "js.enCours"))}
             </span>
           </div>
-          ${conditions.length ? `<p class="giveaway-conditions">📋 ${escapeHtml(conditions.join(" · "))}</p>` : ""}
+          ${conditions.length ? `<p class="giveaway-conditions">${escapeHtml(conditions.join(" · "))}</p>` : ""}
           ${gagnants}
           <div class="search-actions">
-            ${g.url ? `<a class="secondary-btn compact" href="${escapeHtml(g.url)}" target="_blank" rel="noreferrer">🔗 Voir</a>` : ""}
-            ${!g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-edit>✏️ Modifier</button>` : ""}
-            ${!g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-end>⏹️ Terminer</button>` : ""}
-            ${g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-reroll>🎲 Relancer</button>` : ""}
-            <button class="secondary-btn compact danger" type="button" data-giveaway-delete>🗑️ Supprimer</button>
+            ${g.url ? `<a class="secondary-btn compact" href="${escapeHtml(g.url)}" target="_blank" rel="noreferrer">Voir</a>` : ""}
+            ${!g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-edit>Modifier</button>` : ""}
+            ${!g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-end>Terminer</button>` : ""}
+            ${g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-reroll>Relancer</button>` : ""}
+            <button class="secondary-btn compact danger" type="button" data-giveaway-delete>Supprimer</button>
           </div>
         </article>`;
     }).join("");
@@ -3657,7 +3657,7 @@ function initDashboard() {
     const existant = id ? giveawayList.find((g) => g.id === id) : null;
 
     if (existant) {
-      if (titre) titre.textContent = `✏️ Modifier : ${existant.prize}`;
+      if (titre) titre.textContent = `Modifier : ${existant.prize}`;
       setValue("[data-giveaway-prize]", existant.prize);
       setValue("[data-giveaway-channel]", existant.channel_id);
       setValue("[data-giveaway-duration]", Math.max(1, Math.round(existant.seconds_left / 60)));
@@ -3666,7 +3666,7 @@ function initDashboard() {
       setValue("[data-giveaway-min-messages]", (existant.requirements || {}).min_messages || 0);
       setValue("[data-giveaway-min-account]", (existant.requirements || {}).min_account_days || 0);
     } else {
-      if (titre) titre.textContent = "🎉 Nouveau giveaway";
+      if (titre) titre.textContent = "Nouveau giveaway";
       form.reset();
       setValue("[data-giveaway-duration]", 60);
       setValue("[data-giveaway-winners]", 1);
@@ -3718,7 +3718,7 @@ function initDashboard() {
       closeGiveawayForm();
       loadGiveaways();
     } catch (error) {
-      showToast(`⚠️ ${error?.message || t("js.publicationImpossibleCourt")}`);
+      showToast(`${error?.message || t("js.publicationImpossibleCourt")}`);
     }
   }
 
@@ -3729,10 +3729,10 @@ function initDashboard() {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/giveaways/${id}/action`, {
         method: "POST", body: JSON.stringify({ action })
       });
-      showToast(`✅ ${data.result || t("js.actionAppliquee")}`);
+      showToast(`${data.result || t("js.actionAppliquee")}`);
       loadGiveaways();
     } catch (error) {
-      showToast(`⚠️ ${error?.message || t("js.actionRefusee")}`);
+      showToast(`${error?.message || t("js.actionRefusee")}`);
     }
   }
 
@@ -3741,12 +3741,12 @@ function initDashboard() {
     const bouton = carte.querySelector("[data-giveaway-delete]");
     if (bouton && !bouton.dataset.confirming) {
       bouton.dataset.confirming = "1";
-      bouton.textContent = "⚠️ Confirmer";
+      bouton.textContent = "Confirmer";
       bouton.classList.add("is-confirming");
       setTimeout(() => {
         if (!bouton.isConnected) return;
         delete bouton.dataset.confirming;
-        bouton.textContent = "🗑️ Supprimer";
+        bouton.textContent = "Supprimer";
         bouton.classList.remove("is-confirming");
       }, 5000);
       return;
@@ -3758,7 +3758,7 @@ function initDashboard() {
       showToast(t("js.giveawaySupprime"));
       loadGiveaways();
     } catch (error) {
-      showToast(`⚠️ ${error?.message || t("js.suppressionImpossible")}`);
+      showToast(`${error?.message || t("js.suppressionImpossible")}`);
     }
   }
 
@@ -3798,7 +3798,7 @@ function initDashboard() {
       const lien = document.createElement("button");
       lien.type = "button";
       lien.className = "ai-panel-link";
-      lien.textContent = `→ Ouvrir « ${libelle.split("—")[0].trim() || panneau} »`;
+      lien.textContent = `Ouvrir « ${libelle.split("—")[0].trim() || panneau} »`;
       lien.addEventListener("click", () => {
         openPanel(panneau);
         setAiOpen(false);
@@ -3859,7 +3859,7 @@ function initDashboard() {
     } catch (error) {
       attente?.remove();
       const message = error?.message || t("js.assistantNaPasRepondu");
-      aiAddMessage("bot", `⚠️ ${message}`);
+      aiAddMessage("bot", `${message}`);
     } finally {
       aiBusy = false;
     }
@@ -3932,7 +3932,7 @@ function initDashboard() {
             <span class="search-result-dot" style="background:${escapeHtml(item.color || "#5865F2")}"></span>
             <span class="search-result-body">
               <strong>${escapeHtml(item.name)}</strong>
-              <small>${escapeHtml(tn("js.membreSingulier", "js.membresPluriel", item.members))}${item.immune ? ` · 🛡️ ${escapeHtml(t("js.immunise"))}` : ""}</small>
+              <small>${escapeHtml(tn("js.membreSingulier", "js.membresPluriel", item.members))}${item.immune ? ` · ${escapeHtml(t("js.immunise"))}` : ""}</small>
             </span>
           </button>`;
       }
@@ -3943,7 +3943,7 @@ function initDashboard() {
           </span>
           <span class="search-result-body">
             <strong>${escapeHtml(item.display_name)}</strong>
-            <small>@${escapeHtml(item.username)}${item.points ? ` · ⚠️ ${item.points} pt` : ""}${item.immune ? " · 🛡️" : ""}</small>
+            <small>@${escapeHtml(item.username)}${item.points ? ` · ${item.points} pt` : ""}${item.immune ? " ·" : ""}</small>
           </span>
         </button>`;
     }).join("");
@@ -3997,8 +3997,8 @@ function initDashboard() {
           </div>
         </div>
         <div class="search-detail-facts">
-          <div><span>${escapeHtml(t("js.immunite"))}</span><strong>${item.immune ? `🛡️ ${escapeHtml(t("js.activee"))}` : escapeHtml(t("js.non"))}</strong></div>
-          <div><span>${escapeHtml(t("js.confianceAntiNuke"))}</span><strong>${item.trusted ? `🤝 ${escapeHtml(t("js.activee"))}` : escapeHtml(t("js.non"))}</strong></div>
+          <div><span>${escapeHtml(t("js.immunite"))}</span><strong>${item.immune ? `${escapeHtml(t("js.activee"))}` : escapeHtml(t("js.non"))}</strong></div>
+          <div><span>${escapeHtml(t("js.confianceAntiNuke"))}</span><strong>${item.trusted ? `${escapeHtml(t("js.activee"))}` : escapeHtml(t("js.non"))}</strong></div>
           <div><span>${escapeHtml(t("js.roleGerePar"))}</span><strong>${escapeHtml(t(item.managed ? "js.oui" : "js.non"))}</strong></div>
         </div>
         ${immunityHelp(item)}
@@ -4091,7 +4091,7 @@ function initDashboard() {
         method: "POST",
         body: JSON.stringify({ action, reason: raison, minutes: 60 })
       });
-      showToast(`✅ ${data.result || t("js.actionAppliquee")}`);
+      showToast(`${data.result || t("js.actionAppliquee")}`);
       if (data.member) {
         renderSearchDetail(data.member);
       } else if (data.role) {
@@ -4100,7 +4100,7 @@ function initDashboard() {
       runSearch();               // la liste reflète le nouvel état
       loadGuildSecurity(guildId); // l'immunité modifie la liste blanche anti-nuke
     } catch (error) {
-      showToast(`⚠️ ${error?.message || t("js.actionRefusee")}`);
+      showToast(`${error?.message || t("js.actionRefusee")}`);
     }
   }
 
@@ -4177,7 +4177,7 @@ function initDashboard() {
      ══════════════════════════════════════════════════════════════════ */
 
   const LOG_SEVERITY_ICONS = {
-    info: "ℹ️", success: "✅", warning: "⚠️", danger: "🚫", critical: "🚨"
+    info: "ℹ", success: "", warning: "", danger: "", critical: ""
   };
   let logCategories = [];
   let currentLogCategory = "all";
@@ -4186,7 +4186,7 @@ function initDashboard() {
   function renderLogFilters() {
     const host = document.querySelector("[data-log-filters]");
     if (!host) return;
-    const buttons = [{ id: "all", label: "Tout", emoji: "🗂️" }, ...logCategories.map((c) => ({
+    const buttons = [{ id: "all", label: "Tout", emoji: "" }, ...logCategories.map((c) => ({
       id: c.id, label: c.label, emoji: c.emoji
     }))];
     host.innerHTML = buttons
@@ -4242,8 +4242,8 @@ function initDashboard() {
       .map((entry) => {
         const category = logCategories.find((c) => c.id === entry.category);
         const icon = LOG_SEVERITY_ICONS[entry.severity] || "•";
-        const actor = entry.actor ? `<span class="log-actor">👮 ${escapeHtml(entry.actor)}</span>` : "";
-        const target = entry.target ? `<span class="log-target">🎯 ${escapeHtml(entry.target)}</span>` : "";
+        const actor = entry.actor ? `<span class="log-actor">${escapeHtml(entry.actor)}</span>` : "";
+        const target = entry.target ? `<span class="log-target">${escapeHtml(entry.target)}</span>` : "";
         return `
       <article class="log-entry" data-severity="${escapeHtml(entry.severity || "info")}">
         <header>
@@ -4276,7 +4276,7 @@ function initDashboard() {
     } catch (error) {
       const feed = document.querySelector("[data-dashboard-log-feed]");
       if (feed) {
-        feed.innerHTML = `<div class="log-empty"><span>⚠️</span> ${escapeHtml(error?.message || "Logs indisponibles")}</div>`;
+        feed.innerHTML = `<div class="log-empty"><span></span> ${escapeHtml(error?.message || "Logs indisponibles")}</div>`;
       }
     }
   }
@@ -4336,13 +4336,13 @@ function initDashboard() {
           ${entry.note ? `<em>${escapeHtml(entry.note)}</em>` : ""}
         </div>
         <div class="backup-counts">
-          <span>🎭 ${Number(counts.roles || 0)}</span>
-          <span>🗂️ ${Number(counts.categories || 0)}</span>
-          <span>📁 ${Number(counts.channels || 0)}</span>
+          <span>${Number(counts.roles || 0)}</span>
+          <span>${Number(counts.categories || 0)}</span>
+          <span>${Number(counts.channels || 0)}</span>
         </div>
         <div class="backup-actions">
-          <button class="primary-btn compact" type="button" data-backup-restore="${escapeHtml(entry.id)}">♻️ Restaurer</button>
-          <button class="secondary-btn compact danger" type="button" data-backup-delete="${escapeHtml(entry.id)}">🗑️</button>
+          <button class="primary-btn compact" type="button" data-backup-restore="${escapeHtml(entry.id)}">Restaurer</button>
+          <button class="secondary-btn compact danger" type="button" data-backup-delete="${escapeHtml(entry.id)}"></button>
         </div>
       </article>`;
       })
@@ -4368,7 +4368,7 @@ function initDashboard() {
       showToast(t("js.selectionneDabord"));
       return;
     }
-    showToast("💾 Sauvegarde en cours…");
+    showToast("Sauvegarde en cours…");
     try {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/backups`, {
         method: "POST",
@@ -4377,7 +4377,7 @@ function initDashboard() {
       await loadGuildBackups(guildId);
       showToast(tp("js.sauvegardeCreee", { id: data.backup?.id || "" }));
     } catch (error) {
-      showToast(`⚠️ ${error?.message || t("js.sauvegardeImpossible")}`);
+      showToast(`${error?.message || t("js.sauvegardeImpossible")}`);
     }
   }
 
@@ -4409,7 +4409,7 @@ function initDashboard() {
       );
       loadGuildLogs(guildId);
     } catch (error) {
-      showToast(`⚠️ ${error?.message || t("js.restaurationImpossible")}`);
+      showToast(`${error?.message || t("js.restaurationImpossible")}`);
     }
   }
 
@@ -4422,7 +4422,7 @@ function initDashboard() {
       await loadGuildBackups(guildId);
       showToast(t("js.sauvegardeSupprimee"));
     } catch (error) {
-      showToast(`⚠️ ${error?.message || t("js.suppressionImpossible")}`);
+      showToast(`${error?.message || t("js.suppressionImpossible")}`);
     }
   }
 
@@ -4486,7 +4486,7 @@ function initDashboard() {
       URL.revokeObjectURL(lien.href);
       showToast(t("js.reglages.telecharges"));
     } catch (error) {
-      showToast(`⚠️ ${String(error?.message || error).slice(0, 120)}`);
+      showToast(`${String(error?.message || error).slice(0, 120)}`);
     }
   }
 
@@ -4512,7 +4512,7 @@ function initDashboard() {
       if (data?.config) applyDashboardConfig(data.config);
       clearUnsavedChanges();
     } catch (error) {
-      showToast(`⚠️ ${String(error?.message || error).slice(0, 140)}`);
+      showToast(`${String(error?.message || error).slice(0, 140)}`);
     }
   }
 
@@ -4545,7 +4545,7 @@ function initDashboard() {
     const ticketOptions = Array.from(document.querySelectorAll("#ticketOptionList .option-row")).map((row) => {
       const inputs = row.querySelectorAll("input");
       return {
-        emoji: inputs[0]?.value || "🎫",
+        emoji: inputs[0]?.value || "",
         label: inputs[1]?.value || "Ticket",
         desc: inputs[2]?.value || t("js.ouvrirUnTicket"),
       };
@@ -4560,7 +4560,7 @@ function initDashboard() {
     const reactionRoles = Array.from(document.querySelectorAll(".reaction-role-row")).map((row) => {
       const inputs = row.querySelectorAll("input");
       return {
-        emoji: inputs[0]?.value || "✨",
+        emoji: inputs[0]?.value || "",
         role: inputs[1]?.value || "",
         role_id: inputs[1]?.value || "",
         label: inputs[2]?.value || "",
@@ -4568,7 +4568,7 @@ function initDashboard() {
     });
     const recurringMessages = Array.from(document.querySelectorAll(".recurring-item")).map((item) => ({
       enabled: true,
-      name: item.dataset.name || item.querySelector("strong")?.textContent?.replace(/^🔁\s*/, "") || t("js.messageRecurrent"),
+      name: item.dataset.name || item.querySelector("strong")?.textContent?.replace(/^\s*/, "") || t("js.messageRecurrent"),
       channel_id: item.dataset.channel || "",
       interval: Number(item.dataset.interval || 30),
       unit: item.dataset.unit || "minutes",
@@ -4603,7 +4603,7 @@ function initDashboard() {
       tickets: {
         author: document.querySelector("[data-preview-author]")?.value || "ModBot Ticket System",
         title: document.querySelector("[data-preview-title]")?.value || "Ouvre ton ticket",
-        emoji: document.querySelector("[data-preview-emoji]")?.value || "📩",
+        emoji: document.querySelector("[data-preview-emoji]")?.value || "",
         description: document.querySelector("[data-preview-desc]")?.value || "",
         banner: document.querySelector("[data-ticket-banner]")?.value || "",
         logo: document.querySelector("[data-ticket-logo]")?.value || "",
@@ -4800,7 +4800,7 @@ function initDashboard() {
     const onglet = [...tabs].find((tab) => tab.dataset.dashboardTab === panelName);
     if (!cible || !onglet) return;
     // On passe par la clef, pas par le texte affiche de l'onglet : celui-ci
-    // commence par une emoji decorative (« 👋Bienvenue ») qui n'a rien a
+    // commence par une emoji decorative («Bienvenue ») qui n'a rien a
     // faire dans le libelle.
     const clef = onglet.dataset.i18n
       || onglet.querySelector("[data-i18n]")?.dataset.i18n;
@@ -4910,7 +4910,7 @@ function initDashboard() {
 
     setCurrentServer(nom, logo, initiales, guildId, installe);
     showDashboardStage("dashboard");
-    showToast(`✅ ${nom}`);
+    showToast(`${nom}`);
 
     if (guildId) {
       await loadSelectedGuildConfig(guildId);
@@ -5075,7 +5075,7 @@ function initDashboard() {
   });
 
   previewEmoji?.addEventListener("input", () => {
-    if (liveTicketEmoji) liveTicketEmoji.textContent = previewEmoji.value || "📩";
+    if (liveTicketEmoji) liveTicketEmoji.textContent = previewEmoji.value || "";
   });
 
   const optionList = document.getElementById("ticketOptionList");
@@ -5088,7 +5088,7 @@ function initDashboard() {
     option.className = "option-row";
     option.innerHTML = `
       <span>${String(count).padStart(2, "0")}</span>
-      <input class="emoji-input" type="text" value="✨" maxlength="3">
+      <input class="emoji-input" type="text" value="" maxlength="3">
       <input type="text" value="${escapeHtml(t("js.nouvelleOption"))}">
       <input type="text" value="${escapeHtml(t("js.descriptionOption"))}">
       <button type="button">${escapeHtml(t("js.supprimer"))}</button>
@@ -5177,7 +5177,7 @@ function initDashboard() {
 
   function renderReactionPreview() {
     if (reactionLiveTitle) {
-      reactionLiveTitle.textContent = `🎭 ${reactionTitleInput?.value.trim() || t("js.choisisTesRoles")}`;
+      reactionLiveTitle.textContent = `${reactionTitleInput?.value.trim() || t("js.choisisTesRoles")}`;
     }
     if (reactionLiveDescription) {
       reactionLiveDescription.textContent = reactionDescriptionInput?.value.trim() || t("js.cliqueSurUneReaction");
@@ -5187,7 +5187,7 @@ function initDashboard() {
     reactionPreviewList.innerHTML = "";
     reactionRoleList.querySelectorAll(".reaction-role-row").forEach((row) => {
       const inputs = row.querySelectorAll("input");
-      const emoji = inputs[0]?.value.trim() || "✨";
+      const emoji = inputs[0]?.value.trim() || "";
       const label = inputs[2]?.value.trim() || inputs[1]?.value.trim() || t("js.role");
       const chip = document.createElement("span");
       chip.textContent = `${emoji} ${label}`;
@@ -5212,7 +5212,7 @@ function initDashboard() {
     row.className = "reaction-role-row";
     row.innerHTML = `
       <span>${String(count).padStart(2, "0")}</span>
-      <input class="emoji-input" type="text" value="✨" maxlength="3">
+      <input class="emoji-input" type="text" value="" maxlength="3">
       <input type="text" value="" placeholder="${escapeHtml(t("js.idDuRoleOuRole"))}" list="dashboardRoleOptions">
       <input type="text" value="${escapeHtml(t("js.nouveauRole"))}">
       <button type="button">Supprimer</button>
@@ -5281,7 +5281,7 @@ function initDashboard() {
     item.dataset.content = document.querySelector("[data-recurring-content]")?.value.trim() || t("js.exempleMessageRecurrent");
     item.innerHTML = `
       <span>
-        <strong>🔁 ${escapeHtml(name)}</strong>
+        <strong>${escapeHtml(name)}</strong>
         <small>Toutes les ${escapeHtml(interval)} ${escapeHtml(unit)} dans ${escapeHtml(channel)}</small>
       </span>
       <button class="secondary-btn compact" type="button" data-recurring-remove>Supprimer</button>
@@ -5478,13 +5478,6 @@ function nomDePays(code) {
   return code;
 }
 
-/** « BE » donne 🇧🇪 : chaque lettre devient son indicateur régional. */
-function drapeauDuPays(code) {
-  const net = String(code || "").trim().toUpperCase();
-  if (!/^[A-Z]{2}$/.test(net)) return "🌐";
-  return String.fromCodePoint(...[...net].map((l) => 0x1F1E6 + l.charCodeAt(0) - 65));
-}
-
 /**
  * Une ligne de répartition : drapeau, nom, nombre de membres.
  *
@@ -5497,7 +5490,6 @@ function rendreRepartition(liste, entrees, nommer) {
   if (!lignes.length) return false;
   liste.innerHTML = lignes.map((entree) => `
     <span class="stat-country${entree.unknown ? " is-unknown" : ""}">
-      <span class="stat-country-flag" aria-hidden="true">${escapeHtmlValue(entree.flag || "🌐")}</span>
       <span class="stat-country-name">${escapeHtmlValue(nommer(entree))}</span>
       <span class="stat-country-count">${formatNombreFr(entree.members)}</span>
     </span>`).join("");
@@ -5542,7 +5534,7 @@ function remplirSelecteurPays() {
     .forEach(({ code, nom }) => {
       const option = document.createElement("option");
       option.value = code;
-      option.textContent = `${drapeauDuPays(code)} ${nom}`;
+      option.textContent = nom;
       champ.appendChild(option);
     });
   champ.value = choisi;

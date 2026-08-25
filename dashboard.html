@@ -439,8 +439,8 @@
         </div>
         <div class="health-pill" data-i18n="dash.connecteAuBot">
           <span></span>
-          🟢 Connecté au bot
-        </div>
+ Connecté au bot
+</div>
       </div>
 
       <section class="dash-panel is-active" data-dashboard-panel="overview">
@@ -519,7 +519,7 @@
               <input type="text" value="Ouvre ton ticket" data-preview-title>
             </label>
             <label data-i18n="dash.emojiDuMessage">Emoji du message
-              <input class="emoji-input-wide" type="text" value="📩" maxlength="3" data-preview-emoji>
+              <input class="emoji-input-wide" type="text" value="" maxlength="3" data-preview-emoji>
             </label>
             <label data-i18n="dash.description">Description
               <textarea data-preview-desc data-i18n="dash.ticketDescriptionDefaut">Merci de sélectionner la raison de ta demande via le menu. Un membre du staff viendra rapidement te répondre.</textarea>
@@ -601,10 +601,10 @@
             <button type="button" class="primary-btn compact" data-add-ticket-option data-i18n="dash.ajouter"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Ajouter</button>
           </div>
           <div class="option-list" id="ticketOptionList">
-            <div class="option-row"><span>01</span><input class="emoji-input" value="🛠️" maxlength="3"><input value="Support technique"><input value="Problème technique, bug ou aide"><button type="button" data-i18n="dash.supprimer">Supprimer</button></div>
-            <div class="option-row"><span>02</span><input class="emoji-input" value="❓" maxlength="3"><input value="Question"><input value="Poser une question au staff"><button type="button" data-i18n="dash.supprimer2">Supprimer</button></div>
-            <div class="option-row"><span>03</span><input class="emoji-input" value="🔒" maxlength="3"><input value="Déban"><input value="Contester un bannissement"><button type="button" data-i18n="dash.supprimer3">Supprimer</button></div>
-            <div class="option-row"><span>04</span><input class="emoji-input" value="📋" maxlength="3"><input value="Administration"><input value="Demande administrative"><button type="button" data-i18n="dash.supprimer4">Supprimer</button></div>
+            <div class="option-row"><span>01</span><input class="emoji-input" value="" maxlength="3"><input value="Support technique"><input value="Problème technique, bug ou aide"><button type="button" data-i18n="dash.supprimer">Supprimer</button></div>
+            <div class="option-row"><span>02</span><input class="emoji-input" value="" maxlength="3"><input value="Question"><input value="Poser une question au staff"><button type="button" data-i18n="dash.supprimer2">Supprimer</button></div>
+            <div class="option-row"><span>03</span><input class="emoji-input" value="" maxlength="3"><input value="Déban"><input value="Contester un bannissement"><button type="button" data-i18n="dash.supprimer3">Supprimer</button></div>
+            <div class="option-row"><span>04</span><input class="emoji-input" value="" maxlength="3"><input value="Administration"><input value="Demande administrative"><button type="button" data-i18n="dash.supprimer4">Supprimer</button></div>
           </div>
         </div>
       </section>
@@ -616,7 +616,7 @@
             <h2 data-i18n="dash.protectionsServeur">Protections serveur</h2>
           </div>
           <div class="panel-title-actions">
-            <span class="state" data-safe-mode-badge hidden data-i18n="dash.modeSecuriteActif"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-siren"/></svg> Mode sécurité actif</span>
+            <span class="state danger" data-safe-mode-badge hidden data-i18n="dash.modeSecuriteActif"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-siren"/></svg> Mode sécurité actif</span>
             <button class="secondary-btn compact" type="button" data-security-reload data-i18n="dash.actualiser"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg> Actualiser</button>
             <button class="primary-btn compact" type="button" data-security-save data-i18n="dash.enregistrerLaSecurite"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg> Enregistrer la sécurité</button>
           </div>
@@ -854,7 +854,7 @@
           </div>
 
           <div class="tool-panel">
-            <h3 data-i18n="dash.commentCaMarche">ℹ️ Comment ça marche</h3>
+            <h3 data-i18n="dash.commentCaMarche">ℹ Comment ça marche</h3>
             <ul class="info-list">
               <li data-i18n-html="dash.uneSauvegardeContientLes">Une sauvegarde contient les <strong>rôles</strong>, <strong>catégories</strong>, <strong>salons</strong> et leurs <strong>permissions</strong>.</li>
               <li data-i18n-html="dash.laRestaurationEst">La restauration est <strong>additive</strong> : elle recrée ce qui manque, sans jamais rien supprimer.</li>
@@ -867,7 +867,7 @@
         <div class="tool-panel">
           <div class="table-head">
             <h3 data-i18n="dash.sauvegardesDisponibles"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg> Sauvegardes disponibles</h3>
-            <span class="state" data-backups-count data-i18n="dash.sauvegarde">0 sauvegarde</span>
+            <span class="state is-count" data-backups-count data-i18n="dash.sauvegarde">0 sauvegarde</span>
           </div>
           <div class="backup-list" data-backup-list>
             <div class="backup-empty" data-i18n="dash.aucuneSauvegardePourLe">Aucune sauvegarde pour le moment.</div>
@@ -885,11 +885,11 @@
         </div>
 
         <div class="channel-table">
-          <div class="channel-row"><strong data-i18n="dash.tickets2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg> Tickets</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple2"><span class="state inactive" data-i18n="dash.inactif">⚪ Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.logs"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple3"><span class="state inactive" data-i18n="dash.inactif2">⚪ Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.suggestions"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Suggestions</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple4"><span class="state inactive" data-i18n="dash.inactif3">⚪ Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.reports"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flag"/></svg> Reports</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple5"><span class="state inactive" data-i18n="dash.inactif4">⚪ Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.staffAlert2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Staff alert</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple6"><span class="state inactive" data-i18n="dash.inactif5">⚪ Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.tickets2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg> Tickets</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple2"><span class="state inactive" data-i18n="dash.inactif">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.logs"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple3"><span class="state inactive" data-i18n="dash.inactif2">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.suggestions"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Suggestions</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple4"><span class="state inactive" data-i18n="dash.inactif3">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.reports"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flag"/></svg> Reports</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple5"><span class="state inactive" data-i18n="dash.inactif4">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.staffAlert2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Staff alert</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple6"><span class="state inactive" data-i18n="dash.inactif5">Inactif</span></div>
         </div>
       </section>
 
@@ -969,7 +969,7 @@
             </div>
 
             <label class="mini-form"><span data-i18n="welcome.msgTitle">Titre</span>
-              <input type="text" data-welcome-title maxlength="200" placeholder="👋 Bienvenue" data-i18n-placeholder="dash.bienvenue">
+              <input type="text" data-welcome-title maxlength="200" placeholder="Bienvenue" data-i18n-placeholder="dash.bienvenue">
             </label>
 
             <label class="mini-form"><span data-i18n="welcome.message">Message d'arrivée</span>
@@ -1044,7 +1044,7 @@
             <h2 data-i18n="gw.title">Giveaways</h2>
           </div>
           <div class="panel-title-actions">
-            <span class="state" data-giveaway-count></span>
+            <span class="state is-count" data-giveaway-count></span>
             <button class="secondary-btn compact" type="button" data-giveaway-reload data-i18n="gw.reload"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg> Actualiser</button>
             <button class="primary-btn compact" type="button" data-giveaway-new data-i18n="gw.new"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Nouveau giveaway</button>
           </div>
@@ -1105,7 +1105,7 @@
             <h2 data-i18n="dash.membresEtRoles">Membres et rôles</h2>
           </div>
           <div class="panel-title-actions">
-            <span class="state" data-search-count></span>
+            <span class="state is-count" data-search-count></span>
           </div>
         </div>
 
@@ -1206,7 +1206,7 @@
                 <h3 data-i18n="dash.twitter">Twitter / X</h3>
                 <p data-i18n="dash.postsAnnoncesEtThreads">Posts, annonces et threads publics.</p>
               </div>
-              <span class="state inactive" data-social-state data-i18n="dash.inactif6">⚪ Inactif</span>
+              <span class="state inactive" data-social-state data-i18n="dash.inactif6">Inactif</span>
             </div>
             <label data-i18n="dash.lienDuCompte">Lien du compte
               <input type="url" placeholder="https://x.com/ton_compte" data-social-link>
@@ -1227,7 +1227,7 @@
                 <h3 data-i18n="dash.tiktok">TikTok</h3>
                 <p data-i18n="dash.nouvellesVideosEtClips">Nouvelles vidéos et clips publiés.</p>
               </div>
-              <span class="state inactive" data-social-state data-i18n="dash.inactif7">⚪ Inactif</span>
+              <span class="state inactive" data-social-state data-i18n="dash.inactif7">Inactif</span>
             </div>
             <label data-i18n="dash.lienDuCompte2">Lien du compte
               <input type="url" placeholder="https://www.tiktok.com/@ton_compte" data-social-link>
@@ -1248,7 +1248,7 @@
                 <h3>Twitch</h3>
                 <p data-i18n="dash.annonceLiveRediffusionOu">Annonce live, rediffusion ou nouveau contenu.</p>
               </div>
-              <span class="state inactive" data-social-state data-i18n="dash.inactif8">⚪ Inactif</span>
+              <span class="state inactive" data-social-state data-i18n="dash.inactif8">Inactif</span>
             </div>
             <label data-i18n="dash.lienDuCompte3">Lien du compte
               <input type="url" placeholder="https://www.twitch.tv/ton_compte" data-social-link>
@@ -1269,7 +1269,7 @@
                 <h3 data-i18n="dash.instagram">Instagram</h3>
                 <p data-i18n="dash.postsReelsEtAnnonces">Posts, reels et annonces publiques.</p>
               </div>
-              <span class="state inactive" data-social-state data-i18n="dash.inactif9">⚪ Inactif</span>
+              <span class="state inactive" data-social-state data-i18n="dash.inactif9">Inactif</span>
             </div>
             <label data-i18n="dash.lienDuCompte4">Lien du compte
               <input type="url" placeholder="https://www.instagram.com/ton_compte" data-social-link>
