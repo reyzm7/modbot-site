@@ -21,6 +21,7 @@
 
 window.MODBOT_TRANSLATIONS = {
   fr: {
+    "integrations.title": "Annonce automatiquement les nouvelles publications",
     "js.retirer": "Retirer",
     "js.adm.verificationEnCours": "Vérification de ton compte Discord…",
     "js.adm.accesRefuse": "⛔ Accès refusé par le bot",
@@ -1387,6 +1388,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Télécharger",
   },
   en: {
+    "integrations.title": "Automatically announces new posts",
     "js.retirer": "Remove",
     "js.adm.verificationEnCours": "Checking your Discord account…",
     "js.adm.accesRefuse": "⛔ Access denied by the bot",
@@ -2753,6 +2755,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Download",
   },
   ar: {
+    "integrations.title": "يعلن تلقائيًا عن المنشورات الجديدة",
     "js.retirer": "إزالة",
     "js.adm.verificationEnCours": "جارٍ التحقق من حسابك في Discord…",
     "js.adm.accesRefuse": "⛔ رفض البوت الوصول",
@@ -4119,6 +4122,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "تنزيل",
   },
   es: {
+    "integrations.title": "Anuncia automáticamente las nuevas publicaciones",
     "js.retirer": "Quitar",
     "js.adm.verificationEnCours": "Comprobando tu cuenta de Discord…",
     "js.adm.accesRefuse": "⛔ Acceso denegado por el bot",
@@ -5424,6 +5428,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Descargar",
   },
   de: {
+    "integrations.title": "Kündigt neue Beiträge automatisch an",
     "js.retirer": "Entfernen",
     "js.adm.verificationEnCours": "Dein Discord-Konto wird geprüft…",
     "js.adm.accesRefuse": "⛔ Zugriff vom Bot abgelehnt",

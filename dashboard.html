@@ -18,6 +18,96 @@
   <meta name="modbot-bot-permissions" content="3124257994829047">
 </head>
 <body class="dashboard-page">
+  <!-- Jeu d'icônes SVG, défini une fois et réutilisé par <use href="#id">.
+       Inline plutôt que chargé : le CSP bloque les hôtes externes, et un
+       sprite externe impose une requête de plus avant le premier rendu.
+       Les marques gardent leur tracé officiel ; les icônes de rubrique
+       héritent de la couleur du texte via currentColor. -->
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <defs>
+
+      <!-- ── Marques ─────────────────────────────────────────────── -->
+      <symbol id="i-discord" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.873.8914.0766.0766 0 0 0-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
+      </symbol>
+
+      <symbol id="i-twitch" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
+      </symbol>
+
+      <symbol id="i-tiktok" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07Z"/>
+      </symbol>
+
+      <symbol id="i-instagram" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06zm0 3.678a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405a1.441 1.441 0 0 1-2.88 0 1.44 1.44 0 0 1 2.88 0z"/>
+      </symbol>
+
+      <symbol id="i-x" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
+      </symbol>
+
+      <symbol id="i-paypal" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/>
+      </symbol>
+
+      <!-- ── Rubriques ───────────────────────────────────────────────
+           Tracés au trait, alignés sur la même grille de 24 : ils se
+           tiennent côte à côte sans qu'aucun paraisse plus lourd. -->
+      <symbol id="i-shield" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+              d="M12 2.75 4.75 5.5v5.6c0 4.4 3 8.2 7.25 9.65 4.25-1.45 7.25-5.25 7.25-9.65V5.5Z"/>
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+              d="m9.2 12 2 2 3.6-3.9"/>
+      </symbol>
+
+      <symbol id="i-ticket" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"
+              d="M3 8.2V5.75h18V8.2a2.1 2.1 0 0 0 0 4.2v2.45H3v-2.45a2.1 2.1 0 0 0 0-4.2Z"/>
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-dasharray="1.6 2.4"
+              d="M14.2 6.4v7.6"/>
+      </symbol>
+
+      <symbol id="i-chart" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+              d="M4 20h16M6.5 20v-6.5M11.5 20V7M16.5 20v-9.5"/>
+      </symbol>
+
+      <symbol id="i-megaphone" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"
+              d="M4 9.5h3.4L18 5v14L7.4 14.5H4a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1Z"/>
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+              d="M7.4 14.5v3.9a1.6 1.6 0 0 0 3.2 0v-2.5M20.5 10v4"/>
+      </symbol>
+
+      <symbol id="i-translate" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+              d="M3.5 5.5h8M7.2 3.5v2M9.6 5.5c0 3.8-2.6 6.9-6.1 8M5.2 8.6c.9 2.4 2.8 4.3 5.2 5.1"/>
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+              d="m12.2 20.5 4-10 4 10M13.7 17.2h5"/>
+      </symbol>
+
+      <symbol id="i-bulb" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+              d="M9.3 17.2a6.2 6.2 0 1 1 5.4 0v1.9a1.4 1.4 0 0 1-1.4 1.4h-2.6a1.4 1.4 0 0 1-1.4-1.4Z"/>
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M9.6 17.2h4.8"/>
+      </symbol>
+
+      <symbol id="i-sliders" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+              d="M5 4v6M5 14v6M12 4v3M12 11v9M19 4v9M19 17v3"/>
+        <circle cx="5" cy="12" r="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <circle cx="12" cy="9" r="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <circle cx="19" cy="15" r="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+      </symbol>
+
+      <symbol id="i-bolt" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"
+              d="M13.2 2.8 5 13.4h5.4l-.6 7.8 8.2-10.6h-5.4Z"/>
+      </symbol>
+
+    </defs>
+  </svg>
   <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
   <div class="page-glow" aria-hidden="true"></div>
 
@@ -1050,7 +1140,7 @@
         <div class="social-grid">
           <article class="social-card" data-social-platform="Twitter/X">
             <div class="social-card-head">
-              <span class="social-icon">𝕏</span>
+              <span class="social-icon brand-x" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-x"/></svg></span>
               <div>
                 <h3 data-i18n="dash.twitter">Twitter / X</h3>
                 <p data-i18n="dash.postsAnnoncesEtThreads">Posts, annonces et threads publics.</p>
@@ -1071,7 +1161,7 @@
 
           <article class="social-card" data-social-platform="TikTok">
             <div class="social-card-head">
-              <span class="social-icon">🎵</span>
+              <span class="social-icon brand-tiktok" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-tiktok"/></svg></span>
               <div>
                 <h3 data-i18n="dash.tiktok">TikTok</h3>
                 <p data-i18n="dash.nouvellesVideosEtClips">Nouvelles vidéos et clips publiés.</p>
@@ -1092,7 +1182,7 @@
 
           <article class="social-card" data-social-platform="Twitch">
             <div class="social-card-head">
-              <span class="social-icon">🟣</span>
+              <span class="social-icon brand-twitch" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-twitch"/></svg></span>
               <div>
                 <h3>Twitch</h3>
                 <p data-i18n="dash.annonceLiveRediffusionOu">Annonce live, rediffusion ou nouveau contenu.</p>
@@ -1113,7 +1203,7 @@
 
           <article class="social-card" data-social-platform="Instagram">
             <div class="social-card-head">
-              <span class="social-icon">📸</span>
+              <span class="social-icon brand-instagram" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-instagram"/></svg></span>
               <div>
                 <h3 data-i18n="dash.instagram">Instagram</h3>
                 <p data-i18n="dash.postsReelsEtAnnonces">Posts, reels et annonces publiques.</p>

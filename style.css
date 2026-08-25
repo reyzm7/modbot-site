@@ -8461,3 +8461,168 @@ label,
   .admin-identity { flex-wrap: wrap; }
   .admin-identity .secondary-btn { width: 100%; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   ICÔNES ET MARQUES
+   Le sprite est inline dans la page ; il ne doit jamais occuper de
+   place ni être lu par un lecteur d'écran.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.icon-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ── Icônes des rubriques ───────────────────────────────────────── */
+
+.feature-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  color: var(--purple-2);
+  /* Le numéro qui occupait cette place imposait une graisse et une
+     taille de texte : on les neutralise. */
+  font-size: 0;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.feature-icon svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.feature-card:hover .feature-icon {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* ── Logo dans un bouton ────────────────────────────────────────── */
+
+.primary-btn.has-logo,
+.secondary-btn.has-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-logo {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+/* ── Bandeau des plateformes relayées ───────────────────────────── */
+
+.integrations {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  text-align: center;
+}
+
+.integrations-title {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.integration-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.integration {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--soft);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: border-color 0.18s ease, color 0.18s ease,
+              transform 0.18s ease, background 0.18s ease;
+}
+
+.integration svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  /* Gris au repos : la couleur de marque n'arrive qu'au survol, sinon
+     cinq logos saturés se disputent l'attention en même temps. */
+  color: var(--muted);
+  transition: color 0.18s ease;
+}
+
+.integration:hover {
+  transform: translateY(-2px);
+  color: var(--text);
+  background: var(--panel-strong);
+}
+
+/* Couleurs officielles, au survol seulement */
+.integration.is-twitch:hover    { border-color: #9146ff; }
+.integration.is-twitch:hover svg    { color: #9146ff; }
+.integration.is-tiktok:hover    { border-color: #ff0050; }
+.integration.is-tiktok:hover svg    { color: #ff0050; }
+.integration.is-instagram:hover { border-color: #e1306c; }
+.integration.is-instagram:hover svg { color: #e1306c; }
+.integration.is-x:hover         { border-color: #e8ecf4; }
+.integration.is-x:hover svg         { color: #e8ecf4; }
+.integration.is-discord:hover   { border-color: #5865f2; }
+.integration.is-discord:hover svg   { color: #5865f2; }
+
+/* ── Logos de marque dans le dashboard (cartes réseaux) ─────────── */
+
+.social-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 11px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  font-size: 0;
+}
+
+.social-icon svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.social-icon.brand-twitch    { color: #9146ff; background: rgba(145, 70, 255, 0.12); border-color: rgba(145, 70, 255, 0.32); }
+.social-icon.brand-tiktok    { color: #ff0050; background: rgba(255, 0, 80, 0.10);   border-color: rgba(255, 0, 80, 0.30); }
+.social-icon.brand-instagram { color: #e1306c; background: rgba(225, 48, 108, 0.11); border-color: rgba(225, 48, 108, 0.30); }
+.social-icon.brand-x         { color: #e8ecf4; background: rgba(232, 236, 244, 0.08); border-color: rgba(232, 236, 244, 0.22); }
+
+@media (prefers-reduced-motion: reduce) {
+  .feature-card:hover .feature-icon,
+  .integration:hover { transform: none; }
+}
+
+@media (max-width: 560px) {
+  .integration { padding: 8px 14px; font-size: 0.84rem; }
+  .integration svg { width: 16px; height: 16px; }
+  .integrations-title { font-size: 0.76rem; }
+}
