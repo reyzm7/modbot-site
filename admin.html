@@ -288,12 +288,12 @@
               <h3 data-i18n="adm.administrateursAutorises"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg> Administrateurs autorisés</h3>
               <span class="admin-badge active" data-i18n="adm.accesSensible">Accès sensible</span>
             </div>
-            <div class="admin-action-row">
-              <input type="text" inputmode="numeric" placeholder="ID Discord administrateur" data-new-admin-id data-i18n-placeholder="adm.idDiscordAdministrateur">
-              <button class="primary-btn compact" type="button" data-add-admin data-i18n="adm.ajouter"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Ajouter</button>
-            </div>
             <div class="admin-list" data-admin-list data-admin-sensitive>
               <div><span><strong data-i18n="adm.chargement">Chargement…</strong><small data-i18n="adm.listeFournieParLeBot">Liste fournie par le bot</small></span></div>
+            </div>
+            <div class="inline-hint">
+              <strong data-i18n="adm.listeSource">Où se modifie cette liste</strong>
+              <p data-i18n="adm.listeSourceTexte">Les administrateurs se déclarent dans la variable DASHBOARD_ADMIN_IDS, sur l'hébergeur du bot. C'est le seul endroit qu'un navigateur ne peut pas contourner : un champ de saisie ici n'aurait donné aucun droit réel.</p>
             </div>
           </article>
         </section>
