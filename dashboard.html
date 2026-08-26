@@ -601,10 +601,10 @@
             <button type="button" class="primary-btn compact" data-add-ticket-option data-i18n="dash.ajouter"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Ajouter</button>
           </div>
           <div class="option-list" id="ticketOptionList">
-            <div class="option-row"><span>01</span><input class="emoji-input" value="" maxlength="3"><input value="Support technique"><input value="Problème technique, bug ou aide"><button type="button" data-i18n="dash.supprimer">Supprimer</button></div>
-            <div class="option-row"><span>02</span><input class="emoji-input" value="" maxlength="3"><input value="Question"><input value="Poser une question au staff"><button type="button" data-i18n="dash.supprimer2">Supprimer</button></div>
-            <div class="option-row"><span>03</span><input class="emoji-input" value="" maxlength="3"><input value="Déban"><input value="Contester un bannissement"><button type="button" data-i18n="dash.supprimer3">Supprimer</button></div>
-            <div class="option-row"><span>04</span><input class="emoji-input" value="" maxlength="3"><input value="Administration"><input value="Demande administrative"><button type="button" data-i18n="dash.supprimer4">Supprimer</button></div>
+            <div class="option-row"><span>01</span><input class="emoji-input" value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><input class="option-image" type="url" value="" data-option-image data-i18n-placeholder="dash.optionImage" placeholder="URL d'une image"><input value="Support technique"><input value="Problème technique, bug ou aide"><button type="button" data-i18n="dash.supprimer">Supprimer</button></div>
+            <div class="option-row"><span>02</span><input class="emoji-input" value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><input class="option-image" type="url" value="" data-option-image data-i18n-placeholder="dash.optionImage" placeholder="URL d'une image"><input value="Question"><input value="Poser une question au staff"><button type="button" data-i18n="dash.supprimer2">Supprimer</button></div>
+            <div class="option-row"><span>03</span><input class="emoji-input" value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><input class="option-image" type="url" value="" data-option-image data-i18n-placeholder="dash.optionImage" placeholder="URL d'une image"><input value="Déban"><input value="Contester un bannissement"><button type="button" data-i18n="dash.supprimer3">Supprimer</button></div>
+            <div class="option-row"><span>04</span><input class="emoji-input" value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><input class="option-image" type="url" value="" data-option-image data-i18n-placeholder="dash.optionImage" placeholder="URL d'une image"><input value="Administration"><input value="Demande administrative"><button type="button" data-i18n="dash.supprimer4">Supprimer</button></div>
           </div>
         </div>
       </section>
@@ -670,8 +670,26 @@
               <p data-captcha-state class="captcha-state-value" data-i18n="dash.nonConfigure">Non configuré</p>
             </div>
           </div>
+          <div class="search-actions captcha-actions">
+            <button class="primary-btn compact" type="button" data-captcha-setup>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg>
+              <span data-i18n="dash.captchaInstaller">Installer et publier</span>
+            </button>
+            <button class="secondary-btn compact" type="button" data-captcha-panel>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg>
+              <span data-i18n="dash.captchaRepublier">Republier le panneau</span>
+            </button>
+            <button class="secondary-btn compact" type="button" data-captcha-lock>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg>
+              <span data-i18n="dash.captchaVerrouiller">Masquer les salons</span>
+            </button>
+            <button class="secondary-btn compact danger" type="button" data-captcha-disable>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg>
+              <span data-i18n="dash.captchaCouper">Désactiver</span>
+            </button>
+          </div>
           <div class="inline-hint" data-i18n-html="dash.captchaAstuce">
-            <strong><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Le plus simple :</strong> tape <code>/captcha activer</code> dans Discord.
+            <strong><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Bon à savoir :</strong> <code>/captcha activer</code> fait la même chose depuis Discord.
             ModBot crée le rôle, crée le salon, publie le panneau et propose de masquer les
             salons aux membres non vérifiés — en une commande.
           </div>
@@ -1214,6 +1232,14 @@
             <label data-i18n="dash.salonDePublication">Salon de publication
               <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord">
             </label>
+            <label data-i18n="dash.relaisPing">Prévenir ces rôles
+              <input type="text" data-social-ping list="dashboardRoleOptions"
+                     placeholder="Identifiants de rôles, séparés par une virgule"
+                     data-i18n-placeholder="dash.relaisPingAide">
+            </label>
+            <label class="mini-toggle" data-i18n="dash.relaisEveryone">
+              <input type="checkbox" data-social-everyone><span></span>Mentionner @everyone
+            </label>
             <div class="social-actions">
               <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
               <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flask"/></svg> Tester</button>
@@ -1234,6 +1260,14 @@
             </label>
             <label data-i18n="dash.salonDePublication2">Salon de publication
               <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord2">
+            </label>
+            <label data-i18n="dash.relaisPing">Prévenir ces rôles
+              <input type="text" data-social-ping list="dashboardRoleOptions"
+                     placeholder="Identifiants de rôles, séparés par une virgule"
+                     data-i18n-placeholder="dash.relaisPingAide">
+            </label>
+            <label class="mini-toggle" data-i18n="dash.relaisEveryone">
+              <input type="checkbox" data-social-everyone><span></span>Mentionner @everyone
             </label>
             <div class="social-actions">
               <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
@@ -1256,6 +1290,14 @@
             <label data-i18n="dash.salonDePublication3">Salon de publication
               <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord3">
             </label>
+            <label data-i18n="dash.relaisPing">Prévenir ces rôles
+              <input type="text" data-social-ping list="dashboardRoleOptions"
+                     placeholder="Identifiants de rôles, séparés par une virgule"
+                     data-i18n-placeholder="dash.relaisPingAide">
+            </label>
+            <label class="mini-toggle" data-i18n="dash.relaisEveryone">
+              <input type="checkbox" data-social-everyone><span></span>Mentionner @everyone
+            </label>
             <div class="social-actions">
               <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
               <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester3"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flask"/></svg> Tester</button>
@@ -1276,6 +1318,14 @@
             </label>
             <label data-i18n="dash.salonDePublication4">Salon de publication
               <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord4">
+            </label>
+            <label data-i18n="dash.relaisPing">Prévenir ces rôles
+              <input type="text" data-social-ping list="dashboardRoleOptions"
+                     placeholder="Identifiants de rôles, séparés par une virgule"
+                     data-i18n-placeholder="dash.relaisPingAide">
+            </label>
+            <label class="mini-toggle" data-i18n="dash.relaisEveryone">
+              <input type="checkbox" data-social-everyone><span></span>Mentionner @everyone
             </label>
             <div class="social-actions">
               <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>

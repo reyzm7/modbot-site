@@ -8765,3 +8765,60 @@ h3 > .ui-icon,
    pastille verte, qui laisserait croire à une confirmation. */
 .state.is-count::before { display: none; }
 .state.is-count { gap: 0; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   OPTIONS DE TICKET — colonne image
+   La ligne portait emoji + libellé + description. Elle porte désormais
+   une image, et le libellé peut rester vide : le bot publie alors le
+   panneau en boutons, seule forme où Discord accepte un composant sans
+   texte.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.option-row .option-image {
+  flex: 1.4 1 150px;
+  min-width: 0;
+}
+
+/* Un champ laissé vide n'est pas une erreur ici : on le montre comme un
+   choix, pas comme un oubli. */
+.option-row input:placeholder-shown {
+  border-style: dashed;
+  border-color: var(--line-strong);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RELAIS RÉSEAUX — mentions de rôles
+   ═══════════════════════════════════════════════════════════════════ */
+
+.social-card [data-social-ping] { font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+.social-card .mini-toggle { margin-top: 4px; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   CAPTCHA — actions du dashboard
+   ═══════════════════════════════════════════════════════════════════ */
+
+.captcha-actions { margin-top: 14px; }
+
+/* Le masquage des salons change les permissions de tout le serveur :
+   le bouton se signale pendant qu'il attend le second clic. */
+.captcha-actions .is-confirming {
+  border-color: var(--err);
+  color: #ff8b8d;
+  animation: captcha-attente 1.1s ease-in-out infinite;
+}
+
+@keyframes captcha-attente {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(237, 66, 69, 0.45); }
+  50%      { box-shadow: 0 0 0 6px rgba(237, 66, 69, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .captcha-actions .is-confirming { animation: none; }
+}
+
+@media (max-width: 700px) {
+  .captcha-actions > button { flex: 1 1 100%; }
+  .option-row { flex-wrap: wrap; }
+  .option-row .option-image { flex: 1 1 100%; }
+}

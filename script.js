@@ -2507,7 +2507,7 @@ function initDashboard() {
     const optionList = document.getElementById("ticketOptionList");
     if (optionList && Array.isArray(tickets.options) && tickets.options.length) {
       optionList.innerHTML = tickets.options.map((option, index) => `
-        <div class="option-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(option.emoji || "")}" maxlength="3"><input value="${escapeHtml(option.label || "Ticket")}"><input value="${escapeHtml(option.desc || t("js.ouvrirUnTicket"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>
+        <div class="option-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(option.emoji || "")}" maxlength="3" placeholder="${escapeHtml(t("js.emoji"))}"><input class="option-image" type="url" data-option-image value="${escapeHtml(option.image || "")}" placeholder="${escapeHtml(t("js.imageUrl"))}"><input value="${escapeHtml(option.label || "")}" placeholder="${escapeHtml(t("js.libelleFacultatif"))}"><input value="${escapeHtml(option.desc || "")}" placeholder="${escapeHtml(t("js.descriptionFacultative"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>
       `).join("");
     }
 
@@ -2635,6 +2635,11 @@ function initDashboard() {
         if (link) link.value = relay.link || "";
         if (channel) channel.value = relay.channel_id || "";
         if (enabled) enabled.checked = Boolean(relay.enabled);
+        // Les rôles à prévenir : relus tels que le bot les a gardés.
+        const ping = card.querySelector("[data-social-ping]");
+        if (ping) ping.value = (relay.ping_roles || []).join(", ");
+        const everyone = card.querySelector("[data-social-everyone]");
+        if (everyone) everyone.checked = Boolean(relay.ping_everyone);
         if (state) {
           state.classList.toggle("active", Boolean(relay.enabled));
           state.classList.toggle("inactive", !relay.enabled);
@@ -4139,6 +4144,88 @@ function initDashboard() {
     searchPendingAction = null;
   }
 
+
+  /* ══════════════════════════════════════════════════════════════════
+     CAPTCHA — mise en place depuis le dashboard
+     Chaque action passe par le bot : c'est lui qui crée le rôle, le
+     salon et le panneau. Le navigateur ne fait que demander.
+     ══════════════════════════════════════════════════════════════════ */
+
+  async function actionCaptcha(chemin, corps, messageOk) {
+    const guildId = selectedServer.id;
+    if (!guildId) {
+      showToast(t("js.captchaChoisirServeur"));
+      return null;
+    }
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/captcha/${chemin}`, {
+        method: "POST",
+        body: JSON.stringify(corps || {})
+      });
+      showToast(messageOk);
+      // L'état affiché vient du bot, pas d'une supposition locale.
+      loadGuildSecurity(guildId);
+      loadGuildResources(guildId);
+      return data;
+    } catch (error) {
+      showToast(`${error?.message || t("js.captchaEchec")}`);
+      return null;
+    }
+  }
+
+  function initCaptchaPanel() {
+    const bouton = document.querySelector("[data-captcha-setup]");
+    if (!bouton) return;
+
+    bouton.addEventListener("click", async () => {
+      // Le rôle et le salon déjà choisis sont réutilisés ; laissés vides,
+      // le bot les crée.
+      const data = await actionCaptcha("setup", {
+        role_id: readValue("[data-captcha-role]") || "",
+        channel_id: readValue("[data-captcha-channel]") || "",
+        publish: true
+      }, t("js.captchaInstalle"));
+      if (data?.created?.length) {
+        showToast(t("js.captchaCree").replace("{quoi}", data.created.join(", ")));
+      }
+    });
+
+    document.querySelector("[data-captcha-panel]")?.addEventListener("click", () => {
+      actionCaptcha("panel", {}, t("js.captchaPublie"));
+    });
+
+    document.querySelector("[data-captcha-disable]")?.addEventListener("click", () => {
+      actionCaptcha("disable", {}, t("js.captchaCoupe"));
+    });
+
+    // Le verrouillage change les permissions de tout le serveur :
+    // il demande un second clic, comme les actions irréversibles.
+    const verrou = document.querySelector("[data-captcha-lock]");
+    verrou?.addEventListener("click", async () => {
+      if (!verrou.dataset.confirming) {
+        verrou.dataset.confirming = "1";
+        verrou.classList.add("is-confirming");
+        const libelle = verrou.querySelector("span");
+        const avant = libelle?.textContent;
+        if (libelle) libelle.textContent = t("js.captchaConfirmer");
+        showToast(t("js.captchaAvertissement"));
+        setTimeout(() => {
+          if (!verrou.isConnected) return;
+          delete verrou.dataset.confirming;
+          verrou.classList.remove("is-confirming");
+          if (libelle && avant) libelle.textContent = avant;
+        }, 6000);
+        return;
+      }
+      delete verrou.dataset.confirming;
+      verrou.classList.remove("is-confirming");
+      const data = await actionCaptcha("lock", {}, t("js.captchaVerrouille"));
+      if (data) {
+        showToast(t("js.captchaSalonsMasques").replace("{n}", data.locked));
+      }
+    });
+  }
+
   function initSearchPanel() {
     const input = searchEl("[data-search-input]");
     if (!input) return;
@@ -4544,10 +4631,14 @@ function initDashboard() {
   function collectDashboardConfig() {
     const ticketOptions = Array.from(document.querySelectorAll("#ticketOptionList .option-row")).map((row) => {
       const inputs = row.querySelectorAll("input");
+      // Le libellé est facultatif depuis que le bot sait publier le panneau
+      // en boutons : une option qui porte une image ou un emoji se passe de
+      // texte. On n'invente donc plus « Ticket » à sa place.
       return {
-        emoji: inputs[0]?.value || "",
-        label: inputs[1]?.value || "Ticket",
-        desc: inputs[2]?.value || t("js.ouvrirUnTicket"),
+        emoji: inputs[0]?.value.trim() || "",
+        image: row.querySelector("[data-option-image]")?.value.trim() || "",
+        label: inputs[2]?.value.trim() || "",
+        desc: inputs[3]?.value.trim() || "",
       };
     });
     const channelRows = document.querySelectorAll("[data-dashboard-panel='channels'] .channel-row input");
@@ -4556,6 +4647,11 @@ function initDashboard() {
       link: card.querySelector("[data-social-link]")?.value || "",
       channel_id: card.querySelector("[data-social-channel]")?.value || "",
       enabled: Boolean(card.querySelector("[data-social-enabled]")?.checked),
+      // Le bot revérifie de son côté : ce filtre évite juste d'envoyer
+      // du texte qui sera rejeté.
+      ping_roles: (card.querySelector("[data-social-ping]")?.value || "")
+        .split(/[,\s]+/).map((v) => v.trim()).filter((v) => /^\d{5,}$/.test(v)),
+      ping_everyone: Boolean(card.querySelector("[data-social-everyone]")?.checked),
     }));
     const reactionRoles = Array.from(document.querySelectorAll(".reaction-role-row")).map((row) => {
       const inputs = row.querySelectorAll("input");
@@ -4984,6 +5080,7 @@ function initDashboard() {
   });
 
   initSearchPanel();
+  initCaptchaPanel();
   initWelcomePanel();
   initGiveawayPanel();
   initAiAssistant();
