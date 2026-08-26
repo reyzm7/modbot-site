@@ -114,6 +114,8 @@
             <li data-i18n="wiki.sauvegardesRestauration">Sauvegardes : copie des salons et rôles, puis restauration additive.</li>
             <li data-i18n="wiki.logsHistorique">Logs : historique des actions du bot et du staff, filtrable.</li>
             <li data-i18n="wiki.ticketsMessagePublicOptions">Tickets : message public, options, emojis, salon, rôle support et publication.</li>
+            <li data-i18n="wiki.ticketImage">Une option peut porter une image à la place d’un emoji : le bot en fait un emoji du serveur au moment de publier le panneau. Il lui faut la permission « Gérer les emojis ».</li>
+            <li data-i18n="wiki.ticketLibelle">Le libellé est facultatif. Une option qui n’a qu’une image ou qu’un emoji fait basculer le panneau en boutons — un menu déroulant Discord refuse une entrée sans texte.</li>
             <li data-i18n="wiki.bienvenueModule">Bienvenue : messages d’arrivée et de départ, message privé et carte illustrée.</li>
             <li data-i18n="wiki.giveawaysModule">Giveaways : création, durée, nombre de gagnants, relance et tirage.</li>
             <li data-i18n="wiki.ratingsModule">Ratings : notes laissées par les membres après un ticket.</li>
@@ -129,6 +131,8 @@
           <ul class="wiki-check-list">
             <li data-i18n-html="wiki.captchaRole">Code validé, le membre reçoit automatiquement le rôle <strong>Verifier</strong> — ou celui que tu as choisi dans la section Sécurité.</li>
             <li data-i18n="wiki.captchaRoleCree">Si le rôle n’existe pas encore, le bot le crée au premier usage : rien à préparer à la main.</li>
+            <li data-i18n="wiki.captchaDashboard">Tout se règle depuis le dashboard : « Installer et publier » crée le rôle, crée le salon et publie le panneau en une fois.</li>
+            <li data-i18n="wiki.captchaMasquer">« Masquer les salons » rend le serveur invisible aux membres non vérifiés. Sans cette étape, un robot qui ignore le panneau voit quand même tout.</li>
             <li data-i18n="wiki.captchaDelai">Un délai d’expulsion facultatif écarte ceux qui ne se vérifient jamais.</li>
           </ul>
         </section>
@@ -204,6 +208,30 @@
           <p data-i18n="wiki.leMessageDeTicket">Le message de ticket se publie depuis le dashboard. Le staff peut choisir la priorité du ticket dans l’interface Discord : P1, P2 ou P3. La couleur est ajoutée devant le nom du salon. Les transcripts doivent être envoyés en MP et les ratings sont centralisés dans le panel.</p>
         </section>
 
+
+        <section id="reseaux" class="wiki-section">
+          <h2 data-i18n="wiki.reseauxTitre">Annonces réseaux</h2>
+          <p data-i18n="wiki.reseauxTexte">ModBot surveille un compte Twitch, TikTok, Instagram ou X, et publie un message dès qu’une nouvelle activité apparaît. Un relais par plateforme, chacun avec son salon.</p>
+          <ul class="wiki-check-list">
+            <li data-i18n="wiki.reseauxPing">Chaque relais peut prévenir un ou plusieurs rôles, et @everyone si le bot en a le droit.</li>
+            <li data-i18n="wiki.reseauxPingContenu">La mention part dans le message, jamais dans l’encadré : Discord ne notifie personne pour une mention placée dans un embed.</li>
+            <li data-i18n="wiki.reseauxPingId">Le champ attend des identifiants de rôles. Clic droit sur un rôle dans Discord, puis « Copier l’identifiant » — le mode développeur doit être actif.</li>
+            <li data-i18n="wiki.reseauxPingRefus">Un rôle non mentionnable est ignoré si ModBot n’a pas la permission « Mentionner @everyone » : mieux vaut ne rien envoyer qu’un texte bleu qui ne prévient personne.</li>
+            <li data-i18n="wiki.reseauxTest">Le bouton « Tester » publie un exemple immédiatement, sans attendre une vraie publication.</li>
+          </ul>
+        </section>
+
+        <section id="journal" class="wiki-section">
+          <h2 data-i18n="wiki.journalTitre">Ce que le journal enregistre</h2>
+          <p data-i18n="wiki.journalTexte">Quinze catégories, chacune avec son salon et son interrupteur. Les cinq premières sont actives d’origine ; les autres se coupent par défaut, parce qu’un serveur actif y produit un flot que personne ne lit.</p>
+          <ul class="wiki-check-list">
+            <li data-i18n="wiki.journalActives">Actives d’origine : tickets, modération, alertes sécurité, arrivées et départs, actions admin, réglages du serveur, automod Discord.</li>
+            <li data-i18n="wiki.journalCoupees">Coupées d’origine : messages, rôles, salons, permissions, invitations, fils, vocal, événements planifiés.</li>
+            <li data-i18n="wiki.journalMasse">Une purge de messages laisse une seule ligne, avec le compte par auteur — Discord n’émet pas d’événement par message supprimé lors d’une suppression groupée.</li>
+            <li data-i18n="wiki.journalTimeout">L’exclusion temporaire d’un membre est enregistrée à la pose et à la levée, avec la durée restante.</li>
+            <li data-i18n="wiki.journalAuteur">Quand Discord le permet, l’auteur de l’action est retrouvé dans le journal d’audit et affiché.</li>
+          </ul>
+        </section>
 
         <section id="admin" class="wiki-section">
           <h2 data-i18n="wiki.administrationDuSite">Administration du site</h2>
