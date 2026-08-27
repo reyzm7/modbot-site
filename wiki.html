@@ -126,7 +126,7 @@
             <li data-i18n="wiki.giveawaysModule">Giveaways : création, durée, nombre de gagnants, relance et tirage.</li>
             <li data-i18n="wiki.ratingsModule">Ratings : notes laissées par les membres après un ticket.</li>
             <li data-i18n="wiki.salonsIdsDesSalons">Salons : salons utilisés par les systèmes du bot.</li>
-            <li data-i18n="wiki.reseauxRelaisAutomatiqueTwitter">Réseaux : relais automatique Twitter/X, TikTok, Twitch et Instagram.</li>
+            <li data-i18n="wiki.reseauxRelaisAutomatiqueTwitter">Réseaux : relais automatique Twitch, YouTube, Twitter/X, TikTok et Instagram.</li>
             <li data-i18n="wiki.langueModule">Langue : langue des messages du bot et pays du serveur.</li>
           </ul>
         </section>
@@ -233,10 +233,13 @@
           <ul class="wiki-check-list">
             <li data-i18n="wiki.reseauxPing">Chaque relais peut prévenir un ou plusieurs rôles, et @everyone si le bot en a le droit.</li>
             <li data-i18n="wiki.reseauxPingContenu">La mention part dans le message, jamais dans l’encadré : Discord ne notifie personne pour une mention placée dans un embed.</li>
-            <li data-i18n="wiki.reseauxPingId">Le champ attend des identifiants de rôles. Clic droit sur un rôle dans Discord, puis « Copier l’identifiant » — le mode développeur doit être actif.</li>
+            <li data-i18n="wiki.reseauxPingId">Rôles et salons se choisissent dans des listes déroulantes : le dashboard connaît déjà le serveur. Plus aucun identifiant à copier, donc plus de faute de frappe qui ne se voit pas.</li>
             <li data-i18n="wiki.reseauxPingRefus">Un rôle non mentionnable est ignoré si ModBot n’a pas la permission « Mentionner @everyone » : mieux vaut ne rien envoyer qu’un texte bleu qui ne prévient personne.</li>
             <li data-i18n-html="wiki.reseauxMessage">Chaque relais porte son propre texte d’annonce, par exemple <code>{account} est en live, venez le voir !</code>. Il part avec la mention, dans le message.</li>
             <li data-i18n-html="wiki.reseauxVariables">Quatre variables : <code>{account}</code> le compte suivi, <code>{platform}</code> le réseau, <code>{title}</code> le titre de la publication et <code>{link}</code> son lien direct.</li>
+            <li data-i18n="wiki.reseauxYoutube">YouTube passe par son flux public officiel : ModBot voit la vraie dernière vidéo, son titre et sa miniature, et n’annonce qu’une fois par vidéo.</li>
+            <li data-i18n="wiki.reseauxTwitch">Twitch expose de quoi détecter un passage en direct.</li>
+            <li data-i18n="wiki.reseauxLimite">TikTok, Instagram et X servent aux robots une page vide, sans clef d’API. ModBot n’y annonce donc rien plutôt que d’annoncer n’importe quoi : c’est une limite de ces plateformes, pas un réglage.</li>
             <li data-i18n="wiki.reseauxTest">Le bouton « Tester » publie un exemple immédiatement, sans attendre une vraie publication.</li>
           </ul>
         </section>

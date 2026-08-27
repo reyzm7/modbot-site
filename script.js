@@ -1909,6 +1909,9 @@ function initDashboard() {
     document.querySelectorAll("[data-social-ping-picker]").forEach((champ) => {
       remplirSelect(champ, optionsRoles, t("js.ajouterCeRole"));
     });
+    document.querySelectorAll("[data-social-channel]").forEach((champ) => {
+      remplirSelect(champ, optionsSalons, t("js.aucun"));
+    });
     // Les pastilles affichent un nom : il faut les redessiner une fois
     // les roles connus, sinon elles resteraient sur « #123456789 ».
     document.querySelectorAll(".social-card").forEach((carte) => {
@@ -2760,7 +2763,11 @@ function initDashboard() {
         const enabled = card.querySelector("[data-social-enabled]");
         const state = card.querySelector("[data-social-state]");
         if (link) link.value = relay.link || "";
-        if (channel) channel.value = relay.channel_id || "";
+        if (channel) {
+          channel.dataset.attendu = relay.channel_id || "";
+          remplirSelect(channel, optionsSalons, t("js.aucun"));
+          channel.value = relay.channel_id || "";
+        }
         if (enabled) enabled.checked = Boolean(relay.enabled);
         // Les rôles à prévenir : relus tels que le bot les a gardés.
         poserRolesDeLaCarte(card, relay.ping_roles || []);

@@ -55,6 +55,16 @@ for attribut, attendu in [
              balise is not None and balise.group(1) == attendu,
              balise.group(1) if balise else "absent")
 
+# Le champ des relais reseaux avait echappe au controle precedent : il ne
+# portait pas de `list=`, juste un placeholder « ID du salon Discord ».
+demandes = re.findall(r'<input[^>]*placeholder="[^"]*(?:ID|Identifiant|identifiant)[^"]*"[^>]*>', html)
+demandes = [d for d in demandes if "data-admin-add-id" not in d and "blacklist" not in d]
+verifier("aucun champ ne demande un identifiant de salon ou de role",
+         not demandes, str(demandes)[:120])
+verifier("les salons de publication sont des listes",
+         html.count("<select data-social-channel>") == 4,
+         str(html.count("<select data-social-channel>")))
+
 verifier("le champ texte des auto-roles a disparu",
          "data-autorole-list" not in html)
 verifier("les auto-roles ont une liste d'ajout et des pastilles",
