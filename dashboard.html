@@ -407,6 +407,7 @@
       <p class="sidebar-label" data-i18n="dash.protection">Protection</p>
       <button class="dash-nav" type="button" data-dashboard-tab="security" data-i18n="dash.navSecurite"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg></span>Sécurité</button>
       <button class="dash-nav" type="button" data-dashboard-tab="moderation" data-i18n="dash.navModeration"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg></span>Modération</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="verification"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg></span><span data-i18n="nav.verification">Vérification</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="search" data-i18n="dash.navRecherche"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-search"/></svg></span>Recherche</button>
       <button class="dash-nav" type="button" data-dashboard-tab="backups" data-i18n="dash.navSauvegardes"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg></span>Sauvegardes</button>
       <button class="dash-nav" type="button" data-dashboard-tab="logs" data-i18n="dash.navLogs"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg></span>Logs</button>
@@ -423,6 +424,7 @@
       <button class="dash-nav" type="button" data-dashboard-tab="socials" data-i18n="dash.navReseaux"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg></span>Réseaux</button>
 
       <p class="sidebar-label" data-i18n="dash.apparence">Apparence</p>
+      <button class="dash-nav" type="button" data-dashboard-tab="ai"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg></span><span data-i18n="nav.ai">Assistant IA</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="language" data-i18n="dash.navLangue"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg></span>Langue</button>
     </aside>
 
@@ -643,57 +645,6 @@
           <label class="tool-panel mini-form" data-i18n="dash.messagesMax"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-message"/></svg> Messages max<input type="number" value="5"></label>
           <label class="tool-panel mini-form" data-i18n="dash.fenetreAntiSpam"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-timer"/></svg> Fenêtre anti-spam<input type="number" value="5"></label>
           <label class="tool-panel mini-form" data-i18n="dash.seuilBan"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg> Seuil ban<input type="number" value="4"></label>
-        </div>
-
-        <!-- CAPTCHA -->
-        <div class="tool-panel security-block">
-          <div class="table-head">
-            <h3 data-i18n="dash.captchaEntree"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg> Captcha d'entrée</h3>
-            <label class="switch-inline">
-              <input type="checkbox" data-captcha-enabled>
-              <span data-i18n="dash.activer">Activer</span>
-            </label>
-          </div>
-          <p class="field-help" data-i18n="dash.lesNouveauxMembresCliquent">
-            Les nouveaux membres cliquent sur un bouton et recopient un code affiché en image.
-            Tout se passe dans une réponse privée : aucun message privé n'est nécessaire, donc
-            personne ne reste bloqué parce qu'il a fermé ses MP.
-          </p>
-          <div class="dashboard-grid three">
-            <label class="mini-form" data-i18n="dash.roleAccordeApresVerification">Rôle accordé après vérification
-              <select data-captcha-role><option value="">— Aucun —</option></select>
-            </label>
-            <label class="mini-form" data-i18n="dash.salonDuPanneau">Salon du panneau
-              <select data-captcha-channel><option value="">— Aucun —</option></select>
-            </label>
-            <div class="mini-form captcha-state">
-              <span data-i18n="dash.etat">État</span>
-              <p data-captcha-state class="captcha-state-value" data-i18n="dash.nonConfigure">Non configuré</p>
-            </div>
-          </div>
-          <div class="search-actions captcha-actions">
-            <button class="primary-btn compact" type="button" data-captcha-setup>
-              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg>
-              <span data-i18n="dash.captchaInstaller">Installer et publier</span>
-            </button>
-            <button class="secondary-btn compact" type="button" data-captcha-panel>
-              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg>
-              <span data-i18n="dash.captchaRepublier">Republier le panneau</span>
-            </button>
-            <button class="secondary-btn compact" type="button" data-captcha-lock>
-              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg>
-              <span data-i18n="dash.captchaVerrouiller">Masquer les salons</span>
-            </button>
-            <button class="secondary-btn compact danger" type="button" data-captcha-disable>
-              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg>
-              <span data-i18n="dash.captchaCouper">Désactiver</span>
-            </button>
-          </div>
-          <div class="inline-hint" data-i18n-html="dash.captchaAstuce">
-            <strong><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Bon à savoir :</strong> <code>/captcha activer</code> fait la même chose depuis Discord.
-            ModBot crée le rôle, crée le salon, publie le panneau et propose de masquer les
-            salons aux membres non vérifiés — en une commande.
-          </div>
         </div>
 
         <!-- ALERTES D'ATTAQUE -->
@@ -1227,6 +1178,72 @@
         </div>
       </section>
 
+      <section class="dash-panel" data-dashboard-panel="verification">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="verif.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg> Entrée du serveur</p>
+            <h2 data-i18n="verif.title">Vérification humaine</h2>
+          </div>
+        </div>
+
+        <p class="field-help" data-i18n="verif.intro">
+          Un nouveau membre clique sur un bouton et recopie un code affiché en image.
+          Tout se passe dans une réponse privée : personne n'est bloqué parce qu'il a
+          fermé ses messages privés.
+        </p>
+
+        <!-- CAPTCHA -->
+        <div class="tool-panel security-block">
+          <div class="table-head">
+            <h3 data-i18n="dash.captchaEntree"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg> Captcha d'entrée</h3>
+            <label class="switch-inline">
+              <input type="checkbox" data-captcha-enabled>
+              <span data-i18n="dash.activer">Activer</span>
+            </label>
+          </div>
+          <p class="field-help" data-i18n="dash.lesNouveauxMembresCliquent">
+            Les nouveaux membres cliquent sur un bouton et recopient un code affiché en image.
+            Tout se passe dans une réponse privée : aucun message privé n'est nécessaire, donc
+            personne ne reste bloqué parce qu'il a fermé ses MP.
+          </p>
+          <div class="dashboard-grid three">
+            <label class="mini-form" data-i18n="dash.roleAccordeApresVerification">Rôle accordé après vérification
+              <select data-captcha-role><option value="">— Aucun —</option></select>
+            </label>
+            <label class="mini-form" data-i18n="dash.salonDuPanneau">Salon du panneau
+              <select data-captcha-channel><option value="">— Aucun —</option></select>
+            </label>
+            <div class="mini-form captcha-state">
+              <span data-i18n="dash.etat">État</span>
+              <p data-captcha-state class="captcha-state-value" data-i18n="dash.nonConfigure">Non configuré</p>
+            </div>
+          </div>
+          <div class="search-actions captcha-actions">
+            <button class="primary-btn compact" type="button" data-captcha-setup>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg>
+              <span data-i18n="dash.captchaInstaller">Installer et publier</span>
+            </button>
+            <button class="secondary-btn compact" type="button" data-captcha-panel>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg>
+              <span data-i18n="dash.captchaRepublier">Republier le panneau</span>
+            </button>
+            <button class="secondary-btn compact" type="button" data-captcha-lock>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg>
+              <span data-i18n="dash.captchaVerrouiller">Masquer les salons</span>
+            </button>
+            <button class="secondary-btn compact danger" type="button" data-captcha-disable>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg>
+              <span data-i18n="dash.captchaCouper">Désactiver</span>
+            </button>
+          </div>
+          <div class="inline-hint" data-i18n-html="dash.captchaAstuce">
+            <strong><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Bon à savoir :</strong> tout se règle ici : la commande Discord a été retirée pour qu'il n'y ait qu'un seul endroit où configurer la vérification.
+            ModBot crée le rôle, crée le salon, publie le panneau et propose de masquer les
+            salons aux membres non vérifiés — en une commande.
+          </div>
+        </div>
+      </section>
+
       <section class="dash-panel" data-dashboard-panel="search">
         <div class="panel-title">
           <div>
@@ -1277,6 +1294,87 @@
               <strong data-i18n="dash.aucuneSelection">Aucune sélection</strong>
               <span data-i18n="dash.choisisUnResultatPour">Choisis un résultat pour voir sa fiche et agir dessus.</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="ai">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="ia.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg> Réponses automatiques</p>
+            <h2 data-i18n="ia.title">Assistant IA</h2>
+          </div>
+          <div class="panel-title-actions">
+            <span class="state inactive" data-ia-state data-i18n="ia.inactif">Inactif</span>
+          </div>
+        </div>
+
+        <p class="field-help" data-i18n="ia.intro">
+          Quand un membre mentionne ModBot, le bot lui répond. Il garde le fil de la
+          conversation salon par salon, et n'intervient jamais de lui-même.
+        </p>
+
+        <div class="welcome-layout">
+          <div class="tool-panel">
+            <h3 data-i18n="ia.reglages">Réglages</h3>
+
+            <label class="toggle-line">
+              <input type="checkbox" data-ia-enabled><span></span>
+              <strong data-i18n="ia.activer">Répondre aux mentions</strong>
+              <small data-i18n="ia.activerAide">Le bot répond quand on l'écrit @ModBot.</small>
+            </label>
+
+            <label class="mini-form"><span data-i18n="ia.salons">Limiter à ces salons</span>
+              <select data-ia-channel-picker></select>
+            </label>
+            <div class="variable-chips" data-ia-channels></div>
+            <p class="field-help" data-i18n="ia.salonsAide">
+              Aucun salon choisi : le bot répond partout où il est mentionné. Choisis-en
+              un ou plusieurs pour le cantonner.
+            </p>
+
+            <label class="mini-form"><span data-i18n="ia.personnalite">Ton des réponses</span>
+              <textarea data-ia-persona rows="3" maxlength="600"
+                        placeholder="Exemple : réponds de façon très concise et tutoie tout le monde"
+                        data-i18n-placeholder="ia.personnalitePlaceholder"></textarea>
+            </label>
+
+            <div class="search-actions">
+              <button class="secondary-btn compact" type="button" data-ia-reset>
+                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-reset"/></svg>
+                <span data-i18n="ia.oublier">Effacer le contexte</span>
+              </button>
+            </div>
+            <p class="field-help" data-i18n="ia.oublierAide">
+              Le bot repart de zéro dans tous les salons. Utile quand il s'entête sur une
+              réponse ou reste sur un sujet clos.
+            </p>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="ia.etatTitre">État du service</h3>
+            <div class="dashboard-grid two">
+              <div class="mini-form captcha-state">
+                <span data-i18n="ia.fournisseur">Fournisseur</span>
+                <p data-ia-provider class="captcha-state-value">—</p>
+              </div>
+              <div class="mini-form captcha-state">
+                <span data-i18n="ia.modele">Modèle</span>
+                <p data-ia-model class="captcha-state-value">—</p>
+              </div>
+            </div>
+            <div class="mini-form captcha-state">
+              <span data-i18n="ia.clef">Clef d'API</span>
+              <p data-ia-key class="captcha-state-value">—</p>
+            </div>
+            <div class="inline-hint" data-ia-advice hidden>
+              <strong data-ia-advice-title></strong>
+              <p data-ia-advice-text></p>
+            </div>
+            <p class="field-help" data-i18n="ia.clefAide">
+              La clef est posée chez l'hébergeur du bot, jamais ici : elle est commune à
+              tous les serveurs. Elle n'est affichée nulle part sur cette page.
+            </p>
           </div>
         </div>
       </section>

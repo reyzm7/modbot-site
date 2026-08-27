@@ -1898,6 +1898,10 @@ function initDashboard() {
     redessinerAutoRoles();
 
     remplirSelect("[data-ticket-channel]", optionsSalons, t("js.aucun"));
+    remplirSelect("[data-ia-channel-picker]", optionsSalons, t("js.ia.ajouterSalon"));
+    // Les pastilles portent un nom de salon : il faut les redessiner une
+    // fois les salons connus, sinon elles resteraient sur « #123456 ».
+    redessinerSalonsIa();
     ["tickets", "logs", "suggestions", "reports", "staff_alert"].forEach((clef) => {
       const champ = remplirSelect(`[data-channel="${clef}"]`, optionsSalons, t("js.aucun"));
       if (champ) setInputState(champ);
@@ -2745,6 +2749,7 @@ function initDashboard() {
     }
 
     applyAutoRoles(config.auto_roles);
+    applyAiState(config.ai);
 
     if (Array.isArray(config.social_relays)) {
       config.social_relays.forEach((relay) => {
@@ -5125,6 +5130,7 @@ function initDashboard() {
         reaction_roles: reactionRoles,
       } : {}),
       auto_roles: collectAutoRoles(),
+      ai: collectAiConfig(),
       recurring_messages: recurringMessages,
       social_relays: socialRelays,
       language: languageValue === "English" ? "en" : "fr",
@@ -5676,6 +5682,126 @@ function initDashboard() {
   initSocialVariables();
   initAutoRoles();
   initImagesTicket();
+  /* ══════════════════════════════════════════════════════════════
+     ASSISTANT IA DU SERVEUR
+     A ne pas confondre avec l'assistant flottant de cette page, qui
+     repond sur la configuration du dashboard. Celui-ci fait repondre
+     ModBot aux membres, sur Discord, quand ils le mentionnent.
+     ══════════════════════════════════════════════════════════════ */
+
+  let iaSalonsChoisis = [];
+
+  function nomDuSalon(id) {
+    const trouve = dashboardResources.channels.find((c) => String(c.id) === String(id));
+    return trouve ? channelLabel(trouve) : `#${id}`;
+  }
+
+  function redessinerSalonsIa() {
+    const hote = document.querySelector("[data-ia-channels]");
+    if (!hote) return;
+    hote.innerHTML = iaSalonsChoisis.length
+      ? iaSalonsChoisis.map((id) => (
+          `<button type="button" class="variable-chip" data-retirer-salon="${escapeHtml(id)}"
+                   title="${escapeHtml(t("js.ia.retirerSalon"))}">${escapeHtml(nomDuSalon(id))} &times;</button>`
+        )).join("")
+      : `<span class="field-help">${escapeHtml(t("js.ia.partout"))}</span>`;
+  }
+
+  function applyAiState(ai) {
+    if (!ai || typeof ai !== "object") return;
+
+    const actif = document.querySelector("[data-ia-enabled]");
+    if (actif) {
+      actif.checked = Boolean(ai.enabled);
+      actif.closest(".toggle-line")?.classList.toggle("is-on", Boolean(ai.enabled));
+    }
+    const persona = document.querySelector("[data-ia-persona]");
+    if (persona) persona.value = ai.persona || "";
+
+    iaSalonsChoisis = [...new Set((ai.channels || []).map(String))].slice(0, 25);
+    redessinerSalonsIa();
+
+    const etat = document.querySelector("[data-ia-state]");
+    if (etat) {
+      // Actif mais sans clef, c'est un piege : le reglage est vert et rien
+      // ne repond. On le distingue donc de « inactif ».
+      const enMarche = Boolean(ai.enabled) && Boolean(ai.configured);
+      etat.classList.toggle("active", enMarche);
+      etat.classList.toggle("inactive", !enMarche);
+      etat.textContent = t(
+        !ai.configured ? "js.ia.sansClef" : (ai.enabled ? "js.actif" : "js.inactif"));
+    }
+
+    const poser = (selecteur, valeur) => {
+      const cible = document.querySelector(selecteur);
+      if (cible) cible.textContent = valeur || "—";
+    };
+    poser("[data-ia-provider]", ai.provider);
+    poser("[data-ia-model]", ai.model);
+    poser("[data-ia-key]", t(ai.configured ? "js.ia.clefPosee" : "js.ia.clefAbsente"));
+
+    // Le conseil de configuration n'a de sens que si quelque chose cloche.
+    const conseil = document.querySelector("[data-ia-advice]");
+    if (conseil) {
+      const aDireQuelqueChose = !ai.configured && Boolean(ai.advice);
+      conseil.hidden = !aDireQuelqueChose;
+      if (aDireQuelqueChose) {
+        poser("[data-ia-advice-title]", ai.advice_title);
+        poser("[data-ia-advice-text]", ai.advice);
+      }
+    }
+  }
+
+  function collectAiConfig() {
+    const actif = document.querySelector("[data-ia-enabled]");
+    if (!actif) return undefined;
+    return {
+      enabled: Boolean(actif.checked),
+      channels: iaSalonsChoisis.slice(0, 25),
+      persona: document.querySelector("[data-ia-persona]")?.value || "",
+    };
+  }
+
+  function initAiPanel() {
+    const picker = document.querySelector("[data-ia-channel-picker]");
+    const hote = document.querySelector("[data-ia-channels]");
+    if (picker && hote) {
+      picker.addEventListener("change", () => {
+        const id = picker.value;
+        picker.value = "";
+        if (!id) return;
+        if (iaSalonsChoisis.includes(id)) return showToast(t("js.ia.salonDejaChoisi"));
+        if (iaSalonsChoisis.length >= 25) return showToast(t("js.ia.tropDeSalons"));
+        iaSalonsChoisis.push(id);
+        redessinerSalonsIa();
+        markPanelDirty("ai");
+      });
+      hote.addEventListener("click", (evenement) => {
+        const chip = evenement.target.closest("[data-retirer-salon]");
+        if (!chip) return;
+        iaSalonsChoisis = iaSalonsChoisis.filter((x) => x !== chip.dataset.retirerSalon);
+        redessinerSalonsIa();
+        markPanelDirty("ai");
+      });
+    }
+
+    document.querySelector("[data-ia-reset]")?.addEventListener("click", async () => {
+      if (!selectedServer.id) return showToast(t("js.selectionneDabord"));
+      if (!window.confirm(t("js.ia.confirmerOubli"))) return;
+      try {
+        const data = await modbotApiFetch(`/api/guilds/${selectedServer.id}/ai/reset`, {
+          method: "POST",
+          body: JSON.stringify({}),
+        });
+        showToast(tp("js.ia.contexteEfface", { n: data?.cleared ?? 0 }));
+      } catch (error) {
+        showToast(error?.message || t("js.ia.oubliImpossible"));
+      }
+    });
+  }
+
+  initAiPanel();
+
   initMentionsRelais();
 
   document.querySelector("[data-publish-reaction-roles]")?.addEventListener("click", async () => {
