@@ -8829,12 +8829,26 @@ h3 > .ui-icon,
    d'identifiant tombait a 34px — illisible pour un ID a 18 chiffres. */
 .roles-layout {
   display: grid;
-  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
   gap: 16px;
   margin-top: 16px;
   align-items: start;
 }
 
-@media (max-width: 1100px) {
+/* Deux colonnes seulement quand la droite reste utilisable. Sous 1280px
+   le champ d'identifiant tombait a 75px pour un contenu de 182px : l'ID
+   defilait hors de vue pendant qu'on le tapait. */
+@media (max-width: 1280px) {
   .roles-layout { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Un identifiant Discord fait 18 chiffres. La colonne ne descend donc
+   pas sous 150px ; si la place manque vraiment, c'est la ligne qui
+   defile dans son cadre, jamais la page. */
+.roles-layout .reaction-role-row {
+  grid-template-columns: 40px 64px minmax(150px, 1fr) minmax(90px, 1fr) auto;
+}
+
+.roles-layout [data-reaction-role-list] {
+  overflow-x: auto;
 }
