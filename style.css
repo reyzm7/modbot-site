@@ -8844,9 +8844,17 @@ h3 > .ui-icon,
 
 /* Un identifiant Discord fait 18 chiffres. La colonne ne descend donc
    pas sous 150px ; si la place manque vraiment, c'est la ligne qui
-   defile dans son cadre, jamais la page. */
-.roles-layout .reaction-role-row {
-  grid-template-columns: 40px 64px minmax(150px, 1fr) minmax(90px, 1fr) auto;
+   defile dans son cadre, jamais la page.
+
+   Borne a 761px : sous 760px la ligne s'empile (regle commune aux
+   .option-row, .channel-row et .sanction-row). Sans cette borne, la
+   specificite de ce selecteur (0,2,0) l'emporterait sur celle de la
+   regle d'empilement (0,1,0) et la ligne resterait sur cinq colonnes
+   sur telephone. */
+@media (min-width: 761px) {
+  .roles-layout .reaction-role-row {
+    grid-template-columns: 40px 64px minmax(150px, 1fr) minmax(90px, 1fr) auto;
+  }
 }
 
 .roles-layout [data-reaction-role-list] {
