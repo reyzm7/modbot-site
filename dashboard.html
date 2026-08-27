@@ -414,6 +414,7 @@
       <p class="sidebar-label" data-i18n="dash.communaute">Communauté</p>
       <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg></span><span data-i18n="nav.tickets">Tickets</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="welcome"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg></span><span data-i18n="nav.welcome">Bienvenue</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="roles"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-mask"/></svg></span><span data-i18n="nav.roles">Rôles</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="giveaways"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg></span><span data-i18n="nav.giveaways">Giveaways</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="ratings" data-i18n="dash.navRatings"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span>Ratings</button>
 
@@ -977,12 +978,17 @@
           <div class="tool-panel welcome-form">
             <h3 data-i18n="welcome.settings">Réglages</h3>
 
+            <p class="field-help" data-i18n="welcome.channelsHelp">
+              Les arrivées et les départs peuvent aller dans deux salons différents.
+              Laissé vide, le salon de départ reprend celui des arrivées — jamais l'inverse.
+            </p>
+
             <div class="dashboard-grid two">
-              <label class="mini-form"><span data-i18n="welcome.channel">Salon d'arrivée</span>
+              <label class="mini-form"><span data-i18n="welcome.channel">Salon d'arrivée — messages de bienvenue</span>
                 <select data-welcome-channel><option value="">— Aucun —</option></select>
               </label>
-              <label class="mini-form"><span data-i18n="welcome.departureChannel">Salon de départ</span>
-                <select data-welcome-departure-channel><option value="">— Même salon —</option></select>
+              <label class="mini-form"><span data-i18n="welcome.departureChannel">Salon de départ — messages d'au revoir</span>
+                <select data-welcome-departure-channel><option value="">— Même salon que l'arrivée —</option></select>
               </label>
             </div>
 
@@ -1052,6 +1058,111 @@
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="roles">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="roles.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-mask"/></svg> Attribution</p>
+            <h2 data-i18n="roles.title">Rôles automatiques</h2>
+          </div>
+          <div class="panel-title-actions">
+            <button class="secondary-btn compact" type="button" data-publish-reaction-roles data-i18n="roles.publish"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-send"/></svg> Publier le panneau</button>
+          </div>
+        </div>
+
+        <p class="field-help" data-i18n-html="roles.intro">
+          Deux façons de distribuer un rôle sans intervention humaine.
+          <strong>À l'arrivée</strong> : le rôle tombe tout seul quand quelqu'un rejoint.
+          <strong>Par réaction</strong> : le membre choisit lui-même, en cliquant sur un panneau.
+          Les deux sont enregistrées dans le journal, catégorie <strong>Rôles</strong>.
+        </p>
+
+        <div class="roles-layout">
+
+          <div class="tool-panel">
+            <h3 data-i18n="roles.autoTitle">À l'arrivée</h3>
+
+            <label class="toggle-line">
+              <input type="checkbox" data-autorole-enabled><span></span>
+              <strong data-i18n="roles.autoEnable">Donner des rôles automatiquement</strong>
+              <small data-i18n="roles.autoEnableHelp">Chaque nouveau membre les reçoit sans rien faire.</small>
+            </label>
+
+            <label class="mini-form"><span data-i18n="roles.autoList">Rôles à donner</span>
+              <input type="text" data-autorole-list list="dashboardRoleOptions"
+                     placeholder="Identifiants de rôles, séparés par une virgule"
+                     data-i18n-placeholder="roles.autoListPlaceholder">
+            </label>
+            <p class="field-help" data-i18n="roles.autoListHelp">
+              Dix rôles au maximum. Un rôle placé au-dessus de ModBot dans la hiérarchie
+              du serveur ne peut pas être attribué : Discord le refuse. Le journal indique
+              lesquels ont été écartés, et pourquoi.
+            </p>
+
+            <label class="toggle-line">
+              <input type="checkbox" data-autorole-after-captcha><span></span>
+              <strong data-i18n="roles.autoAfterCaptcha">Attendre la vérification</strong>
+              <small data-i18n="roles.autoAfterCaptchaHelp">Recommandé si le captcha est actif.</small>
+            </label>
+            <p class="field-help" data-i18n="roles.autoAfterCaptchaLong">
+              Sans cette option, un rôle donné dès l'arrivée ouvrirait l'accès avant même
+              que le captcha ait été passé — la vérification ne servirait plus à rien.
+              Quand le captcha est désactivé, ce réglage n'a aucun effet.
+            </p>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="roles.reactionTitle">Par réaction</h3>
+
+            <div class="dashboard-grid two">
+              <label class="mini-form"><span data-i18n="roles.reactionChannel">Salon du panneau</span>
+                <input type="text" data-reaction-channel list="dashboardChannelOptions"
+                       placeholder="ID du salon Discord" data-i18n-placeholder="roles.reactionChannelPlaceholder">
+              </label>
+              <label class="mini-form"><span data-i18n="roles.reactionMode">Mode</span>
+                <select data-reaction-mode>
+                  <option value="Plusieurs rôles possibles" data-i18n="roles.modeMulti">Plusieurs rôles possibles</option>
+                  <option value="Un seul rôle à la fois" data-i18n="roles.modeUnique">Un seul rôle à la fois</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="mini-form"><span data-i18n="roles.reactionPanelTitle">Titre du panneau</span>
+              <input type="text" data-reaction-title maxlength="120" placeholder="Choisis tes rôles"
+                     data-i18n-placeholder="roles.reactionPanelTitlePlaceholder">
+            </label>
+
+            <label class="mini-form"><span data-i18n="roles.reactionDescription">Description</span>
+              <textarea data-reaction-description rows="2" maxlength="600"></textarea>
+            </label>
+
+            <h4 data-i18n="roles.reactionRows">Emoji, rôle et libellé</h4>
+            <div data-reaction-role-list>
+              <div class="reaction-role-row">
+                <span>01</span>
+                <input class="emoji-input" type="text" value="" maxlength="3">
+                <input type="text" value="" list="dashboardRoleOptions">
+                <input type="text" value="">
+                <button type="button" data-i18n="roles.removeRow">Supprimer</button>
+              </div>
+            </div>
+            <button class="secondary-btn compact" type="button" data-add-reaction-role data-i18n="roles.addRow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Ajouter un rôle</button>
+
+            <p class="field-help" data-i18n="roles.reactionHelp">
+              « Publier le panneau » enregistre d'abord, puis envoie le message dans le salon
+              choisi et y pose les réactions. Republier crée un nouveau message : l'ancien
+              cesse alors de distribuer des rôles.
+            </p>
+
+            <div class="discord-preview">
+              <strong data-reaction-live-title data-i18n="roles.previewDefault">Choisis tes rôles</strong>
+              <p data-reaction-live-description></p>
+              <div class="variable-chips" data-reaction-preview-list></div>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -1240,6 +1351,12 @@
             <label class="mini-toggle" data-i18n="dash.relaisEveryone">
               <input type="checkbox" data-social-everyone><span></span>Mentionner @everyone
             </label>
+            <label data-i18n="dash.relaisMessage">Message d'annonce
+              <textarea data-social-message rows="2" maxlength="400"
+                        placeholder="{account} est en live, venez le voir !"
+                        data-i18n-placeholder="dash.relaisMessagePlaceholder"></textarea>
+            </label>
+            <div class="variable-chips" data-social-variables></div>
             <div class="social-actions">
               <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
               <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flask"/></svg> Tester</button>
@@ -1269,6 +1386,12 @@
             <label class="mini-toggle" data-i18n="dash.relaisEveryone">
               <input type="checkbox" data-social-everyone><span></span>Mentionner @everyone
             </label>
+            <label data-i18n="dash.relaisMessage">Message d'annonce
+              <textarea data-social-message rows="2" maxlength="400"
+                        placeholder="{account} est en live, venez le voir !"
+                        data-i18n-placeholder="dash.relaisMessagePlaceholder"></textarea>
+            </label>
+            <div class="variable-chips" data-social-variables></div>
             <div class="social-actions">
               <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
               <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flask"/></svg> Tester</button>
@@ -1298,6 +1421,12 @@
             <label class="mini-toggle" data-i18n="dash.relaisEveryone">
               <input type="checkbox" data-social-everyone><span></span>Mentionner @everyone
             </label>
+            <label data-i18n="dash.relaisMessage">Message d'annonce
+              <textarea data-social-message rows="2" maxlength="400"
+                        placeholder="{account} est en live, venez le voir !"
+                        data-i18n-placeholder="dash.relaisMessagePlaceholder"></textarea>
+            </label>
+            <div class="variable-chips" data-social-variables></div>
             <div class="social-actions">
               <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
               <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester3"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flask"/></svg> Tester</button>
@@ -1327,6 +1456,12 @@
             <label class="mini-toggle" data-i18n="dash.relaisEveryone">
               <input type="checkbox" data-social-everyone><span></span>Mentionner @everyone
             </label>
+            <label data-i18n="dash.relaisMessage">Message d'annonce
+              <textarea data-social-message rows="2" maxlength="400"
+                        placeholder="{account} est en live, venez le voir !"
+                        data-i18n-placeholder="dash.relaisMessagePlaceholder"></textarea>
+            </label>
+            <div class="variable-chips" data-social-variables></div>
             <div class="social-actions">
               <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
               <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.tester4"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flask"/></svg> Tester</button>

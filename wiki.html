@@ -73,6 +73,9 @@
         <a href="#dashboard" data-i18n="wiki.dashboard">Dashboard</a>
         <a href="#verification" data-i18n="wiki.verification">Vérification</a>
         <a href="#bienvenue" data-i18n="wiki.bienvenueSommaire">Bienvenue</a>
+        <a href="#roles" data-i18n="wiki.rolesSommaire">Rôles</a>
+        <a href="#reseaux" data-i18n="wiki.reseauxSommaire">Réseaux</a>
+        <a href="#journal" data-i18n="wiki.journalSommaire">Journal</a>
         <a href="#compte" data-i18n="wiki.compteSommaire">Compte et langue</a>
         <a href="#commandes" data-i18n="wiki.commandes">Commandes</a>
         <a href="#tickets" data-i18n="wiki.tickets">Tickets</a>
@@ -117,9 +120,10 @@
             <li data-i18n="wiki.ticketImage">Une option peut porter une image à la place d’un emoji : le bot en fait un emoji du serveur au moment de publier le panneau. Il lui faut la permission « Gérer les emojis ».</li>
             <li data-i18n="wiki.ticketLibelle">Le libellé est facultatif. Une option qui n’a qu’une image ou qu’un emoji fait basculer le panneau en boutons — un menu déroulant Discord refuse une entrée sans texte.</li>
             <li data-i18n="wiki.bienvenueModule">Bienvenue : messages d’arrivée et de départ, message privé et carte illustrée.</li>
+            <li data-i18n="wiki.rolesModule">Rôles : rôles donnés automatiquement à l’arrivée, et panneau de rôles par réaction.</li>
             <li data-i18n="wiki.giveawaysModule">Giveaways : création, durée, nombre de gagnants, relance et tirage.</li>
             <li data-i18n="wiki.ratingsModule">Ratings : notes laissées par les membres après un ticket.</li>
-            <li data-i18n="wiki.salonsIdsDesSalons">Salons : salons utilisés par les systèmes du bot, et rôles réactions.</li>
+            <li data-i18n="wiki.salonsIdsDesSalons">Salons : salons utilisés par les systèmes du bot.</li>
             <li data-i18n="wiki.reseauxRelaisAutomatiqueTwitter">Réseaux : relais automatique Twitter/X, TikTok, Twitch et Instagram.</li>
             <li data-i18n="wiki.langueModule">Langue : langue des messages du bot et pays du serveur.</li>
           </ul>
@@ -142,9 +146,23 @@
           <p data-i18n="wiki.bienvenueTexte">À chaque arrivée et à chaque départ, ModBot publie une carte : l’avatar du membre en rond, la phrase d’accueil et son numéro d’inscription. Le texte s’adapte à la longueur du pseudo au lieu d’être coupé.</p>
           <ul class="wiki-check-list">
             <li data-i18n="wiki.bienvenueImage">L’image de fond se choisit depuis la galerie du téléphone ou l’explorateur de l’ordinateur : aucune URL à coller. Elle est réduite automatiquement.</li>
-            <li data-i18n="wiki.bienvenueSalons">Salon d’arrivée et salon de départ peuvent être différents.</li>
+            <li data-i18n="wiki.bienvenueSalons">Salon d’arrivée et salon de départ sont deux réglages distincts. Laissé vide, le salon de départ reprend celui des arrivées — jamais l’inverse : un message de bienvenue ne part jamais dans le salon des départs.</li>
             <li data-i18n="wiki.bienvenueMp">Un message privé facultatif accueille le membre directement.</li>
             <li data-i18n-html="wiki.bienvenueVariables">Les variables <code>{user}</code>, <code>{server}</code> et <code>{memberCount}</code> sont remplacées à l’envoi.</li>
+          </ul>
+        </section>
+
+        <section id="roles" class="wiki-section">
+          <h2 data-i18n="wiki.rolesTitre">Rôles automatiques</h2>
+          <p data-i18n="wiki.rolesTexte">Deux façons de distribuer un rôle sans que personne ait à lever le petit doigt : à l’arrivée, ou au choix du membre depuis un panneau. Les deux écrivent dans le journal, catégorie « Rôles ».</p>
+          <ul class="wiki-check-list">
+            <li data-i18n="wiki.rolesAuto">À l’arrivée : jusqu’à dix rôles, donnés dès que quelqu’un rejoint le serveur.</li>
+            <li data-i18n="wiki.rolesCaptcha">Quand le captcha est actif, les auto-rôles attendent qu’il soit passé. Sans cela, le rôle ouvrirait l’accès avant la vérification, qui ne servirait plus à rien.</li>
+            <li data-i18n="wiki.rolesHierarchie">Un rôle placé au-dessus de ModBot dans la hiérarchie ne peut pas être attribué : Discord le refuse. Le journal nomme les rôles écartés et la raison.</li>
+            <li data-i18n="wiki.rolesBots">Les bots qui rejoignent le serveur ne reçoivent jamais d’auto-rôle : ils arrivent déjà avec les permissions de leur invitation.</li>
+            <li data-i18n="wiki.rolesReaction">Par réaction : un panneau à publier dans un salon, une ligne par rôle avec son emoji et son libellé.</li>
+            <li data-i18n="wiki.rolesMode">Deux modes : plusieurs rôles à la fois, ou un seul — auquel cas prendre un rôle retire le précédent.</li>
+            <li data-i18n="wiki.rolesRepublier">Republier le panneau crée un nouveau message. L’ancien cesse alors de distribuer des rôles : il peut être supprimé.</li>
           </ul>
         </section>
 
@@ -217,6 +235,8 @@
             <li data-i18n="wiki.reseauxPingContenu">La mention part dans le message, jamais dans l’encadré : Discord ne notifie personne pour une mention placée dans un embed.</li>
             <li data-i18n="wiki.reseauxPingId">Le champ attend des identifiants de rôles. Clic droit sur un rôle dans Discord, puis « Copier l’identifiant » — le mode développeur doit être actif.</li>
             <li data-i18n="wiki.reseauxPingRefus">Un rôle non mentionnable est ignoré si ModBot n’a pas la permission « Mentionner @everyone » : mieux vaut ne rien envoyer qu’un texte bleu qui ne prévient personne.</li>
+            <li data-i18n-html="wiki.reseauxMessage">Chaque relais porte son propre texte d’annonce, par exemple <code>{account} est en live, venez le voir !</code>. Il part avec la mention, dans le message.</li>
+            <li data-i18n-html="wiki.reseauxVariables">Quatre variables : <code>{account}</code> le compte suivi, <code>{platform}</code> le réseau, <code>{title}</code> le titre de la publication et <code>{link}</code> son lien direct.</li>
             <li data-i18n="wiki.reseauxTest">Le bouton « Tester » publie un exemple immédiatement, sans attendre une vraie publication.</li>
           </ul>
         </section>
@@ -228,6 +248,7 @@
             <li data-i18n="wiki.journalActives">Actives d’origine : tickets, modération, alertes sécurité, arrivées et départs, actions admin, réglages du serveur, automod Discord.</li>
             <li data-i18n="wiki.journalCoupees">Coupées d’origine : messages, rôles, salons, permissions, invitations, fils, vocal, événements planifiés.</li>
             <li data-i18n="wiki.journalMasse">Une purge de messages laisse une seule ligne, avec le compte par auteur — Discord n’émet pas d’événement par message supprimé lors d’une suppression groupée.</li>
+            <li data-i18n="wiki.journalRoles">La catégorie « Rôles » enregistre aussi les rôles pris ou rendus par réaction, et les auto-rôles donnés à l’arrivée — avec, en cas d’échec, la raison.</li>
             <li data-i18n="wiki.journalTimeout">L’exclusion temporaire d’un membre est enregistrée à la pose et à la levée, avec la durée restante.</li>
             <li data-i18n="wiki.journalAuteur">Quand Discord le permet, l’auteur de l’action est retrouvé dans le journal d’audit et affiché.</li>
           </ul>

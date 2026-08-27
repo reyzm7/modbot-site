@@ -8822,3 +8822,19 @@ h3 > .ui-icon,
   .option-row { flex-wrap: wrap; }
   .option-row .option-image { flex: 1 1 100%; }
 }
+
+/* Les auto-roles tiennent en trois champs ; les roles-reactions ont
+   besoin de largeur : une ligne y aligne emoji, identifiant, libelle et
+   bouton. Dans la colonne de 380px de .welcome-layout, le champ
+   d'identifiant tombait a 34px — illisible pour un ID a 18 chiffres. */
+.roles-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .roles-layout { grid-template-columns: minmax(0, 1fr); }
+}

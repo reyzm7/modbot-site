@@ -2624,6 +2624,8 @@ function initDashboard() {
       if (reactionMode && config.reaction_roles_mode) reactionMode.value = config.reaction_roles_mode;
     }
 
+    applyAutoRoles(config.auto_roles);
+
     if (Array.isArray(config.social_relays)) {
       config.social_relays.forEach((relay) => {
         const card = [...document.querySelectorAll(".social-card")].find((item) => item.dataset.socialPlatform === relay.platform);
@@ -2640,6 +2642,8 @@ function initDashboard() {
         if (ping) ping.value = (relay.ping_roles || []).join(", ");
         const everyone = card.querySelector("[data-social-everyone]");
         if (everyone) everyone.checked = Boolean(relay.ping_everyone);
+        const message = card.querySelector("[data-social-message]");
+        if (message) message.value = relay.message || "";
         if (state) {
           state.classList.toggle("active", Boolean(relay.enabled));
           state.classList.toggle("inactive", !relay.enabled);
@@ -4628,6 +4632,44 @@ function initDashboard() {
 
   renderSanctionLadder();
 
+  // ── Auto-roles ──────────────────────────────────────────────────
+  // Une saisie libre d'identifiants, comme pour les mentions de relais :
+  // le meme filtre, pour la meme raison — n'envoyer au bot que ce qui a
+  // une chance d'etre accepte.
+  function collectAutoRoles() {
+    const enabled = document.querySelector("[data-autorole-enabled]");
+    const liste = document.querySelector("[data-autorole-list]");
+    const apres = document.querySelector("[data-autorole-after-captcha]");
+    if (!enabled && !liste) return undefined;
+    return {
+      enabled: Boolean(enabled?.checked),
+      roles: [...new Set(
+        (liste?.value || "")
+          .split(/[,\s]+/)
+          .map((v) => v.trim())
+          .filter((v) => /^\d{5,}$/.test(v))
+      )].slice(0, 10),
+      after_captcha: apres ? Boolean(apres.checked) : true,
+    };
+  }
+
+  function applyAutoRoles(auto) {
+    if (!auto || typeof auto !== "object") return;
+    const enabled = document.querySelector("[data-autorole-enabled]");
+    const liste = document.querySelector("[data-autorole-list]");
+    const apres = document.querySelector("[data-autorole-after-captcha]");
+    if (enabled) {
+      enabled.checked = Boolean(auto.enabled);
+      enabled.closest(".toggle-line")?.classList.toggle("is-on", Boolean(auto.enabled));
+    }
+    if (liste) liste.value = (auto.roles || []).join(", ");
+    if (apres) {
+      const attendre = auto.after_captcha !== false;
+      apres.checked = attendre;
+      apres.closest(".toggle-line")?.classList.toggle("is-on", attendre);
+    }
+  }
+
   function collectDashboardConfig() {
     const ticketOptions = Array.from(document.querySelectorAll("#ticketOptionList .option-row")).map((row) => {
       const inputs = row.querySelectorAll("input");
@@ -4652,7 +4694,13 @@ function initDashboard() {
       ping_roles: (card.querySelector("[data-social-ping]")?.value || "")
         .split(/[,\s]+/).map((v) => v.trim()).filter((v) => /^\d{5,}$/.test(v)),
       ping_everyone: Boolean(card.querySelector("[data-social-everyone]")?.checked),
+      message: card.querySelector("[data-social-message]")?.value || "",
     }));
+    // Le panneau des roles-reactions a longtemps manque au HTML. Le
+    // selecteur ne trouvait donc rien, la liste partait vide, et le bot
+    // ecrasait la configuration du serveur a chaque enregistrement. On ne
+    // renvoie desormais la clef que si le panneau est reellement present.
+    const reactionPanelPresent = Boolean(document.querySelector("[data-reaction-role-list]"));
     const reactionRoles = Array.from(document.querySelectorAll(".reaction-role-row")).map((row) => {
       const inputs = row.querySelectorAll("input");
       return {
@@ -4718,11 +4766,14 @@ function initDashboard() {
         font: document.querySelector("[data-welcome-font]")?.value || "Inter",
         color: document.querySelector("[data-welcome-color]")?.value || "#ffffff",
       },
-      reaction_title: document.querySelector("[data-reaction-title]")?.value || t("js.choisisTesRoles"),
-      reaction_description: document.querySelector("[data-reaction-description]")?.value || "",
-      reaction_roles_channel_id: document.querySelector("[data-reaction-channel]")?.value || "",
-      reaction_roles_mode: document.querySelector("[data-reaction-mode]")?.value || t("js.plusieursRolesPossibles"),
-      reaction_roles: reactionRoles,
+      ...(reactionPanelPresent ? {
+        reaction_title: document.querySelector("[data-reaction-title]")?.value || t("js.choisisTesRoles"),
+        reaction_description: document.querySelector("[data-reaction-description]")?.value || "",
+        reaction_roles_channel_id: document.querySelector("[data-reaction-channel]")?.value || "",
+        reaction_roles_mode: document.querySelector("[data-reaction-mode]")?.value || t("js.plusieursRolesPossibles"),
+        reaction_roles: reactionRoles,
+      } : {}),
+      auto_roles: collectAutoRoles(),
       recurring_messages: recurringMessages,
       social_relays: socialRelays,
       language: languageValue === "English" ? "en" : "fr",
@@ -5235,6 +5286,43 @@ function initDashboard() {
     if (dirtyPanelName === "tickets") clearUnsavedChanges();
     showToast(tp("js.ticketPublieDans", { salon: channel }));
   });
+
+  // ── Variables du message d'annonce ──────────────────────────────
+  // Meme geste que pour les messages de bienvenue : on insere au curseur
+  // plutot qu'a la fin, sinon la variable atterrit toujours au mauvais
+  // endroit quand on revient corriger une phrase.
+  // Memes jetons dans les cinq langues, comme WELCOME_VARIABLES : un
+  // exemple copie ailleurs fonctionne quel que soit le reglage de langue.
+  const SOCIAL_VARIABLES = [
+    { token: "{account}", label: "js.varCompteSocial" },
+    { token: "{platform}", label: "js.varPlateformeSociale" },
+    { token: "{title}", label: "js.varTitrePublication" },
+    { token: "{link}", label: "js.varLienPublication" },
+  ];
+
+  function initSocialVariables() {
+    document.querySelectorAll("[data-social-variables]").forEach((host) => {
+      const zone = host.closest(".social-card")?.querySelector("[data-social-message]");
+      if (!zone) return;
+      host.innerHTML = SOCIAL_VARIABLES.map((v) => (
+        `<button type="button" class="variable-chip" data-variable="${escapeHtml(v.token)}"
+                 title="${escapeHtml(t(v.label))}">${escapeHtml(v.token)}</button>`
+      )).join("");
+      host.querySelectorAll("[data-variable]").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          const debut = zone.selectionStart ?? zone.value.length;
+          const fin = zone.selectionEnd ?? zone.value.length;
+          const jeton = chip.dataset.variable;
+          zone.value = zone.value.slice(0, debut) + jeton + zone.value.slice(fin);
+          zone.focus();
+          zone.setSelectionRange(debut + jeton.length, debut + jeton.length);
+          markPanelDirty("socials");
+        });
+      });
+    });
+  }
+
+  initSocialVariables();
 
   document.querySelector("[data-publish-reaction-roles]")?.addEventListener("click", async () => {
     const channel = document.querySelector("[data-reaction-channel]")?.value.trim();
