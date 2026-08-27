@@ -288,12 +288,18 @@
               <h3 data-i18n="adm.administrateursAutorises"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg> Administrateurs autorisés</h3>
               <span class="admin-badge active" data-i18n="adm.accesSensible">Accès sensible</span>
             </div>
+            <div class="admin-action-row split">
+              <input type="text" inputmode="numeric" data-admin-add-id
+                     placeholder="Identifiant Discord (18 chiffres)"
+                     data-i18n-placeholder="adm.ajoutIdPlaceholder">
+              <button class="primary-btn compact" type="button" data-admin-add data-i18n="adm.ajouterAdmin"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Nommer administrateur</button>
+            </div>
             <div class="admin-list" data-admin-list data-admin-sensitive>
               <div><span><strong data-i18n="adm.chargement">Chargement…</strong><small data-i18n="adm.listeFournieParLeBot">Liste fournie par le bot</small></span></div>
             </div>
             <div class="inline-hint">
-              <strong data-i18n="adm.listeSource">Où se modifie cette liste</strong>
-              <p data-i18n="adm.listeSourceTexte">Les administrateurs se déclarent dans la variable DASHBOARD_ADMIN_IDS, sur l'hébergeur du bot. C'est le seul endroit qu'un navigateur ne peut pas contourner : un champ de saisie ici n'aurait donné aucun droit réel.</p>
+              <strong data-i18n="adm.listeSource">Ce que donne ce droit</strong>
+              <p data-i18n="adm.listeSourceTexte">Un administrateur voit et pilote tout le panneau : blacklist, sauvegardes, serveurs, journal. Ne le donne qu'à quelqu'un en qui tu as confiance. Les administrateurs marqués « fondateur » viennent de la variable DASHBOARD_ADMIN_IDS, chez l'hébergeur : ils ne peuvent pas être retirés d'ici, pour que personne ne puisse évincer celui qui l'a nommé.</p>
             </div>
           </article>
         </section>

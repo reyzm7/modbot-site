@@ -1465,19 +1465,69 @@ function initAdminZone() {
     try {
       const data = await modbotApiFetch("/api/admin/admins", { cache: "no-store" });
       const admins = data.admins || [];
-      liste.innerHTML = admins.map((admin) => `
+      liste.innerHTML = admins.map((admin) => {
+        // Un fondateur vient de l'hebergeur : le bouton reste, desactive,
+        // pour que la raison soit lisible plutot que devinee.
+        const details = [`ID ${escapeHtmlValue(admin.id)}`];
+        if (admin.is_you) details.push(escapeHtmlValue(t("js.adm.cestToi")));
+        if (admin.added_by) {
+          details.push(escapeHtmlValue(tp("js.adm.nommePar", { par: admin.added_by })));
+        }
+        const bouton = admin.removable
+          ? `<button type="button" class="danger-btn" data-admin-remove="${escapeHtmlValue(admin.id)}">${escapeHtmlValue(t("js.adm.retirer"))}</button>`
+          : `<button type="button" disabled title="${escapeHtmlValue(t("js.adm.fondateurAide"))}">${escapeHtmlValue(t("js.adm.fondateur"))}</button>`;
+        return `
         <div>
           <span>
             <strong>${escapeHtmlValue(admin.username || admin.id)}</strong>
-            <small>ID ${escapeHtmlValue(admin.id)}${admin.is_you ? " \u2014 " + escapeHtmlValue(t("js.adm.cestToi")) : ""}</small>
+            <small>${details.join(" \u2014 ")}</small>
           </span>
-          <button type="button" disabled>${escapeHtmlValue(t("js.adm.definiSurLeServeur"))}</button>
-        </div>`).join("")
+          ${bouton}
+        </div>`;
+      }).join("")
         || `<div><span><strong>${escapeHtmlValue(t("js.adm.aucunAdmin"))}</strong></span></div>`;
+
+      // Le retrait est delegue : la liste est reconstruite a chaque fois.
+      liste.querySelectorAll("[data-admin-remove]").forEach((bouton) => {
+        bouton.addEventListener("click", async () => {
+          const id = bouton.dataset.adminRemove;
+          if (!window.confirm(tp("js.adm.confirmerRetrait", { id }))) return;
+          try {
+            await modbotApiFetch(`/api/admin/admins/${encodeURIComponent(id)}`,
+                                 { method: "DELETE" });
+            showAdminToast(t("js.adm.adminRetire"));
+            chargerAdministrateurs();
+          } catch (error) {
+            showAdminToast(error?.message || t("js.adm.retraitImpossible"));
+          }
+        });
+      });
     } catch (error) {
       liste.innerHTML = `<p class="field-help">${escapeHtmlValue(error?.message || "")}</p>`;
     }
   }
+
+  document.querySelector("[data-admin-add]")?.addEventListener("click", async () => {
+    const champ = document.querySelector("[data-admin-add-id]");
+    const id = (champ?.value || "").trim();
+    // Le bot revalide : ce controle evite seulement un aller-retour.
+    if (!/^\d{17,20}$/.test(id)) {
+      showAdminToast(t("js.adm.idInvalide"));
+      return;
+    }
+    if (!window.confirm(tp("js.adm.confirmerAjout", { id }))) return;
+    try {
+      await modbotApiFetch("/api/admin/admins", {
+        method: "POST",
+        body: JSON.stringify({ user_id: id }),
+      });
+      if (champ) champ.value = "";
+      showAdminToast(t("js.adm.adminAjoute"));
+      chargerAdministrateurs();
+    } catch (error) {
+      showAdminToast(error?.message || t("js.adm.ajoutImpossible"));
+    }
+  });
 
   document.querySelector("[data-blacklist-add]")?.addEventListener("click", async () => {
     const memberInput = document.querySelector("[data-blacklist-member]");
