@@ -3402,6 +3402,13 @@ function initDashboard() {
     if (readChecked("[data-welcome-enabled]") && !readValue("[data-welcome-channel]")) {
       return showToast(t("js.choisisSalonArrivee"));
     }
+    // Laisser le salon de depart vide n'est pas une erreur : c'est le choix
+    // « meme salon que l'arrivee ». Mais autant le dire, sinon on croit que
+    // le bot confond les deux.
+    if (readChecked("[data-welcome-departure-enabled]")
+        && !readValue("[data-welcome-departure-channel]")) {
+      showToast(t("js.departSansSalon"));
+    }
 
     try {
       await modbotApiFetch(`/api/guilds/${guildId}/config`, {
@@ -4754,18 +4761,15 @@ function initDashboard() {
         support_role: document.querySelector("[data-ticket-support-role]")?.value || "",
         options: ticketOptions,
       },
-      welcome_system: {
-        enabled: Boolean(document.querySelector("[data-dashboard-panel='welcome'] .toggle-line input")?.checked),
-        dm_enabled: Boolean(document.querySelector("[data-welcome-dm-enabled]")?.checked),
-        departure_enabled: Boolean(document.querySelectorAll("[data-dashboard-panel='welcome'] .toggle-line input")[2]?.checked),
-        channel_id: document.querySelector("[data-welcome-channel]")?.value || "",
-        message: document.querySelector("[data-welcome-message]")?.value || "",
-        dm_message: document.querySelector("[data-welcome-dm-message]")?.value || "",
-        departure_message: document.querySelector("[data-departure-message]")?.value || "",
-        background: document.querySelector("[data-welcome-bg]")?.value || "",
-        font: document.querySelector("[data-welcome-font]")?.value || "Inter",
-        color: document.querySelector("[data-welcome-color]")?.value || "#ffffff",
-      },
+      // Un seul constructeur pour la bienvenue. Il en existait un second
+      // ici, perime : il oubliait `departure_channel_id`, visait
+      // [data-departure-message] et [data-welcome-bg] qui n'existent plus,
+      // et lisait `departure_enabled` sur la troisieme .toggle-line — la
+      // case « message prive ». Comme sanitize_welcome_system() repart des
+      // valeurs par defaut, chaque clef absente etait REMISE A ZERO : le
+      // salon de depart s'effacait a chaque enregistrement, et les departs
+      // repartaient alors dans le salon d'arrivee.
+      welcome_system: collectWelcomePayload(),
       ...(reactionPanelPresent ? {
         reaction_title: document.querySelector("[data-reaction-title]")?.value || t("js.choisisTesRoles"),
         reaction_description: document.querySelector("[data-reaction-description]")?.value || "",
