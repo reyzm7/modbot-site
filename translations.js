@@ -21,8 +21,8 @@
 
 window.MODBOT_TRANSLATIONS = {
   fr: {
-    "adm.listeSource": "Où se modifie cette liste",
-    "adm.listeSourceTexte": "Les administrateurs se déclarent dans la variable DASHBOARD_ADMIN_IDS, sur l'hébergeur du bot. C'est le seul endroit qu'un navigateur ne peut pas contourner : un champ de saisie ici n'aurait donné aucun droit réel.",
+    "adm.listeSource": "Ce que donne ce droit",
+    "adm.listeSourceTexte": "Un administrateur voit et pilote tout le panneau : blacklist, sauvegardes, serveurs, journal. Ne le donne qu'à quelqu'un en qui tu as confiance. Les administrateurs marqués « fondateur » viennent de la variable DASHBOARD_ADMIN_IDS, chez l'hébergeur : ils ne peuvent pas être retirés d'ici, pour que personne ne puisse évincer celui qui l'a nommé.",
     "wiki.reseauxTitre": "Annonces réseaux",
     "wiki.reseauxTexte": "ModBot surveille un compte Twitch, TikTok, Instagram ou X, et publie un message dès qu’une nouvelle activité apparaît. Un relais par plateforme, chacun avec son salon.",
     "wiki.reseauxPing": "Chaque relais peut prévenir un ou plusieurs rôles, et @everyone si le bot en a le droit.",
@@ -1491,8 +1491,8 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Télécharger",
   },
   en: {
-    "adm.listeSource": "Where this list is edited",
-    "adm.listeSourceTexte": "Administrators are declared in the DASHBOARD_ADMIN_IDS variable, on the bot's host. That is the only place a browser cannot bypass: an input field here would have granted no real access.",
+    "adm.listeSource": "What this grants",
+    "adm.listeSourceTexte": "An administrator sees and controls the whole panel: blacklist, backups, servers, audit log. Only grant it to someone you trust. Administrators marked “founder” come from the DASHBOARD_ADMIN_IDS variable on the host: they cannot be removed from here, so that nobody can evict the person who appointed them.",
     "wiki.reseauxTitre": "Social announcements",
     "wiki.reseauxTexte": "ModBot watches a Twitch, TikTok, Instagram or X account and posts a message as soon as new activity appears. One relay per platform, each with its own channel.",
     "wiki.reseauxPing": "Each relay can ping one or more roles, and @everyone if the bot is allowed to.",
@@ -2961,8 +2961,8 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Download",
   },
   ar: {
-    "adm.listeSource": "أين تُعدَّل هذه القائمة",
-    "adm.listeSourceTexte": "يُعلَن المشرفون في المتغيّر DASHBOARD_ADMIN_IDS على مستضيف البوت. هذا هو المكان الوحيد الذي لا يستطيع المتصفّح تجاوزه: وحقل إدخال هنا لم يكن ليمنح أي صلاحية حقيقية.",
+    "adm.listeSource": "ما الذي يمنحه هذا الحق",
+    "adm.listeSourceTexte": "يرى المسؤول لوحة التحكم كاملة ويتحكم فيها: القائمة السوداء والنسخ الاحتياطية والخوادم والسجل. لا تمنحه إلا لمن تثق به. أما المسؤولون الموسومون بـ«مؤسِّس» فيأتون من متغيّر DASHBOARD_ADMIN_IDS لدى المستضيف: لا يمكن إزالتهم من هنا، حتى لا يتمكّن أحد من إقصاء من عيّنه.",
     "wiki.reseauxTitre": "إعلانات الشبكات",
     "wiki.reseauxTexte": "يراقب ModBot حسابًا على تويتش أو تيك توك أو إنستغرام أو إكس، وينشر رسالة فور ظهور نشاط جديد. مُرحِّل واحد لكل منصة، لكلٍّ قناته.",
     "wiki.reseauxPing": "يمكن لكل مُرحِّل تنبيه دور واحد أو أكثر، و@everyone إن كان للبوت صلاحية ذلك.",
@@ -4431,8 +4431,8 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "تنزيل",
   },
   es: {
-    "adm.listeSource": "Dónde se edita esta lista",
-    "adm.listeSourceTexte": "Los administradores se declaran en la variable DASHBOARD_ADMIN_IDS, en el alojamiento del bot. Es el único lugar que un navegador no puede eludir: un campo de entrada aquí no habría dado ningún permiso real.",
+    "adm.listeSource": "Qué otorga este permiso",
+    "adm.listeSourceTexte": "Un administrador ve y controla todo el panel: blacklist, copias de seguridad, servidores, historial. Concédelo solo a alguien de confianza. Los administradores marcados como «fundador» vienen de la variable DASHBOARD_ADMIN_IDS, en el alojamiento: no pueden quitarse desde aquí, para que nadie pueda destituir a quien lo nombró.",
     "wiki.reseauxTitre": "Anuncios de redes",
     "wiki.reseauxTexte": "ModBot vigila una cuenta de Twitch, TikTok, Instagram o X y publica un mensaje en cuanto aparece actividad nueva. Un relé por plataforma, cada uno con su canal.",
     "wiki.reseauxPing": "Cada relé puede avisar a uno o varios roles, y a @everyone si el bot tiene permiso.",
@@ -5840,8 +5840,8 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Descargar",
   },
   de: {
-    "adm.listeSource": "Wo diese Liste bearbeitet wird",
-    "adm.listeSourceTexte": "Administratoren werden in der Variable DASHBOARD_ADMIN_IDS beim Hoster des Bots eingetragen. Das ist der einzige Ort, den ein Browser nicht umgehen kann: ein Eingabefeld hier hätte keinerlei echte Rechte verliehen.",
+    "adm.listeSource": "Was dieses Recht bedeutet",
+    "adm.listeSourceTexte": "Ein Administrator sieht und steuert das gesamte Panel: Blacklist, Sicherungen, Server, Protokoll. Gib es nur jemandem, dem du vertraust. Als „Gründer“ markierte Administratoren stammen aus der Variable DASHBOARD_ADMIN_IDS beim Hoster: sie lassen sich von hier aus nicht entfernen, damit niemand denjenigen absetzen kann, der ihn ernannt hat.",
     "wiki.reseauxTitre": "Netzwerk-Ankündigungen",
     "wiki.reseauxTexte": "ModBot beobachtet ein Twitch-, TikTok-, Instagram- oder X-Konto und veröffentlicht eine Nachricht, sobald neue Aktivität erscheint. Ein Relais je Plattform, jeweils mit eigenem Kanal.",
     "wiki.reseauxPing": "Jedes Relais kann eine oder mehrere Rollen benachrichtigen, und @everyone, sofern der Bot es darf.",
