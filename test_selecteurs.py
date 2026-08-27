@@ -18,6 +18,9 @@ import io
 import re
 import sys
 
+NL = chr(10)
+CRLF = chr(13) + chr(10)
+
 resultats = []
 
 
@@ -125,6 +128,36 @@ verifier("les deux sont envoyes a l'installation",
          and 'channel_id: readValue("[data-captcha-channel]")' in script)
 verifier("le choix enregistre est relu a l'affichage",
          'setValue("[data-captcha-role]"' in script)
+
+
+# ══════════════════════════════════════════════════════════════════════
+print("\n--- Les listes deroulantes se voient et se lisent ---")
+
+style = io.open("style.css", encoding="utf-8").read()
+
+# Le reset ne couvrait que `button, input` : les listes retombaient sur
+# Arial et les zones de texte sur monospace, a cote d'Inter partout
+# ailleurs. Trois polices sur la meme page.
+reset = "button," + NL + "input," + NL + "select," + NL + "textarea {"
+verifier("le reset de police couvre select et textarea",
+         reset in style or reset.replace(NL, CRLF) in style)
+
+# Une <option> sans fond propre est peinte par le navigateur avec SA
+# couleur — blanche — sous un texte quasi blanc : la liste s'ouvrait sur
+# du vide, et on ne pouvait choisir ni salon ni role.
+verifier("les options portent un fond explicite",
+         "select option," in style and "background-color: #14101f" in style)
+verifier("la racine declare un schema sombre",
+         "color-scheme: dark" in style)
+
+# Un <select> vide est une boite grise sans rien dedans tant que les
+# ressources du serveur ne sont pas arrivees.
+vides = [v for v in re.findall(r"<select [^>]*></select>", html)
+         if "giveaway" not in v]
+verifier("aucune liste n'est vide dans le HTML", not vides, str(vides))
+
+verifier("un bloc « ai » manquant est dit, pas laisse en tirets",
+         "js.ia.indisponible" in script)
 
 
 rates = [n for n, ok, _ in resultats if not ok]

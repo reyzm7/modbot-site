@@ -569,7 +569,7 @@
             </div>
             <div class="form-row">
               <label data-i18n="dash.salonTicket">Salon ticket
-                <select data-ticket-channel></select>
+                <select data-ticket-channel><option value="" data-i18n="js.chargementSalons2">— Chargement… —</option></select>
               </label>
               <label data-i18n="dash.roleSupport">Rôle support
                 <select data-ticket-support-role>
@@ -855,11 +855,11 @@
         </div>
 
         <div class="channel-table">
-          <div class="channel-row"><strong data-i18n="dash.tickets2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg> Tickets</strong><select data-channel="tickets"></select><span class="state inactive" data-i18n="dash.inactif">Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.logs"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs</strong><select data-channel="logs"></select><span class="state inactive" data-i18n="dash.inactif2">Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.suggestions"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Suggestions</strong><select data-channel="suggestions"></select><span class="state inactive" data-i18n="dash.inactif3">Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.reports"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flag"/></svg> Reports</strong><select data-channel="reports"></select><span class="state inactive" data-i18n="dash.inactif4">Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.staffAlert2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Staff alert</strong><select data-channel="staff_alert"></select><span class="state inactive" data-i18n="dash.inactif5">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.tickets2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg> Tickets</strong><select data-channel="tickets"><option value="">— Chargement… —</option></select><span class="state inactive" data-i18n="dash.inactif">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.logs"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs</strong><select data-channel="logs"><option value="">— Chargement… —</option></select><span class="state inactive" data-i18n="dash.inactif2">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.suggestions"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Suggestions</strong><select data-channel="suggestions"><option value="">— Chargement… —</option></select><span class="state inactive" data-i18n="dash.inactif3">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.reports"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flag"/></svg> Reports</strong><select data-channel="reports"><option value="">— Chargement… —</option></select><span class="state inactive" data-i18n="dash.inactif4">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.staffAlert2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Staff alert</strong><select data-channel="staff_alert"><option value="">— Chargement… —</option></select><span class="state inactive" data-i18n="dash.inactif5">Inactif</span></div>
         </div>
       </section>
 
@@ -1042,7 +1042,7 @@
             </label>
 
             <label class="mini-form"><span data-i18n="roles.autoList">Rôles à donner</span>
-              <select data-autorole-picker></select>
+              <select data-autorole-picker><option value="" data-i18n="js.chargementRoles">— Chargement… —</option></select>
             </label>
             <div class="variable-chips" data-autorole-chips></div>
             <p class="field-help" data-i18n="roles.autoListHelp">
@@ -1069,7 +1069,7 @@
 
             <div class="dashboard-grid two">
               <label class="mini-form"><span data-i18n="roles.reactionChannel">Salon du panneau</span>
-                <select data-reaction-channel></select>
+                <select data-reaction-channel><option value="" data-i18n="js.chargementSalons">— Chargement… —</option></select>
               </label>
               <label class="mini-form"><span data-i18n="roles.reactionMode">Mode</span>
                 <select data-reaction-mode>
@@ -1093,7 +1093,7 @@
               <div class="reaction-role-row">
                 <span>01</span>
                 <input class="emoji-input" type="text" data-rr-emoji value="" maxlength="3">
-                <select data-rr-role></select>
+                <select data-rr-role><option value="">— Chargement… —</option></select>
                 <input type="text" data-rr-label value=""
                        data-i18n-placeholder="roles.rowLabelPlaceholder" placeholder="Libellé (facultatif)">
                 <button type="button" data-i18n="roles.removeRow">Supprimer</button>
@@ -1325,7 +1325,7 @@
             </label>
 
             <label class="mini-form"><span data-i18n="ia.salons">Limiter à ces salons</span>
-              <select data-ia-channel-picker></select>
+              <select data-ia-channel-picker><option value="" data-i18n="ia.chargement">— Chargement… —</option></select>
             </label>
             <div class="variable-chips" data-ia-channels></div>
             <p class="field-help" data-i18n="ia.salonsAide">
@@ -1442,7 +1442,7 @@
               <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord">
             </label>
             <label data-i18n="dash.relaisPing">Prévenir ces rôles
-              <select data-social-ping-picker></select>
+              <select data-social-ping-picker><option value="">— Chargement… —</option></select>
               <span class="variable-chips" data-social-ping-chips></span>
             </label>
             <label class="mini-toggle" data-i18n="dash.relaisEveryone">
@@ -1476,7 +1476,7 @@
               <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord2">
             </label>
             <label data-i18n="dash.relaisPing">Prévenir ces rôles
-              <select data-social-ping-picker></select>
+              <select data-social-ping-picker><option value="">— Chargement… —</option></select>
               <span class="variable-chips" data-social-ping-chips></span>
             </label>
             <label class="mini-toggle" data-i18n="dash.relaisEveryone">
@@ -1510,7 +1510,7 @@
               <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord3">
             </label>
             <label data-i18n="dash.relaisPing">Prévenir ces rôles
-              <select data-social-ping-picker></select>
+              <select data-social-ping-picker><option value="">— Chargement… —</option></select>
               <span class="variable-chips" data-social-ping-chips></span>
             </label>
             <label class="mini-toggle" data-i18n="dash.relaisEveryone">
@@ -1544,7 +1544,7 @@
               <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord4">
             </label>
             <label data-i18n="dash.relaisPing">Prévenir ces rôles
-              <select data-social-ping-picker></select>
+              <select data-social-ping-picker><option value="">— Chargement… —</option></select>
               <span class="variable-chips" data-social-ping-chips></span>
             </label>
             <label class="mini-toggle" data-i18n="dash.relaisEveryone">

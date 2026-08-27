@@ -60,8 +60,15 @@ a {
   text-decoration: none;
 }
 
+/* `select` et `textarea` manquaient : ils retombaient sur les polices
+   du navigateur — Arial pour les listes, monospace pour les zones de
+   texte — a cote d'Inter partout ailleurs. Invisible tant que les
+   champs etaient surtout des <input> ; criant depuis que onze
+   reglages se choisissent dans une liste. */
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -8889,4 +8896,47 @@ h3 > .ui-icon,
 @media (max-width: 1100px) {
   .option-row { grid-template-columns: 40px 60px minmax(150px, auto) minmax(0, 1fr) auto; }
   .option-row [data-option-desc] { grid-column: 1 / -1; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LISTES DEROULANTES
+   Une <option> n'heritait de rien : fond transparent, texte quasi
+   blanc. Le navigateur peint la liste ouverte avec SA propre couleur —
+   blanche, faute de `color-scheme` — et les entrees devenaient du blanc
+   sur blanc. La liste s'ouvrait sur du vide : on ne pouvait pas choisir
+   de salon ni de role.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Fait peindre au navigateur ses controles natifs en sombre :
+     listes deroulantes, barres de defilement, calendriers. */
+  color-scheme: dark;
+}
+
+select option,
+select optgroup {
+  /* Reprecise malgre color-scheme : certains navigateurs peignent la
+     liste ouverte avec la couleur du systeme et ignorent l'heritage. */
+  background-color: #14101f;
+  color: var(--text);
+}
+
+select option:disabled {
+  color: var(--muted);
+}
+
+/* La fleche par defaut disparait avec appearance:none sur certains
+   moteurs : on la redessine, pour qu'un select reste reconnaissable
+   comme tel a cote d'un champ de saisie. */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+                    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 18px) calc(50% + 2px),
+                       calc(100% - 13px) calc(50% + 2px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 34px;
+  cursor: pointer;
 }

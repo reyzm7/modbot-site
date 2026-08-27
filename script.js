@@ -5708,7 +5708,15 @@ function initDashboard() {
   }
 
   function applyAiState(ai) {
-    if (!ai || typeof ai !== "object") return;
+    if (!ai || typeof ai !== "object") {
+      // Le bot n'a pas renvoye de bloc « ai » : autant le dire. Trois
+      // tirets laissent croire a un chargement qui n'arrivera jamais.
+      ["[data-ia-provider]", "[data-ia-model]", "[data-ia-key]"].forEach((sel) => {
+        const cible = document.querySelector(sel);
+        if (cible) cible.textContent = t("js.ia.indisponible");
+      });
+      return;
+    }
 
     const actif = document.querySelector("[data-ia-enabled]");
     if (actif) {
