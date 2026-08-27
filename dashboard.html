@@ -875,7 +875,18 @@
         <div class="dashboard-grid two">
           <div class="tool-panel moderation-word-panel">
             <h3 data-i18n="dash.motsFiltres"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-ban"/></svg> Mots filtrés</h3>
-            <textarea data-custom-words placeholder="Ajoute des mots personnalisés séparés par une virgule ou une ligne" data-i18n-placeholder="dash.ajouteDesMotsPersonnalises" data-i18n="dash.spamScamInsultesPersonnalisees">spam, scam, insultes personnalisées</textarea>
+            <div class="admin-action-row split">
+              <input type="text" data-word-input
+                     placeholder="Un mot, puis Entrée"
+                     data-i18n-placeholder="dash.motPlaceholder">
+              <button class="primary-btn compact" type="button" data-word-add data-i18n="dash.ajouterMot"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Ajouter</button>
+            </div>
+            <p class="field-help" data-i18n="dash.motAide">
+              La touche Entrée ajoute le mot. Plusieurs mots séparés par une virgule
+              s'ajoutent d'un coup. Clique sur un mot pour le retirer.
+            </p>
+            <div class="variable-chips" data-word-chips></div>
+            <input type="hidden" data-custom-words value="">
             <div class="filtered-word-list" data-filtered-word-list>
               <div class="dashboard-empty-state"><strong data-i18n="dash.chargement3">Chargement</strong><span data-i18n="dash.lesMotsParDefaut">Les mots par défaut et personnalisés arrivent depuis ModBot.</span></div>
             </div>

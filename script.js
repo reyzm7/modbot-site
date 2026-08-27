@@ -1936,8 +1936,9 @@ function initDashboard() {
       ? moderation.sanctions
       : (Array.isArray(moderation.bans) ? moderation.bans : []);
 
-    const customWordsInput = document.querySelector("[data-custom-words]");
-    if (customWordsInput) customWordsInput.value = customWords.join(", ");
+    // Les mots arrivent du bot : ils alimentent les pastilles, qui sont
+    // desormais la source de verite a l'enregistrement.
+    appliquerMotsFiltres(customWords);
 
     const wordList = document.querySelector("[data-filtered-word-list]");
     if (wordList) {
@@ -3382,8 +3383,17 @@ function initDashboard() {
   const WELCOME_VARIABLES = [
     { token: "{user}", label: "js.varMention" },
     { token: "{username}", label: "js.varNomMembre" },
+    { token: "{userTag}", label: "js.varTag" },
+    { token: "{userId}", label: "js.varId" },
     { token: "{server}", label: "js.varNomServeur" },
-    { token: "{memberCount}", label: "js.varNombreMembres" }
+    { token: "{memberCount}", label: "js.varNombreMembres" },
+    { token: "{owner}", label: "js.varProprietaire" },
+    { token: "{accountCreated}", label: "js.varCompteCree" },
+    { token: "{accountAge}", label: "js.varCompteAge" },
+    { token: "{joinedAt}", label: "js.varArriveLe" },
+    { token: "{boostCount}", label: "js.varBoosts" },
+    { token: "{channelCount}", label: "js.varSalons" },
+    { token: "{roleCount}", label: "js.varRoles" }
   ];
 
   let welcomeState = {};
@@ -4307,7 +4317,7 @@ function initDashboard() {
       showToast(messageOk);
       // L'état affiché vient du bot, pas d'une supposition locale.
       loadGuildSecurity(guildId);
-      loadGuildResources(guildId);
+      loadDashboardResources(guildId);
       return data;
     } catch (error) {
       showToast(`${error?.message || t("js.captchaEchec")}`);
@@ -4909,6 +4919,10 @@ function initDashboard() {
       img.src = source;
     });
 
+    // Discord accepte 256 Ko pour un emoji, mais la sauvegarde porte
+    // toutes les images a la fois : quatre options a 256 Ko faisaient
+    // deborder la requete. Un PNG de 128x128 tient largement en 64 Ko.
+    const EMOJI_MAX_OCTETS = 64 * 1024;
     const COTE = 128;
     const toile = document.createElement("canvas");
     toile.width = COTE;
@@ -4922,10 +4936,10 @@ function initDashboard() {
     // PNG d'abord : il garde la transparence, ce qui compte pour un
     // logo pose sur un bouton. On bascule en JPEG s'il est trop lourd.
     const png = toile.toDataURL("image/png");
-    if (png.length <= 256 * 1024) return png;
+    if (png.length <= EMOJI_MAX_OCTETS) return png;
     for (const qualite of [0.9, 0.75, 0.6, 0.45]) {
       const rendu = toile.toDataURL("image/jpeg", qualite);
-      if (rendu.length <= 256 * 1024) return rendu;
+      if (rendu.length <= EMOJI_MAX_OCTETS) return rendu;
     }
     return null;
   }
@@ -5088,7 +5102,9 @@ function initDashboard() {
     }));
     const languageValue = document.querySelector("[data-dashboard-panel='language'] select")?.value || "Français";
     const securityToggles = document.querySelectorAll("[data-dashboard-panel='security'] .toggle-line input");
-    const customWords = (document.querySelector("[data-custom-words]")?.value || "")
+    const customWords = (motsFiltres.length
+      ? motsFiltres.join(", ")
+      : document.querySelector("[data-custom-words]")?.value || "")
       .split(/[\n,;]+/)
       .map((word) => word.trim().toLowerCase())
       .filter(Boolean)
@@ -5814,6 +5830,164 @@ function initDashboard() {
       }
     });
   }
+
+  /* ── Mots filtres ───────────────────────────────────────────────
+     C'etait une zone de texte enregistree par la sauvegarde generale.
+     Sur telephone ce bouton est loin, et dans une zone de texte la
+     touche Entree ajoute une ligne au lieu de valider : on croyait avoir
+     ajoute le mot, il n'etait nulle part. */
+
+  let motsFiltres = [];
+
+  function redessinerMots() {
+    const hote = document.querySelector("[data-word-chips]");
+    const cache = document.querySelector("[data-custom-words]");
+    if (cache) cache.value = motsFiltres.join(", ");
+    if (!hote) return;
+    hote.innerHTML = motsFiltres.length
+      ? motsFiltres.map((mot) => (
+          `<button type="button" class="variable-chip" data-retirer-mot="${escapeHtml(mot)}"
+                   title="${escapeHtml(t("js.retirerCeMot"))}">${escapeHtml(mot)} &times;</button>`
+        )).join("")
+      : `<span class="field-help">${escapeHtml(t("js.aucunMotFiltre"))}</span>`;
+  }
+
+  function ajouterMots(saisie) {
+    // Une virgule ou un retour a la ligne separe : coller une liste
+    // entiere doit marcher aussi bien que taper un mot.
+    const candidats = String(saisie || "")
+      .split(/[,\n;]+/)
+      .map((mot) => mot.trim().toLowerCase())
+      .filter(Boolean);
+    if (!candidats.length) return 0;
+    let ajoutes = 0;
+    candidats.forEach((mot) => {
+      if (mot.length > 60 || motsFiltres.includes(mot)) return;
+      motsFiltres.push(mot);
+      ajoutes += 1;
+    });
+    if (ajoutes) {
+      redessinerMots();
+      markPanelDirty("moderation");
+    }
+    return ajoutes;
+  }
+
+  function appliquerMotsFiltres(mots) {
+    motsFiltres = [...new Set((mots || []).map((m) => String(m).trim().toLowerCase()))]
+      .filter(Boolean);
+    redessinerMots();
+  }
+
+  function initMotsFiltres() {
+    const champ = document.querySelector("[data-word-input]");
+    const bouton = document.querySelector("[data-word-add]");
+    const hote = document.querySelector("[data-word-chips]");
+    if (!champ || !bouton || !hote) return;
+
+    const valider = () => {
+      const ajoutes = ajouterMots(champ.value);
+      if (!ajoutes) {
+        showToast(champ.value.trim() ? t("js.motDejaPresent") : t("js.motVide"));
+        return;
+      }
+      champ.value = "";
+      champ.focus();
+      showToast(tp("js.motsAjoutes", { n: ajoutes }));
+    };
+
+    bouton.addEventListener("click", valider);
+    champ.addEventListener("keydown", (evenement) => {
+      if (evenement.key !== "Enter") return;
+      // Sans cela, Entree soumettrait le formulaire environnant et la
+      // page se rechargerait sans rien enregistrer.
+      evenement.preventDefault();
+      valider();
+    });
+
+    hote.addEventListener("click", (evenement) => {
+      const chip = evenement.target.closest("[data-retirer-mot]");
+      if (!chip) return;
+      motsFiltres = motsFiltres.filter((m) => m !== chip.dataset.retirerMot);
+      redessinerMots();
+      markPanelDirty("moderation");
+    });
+
+    // Sans ce premier dessin, la zone reste vide au chargement : ni mots,
+    // ni message expliquant qu'il n'y en a pas.
+    redessinerMots();
+  }
+
+  /* ── Choix d'emoji ──────────────────────────────────────────────
+     Sur telephone le clavier en propose ; sur ordinateur il faut
+     connaitre un raccourci ou ouvrir une table de caracteres. Les
+     champs restaient vides. Une palette au clic suffit — le champ
+     reste modifiable a la main pour ce qui n'y figure pas. */
+
+  const EMOJIS_COURANTS = [
+    "🎫", "📩", "💬", "❓", "❔", "🆘", "🛠️", "⚙️", "🔧", "📌",
+    "📝", "📋", "📁", "🔒", "🔓", "🔑", "🛡️", "⚠️", "🚨", "⛔",
+    "✅", "❌", "⭐", "🌟", "💡", "🔔", "📢", "📣", "🎁", "🎉",
+    "🎮", "🕹️", "🎲", "🎧", "🎵", "🎬", "📺", "📷", "🖼️", "🎨",
+    "💰", "💳", "🛒", "📦", "🚀", "🔥", "💎", "👑", "🏆", "🥇",
+    "❤️", "💙", "💚", "💜", "🧡", "🤍", "👍", "👎", "👋", "🙏",
+    "😀", "😎", "🤔", "😴", "🥳", "😇", "🤖", "👻", "🐱", "🐶",
+    "🌍", "🌙", "☀️", "🌈", "⚡", "❄️", "🍀", "🌸", "🍕", "☕",
+  ];
+
+  let paletteOuverte = null;
+
+  function fermerPaletteEmoji() {
+    paletteOuverte?.remove();
+    paletteOuverte = null;
+  }
+
+  function ouvrirPaletteEmoji(champ) {
+    fermerPaletteEmoji();
+    const palette = document.createElement("div");
+    palette.className = "emoji-palette";
+    palette.innerHTML = EMOJIS_COURANTS
+      .map((e) => `<button type="button" data-emoji="${e}">${e}</button>`).join("")
+      + `<button type="button" class="emoji-palette-clear" data-emoji="">`
+      + `${escapeHtml(t("js.emoji.aucun"))}</button>`;
+
+    // Positionnee sous le champ, ramenee dans la fenetre si elle deborde.
+    const boite = champ.getBoundingClientRect();
+    palette.style.top = `${boite.bottom + window.scrollY + 6}px`;
+    palette.style.left = `${Math.max(8, Math.min(
+      boite.left + window.scrollX,
+      window.innerWidth - 300))}px`;
+    document.body.append(palette);
+    paletteOuverte = palette;
+
+    palette.addEventListener("click", (evenement) => {
+      const bouton = evenement.target.closest("[data-emoji]");
+      if (!bouton) return;
+      champ.value = bouton.dataset.emoji;
+      champ.dispatchEvent(new Event("input", { bubbles: true }));
+      champ.dispatchEvent(new Event("change", { bubbles: true }));
+      fermerPaletteEmoji();
+    });
+  }
+
+  // Delegue : les lignes d'option et de role sont creees en cours de route.
+  document.addEventListener("click", (evenement) => {
+    const champ = evenement.target.closest(".emoji-input, .emoji-input-wide");
+    if (champ) {
+      ouvrirPaletteEmoji(champ);
+      return;
+    }
+    if (!evenement.target.closest(".emoji-palette")) fermerPaletteEmoji();
+  });
+
+  document.addEventListener("keydown", (evenement) => {
+    if (evenement.key === "Escape") fermerPaletteEmoji();
+  });
+
+  window.addEventListener("resize", fermerPaletteEmoji);
+  window.addEventListener("scroll", fermerPaletteEmoji, true);
+
+  initMotsFiltres();
 
   initAiPanel();
 

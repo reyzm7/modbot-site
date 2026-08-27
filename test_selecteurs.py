@@ -94,8 +94,13 @@ verifier("une vignette montre le resultat", "data-option-thumb" in html)
 verifier("l'image est reduite avant l'envoi", "function reduireEmoji" in script)
 verifier("elle est recadree en carre pour un emoji",
          "const COTE = 128" in script)
-verifier("elle reste sous la limite de Discord",
-         "256 * 1024" in script)
+# Discord accepte 256 Ko pour un emoji, mais la sauvegarde porte toutes
+# les images a la fois : la borne doit rester nettement en dessous.
+plafond = re.search(r"EMOJI_MAX_OCTETS = (\d+) \* 1024", script)
+verifier("l'image est bornee avant l'envoi", plafond is not None)
+verifier("la borne reste sous les 256 Ko de Discord",
+         plafond is not None and int(plafond.group(1)) <= 256,
+         (plafond.group(1) + " Ko") if plafond else "-")
 
 
 # ══════════════════════════════════════════════════════════════════════
