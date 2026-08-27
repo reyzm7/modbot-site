@@ -567,7 +567,7 @@
             </div>
             <div class="form-row">
               <label data-i18n="dash.salonTicket">Salon ticket
-                <input type="text" placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-ticket-channel data-i18n-placeholder="dash.exemple">
+                <select data-ticket-channel></select>
               </label>
               <label data-i18n="dash.roleSupport">Rôle support
                 <select data-ticket-support-role>
@@ -602,10 +602,10 @@
             <button type="button" class="primary-btn compact" data-add-ticket-option data-i18n="dash.ajouter"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Ajouter</button>
           </div>
           <div class="option-list" id="ticketOptionList">
-            <div class="option-row"><span>01</span><input class="emoji-input" value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><input class="option-image" type="url" value="" data-option-image data-i18n-placeholder="dash.optionImage" placeholder="URL d'une image"><input value="Support technique"><input value="Problème technique, bug ou aide"><button type="button" data-i18n="dash.supprimer">Supprimer</button></div>
-            <div class="option-row"><span>02</span><input class="emoji-input" value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><input class="option-image" type="url" value="" data-option-image data-i18n-placeholder="dash.optionImage" placeholder="URL d'une image"><input value="Question"><input value="Poser une question au staff"><button type="button" data-i18n="dash.supprimer2">Supprimer</button></div>
-            <div class="option-row"><span>03</span><input class="emoji-input" value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><input class="option-image" type="url" value="" data-option-image data-i18n-placeholder="dash.optionImage" placeholder="URL d'une image"><input value="Déban"><input value="Contester un bannissement"><button type="button" data-i18n="dash.supprimer3">Supprimer</button></div>
-            <div class="option-row"><span>04</span><input class="emoji-input" value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><input class="option-image" type="url" value="" data-option-image data-i18n-placeholder="dash.optionImage" placeholder="URL d'une image"><input value="Administration"><input value="Demande administrative"><button type="button" data-i18n="dash.supprimer4">Supprimer</button></div>
+            <div class="option-row"><span>01</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Support technique"><input data-option-desc value="Problème technique, bug ou aide"><button type="button" data-option-remove data-i18n="dash.supprimer">Supprimer</button></div>
+            <div class="option-row"><span>02</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Question"><input data-option-desc value="Poser une question au staff"><button type="button" data-option-remove data-i18n="dash.supprimer2">Supprimer</button></div>
+            <div class="option-row"><span>03</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Déban"><input data-option-desc value="Contester un bannissement"><button type="button" data-option-remove data-i18n="dash.supprimer3">Supprimer</button></div>
+            <div class="option-row"><span>04</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Administration"><input data-option-desc value="Demande administrative"><button type="button" data-option-remove data-i18n="dash.supprimer4">Supprimer</button></div>
           </div>
         </div>
       </section>
@@ -904,11 +904,11 @@
         </div>
 
         <div class="channel-table">
-          <div class="channel-row"><strong data-i18n="dash.tickets2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg> Tickets</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple2"><span class="state inactive" data-i18n="dash.inactif">Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.logs"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple3"><span class="state inactive" data-i18n="dash.inactif2">Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.suggestions"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Suggestions</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple4"><span class="state inactive" data-i18n="dash.inactif3">Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.reports"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flag"/></svg> Reports</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple5"><span class="state inactive" data-i18n="dash.inactif4">Inactif</span></div>
-          <div class="channel-row"><strong data-i18n="dash.staffAlert2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Staff alert</strong><input placeholder="Exemple : 151060028..." list="dashboardChannelOptions" data-i18n-placeholder="dash.exemple6"><span class="state inactive" data-i18n="dash.inactif5">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.tickets2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg> Tickets</strong><select data-channel="tickets"></select><span class="state inactive" data-i18n="dash.inactif">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.logs"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs</strong><select data-channel="logs"></select><span class="state inactive" data-i18n="dash.inactif2">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.suggestions"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Suggestions</strong><select data-channel="suggestions"></select><span class="state inactive" data-i18n="dash.inactif3">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.reports"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flag"/></svg> Reports</strong><select data-channel="reports"></select><span class="state inactive" data-i18n="dash.inactif4">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.staffAlert2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Staff alert</strong><select data-channel="staff_alert"></select><span class="state inactive" data-i18n="dash.inactif5">Inactif</span></div>
         </div>
       </section>
 
@@ -1091,14 +1091,14 @@
             </label>
 
             <label class="mini-form"><span data-i18n="roles.autoList">Rôles à donner</span>
-              <input type="text" data-autorole-list list="dashboardRoleOptions"
-                     placeholder="Identifiants de rôles, séparés par une virgule"
-                     data-i18n-placeholder="roles.autoListPlaceholder">
+              <select data-autorole-picker></select>
             </label>
+            <div class="variable-chips" data-autorole-chips></div>
             <p class="field-help" data-i18n="roles.autoListHelp">
-              Dix rôles au maximum. Un rôle placé au-dessus de ModBot dans la hiérarchie
-              du serveur ne peut pas être attribué : Discord le refuse. Le journal indique
-              lesquels ont été écartés, et pourquoi.
+              Choisis un rôle dans la liste pour l'ajouter ; clique sur un rôle ajouté pour
+              le retirer. Dix au maximum. Un rôle placé au-dessus de ModBot dans la
+              hiérarchie du serveur ne peut pas être attribué : Discord le refuse, et le
+              journal indique lesquels ont été écartés.
             </p>
 
             <label class="toggle-line">
@@ -1118,8 +1118,7 @@
 
             <div class="dashboard-grid two">
               <label class="mini-form"><span data-i18n="roles.reactionChannel">Salon du panneau</span>
-                <input type="text" data-reaction-channel list="dashboardChannelOptions"
-                       placeholder="ID du salon Discord" data-i18n-placeholder="roles.reactionChannelPlaceholder">
+                <select data-reaction-channel></select>
               </label>
               <label class="mini-form"><span data-i18n="roles.reactionMode">Mode</span>
                 <select data-reaction-mode>
@@ -1142,9 +1141,10 @@
             <div data-reaction-role-list>
               <div class="reaction-role-row">
                 <span>01</span>
-                <input class="emoji-input" type="text" value="" maxlength="3">
-                <input type="text" value="" list="dashboardRoleOptions">
-                <input type="text" value="">
+                <input class="emoji-input" type="text" data-rr-emoji value="" maxlength="3">
+                <select data-rr-role></select>
+                <input type="text" data-rr-label value=""
+                       data-i18n-placeholder="roles.rowLabelPlaceholder" placeholder="Libellé (facultatif)">
                 <button type="button" data-i18n="roles.removeRow">Supprimer</button>
               </div>
             </div>
@@ -1344,9 +1344,8 @@
               <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord">
             </label>
             <label data-i18n="dash.relaisPing">Prévenir ces rôles
-              <input type="text" data-social-ping list="dashboardRoleOptions"
-                     placeholder="Identifiants de rôles, séparés par une virgule"
-                     data-i18n-placeholder="dash.relaisPingAide">
+              <select data-social-ping-picker></select>
+              <span class="variable-chips" data-social-ping-chips></span>
             </label>
             <label class="mini-toggle" data-i18n="dash.relaisEveryone">
               <input type="checkbox" data-social-everyone><span></span>Mentionner @everyone
@@ -1379,9 +1378,8 @@
               <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord2">
             </label>
             <label data-i18n="dash.relaisPing">Prévenir ces rôles
-              <input type="text" data-social-ping list="dashboardRoleOptions"
-                     placeholder="Identifiants de rôles, séparés par une virgule"
-                     data-i18n-placeholder="dash.relaisPingAide">
+              <select data-social-ping-picker></select>
+              <span class="variable-chips" data-social-ping-chips></span>
             </label>
             <label class="mini-toggle" data-i18n="dash.relaisEveryone">
               <input type="checkbox" data-social-everyone><span></span>Mentionner @everyone
@@ -1414,9 +1412,8 @@
               <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord3">
             </label>
             <label data-i18n="dash.relaisPing">Prévenir ces rôles
-              <input type="text" data-social-ping list="dashboardRoleOptions"
-                     placeholder="Identifiants de rôles, séparés par une virgule"
-                     data-i18n-placeholder="dash.relaisPingAide">
+              <select data-social-ping-picker></select>
+              <span class="variable-chips" data-social-ping-chips></span>
             </label>
             <label class="mini-toggle" data-i18n="dash.relaisEveryone">
               <input type="checkbox" data-social-everyone><span></span>Mentionner @everyone
@@ -1449,9 +1446,8 @@
               <input type="text" placeholder="ID du salon Discord" data-social-channel data-i18n-placeholder="dash.idDuSalonDiscord4">
             </label>
             <label data-i18n="dash.relaisPing">Prévenir ces rôles
-              <input type="text" data-social-ping list="dashboardRoleOptions"
-                     placeholder="Identifiants de rôles, séparés par une virgule"
-                     data-i18n-placeholder="dash.relaisPingAide">
+              <select data-social-ping-picker></select>
+              <span class="variable-chips" data-social-ping-chips></span>
             </label>
             <label class="mini-toggle" data-i18n="dash.relaisEveryone">
               <input type="checkbox" data-social-everyone><span></span>Mentionner @everyone
@@ -1558,6 +1554,7 @@
   </section>
 
   <div class="dashboard-toast" id="dashboardToast" aria-live="polite" data-i18n="dash.configurationEnregistree">Configuration enregistrée</div>
+  <input type="file" accept="image/*" data-option-image-file hidden>
   <datalist id="dashboardChannelOptions"></datalist>
   <datalist id="dashboardRoleOptions"></datalist>
 

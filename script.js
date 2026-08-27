@@ -1729,6 +1729,46 @@ function initDashboard() {
     state.textContent = t(active ? "js.actif" : "js.inactif");
   }
 
+  /* ══════════════════════════════════════════════════════════════
+     SELECTEURS DE ROLES ET DE SALONS
+     Le serveur est deja connu : ses roles et ses salons arrivent de
+     /resources, deja filtres. Personne n'a donc a coller un identifiant
+     a 18 chiffres — et personne ne peut plus en coller un faux.
+     ══════════════════════════════════════════════════════════════ */
+
+  function optionsRoles(choisi = "", libelleVide = null) {
+    const tete = libelleVide === null ? ""
+      : `<option value="">${escapeHtml(libelleVide)}</option>`;
+    return tete + dashboardResources.roles.map((role) => (
+      `<option value="${escapeHtml(role.id)}"${String(role.id) === String(choisi) ? " selected" : ""}>${escapeHtml(roleLabel(role))}</option>`
+    )).join("");
+  }
+
+  function optionsSalons(choisi = "", libelleVide = null) {
+    const tete = libelleVide === null ? ""
+      : `<option value="">${escapeHtml(libelleVide)}</option>`;
+    return tete + dashboardResources.channels.map((salon) => (
+      `<option value="${escapeHtml(salon.id)}"${String(salon.id) === String(choisi) ? " selected" : ""}>${escapeHtml(channelLabel(salon))}</option>`
+    )).join("");
+  }
+
+  /**
+   * Remplit un <select> sans perdre la valeur deja posee.
+   *
+   * Les ressources arrivent parfois APRES la configuration : ecraser le
+   * contenu ferait retomber le champ sur sa premiere option, et le
+   * reglage enregistre disparaitrait de l'ecran.
+   */
+  function remplirSelect(selecteur, options, libelleVide) {
+    const champ = typeof selecteur === "string"
+      ? document.querySelector(selecteur) : selecteur;
+    if (!champ) return null;
+    const voulu = champ.value || champ.dataset.attendu || "";
+    champ.innerHTML = options(voulu, libelleVide);
+    if (voulu) champ.value = voulu;
+    return champ;
+  }
+
   function renderDashboardResources(resources = {}) {
     dashboardResources = {
       channels: Array.isArray(resources.channels) ? resources.channels : [],
@@ -1796,9 +1836,29 @@ function initDashboard() {
 
     fillGiveawaySelects();
 
-    document.querySelectorAll(".reaction-role-row input:nth-of-type(2)").forEach((input) => {
-      input.setAttribute("list", "dashboardRoleOptions");
-      input.placeholder = t("js.idDuRoleOuRole");
+    // Salon du panneau de roles-reactions.
+    remplirSelect("[data-reaction-channel]", optionsSalons, t("js.aucun"));
+
+    // Une liste par ligne de role-reaction, et la liste d'ajout des
+    // auto-roles.
+    document.querySelectorAll(".reaction-role-row [data-rr-role]").forEach((champ) => {
+      remplirSelect(champ, optionsRoles, t("js.choisirRole"));
+    });
+    remplirSelect("[data-autorole-picker]", optionsRoles, t("js.ajouterCeRole"));
+    redessinerAutoRoles();
+
+    remplirSelect("[data-ticket-channel]", optionsSalons, t("js.aucun"));
+    ["tickets", "logs", "suggestions", "reports", "staff_alert"].forEach((clef) => {
+      const champ = remplirSelect(`[data-channel="${clef}"]`, optionsSalons, t("js.aucun"));
+      if (champ) setInputState(champ);
+    });
+    document.querySelectorAll("[data-social-ping-picker]").forEach((champ) => {
+      remplirSelect(champ, optionsRoles, t("js.ajouterCeRole"));
+    });
+    // Les pastilles affichent un nom : il faut les redessiner une fois
+    // les roles connus, sinon elles resteraient sur « #123456789 ».
+    document.querySelectorAll(".social-card").forEach((carte) => {
+      poserRolesDeLaCarte(carte, rolesDeLaCarte(carte));
     });
   }
 
@@ -2507,15 +2567,19 @@ function initDashboard() {
     const optionList = document.getElementById("ticketOptionList");
     if (optionList && Array.isArray(tickets.options) && tickets.options.length) {
       optionList.innerHTML = tickets.options.map((option, index) => `
-        <div class="option-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(option.emoji || "")}" maxlength="3" placeholder="${escapeHtml(t("js.emoji"))}"><input class="option-image" type="url" data-option-image value="${escapeHtml(option.image || "")}" placeholder="${escapeHtml(t("js.imageUrl"))}"><input value="${escapeHtml(option.label || "")}" placeholder="${escapeHtml(t("js.libelleFacultatif"))}"><input value="${escapeHtml(option.desc || "")}" placeholder="${escapeHtml(t("js.descriptionFacultative"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>
+        ${ligneOptionTicket(index + 1, option)}
       `).join("");
     }
 
-    const channelRows = document.querySelectorAll("[data-dashboard-panel='channels'] .channel-row input");
-    const channelValues = [channels.tickets, channels.logs, channels.suggestions, channels.reports, channels.staff_alert];
-    channelRows.forEach((input, index) => {
-      input.value = channelValues[index] || "";
-      setInputState(input);
+    // Chaque salon est retrouve par sa clef, plus par son rang dans le
+    // panneau : inserer une ligne ne deplace plus les reglages suivants.
+    ["tickets", "logs", "suggestions", "reports", "staff_alert"].forEach((clef) => {
+      const champ = document.querySelector(`[data-channel="${clef}"]`);
+      if (!champ) return;
+      champ.dataset.attendu = channels[clef] || "";
+      remplirSelect(champ, optionsSalons, t("js.aucun"));
+      champ.value = channels[clef] || "";
+      setInputState(champ);
     });
 
     const securityToggles = document.querySelectorAll("[data-dashboard-panel='security'] .toggle-line input");
@@ -2614,13 +2678,19 @@ function initDashboard() {
       if (reactionDescription && config.reaction_description) reactionDescription.value = config.reaction_description;
       const reactionRoleList = document.querySelector("[data-reaction-role-list]");
       if (reactionRoleList) {
-        reactionRoleList.innerHTML = config.reaction_roles.map((role, index) => `
-          <div class="reaction-role-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" value="${escapeHtml(role.emoji || "")}" maxlength="3"><input value="${escapeHtml(role.role_id || role.role || "")}" list="dashboardRoleOptions"><input value="${escapeHtml(role.label || role.name || t("js.role"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>
-        `).join("") || `<div class="reaction-role-row"><span>01</span><input class="emoji-input" value="" maxlength="3"><input value="" list="dashboardRoleOptions"><input value="${escapeHtml(t("js.nouveauRole"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>`;
+        reactionRoleList.innerHTML = config.reaction_roles
+          .map((role, index) => ligneReactionRole(index + 1, role))
+          .join("") || ligneReactionRole(1);
       }
       const reactionChannel = document.querySelector("[data-reaction-channel]");
       const reactionMode = document.querySelector("[data-reaction-mode]");
-      if (reactionChannel && config.reaction_roles_channel_id) reactionChannel.value = config.reaction_roles_channel_id;
+      if (reactionChannel && config.reaction_roles_channel_id) {
+        // Memorise le choix : si les ressources arrivent apres, le select
+        // est reconstruit et retomberait sinon sur sa premiere option.
+        reactionChannel.dataset.attendu = config.reaction_roles_channel_id;
+        remplirSelect(reactionChannel, optionsSalons, t("js.aucun"));
+        reactionChannel.value = config.reaction_roles_channel_id;
+      }
       if (reactionMode && config.reaction_roles_mode) reactionMode.value = config.reaction_roles_mode;
     }
 
@@ -2638,8 +2708,7 @@ function initDashboard() {
         if (channel) channel.value = relay.channel_id || "";
         if (enabled) enabled.checked = Boolean(relay.enabled);
         // Les rôles à prévenir : relus tels que le bot les a gardés.
-        const ping = card.querySelector("[data-social-ping]");
-        if (ping) ping.value = (relay.ping_roles || []).join(", ");
+        poserRolesDeLaCarte(card, relay.ping_roles || []);
         const everyone = card.querySelector("[data-social-everyone]");
         if (everyone) everyone.checked = Boolean(relay.ping_everyone);
         const message = card.querySelector("[data-social-message]");
@@ -2660,7 +2729,7 @@ function initDashboard() {
     if (liveTicketEmoji) liveTicketEmoji.textContent = tickets.emoji || "";
     renderModerationConfig(config);
     renderDashboardStats(config);
-    document.querySelectorAll("[data-dashboard-panel='channels'] .channel-row input").forEach(setInputState);
+    document.querySelectorAll("[data-dashboard-panel='channels'] [data-channel]").forEach(setInputState);
     applyWelcomeState(welcome);
     renderReactionPreview();
   }
@@ -4643,19 +4712,65 @@ function initDashboard() {
   // Une saisie libre d'identifiants, comme pour les mentions de relais :
   // le meme filtre, pour la meme raison — n'envoyer au bot que ce qui a
   // une chance d'etre accepte.
+  // Les auto-roles choisis, dans l'ordre d'ajout. La source de verite est
+  // ce tableau, pas le DOM : une pastille dont le role a ete supprime du
+  // serveur doit rester affichee et supprimable, pas disparaitre en
+  // silence en emportant le reglage avec elle.
+  let autoRolesChoisis = [];
+  const AUTOROLE_MAX = 10;
+
+  function nomDuRole(id) {
+    const trouve = dashboardResources.roles.find((r) => String(r.id) === String(id));
+    return trouve ? roleLabel(trouve) : `#${id}`;
+  }
+
+  function redessinerAutoRoles() {
+    const hote = document.querySelector("[data-autorole-chips]");
+    if (!hote) return;
+    if (!autoRolesChoisis.length) {
+      hote.innerHTML = `<span class="field-help">${escapeHtml(t("js.aucunAutoRole"))}</span>`;
+    } else {
+      hote.innerHTML = autoRolesChoisis.map((id) => (
+        `<button type="button" class="variable-chip" data-retirer-role="${escapeHtml(id)}"
+                 title="${escapeHtml(t("js.retirerCeRole"))}">${escapeHtml(nomDuRole(id))} &times;</button>`
+      )).join("");
+    }
+    const picker = document.querySelector("[data-autorole-picker]");
+    if (picker) picker.disabled = autoRolesChoisis.length >= AUTOROLE_MAX;
+  }
+
+  function initAutoRoles() {
+    const picker = document.querySelector("[data-autorole-picker]");
+    const hote = document.querySelector("[data-autorole-chips]");
+    if (!picker || !hote) return;
+
+    picker.addEventListener("change", () => {
+      const id = picker.value;
+      picker.value = "";
+      if (!id) return;
+      if (autoRolesChoisis.includes(id)) return showToast(t("js.roleDejaChoisi"));
+      if (autoRolesChoisis.length >= AUTOROLE_MAX) return showToast(t("js.tropDAutoRoles"));
+      autoRolesChoisis.push(id);
+      redessinerAutoRoles();
+      markPanelDirty("roles");
+    });
+
+    hote.addEventListener("click", (evenement) => {
+      const chip = evenement.target.closest("[data-retirer-role]");
+      if (!chip) return;
+      autoRolesChoisis = autoRolesChoisis.filter((x) => x !== chip.dataset.retirerRole);
+      redessinerAutoRoles();
+      markPanelDirty("roles");
+    });
+  }
+
   function collectAutoRoles() {
     const enabled = document.querySelector("[data-autorole-enabled]");
-    const liste = document.querySelector("[data-autorole-list]");
     const apres = document.querySelector("[data-autorole-after-captcha]");
-    if (!enabled && !liste) return undefined;
+    if (!enabled) return undefined;
     return {
-      enabled: Boolean(enabled?.checked),
-      roles: [...new Set(
-        (liste?.value || "")
-          .split(/[,\s]+/)
-          .map((v) => v.trim())
-          .filter((v) => /^\d{5,}$/.test(v))
-      )].slice(0, 10),
+      enabled: Boolean(enabled.checked),
+      roles: autoRolesChoisis.slice(0, AUTOROLE_MAX),
       after_captcha: apres ? Boolean(apres.checked) : true,
     };
   }
@@ -4663,13 +4778,13 @@ function initDashboard() {
   function applyAutoRoles(auto) {
     if (!auto || typeof auto !== "object") return;
     const enabled = document.querySelector("[data-autorole-enabled]");
-    const liste = document.querySelector("[data-autorole-list]");
     const apres = document.querySelector("[data-autorole-after-captcha]");
     if (enabled) {
       enabled.checked = Boolean(auto.enabled);
       enabled.closest(".toggle-line")?.classList.toggle("is-on", Boolean(auto.enabled));
     }
-    if (liste) liste.value = (auto.roles || []).join(", ");
+    autoRolesChoisis = [...new Set((auto.roles || []).map(String))].slice(0, AUTOROLE_MAX);
+    redessinerAutoRoles();
     if (apres) {
       const attendre = auto.after_captcha !== false;
       apres.checked = attendre;
@@ -4677,20 +4792,200 @@ function initDashboard() {
     }
   }
 
-  function collectDashboardConfig() {
-    const ticketOptions = Array.from(document.querySelectorAll("#ticketOptionList .option-row")).map((row) => {
-      const inputs = row.querySelectorAll("input");
-      // Le libellé est facultatif depuis que le bot sait publier le panneau
-      // en boutons : une option qui porte une image ou un emoji se passe de
-      // texte. On n'invente donc plus « Ticket » à sa place.
-      return {
-        emoji: inputs[0]?.value.trim() || "",
-        image: row.querySelector("[data-option-image]")?.value.trim() || "",
-        label: inputs[2]?.value.trim() || "",
-        desc: inputs[3]?.value.trim() || "",
-      };
+  /* ══════════════════════════════════════════════════════════════
+     OPTIONS DE TICKET
+     Une seule fabrique de ligne. Il en existait deux : celle du serveur
+     avait cinq champs, celle du bouton « Ajouter » n'en avait que quatre,
+     et le lecteur les prenait par leur rang — la description finissait
+     dans le libelle. Les champs portent desormais un nom.
+     ══════════════════════════════════════════════════════════════ */
+
+  function ligneOptionTicket(numero, option = {}) {
+    const image = option.image || "";
+    return `<div class="option-row">
+      <span>${String(numero).padStart(2, "0")}</span>
+      <input class="emoji-input" data-option-emoji value="${escapeHtml(option.emoji || "")}"
+             maxlength="3" placeholder="${escapeHtml(t("js.emoji"))}">
+      <span class="option-image-pick">
+        <input type="hidden" data-option-image value="${escapeHtml(image)}">
+        <img class="option-thumb" data-option-thumb alt=""${image ? ` src="${escapeHtml(image)}"` : " hidden"}>
+        <button type="button" class="secondary-btn compact" data-option-image-pick>
+          <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg>
+          ${escapeHtml(t("js.optionImageChoisir"))}
+        </button>
+        <button type="button" class="secondary-btn compact" data-option-image-clear${image ? "" : " hidden"}>
+          <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg>
+        </button>
+      </span>
+      <input data-option-label value="${escapeHtml(option.label || "")}"
+             placeholder="${escapeHtml(t("js.libelleFacultatif"))}">
+      <input data-option-desc value="${escapeHtml(option.desc || "")}"
+             placeholder="${escapeHtml(t("js.descriptionFacultative"))}">
+      <button type="button" data-option-remove>${escapeHtml(t("js.supprimer"))}</button>
+    </div>`;
+  }
+
+  /**
+   * Reduit une image en emoji carre.
+   *
+   * Discord refuse un emoji au-dela de 256 Ko et l'affiche a 32 px : une
+   * image de carte de bienvenue (1000x380) n'a pas la bonne forme. On
+   * recadre donc au centre, en carre, et on descend en qualite jusqu'a
+   * passer sous la limite.
+   */
+  async function reduireEmoji(fichier) {
+    const source = await new Promise((ok, ko) => {
+      const lecteur = new FileReader();
+      lecteur.onload = () => ok(lecteur.result);
+      lecteur.onerror = () => ko(new Error("lecture"));
+      lecteur.readAsDataURL(fichier);
     });
-    const channelRows = document.querySelectorAll("[data-dashboard-panel='channels'] .channel-row input");
+    const image = await new Promise((ok, ko) => {
+      const img = new Image();
+      img.onload = () => ok(img);
+      img.onerror = () => ko(new Error("decodage"));
+      img.src = source;
+    });
+
+    const COTE = 128;
+    const toile = document.createElement("canvas");
+    toile.width = COTE;
+    toile.height = COTE;
+    const ctx = toile.getContext("2d");
+    const echelle = Math.max(COTE / image.width, COTE / image.height);
+    const l = image.width * echelle;
+    const h = image.height * echelle;
+    ctx.drawImage(image, (COTE - l) / 2, (COTE - h) / 2, l, h);
+
+    // PNG d'abord : il garde la transparence, ce qui compte pour un
+    // logo pose sur un bouton. On bascule en JPEG s'il est trop lourd.
+    const png = toile.toDataURL("image/png");
+    if (png.length <= 256 * 1024) return png;
+    for (const qualite of [0.9, 0.75, 0.6, 0.45]) {
+      const rendu = toile.toDataURL("image/jpeg", qualite);
+      if (rendu.length <= 256 * 1024) return rendu;
+    }
+    return null;
+  }
+
+  function initImagesTicket() {
+    const liste = document.getElementById("ticketOptionList");
+    const fichier = document.querySelector("[data-option-image-file]");
+    if (!liste || !fichier) return;
+    let ligneVisee = null;
+
+    liste.addEventListener("click", (evenement) => {
+      const choisir = evenement.target.closest("[data-option-image-pick]");
+      if (choisir) {
+        ligneVisee = choisir.closest(".option-row");
+        fichier.click();
+        return;
+      }
+      const retirer = evenement.target.closest("[data-option-image-clear]");
+      if (retirer) {
+        const ligne = retirer.closest(".option-row");
+        ligne.querySelector("[data-option-image]").value = "";
+        const vignette = ligne.querySelector("[data-option-thumb]");
+        vignette.hidden = true;
+        vignette.removeAttribute("src");
+        retirer.hidden = true;
+        markPanelDirty("tickets");
+      }
+    });
+
+    fichier.addEventListener("change", async () => {
+      const choisi = fichier.files?.[0];
+      // Le champ est remis a zero dans tous les cas : sans cela,
+      // rechoisir le meme fichier ne declencherait aucun evenement.
+      const ligne = ligneVisee;
+      ligneVisee = null;
+      if (!choisi || !ligne) { fichier.value = ""; return; }
+      if (!choisi.type.startsWith("image/")) {
+        showToast(t("js.image.pasUneImage"));
+        fichier.value = "";
+        return;
+      }
+      showToast(t("js.image.traitement"));
+      try {
+        const reduit = await reduireEmoji(choisi);
+        if (!reduit) {
+          showToast(t("js.image.tropLourde"));
+          return;
+        }
+        ligne.querySelector("[data-option-image]").value = reduit;
+        const vignette = ligne.querySelector("[data-option-thumb]");
+        vignette.src = reduit;
+        vignette.hidden = false;
+        ligne.querySelector("[data-option-image-clear]").hidden = false;
+        markPanelDirty("tickets");
+        showToast(t("js.image.prete"));
+      } catch (erreur) {
+        showToast(t("js.image.illisible"));
+      } finally {
+        fichier.value = "";
+      }
+    });
+  }
+
+  /* ── Mentions des relais reseaux ────────────────────────────────
+     Meme geste que pour les auto-roles, mais l'etat vit dans le DOM :
+     chaque carte a ses propres pastilles, et aucune n'a besoin de
+     savoir ce que font les autres. */
+
+  function pastilleRole(id) {
+    return `<button type="button" class="variable-chip" data-role-id="${escapeHtml(id)}"
+             title="${escapeHtml(t("js.retirerCeRole"))}">${escapeHtml(nomDuRole(id))} &times;</button>`;
+  }
+
+  function rolesDeLaCarte(carte) {
+    return [...carte.querySelectorAll("[data-social-ping-chips] [data-role-id]")]
+      .map((chip) => chip.dataset.roleId);
+  }
+
+  function poserRolesDeLaCarte(carte, ids) {
+    const hote = carte.querySelector("[data-social-ping-chips]");
+    if (!hote) return;
+    hote.innerHTML = [...new Set(ids.map(String))].slice(0, 8).map(pastilleRole).join("");
+  }
+
+  function initMentionsRelais() {
+    document.querySelectorAll(".social-card").forEach((carte) => {
+      const picker = carte.querySelector("[data-social-ping-picker]");
+      const hote = carte.querySelector("[data-social-ping-chips]");
+      if (!picker || !hote) return;
+
+      picker.addEventListener("change", () => {
+        const id = picker.value;
+        picker.value = "";
+        if (!id) return;
+        const deja = rolesDeLaCarte(carte);
+        if (deja.includes(id)) return showToast(t("js.roleDejaChoisi"));
+        if (deja.length >= 8) return showToast(t("js.tropDeRolesMentionnes"));
+        hote.insertAdjacentHTML("beforeend", pastilleRole(id));
+        markPanelDirty("socials");
+      });
+
+      hote.addEventListener("click", (evenement) => {
+        const chip = evenement.target.closest("[data-role-id]");
+        if (!chip) return;
+        chip.remove();
+        markPanelDirty("socials");
+      });
+    });
+  }
+
+  function collectDashboardConfig() {
+    // Le libellé est facultatif depuis que le bot sait publier le panneau
+    // en boutons : une option qui porte une image ou un emoji se passe de
+    // texte. On n'invente donc plus « Ticket » à sa place.
+    const ticketOptions = Array.from(document.querySelectorAll("#ticketOptionList .option-row")).map((row) => ({
+      emoji: row.querySelector("[data-option-emoji]")?.value.trim() || "",
+      image: row.querySelector("[data-option-image]")?.value.trim() || "",
+      label: row.querySelector("[data-option-label]")?.value.trim() || "",
+      desc: row.querySelector("[data-option-desc]")?.value.trim() || "",
+    }));
+    const salonSysteme = (clef) =>
+      document.querySelector(`[data-channel="${clef}"]`)?.value || "";
     const socialRelays = Array.from(document.querySelectorAll(".social-card")).map((card) => ({
       platform: card.dataset.socialPlatform,
       link: card.querySelector("[data-social-link]")?.value || "",
@@ -4698,8 +4993,7 @@ function initDashboard() {
       enabled: Boolean(card.querySelector("[data-social-enabled]")?.checked),
       // Le bot revérifie de son côté : ce filtre évite juste d'envoyer
       // du texte qui sera rejeté.
-      ping_roles: (card.querySelector("[data-social-ping]")?.value || "")
-        .split(/[,\s]+/).map((v) => v.trim()).filter((v) => /^\d{5,}$/.test(v)),
+      ping_roles: rolesDeLaCarte(card),
       ping_everyone: Boolean(card.querySelector("[data-social-everyone]")?.checked),
       message: card.querySelector("[data-social-message]")?.value || "",
     }));
@@ -4708,13 +5002,16 @@ function initDashboard() {
     // ecrasait la configuration du serveur a chaque enregistrement. On ne
     // renvoie desormais la clef que si le panneau est reellement present.
     const reactionPanelPresent = Boolean(document.querySelector("[data-reaction-role-list]"));
+    // Lecture par nom, pas par rang. Un champ insere en amont deplacait
+    // silencieusement tous les suivants — c'est ce qui avait fait
+    // disparaitre le salon de depart des messages de bienvenue.
     const reactionRoles = Array.from(document.querySelectorAll(".reaction-role-row")).map((row) => {
-      const inputs = row.querySelectorAll("input");
+      const role = row.querySelector("[data-rr-role]")?.value || "";
       return {
-        emoji: inputs[0]?.value || "",
-        role: inputs[1]?.value || "",
-        role_id: inputs[1]?.value || "",
-        label: inputs[2]?.value || "",
+        emoji: row.querySelector("[data-rr-emoji]")?.value || "",
+        role,
+        role_id: role,
+        label: row.querySelector("[data-rr-label]")?.value || "",
       };
     });
     const recurringMessages = Array.from(document.querySelectorAll(".recurring-item")).map((item) => ({
@@ -4736,11 +5033,11 @@ function initDashboard() {
       .filter((word, index, words) => words.indexOf(word) === index);
     return {
       channels: {
-        tickets: document.querySelector("[data-ticket-channel]")?.value || channelRows[0]?.value || "",
-        logs: channelRows[1]?.value || "",
-        suggestions: channelRows[2]?.value || "",
-        reports: channelRows[3]?.value || "",
-        staff_alert: channelRows[4]?.value || "",
+        tickets: document.querySelector("[data-ticket-channel]")?.value || salonSysteme("tickets"),
+        logs: salonSysteme("logs"),
+        suggestions: salonSysteme("suggestions"),
+        reports: salonSysteme("reports"),
+        staff_alert: salonSysteme("staff_alert"),
       },
       security: {
         antilink: Boolean(securityToggles[0]?.checked),
@@ -5237,21 +5534,21 @@ function initDashboard() {
     if (!optionList) return;
     const count = optionList.querySelectorAll(".option-row").length + 1;
     const option = document.createElement("div");
-    option.className = "option-row";
-    option.innerHTML = `
-      <span>${String(count).padStart(2, "0")}</span>
-      <input class="emoji-input" type="text" value="" maxlength="3">
-      <input type="text" value="${escapeHtml(t("js.nouvelleOption"))}">
-      <input type="text" value="${escapeHtml(t("js.descriptionOption"))}">
-      <button type="button">${escapeHtml(t("js.supprimer"))}</button>
-    `;
-    optionList.appendChild(option);
+    // Cette ligne n'avait que quatre champs quand celle du serveur en a
+    // cinq : lus par leur rang, la description finissait dans le libelle.
+    optionList.insertAdjacentHTML("beforeend", ligneOptionTicket(count, {
+      label: t("js.nouvelleOption"),
+      desc: t("js.descriptionOption"),
+    }));
     markPanelDirty("tickets");
     showToast(t("js.optionAjoutee"));
   });
 
   optionList?.addEventListener("click", (event) => {
-    const button = event.target.closest("button");
+    // Seul le bouton de suppression supprime. La cellule d'image porte
+    // elle aussi des boutons : sans ce filtre, cliquer « Image » effacait
+    // l'option entiere.
+    const button = event.target.closest("[data-option-remove]");
     if (!button) return;
     const rows = optionList.querySelectorAll(".option-row");
     if (rows.length <= 1) {
@@ -5327,6 +5624,9 @@ function initDashboard() {
   }
 
   initSocialVariables();
+  initAutoRoles();
+  initImagesTicket();
+  initMentionsRelais();
 
   document.querySelector("[data-publish-reaction-roles]")?.addEventListener("click", async () => {
     const channel = document.querySelector("[data-reaction-channel]")?.value.trim();
@@ -5364,6 +5664,12 @@ function initDashboard() {
   const reactionRoleList = document.querySelector("[data-reaction-role-list]");
   const addReactionRoleButton = document.querySelector("[data-add-reaction-role]");
 
+  /** Une ligne de role-reaction, numerotee. Modele unique. */
+  function ligneReactionRole(numero, role = {}) {
+    const index = numero - 1;
+    return `<div class="reaction-role-row"><span>${String(index + 1).padStart(2, "0")}</span><input class="emoji-input" data-rr-emoji value="${escapeHtml(role.emoji || "")}" maxlength="3"><select data-rr-role>${optionsRoles(role.role_id || role.role || "", t("js.choisirRole"))}</select><input data-rr-label value="${escapeHtml(role.label || role.name || "")}" placeholder="${escapeHtml(t("js.libelleFacultatif"))}"><button type="button">${escapeHtml(t("js.supprimer"))}</button></div>`;
+  }
+
   function renderReactionPreview() {
     if (reactionLiveTitle) {
       reactionLiveTitle.textContent = `${reactionTitleInput?.value.trim() || t("js.choisisTesRoles")}`;
@@ -5375,9 +5681,11 @@ function initDashboard() {
 
     reactionPreviewList.innerHTML = "";
     reactionRoleList.querySelectorAll(".reaction-role-row").forEach((row) => {
-      const inputs = row.querySelectorAll("input");
-      const emoji = inputs[0]?.value.trim() || "";
-      const label = inputs[2]?.value.trim() || inputs[1]?.value.trim() || t("js.role");
+      const emoji = row.querySelector("[data-rr-emoji]")?.value.trim() || "";
+      const choisi = row.querySelector("[data-rr-role]");
+      const label = row.querySelector("[data-rr-label]")?.value.trim()
+        || (choisi?.value ? nomDuRole(choisi.value) : "")
+        || t("js.role");
       const chip = document.createElement("span");
       chip.textContent = `${emoji} ${label}`;
       reactionPreviewList.append(chip);
@@ -5397,16 +5705,9 @@ function initDashboard() {
   addReactionRoleButton?.addEventListener("click", () => {
     if (!reactionRoleList) return;
     const count = reactionRoleList.querySelectorAll(".reaction-role-row").length + 1;
-    const row = document.createElement("div");
-    row.className = "reaction-role-row";
-    row.innerHTML = `
-      <span>${String(count).padStart(2, "0")}</span>
-      <input class="emoji-input" type="text" value="" maxlength="3">
-      <input type="text" value="" placeholder="${escapeHtml(t("js.idDuRoleOuRole"))}" list="dashboardRoleOptions">
-      <input type="text" value="${escapeHtml(t("js.nouveauRole"))}">
-      <button type="button">Supprimer</button>
-    `;
-    reactionRoleList.append(row);
+    // Une seule fabrique de ligne : deux modeles divergeraient au premier
+    // changement, comme l'ont fait les deux constructeurs de bienvenue.
+    reactionRoleList.insertAdjacentHTML("beforeend", ligneReactionRole(count));
     renderReactionPreview();
     markPanelDirty("reactionroles");
     showToast(t("js.roleReactionAjoute"));

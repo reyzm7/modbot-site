@@ -8774,9 +8774,27 @@ h3 > .ui-icon,
    texte.
    ═══════════════════════════════════════════════════════════════════ */
 
-.option-row .option-image {
-  flex: 1.4 1 150px;
+/* La cellule d'image n'est plus un champ d'URL mais un bouton, une
+   vignette et un bouton de retrait. */
+.option-image-pick {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   min-width: 0;
+}
+
+.option-image-pick button {
+  white-space: nowrap;
+}
+
+.option-thumb {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--panel);
 }
 
 /* Un champ laissé vide n'est pas une erreur ici : on le montre comme un
@@ -8859,4 +8877,16 @@ h3 > .ui-icon,
 
 .roles-layout [data-reaction-role-list] {
   overflow-x: auto;
+}
+
+/* Six cellules depuis que l'image se choisit dans la galerie : numero,
+   emoji, image, libelle, description, suppression. La grille n'en
+   declarait que cinq, et la sixieme repassait a la ligne. */
+.option-row {
+  grid-template-columns: 40px 60px minmax(150px, auto) minmax(120px, 1fr) minmax(140px, 1.3fr) auto;
+}
+
+@media (max-width: 1100px) {
+  .option-row { grid-template-columns: 40px 60px minmax(150px, auto) minmax(0, 1fr) auto; }
+  .option-row [data-option-desc] { grid-column: 1 / -1; }
 }
