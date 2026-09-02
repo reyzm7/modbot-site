@@ -9472,3 +9472,37 @@ select {
   .partners-shell { padding: 0 14px 60px; }
   .main-partner-actions > a { flex: 1 1 100%; justify-content: center; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   EVENEMENTS
+   Une carte par evenement, pliee comme un formulaire : c'est ce qu'elle
+   est. Le badge dit d'un coup d'oeil ce qui est publie et ce qui ne
+   l'est pas encore.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.event-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.event-card {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.event-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.event-card-head strong { font-size: 1.02rem; }
+.event-card .search-actions { margin-top: 4px; }

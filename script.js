@@ -1765,7 +1765,7 @@ function initDashboard() {
   };
   let dashboardGuilds = [];
   let dernierConfig = null;   // derniere config reçue, pour le redessin
-  let dashboardResources = { channels: [], roles: [] };
+  let dashboardResources = { channels: [], roles: [], voice_channels: [], categories: [] };
 
   function showToast(message) {
     if (!toast) return;
@@ -1899,6 +1899,24 @@ function initDashboard() {
     )).join("");
   }
 
+  function optionsSalonsVocaux(choisi = "", libelleVide = null) {
+    const tete = libelleVide === null ? ""
+      : `<option value="">${escapeHtml(libelleVide)}</option>`;
+    return tete + (dashboardResources.voice_channels || [])
+      .map((salon) => (
+        `<option value="${escapeHtml(salon.id)}"${String(salon.id) === String(choisi) ? " selected" : ""}>${escapeHtml(channelLabel(salon))}</option>`
+      )).join("");
+  }
+
+  function optionsCategories(choisi = "", libelleVide = null) {
+    const tete = libelleVide === null ? ""
+      : `<option value="">${escapeHtml(libelleVide)}</option>`;
+    return tete + (dashboardResources.categories || [])
+      .map((salon) => (
+        `<option value="${escapeHtml(salon.id)}"${String(salon.id) === String(choisi) ? " selected" : ""}>${escapeHtml(channelLabel(salon))}</option>`
+      )).join("");
+  }
+
   function optionsSalons(choisi = "", libelleVide = null) {
     const tete = libelleVide === null ? ""
       : `<option value="">${escapeHtml(libelleVide)}</option>`;
@@ -1927,7 +1945,11 @@ function initDashboard() {
   function renderDashboardResources(resources = {}) {
     dashboardResources = {
       channels: Array.isArray(resources.channels) ? resources.channels : [],
-      roles: Array.isArray(resources.roles) ? resources.roles : []
+      roles: Array.isArray(resources.roles) ? resources.roles : [],
+      // Listes dediees : un salon vocal n'a rien a faire dans un
+      // selecteur de salon texte, ni une categorie dans les deux.
+      voice_channels: Array.isArray(resources.voice_channels) ? resources.voice_channels : [],
+      categories: Array.isArray(resources.categories) ? resources.categories : []
     };
 
     const channelDatalist = document.getElementById("dashboardChannelOptions");
@@ -2004,6 +2026,13 @@ function initDashboard() {
 
     remplirSelect("[data-ticket-channel]", optionsSalons, t("js.aucun"));
     remplirSelect("[data-ia-channel-picker]", optionsSalons, t("js.ia.ajouterSalon"));
+    // La porte d'entree est un salon VOCAL, l'accueil une CATEGORIE :
+    // le bot renvoie deux listes dediees pour ne pas melanger les types.
+    remplirSelect("[data-voice-hub]", optionsSalonsVocaux, t("js.aucun"));
+    remplirSelect("[data-voice-category]", optionsCategories, t("js.aucun"));
+    document.querySelectorAll("[data-event-channel]").forEach((champ) => {
+      remplirSelect(champ, optionsSalons, t("js.aucun"));
+    });
     // Les pastilles portent un nom de salon : il faut les redessiner une
     // fois les salons connus, sinon elles resteraient sur « #123456 ».
     redessinerSalonsIa();
@@ -2859,6 +2888,8 @@ function initDashboard() {
 
     applyAutoRoles(config.auto_roles);
     applyAiState(config.ai);
+    applyVoiceState(config.voice);
+    applyEventsState(config.events);
     appliquerPremium(config.premium);
 
     if (Array.isArray(config.social_relays)) {
@@ -5197,6 +5228,232 @@ function initDashboard() {
       });
   }
 
+  /* ══════════════════════════════════════════════════════════════
+     VOCAUX PERSONNALISES
+     ══════════════════════════════════════════════════════════════ */
+
+  const VOCAL_VARIABLES = [
+    { token: "{username}", label: "js.voc.varPseudo" },
+    { token: "{tag}", label: "js.voc.varTag" },
+  ];
+
+  function applyVoiceState(voice) {
+    if (!voice || typeof voice !== "object") return;
+    const actif = document.querySelector("[data-voice-enabled]");
+    if (actif) {
+      actif.checked = Boolean(voice.enabled);
+      actif.closest(".toggle-line")?.classList.toggle("is-on", Boolean(voice.enabled));
+    }
+    const poser = (selecteur, valeur) => {
+      const champ = document.querySelector(selecteur);
+      if (!champ) return;
+      champ.dataset.attendu = valeur || "";
+      champ.value = valeur || "";
+    };
+    poser("[data-voice-hub]", voice.hub_id);
+    poser("[data-voice-category]", voice.category_id);
+    const nom = document.querySelector("[data-voice-name]");
+    if (nom) nom.value = voice.name_template || "";
+    const limite = document.querySelector("[data-voice-limit]");
+    if (limite) limite.value = voice.user_limit ?? 0;
+  }
+
+  function collectVoiceConfig() {
+    const actif = document.querySelector("[data-voice-enabled]");
+    if (!actif) return undefined;
+    return {
+      enabled: Boolean(actif.checked),
+      hub_id: document.querySelector("[data-voice-hub]")?.value || "",
+      category_id: document.querySelector("[data-voice-category]")?.value || "",
+      name_template: document.querySelector("[data-voice-name]")?.value || "",
+      user_limit: Number(document.querySelector("[data-voice-limit]")?.value || 0),
+      // `temporaires` n'est jamais envoye : c'est au bot de savoir quels
+      // salons il a crees. Un client qui l'ecraserait laisserait des
+      // salons que plus rien ne supprimerait.
+    };
+  }
+
+  function initVoicePanel() {
+    const hote = document.querySelector("[data-voice-variables]");
+    const champ = document.querySelector("[data-voice-name]");
+    if (!hote || !champ) return;
+    hote.innerHTML = VOCAL_VARIABLES.map((v) => (
+      `<button type="button" class="variable-chip" data-variable="${escapeHtml(v.token)}"
+               title="${escapeHtml(t(v.label))}">${escapeHtml(v.token)}</button>`
+    )).join("");
+    hote.querySelectorAll("[data-variable]").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const debut = champ.selectionStart ?? champ.value.length;
+        const fin = champ.selectionEnd ?? champ.value.length;
+        const jeton = chip.dataset.variable;
+        champ.value = champ.value.slice(0, debut) + jeton + champ.value.slice(fin);
+        champ.focus();
+        champ.setSelectionRange(debut + jeton.length, debut + jeton.length);
+        markPanelDirty("voice");
+      });
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     EVENEMENTS
+     L'etat vit dans un tableau, pas dans le DOM : la liste des
+     inscrits et le message publie appartiennent au bot, et le
+     formulaire ne doit pas pouvoir les ecraser.
+     ══════════════════════════════════════════════════════════════ */
+
+  let evenements = [];
+
+  function ligneEvenement(evenement, index) {
+    const inscrits = (evenement.participants || []).length;
+    const publie = Boolean(evenement.message_id);
+    return `
+      <article class="event-card" data-event-index="${index}">
+        <div class="event-card-head">
+          <strong>${escapeHtml(evenement.title || t("js.evt.sansTitre"))}</strong>
+          <span class="state ${publie ? "active" : "inactive"}">
+            ${escapeHtml(t(publie ? "js.evt.publie" : "js.evt.brouillon"))}
+          </span>
+        </div>
+        <label class="mini-form"><span>${escapeHtml(t("js.evt.titre"))}</span>
+          <input type="text" data-event-title maxlength="120"
+                 value="${escapeHtml(evenement.title || "")}">
+        </label>
+        <label class="mini-form"><span>${escapeHtml(t("js.evt.description"))}</span>
+          <textarea data-event-desc rows="3" maxlength="1500">${escapeHtml(evenement.description || "")}</textarea>
+        </label>
+        <div class="dashboard-grid two">
+          <label class="mini-form"><span>${escapeHtml(t("js.evt.salon"))}</span>
+            <select data-event-channel>${optionsSalons(evenement.channel_id || "", t("js.aucun"))}</select>
+          </label>
+          <label class="mini-form"><span>${escapeHtml(t("js.evt.date"))}</span>
+            <input type="datetime-local" data-event-date
+                   value="${escapeHtml(pourChampDate(evenement.starts_at))}">
+          </label>
+        </div>
+        <div class="dashboard-grid two">
+          <label class="mini-form"><span>${escapeHtml(t("js.evt.places"))}</span>
+            <input type="number" data-event-max min="0" max="5000" step="1"
+                   value="${Number(evenement.max || 0)}">
+          </label>
+          <div class="mini-form">
+            <span>${escapeHtml(t("js.evt.inscrits"))}</span>
+            <p class="captcha-state-value">${inscrits}</p>
+          </div>
+        </div>
+        <label class="mini-form"><span>${escapeHtml(t("js.evt.image"))}</span>
+          <input type="url" data-event-image maxlength="500"
+                 placeholder="https://…"
+                 value="${escapeHtml(evenement.image || "")}">
+        </label>
+        <p class="field-help">${escapeHtml(t("js.evt.imageAide"))}</p>
+        <div class="search-actions">
+          <button class="primary-btn compact" type="button" data-event-publish="${index}">
+            ${escapeHtml(t(publie ? "js.evt.republier" : "js.evt.publier"))}
+          </button>
+          <button class="secondary-btn compact danger-btn" type="button" data-event-remove="${index}">
+            ${escapeHtml(t("js.supprimer"))}
+          </button>
+        </div>
+      </article>`;
+  }
+
+  /** ISO -> valeur d'un <input type="datetime-local">, en heure locale. */
+  function pourChampDate(iso) {
+    if (!iso) return "";
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return "";
+    const decalage = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() - decalage).toISOString().slice(0, 16);
+  }
+
+  function redessinerEvenements() {
+    const hote = document.querySelector("[data-event-list]");
+    if (!hote) return;
+    hote.innerHTML = evenements.length
+      ? evenements.map(ligneEvenement).join("")
+      : `<div class="dashboard-empty-state">
+           <strong>${escapeHtml(t("js.evt.aucun"))}</strong>
+           <span>${escapeHtml(t("js.evt.aucunAide"))}</span>
+         </div>`;
+  }
+
+  function lireEvenementsDuDom() {
+    document.querySelectorAll("[data-event-index]").forEach((carte) => {
+      const index = Number(carte.dataset.eventIndex);
+      const evenement = evenements[index];
+      if (!evenement) return;
+      const date = carte.querySelector("[data-event-date]")?.value || "";
+      evenement.title = carte.querySelector("[data-event-title]")?.value || "";
+      evenement.description = carte.querySelector("[data-event-desc]")?.value || "";
+      evenement.channel_id = carte.querySelector("[data-event-channel]")?.value || "";
+      evenement.starts_at = date ? new Date(date).toISOString() : "";
+      evenement.max = Number(carte.querySelector("[data-event-max]")?.value || 0);
+      evenement.image = carte.querySelector("[data-event-image]")?.value || "";
+    });
+    return evenements;
+  }
+
+  function applyEventsState(liste) {
+    evenements = Array.isArray(liste) ? liste.map((e) => ({ ...e })) : [];
+    redessinerEvenements();
+  }
+
+  function initEventsPanel() {
+    const hote = document.querySelector("[data-event-list]");
+    if (!hote) return;
+
+    document.querySelector("[data-event-add]")?.addEventListener("click", () => {
+      // On relit AVANT d'ajouter : le redessin repart du tableau, et ce
+      // qui etait saisi dans les cartes existantes serait perdu.
+      lireEvenementsDuDom();
+      evenements.push({ title: "", description: "", channel_id: "",
+                        starts_at: "", max: 0, image: "", participants: [] });
+      redessinerEvenements();
+      markPanelDirty("events");
+    });
+
+    hote.addEventListener("input", () => markPanelDirty("events"));
+
+    hote.addEventListener("click", async (evenement_clic) => {
+      const retirer = evenement_clic.target.closest("[data-event-remove]");
+      if (retirer) {
+        // Meme raison : supprimer la troisieme carte ne doit pas effacer
+        // ce qu'on venait de taper dans la premiere.
+        lireEvenementsDuDom();
+        evenements.splice(Number(retirer.dataset.eventRemove), 1);
+        redessinerEvenements();
+        markPanelDirty("events");
+        return;
+      }
+      const publier = evenement_clic.target.closest("[data-event-publish]");
+      if (!publier) return;
+
+      lireEvenementsDuDom();
+      const cible = evenements[Number(publier.dataset.eventPublish)];
+      if (!cible?.title || !cible?.channel_id) {
+        showToast(t("js.evt.titreEtSalon"));
+        return;
+      }
+      // On enregistre avant de publier : le bot publie ce qu'il a en
+      // base, pas ce qui est a l'ecran.
+      const enregistre = await saveCurrentChanges(t("js.evt.enregistre"));
+      if (!enregistre) return;
+      try {
+        await modbotApiFetch(`/api/guilds/${selectedServer.id}/events/publish`, {
+          method: "POST",
+          body: JSON.stringify({ id: cible.id }),
+        });
+        showToast(t("js.evt.publieOk"));
+        await loadSelectedGuildConfig(selectedServer.id);
+      } catch (erreur) {
+        showToast(erreur?.message || t("js.evt.publicationImpossible"));
+      }
+    });
+  }
+
+  initVoicePanel();
+  initEventsPanel();
+
   function collectDashboardConfig() {
     // Le libellé est facultatif depuis que le bot sait publier le panneau
     // en boutons : une option qui porte une image ou un emoji se passe de
@@ -5301,6 +5558,9 @@ function initDashboard() {
       } : {}),
       auto_roles: collectAutoRoles(),
       ai: collectAiConfig(),
+      voice: collectVoiceConfig(),
+      ...(document.querySelector("[data-event-list]")
+        ? { events: lireEvenementsDuDom() } : {}),
       recurring_messages: recurringMessages,
       social_relays: socialRelays,
       language: languageValue === "English" ? "en" : "fr",

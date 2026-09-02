@@ -416,6 +416,8 @@
       <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg></span><span data-i18n="nav.tickets">Tickets</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="welcome"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg></span><span data-i18n="nav.welcome">Bienvenue</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="roles"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-mask"/></svg></span><span data-i18n="nav.roles">Rôles</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="voice"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-broadcast"/></svg></span><span data-i18n="nav.voice">Vocaux</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="events"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span><span data-i18n="nav.events">Événements</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="giveaways"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg></span><span data-i18n="nav.giveaways">Giveaways</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="ratings" data-i18n="dash.navRatings"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span>Ratings</button>
 
@@ -1134,6 +1136,98 @@
             </div>
           </div>
 
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="voice" data-premium-feature="voice">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="voc.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-broadcast"/></svg> Salons vocaux</p>
+            <h2 data-i18n="voc.title">Vocaux personnalisés</h2>
+          </div>
+        </div>
+
+        <p class="field-help" data-i18n="voc.intro">
+          Un salon sert de porte d'entrée. Qui s'y connecte se voit créer son propre salon,
+          y est déplacé, et en devient maître : il peut le renommer, en limiter l'accès et
+          en expulser quelqu'un. Le salon disparaît dès qu'il se vide.
+        </p>
+
+        <div class="welcome-layout">
+          <div class="tool-panel">
+            <h3 data-i18n="voc.reglages">Réglages</h3>
+
+            <label class="toggle-line">
+              <input type="checkbox" data-voice-enabled><span></span>
+              <strong data-i18n="voc.activer">Activer les vocaux personnalisés</strong>
+              <small data-i18n="voc.activerAide">Rien ne se passe tant qu'aucune porte n'est choisie.</small>
+            </label>
+
+            <label class="mini-form"><span data-i18n="voc.hub">Salon « porte d'entrée »</span>
+              <select data-voice-hub><option value="">— Chargement… —</option></select>
+            </label>
+            <p class="field-help" data-i18n="voc.hubAide">
+              Un salon vocal existant, que personne n'utilise pour parler. S'y connecter
+              déclenche la création. Choisis-en un dédié : ModBot n'y laisse jamais personne.
+            </p>
+
+            <label class="mini-form"><span data-i18n="voc.categorie">Catégorie d'accueil</span>
+              <select data-voice-category><option value="">— Chargement… —</option></select>
+            </label>
+
+            <label class="mini-form"><span data-i18n="voc.nom">Nom des salons créés</span>
+              <input type="text" data-voice-name maxlength="90"
+                     placeholder="Salon de {username}"
+                     data-i18n-placeholder="voc.nomPlaceholder">
+            </label>
+            <div class="variable-chips" data-voice-variables></div>
+
+            <label class="mini-form"><span data-i18n="voc.limite">Places par salon</span>
+              <input type="number" data-voice-limit min="0" max="99" step="1" value="0">
+            </label>
+            <p class="field-help" data-i18n="voc.limiteAide">
+              Zéro veut dire « sans limite ». Le créateur peut la changer lui-même sur son
+              propre salon.
+            </p>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="voc.droitsTitre">Ce que reçoit le créateur</h3>
+            <ul class="wiki-check-list">
+              <li data-i18n="voc.droit1">Renommer son salon et changer sa limite de places.</li>
+              <li data-i18n="voc.droit2">Expulser quelqu'un de son salon, le rendre muet.</li>
+              <li data-i18n="voc.droit3">Rien d'autre : ces droits ne valent que dans SON salon, jamais ailleurs sur le serveur.</li>
+            </ul>
+            <div class="inline-hint">
+              <strong data-i18n="voc.permsTitre">Ce dont ModBot a besoin</strong>
+              <p data-i18n="voc.permsTexte">« Gérer les salons » et « Déplacer les membres ». Sans elles, la création échoue et le journal le dit — plutôt que de laisser le membre attendre dans la porte d'entrée.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="events" data-premium-feature="events">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="evt.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Événements</p>
+            <h2 data-i18n="evt.title">Organiser un événement</h2>
+          </div>
+          <div class="panel-title-actions">
+            <button class="secondary-btn compact" type="button" data-event-add data-i18n="evt.ajouter"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Nouvel événement</button>
+          </div>
+        </div>
+
+        <p class="field-help" data-i18n="evt.intro">
+          Une affiche publiée dans le salon de votre choix, avec son image, un compte à
+          rebours qui se met à jour tout seul dans le fuseau de chaque lecteur, et deux
+          boutons pour s'inscrire ou se désister.
+        </p>
+
+        <div class="event-list" data-event-list>
+          <div class="dashboard-empty-state">
+            <strong data-i18n="evt.aucun">Aucun événement</strong>
+            <span data-i18n="evt.aucunAide">« Nouvel événement » pour en créer un.</span>
+          </div>
         </div>
       </section>
 
