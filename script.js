@@ -1463,6 +1463,7 @@ function initAdminZone() {
     const liste = document.querySelector("[data-admin-list]");
     if (!liste) return;
     try {
+      chargerPremiumAdmin();
       const data = await modbotApiFetch("/api/admin/admins", { cache: "no-store" });
       const admins = data.admins || [];
       liste.innerHTML = admins.map((admin) => {
@@ -1506,6 +1507,75 @@ function initAdminZone() {
       liste.innerHTML = `<p class="field-help">${escapeHtmlValue(error?.message || "")}</p>`;
     }
   }
+
+  /* ── Offrir du premium ──────────────────────────────────────────
+     La duree s'AJOUTE a ce que le serveur a deja : c'est le bot qui
+     s'en charge, mais le texte du panneau le dit pour qu'on ne croie
+     pas ecraser un abonnement en cours. */
+
+  async function chargerPremiumAdmin() {
+    const liste = document.querySelector("[data-premium-list]");
+    if (!liste) return;
+    try {
+      const data = await modbotApiFetch("/api/admin/premium", { cache: "no-store" });
+      const lignes = data.guilds || [];
+      liste.innerHTML = lignes.map((ligne) => {
+        const nom = ligne.guild_name || ligne.guild_id;
+        const details = [`ID ${escapeHtmlValue(ligne.guild_id)}`];
+        if (ligne.active) {
+          details.push(escapeHtmlValue(tp("js.adm.premiumRestant", {
+            jours: ligne.days_left, date: (ligne.until || "").slice(0, 10) })));
+          if (ligne.source) details.push(escapeHtmlValue(ligne.source));
+        } else {
+          details.push(escapeHtmlValue(t("js.adm.premiumExpire")));
+        }
+        const bouton = ligne.active
+          ? `<button type="button" class="danger-btn" data-premium-revoke="${escapeHtmlValue(ligne.guild_id)}">${escapeHtmlValue(t("js.adm.premiumRetirer"))}</button>`
+          : "";
+        return `<div><span><strong>${escapeHtmlValue(nom)}</strong><small>${details.join(" \u2014 ")}</small></span>${bouton}</div>`;
+      }).join("") || `<div><span><strong>${escapeHtmlValue(t("js.adm.premiumAucun"))}</strong></span></div>`;
+
+      liste.querySelectorAll("[data-premium-revoke]").forEach((bouton) => {
+        bouton.addEventListener("click", async () => {
+          const gid = bouton.dataset.premiumRevoke;
+          if (!window.confirm(tp("js.adm.premiumConfirmerRetrait", { id: gid }))) return;
+          try {
+            await modbotApiFetch(`/api/admin/premium/${encodeURIComponent(gid)}`,
+                                 { method: "DELETE" });
+            showAdminToast(t("js.adm.premiumRetire"));
+            chargerPremiumAdmin();
+          } catch (erreur) {
+            showAdminToast(erreur?.message || t("js.adm.premiumEchec"));
+          }
+        });
+      });
+    } catch (erreur) {
+      liste.innerHTML = `<p class="field-help">${escapeHtmlValue(erreur?.message || "")}</p>`;
+    }
+  }
+
+  document.querySelector("[data-premium-grant]")?.addEventListener("click", async () => {
+    const champ = document.querySelector("[data-premium-guild]");
+    const duree = document.querySelector("[data-premium-duration]")?.value || "1mois";
+    const gid = (champ?.value || "").trim();
+    if (!/^\d{17,20}$/.test(gid)) {
+      showAdminToast(t("js.adm.premiumIdInvalide"));
+      return;
+    }
+    if (!window.confirm(tp("js.adm.premiumConfirmer", { id: gid, duree }))) return;
+    try {
+      const data = await modbotApiFetch("/api/admin/premium", {
+        method: "POST",
+        body: JSON.stringify({ guild_id: gid, duration: duree }),
+      });
+      if (champ) champ.value = "";
+      showAdminToast(tp("js.adm.premiumOffert", {
+        nom: data?.guild_name || gid, duree }));
+      chargerPremiumAdmin();
+    } catch (erreur) {
+      showAdminToast(erreur?.message || t("js.adm.premiumEchec"));
+    }
+  });
 
   document.querySelector("[data-admin-add]")?.addEventListener("click", async () => {
     const champ = document.querySelector("[data-admin-add-id]");
@@ -2754,6 +2824,7 @@ function initDashboard() {
 
     applyAutoRoles(config.auto_roles);
     applyAiState(config.ai);
+    appliquerPremium(config.premium);
 
     if (Array.isArray(config.social_relays)) {
       config.social_relays.forEach((relay) => {
@@ -5050,6 +5121,47 @@ function initDashboard() {
     });
   }
 
+  /* ── Cadenas premium ────────────────────────────────────────────
+     Un reglage verrouille reste VISIBLE et modifiable : on doit pouvoir
+     preparer sa configuration avant de payer et la retrouver telle
+     quelle ensuite. Ce qui change, c'est le bandeau qui dit clairement
+     que rien ne s'appliquera tant que l'abonnement n'est pas la. */
+
+  let premiumEtat = { active: false, features: {} };
+
+  function appliquerPremium(premium) {
+    premiumEtat = premium && typeof premium === "object"
+      ? premium
+      : { active: false, features: {} };
+    majCadenas();
+  }
+
+  function majCadenas() {
+    const bandeau = document.querySelector("[data-premium-lock]");
+    if (!bandeau) return;
+    const panneau = document.querySelector("[data-dashboard-panel].is-active");
+    const fonction = panneau?.dataset.premiumFeature || "";
+    const ouvert = !fonction
+      || premiumEtat.active
+      || (premiumEtat.features || {})[fonction] === true;
+
+    bandeau.hidden = ouvert;
+    if (!ouvert && panneau) {
+      // Le bandeau se pose en tete du panneau concerne : un seul
+      // element deplace, plutot qu'un par panneau a maintenir.
+      panneau.insertBefore(bandeau, panneau.firstElementChild?.nextSibling || null);
+    }
+    // L'onglet porte une pastille : on doit voir le verrou sans ouvrir.
+    document.querySelectorAll("[data-dashboard-panel][data-premium-feature]")
+      .forEach((section) => {
+        const clef = section.dataset.premiumFeature;
+        const libre = premiumEtat.active || (premiumEtat.features || {})[clef] === true;
+        const onglet = document.querySelector(
+          `[data-dashboard-tab="${section.dataset.dashboardPanel}"]`);
+        onglet?.classList.toggle("is-locked", !libre);
+      });
+  }
+
   function collectDashboardConfig() {
     // Le libellé est facultatif depuis que le bot sait publier le panneau
     // en boutons : une option qui porte une image ou un emoji se passe de
@@ -5567,6 +5679,11 @@ function initDashboard() {
     showToast(t("js.modificationsAbandonnees"));
     pendingNavigation = null;
     action?.();
+  });
+
+  // Le bandeau de verrouillage suit le panneau qu'on ouvre.
+  document.addEventListener("click", (evenement) => {
+    if (evenement.target.closest("[data-dashboard-tab]")) setTimeout(majCadenas, 0);
   });
 
   panels.forEach((panel) => {

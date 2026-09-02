@@ -253,9 +253,10 @@
         <p class="sidebar-label" data-i18n="adm.administration2">Administration</p>
         <button class="admin-nav is-active" type="button" data-admin-tab="overview" data-i18n="adm.navVueGlobale"><span>01</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg> Vue globale</button>
         <button class="admin-nav" type="button" data-admin-tab="admins" data-i18n="adm.navAdministrateurs"><span>02</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg> Administrateurs</button>
-        <button class="admin-nav" type="button" data-admin-tab="blacklist" data-i18n="adm.navBlacklist"><span>03</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-ban"/></svg> Blacklist bot</button>
-        <button class="admin-nav" type="button" data-admin-tab="servers" data-i18n="adm.navServeurs"><span>04</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-compass"/></svg> Serveurs</button>
-        <button class="admin-nav" type="button" data-admin-tab="activity" data-i18n="adm.navLogs"><span>05</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs globaux</button>
+        <button class="admin-nav" type="button" data-admin-tab="premium"><span>03</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="adm.navPremium">Premium</span></button>
+        <button class="admin-nav" type="button" data-admin-tab="blacklist" data-i18n="adm.navBlacklist"><span>04</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-ban"/></svg> Blacklist bot</button>
+        <button class="admin-nav" type="button" data-admin-tab="servers" data-i18n="adm.navServeurs"><span>05</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-compass"/></svg> Serveurs</button>
+        <button class="admin-nav" type="button" data-admin-tab="activity" data-i18n="adm.navLogs"><span>06</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs globaux</button>
       </aside>
 
       <div class="admin-main">
@@ -300,6 +301,33 @@
             <div class="inline-hint">
               <strong data-i18n="adm.listeSource">Ce que donne ce droit</strong>
               <p data-i18n="adm.listeSourceTexte">Un administrateur voit et pilote tout le panneau : blacklist, sauvegardes, serveurs, journal. Ne le donne qu'à quelqu'un en qui tu as confiance. Les administrateurs marqués « fondateur » viennent de la variable DASHBOARD_ADMIN_IDS, chez l'hébergeur : ils ne peuvent pas être retirés d'ici, pour que personne ne puisse évincer celui qui l'a nommé.</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="admin-view" data-admin-panel="premium">
+          <article class="admin-panel">
+            <div class="admin-panel-head">
+              <h3 data-i18n="adm.premiumTitre"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Offrir ModBot Premium</h3>
+              <span class="admin-badge active" data-i18n="adm.premiumBadge">Journalisé</span>
+            </div>
+            <div class="admin-action-row split">
+              <input type="text" inputmode="numeric" data-premium-guild
+                     placeholder="Identifiant du serveur"
+                     data-i18n-placeholder="adm.premiumServeur">
+              <select data-premium-duration>
+                <option value="1mois" data-i18n="adm.premium1mois">1 mois</option>
+                <option value="6mois" data-i18n="adm.premium6mois">6 mois</option>
+                <option value="1an" data-i18n="adm.premium1an">1 an</option>
+              </select>
+              <button class="primary-btn compact" type="button" data-premium-grant data-i18n="adm.premiumOffrir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg> Offrir</button>
+            </div>
+            <div class="inline-hint">
+              <strong data-i18n="adm.premiumAide">Ce que fait ce bouton</strong>
+              <p data-i18n="adm.premiumAideTexte">La durée s'ajoute à ce que le serveur a déjà : offrir 6 mois à un serveur abonné pour 1 mois donne 7 mois, pas 6. Chaque cadeau est inscrit au journal du serveur et au journal d'administration, avec son auteur.</p>
+            </div>
+            <div class="admin-list" data-premium-list data-admin-sensitive>
+              <div><span><strong data-i18n="adm.chargement">Chargement…</strong></span></div>
             </div>
           </article>
         </section>

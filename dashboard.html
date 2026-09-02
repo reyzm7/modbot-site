@@ -446,6 +446,15 @@
 </div>
       </div>
 
+      <div class="premium-lock" data-premium-lock hidden>
+        <span class="premium-lock-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg></span>
+        <span>
+          <strong data-i18n="prem.verrouTitre">Réservé à ModBot Premium</strong>
+          <small data-i18n="prem.verrouTexte">Vous pouvez tout régler dès maintenant : rien ne sera appliqué tant que l'abonnement n'est pas actif, et tout repartira tel quel ensuite.</small>
+        </span>
+        <a class="primary-btn compact" href="premium.html" data-i18n="prem.verrouBouton"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Voir les offres</a>
+      </div>
+
       <section class="dash-panel is-active" data-dashboard-panel="overview">
         <div class="panel-title">
           <div>
@@ -1309,7 +1318,7 @@
         </div>
       </section>
 
-      <section class="dash-panel" data-dashboard-panel="ai">
+      <section class="dash-panel" data-dashboard-panel="ai" data-premium-feature="ai">
         <div class="panel-title">
           <div>
             <p class="eyebrow" data-i18n="ia.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg> Réponses automatiques</p>
@@ -1422,7 +1431,7 @@
         </div>
       </section>
 
-      <section class="dash-panel" data-dashboard-panel="socials">
+      <section class="dash-panel" data-dashboard-panel="socials" data-premium-feature="social_relays">
         <div class="panel-title">
           <div>
             <p class="eyebrow" data-i18n="dash.reseauxSociaux"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Réseaux sociaux</p>

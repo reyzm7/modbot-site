@@ -9168,3 +9168,57 @@ select {
   .premium-shell { padding: 0 14px 60px; }
   .premium-offers { grid-template-columns: 1fr; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   VERROUS PREMIUM
+   Le reglage reste visible et modifiable : on prepare sa configuration
+   avant de payer. Le bandeau dit seulement que rien ne s'appliquera
+   d'ici la.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.premium-lock {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 18px;
+  padding: 14px 18px;
+  border: 1px solid rgba(241, 196, 15, 0.35);
+  border-radius: var(--radius-lg);
+  background: rgba(241, 196, 15, 0.07);
+}
+
+.premium-lock-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(241, 196, 15, 0.16);
+  color: #f1c40f;
+}
+
+.premium-lock strong { display: block; color: #f7d354; font-size: 0.95rem; }
+.premium-lock small { display: block; margin-top: 2px; color: var(--muted); line-height: 1.5; }
+.premium-lock .primary-btn { white-space: nowrap; }
+
+/* La pastille de l'onglet : on doit voir le verrou sans ouvrir. */
+.dash-nav.is-locked { position: relative; }
+
+.dash-nav.is-locked::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: #f1c40f;
+  flex: none;
+}
+
+@media (max-width: 640px) {
+  .premium-lock {
+    grid-template-columns: auto 1fr;
+    row-gap: 10px;
+  }
+  .premium-lock .primary-btn { grid-column: 1 / -1; justify-content: center; }
+}
