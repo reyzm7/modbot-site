@@ -7376,6 +7376,21 @@ async function initLogosPartenaires() {
       image.src = `https://cdn.discordapp.com/icons/${serveur.id}/${serveur.icon}.${extension}?size=128`;
     }
 
+    // La banniere du serveur, quand il en a une. Elle sert de fond au
+    // bandeau de l'accueil : c'est l'image que le serveur a choisie pour
+    // se presenter, autant s'en servir plutot que d'un degrade de plus.
+    const fond = carte.querySelector("[data-partner-banner]");
+    if (fond && serveur.banner) {
+      const extension = String(serveur.banner).startsWith("a_") ? "gif" : "png";
+      const image = new Image();
+      image.decoding = "async";
+      image.addEventListener("load", () => {
+        fond.style.backgroundImage = `url("${image.src}")`;
+        carte.classList.add("has-banner");
+      });
+      image.src = `https://cdn.discordapp.com/banners/${serveur.id}/${serveur.banner}.${extension}?size=1024`;
+    }
+
     const effectif = carte.querySelector("[data-partner-size]");
     const membres = invitation.approximate_member_count;
     if (effectif && Number.isFinite(membres)) {

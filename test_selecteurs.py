@@ -175,6 +175,58 @@ verifier("un bloc « ai » manquant est dit, pas laisse en tirets",
          "js.ia.indisponible" in script)
 
 
+
+# ══════════════════════════════════════════════════════════════════════
+#  Les icones
+#
+#  Le sprite vivait en clair dans trois pages et manquait des trois
+#  autres : tous leurs <use href="#..."> ne dessinaient rien, en
+#  silence — un <use> qui ne resout pas ne leve aucune erreur, il
+#  n'affiche simplement rien. Ces deux verifications ferment la porte.
+# ══════════════════════════════════════════════════════════════════════
+print(chr(10) + "--- Les icones ---")
+
+import glob
+import os
+
+sprite = io.open("icons.js", encoding="utf-8", newline="").read()
+declarees = set(re.findall(r'<symbol id="([^"]+)"', sprite))
+verifier("le sprite declare ses symboles", len(declarees) > 50, str(len(declarees)))
+
+sans_sprite = []
+inconnues = {}
+for page in sorted(glob.glob("*.html")):
+    contenu = io.open(page, encoding="utf-8", newline="").read()
+    # Les commentaires HTML citent parfois la forme generale
+    # « <use href="#id"> » : ce n'est pas une icone a resoudre.
+    sans_commentaires = re.sub(r"<!--.*?-->", "", contenu, flags=re.DOTALL)
+    citees = set(re.findall(r'<use href="#([^"]+)"', sans_commentaires))
+    if not citees:
+        continue
+    if "icons.js" not in contenu:
+        sans_sprite.append(page)
+    manquantes = citees - declarees
+    if manquantes:
+        inconnues[page] = sorted(manquantes)
+
+verifier("toute page qui dessine des icones charge le sprite",
+         not sans_sprite, str(sans_sprite))
+verifier("aucune page ne cite une icone qui n'existe pas",
+         not inconnues, str(inconnues))
+
+# Le sprite ne doit plus etre recopie dans les pages : c'est la
+# duplication qui l'avait laisse diverger.
+recopie = [f for f in sorted(glob.glob("*.html"))
+           if "<symbol id=" in io.open(f, encoding="utf-8").read()]
+verifier("le sprite n'est recopie dans aucune page", not recopie, str(recopie))
+
+# Les icones citees par le JS comptent autant que celles du HTML.
+script_js = io.open("script.js", encoding="utf-8", newline="").read()
+citees_js = set(re.findall(r'href="#(u-[\w-]+|i-[\w-]+)"', script_js))
+verifier("aucune icone inconnue citee par script.js",
+         not (citees_js - declarees), str(sorted(citees_js - declarees)))
+
+
 rates = [n for n, ok, _ in resultats if not ok]
 print("\n" + "=" * 62)
 print(f"RESULTAT : {len(resultats) - len(rates)}/{len(resultats)} verifications passees")
