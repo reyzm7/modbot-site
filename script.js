@@ -453,9 +453,44 @@ function appendDemoMessage(feed, text, type) {
   feed.scrollTop = feed.scrollHeight;
 }
 
+/* Le second ecran de la demo : ce que le bot ecrit pendant que le
+   membre lit sa reponse. C'est ce qui distingue ModBot d'une commande
+   qui repond dans le vide — et ca se montre mieux que ca ne s'explique. */
+
+const JOURNAL_DEMO = {
+  panel: [["INFO", "panel.open", "interaction recue · gid=8271 · latence 41 ms"],
+          ["OK", "perms.check", "administrator=true · 12 modules charges"]],
+  stats: [["INFO", "stats.collect", "membres=4154 · salons=38 · roles=21"],
+          ["OK", "cache.hit", "instantane servi en 7 ms"]],
+  avert: [["WARN", "infraction.read", "membre=@invite · 2 avertissements"],
+          ["INFO", "sanction.next", "seuil 3 -> mute 4 h"]],
+};
+
+function ecrireJournalDemo(command) {
+  const console_ = document.getElementById("demoConsole");
+  if (!console_) return;
+  const lignes = JOURNAL_DEMO[command] || JOURNAL_DEMO.panel;
+  console_.innerHTML = "";
+  lignes.forEach(([niveau, source, texte], index) => {
+    window.setTimeout(() => {
+      const ligne = document.createElement("div");
+      ligne.className = `console-line niveau-${niveau.toLowerCase()}`;
+      const heure = new Date().toLocaleTimeString("fr-FR", { hour12: false });
+      ligne.innerHTML =
+        `<span class="console-time">${escapeHtmlValue(heure)}</span>`
+        + `<span class="console-level">${escapeHtmlValue(niveau)}</span>`
+        + `<span class="console-source">${escapeHtmlValue(source)}</span>`
+        + `<span class="console-text">${escapeHtmlValue(texte)}</span>`;
+      console_.appendChild(ligne);
+      console_.scrollTop = console_.scrollHeight;
+    }, 220 + index * 380);
+  });
+}
+
 function runDemoCommand(command) {
   const feed = document.getElementById("demoFeed");
   if (!feed) return;
+  ecrireJournalDemo(command);
 
   const data = commandResponses[command] || commandResponses.panel;
 
@@ -6818,4 +6853,55 @@ function initPagePremium() {
 }
 
 initPagePremium();
+
+/* ══════════════════════════════════════════════════════════════════
+   MENU D'ACCES
+   Dashboard, Ajouter ModBot, Premium, Admin et la langue occupaient
+   cinq places dans la barre, melanges aux ancres de la page. Ils sont
+   regroupes : la barre ne porte plus que la navigation du site.
+   ══════════════════════════════════════════════════════════════════ */
+
+function initMenuAcces() {
+  const menu = document.querySelector("[data-nav-menu]");
+  const declencheur = menu?.querySelector("[data-nav-menu-trigger]");
+  const panneau = menu?.querySelector("[data-nav-menu-panel]");
+  if (!menu || !declencheur || !panneau) return;
+
+  const ouvrir = (etat) => {
+    panneau.hidden = !etat;
+    menu.classList.toggle("is-open", etat);
+    declencheur.setAttribute("aria-expanded", etat ? "true" : "false");
+  };
+
+  declencheur.addEventListener("click", (evenement) => {
+    evenement.stopPropagation();
+    ouvrir(panneau.hidden);
+  });
+
+  // Un clic dehors ferme. Un clic DANS le menu ne doit pas fermer avant
+  // que le lien n'ait eu le temps de partir.
+  document.addEventListener("click", (evenement) => {
+    if (!menu.contains(evenement.target)) ouvrir(false);
+  });
+  document.addEventListener("keydown", (evenement) => {
+    if (evenement.key === "Escape") ouvrir(false);
+  });
+
+  // La langue du menu et celle du site sont la meme chose : les deux
+  // selecteurs peuvent coexister sur une page, ils doivent s'accorder.
+  const choixLangue = menu.querySelector("[data-nav-language]");
+  if (choixLangue) {
+    choixLangue.value = getSiteLanguage();
+    choixLangue.addEventListener("change", () => {
+      applySiteLanguage(choixLangue.value);
+      const autre = document.getElementById("siteLanguage");
+      if (autre && autre.value !== choixLangue.value) autre.value = choixLangue.value;
+    });
+    document.getElementById("siteLanguage")?.addEventListener("change", (evenement) => {
+      choixLangue.value = evenement.target.value;
+    });
+  }
+}
+
+initMenuAcces();
 

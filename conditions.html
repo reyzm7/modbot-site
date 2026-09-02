@@ -40,20 +40,38 @@
       <div class="nav-links" id="navLinks">
         <a href="index.html#features" data-i18n="cgu.fonctionnalites">Fonctionnalités</a>
         <a href="index.html#pricing" data-i18n="cgu.tarifs">Tarifs</a>
-        <a class="nav-action-btn nav-dashboard-btn" href="dashboard.html"><span></span><span data-i18n="nav.dashboard">Dashboard</span></a>
-        <a class="nav-action-btn nav-admin-btn" href="admin.html"><span></span><span data-i18n="nav.admin">Admin</span></a>
-        <a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="cgu.supportDiscord">Support Discord</a>
-        <label class="language-switch" aria-label="Choisir la langue du site" data-i18n-aria="cgu.choisirLaLangue">
-          <span></span>
-          <select id="siteLanguage">
-            <option value="fr">Français</option>
-            <option value="en">English</option>
-            <option value="ar">العربية</option>
-            <option value="es">Español</option>
-            <option value="de">Deutsch</option>
-          </select>
-        </label>
-      </div>
+
+
+<a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="cgu.supportDiscord">Support Discord</a>
+
+        <div class="nav-menu" data-nav-menu>
+          <button class="nav-menu-trigger" type="button" data-nav-menu-trigger
+                  aria-expanded="false" aria-haspopup="true">
+            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-menu"/></svg></span>
+            <span data-i18n="nav.menu">Accès</span>
+            <svg class="nav-menu-chevron" viewBox="0 0 12 8" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav-menu-panel" data-nav-menu-panel hidden>
+            <a href="dashboard.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
+            <a href="dashboard.html?flow=invite" data-discord-bot-invite><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg><span data-i18n="nav.ajouter">Ajouter ModBot</span></a>
+            <a href="premium.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="nav.premium">Premium</span></a>
+            <a href="admin.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg><span data-i18n="nav.admin">Admin</span></a>
+            <label class="nav-menu-lang">
+              <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="nav.langue">Langue</span></span>
+              <select data-nav-language>
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+                <option value="es">Español</option>
+                <option value="de">Deutsch</option>
+              </select>
+            </label>
+          </div>
+        </div>
+</div>
     </nav>
   </header>
 

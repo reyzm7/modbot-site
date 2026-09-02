@@ -9222,3 +9222,253 @@ select {
   }
   .premium-lock .primary-btn { grid-column: 1 / -1; justify-content: center; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   MENU D'ACCES
+   ═══════════════════════════════════════════════════════════════════ */
+
+.nav-menu { position: relative; }
+
+.nav-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--text);
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.nav-menu-trigger:hover,
+.nav-menu.is-open .nav-menu-trigger {
+  border-color: var(--accent);
+}
+
+.nav-menu-chevron {
+  width: 11px;
+  transition: transform 0.18s ease;
+}
+
+.nav-menu.is-open .nav-menu-chevron { transform: rotate(180deg); }
+
+.nav-menu-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 90;
+  display: grid;
+  gap: 2px;
+  min-width: 232px;
+  padding: 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  box-shadow: 0 20px 46px rgba(0, 0, 0, 0.45);
+}
+
+.nav-menu-panel a,
+.nav-menu-lang {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.nav-menu-panel a:hover { background: rgba(158, 110, 255, 0.14); }
+.nav-menu-panel .ui-icon { color: var(--muted); flex: none; }
+.nav-menu-panel a:hover .ui-icon { color: var(--accent); }
+
+.nav-menu-lang {
+  justify-content: space-between;
+  margin-top: 4px;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  padding-top: 12px;
+}
+
+.nav-menu-lang > span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-menu-lang select {
+  min-width: 108px;
+  padding: 6px 30px 6px 10px;
+  font-size: 0.86rem;
+}
+
+/* Sur telephone, le menu s'etale au lieu de flotter : une liste
+   ancree a droite deborderait de l'ecran. */
+@media (max-width: 640px) {
+  .nav-menu { width: 100%; }
+  .nav-menu-trigger { width: 100%; justify-content: center; }
+  .nav-menu-panel { position: static; width: 100%; box-shadow: none; margin-top: 8px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DEMO A DEUX ECRANS
+   A gauche ce que voit le membre, a droite ce que le bot enregistre au
+   meme instant. C'est ce qui distingue ModBot d'une commande qui
+   repond dans le vide, et ca se montre mieux que ca ne s'explique.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.demo-duo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+.demo-duo .discord-window { min-height: 300px; }
+
+.discord-window.is-console { background: #07060d; }
+
+.console-feed {
+  padding: 14px 16px;
+  overflow-y: auto;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  line-height: 1.75;
+}
+
+.console-line {
+  display: grid;
+  grid-template-columns: auto auto auto 1fr;
+  gap: 10px;
+  align-items: baseline;
+  padding: 2px 0;
+  /* Chaque ligne parait, elle ne s'affiche pas d'un bloc : on veut voir
+     le bot travailler, pas lire un journal deja ecrit. */
+  animation: console-apparait 0.24s ease both;
+}
+
+@keyframes console-apparait {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .console-line { animation: none; }
+}
+
+.console-time { color: #4b5563; }
+.console-source { color: #8b7cf6; }
+.console-text { color: var(--muted); }
+
+.console-level {
+  min-width: 42px;
+  padding: 0 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.niveau-info .console-level { background: rgba(88, 101, 242, 0.18); color: #93a4ff; }
+.niveau-ok   .console-level { background: rgba(67, 181, 129, 0.18); color: #6ee7a8; }
+.niveau-warn .console-level { background: rgba(250, 166, 26, 0.18); color: #f4c069; }
+
+@media (max-width: 900px) {
+  .demo-duo { grid-template-columns: 1fr; }
+  .demo-duo .discord-window { min-height: 230px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PARTENAIRES
+   ═══════════════════════════════════════════════════════════════════ */
+
+.partners-shell { max-width: 1080px; margin: 0 auto; padding: 0 20px 80px; }
+.partners-hero { text-align: center; }
+.partners-hero h1 { margin: 8px 0 14px; font-size: clamp(1.9rem, 4.5vw, 2.9rem); }
+.partners-lead { max-width: 62ch; margin: 0 auto; color: var(--muted); }
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.partner-card {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.partner-card h3 { margin: 0; font-size: 1.12rem; }
+.partner-card p { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+.partner-card .secondary-btn,
+.partner-card .primary-btn { margin-top: 8px; justify-self: start; }
+
+.partner-size {
+  color: var(--accent) !important;
+  font-size: 0.82rem !important;
+  font-weight: 700;
+}
+
+/* Le partenaire principal se distingue par sa bordure et sa largeur,
+   pas par une couleur criarde : c'est une mise en avant, pas une
+   publicite. */
+.partner-card.is-main {
+  border-color: rgba(241, 196, 15, 0.45);
+  background: linear-gradient(180deg, rgba(241, 196, 15, 0.06), transparent 60%), var(--panel);
+  padding: 28px;
+}
+
+.partner-card.is-main h2 { margin: 0 0 10px; font-size: 1.6rem; }
+
+/* Le bandeau de l'accueil */
+.main-partner { padding-top: 0; }
+
+.main-partner-inner {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  text-align: center;
+  padding: 22px;
+  border: 1px solid rgba(241, 196, 15, 0.32);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(241, 196, 15, 0.07), transparent 70%), var(--panel);
+}
+
+.main-partner-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: rgba(241, 196, 15, 0.16);
+  color: #f7d354;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.main-partner-inner h2 { margin: 4px 0 0; font-size: 1.5rem; }
+.main-partner-inner p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+
+.main-partner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+@media (max-width: 640px) {
+  .partners-shell { padding: 0 14px 60px; }
+  .main-partner-actions > a { flex: 1 1 100%; justify-content: center; }
+}

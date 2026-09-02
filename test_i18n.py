@@ -19,7 +19,7 @@ from html.parser import HTMLParser
 
 SITE = os.path.dirname(os.path.abspath(__file__))
 PAGES = ["index.html", "dashboard.html", "admin.html", "wiki.html",
-         "premium.html",
+         "premium.html", "partenaires.html",
          "confidentialite.html", "conditions.html"]
 LANGUES = ["fr", "en", "ar", "es", "de"]
 
@@ -31,7 +31,8 @@ AUTO_FERMANTES = {"img", "br", "hr", "input", "meta", "link", "source"}
 # slash du bot, les noms de plateformes.
 INTRADUISIBLE = re.compile(
     r"^(ModBot|Twitch|TikTok|Instagram|Discord|Railway|Vercel|Mistral AI"
-    r"|MyMemory|/[\w-]+.*|!\w+|APP)$")
+    r"|MyMemory|/[\w-]+.*|!\w+|APP"
+    r"|Twitch Memez94|ePro League|CPG Belge|VPG Suisse)$")
 
 erreurs = []
 succes = []

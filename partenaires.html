@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partenaires ModBot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
+       la connexion au dashboard est automatique, rien a saisir.
+       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
+  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
+  <meta name="modbot-discord-client-id" content="1510405235544424620">
+  <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
+  <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
+  <meta name="modbot-bot-permissions" content="3124257994829047">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="assets/modbot-mark.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+</head>
+<body class="partners-page">
+  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
+  <div class="page-glow" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navigation partenaires" data-i18n-aria="part.navigation">
+      <a class="brand" href="index.html" aria-label="Accueil ModBot" data-i18n-aria="wiki.accueilModbot">
+        <span class="brand-mark">
+          <img src="assets/modbot-mark.png" alt="" width="128" height="128" decoding="async" fetchpriority="high">
+        </span>
+        <span>ModBot</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="wiki.ouvrirLeMenu">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#features" data-i18n="wiki.fonctionnalites">Fonctionnalités</a>
+        <a href="index.html#pricing" data-i18n="wiki.tarifs">Tarifs</a>
+
+<a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="wiki.supportDiscord">Support Discord</a>
+
+        <div class="nav-menu" data-nav-menu>
+          <button class="nav-menu-trigger" type="button" data-nav-menu-trigger
+                  aria-expanded="false" aria-haspopup="true">
+            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-menu"/></svg></span>
+            <span data-i18n="nav.menu">Accès</span>
+            <svg class="nav-menu-chevron" viewBox="0 0 12 8" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav-menu-panel" data-nav-menu-panel hidden>
+            <a href="dashboard.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
+            <a href="dashboard.html?flow=invite" data-discord-bot-invite><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg><span data-i18n="nav.ajouter">Ajouter ModBot</span></a>
+            <a href="premium.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="nav.premium">Premium</span></a>
+            <a href="admin.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg><span data-i18n="nav.admin">Admin</span></a>
+            <label class="nav-menu-lang">
+              <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="nav.langue">Langue</span></span>
+              <select data-nav-language>
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+                <option value="es">Español</option>
+                <option value="de">Deutsch</option>
+              </select>
+            </label>
+          </div>
+        </div>
+</div>
+    </nav>
+  </header>
+
+  <main class="partners-shell">
+
+    <section class="partners-hero section-shell">
+      <p class="eyebrow" data-i18n="part.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-heart"/></svg> Partenaires</p>
+      <h1 data-i18n="part.titre">Les communautés qui nous font confiance</h1>
+      <p class="partners-lead" data-i18n="part.chapo">
+        Ces serveurs n'ont pas seulement installé ModBot : ils l'ont éprouvé, signalé
+        ses défauts et suggéré la moitié de ce qu'il sait faire aujourd'hui. Une bonne
+        partie de ce qui suit leur revient.
+      </p>
+    </section>
+
+    <!-- ── Le partenaire principal ───────────────────────────────── -->
+    <section class="partner-main section-shell">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="part.principalEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Partenaire principal</p>
+      </div>
+      <article class="partner-card is-main">
+        <div class="partner-card-body">
+          <h2>Twitch Memez94</h2>
+          <p data-i18n="part.memez">
+            Le partenaire principal de ModBot. C'est là que les nouveautés sont essayées
+            en premier, devant de vrais membres, avant d'arriver ailleurs. Beaucoup de ce
+            que fait le bot aujourd'hui a été corrigé grâce à leurs retours.
+          </p>
+          <a class="primary-btn" href="https://discord.gg/twitch-memez94-827944346392723516"
+             target="_blank" rel="noreferrer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg> <span data-i18n="part.rejoindre">Rejoindre le serveur</span></a>
+        </div>
+      </article>
+    </section>
+
+    <!-- ── Les partenaires ───────────────────────────────────────── -->
+    <section class="partners-list section-shell">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="part.listeEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-compass"/></svg> Communautés partenaires</p>
+        <h2 data-i18n="part.listeTitre">Ils font tourner ModBot au quotidien</h2>
+      </div>
+
+      <div class="partners-grid">
+        <article class="partner-card">
+          <h3>ePro League</h3>
+          <p class="partner-size" data-i18n="part.eproTaille">2 400 membres</p>
+          <p data-i18n="part.epro">
+            La plus grande communauté partenaire. Un serveur de cette taille met à
+            l'épreuve tout ce qui tient debout ailleurs : c'est là que l'anti-raid et
+            la file de tickets ont trouvé leurs limites, puis leurs corrections.
+          </p>
+          <a class="secondary-btn compact" href="https://discord.com/invite/VgDfbEn4t2"
+             target="_blank" rel="noreferrer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg> <span data-i18n="part.rejoindre">Rejoindre le serveur</span></a>
+        </article>
+
+        <article class="partner-card">
+          <h3>CPG Belge</h3>
+          <p class="partner-size" data-i18n="part.cpgTaille">1 010 membres</p>
+          <p data-i18n="part.cpg">
+            Une communauté exigeante sur la modération, et précise dans ses signalements.
+            Plusieurs réglages du filtre de langage viennent directement de leurs
+            remarques.
+          </p>
+          <a class="secondary-btn compact" href="https://discord.gg/zA9dHkfZ3"
+             target="_blank" rel="noreferrer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg> <span data-i18n="part.rejoindre">Rejoindre le serveur</span></a>
+        </article>
+
+        <article class="partner-card">
+          <h3>VPG Suisse</h3>
+          <p class="partner-size" data-i18n="part.vpgTaille">Communauté suisse</p>
+          <p data-i18n="part.vpg">
+            Un serveur soigné, attentif aux détails, qui a poussé ModBot à mieux traiter
+            le multilingue et les fuseaux horaires. Les dates affichées dans le fuseau de
+            chaque lecteur leur doivent beaucoup.
+          </p>
+          <a class="secondary-btn compact" href="https://discord.gg/D5R8UcqKC2"
+             target="_blank" rel="noreferrer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg> <span data-i18n="part.rejoindre">Rejoindre le serveur</span></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="partners-join section-shell">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="part.devenirEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Devenir partenaire</p>
+        <h2 data-i18n="part.devenirTitre">Vous voulez en être ?</h2>
+        <p data-i18n="part.devenirTexte">
+          Il n'y a pas de contrepartie à acheter. On travaille avec des communautés qui
+          utilisent vraiment le bot et qui prennent le temps de dire ce qui cloche.
+          Écrivez-nous sur le serveur de support.
+        </p>
+      </div>
+      <a class="primary-btn" href="https://discord.gg/CK8CbFtYuv" target="_blank"
+         rel="noreferrer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg> <span data-i18n="part.contact">Nous écrire</span></a>
+    </section>
+
+  </main>
+
+  <script src="translations.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
