@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModBot Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
+       la connexion au dashboard est automatique, rien a saisir.
+       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
+  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
+  <meta name="modbot-discord-client-id" content="1510405235544424620">
+  <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
+  <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
+  <meta name="modbot-bot-permissions" content="3124257994829047">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="assets/modbot-mark.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+</head>
+<body class="premium-page">
+  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
+  <div class="page-glow" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navigation premium" data-i18n-aria="prem.navigation">
+      <a class="brand" href="index.html" aria-label="Accueil ModBot" data-i18n-aria="wiki.accueilModbot">
+        <span class="brand-mark">
+          <img src="assets/modbot-mark.png" alt="" width="128" height="128" decoding="async" fetchpriority="high">
+        </span>
+        <span>ModBot</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="wiki.ouvrirLeMenu">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#features" data-i18n="wiki.fonctionnalites">Fonctionnalités</a>
+        <a href="index.html#pricing" data-i18n="wiki.tarifs">Tarifs</a>
+        <a class="nav-action-btn nav-premium-btn" href="premium.html"><span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span><span data-i18n="nav.premium">Premium</span></a>
+        <a class="nav-action-btn nav-dashboard-btn" href="dashboard.html"><span></span><span data-i18n="nav.dashboard">Dashboard</span></a>
+        <a class="nav-action-btn nav-admin-btn" href="admin.html"><span></span><span data-i18n="nav.admin">Admin</span></a>
+        <a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="wiki.supportDiscord">Support Discord</a>
+        <label class="language-switch" aria-label="Choisir la langue du site" data-i18n-aria="wiki.choisirLaLangueDu">
+          <span></span>
+          <select id="siteLanguage">
+            <option value="fr">Français</option>
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+            <option value="es">Español</option>
+            <option value="de">Deutsch</option>
+          </select>
+        </label>
+      </div>
+    </nav>
+  </header>
+
+  <main class="premium-shell">
+
+    <!-- ── Le haut : ce qu'on paie ───────────────────────────────── -->
+    <section class="premium-hero section-shell">
+      <p class="eyebrow" data-i18n="prem.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> ModBot Premium</p>
+      <h1 data-i18n="prem.titre">Débloquez tout ModBot</h1>
+      <p class="premium-lead" data-i18n="prem.chapo">
+        ModBot reste utilisable gratuitement : modération, tickets, anti-raid, captcha,
+        sauvegardes. Le premium ouvre ce qui demande du temps machine et du stockage —
+        et fait vivre le projet.
+      </p>
+
+      <div class="premium-state" data-premium-state hidden>
+        <strong data-premium-state-title></strong>
+        <span data-premium-state-detail></span>
+      </div>
+
+      <div class="premium-offers" data-premium-offers>
+        <p class="field-help" data-i18n="prem.chargementOffres">Chargement des offres…</p>
+      </div>
+
+      <p class="field-help premium-note" data-i18n-html="prem.note">
+        Paiement par <strong>Stripe</strong>. ModBot ne voit jamais votre numéro de carte.
+        Résiliable à tout moment : la période déjà payée reste due jusqu'à son terme.
+      </p>
+
+      <p class="field-help premium-note" data-i18n-html="prem.dons">
+        Les <a href="index.html#donate">dons libres</a> existent toujours et restent
+        les bienvenus. Ils ne débloquent rien — ils n'ont jamais rien débloqué.
+      </p>
+    </section>
+
+    <!-- ── Le bas : ce que ca ouvre ──────────────────────────────── -->
+    <section class="premium-features section-shell">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="prem.inclusEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-check"/></svg> Inclus</p>
+        <h2 data-i18n="prem.inclusTitre">Ce que le premium ouvre</h2>
+        <p data-i18n="prem.inclusChapo">
+          Neuf ensembles de fonctionnalités, actifs sur tous vos serveurs abonnés.
+        </p>
+      </div>
+
+      <div class="premium-grid" data-premium-features></div>
+    </section>
+
+    <section class="premium-faq section-shell">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="prem.faqEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-question"/></svg> Questions</p>
+        <h2 data-i18n="prem.faqTitre">Ce qu'on nous demande</h2>
+      </div>
+      <div class="premium-faq-grid">
+        <article>
+          <h3 data-i18n="prem.q1">L'abonnement vaut pour un serveur ou pour mon compte ?</h3>
+          <p data-i18n="prem.r1">Pour un serveur. Vous choisissez lequel depuis son dashboard avant de payer.</p>
+        </article>
+        <article>
+          <h3 data-i18n="prem.q2">Que se passe-t-il si je résilie ?</h3>
+          <p data-i18n="prem.r2">Rien ne s'arrête le jour même : la période déjà payée est servie jusqu'à son terme, puis les fonctionnalités premium se referment. Vos réglages sont conservés.</p>
+        </article>
+        <article>
+          <h3 data-i18n="prem.q3">Et ce que j'ai configuré avant ?</h3>
+          <p data-i18n="prem.r3">Tout est conservé. Un relais réseaux configuré puis fermé reprend exactement où il s'était arrêté si vous vous réabonnez.</p>
+        </article>
+        <article>
+          <h3 data-i18n="prem.q4">Le bot reste-t-il gratuit ?</h3>
+          <p data-i18n="prem.r4">La modération, les tickets, l'anti-raid, le captcha et les sauvegardes le restent. Le premium ouvre ce qui coûte du temps machine, du stockage ou des appels à des services payants.</p>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="translations.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

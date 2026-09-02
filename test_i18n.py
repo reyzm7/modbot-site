@@ -19,6 +19,7 @@ from html.parser import HTMLParser
 
 SITE = os.path.dirname(os.path.abspath(__file__))
 PAGES = ["index.html", "dashboard.html", "admin.html", "wiki.html",
+         "premium.html",
          "confidentialite.html", "conditions.html"]
 LANGUES = ["fr", "en", "ar", "es", "de"]
 

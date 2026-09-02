@@ -5186,6 +5186,15 @@ function initDashboard() {
       initials,
       installed: Boolean(installed)
     };
+    // Retenu pour les autres pages : la page Premium doit savoir quel
+    // serveur facturer, et elle n'a pas acces a cette variable.
+    try {
+      if (serverId) localStorage.setItem("modbot-selected-guild", serverId);
+      if (serverName) localStorage.setItem("modbot-selected-guild-name", serverName);
+    } catch (erreur) {
+      // Navigation privee, stockage refuse : la page Premium demandera
+      // simplement de passer par le dashboard.
+    }
     currentServerTargets.forEach((target) => {
       target.textContent = serverName;
     });
@@ -6547,3 +6556,149 @@ document.addEventListener("DOMContentLoaded", () => {
   initDashboard();
   remplirSelecteurPays();
 });
+
+/* ══════════════════════════════════════════════════════════════════
+   PAGE PREMIUM
+   Les offres et les fonctionnalites viennent du bot : les prix ne
+   doivent exister qu'a un seul endroit, sinon le site finira par
+   afficher un tarif que la caisse ne pratique plus.
+   ══════════════════════════════════════════════════════════════════ */
+
+function initPagePremium() {
+  const hoteOffres = document.querySelector("[data-premium-offers]");
+  const hoteFonctions = document.querySelector("[data-premium-features]");
+  if (!hoteOffres && !hoteFonctions) return;
+
+  /** Le serveur choisi dans le dashboard, s'il y en a un. */
+  function serveurChoisi() {
+    try {
+      return localStorage.getItem("modbot-selected-guild") || "";
+    } catch (erreur) {
+      return "";
+    }
+  }
+
+  function carteOffre(offre, populaire) {
+    const economie = offre.saving
+      ? `<span class="premium-saving">${escapeHtmlValue(
+          tp("prem.economie", { pct: offre.saving }))}</span>`
+      : "";
+    return `
+      <article class="premium-offer${populaire ? " is-featured" : ""}">
+        ${populaire ? `<span class="premium-badge">${escapeHtmlValue(t("prem.populaire"))}</span>` : ""}
+        <h3>${escapeHtmlValue(offre.label)}</h3>
+        <p class="premium-price">${escapeHtmlValue(offre.price)}</p>
+        <p class="premium-period">${escapeHtmlValue(offre.period)}</p>
+        ${economie}
+        <button class="primary-btn" type="button" data-premium-buy="${escapeHtmlValue(offre.key)}">
+          ${escapeHtmlValue(t("prem.choisir"))}
+        </button>
+      </article>`;
+  }
+
+  function carteFonction(fonction) {
+    return `
+      <article class="premium-feature">
+        <span class="premium-feature-icon" aria-hidden="true">
+          <svg class="ui-icon" viewBox="0 0 24 24"><use href="#${escapeHtmlValue(fonction.icon)}"/></svg>
+        </span>
+        <h3>${escapeHtmlValue(fonction.title)}</h3>
+        <p>${escapeHtmlValue(fonction.summary)}</p>
+      </article>`;
+  }
+
+  async function acheter(plan) {
+    const guildId = serveurChoisi();
+    if (!guildId) {
+      // Sans serveur choisi, le paiement n'aurait pas de destinataire :
+      // mieux vaut renvoyer au dashboard que d'encaisser dans le vide.
+      showToast(t("prem.choisirServeur"));
+      setTimeout(() => { location.href = "dashboard.html"; }, 1600);
+      return;
+    }
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/premium/checkout`, {
+        method: "POST",
+        body: JSON.stringify({ plan }),
+      });
+      if (data?.url) location.href = data.url;
+      else showToast(t("prem.paiementIndisponible"));
+    } catch (erreur) {
+      showToast(erreur?.message || t("prem.paiementIndisponible"));
+    }
+  }
+
+  async function afficherEtat() {
+    const bloc = document.querySelector("[data-premium-state]");
+    const guildId = serveurChoisi();
+    if (!bloc || !guildId) return;
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/premium`,
+                                        { cache: "no-store" });
+      const etat = data?.premium || {};
+      if (!etat.active) return;
+      bloc.hidden = false;
+      bloc.classList.add("is-active");
+      const titre = bloc.querySelector("[data-premium-state-title]");
+      const detail = bloc.querySelector("[data-premium-state-detail]");
+      if (titre) titre.textContent = t("prem.dejaActif");
+      if (detail) {
+        detail.textContent = tp("prem.jusquau", {
+          date: (etat.until || "").slice(0, 10),
+          jours: etat.days_left,
+        });
+      }
+    } catch (erreur) {
+      // Pas connecte, ou serveur inaccessible : la page reste utile.
+    }
+  }
+
+  async function charger() {
+    try {
+      const data = await modbotApiFetch("/api/premium/offers", { cache: "no-store" });
+      const offres = data?.offers || [];
+      const fonctions = data?.features || [];
+
+      if (hoteOffres) {
+        hoteOffres.innerHTML = offres
+          .map((offre) => carteOffre(offre, offre.key === "semestriel"))
+          .join("") || `<p class="field-help">${escapeHtmlValue(t("prem.offresIndisponibles"))}</p>`;
+        hoteOffres.querySelectorAll("[data-premium-buy]").forEach((bouton) => {
+          bouton.addEventListener("click", () => acheter(bouton.dataset.premiumBuy));
+        });
+        if (data && data.checkout_available === false) {
+          hoteOffres.querySelectorAll("[data-premium-buy]").forEach((b) => {
+            b.disabled = true;
+            b.textContent = t("prem.bientot");
+          });
+        }
+      }
+
+      if (hoteFonctions) {
+        hoteFonctions.innerHTML = fonctions.map(carteFonction).join("");
+      }
+    } catch (erreur) {
+      if (hoteOffres) {
+        hoteOffres.innerHTML =
+          `<p class="field-help">${escapeHtmlValue(t("prem.offresIndisponibles"))}</p>`;
+      }
+    }
+  }
+
+  charger();
+  afficherEtat();
+
+  // Retour de Stripe : on le dit, sinon la page semble n'avoir rien fait.
+  const retour = new URLSearchParams(location.search).get("paiement");
+  if (retour === "reussi") {
+    showToast(t("prem.merci"));
+    // Le webhook arrive parfois apres la redirection : on relit l'etat
+    // une fois passe ce delai plutot que d'afficher « non abonne ».
+    setTimeout(afficherEtat, 4000);
+  } else if (retour === "annule") {
+    showToast(t("prem.annule"));
+  }
+}
+
+initPagePremium();
+

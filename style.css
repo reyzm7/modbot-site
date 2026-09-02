@@ -9001,3 +9001,170 @@ select {
 @media (max-width: 520px) {
   .emoji-palette { grid-template-columns: repeat(8, 1fr); }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   PAGE PREMIUM
+   Le haut vend, le bas explique. Deux grilles, une respiration entre
+   les deux : personne ne lit une liste de fonctionnalites avant de
+   savoir combien ca coute.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.premium-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+.premium-hero { text-align: center; }
+
+.premium-hero h1 {
+  margin: 8px 0 14px;
+  font-size: clamp(2rem, 5vw, 3.1rem);
+  line-height: 1.08;
+}
+
+.premium-lead {
+  max-width: 62ch;
+  margin: 0 auto 28px;
+  color: var(--muted);
+  font-size: 1.03rem;
+}
+
+.premium-state {
+  max-width: 520px;
+  margin: 0 auto 26px;
+  padding: 14px 18px;
+  display: grid;
+  gap: 4px;
+  border: 1px solid rgba(241, 196, 15, 0.35);
+  border-radius: var(--radius-lg);
+  background: rgba(241, 196, 15, 0.08);
+}
+
+.premium-state strong { color: #f7d354; }
+.premium-state span { color: var(--muted); font-size: 0.9rem; }
+
+/* ── Les offres ─────────────────────────────────────────────────── */
+
+.premium-offers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: stretch;
+}
+
+.premium-offer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 26px 20px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  text-align: center;
+}
+
+/* L'offre mise en avant se distingue par la bordure, pas par la
+   taille : une carte plus grande decale les autres et casse la ligne
+   de lecture des prix. */
+.premium-offer.is-featured {
+  border-color: rgba(241, 196, 15, 0.55);
+  box-shadow: 0 0 0 1px rgba(241, 196, 15, 0.18), 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.premium-badge {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: #f1c40f;
+  color: #1a1405;
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.premium-offer h3 { margin: 0; font-size: 1.05rem; }
+
+.premium-price {
+  margin: 6px 0 0;
+  font-size: 2.1rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.premium-period { margin: 0; color: var(--muted); font-size: 0.86rem; }
+
+.premium-saving {
+  align-self: center;
+  margin-top: 4px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(67, 181, 129, 0.16);
+  color: #6ee7a8;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.premium-offer button { margin-top: auto; padding-top: 12px; padding-bottom: 12px; }
+.premium-note { max-width: 62ch; margin: 0 auto 8px; }
+
+/* ── Les fonctionnalites ────────────────────────────────────────── */
+
+.premium-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.premium-feature {
+  display: grid;
+  gap: 8px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.premium-feature-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(241, 196, 15, 0.14);
+  color: #f1c40f;
+}
+
+.premium-feature h3 { margin: 0; font-size: 0.98rem; }
+.premium-feature p { margin: 0; color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+
+.premium-faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.premium-faq-grid article {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.premium-faq-grid h3 { margin: 0 0 6px; font-size: 0.95rem; }
+.premium-faq-grid p { margin: 0; color: var(--muted); font-size: 0.88rem; line-height: 1.55; }
+
+.nav-premium-btn { border-color: rgba(241, 196, 15, 0.4) !important; }
+.nav-premium-btn .ui-icon { color: #f1c40f; }
+
+@media (max-width: 640px) {
+  .premium-shell { padding: 0 14px 60px; }
+  .premium-offers { grid-template-columns: 1fr; }
+}
