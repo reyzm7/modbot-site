@@ -445,59 +445,27 @@ function initHeroCommands() {
   renderCommand(stage, "panel");
 }
 
-function appendDemoMessage(feed, text, type) {
-  const message = document.createElement("div");
-  message.className = `message ${type}`;
-  message.textContent = text;
-  feed.appendChild(message);
-  feed.scrollTop = feed.scrollHeight;
-}
+/* Le rendu en attente, s'il y en a un.
 
-/* Le second ecran de la demo : ce que le bot ecrit pendant que le
-   membre lit sa reponse. C'est ce qui distingue ModBot d'une commande
-   qui repond dans le vide — et ca se montre mieux que ca ne s'explique. */
-
-const JOURNAL_DEMO = {
-  panel: [["INFO", "panel.open", "interaction recue · gid=8271 · latence 41 ms"],
-          ["OK", "perms.check", "administrator=true · 12 modules charges"]],
-  stats: [["INFO", "stats.collect", "membres=4154 · salons=38 · roles=21"],
-          ["OK", "cache.hit", "instantane servi en 7 ms"]],
-  avert: [["WARN", "infraction.read", "membre=@invite · 2 avertissements"],
-          ["INFO", "sanction.next", "seuil 3 -> mute 4 h"]],
-};
-
-function ecrireJournalDemo(command) {
-  const console_ = document.getElementById("demoConsole");
-  if (!console_) return;
-  const lignes = JOURNAL_DEMO[command] || JOURNAL_DEMO.panel;
-  console_.innerHTML = "";
-  lignes.forEach(([niveau, source, texte], index) => {
-    window.setTimeout(() => {
-      const ligne = document.createElement("div");
-      ligne.className = `console-line niveau-${niveau.toLowerCase()}`;
-      const heure = new Date().toLocaleTimeString("fr-FR", { hour12: false });
-      ligne.innerHTML =
-        `<span class="console-time">${escapeHtmlValue(heure)}</span>`
-        + `<span class="console-level">${escapeHtmlValue(niveau)}</span>`
-        + `<span class="console-source">${escapeHtmlValue(source)}</span>`
-        + `<span class="console-text">${escapeHtmlValue(texte)}</span>`;
-      console_.appendChild(ligne);
-      console_.scrollTop = console_.scrollHeight;
-    }, 220 + index * 380);
-  });
-}
+   La reponse parait 260 ms apres l'appel, pour qu'on voie le bot
+   repondre plutot que d'avoir tout d'un bloc. Mais trois appels
+   rapproches — le dessin initial, le passage de la langue, puis un clic
+   — vidaient chacun le fil avant que le premier delai ne soit echu,
+   puis y deposaient chacun leur message : trois apercus empiles pour
+   une seule commande. On annule donc le rendu precedent avant d'en
+   programmer un nouveau. */
+let renduDemoEnAttente = 0;
 
 function runDemoCommand(command) {
   const feed = document.getElementById("demoFeed");
   if (!feed) return;
-  ecrireJournalDemo(command);
 
-  const data = commandResponses[command] || commandResponses.panel;
-
+  window.clearTimeout(renduDemoEnAttente);
   feed.innerHTML = "";
-  appendDemoMessage(feed, data.command, "user");
 
-  window.setTimeout(() => {
+  // La commande est deja ecrite dans l'apercu (« LGCY a utilise /panel ») :
+  // l'ajouter en plus au-dessus la faisait paraitre deux fois.
+  renduDemoEnAttente = window.setTimeout(() => {
     const message = document.createElement("div");
     message.className = "message bot command-demo-message";
     message.innerHTML = getCommandMarkup(command);
@@ -1902,10 +1870,16 @@ function initDashboard() {
   function optionsSalonsVocaux(choisi = "", libelleVide = null) {
     const tete = libelleVide === null ? ""
       : `<option value="">${escapeHtml(libelleVide)}</option>`;
+    // Tous les salons vocaux paraissent, y compris ceux que le bot ne
+    // voit pas encore : une liste trouee se lit comme un bug. Ceux-la
+    // sont annonces comme tels plutot que passes sous silence.
     return tete + (dashboardResources.voice_channels || [])
-      .map((salon) => (
-        `<option value="${escapeHtml(salon.id)}"${String(salon.id) === String(choisi) ? " selected" : ""}>${escapeHtml(channelLabel(salon))}</option>`
-      )).join("");
+      .map((salon) => {
+        const categorie = salon.category ? `${salon.category} / ` : "";
+        const alerte = salon.visible === false ? ` ${t("js.voc.salonInvisible")}` : "";
+        const libelle = `${categorie}${salon.name || salon.id}${alerte}`;
+        return `<option value="${escapeHtml(salon.id)}"${String(salon.id) === String(choisi) ? " selected" : ""}>${escapeHtml(libelle)}</option>`;
+      }).join("");
   }
 
   function optionsCategories(choisi = "", libelleVide = null) {
@@ -5081,6 +5055,45 @@ function initDashboard() {
     return null;
   }
 
+  /**
+   * Reduit une affiche d'evenement.
+   *
+   * Rien a voir avec un emoji : une affiche est large, on garde donc ses
+   * proportions et on plafonne le grand cote. Le poids compte quand meme
+   * — l'image voyage dans la sauvegarde du dashboard, puis dans le
+   * message Discord.
+   */
+  async function reduireAffiche(fichier) {
+    const source = await new Promise((ok, ko) => {
+      const lecteur = new FileReader();
+      lecteur.onload = () => ok(lecteur.result);
+      lecteur.onerror = () => ko(new Error("lecture"));
+      lecteur.readAsDataURL(fichier);
+    });
+    const image = await new Promise((ok, ko) => {
+      const img = new Image();
+      img.onload = () => ok(img);
+      img.onerror = () => ko(new Error("decodage"));
+      img.src = source;
+    });
+
+    const AFFICHE_MAX_OCTETS = 900 * 1024;
+    const COTE_MAX = 1280;
+    const echelle = Math.min(1, COTE_MAX / Math.max(image.width, image.height));
+    const toile = document.createElement("canvas");
+    toile.width = Math.max(1, Math.round(image.width * echelle));
+    toile.height = Math.max(1, Math.round(image.height * echelle));
+    toile.getContext("2d").drawImage(image, 0, 0, toile.width, toile.height);
+
+    const png = toile.toDataURL("image/png");
+    if (png.length <= AFFICHE_MAX_OCTETS) return png;
+    for (const qualite of [0.92, 0.85, 0.75, 0.62, 0.5]) {
+      const rendu = toile.toDataURL("image/jpeg", qualite);
+      if (rendu.length <= AFFICHE_MAX_OCTETS) return rendu;
+    }
+    return null;
+  }
+
   function initImagesTicket() {
     const liste = document.getElementById("ticketOptionList");
     const fichier = document.querySelector("[data-option-image-file]");
@@ -5225,7 +5238,38 @@ function initDashboard() {
         const onglet = document.querySelector(
           `[data-dashboard-tab="${section.dataset.dashboardPanel}"]`);
         onglet?.classList.toggle("is-locked", !libre);
+        verrouillerPanneau(section, !libre);
       });
+  }
+
+  /**
+   * Un panneau verrouille se lit, ne se modifie pas.
+   *
+   * Griser sans desactiver laissait tout cliquable : on reglait, on
+   * enregistrait, et le bot refusait — sans que rien ne le dise a
+   * l'ecran. Chaque champ neutralise porte une marque, pour ne
+   * reactiver a la levee du verrou que ce que le verrou avait ferme :
+   * un bouton deja desactive pour une autre raison doit le rester.
+   */
+  function verrouillerPanneau(section, ferme) {
+    section.classList.toggle("is-locked", ferme);
+    const champs = section.querySelectorAll(
+      "input, select, textarea, button, [contenteditable='true']");
+    champs.forEach((champ) => {
+      if (champ.closest(".premium-lock")) return;  // le bouton « Voir les offres »
+      if (ferme) {
+        if (champ.disabled) return;                // deja ferme, pas par nous
+        champ.dataset.verrouPremium = "1";
+        champ.disabled = true;
+        if (champ.isContentEditable) champ.contentEditable = "false";
+      } else if (champ.dataset.verrouPremium === "1") {
+        delete champ.dataset.verrouPremium;
+        champ.disabled = false;
+        if (champ.getAttribute("contenteditable") === "false") {
+          champ.contentEditable = "true";
+        }
+      }
+    });
   }
 
   /* ══════════════════════════════════════════════════════════════
@@ -5340,11 +5384,26 @@ function initDashboard() {
             <p class="captcha-state-value">${inscrits}</p>
           </div>
         </div>
-        <label class="mini-form"><span>${escapeHtml(t("js.evt.image"))}</span>
-          <input type="url" data-event-image maxlength="500"
-                 placeholder="https://…"
-                 value="${escapeHtml(evenement.image || "")}">
-        </label>
+        <div class="mini-form">
+          <span>${escapeHtml(t("js.evt.image"))}</span>
+          <div class="event-image-row">
+            <span class="event-image-preview" data-event-image-preview>${
+              evenement.image
+                ? `<img src="${escapeHtml(evenement.image)}" alt="">`
+                : `<span class="image-picker-empty">${escapeHtml(t("js.evt.imageAucune"))}</span>`
+            }</span>
+            <div class="event-image-actions">
+              <button class="secondary-btn compact" type="button" data-event-image-pick="${index}">
+                ${escapeHtml(t("js.evt.imageChoisir"))}
+              </button>
+              <button class="secondary-btn compact danger-btn" type="button"
+                      data-event-image-clear="${index}"${evenement.image ? "" : " disabled"}>
+                ${escapeHtml(t("js.evt.imageRetirer"))}
+              </button>
+            </div>
+          </div>
+          <input type="hidden" data-event-image value="${escapeHtml(evenement.image || "")}">
+        </div>
         <p class="field-help">${escapeHtml(t("js.evt.imageAide"))}</p>
         <div class="search-actions">
           <button class="primary-btn compact" type="button" data-event-publish="${index}">
@@ -5414,7 +5473,59 @@ function initDashboard() {
 
     hote.addEventListener("input", () => markPanelDirty("events"));
 
+    // Un seul champ fichier pour toutes les cartes : on retient a qui il
+    // sert le temps du choix. En creer un par carte les multiplierait a
+    // chaque redessin.
+    const choixFichier = document.createElement("input");
+    choixFichier.type = "file";
+    choixFichier.accept = "image/*";
+    choixFichier.hidden = true;
+    document.body.appendChild(choixFichier);
+    let carteEnAttente = -1;
+
+    choixFichier.addEventListener("change", async () => {
+      const fichier = choixFichier.files?.[0];
+      const index = carteEnAttente;
+      choixFichier.value = "";
+      carteEnAttente = -1;
+      if (!fichier || index < 0) return;
+
+      lireEvenementsDuDom();
+      let reduite = null;
+      try {
+        reduite = await reduireAffiche(fichier);
+      } catch (erreur) {
+        reduite = null;
+      }
+      if (!reduite) {
+        showToast(t("js.evt.imageTropLourde"));
+        return;
+      }
+      if (evenements[index]) {
+        evenements[index].image = reduite;
+        redessinerEvenements();
+        markPanelDirty("events");
+      }
+    });
+
     hote.addEventListener("click", async (evenement_clic) => {
+      const choisir = evenement_clic.target.closest("[data-event-image-pick]");
+      if (choisir) {
+        carteEnAttente = Number(choisir.dataset.eventImagePick);
+        choixFichier.click();
+        return;
+      }
+      const effacer = evenement_clic.target.closest("[data-event-image-clear]");
+      if (effacer) {
+        lireEvenementsDuDom();
+        const cible = evenements[Number(effacer.dataset.eventImageClear)];
+        if (cible) {
+          cible.image = "";
+          redessinerEvenements();
+          markPanelDirty("events");
+        }
+        return;
+      }
       const retirer = evenement_clic.target.closest("[data-event-remove]");
       if (retirer) {
         // Meme raison : supprimer la troisieme carte ne doit pas effacer
@@ -6976,6 +7087,47 @@ document.addEventListener("DOMContentLoaded", () => {
    afficher un tarif que la caisse ne pratique plus.
    ══════════════════════════════════════════════════════════════════ */
 
+/* Les tarifs et la liste des fonctionnalites sont des faits fixes : ils
+   n'ont pas besoin du bot pour s'afficher. Quand la page en dependait,
+   un bot en cours de redemarrage la laissait vide — un visiteur voyait
+   une page premium sans une seule offre. Le serveur ne sert plus qu'a
+   deux choses : dire si le paiement est ouvert, et dire ou en est
+   l'abonnement du serveur choisi. */
+const PREMIUM_OFFRES = [
+  { key: "mensuel", labelClef: "prem.offreMensuel", price: "2,99 €",
+    periodClef: "prem.parMois", saving: 0 },
+  { key: "semestriel", labelClef: "prem.offreSemestriel", price: "13,99 €",
+    periodClef: "prem.tousLes6Mois", saving: 22 },
+  { key: "annuel", labelClef: "prem.offreAnnuel", price: "35 €",
+    periodClef: "prem.parAn", saving: 2 },
+];
+
+/* Chaque fonctionnalite a un titre court pour la grille, et un texte qui
+   dit ce qu'elle fait vraiment. Le resume seul ne suffisait pas : on
+   annoncait « Journal complet » sans jamais dire ce que ca recouvre. */
+const PREMIUM_FONCTIONS = [
+  { icon: "u-palette", titreClef: "prem.f.embed_colors.titre",
+    detailClef: "prem.f.embed_colors.detail" },
+  { icon: "u-image", titreClef: "prem.f.images.titre",
+    detailClef: "prem.f.images.detail" },
+  { icon: "u-clipboard", titreClef: "prem.f.logs_complets.titre",
+    detailClef: "prem.f.logs_complets.detail" },
+  { icon: "i-megaphone", titreClef: "prem.f.social_relays.titre",
+    detailClef: "prem.f.social_relays.detail" },
+  { icon: "u-broadcast", titreClef: "prem.f.voice.titre",
+    detailClef: "prem.f.voice.detail" },
+  { icon: "u-star", titreClef: "prem.f.events.titre",
+    detailClef: "prem.f.events.detail" },
+  { icon: "u-mask", titreClef: "prem.f.auto_roles.titre",
+    detailClef: "prem.f.auto_roles.detail" },
+  { icon: "u-mail", titreClef: "prem.f.dm.titre",
+    detailClef: "prem.f.dm.detail" },
+  { icon: "u-mask", titreClef: "prem.f.premium_role.titre",
+    detailClef: "prem.f.premium_role.detail" },
+  { icon: "u-sparkles", titreClef: "prem.f.ai.titre",
+    detailClef: "prem.f.ai.detail" },
+];
+
 function initPagePremium() {
   const hoteOffres = document.querySelector("[data-premium-offers]");
   const hoteFonctions = document.querySelector("[data-premium-features]");
@@ -6998,9 +7150,9 @@ function initPagePremium() {
     return `
       <article class="premium-offer${populaire ? " is-featured" : ""}">
         ${populaire ? `<span class="premium-badge">${escapeHtmlValue(t("prem.populaire"))}</span>` : ""}
-        <h3>${escapeHtmlValue(offre.label)}</h3>
+        <h3>${escapeHtmlValue(t(offre.labelClef))}</h3>
         <p class="premium-price">${escapeHtmlValue(offre.price)}</p>
-        <p class="premium-period">${escapeHtmlValue(offre.period)}</p>
+        <p class="premium-period">${escapeHtmlValue(t(offre.periodClef))}</p>
         ${economie}
         <button class="primary-btn" type="button" data-premium-buy="${escapeHtmlValue(offre.key)}">
           ${escapeHtmlValue(t("prem.choisir"))}
@@ -7014,9 +7166,23 @@ function initPagePremium() {
         <span class="premium-feature-icon" aria-hidden="true">
           <svg class="ui-icon" viewBox="0 0 24 24"><use href="#${escapeHtmlValue(fonction.icon)}"/></svg>
         </span>
-        <h3>${escapeHtmlValue(fonction.title)}</h3>
-        <p>${escapeHtmlValue(fonction.summary)}</p>
+        <h3>${escapeHtmlValue(t(fonction.titreClef))}</h3>
+        <p>${escapeHtmlValue(t(fonction.detailClef))}</p>
       </article>`;
+  }
+
+  /** Dessine offres et fonctionnalites sans rien attendre du serveur. */
+  function dessiner() {
+    if (hoteOffres) {
+      hoteOffres.innerHTML = PREMIUM_OFFRES
+        .map((offre) => carteOffre(offre, offre.key === "semestriel")).join("");
+      hoteOffres.querySelectorAll("[data-premium-buy]").forEach((bouton) => {
+        bouton.addEventListener("click", () => acheter(bouton.dataset.premiumBuy));
+      });
+    }
+    if (hoteFonctions) {
+      hoteFonctions.innerHTML = PREMIUM_FONCTIONS.map(carteFonction).join("");
+    }
   }
 
   async function acheter(plan) {
@@ -7065,39 +7231,35 @@ function initPagePremium() {
     }
   }
 
-  async function charger() {
+  /**
+   * Le serveur ne fait plus que confirmer que le paiement est ouvert.
+   * S'il ne repond pas, les offres restent affichees et cliquables :
+   * l'erreur, s'il y en a une, arrivera au moment du paiement, avec un
+   * message qui la nomme.
+   */
+  async function verifierPaiement() {
     try {
       const data = await modbotApiFetch("/api/premium/offers", { cache: "no-store" });
-      const offres = data?.offers || [];
-      const fonctions = data?.features || [];
-
-      if (hoteOffres) {
-        hoteOffres.innerHTML = offres
-          .map((offre) => carteOffre(offre, offre.key === "semestriel"))
-          .join("") || `<p class="field-help">${escapeHtmlValue(t("prem.offresIndisponibles"))}</p>`;
+      if (data && data.checkout_available === false && hoteOffres) {
         hoteOffres.querySelectorAll("[data-premium-buy]").forEach((bouton) => {
-          bouton.addEventListener("click", () => acheter(bouton.dataset.premiumBuy));
+          bouton.disabled = true;
+          bouton.textContent = t("prem.bientot");
         });
-        if (data && data.checkout_available === false) {
-          hoteOffres.querySelectorAll("[data-premium-buy]").forEach((b) => {
-            b.disabled = true;
-            b.textContent = t("prem.bientot");
-          });
-        }
-      }
-
-      if (hoteFonctions) {
-        hoteFonctions.innerHTML = fonctions.map(carteFonction).join("");
       }
     } catch (erreur) {
-      if (hoteOffres) {
-        hoteOffres.innerHTML =
-          `<p class="field-help">${escapeHtmlValue(t("prem.offresIndisponibles"))}</p>`;
-      }
+      // Bot injoignable : la page reste complete et utile.
     }
   }
 
-  charger();
+  dessiner();
+  verifierPaiement();
+
+  // Les cartes sont fabriquees en JS : elles n'ont pas de data-i18n a
+  // relire. C'est a nous de les redessiner quand la langue change.
+  document.addEventListener("modbot:language", () => {
+    dessiner();
+    verifierPaiement();
+  });
   afficherEtat();
 
   // Retour de Stripe : on le dit, sinon la page semble n'avoir rien fait.
@@ -7165,3 +7327,84 @@ function initMenuAcces() {
 
 initMenuAcces();
 
+/* ══════════════════════════════════════════════════════════════════
+   LOGOS DES PARTENAIRES
+   Discord publie, sans authentification, ce que contient un lien
+   d'invitation : le nom du serveur, son avatar et son nombre de
+   membres. On s'en sert plutot que de stocker des images qui
+   vieillissent et des chiffres ecrits en dur qui deviennent faux.
+   Si l'appel echoue, le monogramme deja dans la page reste : la carte
+   ne bouge pas et rien ne clignote.
+   ══════════════════════════════════════════════════════════════════ */
+
+async function initLogosPartenaires() {
+  const cartes = document.querySelectorAll("[data-partner]");
+  if (!cartes.length) return;
+
+  await Promise.all([...cartes].map(async (carte) => {
+    const code = carte.dataset.partner;
+    let invitation;
+    try {
+      const reponse = await fetch(
+        `https://discord.com/api/v10/invites/${encodeURIComponent(code)}?with_counts=true`);
+      if (!reponse.ok) return;
+      invitation = await reponse.json();
+    } catch (erreur) {
+      return;  // Hors ligne, ou Discord indisponible : le monogramme suffit.
+    }
+
+    const serveur = invitation?.guild;
+    if (!serveur) return;
+
+    const hote = carte.querySelector("[data-partner-logo]");
+    if (hote && serveur.icon) {
+      // Un hash qui commence par « a_ » designe un avatar anime.
+      const extension = String(serveur.icon).startsWith("a_") ? "gif" : "png";
+      const image = new Image();
+      image.alt = "";
+      image.decoding = "async";
+      // Surtout pas de loading="lazy" ici : une image detachee du
+      // document n'est jamais chargee paresseusement, et comme on
+      // n'insere qu'une fois chargee, les deux s'attendaient l'un
+      // l'autre. Quatre icones de 128 px ne valent pas ce risque.
+      // On ne remplace le monogramme qu'une fois l'image chargee :
+      // sinon un carre vide apparait pendant le telechargement.
+      image.addEventListener("load", () => {
+        hote.textContent = "";
+        hote.appendChild(image);
+      });
+      image.src = `https://cdn.discordapp.com/icons/${serveur.id}/${serveur.icon}.${extension}?size=128`;
+    }
+
+    const effectif = carte.querySelector("[data-partner-size]");
+    const membres = invitation.approximate_member_count;
+    if (effectif && Number.isFinite(membres)) {
+      // Le compte vient de Discord : on retire le data-i18n, sinon le
+      // prochain changement de langue le remplacerait par le texte fige.
+      delete effectif.dataset.i18n;
+      effectif.dataset.partnerCount = String(membres);
+      effectif.classList.add("is-live");
+      ecrireEffectif(effectif);
+    }
+  }));
+}
+
+/** Ecrit « 10 924 membres » dans la langue courante. */
+function ecrireEffectif(element) {
+  const membres = Number(element.dataset.partnerCount);
+  if (!Number.isFinite(membres)) return;
+  const langue = getSiteLanguage();
+  const locales = { fr: "fr-FR", en: "en-US", es: "es-ES", de: "de-DE", ar: "ar-EG" };
+  element.textContent = tp("part.membres", {
+    nombre: membres.toLocaleString(locales[langue] || "fr-FR"),
+  });
+}
+
+// Le compte n'a plus de data-i18n : applySiteLanguage ne le retraduit
+// pas. Sans ceci, changer de langue apres le chargement des logos
+// laissait « 10,924 members » sur une page en francais.
+document.addEventListener("modbot:language", () => {
+  document.querySelectorAll("[data-partner-count]").forEach(ecrireEffectif);
+});
+
+initLogosPartenaires();

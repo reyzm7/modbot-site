@@ -117,6 +117,9 @@ def lire_script():
         clefs.update((un, plusieurs))
     # Clefs rangees dans une table puis resolues par t(variable)
     clefs |= set(re.findall(r'"(js\.[\w.]+)"', src))
+    # Meme cas, mais nommees : « titreClef: "prem.f.voice.titre" ». Les
+    # tables d'offres et de fonctionnalites premium fonctionnent ainsi.
+    clefs |= set(re.findall(r'Clef:\s*"([a-zA-Z][\w.]*)"', src))
     return clefs
 
 

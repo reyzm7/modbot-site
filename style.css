@@ -18,6 +18,14 @@
   --radius-lg: 18px;
 }
 
+/* `hidden` vient du navigateur avec un display:none de faible poids :
+   n'importe quel display:grid ecrit ici le battait. Le menu « Acces »
+   restait donc ouvert en permanence, et la pastille d'etat premium
+   s'affichait vide. La regle vaut pour tout le site. */
+[hidden] {
+  display: none !important;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -975,7 +983,7 @@ h1 {
   text-align: left;
 }
 
-.admin-nav span {
+.admin-nav > span:first-child {
   display: grid;
   place-items: center;
   width: 28px;
@@ -993,7 +1001,7 @@ h1 {
   background: rgba(139, 92, 246, 0.18);
 }
 
-.admin-nav.is-active span {
+.admin-nav.is-active > span:first-child {
   background: linear-gradient(135deg, var(--purple), var(--cyan));
   color: #fff;
 }
@@ -2218,7 +2226,11 @@ main {
   overflow-wrap: anywhere;
 }
 
-.discord-embed {
+/* On mesure le message, pas l'embed : une requete de conteneur ne peut
+   pas modifier la largeur de son propre conteneur — la condition
+   dependrait de ce qu'elle decide. */
+.discord-message,
+.discord-command-preview {
   container-type: inline-size;
 }
 
@@ -2416,8 +2428,22 @@ main {
   box-shadow: 0 14px 38px rgba(0, 0, 0, 0.24);
 }
 
+/* La vignette est un vrai element de grille, pas un bloc pose sur un
+   creux de 128 px reserve a l'aveugle : elle prend la place qu'elle
+   occupe, et le texte tout le reste. */
 .embed-with-thumb {
-  padding-right: 128px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 14px;
+}
+
+.embed-with-thumb > * { grid-column: 1; }
+
+.embed-with-thumb > .embed-thumb {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  position: static;
+  align-self: start;
 }
 
 .embed-thumb {
@@ -2497,6 +2523,34 @@ main {
   gap: 8px;
 }
 
+/* L'embed reservait 128 px a sa vignette quelle que soit sa largeur.
+   Dans la colonne etroite de l'accueil il ne restait que 170 px de
+   texte : le titre se pliait sur trois lignes, les six statistiques
+   tenaient dans des colonnes de 46 px et les boutons descendaient un
+   par ligne. La mesure qui compte n'est pas celle de l'ecran mais celle
+   de l'embed — c'est ce que dit une requete de conteneur, et le
+   `container-type: inline-size` etait deja pose plus haut. */
+@container (max-width: 460px) {
+  /* Trop etroit pour deux colonnes : la vignette passe sous le texte. */
+  .embed-with-thumb {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .embed-with-thumb > .embed-thumb {
+    grid-column: 1;
+    grid-row: auto;
+    order: 99;
+    width: 64px;
+    height: 64px;
+    margin-top: 12px;
+  }
+
+  .embed-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 12px;
+  }
+}
+
 .embed-actions span {
   min-height: 34px;
   padding: 0 13px;
@@ -2567,56 +2621,6 @@ main {
   width: 0%;
   height: 100%;
   background: #5865f2;
-}
-
-.partners {
-  padding: 86px 0;
-}
-
-.partner-grid {
-  max-width: 900px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.partner-card {
-  min-height: 160px;
-  padding: 24px;
-  display: grid;
-  grid-template-columns: 78px minmax(0, 1fr);
-  gap: 18px;
-  align-items: center;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background:
-    radial-gradient(circle at 18% 22%, rgba(139, 92, 246, 0.24), transparent 12rem),
-    rgba(18, 12, 34, 0.8);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(18px);
-}
-
-.partner-mark {
-  width: 78px;
-  height: 78px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  border: 1px solid rgba(158, 110, 255, 0.38);
-  color: var(--soft);
-  background: rgba(139, 92, 246, 0.16);
-  box-shadow: 0 0 28px rgba(139, 92, 246, 0.28);
-  font-weight: 900;
-}
-
-.partner-card h3 {
-  font-size: 1.35rem;
-}
-
-.partner-card p {
-  margin-top: 8px;
-  color: var(--muted);
 }
 
 .assistant-overlay {
@@ -3065,15 +3069,6 @@ main,
 
 .server-card.is-uninstalled small {
   color: #d0c5ff;
-}
-
-.dash-nav.is-locked {
-  opacity: 0.48;
-}
-
-.dash-nav.is-locked::after {
-  content: "🔒";
-  margin-left: auto;
 }
 
 .discord-login-btn:hover,
@@ -5932,14 +5927,6 @@ label,
 }
 .dash-nav.is-active span { background: none; }
 
-.dash-nav.is-locked { opacity: 0.55; }
-.dash-nav.is-locked::after {
-  content: "💎";
-  margin-left: auto;
-  font-size: 0.75rem;
-  opacity: 0.8;
-}
-
 .dashboard-banner {
   padding: 22px 24px;
   border: 1px solid var(--line);
@@ -6346,102 +6333,10 @@ label,
 
 /* ── Cartes partenaires ────────────────────────────────────────────── */
 
-.partner-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-  max-width: 760px;
-}
-
-.partner-card {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--panel);
-  color: inherit;
-  text-decoration: none;
-  transition: border-color 200ms var(--ease), background-color 200ms var(--ease),
-              transform 200ms var(--ease), box-shadow 200ms var(--ease);
-}
-.partner-card:hover {
-  border-color: var(--accent-line);
-  background: var(--panel-strong);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
-}
-
-.partner-mark {
-  position: relative;
-  flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--panel-strong);
-  color: var(--soft);
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-.partner-mark img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-/* Repli sur les initiales si le logo Discord est indisponible */
-.partner-mark.is-fallback::after {
-  content: attr(data-initials);
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--accent), #7c86ff);
-  color: #fff;
-}
-
-.partner-card h3 {
-  margin-bottom: 2px;
-  font-size: 1rem;
-  font-weight: 650;
-}
-.partner-card p {
-  color: var(--muted);
-  font-size: 0.86rem;
-}
-.partner-meta {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--surface-1);
-  color: var(--muted);
-  font-size: 0.74rem;
-  font-weight: 500;
-}
-
-.partner-arrow {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  color: var(--muted);
-  font-size: 0.9rem;
-  opacity: 0;
-  transform: translate(-3px, 3px);
-  transition: opacity 200ms var(--ease), transform 200ms var(--ease), color 200ms var(--ease);
-}
-.partner-card:hover .partner-arrow {
-  opacity: 1;
-  transform: none;
-  color: var(--accent);
-}
-
+/* Les cartes partenaires ont leur page et leur feuille de style plus
+   bas. Les deux blocs qui vivaient ici stylaient la section de
+   l'accueil, retiree depuis ; leur grid-template-columns pliait le
+   texte de la nouvelle page dans une colonne de 78 px. */
 /* ── Rythme des sections ───────────────────────────────────────────── */
 
 .section-shell {
@@ -6643,7 +6538,6 @@ label,
 
 @media (max-width: 860px) {
   .section-shell { padding: 52px 18px; }
-  .partner-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 760px) {
@@ -9203,7 +9097,7 @@ select {
 .premium-lock .primary-btn { white-space: nowrap; }
 
 /* La pastille de l'onglet : on doit voir le verrou sans ouvrir. */
-.dash-nav.is-locked { position: relative; }
+.dash-nav.is-locked { position: relative; opacity: 0.62; }
 
 .dash-nav.is-locked::after {
   content: "";
@@ -9315,69 +9209,22 @@ select {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   DEMO A DEUX ECRANS
-   A gauche ce que voit le membre, a droite ce que le bot enregistre au
-   meme instant. C'est ce qui distingue ModBot d'une commande qui
-   repond dans le vide, et ca se montre mieux que ca ne s'explique.
+   DEMO
+   Un seul ecran : ce que le membre voit. Le journal du bot occupait la
+   moitie de la place pour un public qui n'est pas celui de l'accueil.
    ═══════════════════════════════════════════════════════════════════ */
 
 .demo-duo {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  align-items: stretch;
+  justify-content: center;
 }
 
-.demo-duo .discord-window { min-height: 300px; }
-
-.discord-window.is-console { background: #07060d; }
-
-.console-feed {
-  padding: 14px 16px;
-  overflow-y: auto;
-  font-family: ui-monospace, Menlo, Consolas, monospace;
-  font-size: 0.78rem;
-  line-height: 1.75;
+.demo-duo .discord-window {
+  width: min(680px, 100%);
+  min-height: 300px;
 }
-
-.console-line {
-  display: grid;
-  grid-template-columns: auto auto auto 1fr;
-  gap: 10px;
-  align-items: baseline;
-  padding: 2px 0;
-  /* Chaque ligne parait, elle ne s'affiche pas d'un bloc : on veut voir
-     le bot travailler, pas lire un journal deja ecrit. */
-  animation: console-apparait 0.24s ease both;
-}
-
-@keyframes console-apparait {
-  from { opacity: 0; transform: translateY(3px); }
-  to   { opacity: 1; transform: none; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .console-line { animation: none; }
-}
-
-.console-time { color: #4b5563; }
-.console-source { color: #8b7cf6; }
-.console-text { color: var(--muted); }
-
-.console-level {
-  min-width: 42px;
-  padding: 0 6px;
-  border-radius: 4px;
-  font-weight: 700;
-  text-align: center;
-}
-
-.niveau-info .console-level { background: rgba(88, 101, 242, 0.18); color: #93a4ff; }
-.niveau-ok   .console-level { background: rgba(67, 181, 129, 0.18); color: #6ee7a8; }
-.niveau-warn .console-level { background: rgba(250, 166, 26, 0.18); color: #f4c069; }
 
 @media (max-width: 900px) {
-  .demo-duo { grid-template-columns: 1fr; }
   .demo-duo .discord-window { min-height: 230px; }
 }
 
@@ -9506,3 +9353,117 @@ select {
 
 .event-card-head strong { font-size: 1.02rem; }
 .event-card .search-actions { margin-top: 4px; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   CARTES PARTENAIRES
+   Le logo vient de Discord, a partir du lien d'invitation deja present
+   dans la page : pas de fichier a maintenir, et il suit le serveur
+   quand celui-ci change d'avatar. Tant qu'il n'est pas arrive, le
+   monogramme tient la place — la carte ne saute pas.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.partner-card {
+  grid-template-columns: 56px minmax(0, 1fr);
+  grid-template-areas:
+    "logo tete"
+    "corps corps";
+  align-items: center;
+  column-gap: 14px;
+}
+
+.partner-logo {
+  grid-area: logo;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--line-strong);
+  background: rgba(139, 92, 246, 0.14);
+  color: var(--soft);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.partner-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.partner-head { grid-area: tete; display: grid; gap: 2px; align-content: center; }
+.partner-body { grid-area: corps; display: grid; gap: 8px; margin-top: 4px; }
+
+.partner-card h2,
+.partner-card h3 { margin: 0; }
+
+/* Le compte remplace « 2 400 membres » ecrit en dur : il vient de
+   Discord, donc il est juste le jour ou on le lit. */
+.partner-size { display: inline-flex; align-items: center; gap: 6px; }
+.partner-size.is-live::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3ba55d;
+  box-shadow: 0 0 8px rgba(59, 165, 93, 0.8);
+}
+
+.partner-card.is-main .partner-logo { width: 72px; height: 72px; border-radius: 20px; }
+.partner-card.is-main { grid-template-columns: 72px minmax(0, 1fr); }
+
+@media (max-width: 560px) {
+  .partner-card,
+  .partner-card.is-main {
+    grid-template-columns: 1fr;
+    grid-template-areas: "logo" "tete" "corps";
+    justify-items: start;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PANNEAU VERROUILLE
+   Un cadenas qui laisse cliquer n'est pas un cadenas : on donne le
+   panneau a lire, jamais a modifier.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.dash-panel.is-locked > *:not(.premium-lock) {
+  opacity: 0.42;
+  filter: grayscale(0.5);
+  pointer-events: none;
+  user-select: none;
+}
+
+.dash-panel.is-locked { position: relative; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   RYTHME DES PAGES COURTES
+   L'accueil respire sur 72 px parce qu'il est long et qu'on le
+   parcourt. Les pages Premium et Partenaires tiennent en trois ou
+   quatre blocs : le meme espacement y creusait 144 px de noir entre
+   chaque titre, et les boutons paraissaient perdus, trop bas.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.premium-page .section-shell,
+.partners-page .section-shell {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.premium-page main > section:first-child,
+.partners-page main > section:first-child {
+  padding-top: 64px;
+}
+
+.premium-page main > section:last-child,
+.partners-page main > section:last-child {
+  padding-bottom: 64px;
+}
+
+/* Le titre de section colle a son contenu plutot que de flotter. */
+.premium-page .section-heading,
+.partners-page .section-heading {
+  margin-bottom: 18px;
+}
