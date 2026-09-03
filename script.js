@@ -1538,6 +1538,7 @@ function initAdminZone() {
     const liste = document.querySelector("[data-premium-list]");
     if (!liste) return;
     try {
+      chargerAcheteursPremium();
       const data = await modbotApiFetch("/api/admin/premium", { cache: "no-store" });
       const lignes = data.guilds || [];
       liste.innerHTML = lignes.map((ligne) => {
@@ -1547,6 +1548,12 @@ function initAdminZone() {
           details.push(escapeHtmlValue(tp("js.adm.premiumRestant", {
             jours: ligne.days_left, date: (ligne.until || "").slice(0, 10) })));
           if (ligne.source) details.push(escapeHtmlValue(ligne.source));
+          // Un serveur premium sans nom derriere ne s'explique plus six
+          // mois apres, quand quelqu'un demande pourquoi.
+          if (ligne.activated_by) {
+            details.push(escapeHtmlValue(tp("js.adm.premiumActivePar", {
+              qui: ligne.activated_by })));
+          }
         } else {
           details.push(escapeHtmlValue(t("js.adm.premiumExpire")));
         }
@@ -1573,6 +1580,78 @@ function initAdminZone() {
     } catch (erreur) {
       liste.innerHTML = `<p class="field-help">${escapeHtmlValue(erreur?.message || "")}</p>`;
     }
+  }
+
+  /**
+   * Les acheteurs, avec leur pseudo et leur avatar.
+   *
+   * Un identifiant Discord ne dit rien a personne. Une licence payee et
+   * jamais posee non plus, tant qu'on ne voit pas qui est derriere :
+   * c'est pourtant celle-la qu'il faut aller aider.
+   */
+  async function chargerAcheteursPremium() {
+    const hote = document.querySelector("[data-premium-buyers]");
+    if (!hote) return;
+    let data;
+    try {
+      data = await modbotApiFetch("/api/admin/premium/acheteurs",
+                                  { cache: "no-store" });
+    } catch (erreur) {
+      hote.innerHTML =
+        `<p class="field-help">${escapeHtmlValue(erreur?.message || "")}</p>`;
+      return;
+    }
+
+    const acheteurs = data.buyers || [];
+    if (!acheteurs.length) {
+      hote.innerHTML = `<div class="admin-buyer"><span><strong>${
+        escapeHtmlValue(t("js.adm.premiumAucunAcheteur"))}</strong></span></div>`;
+      return;
+    }
+
+    hote.innerHTML = acheteurs.map((acheteur) => {
+      const nom = acheteur.name || acheteur.id;
+      const offres = (acheteur.licences || [])
+        .filter((licence) => licence.active)
+        .map((licence) => {
+          const offre = PREMIUM_OFFRES.find((o) => o.key === licence.plan);
+          return offre ? t(offre.labelClef) : licence.plan;
+        });
+      const serveurs = acheteur.servers || [];
+      const etiquette = acheteur.dormant
+        ? `<span class="admin-tag is-dormant">${escapeHtmlValue(t("js.adm.premiumDormant"))}</span>`
+        : acheteur.active
+          ? `<span class="admin-tag is-live">${escapeHtmlValue(tn(
+              "js.adm.premiumPoseeUne", "js.adm.premiumPoseesPlusieurs",
+              serveurs.length, { nombre: serveurs.length }))}</span>`
+          : `<span class="admin-tag">${escapeHtmlValue(t("js.adm.premiumExpire"))}</span>`;
+
+      const lignes = [`ID ${escapeHtmlValue(acheteur.id)}`];
+      if (offres.length) lignes.push(escapeHtmlValue(offres.join(", ")));
+      if (acheteur.libres > 0) {
+        lignes.push(escapeHtmlValue(tn(
+          "js.adm.premiumLibreUne", "js.adm.premiumLibresPlusieurs",
+          acheteur.libres, { nombre: acheteur.libres })));
+      }
+
+      return `
+        <div class="admin-buyer">
+          <span class="admin-buyer-avatar">${
+            acheteur.avatar
+              ? `<img src="${escapeHtmlValue(acheteur.avatar)}" alt="" loading="lazy">`
+              : escapeHtmlValue(initialsFromName(nom))
+          }</span>
+          <span class="admin-buyer-texte">
+            <strong>${escapeHtmlValue(nom)}</strong>
+            <small>${lignes.join(" — ")}</small>
+            ${serveurs.length
+              ? `<small class="admin-buyer-serveurs">${serveurs
+                  .map((serveur) => escapeHtmlValue(serveur.name)).join(" · ")}</small>`
+              : ""}
+          </span>
+          ${etiquette}
+        </div>`;
+    }).join("");
   }
 
   // Le champ ne demande pas la meme chose selon la cible : le dire

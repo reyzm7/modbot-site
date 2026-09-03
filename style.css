@@ -10014,3 +10014,86 @@ select {
   .licence-cta-button { grid-template-columns: auto minmax(0, 1fr); }
   .licence-cta-fleche { display: none; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LES ACHETEURS PREMIUM
+   Un identifiant Discord ne dit rien a personne : on montre le visage
+   et le pseudo, comme pour les serveurs.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.admin-sous-titre {
+  margin: 26px 0 4px;
+  color: var(--soft);
+  font-size: 0.95rem;
+}
+
+.admin-buyers {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.admin-buyer {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.admin-buyer-avatar {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: rgba(139, 92, 246, 0.16);
+  font-weight: 800;
+  font-size: 0.86rem;
+}
+
+.admin-buyer-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.admin-buyer-texte strong { display: block; }
+.admin-buyer-texte small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.admin-buyer-serveurs { color: var(--soft) !important; }
+
+.admin-tag {
+  padding: 3px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* Une licence payee et jamais posee : c'est celle qu'il faut aller
+   aider, elle se voit donc en premier et en couleur. */
+.admin-tag.is-dormant {
+  background: hsl(34 92% 60% / 0.18);
+  color: hsl(34 92% 68%);
+}
+
+.admin-tag.is-live {
+  background: hsl(142 62% 52% / 0.16);
+  color: hsl(142 62% 64%);
+}
+
+@media (max-width: 560px) {
+  .admin-buyer {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+  .admin-tag { grid-column: 2; justify-self: start; }
+}
