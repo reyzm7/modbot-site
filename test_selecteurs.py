@@ -418,6 +418,39 @@ apres_secours = bloc[bloc.index("appliquerPremium(etat.premium)"):]
 verifier("si tout echoue, on ne pretend pas que le premium a disparu",
          "appliquerPremium(" not in apres_secours[len("appliquerPremium(etat.premium)"):])
 
+# ── Le premium ne depend d'aucun affichage ────────────────────────────
+#
+#  `appliquerPremium` etait appele au MILIEU de applyDashboardConfig,
+#  apres les tickets, les images et les relais. La moindre exception
+#  dans l'un d'eux et le serveur passait pour gratuit, verrous compris.
+#  Ce qui coute de l'argent se pose avant ce qui ne fait que s'afficher.
+bloc_apply = script[script.index("function applyDashboardConfig"):]
+bloc_apply = bloc_apply[:bloc_apply.index(chr(10) + "  function ", 10)]
+
+# Un seuil en caracteres ne veut rien dire — un commentaire le fait
+# bouger. Ce qui compte : le premium passe AVANT toute autre section.
+premier = bloc_apply.index("appliquerPremium(config.premium)")
+autres = [bloc_apply.index(appel) for appel in
+          ("setImagePicker(", "applyWelcomeState(", "applyAutoRoles(",
+           "renderModerationConfig(", "sansCasser(")
+          if appel in bloc_apply]
+verifier("le premium passe avant toute autre section",
+         autres and premier < min(autres),
+         "premium a %d, premiere section a %d" % (premier, min(autres) if autres else -1))
+verifier("il n'est applique qu'une fois",
+         bloc_apply.count("appliquerPremium(config.premium)") == 1)
+verifier("chaque section est isolee",
+         bloc_apply.count("sansCasser(") >= 8,
+         "%d sections" % bloc_apply.count("sansCasser("))
+
+bloc_secours = script[script.index("async function loadSelectedGuildConfig"):][:2800]
+verifier("une erreur d'affichage n'est pas dite panne du bot",
+         "js.configAffichageErreur" in bloc_secours)
+verifier("et le premium est pose meme dans ce cas",
+         "appliquerPremium(recue.premium)" in bloc_secours)
+verifier("l'erreur reelle part dans la console",
+         "console.error(" in bloc_secours)
+
 bloc_switch = script[script.index("switcherList?.addEventListener"):][:700]
 verifier("changer de serveur previent avant de perdre des reglages",
          "runWithUnsavedGuard(() => selectGuildFromElement(item))" in bloc_switch)

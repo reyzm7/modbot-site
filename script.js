@@ -2959,6 +2959,14 @@ function initDashboard() {
 
   function applyDashboardConfig(config) {
     if (!config) return;
+
+    // Le premium D'ABORD. Il etait applique au milieu de cette fonction,
+    // apres les tickets, les images et les relais : la moindre erreur
+    // dans l'un d'eux — un champ absent, une image illisible — et le
+    // serveur passait pour non premium, verrous compris. Ce qui coute
+    // de l'argent se pose avant ce qui ne fait que s'afficher.
+    appliquerPremium(config.premium);
+
     const tickets = config.tickets || {};
     const channels = config.channels || {};
     const welcome = config.welcome_system || config.welcome || {};
@@ -3110,11 +3118,10 @@ function initDashboard() {
       if (reactionMode && config.reaction_roles_mode) reactionMode.value = config.reaction_roles_mode;
     }
 
-    applyAutoRoles(config.auto_roles);
-    applyAiState(config.ai);
-    applyVoiceState(config.voice);
-    applyEventsState(config.events);
-    appliquerPremium(config.premium);
+    sansCasser("roles automatiques", () => applyAutoRoles(config.auto_roles));
+    sansCasser("assistant IA", () => applyAiState(config.ai));
+    sansCasser("vocaux", () => applyVoiceState(config.voice));
+    sansCasser("evenements", () => applyEventsState(config.events));
 
     if (Array.isArray(config.social_relays)) {
       config.social_relays.forEach((relay) => {
@@ -3151,11 +3158,35 @@ function initDashboard() {
     if (liveTitle) liveTitle.textContent = tickets.title || t("dash.ouvreTonTicket");
     if (liveDescription) liveDescription.textContent = tickets.description || t("js.merciDeSelectionner");
     if (liveTicketEmoji) liveTicketEmoji.textContent = tickets.emoji || "";
-    renderModerationConfig(config);
-    renderDashboardStats(config);
-    document.querySelectorAll("[data-dashboard-panel='channels'] [data-channel]").forEach(setInputState);
-    applyWelcomeState(welcome);
-    renderReactionPreview();
+    sansCasser("moderation", () => renderModerationConfig(config));
+    sansCasser("statistiques", () => renderDashboardStats(config));
+    sansCasser("salons", () => {
+      document.querySelectorAll("[data-dashboard-panel='channels'] [data-channel]")
+        .forEach(setInputState);
+    });
+    sansCasser("bienvenue", () => applyWelcomeState(welcome));
+    sansCasser("apercu des roles", () => renderReactionPreview());
+  }
+
+  /**
+   * Execute une section d'affichage sans laisser son echec emporter les
+   * autres.
+   *
+   * Le dashboard applique une douzaine de sections a la suite. Une seule
+   * exception — un champ absent, une image illisible, une liste qui
+   * n'en est pas une — et tout ce qui suivait restait a l'etat
+   * precedent, sans que rien ne le dise. L'erreur part dans la console
+   * avec le nom de la section : c'est ce qu'on veut lire quand on
+   * cherche pourquoi une rubrique ne se remplit pas.
+   */
+  function sansCasser(nom, action) {
+    try {
+      action();
+      return true;
+    } catch (erreur) {
+      console.error(`Dashboard — section « ${nom} » :`, erreur);
+      return false;
+    }
   }
 
   async function loadSelectedGuildConfig(guildId) {
@@ -3173,13 +3204,32 @@ function initDashboard() {
     }
 
     let configChargee = false;
+    let recue = null;
     try {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/config`, { cache: "no-store" });
-      applyDashboardConfig(data.config);
-      configChargee = true;
-      showToast(t("js.configChargee"));
+      recue = data?.config || null;
     } catch (error) {
+      // Le bot n'a pas repondu : c'est bien une panne de connexion.
       showToast(t("js.configLocale"));
+    }
+
+    if (recue) {
+      // La reponse est arrivee. Si l'affichage echoue, ce n'est PAS une
+      // panne du bot — le dire ainsi envoyait chercher au mauvais
+      // endroit, et faisait passer un serveur premium pour gratuit.
+      try {
+        applyDashboardConfig(recue);
+        configChargee = true;
+        showToast(t("js.configChargee"));
+      } catch (erreur) {
+        console.error("Affichage de la configuration :", erreur);
+        showToast(t("js.configAffichageErreur"));
+        // Le premium, lui, ne depend d'aucun affichage : on le pose.
+        if (recue.premium) {
+          appliquerPremium(recue.premium);
+          configChargee = true;
+        }
+      }
     }
 
     // La configuration n'a pas pu etre lue : on demande au moins l'etat

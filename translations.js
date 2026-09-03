@@ -21,6 +21,7 @@
 
 window.MODBOT_TRANSLATIONS = {
   fr: {
+    "js.configAffichageErreur": "Configuration reçue, mais une rubrique n'a pas pu s'afficher. Détail dans la console du navigateur.",
     "js.ressourcesIndisponibles": "Liste des salons et rôles indisponible : les autres réglages restent modifiables.",
     "lic.possedeJours": "Votre offre : {offre} — {jours} jour(s) restant(s)",
     "lic.possedePlusieurs": "Vos offres : {offres}",
@@ -1789,6 +1790,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Télécharger",
   },
   en: {
+    "js.configAffichageErreur": "Settings received, but one section could not be displayed. Details in the browser console.",
     "js.ressourcesIndisponibles": "Channel and role lists unavailable: the other settings stay editable.",
     "lic.possedeJours": "Your plan: {offre} — {jours} day(s) left",
     "lic.possedePlusieurs": "Your plans: {offres}",
@@ -3557,6 +3559,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Download",
   },
   ar: {
+    "js.configAffichageErreur": "وصلت الإعدادات، لكن تعذّر عرض أحد الأقسام. التفاصيل في وحدة تحكّم المتصفّح.",
     "js.ressourcesIndisponibles": "قوائم القنوات والرتب غير متاحة: تبقى بقية الإعدادات قابلة للتعديل.",
     "lic.possedeJours": "عرضك: {offre} — بقي {jours} يوم",
     "lic.possedePlusieurs": "عروضك: {offres}",
@@ -5325,6 +5328,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "تنزيل",
   },
   es: {
+    "js.configAffichageErreur": "Configuración recibida, pero una sección no pudo mostrarse. Detalle en la consola del navegador.",
     "js.ressourcesIndisponibles": "Listas de canales y roles no disponibles: los demás ajustes siguen editables.",
     "lic.possedeJours": "Tu oferta: {offre} — quedan {jours} día(s)",
     "lic.possedePlusieurs": "Tus ofertas: {offres}",
@@ -7032,6 +7036,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Descargar",
   },
   de: {
+    "js.configAffichageErreur": "Einstellungen empfangen, aber ein Bereich konnte nicht angezeigt werden. Details in der Browser-Konsole.",
     "js.ressourcesIndisponibles": "Kanal- und Rollenlisten nicht verfügbar: Die übrigen Einstellungen bleiben änderbar.",
     "lic.possedeJours": "Dein Tarif: {offre} — noch {jours} Tag(e)",
     "lic.possedePlusieurs": "Deine Tarife: {offres}",
