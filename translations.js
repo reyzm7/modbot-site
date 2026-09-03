@@ -21,6 +21,7 @@
 
 window.MODBOT_TRANSLATIONS = {
   fr: {
+    "js.configRubriquesEchec": "Configuration chargée, sauf : {rubriques}. Détail dans la console.",
     "js.chargementEnCours": "Le serveur finit de charger — attends une seconde avant d'enregistrer.",
     "js.apiInjoignableAdresse": "ModBot injoignable a l'adresse {base} — soit le bot est arrete, soit il n'autorise pas cette page.",
     "js.configEchec": "Configuration non chargée : {raison}",
@@ -1793,6 +1794,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Télécharger",
   },
   en: {
+    "js.configRubriquesEchec": "Settings loaded, except: {rubriques}. Details in the console.",
     "js.chargementEnCours": "The server is still loading — wait a second before saving.",
     "js.apiInjoignableAdresse": "ModBot unreachable at {base} — either the bot is down, or it does not allow this page.",
     "js.configEchec": "Settings not loaded: {raison}",
@@ -3565,6 +3567,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Download",
   },
   ar: {
+    "js.configRubriquesEchec": "حُمّلت الإعدادات، ما عدا: {rubriques}. التفاصيل في وحدة التحكّم.",
     "js.chargementEnCours": "ما زال الخادم قيد التحميل — انتظر لحظة قبل الحفظ.",
     "js.apiInjoignableAdresse": "تعذّر الوصول إلى ModBot على {base} — إمّا أن البوت متوقّف، أو أنه لا يسمح لهذه الصفحة.",
     "js.configEchec": "تعذّر تحميل الإعدادات: {raison}",
@@ -5337,6 +5340,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "تنزيل",
   },
   es: {
+    "js.configRubriquesEchec": "Configuración cargada, salvo: {rubriques}. Detalle en la consola.",
     "js.chargementEnCours": "El servidor aun esta cargando: espera un segundo antes de guardar.",
     "js.apiInjoignableAdresse": "ModBot no responde en {base} — o el bot esta parado, o no autoriza esta pagina.",
     "js.configEchec": "Configuración no cargada: {raison}",
@@ -7048,6 +7052,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Descargar",
   },
   de: {
+    "js.configRubriquesEchec": "Einstellungen geladen, ausser: {rubriques}. Details in der Konsole.",
     "js.chargementEnCours": "Der Server ladt noch — warte einen Moment vor dem Speichern.",
     "js.apiInjoignableAdresse": "ModBot unter {base} nicht erreichbar — entweder ist der Bot aus, oder er erlaubt diese Seite nicht.",
     "js.configEchec": "Einstellungen nicht geladen: {raison}",

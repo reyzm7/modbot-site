@@ -529,6 +529,49 @@ for enregistrement in ("saveCurrentChanges", "saveGuildSecurity", "saveWelcome")
              "serveurEnChargement()" in corps)
 
 
+
+# Toute section d'affichage est sous filet, et celle qui echoue est
+# NOMMEE. « Une rubrique n'a pas pu s'afficher » obligeait a ouvrir la
+# console pour savoir laquelle.
+corps_apply = script[script.index("function applyDashboardConfig"):]
+corps_apply = corps_apply[:re.search(chr(10) + r"  (?:async )?function ",
+                                     corps_apply[10:]).start()]
+verifier("applyDashboardConfig rend la liste de ses echecs",
+         "return rubriquesEnEchec;" in corps_apply)
+verifier("le message nomme les rubriques en echec",
+         "js.configRubriquesEchec" in script)
+
+# Chaque section porte un nom distinct : deux sections homonymes se
+# confondraient dans le message.
+noms = re.findall(r'sansCasser\("([^"]+)"', corps_apply)
+verifier("au moins douze sections sous filet", len(noms) >= 12, str(len(noms)))
+verifier("aucun nom de section en double",
+         len(noms) == len(set(noms)),
+         str([n for n in noms if noms.count(n) > 1]))
+
+# Chaque appel d'affichage passe par le filet. Une premiere version de
+# ce test comptait les lignes « nues » entre deux sections en suivant la
+# profondeur des accolades — mais un gabarit ouvert sur une ligne et
+# ferme sur une autre desequilibre ce comptage, la profondeur ne
+# redescendait jamais a zero, et le test ne pouvait plus rien detecter.
+# Un test qui ne peut pas echouer ne vaut rien : on verifie desormais,
+# ligne par ligne, que chaque appel connu est bien sur une ligne
+# sansCasser.
+APPELS = ("applyWelcomeState(", "renderReactionPreview(",
+          "renderModerationConfig(", "renderDashboardStats(",
+          "applyAutoRoles(", "applyAiState(", "applyVoiceState(",
+          "applyEventsState(")
+nues = []
+for ligne in corps_apply.split(chr(10)):
+    net = ligne.strip()
+    if net.startswith("//") or "sansCasser(" in net:
+        continue
+    for appel in APPELS:
+        if appel in net:
+            nues.append(net[:60])
+verifier("chaque affichage passe par le filet", not nues, str(nues[:3]))
+
+
 rates = [n for n, ok, _ in resultats if not ok]
 print("\n" + "=" * 62)
 print(f"RESULTAT : {len(resultats) - len(rates)}/{len(resultats)} verifications passees")

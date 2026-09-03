@@ -3012,7 +3012,8 @@ function initDashboard() {
   }
 
   function applyDashboardConfig(config) {
-    if (!config) return;
+    rubriquesEnEchec = [];
+    if (!config) return rubriquesEnEchec;
 
     // Le premium D'ABORD. Il etait applique au milieu de cette fonction,
     // apres les tickets, les images et les relais : la moindre erreur
@@ -3026,6 +3027,7 @@ function initDashboard() {
     const welcome = config.welcome_system || config.welcome || {};
     const security = config.security || {};
 
+    sansCasser("tickets", () => {
     const previewAuthor = document.querySelector("[data-preview-author]");
     const previewTitle = document.querySelector("[data-preview-title]");
     const previewEmoji = document.querySelector("[data-preview-emoji]");
@@ -3051,18 +3053,22 @@ function initDashboard() {
         ${ligneOptionTicket(index + 1, option)}
       `).join("");
     }
+    });
 
     // Chaque salon est retrouve par sa clef, plus par son rang dans le
     // panneau : inserer une ligne ne deplace plus les reglages suivants.
-    ["tickets", "logs", "suggestions", "reports", "staff_alert"].forEach((clef) => {
-      const champ = document.querySelector(`[data-channel="${clef}"]`);
-      if (!champ) return;
-      champ.dataset.attendu = channels[clef] || "";
-      remplirSelect(champ, optionsSalons, t("js.aucun"));
-      champ.value = channels[clef] || "";
-      setInputState(champ);
+    sansCasser("salons", () => {
+      ["tickets", "logs", "suggestions", "reports", "staff_alert"].forEach((clef) => {
+        const champ = document.querySelector(`[data-channel="${clef}"]`);
+        if (!champ) return;
+        champ.dataset.attendu = channels[clef] || "";
+        remplirSelect(champ, optionsSalons, t("js.aucun"));
+        champ.value = channels[clef] || "";
+        setInputState(champ);
+      });
     });
 
+    sansCasser("interrupteurs de securite", () => {
     const securityToggles = document.querySelectorAll("[data-dashboard-panel='security'] .toggle-line input");
     [
       security.antilink,
@@ -3077,46 +3083,36 @@ function initDashboard() {
         securityToggles[index].closest(".toggle-line")?.classList.toggle("is-on", value);
       }
     });
+    });
 
 
-    const welcomeMessage = document.querySelector("[data-welcome-message]");
-    const welcomeChannel = document.querySelector("[data-welcome-channel]");
-    const welcomeColor = document.querySelector("[data-welcome-color]");
-    const welcomeToggles = document.querySelectorAll("[data-dashboard-panel='welcome'] .toggle-line input");
-    const welcomeDmEnabled = document.querySelector("[data-welcome-dm-enabled]");
-    const welcomeDmMessage = document.querySelector("[data-welcome-dm-message]");
-    if (welcomeToggles[0]) {
-      welcomeToggles[0].checked = Boolean(welcome.enabled);
-      welcomeToggles[0].closest(".toggle-line")?.classList.toggle("is-on", Boolean(welcome.enabled));
-    }
-    if (welcomeToggles[2]) {
-      welcomeToggles[2].checked = Boolean(welcome.departure_enabled);
-      welcomeToggles[2].closest(".toggle-line")?.classList.toggle("is-on", Boolean(welcome.departure_enabled));
-    }
-    if (welcomeDmEnabled) {
-      welcomeDmEnabled.checked = Boolean(welcome.dm_enabled);
-      welcomeDmEnabled.closest(".toggle-line")?.classList.toggle("is-on", Boolean(welcome.dm_enabled));
-    }
-    if (welcomeChannel && welcome.channel_id) welcomeChannel.value = welcome.channel_id;
-    if (welcomeMessage && welcome.message) welcomeMessage.value = welcome.message;
-    if (departureMessage && welcome.departure_message) departureMessage.value = welcome.departure_message;
-    if (welcomeDmMessage && welcome.dm_message) welcomeDmMessage.value = welcome.dm_message;
-    if (welcomeBg && welcome.background) welcomeBg.value = welcome.background;
-    if (welcomeFont && welcome.font) welcomeFont.value = welcome.font;
-    if (welcomeColor && welcome.color) welcomeColor.value = welcome.color;
+    // La bienvenue etait posee DEUX fois : ici, et par applyWelcomeState()
+    // en fin de fonction. Ce doublon-ci lisait `departureMessage`,
+    // `welcomeBg` et `welcomeFont` — trois variables declarees nulle
+    // part, et aucun element ne portait ces identifiants. Lire une
+    // variable qui n'existe pas leve un ReferenceError : la fonction
+    // s'arretait LA, a chaque chargement, sur chaque serveur, et rien
+    // de ce qui suit n'a jamais tourne.
+    //
+    // Il visait en plus ses interrupteurs par leur RANG dans le
+    // panneau, et lisait `welcome.color` la ou le bot ecrit
+    // `embed_color`. applyWelcomeState() fait tout cela correctement,
+    // champ par champ, sous le nom de chacun.
 
-    const champPays = document.querySelector("[data-guild-country]");
-    if (champPays) {
-      remplirSelecteurPays();
-      champPays.value = String(config.country || "").toUpperCase();
-    }
-
-    if (config.language) {
-      const languageSelect = document.querySelector("[data-dashboard-panel='language'] select");
-      if (languageSelect) languageSelect.value = config.language === "en" ? "English" : "Français";  // valeurs du <select>, pas des libellés traduits
-    }
+    sansCasser("pays et langue", () => {
+      const champPays = document.querySelector("[data-guild-country]");
+      if (champPays) {
+        remplirSelecteurPays();
+        champPays.value = String(config.country || "").toUpperCase();
+      }
+      if (config.language) {
+        const languageSelect = document.querySelector("[data-dashboard-panel='language'] select");
+        if (languageSelect) languageSelect.value = config.language === "en" ? "English" : "Français";  // valeurs du <select>, pas des libellés traduits
+      }
+    });
 
 
+    sansCasser("messages recurrents", () => {
     if (Array.isArray(config.recurring_messages)) {
       const recurringList = document.querySelector("[data-recurring-list]");
       if (recurringList) {
@@ -3148,7 +3144,9 @@ function initDashboard() {
         });
       }
     }
+    });
 
+    sansCasser("roles-reactions", () => {
     if (Array.isArray(config.reaction_roles)) {
       const reactionTitle = document.querySelector("[data-reaction-title]");
       const reactionDescription = document.querySelector("[data-reaction-description]");
@@ -3171,12 +3169,14 @@ function initDashboard() {
       }
       if (reactionMode && config.reaction_roles_mode) reactionMode.value = config.reaction_roles_mode;
     }
+    });
 
     sansCasser("roles automatiques", () => applyAutoRoles(config.auto_roles));
     sansCasser("assistant IA", () => applyAiState(config.ai));
     sansCasser("vocaux", () => applyVoiceState(config.voice));
     sansCasser("evenements", () => applyEventsState(config.events));
 
+    sansCasser("relais reseaux", () => {
     if (Array.isArray(config.social_relays)) {
       config.social_relays.forEach((relay) => {
         const card = [...document.querySelectorAll(".social-card")].find((item) => item.dataset.socialPlatform === relay.platform);
@@ -3205,21 +3205,26 @@ function initDashboard() {
         }
       });
     }
+    });
 
+    sansCasser("apercu du ticket", () => {
     const liveTitle = document.querySelector("[data-live-title]");
     const liveDescription = document.querySelector("[data-live-desc]");
     const liveTicketEmoji = document.querySelector("[data-live-ticket-emoji]");
     if (liveTitle) liveTitle.textContent = tickets.title || t("dash.ouvreTonTicket");
     if (liveDescription) liveDescription.textContent = tickets.description || t("js.merciDeSelectionner");
     if (liveTicketEmoji) liveTicketEmoji.textContent = tickets.emoji || "";
+    });
+
     sansCasser("moderation", () => renderModerationConfig(config));
     sansCasser("statistiques", () => renderDashboardStats(config));
-    sansCasser("salons", () => {
+    sansCasser("etat des salons", () => {
       document.querySelectorAll("[data-dashboard-panel='channels'] [data-channel]")
         .forEach(setInputState);
     });
     sansCasser("bienvenue", () => applyWelcomeState(welcome));
     sansCasser("apercu des roles", () => renderReactionPreview());
+    return rubriquesEnEchec;
   }
 
   /**
@@ -3233,12 +3238,19 @@ function initDashboard() {
    * avec le nom de la section : c'est ce qu'on veut lire quand on
    * cherche pourquoi une rubrique ne se remplit pas.
    */
+  let rubriquesEnEchec = [];
+
   function sansCasser(nom, action) {
     try {
       action();
       return true;
     } catch (erreur) {
       console.error(`Dashboard — section « ${nom} » :`, erreur);
+      // Retenue pour etre NOMMEE a l'ecran. « Une rubrique n'a pas pu
+      // s'afficher » obligeait a ouvrir la console pour savoir
+      // laquelle ; peu de gens le font, et c'est justement le moment ou
+      // l'on a besoin de le savoir.
+      if (!rubriquesEnEchec.includes(nom)) rubriquesEnEchec.push(nom);
       return false;
     }
   }
@@ -3291,9 +3303,14 @@ function initDashboard() {
       // panne du bot — le dire ainsi envoyait chercher au mauvais
       // endroit, et faisait passer un serveur premium pour gratuit.
       try {
-        applyDashboardConfig(recue);
+        const echecs = applyDashboardConfig(recue) || [];
         configChargee = true;
-        showToast(t("js.configChargee"));
+        // Une section peut echouer sans emporter les autres : on le dit,
+        // en la nommant, plutot que de laisser croire que tout est en
+        // place.
+        showToast(echecs.length
+          ? tp("js.configRubriquesEchec", { rubriques: echecs.join(", ") })
+          : t("js.configChargee"));
       } catch (erreur) {
         console.error("Affichage de la configuration :", erreur);
         showToast(t("js.configAffichageErreur"));
