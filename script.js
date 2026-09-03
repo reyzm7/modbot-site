@@ -5506,6 +5506,9 @@ function initDashboard() {
       });
 
     majBandeauPremium();
+    // Le score depend du premium : quand le verrou bouge et que la
+    // rubrique est ouverte, elle doit suivre sans qu'on la reouvre.
+    if (activePanelName === "score") chargerScoreSecurite();
   }
 
   /**
@@ -5667,22 +5670,43 @@ function initDashboard() {
     fragile: "4 84% 64%",
   };
 
+  /** Un mot dans la zone des conseils, plutot qu'une attente sans fin. */
+  function messageScore(titre, detail = "") {
+    const valeur = document.querySelector("[data-score-valeur]");
+    const rang = document.querySelector("[data-score-rang]");
+    const conseils = document.querySelector("[data-score-conseils]");
+    if (valeur) valeur.textContent = "—";
+    if (rang) rang.textContent = "";
+    if (conseils) {
+      conseils.innerHTML = `<div class="dashboard-empty-state">
+        <strong>${escapeHtml(titre)}</strong>
+        ${detail ? `<span>${escapeHtml(detail)}</span>` : ""}</div>`;
+    }
+  }
+
   async function chargerScoreSecurite() {
     const valeur = document.querySelector("[data-score-valeur]");
     const conseils = document.querySelector("[data-score-conseils]");
-    if (!valeur || !selectedServer.id) return;
+    if (!valeur) return;
+    if (!selectedServer.id) {
+      messageScore(t("score.choisirServeur"));
+      return;
+    }
+    // Le bot refuserait de toute facon : autant l'expliquer ici plutot
+    // que d'afficher une erreur technique.
+    const ouvert = premiumEtat.active
+      || (premiumEtat.features || {}).security_score === true;
+    if (!ouvert) {
+      messageScore(t("score.reservePremium"), t("score.reservePremiumAide"));
+      return;
+    }
 
     let data;
     try {
       data = await modbotApiFetch(
         `/api/guilds/${selectedServer.id}/security/score`, { cache: "no-store" });
     } catch (erreur) {
-      valeur.textContent = "—";
-      if (conseils) {
-        conseils.innerHTML = `<div class="dashboard-empty-state">
-          <strong>${escapeHtml(t("score.indisponible"))}</strong>
-          <span>${escapeHtml(erreur?.message || "")}</span></div>`;
-      }
+      messageScore(t("score.indisponible"), erreur?.message || "");
       return;
     }
 
@@ -5736,14 +5760,7 @@ function initDashboard() {
   }
 
   function initScorePanel() {
-    const panneau = document.querySelector("[data-dashboard-panel='score']");
-    if (!panneau) return;
     document.querySelector("[data-score-refresh]")
-      ?.addEventListener("click", chargerScoreSecurite);
-    // On calcule a l'ouverture de la rubrique, pas au chargement du
-    // dashboard : c'est un diagnostic, il doit etre frais quand on le
-    // regarde, pas quand on est arrive.
-    document.querySelector("[data-dashboard-tab='score']")
       ?.addEventListener("click", chargerScoreSecurite);
   }
 
@@ -6334,6 +6351,7 @@ function initDashboard() {
     if (panelName === "search") runSearch();
     if (panelName === "giveaways") loadGiveaways();
     if (panelName === "welcome") renderWelcomePreview();
+    if (panelName === "score") chargerScoreSecurite();
   }
 
   document.querySelector("[data-dashboard-login]")?.addEventListener("click", () => {
@@ -7577,11 +7595,24 @@ function initPagePremium() {
     const libres = Number(data.places_libres || 0);
 
     if (titre) {
-      const noms = licences.map((licence) => {
+      // Deux licences du meme plan affichaient « Mensuel, Mensuel ».
+      // On regroupe par offre, et on garde pour chacune l'echeance la
+      // plus lointaine : c'est celle qui compte pour l'acheteur.
+      const parOffre = new Map();
+      licences.forEach((licence) => {
         const offre = PREMIUM_OFFRES.find((o) => o.key === licence.plan);
-        return offre ? t(offre.labelClef) : licence.plan;
+        const nom = offre ? t(offre.labelClef) : licence.plan;
+        const jours = Number(licence.days_left || 0);
+        parOffre.set(nom, Math.max(parOffre.get(nom) ?? 0, jours));
       });
-      titre.textContent = tp("lic.possede", { offres: noms.join(", ") });
+      const entrees = [...parOffre.entries()];
+      titre.textContent = entrees.length === 1
+        ? tp("lic.possedeJours", { offre: entrees[0][0], jours: entrees[0][1] })
+        : tp("lic.possedePlusieurs", {
+            offres: entrees
+              .map(([nom, jours]) => tp("lic.offreEtJours", { offre: nom, jours }))
+              .join(", "),
+          });
     }
     if (detail) {
       detail.textContent = libres > 0
