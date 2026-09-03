@@ -309,6 +309,79 @@ verifier("aucune fonction declaree n'est laissee sans emploi",
          not jamais_appelees, str(jamais_appelees))
 
 
+
+# ══════════════════════════════════════════════════════════════════════
+#  Le contrat entre le site et le bot
+#
+#  Une adresse mal ecrite ne leve rien : le bot repond 404, le
+#  navigateur affiche « erreur », et personne ne sait laquelle. C'est
+#  exactement le genre de panne qu'on ne trouve qu'en production.
+#
+#  Ce controle ne s'execute que si le depot du bot est a cote. Il ne
+#  fait donc jamais echouer une verification lancee seule.
+# ══════════════════════════════════════════════════════════════════════
+print(chr(10) + "--- Chaque adresse appelee existe cote bot ---")
+
+import os
+
+racine = os.path.dirname(os.path.abspath(__file__))
+# Depuis le depot principal, le bot est le voisin ; depuis un worktree,
+# il est quatre niveaux plus haut.
+candidats = [
+    os.path.join(racine, "..", "modbot", "bot.py"),
+    os.path.join(racine, "..", "..", "..", "..", "modbot", "bot.py"),
+]
+chemin_bot = next((c for c in candidats if os.path.exists(c)), None)
+
+if chemin_bot is None:
+    print("  --   depot du bot introuvable : controle passe")
+else:
+    source_bot = io.open(chemin_bot, encoding="utf-8", newline="").read()
+
+    motifs = []
+    chemins = re.findall(
+        r'app\.router\.add_(?:get|post|put|delete|patch)\(\s*"([^"]+)"',
+        source_bot)
+    chemins += re.findall(
+        r'app\.router\.add_route\(\s*"[^"]*"\s*,\s*"([^"]+)"', source_bot)
+    for chemin in chemins:
+        # « {guild_id} » accepte n'importe quel segment.
+        motifs.append(re.compile(
+            "^" + re.sub(r"\{[^}]+\}", "[^/]+", chemin) + "$"))
+
+    verifier("le bot declare ses routes", len(motifs) > 30, str(len(motifs)))
+
+    appels = set()
+    for m in re.finditer(r'modbotApiFetch\(\s*(`[^`]+`|"[^"]+")', script):
+        appels.add(m.group(1)[1:-1])
+    for m in re.finditer(r'fetch\(\s*`\$\{base\}([^`]+)`', script):
+        appels.add(m.group(1))
+
+    # Les segments dynamiques prennent une valeur quelconque. Ceux qui
+    # designent une SOUS-ACTION sont enumeres a part, sinon on ne
+    # verifierait rien de ce qui suit.
+    sous_actions = {"captcha/": ["setup", "panel", "lock", "disable"]}
+
+    def formes(appel):
+        chemin = appel.split("?")[0]
+        for prefixe, valeurs in sous_actions.items():
+            if chemin.endswith(prefixe + "${chemin}"):
+                base = chemin[: -len("${chemin}")]
+                return [base + v for v in valeurs]
+        return [re.sub(r"\$\{[^}]+\}", "1", chemin)]
+
+    orphelines = []
+    for appel in sorted(appels):
+        for forme in formes(appel):
+            if forme == "1":
+                continue      # adresse entierement calculee ailleurs
+            if not any(motif.match(forme) for motif in motifs):
+                orphelines.append(forme)
+
+    verifier("aucune adresse appelee sans route cote bot",
+             not orphelines, str(orphelines))
+
+
 rates = [n for n, ok, _ in resultats if not ok]
 print("\n" + "=" * 62)
 print(f"RESULTAT : {len(resultats) - len(rates)}/{len(resultats)} verifications passees")
