@@ -1019,7 +1019,24 @@ async function modbotApiFetch(path, options = {}) {
   if (options.body && !headers["Content-Type"]) {
     headers["Content-Type"] = "application/json";
   }
-  const response = await fetch(`${base}${path}`, { ...options, headers });
+  let response;
+  try {
+    response = await fetch(`${base}${path}`, { ...options, headers });
+  } catch (erreur) {
+    // `fetch` ne rejette que pour une panne de TRANSPORT : DNS,
+    // connexion refusee, ou — le cas le plus trompeur — une reponse
+    // bloquee par CORS. Le navigateur n'en dit rien de plus qu'un
+    // « Failed to fetch », et l'onglet Reseau montre pourtant un 200.
+    // On nomme donc l'adresse appelee : c'est la seule information qui
+    // permette de trancher entre un bot injoignable et une origine que
+    // le bot n'autorise pas.
+    const detail = new Error(tp("js.apiInjoignableAdresse", { base }));
+    detail.cause = erreur;
+    detail.transport = true;
+    console.error(`ModBot API — ${base}${path} injoignable`,
+                  { origine: location.origin, erreur });
+    throw detail;
+  }
   if (!response.ok) {
     let message = tp("js.auth.erreurConnexion", { code: response.status });
     try {
@@ -1035,7 +1052,9 @@ async function modbotApiFetch(path, options = {}) {
     } catch (error) {
       // message par defaut
     }
-    throw new Error(message);
+    const echec = new Error(message);
+    echec.status = response.status;
+    throw echec;
   }
   return response.json();
 }
@@ -2182,7 +2201,7 @@ function initDashboard() {
         const source = item.source === "custom" ? "custom" : "default";
         const label = t(source === "custom" ? "js.personnalise" : "js.parDefaut");
         return `<span class="filtered-word-chip is-${source}"><strong>${escapeHtml(word)}</strong><em>${label}</em></span>`;
-      }).join("") : `<div class="dashboard-empty-state"><strong>${escapeHtml(t("js.aucunMotFiltre"))}</strong><span>${escapeHtml(t("js.listeChargeeDepuisBot"))}</span></div>`;
+      }).join("") : `<div class="dashboard-empty-state"><strong>${escapeHtml(t("js.aucunMotPersonnalise"))}</strong><span>${escapeHtml(t("js.listeChargeeDepuisBot"))}</span></div>`;
     }
 
     const sanctionList = document.querySelector("[data-sanction-list]");
@@ -2245,6 +2264,37 @@ function initDashboard() {
     }
   }
 
+  /**
+   * Vrai si `guildId` est TOUJOURS le serveur ouvert.
+   *
+   * Le dashboard lance six requetes par serveur — ressources,
+   * configuration, securite, journal, sauvegardes, giveaways — et rien
+   * ne les annulait. En changeant de serveur, celles du precedent
+   * continuaient leur route et peignaient leur reponse par-dessus la
+   * nouvelle : on lisait le journal d'un serveur sous le nom d'un
+   * autre. La reponse la plus lente gagnait, ce qui n'a aucun sens.
+   *
+   * A appeler APRES chaque `await`, jamais avant : c'est pendant
+   * l'attente que le serveur change.
+   */
+  function estEncoreLeServeur(guildId) {
+    return String(guildId || "") === String(selectedServer.id || "");
+  }
+
+  /**
+   * Vrai tant que la configuration du serveur ouvert n'est pas arrivee.
+   *
+   * Pendant ce temps, les champs a l'ecran portent encore les valeurs du
+   * serveur PRECEDENT. Enregistrer a cet instant les recopiait sur le
+   * nouveau — le salon de logs de l'un devenait celui de l'autre, en un
+   * clic, sans que rien ne le signale.
+   */
+  let chargementServeur = 0;
+
+  function serveurEnChargement() {
+    return chargementServeur > 0;
+  }
+
   async function loadDashboardResources(guildId) {
     if (!guildId) {
       renderDashboardResources({});
@@ -2252,8 +2302,12 @@ function initDashboard() {
     }
     try {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/resources`, { cache: "no-store" });
+      if (!estEncoreLeServeur(guildId)) return;
       renderDashboardResources(data);
     } catch (error) {
+      // Vider les listes de salons du serveur COURANT parce que celles
+      // d'un autre n'ont pas abouti n'aurait aucun sens.
+      if (!estEncoreLeServeur(guildId)) return;
       renderDashboardResources({});
     }
   }
@@ -3190,6 +3244,15 @@ function initDashboard() {
   }
 
   async function loadSelectedGuildConfig(guildId) {
+    chargementServeur += 1;
+    try {
+      await chargerConfigDuServeur(guildId);
+    } finally {
+      chargementServeur -= 1;
+    }
+  }
+
+  async function chargerConfigDuServeur(guildId) {
     // Les ressources et la configuration sont deux appels distincts :
     // l'echec de l'un ne doit pas emporter l'autre. Ils etaient dans le
     // meme `try`, et une liste de salons qui n'arrivait pas — un 429 au
@@ -3205,12 +3268,22 @@ function initDashboard() {
 
     let configChargee = false;
     let recue = null;
+    let panne = null;
     try {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/config`, { cache: "no-store" });
+      if (!estEncoreLeServeur(guildId)) return;
       recue = data?.config || null;
     } catch (error) {
-      // Le bot n'a pas repondu : c'est bien une panne de connexion.
-      showToast(t("js.configLocale"));
+      // Ce message annoncait une panne de connexion pour TOUTE erreur :
+      // un 403, un 429, un 500 du bot, tout se lisait « bot pas
+      // connecte ». On cherchait donc la panne au mauvais endroit, et
+      // la vraie raison — que le bot avait pourtant envoyee — etait
+      // jetee. Elle est desormais affichee, et journalisee.
+      if (!estEncoreLeServeur(guildId)) return;
+      panne = error;
+      console.error(`Configuration du serveur ${guildId} :`, error);
+      const raison = String(error?.message || "").trim();
+      showToast(raison ? tp("js.configEchec", { raison }) : t("js.configLocale"));
     }
 
     if (recue) {
@@ -3239,6 +3312,7 @@ function initDashboard() {
       try {
         const etat = await modbotApiFetch(`/api/guilds/${guildId}/premium`,
                                           { cache: "no-store" });
+        if (!estEncoreLeServeur(guildId)) return;
         if (etat?.premium) appliquerPremium(etat.premium);
       } catch (erreur) {
         // Injoignable des deux cotes : on ne touche a rien plutot que
@@ -3750,6 +3824,7 @@ function initDashboard() {
     if (!guildId) return;
     try {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/security`, { cache: "no-store" });
+      if (!estEncoreLeServeur(guildId)) return;
       applySecurityState(data.security);
       renderOverview();
     } catch (error) {
@@ -3800,6 +3875,7 @@ function initDashboard() {
   }
 
   async function saveGuildSecurity() {
+    if (serveurEnChargement()) return showToast(t("js.chargementEnCours"));
     const guildId = selectedServer.id;
     if (!guildId) {
       showToast(t("js.selectionneDabord"));
@@ -3975,6 +4051,7 @@ function initDashboard() {
   }
 
   async function saveWelcome() {
+    if (serveurEnChargement()) return showToast(t("js.chargementEnCours"));
     const guildId = selectedServer.id;
     if (!guildId) return showToast(t("js.selectionneDabord"));
 
@@ -4213,9 +4290,11 @@ function initDashboard() {
     if (!guildId) return;
     try {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/giveaways`, { cache: "no-store" });
+      if (!estEncoreLeServeur(guildId)) return;
       giveawayList = data.giveaways || [];
       renderGiveaways();
     } catch (error) {
+      if (!estEncoreLeServeur(guildId)) return;
       const host = document.querySelector("[data-giveaway-list]");
       if (host) {
         host.innerHTML = `
@@ -4715,8 +4794,12 @@ function initDashboard() {
     try {
       const url = `/api/guilds/${guildId}/search/${searchMode}?q=${encodeURIComponent(terme)}`;
       const data = await modbotApiFetch(url, { cache: "no-store" });
+      // Les membres d'un autre serveur, avec les boutons bannir et
+      // expulser a cote : le pire endroit pour un melange.
+      if (!estEncoreLeServeur(guildId)) return;
       renderSearchResults(searchMode === "roles" ? (data.roles || []) : (data.members || []));
     } catch (error) {
+      if (!estEncoreLeServeur(guildId)) return;
       host.innerHTML = `
         <div class="dashboard-empty-state">
           <strong>Recherche indisponible</strong>
@@ -4950,6 +5033,9 @@ function initDashboard() {
         `/api/guilds/${targetGuild}/logs?category=${encodeURIComponent(category)}&limit=150`,
         { cache: "no-store" }
       );
+      // Le journal d'un serveur affiche sous le nom d'un autre : c'est
+      // le melange le plus visible, et le plus trompeur.
+      if (!estEncoreLeServeur(targetGuild)) return;
       logCategories = Array.isArray(data.categories) ? data.categories : [];
       currentLogs = Array.isArray(data.logs) ? data.logs : [];
       currentLogCategory = category;
@@ -4957,6 +5043,7 @@ function initDashboard() {
       renderLogFeed();
       renderOverview();
     } catch (error) {
+      if (!estEncoreLeServeur(targetGuild)) return;
       const feed = document.querySelector("[data-dashboard-log-feed]");
       if (feed) {
         feed.innerHTML = `<div class="log-empty"><span></span> ${escapeHtml(error?.message || "Logs indisponibles")}</div>`;
@@ -5037,6 +5124,7 @@ function initDashboard() {
     if (!targetGuild) return;
     try {
       const data = await modbotApiFetch(`/api/guilds/${targetGuild}/backups`, { cache: "no-store" });
+      if (!estEncoreLeServeur(targetGuild)) return;
       backupList = Array.isArray(data.backups) ? data.backups : [];
       renderBackups();
       renderOverview();
@@ -5782,11 +5870,14 @@ function initDashboard() {
       return;
     }
 
+    const demande = selectedServer.id;
     let data;
     try {
       data = await modbotApiFetch(
-        `/api/guilds/${selectedServer.id}/security/score`, { cache: "no-store" });
+        `/api/guilds/${demande}/security/score`, { cache: "no-store" });
+      if (!estEncoreLeServeur(demande)) return;
     } catch (erreur) {
+      if (!estEncoreLeServeur(demande)) return;
       messageScore(t("score.indisponible"), erreur?.message || "");
       return;
     }
@@ -6294,6 +6385,10 @@ function initDashboard() {
 
   async function saveCurrentChanges(message = null) {
     message = message || t("dash.configurationEnregistree");
+    if (serveurEnChargement()) {
+      showToast(t("js.chargementEnCours"));
+      return false;
+    }
     if (!hasUnsavedChanges) {
       showToast(t("js.toutDejaEnregistre"));
       return true;

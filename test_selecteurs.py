@@ -400,7 +400,12 @@ else:
 # ══════════════════════════════════════════════════════════════════════
 print(chr(10) + "--- Changer de serveur ---")
 
-bloc = script[script.index("async function loadSelectedGuildConfig"):][:2400]
+# Le bloc s'arrete a la fonction suivante, pas a un nombre de
+# caracteres : une fenetre fixe de 2400 signes se refermait sur le
+# premier commentaire ajoute, et le test echouait sans qu'aucun code
+# n'ait change.
+bloc = script[script.index("async function chargerConfigDuServeur"):]
+bloc = bloc[:re.search(chr(10) + r"  (?:async )?function ", bloc[10:]).start()]
 
 verifier("les ressources ont leur propre try",
          bloc.count("try {") >= 3, "%d blocs try" % bloc.count("try {"))
@@ -443,7 +448,7 @@ verifier("chaque section est isolee",
          bloc_apply.count("sansCasser(") >= 8,
          "%d sections" % bloc_apply.count("sansCasser("))
 
-bloc_secours = script[script.index("async function loadSelectedGuildConfig"):][:2800]
+bloc_secours = script[script.index("async function chargerConfigDuServeur"):][:2800]
 verifier("une erreur d'affichage n'est pas dite panne du bot",
          "js.configAffichageErreur" in bloc_secours)
 verifier("et le premium est pose meme dans ce cas",
@@ -460,6 +465,68 @@ verifier("changer de serveur revient a la vue globale",
          'openPanel("overview")' in bloc_select)
 verifier("et recharge la configuration du nouveau serveur",
          "await loadSelectedGuildConfig(guildId)" in bloc_select)
+
+
+# ══════════════════════════════════════════════════════════════════════
+#  UNE REPONSE EN RETARD NE PEINT PAS L'ECRAN D'UN AUTRE SERVEUR
+#
+#  Ouvrir un serveur lance six requetes — ressources, configuration,
+#  securite, journal, sauvegardes, giveaways. Rien ne les annulait. En
+#  changeant de serveur, celles du precedent continuaient leur route et
+#  ecrivaient leur reponse par-dessus la nouvelle : on lisait le journal
+#  d'un serveur sous le nom d'un autre, et la liste des membres d'un
+#  serveur avec les boutons bannir et expulser a cote.
+#
+#  La reponse la plus LENTE gagnait. C'est le contraire de ce qu'on veut.
+# ══════════════════════════════════════════════════════════════════════
+print(chr(10) + "--- Le melange entre serveurs ---")
+
+verifier("le garde de serveur existe",
+         "function estEncoreLeServeur(" in script)
+
+for fonction in ("loadDashboardResources", "loadGuildLogs",
+                 "loadGuildBackups", "loadGuildSecurity",
+                 "loadGiveaways", "runSearch",
+                 "chargerConfigDuServeur", "chargerScoreSecurite"):
+    depart = script.index("function %s(" % fonction)
+    suite = script[depart:]
+    suivante = re.search(chr(10) + r"  (?:async )?function ", suite[10:])
+    corps = suite[:suivante.start() + 10] if suivante else suite
+    verifier("%s verifie le serveur apres l'attente" % fonction,
+             "estEncoreLeServeur(" in corps)
+    # Le garde n'a de sens qu'APRES un await : pose avant, il verifie une
+    # valeur qui n'a pas encore eu le temps de changer.
+    if "await modbotApiFetch" in corps:
+        verifier("%s ne verifie pas avant d'attendre" % fonction,
+                 corps.index("await modbotApiFetch")
+                 < corps.rindex("estEncoreLeServeur("))
+
+# Le message qui envoyait chercher la panne au mauvais endroit : « bot
+# pas connecte » s'affichait pour un 403, un 429 ou un 500 tout autant
+# que pour une vraie coupure — et la raison, que le bot avait pourtant
+# envoyee, etait jetee.
+verifier("l'echec de configuration donne sa raison",
+         "js.configEchec" in script)
+verifier("et la raison part aussi dans la console",
+         "console.error(`Configuration du serveur" in script)
+
+
+
+# On n'enregistre pas les reglages d'un serveur sur un autre : pendant
+# que la configuration du nouveau arrive, les champs a l'ecran portent
+# encore les valeurs du precedent. Un clic sur Enregistrer a cet instant
+# les recopiait.
+verifier("le chargement d'un serveur est signale",
+         "function serveurEnChargement(" in script)
+verifier("et il encadre bien le chargement",
+         "chargementServeur += 1" in script and "chargementServeur -= 1" in script)
+for enregistrement in ("saveCurrentChanges", "saveGuildSecurity", "saveWelcome"):
+    depart = script.index("function %s(" % enregistrement)
+    suite = script[depart:]
+    suivante = re.search(chr(10) + r"  (?:async )?function ", suite[10:])
+    corps = suite[:suivante.start() + 10] if suivante else suite
+    verifier("%s refuse d'ecrire pendant le chargement" % enregistrement,
+             "serveurEnChargement()" in corps)
 
 
 rates = [n for n, ok, _ in resultats if not ok]

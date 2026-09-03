@@ -206,6 +206,26 @@ def main():
              f"{len(jumelles)} texte(s) identiques entre deux langues"
              + (f" -> {jumelles[:3]}" if jumelles else ""))
 
+    # 6 bis. Deux fois la meme clef dans un meme bloc de langue.
+    #
+    #    JavaScript ne se plaint pas d'une clef repetee dans un objet :
+    #    la DERNIERE gagne, en silence. Une clef ajoutee en haut du bloc
+    #    par un correctif etait donc annulee par celle qui existait deja
+    #    plus bas — le nouveau message ne s'affichait jamais, et rien
+    #    n'expliquait pourquoi.
+    src_brut = io.open(f"{SITE}/translations.js", encoding="utf-8").read()
+    blocs_bruts = dict(re.findall(r"^  (\w+): \{(.*?)^  \},?$", src_brut,
+                                  re.S | re.M))
+    doublons = []
+    for langue, bloc in blocs_bruts.items():
+        vues = {}
+        for clef in re.findall(r'^\s*"([^"]+)":', bloc, re.M):
+            vues[clef] = vues.get(clef, 0) + 1
+        doublons += [(langue, c) for c, n in vues.items() if n > 1]
+    verifier(not doublons,
+             f"{len(doublons)} clef(s) ecrites deux fois dans un meme bloc"
+             + (f" -> {doublons[:5]}" if doublons else ""))
+
     # 7. L'arabe ne doit pas se contenter de recopier le francais.
     recopies = [c for c in reference
                 if traductions["ar"].get(c) == traductions["fr"].get(c)
