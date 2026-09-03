@@ -2168,16 +2168,20 @@ body::after {
   .hero {
     min-height: auto;
     padding: 96px 0 58px;
-    grid-template-columns: minmax(340px, 0.82fr) minmax(640px, 1.18fr);
+    /* Une seule colonne depuis que l'apercu Discord a quitte l'accueil :
+       la seconde restait ouverte, large de 680 px, et vide. */
+    grid-template-columns: minmax(0, 1fr);
     gap: 38px;
     align-items: center;
-    justify-items: stretch;
+    justify-items: center;
   }
 
   .hero-copy {
-    max-width: 520px;
-    text-align: left;
+    max-width: 62ch;
+    text-align: center;
   }
+
+  .hero-copy .hero-actions { justify-content: center; }
 
   .hero-copy .eyebrow {
     margin-bottom: 18px;
@@ -9468,6 +9472,16 @@ select {
   column-gap: 14px;
 }
 
+/* `.partner-logo` reclame la zone « logo » de la carte partenaire. Le
+   bandeau de l'accueil, lui, n'a pas de zones nommees : la grille en
+   creait une implicite, passait a deux colonnes et dispersait chaque
+   element. La reprise doit etre ecrite ici — plus haut, elle perdait
+   contre cette regle, declaree cent lignes plus bas a specificite
+   egale. */
+.partner-logo.main-partner-logo {
+  grid-area: auto;
+}
+
 .partner-logo {
   grid-area: logo;
   display: grid;
@@ -9756,3 +9770,103 @@ select {
 }
 
 .visite-barre-jour { color: var(--dim, var(--muted)); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LA COULEUR DE CHAQUE DESTINATION
+
+   La teinte suit la destination, pas le rang : les liens ne sont pas
+   dans le meme ordre d'une page a l'autre, et un :nth-child aurait
+   donne a « Wiki » la couleur de « FAQ » selon la page ou on se trouve.
+   Chaque lien porte donc son data-teinte, ecrit dans le HTML.
+
+   Au repos, toute la barre reste sobre. La couleur ne parait qu'au
+   survol, au focus clavier, et sur l'entree active : elle sert a
+   reperer, pas a decorer.
+   ═══════════════════════════════════════════════════════════════════ */
+
+[data-teinte="violet"] { --teinte: 265 85% 68%; }
+[data-teinte="cyan"]   { --teinte: 189 86% 58%; }
+[data-teinte="rose"]   { --teinte: 330 85% 66%; }
+[data-teinte="ambre"]  { --teinte: 34 92% 60%; }
+[data-teinte="menthe"] { --teinte: 162 68% 52%; }
+[data-teinte="rouge"]  { --teinte: 4 84% 64%; }
+[data-teinte="vert"]   { --teinte: 142 62% 52%; }
+[data-teinte="or"]     { --teinte: 45 93% 60%; }
+[data-teinte="acier"]  { --teinte: 213 22% 66%; }
+
+.nav-links a[data-teinte]:hover,
+.nav-links a[data-teinte]:focus-visible {
+  border-color: hsl(var(--teinte) / 0.62);
+  background: hsl(var(--teinte) / 0.14);
+  color: hsl(var(--teinte));
+}
+
+/* Dans le menu deroulant, les entrees ne sont pas des pilules : la
+   couleur y prend la forme d'un fond et d'un liseré a gauche. */
+.nav-menu-panel a[data-teinte]:hover,
+.nav-menu-panel a[data-teinte]:focus-visible {
+  background: hsl(var(--teinte) / 0.16);
+  color: hsl(var(--teinte));
+  box-shadow: inset 3px 0 0 hsl(var(--teinte));
+}
+
+.nav-menu-panel a[data-teinte]:hover .ui-icon,
+.nav-menu-panel a[data-teinte]:focus-visible .ui-icon {
+  color: hsl(var(--teinte));
+}
+
+/* Le bouton « Acces » ne se confond plus avec ses voisins : il ouvre un
+   menu au lieu de mener quelque part, et sa couleur le dit. */
+.nav-menu-trigger {
+  --teinte: 45 93% 60%;
+  border-color: hsl(var(--teinte) / 0.42);
+  color: hsl(var(--teinte));
+}
+
+.nav-menu-trigger:hover,
+.nav-menu-trigger:focus-visible,
+.nav-menu.is-open .nav-menu-trigger {
+  border-color: hsl(var(--teinte) / 0.75);
+  background: hsl(var(--teinte) / 0.16);
+  color: hsl(var(--teinte));
+}
+
+.nav-menu-trigger .ui-icon,
+.nav-menu-chevron { color: currentColor; }
+
+/* Ouvert, le menu montre ses couleurs sans qu'on ait a survoler chaque
+   ligne : c'est ce qui permet de trouver « Admin » sans le lire. */
+.nav-menu.is-open .nav-menu-panel a[data-teinte] .ui-icon {
+  color: hsl(var(--teinte));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nav-menu-panel a[data-teinte] {
+    transition: background-color 140ms var(--ease), color 140ms var(--ease),
+                box-shadow 140ms var(--ease);
+  }
+}
+
+/* L'offre en cours se reconnait sans lire le bandeau : sa carte porte
+   le liseré, et son bouton propose de prolonger plutot que de choisir. */
+.premium-offer.is-current {
+  border-color: hsl(142 62% 52% / 0.55);
+  background: linear-gradient(180deg, hsl(142 62% 52% / 0.08), transparent 70%), var(--panel);
+}
+
+.premium-offer.is-current::after {
+  content: attr(data-badge);
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: hsl(142 62% 52% / 0.18);
+  color: hsl(142 62% 62%);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.premium-offer { position: relative; }

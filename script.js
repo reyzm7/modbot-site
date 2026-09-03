@@ -425,37 +425,6 @@ function getCommandMarkup(command) {
   `;
 }
 
-function renderCommand(target, command) {
-  target.innerHTML = getCommandMarkup(command);
-}
-
-function initHeroCommands() {
-  const stage = document.getElementById("heroCommandStage");
-  const buttons = document.querySelectorAll(".command-card");
-  if (!stage || !buttons.length) return;
-
-  buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-      buttons.forEach((item) => item.classList.remove("is-active"));
-      button.classList.add("is-active");
-      renderCommand(stage, button.dataset.command);
-    });
-  });
-
-  renderCommand(stage, "panel");
-}
-
-/* Le rendu en attente, s'il y en a un.
-
-   La reponse parait 260 ms apres l'appel, pour qu'on voie le bot
-   repondre plutot que d'avoir tout d'un bloc. Mais trois appels
-   rapproches — le dessin initial, le passage de la langue, puis un clic
-   — vidaient chacun le fil avant que le premier delai ne soit echu,
-   puis y deposaient chacun leur message : trois apercus empiles pour
-   une seule commande. On annule donc le rendu precedent avant d'en
-   programmer un nouveau. */
-let renduDemoEnAttente = 0;
-
 function runDemoCommand(command) {
   const feed = document.getElementById("demoFeed");
   if (!feed) return;
@@ -7201,10 +7170,6 @@ async function initPublicStats() {
 
 // La démo de l'accueil est du HTML généré : elle se redessine elle aussi.
 document.addEventListener("modbot:language", () => {
-  const stage = document.getElementById("heroCommandStage");
-  const actifHero = document.querySelector(".command-card.is-active");
-  if (stage) renderCommand(stage, actifHero?.dataset.command || "panel");
-
   const actifDemo = document.querySelector(".demo-command.is-active");
   if (document.getElementById("demoFeed")) runDemoCommand(actifDemo?.dataset.command || "panel");
 
@@ -7222,7 +7187,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initNavigation();
   initSiteLanguage();
   initAdminZone();
-  initHeroCommands();
   initDemo();
   initAssistant();
   initRevealAnimations();
@@ -7248,8 +7212,8 @@ document.addEventListener("DOMContentLoaded", () => {
 const PREMIUM_OFFRES = [
   { key: "mensuel", labelClef: "prem.offreMensuel", price: "3,99 €",
     periodClef: "prem.parMois", saving: 0 },
-  { key: "semestriel", labelClef: "prem.offreSemestriel", price: "23,99 €",
-    periodClef: "prem.tousLes6Mois", saving: 0 },
+  { key: "semestriel", labelClef: "prem.offreSemestriel", price: "19,99 €",
+    periodClef: "prem.tousLes6Mois", saving: 16 },
   { key: "annuel", labelClef: "prem.offreAnnuel", price: "45 €",
     periodClef: "prem.parAn", saving: 6 },
 ];
@@ -7292,6 +7256,28 @@ function initPagePremium() {
     } catch (erreur) {
       return "";
     }
+  }
+
+  /**
+   * Le nom lisible de l'offre en cours.
+   *
+   * `plan` vaut la clef de l'offre pour un abonnement Stripe
+   * (« mensuel », « semestriel », « annuel ») et la duree pour un
+   * cadeau de l'equipe (« 1mois », « 6mois », « 1an ») : deux
+   * vocabulaires, une seule table de correspondance.
+   */
+  function libelleOffre(etat) {
+    const cadeaux = { "1mois": "mensuel", "6mois": "semestriel", "1an": "annuel" };
+    const clef = cadeaux[etat.plan] || etat.plan;
+    const offre = PREMIUM_OFFRES.find((o) => o.key === clef);
+    if (etat.source === "admin") {
+      return offre
+        ? tp("prem.actifCadeauNomme", { offre: t(offre.labelClef) })
+        : t("prem.actifCadeau");
+    }
+    return offre
+      ? tp("prem.actifOffre", { offre: t(offre.labelClef), prix: offre.price })
+      : t("prem.actifSansNom");
   }
 
   function carteOffre(offre, populaire) {
@@ -7371,13 +7357,32 @@ function initPagePremium() {
       bloc.classList.add("is-active");
       const titre = bloc.querySelector("[data-premium-state-title]");
       const detail = bloc.querySelector("[data-premium-state-detail]");
-      if (titre) titre.textContent = t("prem.dejaActif");
+      // Dire « ce serveur est deja premium » n'apprend rien a qui le
+      // sait deja. On nomme l'offre en cours : c'est ce qu'on vient
+      // verifier sur cette page.
+      if (titre) titre.textContent = libelleOffre(etat);
       if (detail) {
+        const echeance = new Date(etat.until);
         detail.textContent = tp("prem.jusquau", {
-          date: (etat.until || "").slice(0, 10),
+          date: Number.isNaN(echeance.getTime())
+            ? (etat.until || "").slice(0, 10)
+            : echeance.toLocaleString(undefined,
+                { dateStyle: "long", timeStyle: "short" }),
           jours: etat.days_left,
         });
       }
+      // La carte de l'offre en cours se distingue des deux autres.
+      const cadeaux = { "1mois": "mensuel", "6mois": "semestriel", "1an": "annuel" };
+      const enCours = cadeaux[etat.plan] || etat.plan;
+      document.querySelectorAll("[data-premium-buy]").forEach((bouton) => {
+        const carte = bouton.closest(".premium-offer");
+        const active = bouton.dataset.premiumBuy === enCours;
+        carte?.classList.toggle("is-current", active);
+        if (active) {
+          carte?.setAttribute("data-badge", t("prem.offreEnCours"));
+          bouton.textContent = t("prem.prolonger");
+        }
+      });
     } catch (erreur) {
       // Pas connecte, ou serveur inaccessible : la page reste utile.
     }
