@@ -382,6 +382,53 @@ else:
              not orphelines, str(orphelines))
 
 
+
+# ══════════════════════════════════════════════════════════════════════
+#  Changer de serveur ne doit rien faire perdre
+#
+#  Trois defauts constates en usage, tous silencieux :
+#
+#    * les ressources et la configuration partageaient un seul `try`.
+#      Une liste de salons qui n'arrivait pas — un 429 au moment de
+#      changer de serveur — empechait la configuration d'etre appliquee,
+#      et le premium avec : le dashboard annoncait « Reserve a ModBot
+#      Premium » sur un serveur qui l'avait ;
+#    * changer de serveur emportait les modifications non enregistrees
+#      sans rien demander, alors que changer de rubrique prevenait ;
+#    * on restait sur la rubrique de l'ancien serveur, a lire des
+#      reglages qui n'etaient plus les siens.
+# ══════════════════════════════════════════════════════════════════════
+print(chr(10) + "--- Changer de serveur ---")
+
+bloc = script[script.index("async function loadSelectedGuildConfig"):][:2400]
+
+verifier("les ressources ont leur propre try",
+         bloc.count("try {") >= 3, "%d blocs try" % bloc.count("try {"))
+verifier("un echec des ressources n'emporte pas la configuration",
+         bloc.index("await loadDashboardResources") <
+         bloc.index("const data = await modbotApiFetch"))
+verifier("l'echec des ressources est dit sans mentir",
+         "js.ressourcesIndisponibles" in bloc)
+verifier("une configuration illisible fait quand meme demander le premium",
+         "/premium`" in bloc and "appliquerPremium(etat.premium)" in bloc)
+# Le premium ne se pose que sur une reponse REELLE du bot. Un catch qui
+# appellerait appliquerPremium avec un objet vide affirmerait une perte
+# qu'on ne sait pas.
+apres_secours = bloc[bloc.index("appliquerPremium(etat.premium)"):]
+verifier("si tout echoue, on ne pretend pas que le premium a disparu",
+         "appliquerPremium(" not in apres_secours[len("appliquerPremium(etat.premium)"):])
+
+bloc_switch = script[script.index("switcherList?.addEventListener"):][:700]
+verifier("changer de serveur previent avant de perdre des reglages",
+         "runWithUnsavedGuard(() => selectGuildFromElement(item))" in bloc_switch)
+
+bloc_select = script[script.index("async function selectGuildFromElement"):][:1800]
+verifier("changer de serveur revient a la vue globale",
+         'openPanel("overview")' in bloc_select)
+verifier("et recharge la configuration du nouveau serveur",
+         "await loadSelectedGuildConfig(guildId)" in bloc_select)
+
+
 rates = [n for n, ok, _ in resultats if not ok]
 print("\n" + "=" * 62)
 print(f"RESULTAT : {len(resultats) - len(rates)}/{len(resultats)} verifications passees")

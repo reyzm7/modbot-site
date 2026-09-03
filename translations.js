@@ -21,6 +21,7 @@
 
 window.MODBOT_TRANSLATIONS = {
   fr: {
+    "js.ressourcesIndisponibles": "Liste des salons et rôles indisponible : les autres réglages restent modifiables.",
     "lic.possedeJours": "Votre offre : {offre} — {jours} jour(s) restant(s)",
     "lic.possedePlusieurs": "Vos offres : {offres}",
     "lic.offreEtJours": "{offre} ({jours} j)",
@@ -1788,6 +1789,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Télécharger",
   },
   en: {
+    "js.ressourcesIndisponibles": "Channel and role lists unavailable: the other settings stay editable.",
     "lic.possedeJours": "Your plan: {offre} — {jours} day(s) left",
     "lic.possedePlusieurs": "Your plans: {offres}",
     "lic.offreEtJours": "{offre} ({jours} d)",
@@ -3555,6 +3557,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Download",
   },
   ar: {
+    "js.ressourcesIndisponibles": "قوائم القنوات والرتب غير متاحة: تبقى بقية الإعدادات قابلة للتعديل.",
     "lic.possedeJours": "عرضك: {offre} — بقي {jours} يوم",
     "lic.possedePlusieurs": "عروضك: {offres}",
     "lic.offreEtJours": "{offre} ({jours} ي)",
@@ -5322,6 +5325,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "تنزيل",
   },
   es: {
+    "js.ressourcesIndisponibles": "Listas de canales y roles no disponibles: los demás ajustes siguen editables.",
     "lic.possedeJours": "Tu oferta: {offre} — quedan {jours} día(s)",
     "lic.possedePlusieurs": "Tus ofertas: {offres}",
     "lic.offreEtJours": "{offre} ({jours} d)",
@@ -7028,6 +7032,7 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Descargar",
   },
   de: {
+    "js.ressourcesIndisponibles": "Kanal- und Rollenlisten nicht verfügbar: Die übrigen Einstellungen bleiben änderbar.",
     "lic.possedeJours": "Dein Tarif: {offre} — noch {jours} Tag(e)",
     "lic.possedePlusieurs": "Deine Tarife: {offres}",
     "lic.offreEtJours": "{offre} ({jours} T)",

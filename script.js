@@ -3159,13 +3159,41 @@ function initDashboard() {
   }
 
   async function loadSelectedGuildConfig(guildId) {
+    // Les ressources et la configuration sont deux appels distincts :
+    // l'echec de l'un ne doit pas emporter l'autre. Ils etaient dans le
+    // meme `try`, et une liste de salons qui n'arrivait pas — un 429 au
+    // moment ou l'on change de serveur, par exemple — empechait la
+    // configuration d'etre appliquee. Le premium avec : le dashboard
+    // annoncait alors « Reserve a ModBot Premium » sur un serveur qui
+    // l'avait bel et bien.
     try {
       await loadDashboardResources(guildId);
+    } catch (erreur) {
+      showToast(t("js.ressourcesIndisponibles"));
+    }
+
+    let configChargee = false;
+    try {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/config`, { cache: "no-store" });
       applyDashboardConfig(data.config);
+      configChargee = true;
       showToast(t("js.configChargee"));
     } catch (error) {
       showToast(t("js.configLocale"));
+    }
+
+    // La configuration n'a pas pu etre lue : on demande au moins l'etat
+    // premium, qui est un appel bien plus leger. Mieux vaut un verrou
+    // juste qu'un verrou devine — dans un sens comme dans l'autre.
+    if (!configChargee) {
+      try {
+        const etat = await modbotApiFetch(`/api/guilds/${guildId}/premium`,
+                                          { cache: "no-store" });
+        if (etat?.premium) appliquerPremium(etat.premium);
+      } catch (erreur) {
+        // Injoignable des deux cotes : on ne touche a rien plutot que
+        // d'affirmer une perte de premium qu'on ne sait pas.
+      }
     }
     // Les modules sécurité / logs / sauvegardes ont leurs propres endpoints :
     // on les charge en parallèle sans bloquer l'affichage de la configuration.
@@ -3411,7 +3439,10 @@ function initDashboard() {
     const item = event.target.closest("[data-switcher-guild]");
     if (!item) return;
     closeSwitcher();
-    selectGuildFromElement(item);
+    // Changer de serveur emportait les modifications non enregistrees
+    // sans rien demander, alors que changer de rubrique, lui, prevenait.
+    // C'est pourtant le changement le plus couteux des deux.
+    runWithUnsavedGuard(() => selectGuildFromElement(item));
   });
 
   switcher?.addEventListener("keydown", (event) => {
@@ -6414,6 +6445,10 @@ function initDashboard() {
 
     setCurrentServer(nom, logo, initiales, guildId, installe);
     showDashboardStage("dashboard");
+    // Retour a la vue globale : rester sur la rubrique de l'autre
+    // serveur donnait a lire des reglages qui n'etaient plus les siens,
+    // le temps que la configuration arrive.
+    openPanel("overview");
     showToast(`${nom}`);
 
     if (guildId) {
