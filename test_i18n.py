@@ -31,8 +31,8 @@ AUTO_FERMANTES = {"img", "br", "hr", "input", "meta", "link", "source"}
 # slash du bot, les noms de plateformes.
 INTRADUISIBLE = re.compile(
     r"^(ModBot|Twitch|TikTok|Instagram|Discord|Railway|Vercel|Mistral AI"
-    r"|MyMemory|/[\w-]+.*|!\w+|APP"
-    r"|Twitch Memez94|ePro League|CPG Belge|VPG Suisse)$")
+    r"|MyMemory|Stripe|PayPal|/[\w-]+.*|!\w+|APP"
+    r"|Twitch Memez94|ePro League|CPG Belge|VPG Suisse|Darryliens / Ennes|VPG Belgique|xWS Tournament)$")
 
 erreurs = []
 succes = []
@@ -180,7 +180,33 @@ def main():
              f"{len(divergentes)} clef(s) aux substitutions divergentes"
              + (f" -> {divergentes[0]}" if divergentes else ""))
 
-    # 6. L'arabe ne doit pas se contenter de recopier le francais.
+    # 6. Deux langues ne doivent pas porter le meme texte.
+    #
+    #    Un correctif applique avec un `subn(count=1)` sur tout le
+    #    fichier retombe a chaque passe sur la premiere occurrence,
+    #    c'est-a-dire sur le francais : les cinq langues s'y ecrasaient
+    #    l'une l'autre et le bloc francais finissait par porter le texte
+    #    allemand, sans qu'aucune verification ne s'en apercoive. Deux
+    #    blocs qui disent exactement la meme phrase longue, ce n'est
+    #    jamais une traduction : c'est une copie.
+    jumelles = []
+    for clef in reference:
+        for i, une in enumerate(LANGUES):
+            for autre in LANGUES[i + 1:]:
+                a_ = traductions.get(une, {}).get(clef)
+                b_ = traductions.get(autre, {}).get(clef)
+                if not a_ or a_ != b_:
+                    continue
+                # Un nom propre, un nombre ou un mot court se disent
+                # pareil partout : « Premium », « FAQ », « 6 mois ».
+                if INTRADUISIBLE.match(a_) or len(a_) < 25:
+                    continue
+                jumelles.append((clef, une, autre))
+    verifier(not jumelles,
+             f"{len(jumelles)} texte(s) identiques entre deux langues"
+             + (f" -> {jumelles[:3]}" if jumelles else ""))
+
+    # 7. L'arabe ne doit pas se contenter de recopier le francais.
     recopies = [c for c in reference
                 if traductions["ar"].get(c) == traductions["fr"].get(c)
                 and not INTRADUISIBLE.match(traductions["fr"].get(c, ""))]

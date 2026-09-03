@@ -94,6 +94,7 @@
         <a href="#jamais" data-i18n="priv.tocJamais">Ce qui n'est pas fait</a>
         <a href="#duree" data-i18n="priv.tocDuree">Durées</a>
         <a href="#destinataires" data-i18n="priv.tocDestinataires">Destinataires</a>
+        <a href="#visites" data-i18n="priv.tocVisites">Compteur de visites</a>
         <a href="#base" data-i18n="priv.tocBase">Base légale</a>
         <a href="#droits" data-i18n="priv.tocDroits">Tes droits</a>
         <a href="#securite" data-i18n="priv.tocSecurite">Sécurité</a>
@@ -232,6 +233,11 @@
                   <td data-i18n="priv.destQuand4">Uniquement quand quelqu'un interpelle l'assistant IA</td>
                 </tr>
                 <tr>
+                  <td>Stripe</td>
+                  <td data-i18n="priv.dest5">Les informations de paiement, saisies directement chez lui : ModBot ne les voit jamais et n'en conserve rien. Seuls l'identifiant de l'abonnement et la date de fin reviennent au bot</td>
+                  <td data-i18n="priv.destQuand5">Uniquement lors d'une souscription ou d'un renouvellement premium</td>
+                </tr>
+                <tr>
                   <td data-i18n="priv.dest5nom">Google Traduction, puis MyMemory en secours</td>
                   <td data-i18n="priv.dest5">Le texte à traduire, et lui seul</td>
                   <td data-i18n="priv.destQuand5">Uniquement à l'usage de la commande de traduction</td>
@@ -240,6 +246,11 @@
             </table>
           </div>
           <p class="field-help" data-i18n="priv.destNote">Autrement dit : sans assistant IA et sans commande de traduction, rien ne sort de Discord, Railway et Vercel.</p>
+        </section>
+
+        <section id="visites" class="wiki-section">
+          <h2 data-i18n="priv.visitesTitre">Le compteur de visites</h2>
+          <p data-i18n="priv.visitesTexte">Chaque page ouverte incrémente un compteur, et rien d'autre : aucun cookie n'est déposé, aucune adresse IP n'est conservée, aucun identifiant n'est créé. Le bot sait combien de pages ont été ouvertes, jamais par qui, ni depuis où, ni dans quel ordre. Il n'y a donc rien à consentir et rien à effacer.</p>
         </section>
 
         <section id="base" class="wiki-section">

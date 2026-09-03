@@ -114,7 +114,8 @@
         <button class="admin-nav" type="button" data-admin-tab="premium" data-i18n="adm.navPremium"><span>03</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Premium</button>
         <button class="admin-nav" type="button" data-admin-tab="blacklist" data-i18n="adm.navBlacklist"><span>04</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-ban"/></svg> Blacklist bot</button>
         <button class="admin-nav" type="button" data-admin-tab="servers" data-i18n="adm.navServeurs"><span>05</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-compass"/></svg> Serveurs</button>
-        <button class="admin-nav" type="button" data-admin-tab="activity" data-i18n="adm.navLogs"><span>06</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs globaux</button>
+        <button class="admin-nav" type="button" data-admin-tab="visites" data-i18n="adm.navVisites"><span>06</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-trend"/></svg> Visites</button>
+        <button class="admin-nav" type="button" data-admin-tab="activity" data-i18n="adm.navLogs"><span>07</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs globaux</button>
       </aside>
 
       <div class="admin-main">
@@ -217,6 +218,33 @@
             <div class="admin-server-list" data-admin-server-list data-admin-sensitive>
               <p class="field-help" data-i18n="adm.serveursChargement">Chargement des serveurs…</p>
             </div>
+          </article>
+        </section>
+
+        <section class="admin-view" data-admin-panel="visites">
+          <article class="admin-panel">
+            <div class="admin-panel-head">
+              <h3 data-i18n="adm.visitesTitre"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-trend"/></svg> Fréquentation du site</h3>
+              <span class="admin-badge active" data-i18n="adm.visitesDirect">Se met à jour tout seul</span>
+            </div>
+            <p class="admin-hint" data-i18n="adm.visitesChapo">
+              Chaque page ouverte compte pour une visite. Aucun cookie, aucune adresse
+              conservée : on sait combien, jamais qui.
+            </p>
+
+            <div class="visite-chiffres">
+              <div class="visite-carte">
+                <strong data-visites-total>—</strong>
+                <span data-i18n="adm.visitesTotal">Visites au total</span>
+              </div>
+              <div class="visite-carte is-jour">
+                <strong data-visites-jour>—</strong>
+                <span data-i18n="adm.visitesJour">Visites aujourd'hui</span>
+              </div>
+            </div>
+
+            <h4 class="visite-sous-titre" data-i18n="adm.visitesHistorique">Les quatorze derniers jours</h4>
+            <div class="visite-histogramme" data-visites-historique></div>
           </article>
         </section>
 

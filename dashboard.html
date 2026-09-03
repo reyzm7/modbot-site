@@ -314,6 +314,18 @@
         <a class="primary-btn compact" href="premium.html" data-i18n="prem.verrouBouton"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Voir les offres</a>
       </div>
 
+      <!-- L'echeance du premium, en tete de toutes les rubriques : un
+           serveur a qui on l'a offert doit savoir jusqu'a quand, et que
+           ca s'arretera. -->
+      <div class="premium-banner" data-premium-banner hidden>
+        <span class="premium-banner-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-star"/></svg></span>
+        <span class="premium-banner-text">
+          <strong data-premium-banner-title></strong>
+          <small data-premium-banner-detail></small>
+        </span>
+        <span class="premium-banner-source" data-premium-banner-source hidden data-i18n="prem.offertPar">Offert par l'équipe ModBot</span>
+      </div>
+
       <section class="dash-panel is-active" data-dashboard-panel="overview">
         <div class="panel-title">
           <div>
@@ -396,7 +408,7 @@
               <textarea data-preview-desc data-i18n="dash.ticketDescriptionDefaut">Merci de sélectionner la raison de ta demande via le menu. Un membre du staff viendra rapidement te répondre.</textarea>
             </label>
             <!-- Sélecteur d'image : depuis l'appareil ou via une adresse -->
-            <div class="image-picker" data-image-picker="ticket-banner">
+            <div class="image-picker" data-image-picker="ticket-banner" data-premium-feature="images">
               <span class="image-picker-label" data-i18n="dash.banniereDuTicket">Bannière du ticket</span>
               <div class="image-picker-body">
                 <div class="image-picker-preview" data-image-preview>
@@ -416,7 +428,7 @@
               </details>
             </div>
 
-            <div class="image-picker" data-image-picker="ticket-logo">
+            <div class="image-picker" data-image-picker="ticket-logo" data-premium-feature="images">
               <span class="image-picker-label" data-i18n="dash.logoDuTicket">Logo du ticket</span>
               <div class="image-picker-body">
                 <div class="image-picker-preview is-square" data-image-preview>
@@ -472,10 +484,10 @@
             <button type="button" class="primary-btn compact" data-add-ticket-option data-i18n="dash.ajouter"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Ajouter</button>
           </div>
           <div class="option-list" id="ticketOptionList">
-            <div class="option-row"><span>01</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Support technique"><input data-option-desc value="Problème technique, bug ou aide"><button type="button" data-option-remove data-i18n="dash.supprimer">Supprimer</button></div>
-            <div class="option-row"><span>02</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Question"><input data-option-desc value="Poser une question au staff"><button type="button" data-option-remove data-i18n="dash.supprimer2">Supprimer</button></div>
-            <div class="option-row"><span>03</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Déban"><input data-option-desc value="Contester un bannissement"><button type="button" data-option-remove data-i18n="dash.supprimer3">Supprimer</button></div>
-            <div class="option-row"><span>04</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Administration"><input data-option-desc value="Demande administrative"><button type="button" data-option-remove data-i18n="dash.supprimer4">Supprimer</button></div>
+            <div class="option-row"><span>01</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick" data-premium-feature="images"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Support technique"><input data-option-desc value="Problème technique, bug ou aide"><button type="button" data-option-remove data-i18n="dash.supprimer">Supprimer</button></div>
+            <div class="option-row"><span>02</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick" data-premium-feature="images"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Question"><input data-option-desc value="Poser une question au staff"><button type="button" data-option-remove data-i18n="dash.supprimer2">Supprimer</button></div>
+            <div class="option-row"><span>03</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick" data-premium-feature="images"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Déban"><input data-option-desc value="Contester un bannissement"><button type="button" data-option-remove data-i18n="dash.supprimer3">Supprimer</button></div>
+            <div class="option-row"><span>04</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick" data-premium-feature="images"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Administration"><input data-option-desc value="Demande administrative"><button type="button" data-option-remove data-i18n="dash.supprimer4">Supprimer</button></div>
           </div>
         </div>
       </section>
@@ -792,7 +804,7 @@
             <strong data-i18n="welcome.onLeave"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-door"/></svg> Message de départ</strong>
             <small data-i18n="welcome.onLeaveHelp">Publié quand quelqu'un quitte le serveur.</small>
           </label>
-          <label class="toggle-line">
+          <label class="toggle-line" data-premium-feature="dm">
             <input type="checkbox" data-welcome-dm-enabled><span></span>
             <strong data-i18n="welcome.dm"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-mail"/></svg> Message privé</strong>
             <small data-i18n="welcome.dmHelp">Envoyé directement au nouveau membre.</small>
@@ -841,10 +853,10 @@
             </label>
 
             <div class="dashboard-grid two">
-              <label class="mini-form"><span data-i18n="welcome.color">Couleur de l'embed</span>
+              <label class="mini-form" data-premium-feature="embed_colors"><span data-i18n="welcome.color">Couleur de l'embed</span>
                 <input type="color" data-welcome-color value="#5865F2">
               </label>
-              <div class="mini-form image-picker">
+              <div class="mini-form image-picker" data-premium-feature="images">
                 <span data-i18n="welcome.image">Image de la carte</span>
                 <!-- Le fichier ne part jamais tel quel : il est redimensionne
                      et recompresse dans le navigateur, puis range en data:

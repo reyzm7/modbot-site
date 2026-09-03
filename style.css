@@ -202,7 +202,6 @@ button {
 
 .nav-links a:hover {
   color: var(--text);
-  transform: translateY(-1px);
 }
 
 .nav-action-btn {
@@ -5647,9 +5646,8 @@ p { color: var(--soft); }
 }
 
 .nav-links a {
-  color: var(--muted);
+  color: var(--soft);
   font-size: 0.92rem;
-  font-weight: 500;
   transition: color 150ms ease;
 }
 .nav-links a:hover { color: var(--text); }
@@ -9135,12 +9133,25 @@ select {
    de la page et un filet gris. Le violet plein est reserve aux appels a
    l'action dans le corps des pages, ou il ne fait pas concurrence a la
    navigation. */
-/* `.nav-links a` (0-1-1) l'emporterait sur `.nav-cta` (0-1-0) et
-   rendrait la graisse du bouton differente de celle de son voisin. */
+/* Toute la barre est faite de pilules : les ancres de navigation, le
+   bouton Discord et le menu « Acces » se ressemblent parce qu'ils font
+   la meme chose — mener quelque part. Rien n'y crie plus fort que le
+   reste, et l'oeil n'a plus a trier deux familles de formes.
+
+   Le selecteur passe par `.nav-links a` (0-1-1) : la regle de couleur
+   des liens, ecrite plus haut avec cette meme specificite, gagnerait
+   sinon sur un simple `.nav-cta` (0-1-0). */
+.nav-links a,
 .nav-links a.nav-cta,
 .nav-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 40px;
-  padding: 9px 16px;
+  /* La hauteur vient de min-height, pas d'un rembourrage vertical :
+     sinon chaque bouton la calculait a sa facon et « Acces » depassait
+     ses voisins de quatre pixels. */
+  padding: 0 16px;
   border: 1px solid var(--line-strong);
   border-radius: 999px;
   background: var(--panel);
@@ -9152,6 +9163,7 @@ select {
   transition: border-color 160ms ease, background-color 160ms ease;
 }
 
+.nav-links a:hover,
 .nav-cta:hover,
 .nav-menu-trigger:hover,
 .nav-menu.is-open .nav-menu-trigger {
@@ -9162,15 +9174,7 @@ select {
 }
 
 .nav-menu-trigger {
-  display: inline-flex;
-  align-items: center;
   gap: 8px;
-  padding: 9px 14px;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  background: var(--panel);
-  color: var(--text);
-  font-weight: 750;
   cursor: pointer;
 }
 
@@ -9560,3 +9564,195 @@ select {
 .partners-page .section-heading {
   margin-bottom: 18px;
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   L'ECHEANCE DU PREMIUM, ET LES CHAMPS QU'IL OUVRE
+   ═══════════════════════════════════════════════════════════════════ */
+
+.premium-banner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding: 14px 18px;
+  border: 1px solid rgba(241, 196, 15, 0.34);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(241, 196, 15, 0.09), transparent 80%), var(--panel);
+}
+
+.premium-banner-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(241, 196, 15, 0.16);
+  color: #f1c40f;
+}
+
+.premium-banner-text strong {
+  display: block;
+  color: #f7d354;
+  font-size: 0.98rem;
+}
+
+.premium-banner-text small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.premium-banner-source {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(241, 196, 15, 0.14);
+  color: #f7d354;
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Un champ premium pose au milieu d'une rubrique gratuite. Il se lit,
+   il ne se regle pas : le griser sans le desactiver laissait croire
+   qu'on pouvait, et le bot refusait ensuite en silence. */
+.is-premium-locked {
+  position: relative;
+  opacity: 0.5;
+  filter: grayscale(0.4);
+}
+
+.is-premium-locked input,
+.is-premium-locked select,
+.is-premium-locked textarea,
+.is-premium-locked button {
+  cursor: not-allowed;
+}
+
+.premium-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(241, 196, 15, 0.18);
+  color: #f7d354;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  filter: none;
+}
+
+@media (max-width: 640px) {
+  .premium-banner {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .premium-banner-source { grid-column: 1 / -1; justify-self: start; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LES VISITES
+   Deux chiffres et quatorze barres. Pas de camembert, pas de courbe
+   lissee : on compare des jours entre eux, une barre par jour suffit.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.visite-chiffres {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin: 18px 0 26px;
+}
+
+.visite-carte {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.visite-carte.is-jour {
+  border-color: var(--accent-line);
+  background: linear-gradient(180deg, rgba(139, 92, 246, 0.09), transparent 70%), var(--panel);
+}
+
+.visite-carte strong {
+  display: block;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.visite-carte span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+/* Le chiffre qui vient de bouger s'annonce une fois, brievement : c'est
+   ce qui distingue un compteur vivant d'une capture d'ecran. */
+.vient-de-changer {
+  animation: visite-pulse 620ms ease;
+}
+
+@keyframes visite-pulse {
+  0%   { color: var(--accent); transform: scale(1.06); }
+  100% { color: inherit; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vient-de-changer { animation: none; }
+}
+
+.visite-sous-titre {
+  margin: 0 0 12px;
+  color: var(--soft);
+  font-size: 0.92rem;
+}
+
+.visite-histogramme {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  align-items: end;
+  gap: 6px;
+  min-height: 150px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  overflow-x: auto;
+}
+
+.visite-barre {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-items: end;
+  justify-items: center;
+  gap: 5px;
+  height: 100%;
+  min-width: 28px;
+}
+
+.visite-barre i {
+  display: block;
+  width: 100%;
+  max-width: 26px;
+  height: var(--part, 4%);
+  border-radius: 4px 4px 2px 2px;
+  background: linear-gradient(180deg, var(--purple-2), rgba(139, 92, 246, 0.35));
+}
+
+.visite-barre-valeur,
+.visite-barre-jour {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.visite-barre-jour { color: var(--dim, var(--muted)); }

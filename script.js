@@ -1213,6 +1213,7 @@ function initAdminZone() {
   function openAdminPanel(panelName) {
     adminTabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.adminTab === panelName));
     adminPanels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.adminPanel === panelName));
+    suivreVisites(panelName === "visites");
   }
 
   function formatStat(value) {
@@ -1515,6 +1516,73 @@ function initAdminZone() {
      La duree s'AJOUTE a ce que le serveur a deja : c'est le bot qui
      s'en charge, mais le texte du panneau le dit pour qu'on ne croie
      pas ecraser un abonnement en cours. */
+
+  /* ══════════════════════════════════════════════════════════════
+     LES VISITES DU SITE
+
+     Le compteur se relit tout seul tant que la rubrique est ouverte, et
+     s'arrete des qu'on la quitte : une console laissee ouverte toute la
+     nuit n'a pas a interroger le bot toutes les cinq secondes pour
+     personne.
+     ══════════════════════════════════════════════════════════════ */
+
+  const VISITES_INTERVALLE = 5000;
+  let visitesMinuteur = 0;
+
+  async function chargerVisites() {
+    const total = document.querySelector("[data-visites-total]");
+    const jour = document.querySelector("[data-visites-jour]");
+    const histo = document.querySelector("[data-visites-historique]");
+    if (!total || !jour) return;
+
+    let data;
+    try {
+      data = await modbotApiFetch("/api/admin/visites", { cache: "no-store" });
+    } catch (erreur) {
+      total.textContent = "—";
+      jour.textContent = "—";
+      if (histo) {
+        histo.innerHTML =
+          `<p class="admin-hint">${escapeHtmlValue(t("adm.visitesIndisponible"))}</p>`;
+      }
+      return;
+    }
+
+    // On n'ecrit que si le chiffre a bouge : reecrire le meme texte
+    // relancerait l'animation a chaque battement.
+    const nouveauTotal = formatStat(data.total);
+    if (total.textContent !== nouveauTotal) {
+      total.textContent = nouveauTotal;
+      total.classList.remove("vient-de-changer");
+      void total.offsetWidth;
+      total.classList.add("vient-de-changer");
+    }
+    jour.textContent = formatStat(data.aujourdhui);
+
+    if (histo) {
+      const jours = Array.isArray(data.historique) ? data.historique : [];
+      const sommet = Math.max(1, ...jours.map((j) => Number(j.visites) || 0));
+      histo.innerHTML = jours.map((entree) => {
+        const nombre = Number(entree.visites) || 0;
+        const hauteur = Math.max(3, Math.round((nombre / sommet) * 100));
+        const etiquette = String(entree.jour || "").slice(5);
+        return `<span class="visite-barre" style="--part:${hauteur}%"
+                      title="${escapeHtmlValue(etiquette)} — ${escapeHtmlValue(String(nombre))}">
+                  <span class="visite-barre-valeur">${escapeHtmlValue(String(nombre))}</span>
+                  <i></i>
+                  <span class="visite-barre-jour">${escapeHtmlValue(etiquette)}</span>
+                </span>`;
+      }).join("");
+    }
+  }
+
+  function suivreVisites(actif) {
+    window.clearInterval(visitesMinuteur);
+    visitesMinuteur = 0;
+    if (!actif) return;
+    chargerVisites();
+    visitesMinuteur = window.setInterval(chargerVisites, VISITES_INTERVALLE);
+  }
 
   async function chargerPremiumAdmin() {
     const liste = document.querySelector("[data-premium-list]");
@@ -4557,7 +4625,7 @@ function initDashboard() {
     host.innerHTML = logCategories
       .map(
         (category) => `
-      <label class="toggle-line compact">
+      <label class="toggle-line compact"${category.premium ? ' data-premium-feature="logs_complets"' : ""}>
         <input type="checkbox" data-log-toggle="${escapeHtml(category.id)}"
                ${enabledMap[category.id] !== false ? "checked" : ""}>
         <span></span>
@@ -4571,6 +4639,8 @@ function initDashboard() {
         markPanelDirty("logs");
       });
     });
+    // Les cases viennent d'etre redessinees : le verrou doit repasser.
+    majCadenas();
   }
 
   function collectLogToggles() {
@@ -4989,7 +5059,7 @@ function initDashboard() {
       <span>${String(numero).padStart(2, "0")}</span>
       <input class="emoji-input" data-option-emoji value="${escapeHtml(option.emoji || "")}"
              maxlength="3" placeholder="${escapeHtml(t("js.emoji"))}">
-      <span class="option-image-pick">
+      <span class="option-image-pick" data-premium-feature="images">
         <input type="hidden" data-option-image value="${escapeHtml(image)}">
         <img class="option-thumb" data-option-thumb alt=""${image ? ` src="${escapeHtml(image)}"` : " hidden"}>
         <button type="button" class="secondary-btn compact" data-option-image-pick>
@@ -5240,6 +5310,88 @@ function initDashboard() {
         onglet?.classList.toggle("is-locked", !libre);
         verrouillerPanneau(section, !libre);
       });
+
+    // Les champs premium loges dans une rubrique gratuite : la couleur
+    // de l'embed, les images, le message prive, les categories de
+    // journal au-dela des cinq de base. Le panneau reste ouvert, le
+    // champ non — sinon on reglait une chose que le bot refuserait
+    // ensuite d'appliquer, sans que rien ne le dise.
+    document.querySelectorAll("[data-premium-feature]:not([data-dashboard-panel])")
+      .forEach((bloc) => {
+        const clef = bloc.dataset.premiumFeature;
+        const libre = premiumEtat.active || (premiumEtat.features || {})[clef] === true;
+        verrouillerChamp(bloc, !libre);
+      });
+
+    majBandeauPremium();
+  }
+
+  /**
+   * Un champ premium isole dans une rubrique gratuite.
+   *
+   * Meme regle que pour un panneau entier : on desactive, et on ne
+   * reactive que ce que le verrou avait ferme. La pastille dit
+   * pourquoi, faute de place pour un bandeau.
+   */
+  function verrouillerChamp(bloc, ferme) {
+    bloc.classList.toggle("is-premium-locked", ferme);
+    if (ferme && !bloc.querySelector(":scope > .premium-tag")) {
+      const marque = document.createElement("span");
+      marque.className = "premium-tag";
+      marque.textContent = t("prem.verrouChamp");
+      bloc.appendChild(marque);
+    } else if (!ferme) {
+      bloc.querySelector(":scope > .premium-tag")?.remove();
+    }
+    bloc.querySelectorAll("input, select, textarea, button").forEach((champ) => {
+      if (ferme) {
+        if (champ.disabled) return;
+        champ.dataset.verrouPremium = "1";
+        champ.disabled = true;
+      } else if (champ.dataset.verrouPremium === "1") {
+        delete champ.dataset.verrouPremium;
+        champ.disabled = false;
+      }
+    });
+  }
+
+  /**
+   * Le bandeau d'echeance, en tete du dashboard.
+   *
+   * Quand un administrateur offre le premium, le serveur doit savoir
+   * jusqu'a quand il en profite — et que ca s'arretera. Le dire apres
+   * coup, quand les fonctionnalites se referment, serait une mauvaise
+   * surprise.
+   */
+  function majBandeauPremium() {
+    const bandeau = document.querySelector("[data-premium-banner]");
+    if (!bandeau) return;
+    const actif = Boolean(premiumEtat.active) && Boolean(premiumEtat.until);
+    bandeau.hidden = !actif;
+    if (!actif) return;
+
+    const echeance = new Date(premiumEtat.until);
+    const lisible = Number.isNaN(echeance.getTime())
+      ? String(premiumEtat.until).slice(0, 16).replace("T", " ")
+      : echeance.toLocaleString(undefined, {
+          dateStyle: "long", timeStyle: "short",
+        });
+
+    const titre = bandeau.querySelector("[data-premium-banner-title]");
+    const detail = bandeau.querySelector("[data-premium-banner-detail]");
+    const source = bandeau.querySelector("[data-premium-banner-source]");
+    if (titre) titre.textContent = tp("prem.jusquAu", { date: lisible });
+    if (detail) {
+      detail.textContent = tp("prem.jusquAuDetail", {
+        jours: Number(premiumEtat.days_left ?? 0),
+      });
+    }
+    // Un premium offert par l'equipe n'est pas un abonnement paye : le
+    // dire evite qu'on aille chercher un prelevement qui n'existe pas.
+    if (source) {
+      source.hidden = premiumEtat.source !== "admin";
+    }
+    bandeau.classList.toggle("is-cadeau", premiumEtat.source === "admin");
   }
 
   /**
@@ -7094,12 +7246,12 @@ document.addEventListener("DOMContentLoaded", () => {
    deux choses : dire si le paiement est ouvert, et dire ou en est
    l'abonnement du serveur choisi. */
 const PREMIUM_OFFRES = [
-  { key: "mensuel", labelClef: "prem.offreMensuel", price: "2,99 €",
+  { key: "mensuel", labelClef: "prem.offreMensuel", price: "3,99 €",
     periodClef: "prem.parMois", saving: 0 },
-  { key: "semestriel", labelClef: "prem.offreSemestriel", price: "13,99 €",
-    periodClef: "prem.tousLes6Mois", saving: 22 },
-  { key: "annuel", labelClef: "prem.offreAnnuel", price: "35 €",
-    periodClef: "prem.parAn", saving: 2 },
+  { key: "semestriel", labelClef: "prem.offreSemestriel", price: "23,99 €",
+    periodClef: "prem.tousLes6Mois", saving: 0 },
+  { key: "annuel", labelClef: "prem.offreAnnuel", price: "45 €",
+    periodClef: "prem.parAn", saving: 6 },
 ];
 
 /* Chaque fonctionnalite a un titre court pour la grille, et un texte qui
@@ -7423,3 +7575,32 @@ document.addEventListener("modbot:language", () => {
 });
 
 initLogosPartenaires();
+
+/* ══════════════════════════════════════════════════════════════════
+   COMPTER LA VISITE
+   Une page ouverte, une visite. Rien n'est envoye d'autre que le fait
+   qu'une page a ete ouverte : pas de cookie, pas d'identifiant, pas de
+   chemin. Le bot ne peut donc rien reconstituer de qui que ce soit.
+
+   La console d'administration ne compte pas ses propres allees et
+   venues : elle regarde le compteur, elle ne doit pas le gonfler.
+   ══════════════════════════════════════════════════════════════════ */
+
+(function compterLaVisite() {
+  if (document.body.classList.contains("admin-page")) return;
+  try {
+    // `keepalive` pour que l'appel survive a une navigation immediate,
+    // et aucune attente : si le bot dort, la page n'en souffre pas.
+    const base = getModbotApiBase();
+    if (!base) return;
+    fetch(`${base}/api/public/visite`, {
+      method: "POST",
+      keepalive: true,
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    }).catch(() => {});
+  } catch (erreur) {
+    // Aucune importance : un compteur n'a jamais empeche un site de
+    // s'afficher.
+  }
+})();
