@@ -7444,6 +7444,17 @@ label,
   border: 1px solid var(--line-strong);
 }
 
+/* Archive : range, pas efface. La carte s'efface davantage que
+   « terminee » sans disparaitre — on doit pouvoir la relire. */
+.giveaway-card.is-archived { opacity: 0.55; }
+.giveaway-card.is-archived:hover { opacity: 0.85; }
+
+.giveaway-state.is-archived {
+  background: rgba(120, 130, 150, 0.12);
+  color: var(--muted);
+  border: 1px dashed var(--line-strong);
+}
+
 .giveaway-conditions,
 .giveaway-winners {
   margin: 0 0 10px;

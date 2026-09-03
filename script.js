@@ -4238,24 +4238,42 @@ function initDashboard() {
     return `${m} min`;
   }
 
+  // Voit-on les archives ? Un reglage d'affichage, propre a la page :
+  // il n'a rien a faire dans la configuration du serveur.
+  let archivesVisibles = false;
+
   function renderGiveaways() {
     const host = document.querySelector("[data-giveaway-list]");
     const compteur = document.querySelector("[data-giveaway-count]");
     if (!host) return;
 
-    const enCours = giveawayList.filter((g) => !g.ended).length;
+    // Un giveaway termine reste a l'ecran jusqu'a ce qu'on l'archive :
+    // c'est le moment ou l'on relit les gagnants et ou l'on relance. Il
+    // ne disparait que sur un geste explicite, jamais tout seul.
+    const archives = giveawayList.filter((g) => g.archived);
+    const visibles = archivesVisibles ? giveawayList : giveawayList.filter((g) => !g.archived);
+
+    const enCours = giveawayList.filter((g) => !g.ended && !g.archived).length;
     if (compteur) compteur.textContent = giveawayList.length ? tp("js.nEnCours", { n: enCours }) : "";
 
-    if (!giveawayList.length) {
+    const bascule = document.querySelector("[data-giveaway-archives]");
+    if (bascule) {
+      bascule.hidden = !archives.length;
+      bascule.textContent = tp(
+        archivesVisibles ? "js.gw.masquerArchives" : "js.gw.voirArchives",
+        { n: archives.length });
+    }
+
+    if (!visibles.length) {
       host.innerHTML = `
         <div class="dashboard-empty-state">
-          <strong>${escapeHtml(t("gw.emptyTitle"))}</strong>
-          <span>${t("gw.emptyText")}</span>
+          <strong>${escapeHtml(t(giveawayList.length ? "js.gw.toutArchive" : "gw.emptyTitle"))}</strong>
+          <span>${giveawayList.length ? escapeHtml(t("js.gw.toutArchiveAide")) : t("gw.emptyText")}</span>
         </div>`;
       return;
     }
 
-    host.innerHTML = giveawayList.map((g) => {
+    host.innerHTML = visibles.map((g) => {
       const conditions = [];
       const req = g.requirements || {};
       if (req.role_id) conditions.push(t("js.condRoleRequis"));
@@ -4267,7 +4285,7 @@ function initDashboard() {
         : "";
 
       return `
-        <article class="giveaway-card ${g.ended ? "is-ended" : ""}" data-giveaway-id="${escapeHtml(g.id)}">
+        <article class="giveaway-card ${g.ended ? "is-ended" : ""}${g.archived ? " is-archived" : ""}" data-giveaway-id="${escapeHtml(g.id)}">
           <div class="giveaway-head">
             <div>
               <h3>${escapeHtml(g.prize || "Giveaway")}</h3>
@@ -4277,18 +4295,20 @@ function initDashboard() {
                 ${g.winners} · ${g.participants}
               </p>
             </div>
-            <span class="giveaway-state ${g.ended ? "is-ended" : "is-live"}">
-              ${escapeHtml(t(g.ended ? "js.termineMaj" : "js.enCours"))}
+            <span class="giveaway-state ${g.archived ? "is-archived" : (g.ended ? "is-ended" : "is-live")}">
+              ${escapeHtml(t(g.archived ? "js.gw.archive" : (g.ended ? "js.termineMaj" : "js.enCours")))}
             </span>
           </div>
           ${conditions.length ? `<p class="giveaway-conditions">${escapeHtml(conditions.join(" · "))}</p>` : ""}
           ${gagnants}
           <div class="search-actions">
-            ${g.url ? `<a class="secondary-btn compact" href="${escapeHtml(g.url)}" target="_blank" rel="noreferrer">Voir</a>` : ""}
-            ${!g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-edit>Modifier</button>` : ""}
-            ${!g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-end>Terminer</button>` : ""}
-            ${g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-reroll>Relancer</button>` : ""}
-            <button class="secondary-btn compact danger" type="button" data-giveaway-delete>Supprimer</button>
+            ${g.url ? `<a class="secondary-btn compact" href="${escapeHtml(g.url)}" target="_blank" rel="noreferrer">${escapeHtml(t("js.gw.voir"))}</a>` : ""}
+            ${!g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-edit>${escapeHtml(t("js.gw.modifier"))}</button>` : ""}
+            ${!g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-end>${escapeHtml(t("js.gw.terminer"))}</button>` : ""}
+            ${g.ended && !g.archived ? `<button class="secondary-btn compact" type="button" data-giveaway-reroll>${escapeHtml(t("js.gw.relancer"))}</button>` : ""}
+            ${g.ended && !g.archived ? `<button class="secondary-btn compact" type="button" data-giveaway-archive>${escapeHtml(t("js.gw.archiver"))}</button>` : ""}
+            ${g.archived ? `<button class="secondary-btn compact" type="button" data-giveaway-unarchive>${escapeHtml(t("js.gw.desarchiver"))}</button>` : ""}
+            <button class="secondary-btn compact danger" type="button" data-giveaway-delete>${escapeHtml(t("js.gw.supprimer"))}</button>
           </div>
         </article>`;
     }).join("");
@@ -4298,6 +4318,8 @@ function initDashboard() {
       carte.querySelector("[data-giveaway-edit]")?.addEventListener("click", () => openGiveawayForm(id));
       carte.querySelector("[data-giveaway-end]")?.addEventListener("click", () => giveawayAction(id, "end"));
       carte.querySelector("[data-giveaway-reroll]")?.addEventListener("click", () => giveawayAction(id, "reroll"));
+      carte.querySelector("[data-giveaway-archive]")?.addEventListener("click", () => giveawayAction(id, "archive"));
+      carte.querySelector("[data-giveaway-unarchive]")?.addEventListener("click", () => giveawayAction(id, "unarchive"));
       carte.querySelector("[data-giveaway-delete]")?.addEventListener("click", () => deleteGiveaway(id, carte));
     });
   }
@@ -4424,7 +4446,13 @@ function initDashboard() {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/giveaways/${id}/action`, {
         method: "POST", body: JSON.stringify({ action })
       });
-      showToast(`${data.result || t("js.actionAppliquee")}`);
+      // Le bot repond en francais : pour les deux actions dont le
+      // resultat n'apprend rien de plus qu'un accuse de reception, on
+      // prefere la phrase traduite.
+      const traduits = { archive: "js.gw.archiveFait", unarchive: "js.gw.desarchiveFait" };
+      showToast(traduits[action]
+        ? t(traduits[action])
+        : `${data.result || t("js.actionAppliquee")}`);
       loadGiveaways();
     } catch (error) {
       showToast(`${error?.message || t("js.actionRefusee")}`);
@@ -4436,7 +4464,7 @@ function initDashboard() {
     const bouton = carte.querySelector("[data-giveaway-delete]");
     if (bouton && !bouton.dataset.confirming) {
       bouton.dataset.confirming = "1";
-      bouton.textContent = "Confirmer";
+      bouton.textContent = t("js.confirmer");
       bouton.classList.add("is-confirming");
       setTimeout(() => {
         if (!bouton.isConnected) return;
@@ -4461,7 +4489,12 @@ function initDashboard() {
     if (!document.querySelector("[data-dashboard-panel='giveaways']")) return;
     document.querySelector("[data-giveaway-new]")?.addEventListener("click", () => openGiveawayForm());
     document.querySelector("[data-giveaway-cancel]")?.addEventListener("click", closeGiveawayForm);
-    document.querySelector("[data-giveaway-reload]")?.addEventListener("click", loadGiveaways);
+    document.querySelector("[data-giveaway-archives]")?.addEventListener("click", () => {
+    archivesVisibles = !archivesVisibles;
+    renderGiveaways();
+  });
+
+  document.querySelector("[data-giveaway-reload]")?.addEventListener("click", loadGiveaways);
     document.querySelector("[data-giveaway-form]")?.addEventListener("submit", submitGiveaway);
   }
 
@@ -5425,8 +5458,9 @@ function initDashboard() {
     const image = option.image || "";
     return `<div class="option-row">
       <span>${String(numero).padStart(2, "0")}</span>
-      <input class="emoji-input" data-option-emoji value="${escapeHtml(option.emoji || "")}"
-             maxlength="3" placeholder="${escapeHtml(t("js.emoji"))}">
+      <input class="emoji-input" data-option-emoji value="${escapeHtml(image ? "" : (option.emoji || ""))}"
+             maxlength="3" placeholder="${escapeHtml(t(image ? "js.optionImagePosee" : "js.emoji"))}"
+             ${image ? "disabled" : ""}>
       <span class="option-image-pick" data-premium-feature="images">
         <input type="hidden" data-option-image value="${escapeHtml(image)}">
         <img class="option-thumb" data-option-thumb alt=""${image ? ` src="${escapeHtml(image)}"` : " hidden"}>
@@ -5532,6 +5566,23 @@ function initDashboard() {
     return null;
   }
 
+  /**
+   * Une option de ticket affiche UN symbole : un emoji ou une image.
+   *
+   * Discord n'en pose qu'un seul sur un bouton comme sur une entree de
+   * menu. Laisser saisir les deux ne donnait pas le choix a l'auteur du
+   * panneau : ca le lui retirait, puisque seul l'un des deux
+   * apparaissait, sans dire lequel.
+   */
+  function accorderEmojiEtImage(ligne) {
+    const champEmoji = ligne.querySelector("[data-option-emoji]");
+    const image = ligne.querySelector("[data-option-image]")?.value.trim() || "";
+    if (!champEmoji) return;
+    champEmoji.disabled = Boolean(image);
+    champEmoji.placeholder = t(image ? "js.optionImagePosee" : "js.emoji");
+    if (image) champEmoji.value = "";
+  }
+
   function initImagesTicket() {
     const liste = document.getElementById("ticketOptionList");
     const fichier = document.querySelector("[data-option-image-file]");
@@ -5553,6 +5604,7 @@ function initDashboard() {
         vignette.hidden = true;
         vignette.removeAttribute("src");
         retirer.hidden = true;
+        accorderEmojiEtImage(ligne);
         markPanelDirty("tickets");
       }
     });
@@ -5581,6 +5633,7 @@ function initDashboard() {
         vignette.src = reduit;
         vignette.hidden = false;
         ligne.querySelector("[data-option-image-clear]").hidden = false;
+        accorderEmojiEtImage(ligne);
         markPanelDirty("tickets");
         showToast(t("js.image.prete"));
       } catch (erreur) {
@@ -6207,12 +6260,18 @@ function initDashboard() {
     // Le libellé est facultatif depuis que le bot sait publier le panneau
     // en boutons : une option qui porte une image ou un emoji se passe de
     // texte. On n'invente donc plus « Ticket » à sa place.
-    const ticketOptions = Array.from(document.querySelectorAll("#ticketOptionList .option-row")).map((row) => ({
-      emoji: row.querySelector("[data-option-emoji]")?.value.trim() || "",
-      image: row.querySelector("[data-option-image]")?.value.trim() || "",
-      label: row.querySelector("[data-option-label]")?.value.trim() || "",
-      desc: row.querySelector("[data-option-desc]")?.value.trim() || "",
-    }));
+    const ticketOptions = Array.from(document.querySelectorAll("#ticketOptionList .option-row")).map((row) => {
+      const image = row.querySelector("[data-option-image]")?.value.trim() || "";
+      return {
+        // Une image l'emporte : envoyer les deux laisserait le bot
+        // trancher a notre place, et l'ecran ne montrerait pas ce que le
+        // panneau publie.
+        emoji: image ? "" : (row.querySelector("[data-option-emoji]")?.value.trim() || ""),
+        image,
+        label: row.querySelector("[data-option-label]")?.value.trim() || "",
+        desc: row.querySelector("[data-option-desc]")?.value.trim() || "",
+      };
+    });
     const salonSysteme = (clef) =>
       document.querySelector(`[data-channel="${clef}"]`)?.value || "";
     const socialRelays = Array.from(document.querySelectorAll(".social-card")).map((card) => ({
@@ -6857,13 +6916,48 @@ function initDashboard() {
     { token: "{platform}", label: "js.varPlateformeSociale" },
     { token: "{title}", label: "js.varTitrePublication" },
     { token: "{link}", label: "js.varLienPublication" },
+    { token: "{description}", label: "js.varDescriptionPublication" },
+    { token: "{server}", label: "js.varServeur" },
+    { token: "{kind}", label: "js.varTypePublication" },
+    { token: "{date}", label: "js.varDatePublication" },
+    // Twitch seulement : sur les autres reseaux elles restent vides, et
+    // la ligne qui ne contient qu'elles disparait a l'envoi.
+    { token: "{game}", label: "js.varJeu", twitch: true },
+    { token: "{viewers}", label: "js.varSpectateurs", twitch: true },
   ];
+
+  /**
+   * Le message propose pour chaque reseau.
+   *
+   * Le meme texte partout n'avait aucun sens : « est en live » sous une
+   * photo Instagram est simplement faux. Ces valeurs doivent rester
+   * identiques a MESSAGES_DEFAUT dans reseaux_sociaux.py — c'est le bot
+   * qui les applique quand le champ est laisse vide.
+   */
+  const SOCIAL_MESSAGES_DEFAUT = {
+    "Twitter/X": "{account} vient de poster sur X 🐦\n{link}",
+    TikTok: "Nouvelle vidéo TikTok de {account} 🎵\n{link}",
+    Instagram: "{account} a publié sur Instagram 📸\n{link}",
+    Twitch: "🔴 {account} est en live : {title}\nOn joue à {game} — {link}",
+    YouTube: "Nouvelle vidéo de {account} ▶️\n{title}\n{link}",
+  };
 
   function initSocialVariables() {
     document.querySelectorAll("[data-social-variables]").forEach((host) => {
-      const zone = host.closest(".social-card")?.querySelector("[data-social-message]");
+      const carte = host.closest(".social-card");
+      const zone = carte?.querySelector("[data-social-message]");
       if (!zone) return;
-      host.innerHTML = SOCIAL_VARIABLES.map((v) => (
+      const reseau = carte.dataset.socialPlatform || "";
+      // Le message propose apparait en filigrane : le champ reste vide,
+      // et un champ vide vaut « prends celui de la plateforme ». Ecrire
+      // le texte dedans obligerait a l'effacer pour revenir au defaut.
+      const propose = SOCIAL_MESSAGES_DEFAUT[reseau];
+      if (propose) zone.placeholder = propose;
+      // {jeu} et {spectateurs} n'ont de sens que sur Twitch : les
+      // proposer ailleurs revient a proposer du vide.
+      const utiles = SOCIAL_VARIABLES.filter(
+        (v) => !v.twitch || reseau.toLowerCase().includes("twitch"));
+      host.innerHTML = utiles.map((v) => (
         `<button type="button" class="variable-chip" data-variable="${escapeHtml(v.token)}"
                  title="${escapeHtml(t(v.label))}">${escapeHtml(v.token)}</button>`
       )).join("");
