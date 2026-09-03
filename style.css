@@ -9892,3 +9892,125 @@ select {
   .stats-attente .stats-big strong,
   .stats-attente .stat-card strong { animation: none; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   L'ACTIVATION D'UNE LICENCE
+   Un seul bouton, large, qui ne parait que s'il y a vraiment une place
+   a poser. Il doit se voir avant la liste des serveurs — c'est la
+   premiere chose a faire apres un achat.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.licence-cta { margin: 0 0 18px; }
+
+.licence-cta-button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  border: 1px solid hsl(45 93% 60% / 0.42);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, hsl(45 93% 60% / 0.14), hsl(45 93% 60% / 0.04));
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms var(--ease), background-color 160ms var(--ease);
+}
+
+.licence-cta-button:hover,
+.licence-cta-button:focus-visible {
+  border-color: hsl(45 93% 60% / 0.8);
+  background: linear-gradient(135deg, hsl(45 93% 60% / 0.2), hsl(45 93% 60% / 0.07));
+}
+
+.licence-cta-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: hsl(45 93% 60% / 0.18);
+  color: #f7d354;
+}
+
+.licence-cta-texte strong {
+  display: block;
+  font-size: 1.08rem;
+  color: #f7d354;
+}
+
+.licence-cta-texte small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+}
+
+.licence-cta-fleche { color: #f7d354; }
+
+.licence-choix-tete {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.licence-choix-tete strong { display: block; font-size: 1.05rem; }
+.licence-choix-tete small { display: block; margin-top: 2px; color: var(--muted); }
+
+.licence-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.licence-carte {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-areas: "logo nom" "logo action";
+  align-items: center;
+  gap: 2px 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms var(--ease), background-color 160ms var(--ease);
+}
+
+.licence-carte:hover,
+.licence-carte:focus-visible {
+  border-color: hsl(142 62% 52% / 0.6);
+  background: var(--panel-strong);
+}
+
+.licence-carte-logo {
+  grid-area: logo;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(139, 92, 246, 0.14);
+  font-weight: 800;
+}
+
+.licence-carte-logo img { width: 100%; height: 100%; object-fit: cover; }
+.licence-carte-nom { grid-area: nom; font-weight: 700; }
+.licence-carte-action {
+  grid-area: action;
+  color: hsl(142 62% 62%);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+@media (max-width: 560px) {
+  .licence-cta-button { grid-template-columns: auto minmax(0, 1fr); }
+  .licence-cta-fleche { display: none; }
+}

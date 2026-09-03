@@ -129,6 +129,31 @@
         </div>
       </div>
 
+      <!-- Le grand bouton d'activation. Il n'apparait QUE si un achat
+           est detecte et qu'il reste une place a poser : proposer une
+           activation sans licence serait une promesse en l'air. -->
+      <div class="licence-cta" data-licence-cta hidden>
+        <button class="licence-cta-button" type="button" data-licence-open>
+          <span class="licence-cta-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span>
+          <span class="licence-cta-texte">
+            <strong data-i18n="lic.ctaTitre">Activation Premium</strong>
+            <small data-licence-cta-detail></small>
+          </span>
+          <span class="licence-cta-fleche" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg></span>
+        </button>
+      </div>
+
+      <div class="licence-choix" data-licence-choix hidden>
+        <div class="licence-choix-tete">
+          <div>
+            <strong data-licence-choix-titre></strong>
+            <small data-i18n="lic.choixAide">Une place posée vaut jusqu'à l'échéance et ne se déplace pas.</small>
+          </div>
+          <button class="secondary-btn compact" type="button" data-licence-cancel data-i18n="lic.retour"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-arrow-left"/></svg> Revenir en arrière</button>
+        </div>
+        <div class="licence-grid" data-licence-grid></div>
+      </div>
+
       <div class="server-select-toolbar">
         <label class="server-search">
           <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-search"/></svg></span>

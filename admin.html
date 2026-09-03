@@ -171,6 +171,10 @@
               <span class="admin-badge active" data-i18n="adm.premiumBadge">Journalisé</span>
             </div>
             <div class="admin-action-row split">
+              <select data-premium-target>
+                <option value="guild" data-i18n="adm.premiumCibleServeur">À un serveur</option>
+                <option value="user" data-i18n="adm.premiumCibleUtilisateur">À un utilisateur</option>
+              </select>
               <input type="text" inputmode="numeric" data-premium-guild
                      placeholder="Identifiant du serveur"
                      data-i18n-placeholder="adm.premiumServeur">
@@ -183,7 +187,7 @@
             </div>
             <div class="inline-hint">
               <strong data-i18n="adm.premiumAide">Ce que fait ce bouton</strong>
-              <p data-i18n="adm.premiumAideTexte">La durée s'ajoute à ce que le serveur a déjà : offrir 6 mois à un serveur abonné pour 1 mois donne 7 mois, pas 6. Chaque cadeau est inscrit au journal du serveur et au journal d'administration, avec son auteur.</p>
+              <p data-i18n="adm.premiumAideTexte">À un serveur, la durée s'ajoute à ce qu'il a déjà : offrir 6 mois à un serveur abonné pour 1 mois donne 7 mois, pas 6. À un utilisateur, c'est une licence avec ses places — 1 mois ouvre 1 serveur, 6 mois en ouvrent 3, 1 an en ouvre 5 — qu'il pose lui-même depuis son dashboard. Chaque cadeau est inscrit au journal, avec son auteur.</p>
             </div>
             <div class="admin-list" data-premium-list data-admin-sensitive>
               <div><span><strong data-i18n="adm.chargement">Chargement…</strong></span></div>

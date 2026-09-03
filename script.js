@@ -1575,23 +1575,42 @@ function initAdminZone() {
     }
   }
 
+  // Le champ ne demande pas la meme chose selon la cible : le dire
+  // evite de coller un identifiant de serveur dans un champ qui attend
+  // une personne.
+  document.querySelector("[data-premium-target]")?.addEventListener("change", (evenement) => {
+    const champ = document.querySelector("[data-premium-guild]");
+    if (!champ) return;
+    champ.placeholder = evenement.target.value === "user"
+      ? t("js.adm.premiumIdUtilisateur")
+      : t("js.adm.premiumIdServeur");
+    champ.value = "";
+  });
+
   document.querySelector("[data-premium-grant]")?.addEventListener("click", async () => {
     const champ = document.querySelector("[data-premium-guild]");
     const duree = document.querySelector("[data-premium-duration]")?.value || "1mois";
-    const gid = (champ?.value || "").trim();
-    if (!/^\d{17,20}$/.test(gid)) {
+    const cible = document.querySelector("[data-premium-target]")?.value || "guild";
+    const id = (champ?.value || "").trim();
+    // Un identifiant Discord fait 17 a 20 chiffres, serveur ou personne :
+    // le bot revalide, ce controle evite seulement un aller-retour.
+    if (!/^\d{17,20}$/.test(id)) {
       showAdminToast(t("js.adm.premiumIdInvalide"));
       return;
     }
-    if (!window.confirm(tp("js.adm.premiumConfirmer", { id: gid, duree }))) return;
+    if (!window.confirm(tp("js.adm.premiumConfirmer", { id, duree }))) return;
     try {
       const data = await modbotApiFetch("/api/admin/premium", {
         method: "POST",
-        body: JSON.stringify({ guild_id: gid, duration: duree }),
+        body: JSON.stringify(cible === "user"
+          ? { target: "user", user_id: id, duration: duree }
+          : { target: "guild", guild_id: id, duration: duree }),
       });
       if (champ) champ.value = "";
-      showAdminToast(tp("js.adm.premiumOffert", {
-        nom: data?.guild_name || gid, duree }));
+      showAdminToast(cible === "user"
+        ? tp("js.adm.premiumOffertUtilisateur", {
+            id, places: data?.licence?.places ?? 1, duree })
+        : tp("js.adm.premiumOffert", { nom: data?.guild_name || id, duree }));
       chargerPremiumAdmin();
     } catch (erreur) {
       showAdminToast(erreur?.message || t("js.adm.premiumEchec"));
@@ -2361,7 +2380,150 @@ function initDashboard() {
     });
     dashboardGuilds = normalizeDashboardGuilds(brut);
     renderGuildChoices(dashboardGuilds);
+    // Les licences arrivent avec les serveurs : le bouton d'activation
+    // se decide a partir des deux.
+    chargerLicences();
     return dashboardGuilds;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     L'ACTIVATION D'UNE LICENCE PREMIUM
+
+     Ce qu'on achete est une licence : une echeance et un nombre de
+     places, qui appartiennent a l'acheteur. Le grand bouton n'apparait
+     que s'il reste une place a poser — sans achat detecte, il n'y a
+     rien a proposer, donc rien a afficher.
+
+     Une place posee ne se reprend pas. On le dit AVANT le choix, pas
+     apres : c'est le genre de decision qu'on ne veut pas decouvrir
+     irreversible une fois prise.
+     ══════════════════════════════════════════════════════════════ */
+
+  let mesLicences = { licences: [], places_libres: 0, serveurs_actives: [], noms: {} };
+
+  async function chargerLicences() {
+    try {
+      mesLicences = await modbotApiFetch("/api/me/licences", { cache: "no-store" });
+    } catch (erreur) {
+      // Pas connecte, ou bot injoignable : aucun bouton, et c'est la
+      // bonne reponse — mieux vaut rien qu'un bouton qui echoue.
+      mesLicences = { licences: [], places_libres: 0, serveurs_actives: [], noms: {} };
+    }
+    majBoutonLicence();
+    return mesLicences;
+  }
+
+  function majBoutonLicence() {
+    const bloc = document.querySelector("[data-licence-cta]");
+    if (!bloc) return;
+    const libres = Number(mesLicences.places_libres || 0);
+    bloc.hidden = libres <= 0;
+    if (libres <= 0) {
+      fermerChoixLicence();
+      return;
+    }
+    const detail = bloc.querySelector("[data-licence-cta-detail]");
+    if (detail) {
+      detail.textContent = tn("lic.ctaDetailUne", "lic.ctaDetailPlusieurs",
+                              libres, { places: libres });
+    }
+  }
+
+  /** La licence qui a encore de la place, la plus proche de l'echeance. */
+  function licenceAPoser() {
+    return (mesLicences.licences || [])
+      .filter((licence) => Number(licence.free || 0) > 0)
+      .sort((a, b) => String(a.until).localeCompare(String(b.until)))[0] || null;
+  }
+
+  function fermerChoixLicence() {
+    const choix = document.querySelector("[data-licence-choix]");
+    const grille = document.querySelector(".server-grid");
+    const barre = document.querySelector(".server-select-toolbar");
+    if (choix) choix.hidden = true;
+    if (grille) grille.hidden = false;
+    if (barre) barre.hidden = false;
+  }
+
+  function ouvrirChoixLicence() {
+    const licence = licenceAPoser();
+    const choix = document.querySelector("[data-licence-choix]");
+    const grille = document.querySelector(".server-grid");
+    const barre = document.querySelector(".server-select-toolbar");
+    if (!licence || !choix) return;
+
+    const titre = choix.querySelector("[data-licence-choix-titre]");
+    if (titre) {
+      const offre = PREMIUM_OFFRES.find((o) => o.key === licence.plan);
+      titre.textContent = tp("lic.choixTitre", {
+        offre: offre ? t(offre.labelClef) : licence.plan,
+        places: licence.free,
+      });
+    }
+
+    const hote = choix.querySelector("[data-licence-grid]");
+    const deja = new Set(mesLicences.serveurs_actives || []);
+    const candidats = dashboardGuilds.filter((g) => !deja.has(String(g.id)));
+
+    if (hote) {
+      hote.innerHTML = candidats.length
+        ? candidats.map((guild) => `
+            <button class="licence-carte" type="button"
+                    data-licence-activer="${escapeHtml(guild.id)}">
+              <span class="licence-carte-logo">${
+                guild.icon
+                  ? `<img src="${escapeHtml(guild.icon)}" alt="">`
+                  : escapeHtml(initialsFromName(guild.name))
+              }</span>
+              <span class="licence-carte-nom">${escapeHtml(guild.name)}</span>
+              <span class="licence-carte-action">${escapeHtml(t("lic.activerIci"))}</span>
+            </button>`).join("")
+        : `<div class="dashboard-empty-state">
+             <strong>${escapeHtml(t("lic.aucunServeur"))}</strong>
+             <span>${escapeHtml(t("lic.aucunServeurAide"))}</span>
+           </div>`;
+    }
+
+    choix.hidden = false;
+    if (grille) grille.hidden = true;
+    if (barre) barre.hidden = true;
+  }
+
+  async function activerLicenceSur(gid) {
+    const licence = licenceAPoser();
+    if (!licence) return;
+    const serveur = dashboardGuilds.find((g) => String(g.id) === String(gid));
+    // On demande confirmation : la place ne se reprend pas.
+    const nom = serveur?.name || gid;
+    if (!window.confirm(tp("lic.confirmer", { serveur: nom }))) return;
+
+    try {
+      const data = await modbotApiFetch("/api/me/licences/activer", {
+        method: "POST",
+        body: JSON.stringify({ licence_id: licence.id, guild_id: String(gid) }),
+      });
+      showToast(tp("lic.active", { serveur: nom }));
+      // On relit plutot que de deviner : le serveur peut avoir eu mieux
+      // que cette licence, et c'est le bot qui tranche.
+      await chargerLicences();
+      if (data?.premium) appliquerPremium(data.premium);
+      if (mesLicences.places_libres > 0) ouvrirChoixLicence();
+      else fermerChoixLicence();
+    } catch (erreur) {
+      showToast(erreur?.message || t("lic.echec"));
+    }
+  }
+
+  function initActivationLicence() {
+    document.querySelector("[data-licence-open]")
+      ?.addEventListener("click", ouvrirChoixLicence);
+    document.querySelector("[data-licence-cancel]")
+      ?.addEventListener("click", fermerChoixLicence);
+    document.querySelector("[data-licence-grid]")
+      ?.addEventListener("click", (evenement) => {
+        const carte = evenement.target.closest("[data-licence-activer]");
+        if (carte) activerLicenceSur(carte.dataset.licenceActiver);
+      });
   }
 
   /** Envoie l'utilisateur vers Discord pour autoriser ModBot. */
@@ -5634,6 +5796,7 @@ function initDashboard() {
 
   initVoicePanel();
   initEventsPanel();
+  initActivationLicence();
 
   function collectDashboardConfig() {
     // Le libellé est facultatif depuis que le bot sait publier le panneau
@@ -7120,36 +7283,7 @@ function initPagePremium() {
   const hoteFonctions = document.querySelector("[data-premium-features]");
   if (!hoteOffres && !hoteFonctions) return;
 
-  /** Le serveur choisi dans le dashboard, s'il y en a un. */
-  function serveurChoisi() {
-    try {
-      return localStorage.getItem("modbot-selected-guild") || "";
-    } catch (erreur) {
-      return "";
-    }
-  }
 
-  /**
-   * Le nom lisible de l'offre en cours.
-   *
-   * `plan` vaut la clef de l'offre pour un abonnement Stripe
-   * (« mensuel », « semestriel », « annuel ») et la duree pour un
-   * cadeau de l'equipe (« 1mois », « 6mois », « 1an ») : deux
-   * vocabulaires, une seule table de correspondance.
-   */
-  function libelleOffre(etat) {
-    const cadeaux = { "1mois": "mensuel", "6mois": "semestriel", "1an": "annuel" };
-    const clef = cadeaux[etat.plan] || etat.plan;
-    const offre = PREMIUM_OFFRES.find((o) => o.key === clef);
-    if (etat.source === "admin") {
-      return offre
-        ? tp("prem.actifCadeauNomme", { offre: t(offre.labelClef) })
-        : t("prem.actifCadeau");
-    }
-    return offre
-      ? tp("prem.actifOffre", { offre: t(offre.labelClef), prix: offre.price })
-      : t("prem.actifSansNom");
-  }
 
   function carteOffre(offre, populaire) {
     const economie = offre.saving
@@ -7195,16 +7329,17 @@ function initPagePremium() {
   }
 
   async function acheter(plan) {
-    const guildId = serveurChoisi();
-    if (!guildId) {
-      // Sans serveur choisi, le paiement n'aurait pas de destinataire :
-      // mieux vaut renvoyer au dashboard que d'encaisser dans le vide.
-      showToast(t("prem.choisirServeur"));
+    // On achete pour SOI, plus pour un serveur : il n'y a donc plus de
+    // serveur a choisir avant de payer. La seule condition est d'etre
+    // connecte — c'est ce compte qui recevra la licence, et lui seul
+    // decidera ensuite ou poser ses places.
+    if (!getModbotSessionToken()) {
+      showToast(t("lic.connecteToi"));
       setTimeout(() => { location.href = "dashboard.html"; }, 1600);
       return;
     }
     try {
-      const data = await modbotApiFetch(`/api/guilds/${guildId}/premium/checkout`, {
+      const data = await modbotApiFetch("/api/premium/checkout", {
         method: "POST",
         body: JSON.stringify({ plan }),
       });
@@ -7215,48 +7350,57 @@ function initPagePremium() {
     }
   }
 
+  /**
+   * Ce que la personne connectee possede, pas ce qu'un serveur a recu.
+   *
+   * Cette page parlait de l'etat premium d'un serveur choisi ailleurs :
+   * elle annoncait « Premium offert — equivalent 6 mois, actif jusqu'au
+   * … » a quelqu'un venu regarder les tarifs. Depuis que l'achat
+   * appartient a l'acheteur, ce qui compte ici est ce qu'il a en main :
+   * combien de places, et combien il lui en reste a poser.
+   */
   async function afficherEtat() {
     const bloc = document.querySelector("[data-premium-state]");
-    const guildId = serveurChoisi();
-    if (!bloc || !guildId) return;
+    if (!bloc) return;
+    let data;
     try {
-      const data = await modbotApiFetch(`/api/guilds/${guildId}/premium`,
-                                        { cache: "no-store" });
-      const etat = data?.premium || {};
-      if (!etat.active) return;
-      bloc.hidden = false;
-      bloc.classList.add("is-active");
-      const titre = bloc.querySelector("[data-premium-state-title]");
-      const detail = bloc.querySelector("[data-premium-state-detail]");
-      // Dire « ce serveur est deja premium » n'apprend rien a qui le
-      // sait deja. On nomme l'offre en cours : c'est ce qu'on vient
-      // verifier sur cette page.
-      if (titre) titre.textContent = libelleOffre(etat);
-      if (detail) {
-        const echeance = new Date(etat.until);
-        detail.textContent = tp("prem.jusquau", {
-          date: Number.isNaN(echeance.getTime())
-            ? (etat.until || "").slice(0, 10)
-            : echeance.toLocaleString(undefined,
-                { dateStyle: "long", timeStyle: "short" }),
-          jours: etat.days_left,
-        });
-      }
-      // La carte de l'offre en cours se distingue des deux autres.
-      const cadeaux = { "1mois": "mensuel", "6mois": "semestriel", "1an": "annuel" };
-      const enCours = cadeaux[etat.plan] || etat.plan;
-      document.querySelectorAll("[data-premium-buy]").forEach((bouton) => {
-        const carte = bouton.closest(".premium-offer");
-        const active = bouton.dataset.premiumBuy === enCours;
-        carte?.classList.toggle("is-current", active);
-        if (active) {
-          carte?.setAttribute("data-badge", t("prem.offreEnCours"));
-          bouton.textContent = t("prem.prolonger");
-        }
-      });
+      data = await modbotApiFetch("/api/me/licences", { cache: "no-store" });
     } catch (erreur) {
-      // Pas connecte, ou serveur inaccessible : la page reste utile.
+      return;  // Pas connecte : la page reste une page de tarifs.
     }
+    const licences = data?.licences || [];
+    if (!licences.length) return;
+
+    bloc.hidden = false;
+    bloc.classList.add("is-active");
+    const titre = bloc.querySelector("[data-premium-state-title]");
+    const detail = bloc.querySelector("[data-premium-state-detail]");
+    const libres = Number(data.places_libres || 0);
+
+    if (titre) {
+      const noms = licences.map((licence) => {
+        const offre = PREMIUM_OFFRES.find((o) => o.key === licence.plan);
+        return offre ? t(offre.labelClef) : licence.plan;
+      });
+      titre.textContent = tp("lic.possede", { offres: noms.join(", ") });
+    }
+    if (detail) {
+      detail.textContent = libres > 0
+        ? tn("lic.resteUne", "lic.restePlusieurs", libres, { places: libres })
+        : t("lic.toutPose");
+    }
+
+    // La carte d'une offre deja possedee se distingue des autres.
+    const possedees = new Set(licences.map((licence) => licence.plan));
+    document.querySelectorAll("[data-premium-buy]").forEach((bouton) => {
+      const carte = bouton.closest(".premium-offer");
+      const active = possedees.has(bouton.dataset.premiumBuy);
+      carte?.classList.toggle("is-current", active);
+      if (active) {
+        carte?.setAttribute("data-badge", t("prem.offreEnCours"));
+        bouton.textContent = t("prem.prolonger");
+      }
+    });
   }
 
   /**
