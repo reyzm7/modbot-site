@@ -287,6 +287,7 @@
       <button class="dash-nav is-active" type="button" data-dashboard-tab="overview" data-i18n="dash.navVueGlobale"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg></span>Vue globale</button>
 
       <p class="sidebar-label" data-i18n="dash.protection">Protection</p>
+      <button class="dash-nav" type="button" data-dashboard-tab="score" data-i18n="dash.navScore"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg></span>Score de sécurité</button>
       <button class="dash-nav" type="button" data-dashboard-tab="security" data-i18n="dash.navSecurite"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg></span>Sécurité</button>
       <button class="dash-nav" type="button" data-dashboard-tab="moderation" data-i18n="dash.navModeration"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg></span>Modération</button>
       <button class="dash-nav" type="button" data-dashboard-tab="verification"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg></span><span data-i18n="nav.verification">Vérification</span></button>
@@ -514,6 +515,44 @@
             <div class="option-row"><span>02</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick" data-premium-feature="images"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Question"><input data-option-desc value="Poser une question au staff"><button type="button" data-option-remove data-i18n="dash.supprimer2">Supprimer</button></div>
             <div class="option-row"><span>03</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick" data-premium-feature="images"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Déban"><input data-option-desc value="Contester un bannissement"><button type="button" data-option-remove data-i18n="dash.supprimer3">Supprimer</button></div>
             <div class="option-row"><span>04</span><input class="emoji-input" data-option-emoji value="" maxlength="3" data-i18n-placeholder="dash.optionEmoji" placeholder="Emoji"><span class="option-image-pick" data-premium-feature="images"><input type="hidden" data-option-image value=""><img class="option-thumb" data-option-thumb alt="" hidden><button type="button" class="secondary-btn compact" data-option-image-pick data-i18n="dash.optionImageChoisir"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-image"/></svg> Image</button><button type="button" class="secondary-btn compact" data-option-image-clear hidden data-i18n="dash.optionImageRetirer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button></span><input data-option-label value="Administration"><input data-option-desc value="Demande administrative"><button type="button" data-option-remove data-i18n="dash.supprimer4">Supprimer</button></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="score" data-premium-feature="security_score">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="score.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg> Diagnostic</p>
+            <h2 data-i18n="score.title">Score de sécurité</h2>
+          </div>
+          <div class="panel-title-actions">
+            <button class="secondary-btn compact" type="button" data-score-refresh data-i18n="score.recalculer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg> Recalculer</button>
+          </div>
+        </div>
+
+        <p class="field-help" data-i18n="score.intro">
+          Une note sur cent, calculée sur vos réglages réels — les nôtres comme ceux
+          de Discord. Aucun point n'est donné au bénéfice du doute : ce qui n'est pas
+          constaté ne compte pas.
+        </p>
+
+        <div class="score-tete">
+          <div class="score-jauge" data-score-jauge>
+            <strong data-score-valeur>—</strong>
+            <small data-i18n="score.sur100">sur 100</small>
+          </div>
+          <div class="score-resume">
+            <strong data-score-rang>—</strong>
+            <p data-score-conseil-general></p>
+          </div>
+        </div>
+
+        <div class="score-familles" data-score-familles></div>
+
+        <h3 class="score-sous-titre" data-i18n="score.actionsTitre">À faire, du plus utile au moins urgent</h3>
+        <div class="score-conseils" data-score-conseils>
+          <div class="dashboard-empty-state">
+            <strong data-i18n="score.chargement">Calcul en cours…</strong>
           </div>
         </div>
       </section>
@@ -1420,7 +1459,7 @@
         </div>
       </section>
 
-      <section class="dash-panel" data-dashboard-panel="recurring">
+      <section class="dash-panel" data-dashboard-panel="recurring" data-premium-feature="recurring">
         <div class="panel-title">
           <div>
             <p class="eyebrow" data-i18n="rec.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-timer"/></svg> Automatisation</p>

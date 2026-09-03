@@ -1557,11 +1557,34 @@ function initAdminZone() {
         } else {
           details.push(escapeHtmlValue(t("js.adm.premiumExpire")));
         }
+        // « Litige » ne s'affiche que pour un serveur ouvert par une
+        // licence : sur un cadeau direct, il n'y a aucune place a
+        // rendre, et le bouton ne ferait qu'echouer.
+        const litige = ligne.active && ligne.licence
+          ? `<button type="button" class="secondary-btn compact" data-premium-litige="${escapeHtmlValue(ligne.guild_id)}">${escapeHtmlValue(t("js.adm.premiumLitige"))}</button>`
+          : "";
         const bouton = ligne.active
-          ? `<button type="button" class="danger-btn" data-premium-revoke="${escapeHtmlValue(ligne.guild_id)}">${escapeHtmlValue(t("js.adm.premiumRetirer"))}</button>`
+          ? `${litige}<button type="button" class="danger-btn" data-premium-revoke="${escapeHtmlValue(ligne.guild_id)}">${escapeHtmlValue(t("js.adm.premiumRetirer"))}</button>`
           : "";
         return `<div><span><strong>${escapeHtmlValue(nom)}</strong><small>${details.join(" \u2014 ")}</small></span>${bouton}</div>`;
       }).join("") || `<div><span><strong>${escapeHtmlValue(t("js.adm.premiumAucun"))}</strong></span></div>`;
+
+      liste.querySelectorAll("[data-premium-litige]").forEach((bouton) => {
+        bouton.addEventListener("click", async () => {
+          const gid = bouton.dataset.premiumLitige;
+          if (!window.confirm(tp("js.adm.premiumLitigeConfirmer", { id: gid }))) return;
+          try {
+            const data = await modbotApiFetch(
+              `/api/admin/premium/${encodeURIComponent(gid)}/litige`,
+              { method: "POST" });
+            showAdminToast(tp("js.adm.premiumLitigeFait", {
+              places: data?.licence?.free ?? 1 }));
+            chargerPremiumAdmin();
+          } catch (erreur) {
+            showAdminToast(erreur?.message || t("js.adm.premiumEchec"));
+          }
+        });
+      });
 
       liste.querySelectorAll("[data-premium-revoke]").forEach((bouton) => {
         bouton.addEventListener("click", async () => {
@@ -5628,6 +5651,102 @@ function initDashboard() {
     };
   }
 
+  /* ══════════════════════════════════════════════════════════════
+     LE SCORE DE SECURITE
+
+     La note vient du bot, qui l'a calculee sur des reglages qu'il est
+     alle lire. Le navigateur ne calcule rien : il affiche, et il trie
+     les conseils du plus rentable au moins urgent — le tri vient du
+     bot lui aussi, on le respecte.
+     ══════════════════════════════════════════════════════════════ */
+
+  const SCORE_TEINTES = {
+    excellent: "142 62% 52%",
+    solide: "162 68% 52%",
+    perfectible: "34 92% 60%",
+    fragile: "4 84% 64%",
+  };
+
+  async function chargerScoreSecurite() {
+    const valeur = document.querySelector("[data-score-valeur]");
+    const conseils = document.querySelector("[data-score-conseils]");
+    if (!valeur || !selectedServer.id) return;
+
+    let data;
+    try {
+      data = await modbotApiFetch(
+        `/api/guilds/${selectedServer.id}/security/score`, { cache: "no-store" });
+    } catch (erreur) {
+      valeur.textContent = "—";
+      if (conseils) {
+        conseils.innerHTML = `<div class="dashboard-empty-state">
+          <strong>${escapeHtml(t("score.indisponible"))}</strong>
+          <span>${escapeHtml(erreur?.message || "")}</span></div>`;
+      }
+      return;
+    }
+
+    const score = data?.score || {};
+    peindreScore(score);
+  }
+
+  function peindreScore(score) {
+    const jauge = document.querySelector("[data-score-jauge]");
+    const valeur = document.querySelector("[data-score-valeur]");
+    const rang = document.querySelector("[data-score-rang]");
+    const general = document.querySelector("[data-score-conseil-general]");
+    const familles = document.querySelector("[data-score-familles]");
+    const conseils = document.querySelector("[data-score-conseils]");
+
+    const note = Number(score.score || 0);
+    const clef = score.rang?.clef || "fragile";
+    if (valeur) valeur.textContent = String(note);
+    if (jauge) {
+      jauge.style.setProperty("--teinte", SCORE_TEINTES[clef] || SCORE_TEINTES.fragile);
+      jauge.style.setProperty("--part", `${note}%`);
+    }
+    if (rang) rang.textContent = score.rang?.libelle || "";
+    if (general) general.textContent = score.rang?.resume || "";
+
+    if (familles) {
+      familles.innerHTML = (score.familles || []).map((famille) => `
+        <div class="score-famille">
+          <strong>${escapeHtml(famille.libelle)}</strong>
+          <span class="score-barre"><i style="--part:${Number(famille.score) || 0}%"></i></span>
+          <small>${escapeHtml(String(famille.obtenus))} / ${escapeHtml(String(famille.total))}</small>
+        </div>`).join("");
+    }
+
+    if (conseils) {
+      const liste = score.conseils || [];
+      conseils.innerHTML = liste.length
+        ? liste.map((conseil) => `
+            <div class="score-conseil">
+              <span class="score-gain">+${escapeHtml(String(conseil.gain))}</span>
+              <span class="score-conseil-texte">
+                <strong>${escapeHtml(conseil.titre)}</strong>
+                <small>${escapeHtml(conseil.conseil)}</small>
+              </span>
+            </div>`).join("")
+        : `<div class="dashboard-empty-state">
+             <strong>${escapeHtml(t("score.rienAFaire"))}</strong>
+             <span>${escapeHtml(t("score.rienAFaireAide"))}</span>
+           </div>`;
+    }
+  }
+
+  function initScorePanel() {
+    const panneau = document.querySelector("[data-dashboard-panel='score']");
+    if (!panneau) return;
+    document.querySelector("[data-score-refresh]")
+      ?.addEventListener("click", chargerScoreSecurite);
+    // On calcule a l'ouverture de la rubrique, pas au chargement du
+    // dashboard : c'est un diagnostic, il doit etre frais quand on le
+    // regarde, pas quand on est arrive.
+    document.querySelector("[data-dashboard-tab='score']")
+      ?.addEventListener("click", chargerScoreSecurite);
+  }
+
   function initVoicePanel() {
     const hote = document.querySelector("[data-voice-variables]");
     const champ = document.querySelector("[data-voice-name]");
@@ -5876,6 +5995,7 @@ function initDashboard() {
   initVoicePanel();
   initEventsPanel();
   initActivationLicence();
+  initScorePanel();
 
   function collectDashboardConfig() {
     // Le libellé est facultatif depuis que le bot sait publier le panneau
