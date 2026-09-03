@@ -9870,3 +9870,25 @@ select {
 }
 
 .premium-offer { position: relative; }
+
+/* Le grand chiffre est peint en degrade sur texte transparent. Un tiret
+   d'attente y devenait un rectangle bleu plein, qu'on prenait pour une
+   image cassee. Pendant l'attente, on rend au texte sa couleur. */
+.stats-attente .stats-big strong,
+.stats-attente .stat-card strong {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--muted);
+  opacity: 0.55;
+  animation: stats-attente-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes stats-attente-pulse {
+  0%, 100% { opacity: 0.32; }
+  50%      { opacity: 0.62; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stats-attente .stats-big strong,
+  .stats-attente .stat-card strong { animation: none; }
+}

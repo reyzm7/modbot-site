@@ -425,6 +425,16 @@ function getCommandMarkup(command) {
   `;
 }
 
+/* Le rendu en attente, s'il y en a un.
+
+   La reponse parait 260 ms apres l'appel, pour qu'on voie le bot
+   repondre plutot que d'avoir tout d'un bloc. Mais trois appels
+   rapproches — le dessin initial, le passage de la langue, puis un clic
+   — vidaient chacun le fil avant que le premier delai ne soit echu,
+   puis y deposaient chacun leur message. On annule donc le rendu
+   precedent avant d'en programmer un nouveau. */
+let renduDemoEnAttente = 0;
+
 function runDemoCommand(command) {
   const feed = document.getElementById("demoFeed");
   if (!feed) return;
@@ -801,14 +811,6 @@ function localeAffichage() {
   return langue === "ar" ? "ar-u-nu-latn" : langue;
 }
 
-/** Formate une date ISO dans la langue du site. Renvoie "—" si invalide. */
-function formatIsoDateFr(value) {
-  if (!value) return "—";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleDateString(localeAffichage(), { day: "2-digit", month: "long", year: "numeric" });
-}
-
 /** Date + heure lisibles, pour les journaux. */
 function formatIsoDateTimeFr(value) {
   if (!value) return "—";
@@ -906,9 +908,6 @@ function getModbotSessionToken() {
   return sessionStorage.getItem("modbot-dashboard-session") || localStorage.getItem("modbot-dashboard-session") || "";
 }
 
-function getDiscordAccessToken() {
-  return sessionStorage.getItem("modbot-discord-access-token") || localStorage.getItem("modbot-discord-access-token") || "";
-}
 
 function discordGuildIconUrl(guild) {
   const guildId = String(guild?.id || "").trim();
@@ -995,24 +994,6 @@ function normalizeDashboardGuilds(guilds) {
       return true;
     })
     .sort((a, b) => a.name.localeCompare(b.name, "fr"));
-}
-
-async function fetchDiscordManageableGuilds() {
-  const token = getDiscordAccessToken();
-  if (!token) return [];
-  const response = await fetch("https://discord.com/api/users/@me/guilds", {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  if (!response.ok) {
-    localStorage.removeItem("modbot-discord-access-token");
-    sessionStorage.removeItem("modbot-discord-access-token");
-    throw new Error(t("js.auth.sessionExpiree"));
-  }
-  const guilds = await response.json();
-  if (!Array.isArray(guilds)) return [];
-  return guilds
-    .filter(canManageDiscordGuild)
-    .map((guild) => normalizeDiscordGuild(guild, false));
 }
 
 function getModbotApiToken() {
@@ -1840,27 +1821,6 @@ function initDashboard() {
 
 
 
-  /**
-   * Tous les modules sont gratuits : il n'y a plus d'offre payante.
-   * Le projet vit désormais des dons.
-   */
-  function applyPanelAccess() {
-    tabs.forEach((tab) => {
-      tab.classList.remove("is-locked");
-      tab.setAttribute("aria-disabled", "false");
-      tab.title = "";
-    });
-    panels.forEach((panel) => {
-    });
-  }
-
-
-
-
-
-
-
-
   function escapeHtml(value) {
     return String(value).replace(/[&<>"']/g, (character) => ({
       "&": "&amp;",
@@ -2036,6 +1996,7 @@ function initDashboard() {
     redessinerAutoRoles();
 
     remplirSelect("[data-ticket-channel]", optionsSalons, t("js.aucun"));
+    remplirSelect("[data-recurring-channel]", optionsSalons, t("js.aucun"));
     remplirSelect("[data-ia-channel-picker]", optionsSalons, t("js.ia.ajouterSalon"));
     // La porte d'entree est un salon VOCAL, l'accueil une CATEGORIE :
     // le bot renvoie deux listes dediees pour ne pas melanger les types.
@@ -2215,15 +2176,6 @@ function initDashboard() {
 
   function currentServerSearchTerm() {
     return String(serverSearchInput?.value || "").trim().toLowerCase();
-  }
-
-  /**
-   * Aucun serveur fictif n'est jamais affiché : la liste vient uniquement de
-   * l'API Discord. En l'absence de données, l'écran reste vide avec un
-   * message explicite plutôt que de faux serveurs.
-   */
-  function readLocalGuildChoices() {
-    return [];
   }
 
   // Dernier diagnostic renvoyé par /api/health (état OAuth, nb de serveurs...)
@@ -2802,10 +2754,7 @@ function initDashboard() {
 
 
     const welcomeMessage = document.querySelector("[data-welcome-message]");
-    const departureMessage = document.querySelector("[data-departure-message]");
     const welcomeChannel = document.querySelector("[data-welcome-channel]");
-    const welcomeBg = document.querySelector("[data-welcome-bg]");
-    const welcomeFont = document.querySelector("[data-welcome-font]");
     const welcomeColor = document.querySelector("[data-welcome-color]");
     const welcomeToggles = document.querySelectorAll("[data-dashboard-panel='welcome'] .toggle-line input");
     const welcomeDmEnabled = document.querySelector("[data-welcome-dm-enabled]");
@@ -2865,7 +2814,7 @@ function initDashboard() {
           item.innerHTML = `
             <span>
               <strong>${escapeHtml(item.dataset.name)}</strong>
-              <small>Toutes les ${escapeHtml(item.dataset.interval)} ${escapeHtml(item.dataset.unit)} dans ${escapeHtml(item.dataset.channel)}</small>
+              <small>${escapeHtml(tp("js.rec.resume", { interval: item.dataset.interval, unite: item.dataset.unit, salon: nomDuSalon(item.dataset.channel) }))}</small>
             </span>
             <button class="secondary-btn compact" type="button" data-recurring-remove>Supprimer</button>
           `;
@@ -5774,7 +5723,7 @@ function initDashboard() {
       },
       // Un seul constructeur pour la bienvenue. Il en existait un second
       // ici, perime : il oubliait `departure_channel_id`, visait
-      // [data-departure-message] et [data-welcome-bg] qui n'existent plus,
+      // des champs disparus depuis, designes par des selecteurs morts,
       // et lisait `departure_enabled` sur la troisieme .toggle-line — la
       // case « message prive ». Comme sanitize_welcome_system() repart des
       // valeurs par defaut, chaque clef absente etait REMISE A ZERO : le
@@ -6790,7 +6739,7 @@ function initDashboard() {
     item.innerHTML = `
       <span>
         <strong>${escapeHtml(name)}</strong>
-        <small>Toutes les ${escapeHtml(interval)} ${escapeHtml(unit)} dans ${escapeHtml(channel)}</small>
+        <small>${escapeHtml(tp("js.rec.resume", { interval, unite: unit, salon: nomDuSalon(channel) }))}</small>
       </span>
       <button class="secondary-btn compact" type="button" data-recurring-remove>Supprimer</button>
     `;
@@ -6816,10 +6765,6 @@ function initDashboard() {
     } else {
       showToast(t("js.messageRecurrentSupprimeLocal"));
     }
-  });
-
-  document.querySelector("[data-recurring-recover]")?.addEventListener("click", () => {
-    showToast(t("js.recuperationPrete"));
   });
 
   document.querySelectorAll(".social-card").forEach((card) => {
@@ -7050,86 +6995,6 @@ function remplirSelecteurPays() {
 
 let derniersStatsPubliques = null;
 
-/* ══════════════════════════════════════════════════════════════════
-   LOGOS DES PARTENAIRES
-   Une carte peut porter `data-partner-invite="<code>"` au lieu d'une
-   adresse d'image figée. Le navigateur du visiteur interroge alors
-   Discord pour obtenir le logo du serveur.
-   ══════════════════════════════════════════════════════════════════ */
-
-const PARTENAIRE_CACHE_MS = 24 * 60 * 60 * 1000;
-
-/** Lit le cache local d'une invitation, ou null s'il est absent ou périmé. */
-function partenaireEnCache(code) {
-  try {
-    const brut = localStorage.getItem(`modbot-partenaire-${code}`);
-    if (!brut) return null;
-    const garde = JSON.parse(brut);
-    return garde.expire > Date.now() ? garde : null;
-  } catch (error) {
-    return null;
-  }
-}
-
-/**
- * Complète les cartes partenaires dont le logo n'est pas connu.
- *
- * Construire l'adresse du CDN Discord exige l'identifiant du serveur ET
- * le hash de son icône ; un lien d'invitation ne contient ni l'un ni
- * l'autre. Seule l'API publique des invitations les donne, et elle n'est
- * joignable que depuis un vrai navigateur.
- *
- * En cas d'échec — hors ligne, invitation expirée, requête refusée — la
- * carte garde ses initiales sur dégradé. Rien ne casse, rien ne clignote.
- */
-async function resoudreLogosPartenaires() {
-  const cartes = document.querySelectorAll("[data-partner-invite]");
-  if (!cartes.length) return;
-
-  await Promise.all([...cartes].map(async (carte) => {
-    const code = carte.dataset.partnerInvite;
-    const marque = carte.querySelector(".partner-mark");
-    if (!code || !marque || marque.querySelector("img")) return;
-
-    let infos = partenaireEnCache(code);
-    if (!infos) {
-      try {
-        const reponse = await fetch(
-          `https://discord.com/api/v10/invites/${encodeURIComponent(code)}?with_counts=true`,
-          { cache: "no-store", headers: { Accept: "application/json" } });
-        if (!reponse.ok) return;
-        const guilde = (await reponse.json())?.guild;
-        if (!guilde?.id || !guilde?.icon) return;
-        infos = { id: guilde.id, icon: guilde.icon, expire: Date.now() + PARTENAIRE_CACHE_MS };
-        try {
-          localStorage.setItem(`modbot-partenaire-${code}`, JSON.stringify(infos));
-        } catch (error) {
-          // Stockage plein ou refusé : on affiche quand même le logo
-        }
-      } catch (error) {
-        return;  // Discord injoignable : les initiales font l'affaire
-      }
-    }
-
-    // `.gif` pour les icônes animées, que Discord préfixe par « a_ »
-    const extension = infos.icon.startsWith("a_") ? "gif" : "png";
-    const image = new Image();
-    // Surtout pas `loading="lazy"` : l'image n'est pas encore dans le
-    // document, donc elle n'entre jamais dans le champ de vision et le
-    // navigateur diffère son chargement indéfiniment — alors qu'on
-    // attend justement `load` pour l'insérer. Les deux s'attendraient.
-    image.alt = "";
-    image.dataset.partnerLogo = "";
-    // On n'affiche l'image qu'une fois chargée : une adresse fausse ne
-    // doit jamais remplacer les initiales par un cadre vide.
-    image.addEventListener("load", () => {
-      marque.classList.remove("is-fallback");
-      marque.appendChild(image);
-    }, { once: true });
-    image.src = `https://cdn.discordapp.com/icons/${infos.id}/${infos.icon}.${extension}?size=128`;
-  }));
-}
-
 async function initPublicStats() {
   const section = document.querySelector("[data-live-stats]");
   if (!section) return;
@@ -7142,6 +7007,11 @@ async function initPublicStats() {
   const base = getModbotApiBase();
   if (!base) return;
 
+  // Tant que le bot n'a pas repondu, le tiret d'attente est peint en
+  // degrade comme un chiffre : il se lisait comme une barre bleue, et on
+  // croyait a une image cassee. On le dit en attente, c'est tout.
+  section.classList.add("stats-attente");
+
   try {
     const reponse = await fetch(`${base}/api/public/stats`, {
       cache: "no-store",
@@ -7152,6 +7022,7 @@ async function initPublicStats() {
     if (!stats) throw new Error(t("js.reponseVide"));
     derniersStatsPubliques = stats;
 
+    section.classList.remove("stats-attente");
     animerCompteur(membres, stats.members_protected);
     animerCompteur(serveurs, stats.servers);
     if (pays) pays.textContent = formatNombreFr(stats.countries);
@@ -7160,6 +7031,7 @@ async function initPublicStats() {
     // Le bot est injoignable : on retire les tirets plutôt que de mentir
     // avec des chiffres inventés, et on garde la page présentable.
     console.warn("Statistiques publiques indisponibles :", error?.message || error);
+    section.classList.remove("stats-attente");
     section.classList.add("stats-offline");
     if (resume) resume.textContent = t("js.chiffresIndisponibles");
     [membres, serveurs, pays].forEach((el) => {
@@ -7191,7 +7063,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initAssistant();
   initRevealAnimations();
   initPublicStats();
-  resoudreLogosPartenaires();
   initDashboard();
   remplirSelecteurPays();
 });
@@ -7494,20 +7365,53 @@ initMenuAcces();
    ne bouge pas et rien ne clignote.
    ══════════════════════════════════════════════════════════════════ */
 
+/* Discord est interroge une fois par jour et par serveur, pas a chaque
+   page ouverte : le logo et l'effectif ne changent pas d'une minute a
+   l'autre, et le visiteur voit la carte complete immediatement. */
+const PARTENAIRE_CACHE_MS = 24 * 60 * 60 * 1000;
+
+function partenaireEnCache(code) {
+  try {
+    const brut = localStorage.getItem(`modbot-partenaire-${code}`);
+    if (!brut) return null;
+    const garde = JSON.parse(brut);
+    return garde.expire > Date.now() ? garde.invitation : null;
+  } catch (erreur) {
+    return null;  // Stockage refuse ou contenu illisible : on redemande.
+  }
+}
+
+function memoriserPartenaire(code, invitation) {
+  try {
+    localStorage.setItem(`modbot-partenaire-${code}`, JSON.stringify({
+      expire: Date.now() + PARTENAIRE_CACHE_MS,
+      invitation: {
+        guild: invitation?.guild,
+        approximate_member_count: invitation?.approximate_member_count,
+      },
+    }));
+  } catch (erreur) {
+    // Stockage plein ou refuse : on redemandera, sans consequence.
+  }
+}
+
 async function initLogosPartenaires() {
   const cartes = document.querySelectorAll("[data-partner]");
   if (!cartes.length) return;
 
   await Promise.all([...cartes].map(async (carte) => {
     const code = carte.dataset.partner;
-    let invitation;
-    try {
-      const reponse = await fetch(
-        `https://discord.com/api/v10/invites/${encodeURIComponent(code)}?with_counts=true`);
-      if (!reponse.ok) return;
-      invitation = await reponse.json();
-    } catch (erreur) {
-      return;  // Hors ligne, ou Discord indisponible : le monogramme suffit.
+    let invitation = partenaireEnCache(code);
+    if (!invitation) {
+      try {
+        const reponse = await fetch(
+          `https://discord.com/api/v10/invites/${encodeURIComponent(code)}?with_counts=true`);
+        if (!reponse.ok) return;
+        invitation = await reponse.json();
+        memoriserPartenaire(code, invitation);
+      } catch (erreur) {
+        return;  // Hors ligne, ou Discord indisponible : le monogramme suffit.
+      }
     }
 
     const serveur = invitation?.guild;

@@ -57,8 +57,17 @@ for attribut, attendu in [
 
 # Le champ des relais reseaux avait echappe au controle precedent : il ne
 # portait pas de `list=`, juste un placeholder « ID du salon Discord ».
-demandes = re.findall(r'<input[^>]*placeholder="[^"]*(?:ID|Identifiant|identifiant)[^"]*"[^>]*>', html)
-demandes = [d for d in demandes if "data-admin-add-id" not in d and "blacklist" not in d]
+demandes = re.findall(r'<input[^>]*placeholder="[^"]*\b(?:ID|Identifiant|identifiant)\b[^"]*"[^>]*>', html)
+# Chercher un membre par son identifiant Discord est legitime : c'est
+# meme le seul moyen sur de designer quelqu'un qui a change de pseudo.
+# La regle vise les salons et les roles, qui doivent se choisir dans une
+# liste. (Ce test etait muet jusqu'ici : son motif portait deux
+# caracteres de controle invisibles a la place des limites de mot, donc
+# il ne trouvait jamais rien.)
+demandes = [d for d in demandes
+            if "data-admin-add-id" not in d
+            and "blacklist" not in d
+            and "data-search-input" not in d]
 verifier("aucun champ ne demande un identifiant de salon ou de role",
          not demandes, str(demandes)[:120])
 verifier("les salons de publication sont des listes",
@@ -225,6 +234,79 @@ script_js = io.open("script.js", encoding="utf-8", newline="").read()
 citees_js = set(re.findall(r'href="#(u-[\w-]+|i-[\w-]+)"', script_js))
 verifier("aucune icone inconnue citee par script.js",
          not (citees_js - declarees), str(sorted(citees_js - declarees)))
+
+
+
+# ══════════════════════════════════════════════════════════════════════
+#  Les selecteurs qui ne visent plus rien
+#
+#  Le panneau des messages recurrents avait disparu du dashboard alors
+#  que le JS qui le pilote etait intact et que le bot les envoyait
+#  toujours : une fonctionnalite annoncee sur l'accueil et dans le wiki,
+#  que personne ne pouvait activer. Rien ne levait d'erreur — un
+#  querySelector qui ne trouve rien renvoie null, et le code teste ce
+#  null poliment.
+# ══════════════════════════════════════════════════════════════════════
+print(chr(10) + "--- Les selecteurs pointent vers du reel ---")
+
+import glob
+
+pages = {f: io.open(f, encoding="utf-8", newline="").read()
+         for f in glob.glob("*.html")}
+tout_html = "".join(pages.values())
+
+# Les attributs que le JS ecrit lui-meme n'ont pas a figurer dans le
+# HTML : on ne verifie que ceux qu'il attend d'y trouver.
+poses_par_js = set(re.findall(r'data-([a-z0-9-]+)=', script))
+poses_par_js |= {re.sub(r"([A-Z])", lambda m: "-" + m.group(1).lower(), nom)
+                 for nom in re.findall(r"dataset\.([A-Za-z][\w]*)", script)}
+# Ceux ecrits sans valeur dans un gabarit : `<input data-event-title>`.
+# Ou suivis d'une substitution : `data-sanction-minutes${...}`.
+poses_par_js |= set(re.findall(r'data-([a-z0-9-]+)[\s>$`]', script))
+
+orphelins = []
+for attribut in sorted(set(re.findall(r'\[data-([a-z0-9-]+)[\]=]', script))):
+    if attribut in poses_par_js:
+        continue
+    if ("data-%s" % attribut) in tout_html:
+        continue
+    orphelins.append(attribut)
+
+verifier("aucun selecteur data-* ne vise un element absent de toutes les pages",
+         not orphelins, str(orphelins))
+
+# Chaque onglet du dashboard a son panneau, et reciproquement.
+dash = pages.get("dashboard.html", "")
+onglets = set(re.findall(r'data-dashboard-tab="([\w-]+)"', dash))
+panneaux = set(re.findall(r'data-dashboard-panel="([\w-]+)"', dash))
+verifier("chaque onglet du dashboard a son panneau",
+         onglets == panneaux, str(sorted(onglets ^ panneaux)))
+
+# Idem pour l'administration.
+adm = pages.get("admin.html", "")
+onglets_adm = set(re.findall(r'data-admin-tab="([\w-]+)"', adm))
+panneaux_adm = set(re.findall(r'data-admin-panel="([\w-]+)"', adm))
+verifier("chaque onglet d'administration a son panneau",
+         onglets_adm == panneaux_adm, str(sorted(onglets_adm ^ panneaux_adm)))
+
+# Une fonction declaree et jamais appelee est du code mort : il ment sur
+# ce que fait le site, et c'est ainsi qu'un commentaire affirmait encore
+# « tous les modules sont gratuits » longtemps apres le premium.
+declarees = set(re.findall(r"^(?:async\s+)?function ([A-Za-z_$][\w$]*)\s*\(",
+                           script, re.MULTILINE))
+declarees |= set(re.findall(r"^  (?:async\s+)?function ([A-Za-z_$][\w$]*)\s*\(",
+                            script, re.MULTILINE))
+jamais_appelees = []
+for nom in sorted(declarees):
+    # Une reference suffit : passee a addEventListener, elle n'a pas de
+    # parentheses.
+    if len(re.findall(r"\b%s\b" % re.escape(nom), script)) > 1:
+        continue
+    if nom in tout_html:
+        continue
+    jamais_appelees.append(nom)
+verifier("aucune fonction declaree n'est laissee sans emploi",
+         not jamais_appelees, str(jamais_appelees))
 
 
 rates = [n for n, ok, _ in resultats if not ok]

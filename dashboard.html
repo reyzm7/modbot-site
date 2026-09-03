@@ -280,6 +280,7 @@
 
       <p class="sidebar-label" data-i18n="dash.contenus">Contenus</p>
       <button class="dash-nav" type="button" data-dashboard-tab="channels" data-i18n="dash.navSalons"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-pin"/></svg></span>Salons</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="recurring" data-i18n="dash.navRecurrents"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-timer"/></svg></span>Messages récurrents</button>
       <button class="dash-nav" type="button" data-dashboard-tab="socials" data-i18n="dash.navReseaux"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg></span>Réseaux</button>
 
       <p class="sidebar-label" data-i18n="dash.apparence">Apparence</p>
@@ -1391,6 +1392,98 @@
             </select>
           </label>
           <p class="field-help" data-i18n="dash.paysAide">Sert uniquement à la carte publique des serveurs protégés, sur la page d'accueil. Discord ne communique pas le pays d'un serveur : sans ce choix, le tien reste « Non renseigné ».</p>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="recurring">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="rec.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-timer"/></svg> Automatisation</p>
+            <h2 data-i18n="rec.title">Messages récurrents</h2>
+          </div>
+        </div>
+
+        <p class="field-help" data-i18n="rec.intro">
+          Un message publié tout seul, à intervalle régulier, dans le salon de votre
+          choix. Le règlement qu'on republie, le rappel d'un événement, le lien du
+          serveur : ce qu'on finit toujours par oublier de renvoyer à la main.
+        </p>
+
+        <div class="welcome-layout">
+          <div class="tool-panel">
+            <h3 data-i18n="rec.nouveau">Nouveau message</h3>
+
+            <label class="mini-form"><span data-i18n="rec.nom">Nom</span>
+              <input type="text" data-recurring-name maxlength="80"
+                     placeholder="Rappel du règlement"
+                     data-i18n-placeholder="rec.nomPlaceholder">
+            </label>
+            <p class="field-help" data-i18n="rec.nomAide">
+              Pour vous y retrouver dans la liste. Les membres ne le voient pas.
+            </p>
+
+            <label class="mini-form"><span data-i18n="rec.salon">Salon de publication</span>
+              <select data-recurring-channel><option value="">— Chargement… —</option></select>
+            </label>
+
+            <div class="dashboard-grid two">
+              <label class="mini-form"><span data-i18n="rec.intervalle">Tous les</span>
+                <input type="number" data-recurring-interval min="1" max="10080"
+                       step="1" value="30">
+              </label>
+              <label class="mini-form"><span data-i18n="rec.unite">Unité</span>
+                <select data-recurring-unit>
+                  <option value="minutes" data-i18n="rec.minutes">minutes</option>
+                  <option value="heures" data-i18n="rec.heures">heures</option>
+                  <option value="jours" data-i18n="rec.jours">jours</option>
+                </select>
+              </label>
+            </div>
+            <p class="field-help" data-i18n="rec.intervalleAide">
+              Cinq minutes au minimum, une semaine au maximum. En dessous, ce ne serait
+              plus un rappel mais une inondation — le bot le refuserait.
+            </p>
+
+            <label class="mini-form"><span data-i18n="rec.contenu">Message</span>
+              <textarea data-recurring-content rows="4" maxlength="1900"
+                        placeholder="Pensez à lire les règles dans #reglement"
+                        data-i18n-placeholder="rec.contenuPlaceholder"></textarea>
+            </label>
+
+            <div class="toggle-grid">
+              <button class="secondary-btn compact is-active" type="button"
+                      data-recurring-mode="repeat" data-i18n="rec.modeRepetition">
+                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg> Répétition
+              </button>
+              <button class="secondary-btn compact" type="button"
+                      data-recurring-mode="target" data-i18n="rec.modeHeure">
+                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-timer"/></svg> Heure ciblée
+              </button>
+            </div>
+            <p class="field-help" data-i18n="rec.modeAide">
+              En répétition, le compte repart après chaque envoi. En heure ciblée, le
+              message tombe au même moment de la journée.
+            </p>
+
+            <div class="search-actions">
+              <button class="primary-btn compact" type="button" data-create-recurring
+                      data-i18n="rec.ajouter"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Ajouter</button>
+            </div>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="rec.listeTitre">Messages programmés</h3>
+            <div class="recurring-list" data-recurring-list>
+              <div class="dashboard-empty-state">
+                <strong data-i18n="rec.aucun">Aucun message récurrent</strong>
+                <span data-i18n="rec.aucunAide">« Ajouter » pour en programmer un.</span>
+              </div>
+            </div>
+            <div class="inline-hint">
+              <strong data-i18n="rec.dateTitre">La date du dernier envoi est gardée par le bot</strong>
+              <p data-i18n="rec.dateTexte">Elle ne vient jamais du navigateur : c'est elle qui empêche un message de repartir en boucle, et une page qui l'oublierait la remettrait à zéro.</p>
+            </div>
+          </div>
         </div>
       </section>
 
