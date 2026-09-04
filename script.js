@@ -3112,6 +3112,8 @@ function initDashboard() {
     });
 
 
+    sansCasser("compteurs", () => applyCompteurs(config.compteurs));
+
     sansCasser("messages recurrents", () => {
     if (Array.isArray(config.recurring_messages)) {
       const recurringList = document.querySelector("[data-recurring-list]");
@@ -6274,6 +6276,7 @@ function initDashboard() {
         desc: row.querySelector("[data-option-desc]")?.value.trim() || "",
       };
     });
+    const compteursEnvoyes = collectCompteurs();
     const salonSysteme = (clef) =>
       document.querySelector(`[data-channel="${clef}"]`)?.value || "";
     const socialRelays = Array.from(document.querySelectorAll(".social-card")).map((card) => ({
@@ -6372,6 +6375,7 @@ function initDashboard() {
       ...(document.querySelector("[data-event-list]")
         ? { events: lireEvenementsDuDom() } : {}),
       recurring_messages: recurringMessages,
+      compteurs: compteursEnvoyes,
       social_relays: socialRelays,
       language: languageValue === "English" ? "en" : "fr",
       country: document.querySelector("[data-guild-country]")?.value || "",
@@ -6946,6 +6950,151 @@ function initDashboard() {
     YouTube: "Nouvelle vidéo de {account} ▶️\n{title}\n{link}",
   };
 
+  /* ══════════════════════════════════════════════════════════════
+     COMPTEURS DE SERVEUR
+
+     Un chiffre dans un nom de salon. Le navigateur ne compte rien :
+     il propose des modeles, montre un apercu, et laisse le bot faire
+     le calcul — lui seul connait le serveur.
+     ══════════════════════════════════════════════════════════════ */
+
+  const COMPTEUR_VARIABLES = [
+    { token: "{membres}", label: "cpt.varMembres" },
+    { token: "{humains}", label: "cpt.varHumains" },
+    { token: "{bots}", label: "cpt.varBots" },
+    { token: "{en_ligne}", label: "cpt.varEnLigne" },
+    { token: "{boosts}", label: "cpt.varBoosts" },
+    { token: "{niveau_boost}", label: "cpt.varNiveauBoost" },
+    { token: "{salons}", label: "cpt.varSalons" },
+    { token: "{roles}", label: "cpt.varRoles" },
+  ];
+
+  const COMPTEUR_MODELES = [
+    { clef: "membres", gabarit: "📊 Membres : {membres}" },
+    { clef: "humains", gabarit: "👥 Joueurs : {humains}" },
+    { clef: "enligne", gabarit: "🟢 En ligne : {en_ligne}" },
+    { clef: "boosts", gabarit: "🚀 Boosts : {boosts}" },
+  ];
+
+  let compteurs = [];
+
+  /** L'apercu : des chiffres d'exemple, pas des chiffres inventes du
+      serveur — le bot seul les connait, et mentir serait pire. */
+  function apercuCompteur(gabarit) {
+    const exemples = {
+      "{membres}": "4 167", "{humains}": "4 090", "{bots}": "77",
+      "{en_ligne}": "812", "{boosts}": "14", "{niveau_boost}": "3",
+      "{salons}": "62", "{roles}": "41",
+    };
+    let texte = String(gabarit || "");
+    for (const [jeton, valeur] of Object.entries(exemples)) {
+      texte = texte.split(jeton).join(valeur);
+    }
+    return texte.replace(/\{[a-zA-Z_]{2,20}\}/g, "").replace(/\s{2,}/g, " ").trim();
+  }
+
+  function renderCompteurs() {
+    const hote = document.querySelector("[data-compteur-list]");
+    const compte = document.querySelector("[data-compteur-count]");
+    if (compte) compte.textContent = compteurs.length
+      ? tp("cpt.nActifs", { n: compteurs.filter((c) => c.enabled !== false).length })
+      : "";
+    if (!hote) return;
+    if (!compteurs.length) {
+      hote.innerHTML = `<div class="recurring-empty">${escapeHtml(t("cpt.aucun"))}</div>`;
+      return;
+    }
+    hote.innerHTML = compteurs.map((c, rang) => `
+      <div class="recurring-item" data-compteur-rang="${rang}">
+        <span>
+          <strong>${escapeHtml(apercuCompteur(c.template))}</strong>
+          <small>${escapeHtml(nomDuSalon(c.channel_id))} · ${escapeHtml(c.template)}</small>
+        </span>
+        <button class="secondary-btn compact danger" type="button" data-compteur-retirer>${escapeHtml(t("js.supprimer"))}</button>
+      </div>`).join("");
+    hote.querySelectorAll("[data-compteur-rang]").forEach((ligne) => {
+      ligne.querySelector("[data-compteur-retirer]")?.addEventListener("click", () => {
+        // Le salon reste : on retire le compteur, pas le salon. Le
+        // supprimer d'autorite effacerait quelque chose que
+        // l'administrateur n'a pas demande de supprimer.
+        compteurs.splice(Number(ligne.dataset.compteurRang), 1);
+        renderCompteurs();
+        markPanelDirty("compteurs");
+      });
+    });
+  }
+
+  function applyCompteurs(liste) {
+    compteurs = Array.isArray(liste) ? liste : [];
+    renderCompteurs();
+  }
+
+  function collectCompteurs() {
+    return compteurs;
+  }
+
+  function initCompteurs() {
+    const gabarit = document.querySelector("[data-compteur-gabarit]");
+    const apercu = document.querySelector("[data-compteur-apercu]");
+    const modeles = document.querySelector("[data-compteur-modele]");
+    const chips = document.querySelector("[data-compteur-variables]");
+    if (!gabarit) return;
+
+    const rafraichir = () => {
+      if (apercu) apercu.textContent = apercuCompteur(gabarit.value) || "—";
+    };
+
+    if (modeles) {
+      modeles.innerHTML = COMPTEUR_MODELES
+        .map((m) => `<option value="${escapeHtml(m.gabarit)}">${escapeHtml(m.gabarit)}</option>`)
+        .join("");
+      modeles.addEventListener("change", () => {
+        gabarit.value = modeles.value;
+        rafraichir();
+      });
+      gabarit.value = COMPTEUR_MODELES[0].gabarit;
+    }
+
+    if (chips) {
+      chips.innerHTML = COMPTEUR_VARIABLES.map((v) => (
+        `<button type="button" class="variable-chip" data-variable="${escapeHtml(v.token)}"
+                 title="${escapeHtml(t(v.label))}">${escapeHtml(v.token)}</button>`
+      )).join("");
+      chips.querySelectorAll("[data-variable]").forEach((puce) => {
+        puce.addEventListener("click", () => {
+          const debut = gabarit.selectionStart ?? gabarit.value.length;
+          const fin = gabarit.selectionEnd ?? gabarit.value.length;
+          const jeton = puce.dataset.variable;
+          gabarit.value = gabarit.value.slice(0, debut) + jeton + gabarit.value.slice(fin);
+          gabarit.focus();
+          gabarit.setSelectionRange(debut + jeton.length, debut + jeton.length);
+          rafraichir();
+        });
+      });
+    }
+
+    gabarit.addEventListener("input", rafraichir);
+    rafraichir();
+
+    document.querySelector("[data-compteur-creer]")?.addEventListener("click", async () => {
+      if (!selectedServer.id) return showToast(t("js.selectionneDabord"));
+      const modele = gabarit.value.trim();
+      if (!modele) return showToast(t("cpt.modeleVide"));
+      try {
+        // C'est le BOT qui cree le salon : lui seul peut poser les
+        // permissions, et lui seul connait les chiffres du serveur.
+        const data = await modbotApiFetch(
+          `/api/guilds/${selectedServer.id}/compteurs`,
+          { method: "POST", body: JSON.stringify({ template: modele }) });
+        applyCompteurs(data?.compteurs || compteurs);
+        showToast(tp("cpt.cree", { nom: data?.name || modele }));
+        loadDashboardResources(selectedServer.id);
+      } catch (erreur) {
+        showToast(erreur?.message || t("js.actionRefusee"));
+      }
+    });
+  }
+
   function initSocialVariables() {
     document.querySelectorAll("[data-social-variables]").forEach((host) => {
       const carte = host.closest(".social-card");
@@ -6981,6 +7130,7 @@ function initDashboard() {
   }
 
   initSocialVariables();
+  initCompteurs();
   initAutoRoles();
   initImagesTicket();
   /* ══════════════════════════════════════════════════════════════

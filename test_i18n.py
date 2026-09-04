@@ -120,6 +120,11 @@ def lire_script():
     # Meme cas, mais nommees : « titreClef: "prem.f.voice.titre" ». Les
     # tables d'offres et de fonctionnalites premium fonctionnent ainsi.
     clefs |= set(re.findall(r'Clef:\s*"([a-zA-Z][\w.]*)"', src))
+    # Meme motif encore : « label: "cpt.varMembres" » dans une table de
+    # variables, resolue plus loin par t(v.label). Le point est exige :
+    # une clef en porte toujours un, et « label: "Tout" » est un libelle
+    # ecrit en clair, pas une clef.
+    clefs |= set(re.findall(r'label:\s*"([a-zA-Z][\w]*\.[\w.]+)"', src))
     return clefs
 
 

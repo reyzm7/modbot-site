@@ -307,6 +307,7 @@
       <p class="sidebar-label" data-i18n="dash.contenus">Contenus</p>
       <button class="dash-nav" type="button" data-dashboard-tab="channels" data-i18n="dash.navSalons"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-pin"/></svg></span>Salons</button>
       <button class="dash-nav" type="button" data-dashboard-tab="recurring" data-i18n="dash.navRecurrents"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-timer"/></svg></span>Messages récurrents</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="compteurs" data-i18n="dash.navCompteurs"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-trend"/></svg></span>Compteurs</button>
       <button class="dash-nav" type="button" data-dashboard-tab="socials" data-i18n="dash.navReseaux"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg></span>Réseaux</button>
 
       <p class="sidebar-label" data-i18n="dash.apparence">Apparence</p>
@@ -1548,6 +1549,63 @@
               <strong data-i18n="rec.dateTitre">La date du dernier envoi est gardée par le bot</strong>
               <p data-i18n="rec.dateTexte">Elle ne vient jamais du navigateur : c'est elle qui empêche un message de repartir en boucle, et une page qui l'oublierait la remettrait à zéro.</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="compteurs">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="cpt.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-trend"/></svg> Vitrine</p>
+            <h2 data-i18n="cpt.title">Compteurs de serveur</h2>
+          </div>
+          <div class="panel-title-actions">
+            <span class="state is-count" data-compteur-count></span>
+          </div>
+        </div>
+
+        <p class="field-help" data-i18n="cpt.intro">
+          Un salon vocal que personne ne peut rejoindre, dont le nom porte un chiffre
+          tenu à jour tout seul. C'est la première chose qu'un visiteur voit en
+          arrivant, avant même de lire un message.
+        </p>
+
+        <div class="welcome-layout">
+          <div class="tool-panel">
+            <h3 data-i18n="cpt.nouveau">Nouveau compteur</h3>
+
+            <label class="mini-form"><span data-i18n="cpt.modele">Ce qu'il affiche</span>
+              <select data-compteur-modele><option value="">— Chargement… —</option></select>
+            </label>
+
+            <label class="mini-form"><span data-i18n="cpt.gabarit">Nom du salon</span>
+              <input type="text" data-compteur-gabarit maxlength="100"
+                     placeholder="📊 Membres : {membres}">
+            </label>
+            <div class="variable-chips" data-compteur-variables></div>
+            <p class="field-help" data-i18n="cpt.gabaritAide">
+              Le chiffre remplace la variable. Aperçu en direct sous le champ.
+            </p>
+
+            <p class="compteur-apercu" data-compteur-apercu>—</p>
+
+            <div class="social-actions">
+              <button class="primary-btn compact" type="button" data-compteur-creer data-i18n="cpt.creer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Créer le salon</button>
+            </div>
+            <p class="field-help" data-i18n="cpt.creerAide">
+              ModBot crée le salon vocal, le rend visible de tous et empêche
+              quiconque de s'y connecter. Rien à faire à la main.
+            </p>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="cpt.listeTitre">Compteurs de ce serveur</h3>
+            <div class="recurring-list" data-compteur-list></div>
+            <p class="field-help" data-i18n="cpt.cadence">
+              Les noms se mettent à jour toutes les six minutes. Discord n'autorise
+              que deux renommages par salon par tranche de dix minutes : aller plus
+              vite bloquerait le compteur au lieu de l'accélérer.
+            </p>
           </div>
         </div>
       </section>
