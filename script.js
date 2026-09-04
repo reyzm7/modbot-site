@@ -3339,6 +3339,7 @@ function initDashboard() {
     // Les modules sécurité / logs / sauvegardes ont leurs propres endpoints :
     // on les charge en parallèle sans bloquer l'affichage de la configuration.
     Promise.allSettled([
+      chargerHookRelais(),
       loadGuildSecurity(guildId),
       loadGuildLogs(guildId),
       loadGuildBackups(guildId),
@@ -4306,7 +4307,9 @@ function initDashboard() {
             ${!g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-edit>${escapeHtml(t("js.gw.modifier"))}</button>` : ""}
             ${!g.ended ? `<button class="secondary-btn compact" type="button" data-giveaway-end>${escapeHtml(t("js.gw.terminer"))}</button>` : ""}
             ${g.ended && !g.archived ? `<button class="secondary-btn compact" type="button" data-giveaway-reroll>${escapeHtml(t("js.gw.relancer"))}</button>` : ""}
-            ${g.ended && !g.archived ? `<button class="secondary-btn compact" type="button" data-giveaway-archive>${escapeHtml(t("js.gw.archiver"))}</button>` : ""}
+            ${!g.archived ? `<button class="secondary-btn compact" type="button" data-giveaway-archive
+                     ${g.ended ? "" : `disabled title="${escapeHtml(t("js.gw.archiverApres"))}"`}
+                   >${escapeHtml(t("js.gw.archiver"))}</button>` : ""}
             ${g.archived ? `<button class="secondary-btn compact" type="button" data-giveaway-unarchive>${escapeHtml(t("js.gw.desarchiver"))}</button>` : ""}
             <button class="secondary-btn compact danger" type="button" data-giveaway-delete>${escapeHtml(t("js.gw.supprimer"))}</button>
           </div>
@@ -6942,6 +6945,113 @@ function initDashboard() {
     YouTube: "Nouvelle vidéo de {account} ▶️\n{title}\n{link}",
   };
 
+  /* ══════════════════════════════════════════════════════════════
+     L'ADRESSE ENTRANTE DES RELAIS
+
+     TikTok et Instagram refusent les serveurs : aucune adresse
+     publique ne donne leurs publications, et ce n'est pas faute
+     d'astuce — c'est deliberé de leur part. On renverse donc le sens.
+     Un automate gratuit previent ModBot, qui fait le reste : le
+     message de l'utilisateur, ses mentions, son salon, et le controle
+     des doublons.
+
+     Le jeton est masque par defaut : il vit dans une page qu'on ouvre
+     parfois en partageant son ecran.
+     ══════════════════════════════════════════════════════════════ */
+
+  let hookRelais = { url: "", token: "" };
+
+  function peindreHookRelais() {
+    const champUrl = document.querySelector("[data-hook-url]");
+    const champJeton = document.querySelector("[data-hook-token]");
+    const exemple = document.querySelector("[data-hook-exemple]");
+    if (!champUrl) return;
+    champUrl.value = hookRelais.url || "—";
+    if (champJeton) champJeton.value = hookRelais.token || "—";
+    if (exemple) {
+      exemple.textContent = hookRelais.url
+        ? `POST ${hookRelais.url}\n`
+          + `Content-Type: application/json\n\n`
+          + JSON.stringify({
+              token: champJeton?.type === "text" ? hookRelais.token : "TON_JETON",
+              platform: "TikTok",
+              id: "{{PostId}}",
+              url: "{{PostUrl}}",
+              title: "{{Caption}}",
+              image: "{{ImageUrl}}",
+            }, null, 2)
+        : t("js.hook.indisponible");
+    }
+  }
+
+  async function chargerHookRelais() {
+    const bloc = document.querySelector("[data-hook-url]");
+    if (!bloc || !selectedServer.id) return;
+    const demande = selectedServer.id;
+    try {
+      const data = await modbotApiFetch(
+        `/api/guilds/${demande}/socials/hook`, { cache: "no-store" });
+      if (!estEncoreLeServeur(demande)) return;
+      hookRelais = { url: data?.url || "", token: data?.token || "" };
+    } catch (erreur) {
+      if (!estEncoreLeServeur(demande)) return;
+      hookRelais = { url: "", token: "" };
+    }
+    peindreHookRelais();
+  }
+
+  function initHookRelais() {
+    const champJeton = document.querySelector("[data-hook-token]");
+
+    // Le libelle est pose ici et non par data-i18n : il depend de
+    // l'etat du champ, ce qu'une clef fixe ne sait pas dire. Les deux
+    // clefs sont ecrites en toutes lettres pour que le test de
+    // traduction les voie.
+    const majBoutonJeton = () => {
+      const etiquette = document.querySelector("[data-hook-voir-label]");
+      if (!etiquette || !champJeton) return;
+      etiquette.textContent = champJeton.type === "password"
+        ? t("dash.hookVoir")
+        : t("dash.hookMasquer");
+    };
+    majBoutonJeton();
+
+    document.querySelector("[data-hook-voir]")?.addEventListener("click", () => {
+      if (!champJeton) return;
+      champJeton.type = champJeton.type === "password" ? "text" : "password";
+      majBoutonJeton();
+      peindreHookRelais();
+    });
+
+    document.querySelector("[data-hook-copier]")?.addEventListener("click", async () => {
+      const exemple = document.querySelector("[data-hook-exemple]");
+      if (!exemple?.textContent) return;
+      try {
+        await navigator.clipboard.writeText(exemple.textContent);
+        showToast(t("js.hook.copie"));
+      } catch (erreur) {
+        showToast(t("js.hook.copieImpossible"));
+      }
+    });
+
+    document.querySelector("[data-hook-renouveler]")?.addEventListener("click", async () => {
+      if (!selectedServer.id) return;
+      // Renouveler coupe l'ancien jeton sur-le-champ : les automates
+      // deja branches cesseront de fonctionner tant qu'on ne leur aura
+      // pas donne le nouveau.
+      if (!window.confirm(t("js.hook.renouvelerConfirmer"))) return;
+      try {
+        const data = await modbotApiFetch(
+          `/api/guilds/${selectedServer.id}/socials/hook`, { method: "POST" });
+        hookRelais = { url: data?.url || "", token: data?.token || "" };
+        peindreHookRelais();
+        showToast(t("js.hook.renouvele"));
+      } catch (erreur) {
+        showToast(erreur?.message || t("js.actionRefusee"));
+      }
+    });
+  }
+
   function initSocialVariables() {
     document.querySelectorAll("[data-social-variables]").forEach((host) => {
       const carte = host.closest(".social-card");
@@ -6976,6 +7086,7 @@ function initDashboard() {
   }
 
   initSocialVariables();
+  initHookRelais();
   initAutoRoles();
   initImagesTicket();
   /* ══════════════════════════════════════════════════════════════
