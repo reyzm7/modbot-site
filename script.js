@@ -8097,9 +8097,16 @@ async function initLogosPartenaires() {
       // l'autre. Quatre icones de 128 px ne valent pas ce risque.
       // On ne remplace le monogramme qu'une fois l'image chargee :
       // sinon un carre vide apparait pendant le telechargement.
+      const monogramme = hote.textContent;
       image.addEventListener("load", () => {
         hote.textContent = "";
         hote.appendChild(image);
+      });
+      // Une image DEJA posee peut echouer plus tard : le CDN qui hoquete,
+      // un serveur qui change son icone. Sans ce retour au monogramme,
+      // la carte gardait le carre casse du navigateur.
+      image.addEventListener("error", () => {
+        if (image.parentElement === hote) hote.textContent = monogramme;
       });
       image.src = `https://cdn.discordapp.com/icons/${serveur.id}/${serveur.icon}.${extension}?size=128`;
     }
@@ -8115,6 +8122,11 @@ async function initLogosPartenaires() {
       image.addEventListener("load", () => {
         fond.style.backgroundImage = `url("${image.src}")`;
         carte.classList.add("has-banner");
+      });
+      image.addEventListener("error", () => {
+        // Le bandeau garde alors son degrade : mieux qu'un fond vide.
+        fond.style.backgroundImage = "";
+        carte.classList.remove("has-banner");
       });
       image.src = `https://cdn.discordapp.com/banners/${serveur.id}/${serveur.banner}.${extension}?size=1024`;
     }
