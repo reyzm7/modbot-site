@@ -6922,10 +6922,12 @@ function initDashboard() {
     { token: "{server}", label: "js.varServeur" },
     { token: "{kind}", label: "js.varTypePublication" },
     { token: "{date}", label: "js.varDatePublication" },
-    // Twitch seulement : sur les autres reseaux elles restent vides, et
-    // la ligne qui ne contient qu'elles disparait a l'envoi.
-    { token: "{game}", label: "js.varJeu", twitch: true },
-    { token: "{viewers}", label: "js.varSpectateurs", twitch: true },
+    // Ces deux-la n'ont de sens que sur un DIRECT : ailleurs elles
+    // restent vides, et la ligne qui ne contient qu'elles disparait a
+    // l'envoi. Le jeu est propre a Twitch ; les spectateurs valent
+    // aussi pour un direct YouTube.
+    { token: "{game}", label: "js.varJeu", reseaux: ["twitch"] },
+    { token: "{viewers}", label: "js.varSpectateurs", reseaux: ["twitch", "youtube"] },
   ];
 
   /**
@@ -6955,10 +6957,11 @@ function initDashboard() {
       // le texte dedans obligerait a l'effacer pour revenir au defaut.
       const propose = SOCIAL_MESSAGES_DEFAUT[reseau];
       if (propose) zone.placeholder = propose;
-      // {jeu} et {spectateurs} n'ont de sens que sur Twitch : les
-      // proposer ailleurs revient a proposer du vide.
+      // Proposer une variable qui restera vide revient a proposer du
+      // vide : on ne montre que celles qui ont un sens sur ce reseau.
+      const minuscule = reseau.toLowerCase();
       const utiles = SOCIAL_VARIABLES.filter(
-        (v) => !v.twitch || reseau.toLowerCase().includes("twitch"));
+        (v) => !v.reseaux || v.reseaux.some((r) => minuscule.includes(r)));
       host.innerHTML = utiles.map((v) => (
         `<button type="button" class="variable-chip" data-variable="${escapeHtml(v.token)}"
                  title="${escapeHtml(t(v.label))}">${escapeHtml(v.token)}</button>`

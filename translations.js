@@ -21,6 +21,11 @@
 
 window.MODBOT_TRANSLATIONS = {
   fr: {
+    "dash.ytSousTitre": "Nouvelles vidéos et passages en direct.",
+    "dash.ytInactif": "Inactif",
+    "dash.ytLien": "Lien de la chaîne",
+    "dash.ytSalon": "Salon de publication",
+    "dash.ytTester": "Tester",
     "js.gw.archiverApres": "Termine d'abord le giveaway : on n'archive pas un tirage en cours.",
     "js.confirmer": "Confirmer",
     "js.gw.voir": "Voir",
@@ -1816,6 +1821,11 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Télécharger",
   },
   en: {
+    "dash.ytSousTitre": "New videos and going live.",
+    "dash.ytInactif": "Inactive",
+    "dash.ytLien": "Channel link",
+    "dash.ytSalon": "Announcement channel",
+    "dash.ytTester": "Test",
     "js.gw.archiverApres": "End the giveaway first: a running draw is not archived.",
     "js.confirmer": "Confirm",
     "js.gw.voir": "View",
@@ -3611,6 +3621,11 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Download",
   },
   ar: {
+    "dash.ytSousTitre": "مقاطع جديدة وبثّ مباشر.",
+    "dash.ytInactif": "غير مفعّل",
+    "dash.ytLien": "رابط القناة",
+    "dash.ytSalon": "قناة النشر",
+    "dash.ytTester": "اختبار",
     "js.gw.archiverApres": "أنهِ السحب أولًا: لا يُؤرشَف سحب جارٍ.",
     "js.confirmer": "تأكيد",
     "js.gw.voir": "عرض",
@@ -5406,6 +5421,11 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "تنزيل",
   },
   es: {
+    "dash.ytSousTitre": "Vídeos nuevos y directos.",
+    "dash.ytInactif": "Inactivo",
+    "dash.ytLien": "Enlace del canal",
+    "dash.ytSalon": "Canal de publicación",
+    "dash.ytTester": "Probar",
     "js.gw.archiverApres": "Finaliza primero el sorteo: no se archiva un sorteo en curso.",
     "js.confirmer": "Confirmar",
     "js.gw.voir": "Ver",
@@ -7140,6 +7160,11 @@ window.MODBOT_TRANSLATIONS = {
     "js.demo.actTelecharger": "Descargar",
   },
   de: {
+    "dash.ytSousTitre": "Neue Videos und Livestreams.",
+    "dash.ytInactif": "Inaktiv",
+    "dash.ytLien": "Kanal-Link",
+    "dash.ytSalon": "Ankündigungskanal",
+    "dash.ytTester": "Testen",
     "js.gw.archiverApres": "Beende das Gewinnspiel zuerst: eine laufende Ziehung wird nicht archiviert.",
     "js.confirmer": "Bestätigen",
     "js.gw.voir": "Ansehen",

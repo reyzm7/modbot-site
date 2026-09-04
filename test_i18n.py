@@ -30,7 +30,7 @@ AUTO_FERMANTES = {"img", "br", "hr", "input", "meta", "link", "source"}
 # Ce qui reste identique dans toutes les langues : la marque, les commandes
 # slash du bot, les noms de plateformes.
 INTRADUISIBLE = re.compile(
-    r"^(ModBot|Twitch|TikTok|Instagram|Discord|Railway|Vercel|Mistral AI"
+    r"^(ModBot|Twitch|TikTok|Instagram|YouTube|Discord|Railway|Vercel|Mistral AI"
     r"|MyMemory|Stripe|PayPal|/[\w-]+.*|!\w+|APP"
     r"|Twitch Memez94|ePro League|CPG Belge|VPG Suisse|Darryliens / Ennes|VPG Belgique|xWS Tournament)$")
 

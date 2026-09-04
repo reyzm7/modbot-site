@@ -70,9 +70,19 @@ demandes = [d for d in demandes
             and "data-search-input" not in d]
 verifier("aucun champ ne demande un identifiant de salon ou de role",
          not demandes, str(demandes)[:120])
+# Un compte en dur — « == 4 » — n'est pas une invariance : il echoue a
+# l'ajout d'un reseau alors que rien n'est casse. Ce qui compte, c'est
+# que CHAQUE carte ait sa liste de salons.
+cartes_reseaux = html.count('class="social-card"')
 verifier("les salons de publication sont des listes",
-         html.count("<select data-social-channel>") == 4,
-         str(html.count("<select data-social-channel>")))
+         html.count("<select data-social-channel>") == cartes_reseaux,
+         f"{html.count('<select data-social-channel>')} listes pour "
+         f"{cartes_reseaux} cartes")
+verifier("les cinq reseaux ont leur carte", cartes_reseaux >= 5,
+         str(cartes_reseaux))
+for reseau in ("Twitter/X", "TikTok", "Twitch", "Instagram", "YouTube"):
+    verifier(f"la carte {reseau} existe",
+             f'data-social-platform="{reseau}"' in html)
 
 verifier("le champ texte des auto-roles a disparu",
          "data-autorole-list" not in html)

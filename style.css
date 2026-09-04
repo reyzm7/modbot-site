@@ -8535,7 +8535,8 @@ label,
 .social-icon.brand-twitch    { color: #9146ff; background: rgba(145, 70, 255, 0.12); border-color: rgba(145, 70, 255, 0.32); }
 .social-icon.brand-tiktok    { color: #ff0050; background: rgba(255, 0, 80, 0.10);   border-color: rgba(255, 0, 80, 0.30); }
 .social-icon.brand-instagram { color: #e1306c; background: rgba(225, 48, 108, 0.11); border-color: rgba(225, 48, 108, 0.30); }
-.social-icon.brand-x         { color: #e8ecf4; background: rgba(232, 236, 244, 0.08); border-color: rgba(232, 236, 244, 0.22); }
+.social-icon.brand-x         { color: #e8ecf4; background: rgba(232, 236, 244, 0.08); border-color: rgba(232, 236, 244, 0.22); }
+.social-icon.brand-youtube   { color: #ff0000; background: rgba(255, 0, 0, 0.10);     border-color: rgba(255, 0, 0, 0.30); }
 
 @media (prefers-reduced-motion: reduce) {
   .feature-card:hover .feature-icon,

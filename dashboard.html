@@ -1663,6 +1663,38 @@
             </div>
           </article>
 
+          <article class="social-card" data-social-platform="YouTube">
+            <div class="social-card-head">
+              <span class="social-icon brand-youtube" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-youtube"/></svg></span>
+              <div>
+                <h3>YouTube</h3>
+                <p data-i18n="dash.ytSousTitre">Nouvelles vidéos et passages en direct.</p>
+              </div>
+              <span class="state inactive" data-social-state data-i18n="dash.ytInactif">Inactif</span>
+            </div>
+            <label data-i18n="dash.ytLien">Lien de la chaîne
+              <input type="url" placeholder="https://www.youtube.com/@ta_chaine" data-social-link>
+            </label>
+            <label data-i18n="dash.ytSalon">Salon de publication
+              <select data-social-channel><option value="">— Chargement… —</option></select><small class="field-help" data-i18n="dash.relaisSalonAide">Le salon où l’annonce sera publiée. Choisis-le dans la liste : le dashboard connaît les salons du serveur.</small>
+            </label>
+            <label data-i18n="dash.relaisPing">Prévenir ces rôles
+              <select data-social-ping-picker><option value="">— Chargement… —</option></select>
+              <span class="variable-chips" data-social-ping-chips></span>
+            </label>
+            <label class="mini-toggle" data-i18n="dash.relaisEveryone">
+              <input type="checkbox" data-social-everyone><span></span>Mentionner @everyone
+            </label>
+            <label data-i18n="dash.relaisMessage">Message d'annonce
+              <textarea data-social-message rows="2" maxlength="400"></textarea>
+            </label>
+            <div class="variable-chips" data-social-variables></div>
+            <div class="social-actions">
+              <label class="mini-toggle" data-i18n="dash.activerRelais"><input type="checkbox" data-social-enabled><span></span>Activer</label>
+              <button class="secondary-btn compact" type="button" data-social-test data-i18n="dash.ytTester"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flask"/></svg> Tester</button>
+            </div>
+          </article>
+
           <article class="social-card" data-social-platform="Instagram">
             <div class="social-card-head">
               <span class="social-icon brand-instagram" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-instagram"/></svg></span>
