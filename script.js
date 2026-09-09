@@ -23,7 +23,10 @@ const commandResponses = {
     title: "js.demo.panelTitre" },
   aide: { command: "/aide", type: "generique", categorie: "js.demo.catOutils",
     title: "js.demo.aideTitre", lignes: ["js.demo.aideLigne"],
-    champs: [["js.demo.catProtection", "2"], ["js.demo.catModeration", "9"],
+    // Les quatre nombres sont ceux de l'inventaire reel du bot, une ligne
+    // par commande : /securite pour la protection, neuf en moderation,
+    // cinq en messages, trois en support.
+    champs: [["js.demo.catProtection", "1"], ["js.demo.catModeration", "9"],
              ["js.demo.catMessages", "5"], ["js.demo.catSupport", "3"]],
     actions: ["js.demo.actDashboard", "js.demo.actWiki", "js.demo.actSupport"],
     footer: "js.demo.piedOutils", heure: "15:01" },
@@ -40,11 +43,9 @@ const commandResponses = {
     champs: [["Anti-Raid", "js.demo.actif"], ["Anti-Nuke", "js.demo.actif"],
              ["Anti-Spam", "js.demo.actif"], ["js.demo.seuilRaid", "5 / 10 s"]],
     footer: "js.demo.piedProtection", heure: "15:03" },
-  captcha: { command: "/captcha", type: "generique", categorie: "js.demo.catProtection",
-    title: "js.demo.captchaTitre", lignes: ["js.demo.captchaLigne"],
-    champs: [["js.demo.statut", "js.demo.actif"], ["js.demo.salon", "#verification"],
-             ["js.demo.roleDonne", "@Verifie"], ["js.demo.validesAujourdhui", "23"]],
-    footer: "js.demo.piedProtection", heure: "15:04" },
+  // Pas de /captcha ici : la commande a ete retiree du bot, le captcha se
+  // regle dans la rubrique Verification du dashboard. Un bouton de demo
+  // pour une commande qui n'existe plus envoie le visiteur dans le vide.
 
   // Moderation
   ban: { command: "/ban", type: "generique", categorie: "js.demo.catModeration",
@@ -111,12 +112,9 @@ const commandResponses = {
     actions: ["js.demo.actRestaurer", "js.demo.actTelecharger"],
     footer: "js.demo.piedSauvegardes", heure: "15:14" },
 
-  // Assistant IA
-  ia: { command: "/ia", type: "generique", categorie: "js.demo.catIa",
-    title: "js.demo.iaTitre", lignes: ["js.demo.iaLigne"],
-    champs: [["js.demo.question", "js.demo.iaQuestion"], ["js.demo.modele", "Mistral"],
-             ["js.demo.tempsReponse", "1,2 s"]],
-    footer: "js.demo.piedIa", heure: "15:15" },
+  // Pas de /ia non plus : l'assistant repond quand on mentionne le bot, et
+  // se regle dans la rubrique Assistant IA du dashboard. La commande a ete
+  // retiree en meme temps que /captcha.
 
   // Statistiques
   stats: { command: "/serverstats", type: "stats", categorie: "js.demo.catStatistiques",
@@ -735,8 +733,38 @@ function setStoredNumber(key, value) {
   localStorage.setItem(key, String(value));
 }
 
+/**
+ * L'adresse d'une API, reduite a son ORIGINE : protocole, hote, port.
+ *
+ * Un lien copie depuis le tableau de bord de l'hebergeur porte un chemin
+ * et une requete — « railway.com/project/…/variables?environmentId=… ».
+ * Colle tel quel dans le champ « adresse du bot », il etait enregistre
+ * tel quel, et chaque appel devenait
+ * « …/variables?environmentId=…/api/health » : une adresse qui ne peut
+ * rien renvoyer d'autre qu'une page 404.
+ *
+ * On ne garde donc que l'origine, et on refuse ce qui n'est ni http ni
+ * https. L'API du bot vit a la racine : un chemin n'a aucun sens ici.
+ */
 function normalizeApiBase(value) {
-  return String(value || "").trim().replace(/\/+$/, "");
+  const brut = String(value || "").trim().replace(/\/+$/, "");
+  if (!brut) return "";
+  const localHote = (hote) => ["localhost", "127.0.0.1", "[::1]", "::1"].includes(hote);
+  const avecProtocole = /^[a-z][a-z0-9+.-]*:\/\//i.test(brut);
+  try {
+    // Sans protocole, https — sauf pour une adresse locale, ou un bot de
+    // developpement ecoute en clair.
+    const suppose = localHote(brut.split(":")[0]) ? "http://" : "https://";
+    const url = new URL(avecProtocole ? brut : suppose + brut);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return "";
+    // Un hote sans point n'est pas un nom de domaine. On ne l'accepte que
+    // s'il est local, ou explicitement demande avec son protocole : sinon
+    // une phrase tapee par megarde passerait pour une adresse.
+    if (!url.hostname.includes(".") && !localHote(url.hostname) && !avecProtocole) return "";
+    return url.origin;
+  } catch (erreur) {
+    return "";
+  }
 }
 
 function escapeHtmlValue(value) {
@@ -768,14 +796,25 @@ function initialsFromName(value) {
  * La saisie manuelle passe AVANT la balise meta : si l'adresse déployée
  * devient obsolète, l'utilisateur doit pouvoir la corriger lui-même sans
  * attendre un redéploiement du site.
+ *
+ * Elle passe avant, mais elle ne la MASQUE plus : une saisie fausse
+ * enregistrée une fois cachait la balise à tout le reste du code, et le
+ * site restait cassé sur cet appareil — pour toujours sur les pages qui
+ * n'ont pas de champ d'adresse, comme l'accueil. La balise reste donc
+ * toujours candidate (voir getModbotApiCandidates).
  */
+function getMetaApiBase() {
+  return normalizeApiBase(
+    document.querySelector('meta[name="modbot-api-url"]')?.content || ""
+  );
+}
+
 function getConfiguredModbotApiBase() {
   return normalizeApiBase(
     window.MODBOT_API_URL ||
     localStorage.getItem("modbot-api-url") ||
-    document.querySelector('meta[name="modbot-api-url"]')?.content ||
     ""
-  );
+  ) || getMetaApiBase();
 }
 
 function getModbotApiBase() {
@@ -837,9 +876,13 @@ function setModbotApiBase(url) {
 
 function getModbotApiCandidates() {
   const candidates = [
-    // 1. Configuration explicite (meta / localStorage) — priorité absolue
+    // 1. Configuration explicite (saisie manuelle) — priorité absolue
     getConfiguredModbotApiBase(),
-    // 2. Base ayant fonctionné précédemment
+    // 2. L'adresse livrée avec le site. Elle vient juste après la saisie
+    //    manuelle et n'est JAMAIS écartée : c'est elle qui rattrape une
+    //    adresse fausse enregistrée dans le navigateur.
+    getMetaApiBase(),
+    // 3. Base ayant fonctionné précédemment
     normalizeApiBase(sessionStorage.getItem("modbot-api-base") || ""),
     normalizeApiBase(localStorage.getItem("modbot-api-base-auto") || "")
   ];
@@ -855,16 +898,72 @@ function getModbotApiCandidates() {
   return [...new Set(candidates.filter(Boolean))];
 }
 
-/** Mémorise durablement une base d'API validée automatiquement. */
+/**
+ * Mémorise durablement une base d'API validée automatiquement.
+ *
+ * Et oublie la saisie manuelle si une AUTRE adresse vient de répondre :
+ * la saisie est toujours essayée en premier, donc si on est ici avec une
+ * adresse différente, c'est qu'elle n'a pas répondu. La garder revenait à
+ * réessayer indéfiniment une adresse morte à chaque chargement.
+ */
 function rememberApiBase(base) {
   if (!base) return;
   sessionStorage.setItem("modbot-api-base", base);
   localStorage.setItem("modbot-api-base-auto", base);
+
+  const manuelle = normalizeApiBase(localStorage.getItem("modbot-api-url") || "");
+  if (manuelle && manuelle !== base) {
+    localStorage.removeItem("modbot-api-url");
+    console.warn(
+      `Adresse enregistrée « ${manuelle} » sans réponse : oubliée au profit de « ${base} ».`
+    );
+  }
 }
 
 function forgetAutoApiBase() {
   sessionStorage.removeItem("modbot-api-base");
   localStorage.removeItem("modbot-api-base-auto");
+}
+
+/**
+ * Le bot répond-il à cette adresse ?
+ *
+ * Le dashboard a sa propre sonde, à l'intérieur de initDashboard(). Celle-ci
+ * sert aux pages qui n'ont pas de dashboard — l'accueil et l'espace
+ * d'administration — et qui, sans elle, partaient à l'aveugle sur une
+ * adresse enregistrée sans jamais vérifier qu'elle répond.
+ */
+async function sonderBaseApi(base, delai = 5000) {
+  if (!base) return false;
+  const controleur = new AbortController();
+  const minuterie = window.setTimeout(() => controleur.abort(), delai);
+  try {
+    const reponse = await fetch(`${base}/api/health`, {
+      cache: "no-store",
+      signal: controleur.signal
+    });
+    if (!reponse.ok) return false;
+    const data = await reponse.json().catch(() => null);
+    return Boolean(data?.ok);
+  } catch (erreur) {
+    return false;
+  } finally {
+    window.clearTimeout(minuterie);
+  }
+}
+
+/**
+ * La première adresse candidate qui répond, mémorisée pour la suite.
+ * Chaîne vide si aucune ne répond : le bot est vraiment injoignable.
+ */
+async function trouverBaseApiJoignable() {
+  for (const candidate of getModbotApiCandidates()) {
+    if (await sonderBaseApi(candidate)) {
+      rememberApiBase(candidate);
+      return candidate;
+    }
+  }
+  return "";
 }
 
 function currentCleanUrl() {
@@ -1398,8 +1497,12 @@ function initAdminZone() {
     }
   }
 
-  document.querySelector("[data-admin-login]")?.addEventListener("click", () => {
-    const base = getModbotApiBase();
+  document.querySelector("[data-admin-login]")?.addEventListener("click", async () => {
+    // On ne part plus sur l'adresse enregistrée sans l'avoir vérifiée :
+    // une adresse fausse envoyait le navigateur sur la page 404 de
+    // l'hébergeur, et la connexion Discord n'avait jamais lieu.
+    afficherEtat("attente", t("js.adm.verificationEnCours"));
+    const base = await trouverBaseApiJoignable();
     if (!base) {
       afficherEtat("erreur", t("js.adm.adresseIntrouvable"));
       return;
@@ -1806,7 +1909,13 @@ function initAdminZone() {
   });
 
   // Le bot tranche a l'ouverture, et au retour d'une connexion Discord.
-  verifierAcces();
+  // L'adresse est d'abord verifiee : sinon une adresse fausse enregistree
+  // dans ce navigateur faisait echouer /api/me et l'espace annoncait « bot
+  // injoignable » alors que le bot tournait.
+  (async () => {
+    if (getModbotSessionToken() || getModbotApiToken()) await trouverBaseApiJoignable();
+    verifierAcces();
+  })();
 }
 
 let revealObserver;
@@ -2973,8 +3082,17 @@ function initDashboard() {
         showToast(t("js.indiqueAdressePublique"));
         return;
       }
-      renderAuthStatus({ level: "pending", message: t("js.testApiEnCours") });
+      // `normalizeApiBase` ne garde que l'origine et refuse ce qui n'est
+      // ni http ni https : un lien du tableau de bord de l'hebergeur, avec
+      // son chemin et sa requete, ne peut plus etre enregistre tel quel.
       const clean = normalizeApiBase(value);
+      if (!clean) {
+        renderAuthStatus({ level: "error", message: t("js.indiqueAdressePublique") });
+        showToast(t("js.indiqueAdressePublique"));
+        return;
+      }
+      input.value = clean;
+      renderAuthStatus({ level: "pending", message: t("js.testApiEnCours") });
       const health = await probeApiBase(clean);
       if (!health) {
         renderAuthStatus({
@@ -7830,40 +7948,66 @@ async function initPublicStats() {
   const pays = section.querySelector("[data-stat-countries]");
   const resume = section.querySelector("[data-stat-summary]");
 
-  const base = getModbotApiBase();
-  if (!base) return;
+  // On essaie TOUTES les adresses candidates, pas seulement la première.
+  // L'accueil n'a aucun champ pour corriger une adresse : une adresse
+  // fausse enregistrée une fois dans ce navigateur rendait ces chiffres
+  // indisponibles pour toujours, sur cet appareil et sur lui seul — d'où
+  // « ça marche sur mon téléphone ».
+  const candidates = getModbotApiCandidates();
+  if (!candidates.length) return;
 
   // Tant que le bot n'a pas repondu, le tiret d'attente est peint en
   // degrade comme un chiffre : il se lisait comme une barre bleue, et on
   // croyait a une image cassee. On le dit en attente, c'est tout.
   section.classList.add("stats-attente");
 
-  try {
-    const reponse = await fetch(`${base}/api/public/stats`, {
-      cache: "no-store",
-      headers: { Accept: "application/json" }
-    });
-    if (!reponse.ok) throw new Error(`HTTP ${reponse.status}`);
-    const stats = (await reponse.json())?.stats;
-    if (!stats) throw new Error(t("js.reponseVide"));
-    derniersStatsPubliques = stats;
+  let stats = null;
+  let derniereErreur = null;
+  for (const base of candidates) {
+    try {
+      const controleur = new AbortController();
+      const minuterie = window.setTimeout(() => controleur.abort(), 6000);
+      let reponse;
+      try {
+        reponse = await fetch(`${base}/api/public/stats`, {
+          cache: "no-store",
+          headers: { Accept: "application/json" },
+          signal: controleur.signal
+        });
+      } finally {
+        window.clearTimeout(minuterie);
+      }
+      if (!reponse.ok) throw new Error(`HTTP ${reponse.status}`);
+      const lues = (await reponse.json())?.stats;
+      if (!lues) throw new Error(t("js.reponseVide"));
+      stats = lues;
+      rememberApiBase(base);   // et oublie l'adresse fausse, s'il y en avait une
+      break;
+    } catch (error) {
+      derniereErreur = error;
+    }
+  }
 
+  if (stats) {
+    derniersStatsPubliques = stats;
     section.classList.remove("stats-attente");
     animerCompteur(membres, stats.members_protected);
     animerCompteur(serveurs, stats.servers);
     if (pays) pays.textContent = formatNombreFr(stats.countries);
     peindreStatsPubliques(stats);
-  } catch (error) {
-    // Le bot est injoignable : on retire les tirets plutôt que de mentir
-    // avec des chiffres inventés, et on garde la page présentable.
-    console.warn("Statistiques publiques indisponibles :", error?.message || error);
-    section.classList.remove("stats-attente");
-    section.classList.add("stats-offline");
-    if (resume) resume.textContent = t("js.chiffresIndisponibles");
-    [membres, serveurs, pays].forEach((el) => {
-      if (el && el.textContent === "—") el.textContent = "·";
-    });
+    return;
   }
+
+  // Le bot est injoignable : on retire les tirets plutôt que de mentir
+  // avec des chiffres inventés, et on garde la page présentable.
+  console.warn("Statistiques publiques indisponibles :",
+               derniereErreur?.message || derniereErreur);
+  section.classList.remove("stats-attente");
+  section.classList.add("stats-offline");
+  if (resume) resume.textContent = t("js.chiffresIndisponibles");
+  [membres, serveurs, pays].forEach((el) => {
+    if (el && el.textContent === "—") el.textContent = "·";
+  });
 }
 
 // La démo de l'accueil est du HTML généré : elle se redessine elle aussi.
@@ -7937,6 +8081,10 @@ const PREMIUM_FONCTIONS = [
     detailClef: "prem.f.dm.detail" },
   { icon: "u-mask", titreClef: "prem.f.premium_role.titre",
     detailClef: "prem.f.premium_role.detail" },
+  { icon: "u-timer", titreClef: "prem.f.recurring.titre",
+    detailClef: "prem.f.recurring.detail" },
+  { icon: "i-shield", titreClef: "prem.f.security_score.titre",
+    detailClef: "prem.f.security_score.detail" },
   { icon: "u-sparkles", titreClef: "prem.f.ai.titre",
     detailClef: "prem.f.ai.detail" },
 ];

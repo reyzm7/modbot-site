@@ -337,7 +337,7 @@
         <span class="premium-lock-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg></span>
         <span>
           <strong data-i18n="prem.verrouTitre">Réservé à ModBot Premium</strong>
-          <small data-i18n="prem.verrouTexte">Vous pouvez tout régler dès maintenant : rien ne sera appliqué tant que l'abonnement n'est pas actif, et tout repartira tel quel ensuite.</small>
+          <small data-i18n="prem.verrouTexte">Ce panneau est en lecture seule tant que l'abonnement n'est pas actif. Vos réglages sont conservés : ils repartiront tels quels le jour où il l'est.</small>
         </span>
         <a class="primary-btn compact" href="premium.html" data-i18n="prem.verrouBouton"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Voir les offres</a>
       </div>
@@ -1002,12 +1002,7 @@
               <select data-autorole-picker><option value="" data-i18n="js.chargementRoles">— Chargement… —</option></select>
             </label>
             <div class="variable-chips" data-autorole-chips></div>
-            <p class="field-help" data-i18n="roles.autoListHelp">
-              Choisis un rôle dans la liste pour l'ajouter ; clique sur un rôle ajouté pour
-              le retirer. Dix au maximum. Un rôle placé au-dessus de ModBot dans la
-              hiérarchie du serveur ne peut pas être attribué : Discord le refuse, et le
-              journal indique lesquels ont été écartés.
-            </p>
+            <p class="field-help" data-i18n="roles.autoListHelp">Dix rôles au maximum. Un rôle placé au-dessus de ModBot dans la hiérarchie du serveur ne peut pas être attribué : Discord le refuse. Le journal indique lesquels ont été écartés, et pourquoi.</p>
 
             <label class="toggle-line">
               <input type="checkbox" data-autorole-after-captcha><span></span>
@@ -1621,7 +1616,7 @@
 
         <div class="tool-panel social-info">
           <strong data-i18n="dash.principe"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-bell"/></svg> Principe</strong>
-          <p data-i18n="dash.ajouteLeLienDu">Ajoute le lien du compte et l’ID du salon Discord. Le bot surveille la plateforme et poste une annonce dans ce salon dès qu’un nouveau contenu est détecté ou lorsqu’un test est lancé.</p>
+          <p data-i18n="dash.ajouteLeLienDu">Le bot regarde chaque minute : une publication est annoncée en moins de deux minutes, et jamais deux fois. Rien à installer ailleurs — colle le lien du compte, choisis le salon. TikTok, Twitch et YouTube renvoient vers la publication elle-même ; Instagram et X ne laissent lire que leur nombre de publications, l’annonce renvoie donc vers le profil.</p>
         </div>
 
         <div class="social-grid">

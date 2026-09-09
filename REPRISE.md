@@ -75,6 +75,14 @@ arrière-plan.** Pour une animation qui doit aboutir même là, force un reflow
 Le `localStorage` passe **avant** la balise, volontairement : une URL déployée
 obsolète peut ainsi être corrigée sans redéploiement.
 
+Il passe avant, mais il ne la **masque pas**. Une adresse fausse enregistrée
+une fois — le lien du tableau de bord Railway, par exemple — cachait la balise
+à tout le reste du code : le site restait cassé sur cet appareil, et sur lui
+seul, d'où les « chez moi ça marche ». La balise reste donc toujours candidate,
+`normalizeApiBase()` ne garde que l'origine d'une adresse (ni chemin ni
+requête), et une adresse enregistrée qui ne répond plus est oubliée dès qu'une
+autre répond.
+
 **4. Les statistiques de l'accueil comptent des LANGUES, pas des pays.**
 Discord ne communique pas le pays d'un serveur — le point est clos, ne le
 rouvre pas. `/api/public/stats` renvoie `languages`, `top_languages` et
