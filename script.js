@@ -8540,7 +8540,17 @@ async function initLogosPartenaires() {
       try {
         const reponse = await fetch(
           `https://discord.com/api/v10/invites/${encodeURIComponent(code)}?with_counts=true`);
-        if (!reponse.ok) return;
+        if (!reponse.ok) {
+          // Une invitation morte ne se voyait nulle part : la carte
+          // retombait sur son monogramme, et le bouton « Rejoindre »
+          // menait au vide sans que personne s'en aperçoive. Trois
+          // l'ont fait en même temps. On le dit au moins en console.
+          console.warn(
+            `Partenaire « ${carte.querySelector("h2, h3")?.textContent?.trim() || code} » : `
+            + `invitation ${code} injoignable (HTTP ${reponse.status}). `
+            + "Il faut un lien neuf, créé sans expiration.");
+          return;
+        }
         invitation = await reponse.json();
         memoriserPartenaire(code, invitation);
       } catch (erreur) {
