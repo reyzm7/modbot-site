@@ -2090,6 +2090,55 @@ function initOndeAuClic() {
   });
 }
 
+/**
+ * La lueur du fond suit le pointeur, avec du retard.
+ *
+ * Le retard fait tout : suivre le curseur exactement colle le decor au
+ * doigt et donne le mal de mer. On s'approche de la cible par
+ * fractions, et le fond semble poser derriere la page.
+ *
+ * Ici, on ne fait que POSER DEUX NOMBRES sur la racine. Le deplacement
+ * lui-meme est compose dans la keyframe `glowMove`, en CSS : une
+ * animation en cours l'emporte sur toute declaration, et poser un
+ * `transform` sur l'element n'aurait rien fait.
+ */
+function initParallaxeFond() {
+  // Rien a piloter la ou la lueur est eteinte : le dashboard et
+  // l'espace d'administration gardent leur fond immobile.
+  if (!document.querySelector("body:not(.dashboard-page) .page-glow")) return;
+  if (mouvementReduit()) return;
+  // Sur un ecran tactile il n'y a pas de survol : le fond sauterait
+  // d'un point a l'autre a chaque appui. On s'abstient.
+  if (!window.matchMedia?.("(hover: hover) and (pointer: fine)")?.matches) return;
+
+  const racine = document.documentElement;
+  const cible = { x: 0, y: 0 };
+  const courant = { x: 0, y: 0 };
+  let enCours = false;
+
+  const pas = () => {
+    courant.x += (cible.x - courant.x) * 0.08;
+    courant.y += (cible.y - courant.y) * 0.08;
+    racine.style.setProperty("--parallaxe-x", courant.x.toFixed(3));
+    racine.style.setProperty("--parallaxe-y", courant.y.toFixed(3));
+    if (Math.abs(cible.x - courant.x) > 0.0015 ||
+        Math.abs(cible.y - courant.y) > 0.0015) {
+      requestAnimationFrame(pas);
+      return;
+    }
+    enCours = false;   // arrive : on rend la main jusqu'au prochain mouvement
+  };
+
+  window.addEventListener("pointermove", (evenement) => {
+    cible.x = evenement.clientX / window.innerWidth - 0.5;
+    cible.y = evenement.clientY / window.innerHeight - 0.5;
+    if (!enCours) {
+      enCours = true;
+      requestAnimationFrame(pas);
+    }
+  }, { passive: true });
+}
+
 function initRevealAnimations() {
   const selectors = [
     ".stat",
@@ -8235,6 +8284,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initAssistant();
   initRevealAnimations();
   initOndeAuClic();
+  initParallaxeFond();
   initPublicStats();
   initDashboard();
   remplirSelecteurPays();

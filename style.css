@@ -10420,6 +10420,51 @@ button.visite-barre:focus-visible i {
     0 0 26px rgba(139, 92, 246, 0.16);
 }
 
+/* ── LA LUEUR DU FOND, rallumee sur les pages publiques ───────────── */
+/*    Elle faisait partie des decorations que le theme eteint plus haut,
+      et la raison tient : tout le decor a la fois nuisait a la
+      lisibilite. On n'en rallume donc QU'UNE — pas le champ d'etoiles,
+      pas les trois nebuleuses — a moitie moins forte, et pas sur le
+      dashboard ni l'espace d'administration : on y reste longtemps,
+      devant des chiffres et des champs.
+
+      `body:not(.dashboard-page)` dit exactement cela : `admin.html`
+      porte les deux classes, il est donc exclu lui aussi.
+
+      Le `!important` n'est pas un caprice : la regle qui eteint la
+      lueur en porte un, et rien d'autre ne la rallumerait. */
+body:not(.dashboard-page) .page-glow {
+  display: block !important;
+  opacity: 0.5;
+}
+
+/*    Le pointeur est compose DANS la keyframe, pas a cote.
+
+      C'est le piege du jour : une animation en cours l'emporte sur
+      toute declaration de la cascade. `.page-glow` porte deja
+      `glowMove`, qui pilote `transform` — poser une seconde
+      transformation sur l'element n'aurait rien fait, et lui donner la
+      place aurait supprime la derive existante. Les deux translations
+      s'additionnent donc dans la meme valeur, et la derive lente reste
+      exactement ce qu'elle etait.
+
+      Dix-huit pixels : le fond doit se deplacer moins que ce qu'on
+      regarde, sinon ce n'est plus un fond. */
+@keyframes glowMove {
+  from {
+    transform: translate3d(
+      calc(var(--parallaxe-x, 0) * 18px),
+      calc(var(--parallaxe-y, 0) * 18px),
+      0) scale(1);
+  }
+  to {
+    transform: translate3d(
+      calc(3% + var(--parallaxe-x, 0) * 18px),
+      calc(-2% + var(--parallaxe-y, 0) * 18px),
+      0) scale(1.08);
+  }
+}
+
 /* ── Le silence, quand le systeme le demande ──────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .dash-panel.is-active,
@@ -10434,6 +10479,13 @@ button.visite-barre:focus-visible i {
 
   .partner-card:hover,
   .premium-feature:hover {
+    transform: none;
+  }
+
+  /* La lueur reste visible — c'est un degrade, pas un mouvement — mais
+     elle cesse de deriver et ne suit plus le pointeur. */
+  body:not(.dashboard-page) .page-glow {
+    animation: none;
     transform: none;
   }
 
