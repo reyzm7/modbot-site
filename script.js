@@ -7086,22 +7086,35 @@ function initDashboard() {
      le calcul — lui seul connait le serveur.
      ══════════════════════════════════════════════════════════════ */
 
+  // Ces variables doivent rester le miroir de VARIABLES dans
+  // compteurs.py : une puce que le bot ne sait pas remplir serait
+  // effacée du nom du salon au lieu d'y écrire un chiffre.
   const COMPTEUR_VARIABLES = [
     { token: "{membres}", label: "cpt.varMembres" },
     { token: "{humains}", label: "cpt.varHumains" },
     { token: "{bots}", label: "cpt.varBots" },
     { token: "{en_ligne}", label: "cpt.varEnLigne" },
+    { token: "{en_vocal}", label: "cpt.varEnVocal" },
     { token: "{boosts}", label: "cpt.varBoosts" },
     { token: "{niveau_boost}", label: "cpt.varNiveauBoost" },
     { token: "{salons}", label: "cpt.varSalons" },
+    { token: "{salons_textuels}", label: "cpt.varSalonsTextuels" },
+    { token: "{salons_vocaux}", label: "cpt.varSalonsVocaux" },
+    { token: "{categories}", label: "cpt.varCategories" },
     { token: "{roles}", label: "cpt.varRoles" },
+    { token: "{emojis}", label: "cpt.varEmojis" },
+    { token: "{stickers}", label: "cpt.varStickers" },
   ];
 
   const COMPTEUR_MODELES = [
     { clef: "membres", gabarit: "📊 Membres : {membres}" },
     { clef: "humains", gabarit: "👥 Joueurs : {humains}" },
     { clef: "enligne", gabarit: "🟢 En ligne : {en_ligne}" },
+    { clef: "envocal", gabarit: "🔊 En vocal : {en_vocal}" },
     { clef: "boosts", gabarit: "🚀 Boosts : {boosts}" },
+    { clef: "bots", gabarit: "🤖 Bots : {bots}" },
+    { clef: "salons", gabarit: "💬 Salons : {salons}" },
+    { clef: "roles", gabarit: "🎭 Rôles : {roles}" },
   ];
 
   let compteurs = [];
@@ -7111,13 +7124,19 @@ function initDashboard() {
   function apercuCompteur(gabarit) {
     const exemples = {
       "{membres}": "4 167", "{humains}": "4 090", "{bots}": "77",
-      "{en_ligne}": "812", "{boosts}": "14", "{niveau_boost}": "3",
-      "{salons}": "62", "{roles}": "41",
+      "{en_ligne}": "812", "{en_vocal}": "23", "{boosts}": "14",
+      "{niveau_boost}": "3", "{salons}": "62", "{salons_textuels}": "48",
+      "{salons_vocaux}": "9", "{categories}": "7", "{roles}": "41",
+      "{emojis}": "120", "{stickers}": "4",
     };
     let texte = String(gabarit || "");
     for (const [jeton, valeur] of Object.entries(exemples)) {
       texte = texte.split(jeton).join(valeur);
     }
+    // « {role:123…} » compte les porteurs d'un rôle. Sans cette ligne il
+    // restait écrit tel quel dans l'aperçu — la seule variable qu'on
+    // voyait en clair au lieu d'un chiffre.
+    texte = texte.replace(/\{(?:role|rôle)\s*:\s*\d{15,25}\}/g, "128");
     return texte.replace(/\{[a-zA-Z_]{2,20}\}/g, "").replace(/\s{2,}/g, " ").trim();
   }
 
