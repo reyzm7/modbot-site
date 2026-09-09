@@ -2589,6 +2589,16 @@ function initDashboard() {
       badge.textContent = labels[state.level] || state.level;
       badge.dataset.level = state.level;
     }
+    // Le champ montre l'adresse REELLEMENT utilisée. Il est rempli au
+    // chargement, avant que la découverte n'ait pu écarter une adresse
+    // morte : sans cette remise à jour, il continuait d'afficher une
+    // adresse que plus rien n'appelle.
+    const champAdresse = document.querySelector("[data-api-url-input]");
+    if (champAdresse && document.activeElement !== champAdresse) {
+      const utilisee = getModbotApiBase();
+      if (utilisee && champAdresse.value !== utilisee) champAdresse.value = utilisee;
+    }
+
     // Le réglage d'adresse n'apparaît qu'en cas de problème de liaison
     const advanced = document.querySelector("[data-auth-advanced]");
     if (advanced) {
