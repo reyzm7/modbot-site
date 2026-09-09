@@ -32,7 +32,7 @@ AUTO_FERMANTES = {"img", "br", "hr", "input", "meta", "link", "source"}
 INTRADUISIBLE = re.compile(
     r"^(ModBot|Twitch|TikTok|Instagram|YouTube|Discord|Railway|Vercel|Mistral AI"
     r"|MyMemory|Stripe|PayPal|/[\w-]+.*|!\w+|APP"
-    r"|Twitch Memez94|ePro League|CPG Belge|VPG Suisse|Darryliens / Ennes|VPG Belgique|xWS Tournament)$")
+    r"|Twitch Memez94|ePro League|PFL France|CPG Belge|VPG Suisse|Darryliens / Ennes|VPG Belgique|xWS Tournament)$")
 
 erreurs = []
 succes = []

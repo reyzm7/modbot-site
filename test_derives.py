@@ -101,7 +101,8 @@ def francais():
 
 def normaliser(texte):
     for avant, apres in (("&nbsp;", " "), ("&amp;", "&"), ("&lt;", "<"),
-                         ("&gt;", ">"), ("&#39;", "'")):
+                         ("&gt;", ">"), ("&#39;", "'"),
+                         ("&rsquo;", "’"), ("&#8217;", "’")):
         texte = texte.replace(avant, apres)
     return " ".join(texte.split())
 

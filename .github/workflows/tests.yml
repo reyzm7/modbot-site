@@ -7,6 +7,10 @@
 # Vercel deploie `main` au push. Ce fichier fait tourner les tests sur la
 # meme poussee : le deploiement n'attend pas le resultat, mais l'onglet
 # Actions dit en deux minutes si quelque chose a casse.
+#
+# UNE ETAPE PAR SUITE, deliberement : la liste des etapes se lit d'un
+# coup d'oeil, et `if: always()` les fait toutes tourner meme apres un
+# echec. Un premier rouge ne doit pas cacher les suivants.
 name: Tests du site
 
 on:
@@ -42,12 +46,27 @@ jobs:
       # bibliotheque standard, et les deux modules du bot qu'ils
       # importent — `premium_core` et `compteurs` — n'ont eux non plus
       # aucune dependance. C'est ce qui les rend verifiables ici.
-      - name: Les suites
+      - name: Traductions (test_i18n)
+        if: always()
         working-directory: modbot-site
-        run: |
-          echec=0
-          for f in test_*.py; do
-            echo "── $f"
-            python "$f" || echec=1
-          done
-          exit $echec
+        run: python test_i18n.py
+
+      - name: Derives entre le site et le bot (test_derives)
+        if: always()
+        working-directory: modbot-site
+        run: python test_derives.py
+
+      - name: Noms declares (test_declarations)
+        if: always()
+        working-directory: modbot-site
+        run: python test_declarations.py
+
+      - name: Selecteurs (test_selecteurs)
+        if: always()
+        working-directory: modbot-site
+        run: python test_selecteurs.py
+
+      - name: Carte de bienvenue (test_bienvenue)
+        if: always()
+        working-directory: modbot-site
+        run: python test_bienvenue.py
