@@ -971,7 +971,14 @@ h1 {
   min-height: 42px;
   margin-bottom: 8px;
   display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
+  /* TROIS colonnes, pas deux : le numero, l'icone, puis l'intitule.
+     Le bouton porte trois enfants — <span>01</span>, le <svg>, et le
+     texte nu. Avec deux colonnes, ce texte devenait un troisieme item
+     de grille pose sur la LIGNE SUIVANTE, dans une colonne de 34 px :
+     « Vue globale » s'y coupait en deux, « Blacklist bot » aussi. Le
+     defaut est apparu le jour ou les icones sont arrivees dans ces
+     boutons, et se voyait sur toute la barre. */
+  grid-template-columns: 34px auto minmax(0, 1fr);
   align-items: center;
   gap: 10px;
   border-radius: var(--radius);

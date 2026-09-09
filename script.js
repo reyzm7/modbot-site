@@ -7260,15 +7260,52 @@ function initDashboard() {
         <button class="secondary-btn compact danger" type="button" data-compteur-retirer>${escapeHtml(t("js.supprimer"))}</button>
       </div>`).join("");
     hote.querySelectorAll("[data-compteur-rang]").forEach((ligne) => {
-      ligne.querySelector("[data-compteur-retirer]")?.addEventListener("click", () => {
-        // Le salon reste : on retire le compteur, pas le salon. Le
-        // supprimer d'autorite effacerait quelque chose que
-        // l'administrateur n'a pas demande de supprimer.
-        compteurs.splice(Number(ligne.dataset.compteurRang), 1);
-        renderCompteurs();
-        markPanelDirty("compteurs");
-      });
+      ligne.querySelector("[data-compteur-retirer]")
+        ?.addEventListener("click", (evenement) =>
+          supprimerCompteur(Number(ligne.dataset.compteurRang), evenement.currentTarget));
     });
+  }
+
+  /**
+   * Retire un compteur, et son salon avec.
+   *
+   * Le salon d'un compteur ne sert qu'à porter son chiffre : personne
+   * ne peut s'y connecter, il ne dit rien d'autre. En laisser un
+   * derrière soi, c'est laisser un nom qui ne bouge plus.
+   *
+   * Suppression en deux temps, comme les giveaways : supprimer un
+   * salon Discord ne se rattrape pas, un clic de trop non plus.
+   */
+  async function supprimerCompteur(rang, bouton) {
+    const compteur = compteurs[rang];
+    if (!compteur) return;
+
+    if (bouton && !bouton.dataset.confirming) {
+      bouton.dataset.confirming = "1";
+      bouton.textContent = t("js.confirmer");
+      bouton.classList.add("is-confirming");
+      window.setTimeout(() => {
+        if (!bouton.isConnected) return;
+        delete bouton.dataset.confirming;
+        bouton.textContent = t("js.supprimer");
+        bouton.classList.remove("is-confirming");
+      }, 5000);
+      return;
+    }
+
+    if (!selectedServer.id) return showToast(t("js.selectionneDabord"));
+    try {
+      // C'est le bot qui supprime : lui seul a la main sur le salon, et
+      // lui seul peut dire si Discord a refusé.
+      const data = await modbotApiFetch(
+        `/api/guilds/${selectedServer.id}/compteurs/${compteur.channel_id}`,
+        { method: "DELETE" });
+      applyCompteurs(data?.compteurs || []);
+      showToast(data?.detail || t("js.cpt.supprime"));
+      loadDashboardResources(selectedServer.id);
+    } catch (erreur) {
+      showToast(erreur?.message || t("js.suppressionImpossible"));
+    }
   }
 
   function applyCompteurs(liste) {
