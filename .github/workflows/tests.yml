@@ -1,0 +1,53 @@
+# Les tests du site, a chaque poussee.
+#
+# Ils existaient tous, et aucun ne tournait tout seul : il fallait y
+# penser, depuis une machine ou Python est installe. Une semaine entiere
+# a ete livree sans qu'aucune suite ne soit passee.
+#
+# Vercel deploie `main` au push. Ce fichier fait tourner les tests sur la
+# meme poussee : le deploiement n'attend pas le resultat, mais l'onglet
+# Actions dit en deux minutes si quelque chose a casse.
+name: Tests du site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Le site
+        uses: actions/checkout@v4
+        with:
+          path: modbot-site
+
+      # `test_derives.py` croise les listes que le site recopie du bot :
+      # les fonctionnalites premium, les variables et modeles de
+      # compteur. Sans le depot du bot a cote, ces croisements sont
+      # sautes — et ce sont eux qui attrapent la derive.
+      - name: Le bot, a cote
+        uses: actions/checkout@v4
+        with:
+          repository: reyzm7/modbot
+          path: modbot
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Rien a installer : les tests du site ne demandent que la
+      # bibliotheque standard, et les deux modules du bot qu'ils
+      # importent — `premium_core` et `compteurs` — n'ont eux non plus
+      # aucune dependance. C'est ce qui les rend verifiables ici.
+      - name: Les suites
+        working-directory: modbot-site
+        run: |
+          echec=0
+          for f in test_*.py; do
+            echo "── $f"
+            python "$f" || echec=1
+          done
+          exit $echec

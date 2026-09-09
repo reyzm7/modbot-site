@@ -49,6 +49,36 @@ node devserver.js
 
 Le site est alors sur `http://localhost:4173`.
 
+### Tests
+
+Quatre suites, sans aucune dépendance : uniquement la bibliothèque
+standard de Python.
+
+```bash
+python test_i18n.py
+```
+
+```bash
+python test_derives.py
+```
+
+`test_i18n.py` vérifie que les cinq langues portent les mêmes clefs,
+qu'aucun texte visible n'échappe au moteur, et qu'aucune clef ne dort.
+`test_derives.py` croise ce que le site **recopie** du bot — les
+fonctionnalités premium, les variables de compteur — avec l'original, et
+compare chaque texte écrit en dur dans les pages à sa traduction
+française. Les trois premiers croisements demandent le dépôt `modbot` à
+côté ; ils se sautent proprement s'il est absent.
+
+Les deux autres, `test_declarations.py` et `test_selecteurs.py`,
+attrapent les noms lus sans être déclarés et les sélecteurs qui ne
+visent plus rien.
+
+**Tout cela tourne à chaque poussée** : `.github/workflows/tests.yml`.
+L'onglet Actions du dépôt dit en deux minutes si un lot a cassé quelque
+chose. Vercel, lui, déploie sans attendre le résultat — regarde le rouge
+s'il y en a.
+
 ### Fichiers
 
 | Fichier | Rôle |
