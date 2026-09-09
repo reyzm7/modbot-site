@@ -1634,18 +1634,118 @@ function initAdminZone() {
     if (histo) {
       const jours = Array.isArray(data.historique) ? data.historique : [];
       const sommet = Math.max(1, ...jours.map((j) => Number(j.visites) || 0));
+      // Chaque barre est un BOUTON : on clique dessus pour corriger le
+      // chiffre du jour. Un compteur d'audience se corrige — une journée
+      // passée à tester le site gonfle son chiffre, un redémarrage en
+      // perd — mais jamais en silence : la correction part au bot avec
+      // son auteur et sa raison, et le jour reste marqué.
       histo.innerHTML = jours.map((entree) => {
         const nombre = Number(entree.visites) || 0;
         const hauteur = Math.max(3, Math.round((nombre / sommet) * 100));
         const etiquette = String(entree.jour || "").slice(5);
-        return `<span class="visite-barre" style="--part:${hauteur}%"
-                      title="${escapeHtmlValue(etiquette)} — ${escapeHtmlValue(String(nombre))}">
+        const corrige = entree.corrige === true;
+        const bulle = `${etiquette} — ${nombre}` +
+          (corrige ? ` (${t("adm.visitesCorrige")})` : "");
+        return `<button type="button" class="visite-barre${corrige ? " est-corrige" : ""}"
+                      style="--part:${hauteur}%" data-visite-jour="${escapeHtmlValue(entree.jour)}"
+                      data-visite-valeur="${escapeHtmlValue(String(nombre))}"
+                      title="${escapeHtmlValue(bulle)}">
                   <span class="visite-barre-valeur">${escapeHtmlValue(String(nombre))}</span>
                   <i></i>
                   <span class="visite-barre-jour">${escapeHtmlValue(etiquette)}</span>
-                </span>`;
+                </button>`;
       }).join("");
+      histo.querySelectorAll("[data-visite-jour]").forEach((barre) => {
+        barre.addEventListener("click", () => ouvrirCorrectionVisite(
+          barre.dataset.visiteJour, barre.dataset.visiteValeur));
+      });
     }
+
+    peindreCorrectionsVisites(data.corrections);
+  }
+
+  /**
+   * Le formulaire de correction d'un jour.
+   *
+   * Il demande une raison, et le bot la refuse si elle est vide : un
+   * chiffre qu'on peut changer sans laisser de trace n'est plus une
+   * mesure, c'est une opinion. La trace vit dans le fichier du bot et
+   * dans le journal, et se relit sous l'histogramme.
+   */
+  function ouvrirCorrectionVisite(jour, valeur) {
+    const hote = document.querySelector("[data-visites-correction]");
+    if (!hote || !jour) return;
+    hote.hidden = false;
+    hote.innerHTML = `
+      <h4>${escapeHtmlValue(tp("adm.visitesCorrigerJour", { jour }))}</h4>
+      <div class="visite-correction-champs">
+        <label class="mini-form"><span>${escapeHtmlValue(t("adm.visitesNouveau"))}</span>
+          <input type="number" min="0" max="10000000" step="1"
+                 data-visite-nombre value="${escapeHtmlValue(String(valeur || 0))}">
+        </label>
+        <label class="mini-form"><span>${escapeHtmlValue(t("adm.visitesRaison"))}</span>
+          <input type="text" maxlength="200" data-visite-raison
+                 placeholder="${escapeHtmlValue(t("adm.visitesRaisonExemple"))}">
+        </label>
+      </div>
+      <div class="search-actions">
+        <button class="primary-btn compact" type="button" data-visite-enregistrer>${escapeHtmlValue(t("adm.visitesEnregistrer"))}</button>
+        <button class="secondary-btn compact" type="button" data-visite-annuler>${escapeHtmlValue(t("adm.visitesAnnuler"))}</button>
+      </div>`;
+
+    const nombre = hote.querySelector("[data-visite-nombre]");
+    const raison = hote.querySelector("[data-visite-raison]");
+    nombre?.focus();
+    nombre?.select();
+
+    hote.querySelector("[data-visite-annuler]")?.addEventListener("click", () => {
+      hote.hidden = true;
+      hote.innerHTML = "";
+    });
+
+    hote.querySelector("[data-visite-enregistrer]")?.addEventListener("click", async () => {
+      const motif = String(raison?.value || "").trim();
+      if (motif.length < 3) {
+        showAdminToast(t("js.adm.visitesRaisonCourte"));
+        raison?.focus();
+        return;
+      }
+      try {
+        await modbotApiFetch("/api/admin/visites", {
+          method: "POST",
+          body: JSON.stringify({
+            day: jour,
+            visits: Number(nombre?.value || 0),
+            reason: motif
+          })
+        });
+        hote.hidden = true;
+        hote.innerHTML = "";
+        showAdminToast(t("js.adm.visitesCorrigee"));
+        // La reponse porte deja le nouvel etat, mais on relit : c'est le
+        // meme chemin que l'affichage normal, donc un seul a maintenir.
+        await chargerVisites();
+      } catch (erreur) {
+        showAdminToast(erreur?.message || t("js.actionRefusee"));
+      }
+    });
+  }
+
+  /** La liste des corrections, sous l'histogramme. */
+  function peindreCorrectionsVisites(liste) {
+    const hote = document.querySelector("[data-visites-corrections]");
+    if (!hote) return;
+    const corrections = Array.isArray(liste) ? liste : [];
+    if (!corrections.length) {
+      hote.innerHTML = `<p class="admin-hint">${escapeHtmlValue(t("adm.visitesAucuneCorrection"))}</p>`;
+      return;
+    }
+    hote.innerHTML = corrections.map((c) => `
+      <div class="visite-correction-ligne">
+        <strong>${escapeHtmlValue(String(c.jour || ""))}</strong>
+        <span>${escapeHtmlValue(String(c.avant ?? "?"))} → ${escapeHtmlValue(String(c.apres ?? "?"))}</span>
+        <small>${escapeHtmlValue(String(c.auteur || "?"))} · ${escapeHtmlValue(String(c.raison || ""))}</small>
+      </div>`).join("");
   }
 
   function suivreVisites(actif) {
