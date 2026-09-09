@@ -2042,6 +2042,54 @@ function observeReveals() {
   revealItems.forEach((item) => revealObserver.observe(item));
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   LE MOUVEMENT
+
+   Le systeme d'exploitation peut demander qu'on se taise : « reduire
+   les animations » n'est pas un gout, c'est un reglage d'accessibilite.
+   Tout ce qui suit le respecte, et le CSS aussi.
+   ══════════════════════════════════════════════════════════════════ */
+
+function mouvementReduit() {
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
+}
+
+/**
+ * L'onde qui part du point clique.
+ *
+ * UN SEUL ecouteur, pose sur le document. La version precedente en
+ * accrochait un par bouton, au chargement, et seulement sur le
+ * dashboard : les sept autres pages n'en avaient aucune, et tout ce que
+ * le JavaScript cree ensuite — une ligne de compteur, un giveaway, le
+ * formulaire de correction des visites — naissait sans onde. La
+ * delegation les couvre tous, y compris ceux qui n'existent pas encore.
+ */
+function initOndeAuClic() {
+  const CIBLES = [
+    ".primary-btn", ".secondary-btn", ".nav-action-btn",
+    ".dash-nav", ".admin-nav", ".demo-command", ".variable-chip"
+  ].join(",");
+
+  document.addEventListener("click", (evenement) => {
+    if (mouvementReduit()) return;
+    const hote = evenement.target.closest?.(CIBLES);
+    // La pastille de couleur EST sa couleur : une onde blanche par
+    // dessus la ferait passer pour une autre.
+    if (!hote || hote.disabled || hote.classList.contains("color-swatch")) return;
+
+    const bornes = hote.getBoundingClientRect();
+    const onde = document.createElement("span");
+    onde.className = "button-ripple";
+    // Un clic au clavier n'a pas de coordonnees : `detail` vaut alors 0
+    // et l'onde partirait du coin haut-gauche. On la part du centre.
+    const auClavier = evenement.detail === 0;
+    onde.style.left = auClavier ? "50%" : `${evenement.clientX - bornes.left}px`;
+    onde.style.top = auClavier ? "50%" : `${evenement.clientY - bornes.top}px`;
+    hote.appendChild(onde);
+    window.setTimeout(() => onde.remove(), 620);
+  });
+}
+
 function initRevealAnimations() {
   const selectors = [
     ".stat",
@@ -7959,18 +8007,6 @@ function initDashboard() {
     setOfferInviteFallbackCopy();
   });
 
-  document.querySelectorAll(".dashboard-page button, .dashboard-page .primary-btn, .dashboard-page .secondary-btn").forEach((element) => {
-    element.addEventListener("click", (event) => {
-      if (element.classList.contains("color-swatch")) return;
-      const bounds = element.getBoundingClientRect();
-      const ripple = document.createElement("span");
-      ripple.className = "button-ripple";
-      ripple.style.left = `${event.clientX - bounds.left}px`;
-      ripple.style.top = `${event.clientY - bounds.top}px`;
-      element.appendChild(ripple);
-      window.setTimeout(() => ripple.remove(), 620);
-    });
-  });
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -8198,6 +8234,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initDemo();
   initAssistant();
   initRevealAnimations();
+  initOndeAuClic();
   initPublicStats();
   initDashboard();
   remplirSelecteurPays();

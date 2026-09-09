@@ -10338,3 +10338,108 @@ button.visite-barre:focus-visible i {
 @media (max-width: 620px) {
   .score-tete { grid-template-columns: 1fr; justify-items: center; text-align: center; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LE MOUVEMENT
+
+   Le site portait deja vingt-deux animations. Ce qui manquait n'etait
+   pas la quantite, mais deux endroits precis :
+
+     * l'onde au clic ne vivait que sur le dashboard, et seulement sur
+       les boutons presents au chargement ;
+     * changer de rubrique etait une coupure nette, sans rien entre les
+       deux — c'est pourtant le geste le plus repete du produit.
+
+   LE FOND, LUI, N'EST PAS UN OUBLI. Le champ d'etoiles, les trois
+   nebuleuses et `body::before` sont eteints plus haut, en
+   `display: none !important`, avec la raison ecrite a cote : ils
+   nuisaient a la lisibilite et donnaient un rendu « template ». Ce qui
+   reste — `body::after` — porte deja `lightSweep`, un balayage toutes
+   les neuf secondes. Et une animation en cours l'emporte sur toute
+   declaration : y poser un mouvement de plus n'aurait rien fait sans
+   d'abord supprimer celui-la. Rallumer le decor est une decision de
+   design, pas une correction : elle ne se prend pas ici.
+
+   Tout ce bloc se tait sous « prefers-reduced-motion ». Une animation
+   qui continue quand le systeme demande le contraire n'est pas un
+   detail de confort : elle rend le site penible, voire inutilisable,
+   pour qui en souffre.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Ce qui peut porter une onde doit pouvoir la contenir ─────────── */
+/*    `.primary-btn` et `.secondary-btn` le pouvaient deja : position
+      relative, overflow cache. Les autres cibles, non — l'onde y
+      debordait, ou se posait en haut de la page. */
+.nav-action-btn,
+.dash-nav,
+.admin-nav,
+.demo-command,
+.variable-chip {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Le changement de rubrique ────────────────────────────────────── */
+/*    `display: block` seul faisait une coupure. Quarante centiemes de
+      seconde suffisent a dire « c'est un autre panneau » sans faire
+      attendre. */
+.dash-panel.is-active,
+.admin-view.is-active {
+  animation: rubriqueEntre 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes rubriqueEntre {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Les deux cartes qui n'avaient pas de survol ──────────────────── */
+/*    Les cartes de fonctionnalite et de tarif en avaient un ; celles
+      des partenaires et du premium, non. Ce sont pourtant les deux
+      pages ou l'on vient regarder avant de decider. */
+.partner-card,
+.premium-feature {
+  transition:
+    transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+.partner-card:hover,
+.premium-feature:hover {
+  transform: translateY(-4px);
+  border-color: var(--line-strong);
+  box-shadow:
+    0 20px 44px rgba(0, 0, 0, 0.34),
+    0 0 26px rgba(139, 92, 246, 0.16);
+}
+
+/* ── Le silence, quand le systeme le demande ──────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .dash-panel.is-active,
+  .admin-view.is-active {
+    animation: none;
+  }
+
+  .partner-card,
+  .premium-feature {
+    transition: none;
+  }
+
+  .partner-card:hover,
+  .premium-feature:hover {
+    transform: none;
+  }
+
+  /* Le JavaScript ne la cree deja plus ; la regle couvre le cas ou le
+     reglage change apres le chargement de la page. */
+  .button-ripple {
+    display: none;
+  }
+}
