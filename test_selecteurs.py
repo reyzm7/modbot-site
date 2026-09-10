@@ -49,11 +49,22 @@ for attribut, attendu in [
     ("data-captcha-channel", "select"),
     ("data-welcome-channel", "select"),
     ("data-welcome-departure-channel", "select"),
+    ("data-bot-language", "select"),
 ]:
     balise = re.search(r"<(\w+)[^>]*\b%s\b" % re.escape(attribut), html)
     verifier(f"« {attribut} » est un <{attendu}>",
              balise is not None and balise.group(1) == attendu,
              balise.group(1) if balise else "absent")
+
+# La langue du bot se lisait comme « le premier <select> de la rubrique »,
+# avec des valeurs qui etaient des libelles (« Français », « English ») :
+# toute langue ajoutee repartait en francais sans rien dire.
+verifier("la langue du bot se lit par son nom, pas par son rang",
+         "[data-dashboard-panel='language'] select" not in script)
+liste_langues = re.search(r"<select data-bot-language>(.*?)</select>", html, re.S)
+codes = re.findall(r'<option value="(\w+)"', liste_langues.group(1)) if liste_langues else []
+verifier("la liste propose les cinq langues du bot, par leur code",
+         codes == ["fr", "en", "es", "de", "ar"], str(codes))
 
 # Le champ des relais reseaux avait echappe au controle precedent : il ne
 # portait pas de `list=`, juste un placeholder « ID du salon Discord ».

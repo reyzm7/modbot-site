@@ -312,7 +312,7 @@
 
       <p class="sidebar-label" data-i18n="dash.apparence">Apparence</p>
       <button class="dash-nav" type="button" data-dashboard-tab="ai"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg></span><span data-i18n="nav.ai">Assistant IA</span></button>
-      <button class="dash-nav" type="button" data-dashboard-tab="language" data-i18n="dash.navLangue"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg></span>Langue</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="language" data-i18n="dash.navLangue"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg></span>Langue du bot</button>
     </aside>
 
     <section class="dashboard-content">
@@ -1428,25 +1428,23 @@
         <div class="panel-title">
           <div>
             <p class="eyebrow" data-i18n="dash.langue"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg> Langue</p>
-            <h2 data-i18n="dash.textesDuBot">Textes du bot</h2>
+            <h2 data-i18n="dash.langueDuBot">Langue du bot</h2>
           </div>
           <button class="secondary-btn compact" type="button" data-reset-section data-i18n="dash.resetLangue"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-reset"/></svg> Reset langue</button>
         </div>
 
         <div class="tool-panel form-panel narrow">
-          <label data-i18n="dash.languePrincipale">Langue principale
-            <select>
-              <option>Français</option>
-              <option>English</option>
+          <label data-i18n="dash.langueDuBotChoix">Le bot écrit en
+            <select data-bot-language>
+              <option value="fr">🇫🇷 Français</option>
+              <option value="en">🇬🇧 English</option>
+              <option value="es">🇪🇸 Español</option>
+              <option value="de">🇩🇪 Deutsch</option>
+              <option value="ar">🇸🇦 العربية</option>
             </select>
           </label>
-          <label data-i18n="dash.tonDesMessages">Ton des messages
-            <select>
-              <option>Professionnel</option>
-              <option>Simple</option>
-              <option>Staff strict</option>
-            </select>
-          </label>
+          <p class="field-help" data-i18n="dash.langueDuBotAide">Tout ce que ModBot écrit sur ce serveur passe dans cette langue : messages, embeds, boutons, menus, fenêtres et logs. Ce que tapent les membres et le staff — motifs, annonces, messages personnalisés — reste tel quel.</p>
+          <p class="field-help" data-i18n="dash.langueDuBotRepublier">Les descriptions des commandes / suivent la langue de l'application Discord de chaque membre : Discord ne permet pas de les choisir serveur par serveur. Un panneau déjà publié (tickets, rôles-réactions…) change de langue quand on le republie.</p>
           <label data-i18n="dash.paysDuServeur">Pays du serveur
             <select data-guild-country>
               <option value="" data-i18n="dash.paysNonRenseigne">Non renseigné</option>

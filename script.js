@@ -3749,6 +3749,13 @@ function initDashboard() {
   let mesLicences = { licences: [], places_libres: 0, serveurs_actives: [], noms: {} };
 
   async function chargerLicences() {
+    // Sans session, la reponse est connue d'avance : un 401, rouge dans
+    // la console de chaque visiteur. On ne la demande pas.
+    if (!getModbotSessionToken()) {
+      mesLicences = { licences: [], places_libres: 0, serveurs_actives: [], noms: {} };
+      majBoutonLicence();
+      return;
+    }
     try {
       mesLicences = await modbotApiFetch("/api/me/licences", { cache: "no-store" });
     } catch (erreur) {
@@ -4305,9 +4312,13 @@ function initDashboard() {
         remplirSelecteurPays();
         champPays.value = String(config.country || "").toUpperCase();
       }
-      if (config.language) {
-        const languageSelect = document.querySelector("[data-dashboard-panel='language'] select");
-        if (languageSelect) languageSelect.value = config.language === "en" ? "English" : "Français";  // valeurs du <select>, pas des libellés traduits
+      const languageSelect = document.querySelector("[data-bot-language]");
+      if (languageSelect) {
+        // Le code de langue du bot, tel quel : fr, en, es, de, ar. Une
+        // langue que le site ne propose pas retombe sur le francais — ce
+        // que fait aussi le bot.
+        const code = String(config.language || "fr");
+        languageSelect.value = [...languageSelect.options].some((o) => o.value === code) ? code : "fr";
       }
     });
 
@@ -7517,7 +7528,7 @@ function initDashboard() {
       mode: item.dataset.mode || "repeat",
       last_sent: item.dataset.lastSent || "",
     }));
-    const languageValue = document.querySelector("[data-dashboard-panel='language'] select")?.value || "Français";
+    const languageValue = document.querySelector("[data-bot-language]")?.value || "fr";
     const securityToggles = document.querySelectorAll("[data-dashboard-panel='security'] .toggle-line input");
     const customWords = (motsFiltres.length
       ? motsFiltres.join(", ")
@@ -7577,7 +7588,7 @@ function initDashboard() {
       recurring_messages: recurringMessages,
       compteurs: compteursEnvoyes,
       social_relays: socialRelays,
-      language: languageValue === "English" ? "en" : "fr",
+      language: languageValue,
       country: document.querySelector("[data-guild-country]")?.value || "",
       // Les reglages retires ne sont plus envoyes : les omettre evite
     // d ecraser des valeurs gerees ailleurs.
@@ -9309,6 +9320,9 @@ function initPagePremium() {
   async function afficherEtat() {
     const bloc = document.querySelector("[data-premium-state]");
     if (!bloc) return;
+    // Pas connecte : la page reste une page de tarifs, sans demander au
+    // bot un 401 certain.
+    if (!getModbotSessionToken()) return;
     let data;
     try {
       data = await modbotApiFetch("/api/me/licences", { cache: "no-store" });
