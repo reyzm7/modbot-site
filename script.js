@@ -2142,21 +2142,37 @@ function initParallaxeFond() {
 /**
  * LE FOND VIVANT — ce que fait le bot, raconte en lumiere.
  *
- * Trois choses, toutes tirees du metier de ModBot :
+ * Tout ce qui s'y dessine vient du metier de ModBot — proteger,
+ * surveiller, valider — et du code qui le fait tourner.
  *
- *   * des SENTINELLES patrouillent : une poignee de points lumineux qui
- *     derivent, se relient quand ils se croisent — un reseau de serveurs
- *     sous surveillance — et viennent voir le pointeur de pres, sans
- *     jamais se poser dessus ;
- *   * toucher le fond leve un BOUCLIER : un anneau hexagonal qui
- *     s'etend depuis le point touche, avec sa lueur ;
- *   * et libere des ECLATS : de petits boucliers, des coches de
- *     validation vertes et des points qui retombent en s'eteignant.
+ * En permanence, derriere la page :
+ *   * des SENTINELLES patrouillent, reliees en reseau quand elles se
+ *     croisent, et des PAQUETS de donnees courent le long des fils ;
+ *   * des GLYPHES de code et de securite derivent vers le haut — `</>`,
+ *     `0xFF`, `sha256`, `verify()`, `2FA` — puis s'effacent ;
+ *   * des CADENAS flottent, s'ouvrent, et se referment dans un eclat
+ *     vert ;
+ *   * de temps en temps une MENACE apparait, point rouge qui palpite : la
+ *     sentinelle la plus proche fond dessus, la vise, et la neutralise en
+ *     une coche verte.
+ *
+ * Au toucher du fond :
+ *   * un BOUCLIER hexagonal s'etend depuis le point touche ;
+ *   * des ECLATS en jaillissent : boucliers, coches, cadenas, bouts de
+ *     code, points qui retombent.
  *
  * Et un secret : cinq touches rapides declenchent le CONFINEMENT. Le
  * bouclier couvre tout l'ecran, une ruche d'hexagones s'allume sur son
  * passage, et les sentinelles accourent. C'est `/securite lockdown`, en
  * miniature.
+ *
+ * LA LISIBILITE D'ABORD. Tout est derriere le contenu. Ce qui derive en
+ * permanence reste faible, et deux fois plus faible encore dans la
+ * colonne du texte, au milieu de l'ecran. Glyphes et cadenas naissent la
+ * ou l'on voit, jamais en amas, et s'estompent en passant derriere un
+ * texte, un bouton, une carte ou l'en-tete ; les sentinelles s'y font
+ * plus discretes. Le spectaculaire est bref : il ne dure que le temps
+ * d'un geste.
  *
  * Une seule toile, une seule boucle d'images. Les halos sont peints une
  * fois pour toutes dans de petites toiles hors ecran : `shadowBlur` a
@@ -2182,16 +2198,21 @@ function initFondVivant() {
     pourpre: [139, 92, 246],
     cyan: [98, 230, 255],
     lavande: [214, 198, 255],
-    vert: [74, 222, 128]
+    vert: [74, 222, 128],
+    rouge: [255, 92, 122]
   };
   const teinte = (nom, alpha) => {
     const rvb = COULEURS[nom];
     return `rgba(${rvb[0]}, ${rvb[1]}, ${rvb[2]}, ${alpha})`;
   };
+  const hasard = (min, max) => min + Math.random() * (max - min);
+  const auHasard = (liste) => liste[Math.floor(Math.random() * liste.length)];
 
-  // Sans survol fin — un ecran tactile — les sentinelles ne suivent pas
-  // le doigt, et elles sont moins nombreuses : la batterie compte.
+  // Sans survol fin — un ecran tactile — tout est moins nombreux, et
+  // les sentinelles ne suivent pas le doigt : la batterie compte, et un
+  // petit ecran se charge vite.
   const tactile = !window.matchMedia?.("(hover: hover) and (pointer: fine)")?.matches;
+  const POLICE = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
 
   let largeur = 0;
   let hauteur = 0;
@@ -2207,7 +2228,10 @@ function initFondVivant() {
   let attenteRedimension = 0;
   window.addEventListener("resize", () => {
     window.clearTimeout(attenteRedimension);
-    attenteRedimension = window.setTimeout(dimensionner, 120);
+    attenteRedimension = window.setTimeout(() => {
+      dimensionner();
+      zonesPerimees = true;
+    }, 120);
   }, { passive: true });
 
   const halos = {};
@@ -2231,7 +2255,99 @@ function initFondVivant() {
     ctx.globalAlpha = 1;
   }
 
-  // ── Les formes : un bouclier, une coche, un hexagone ────────────────
+  // La colonne du texte : au milieu de l'ecran, de la largeur du contenu.
+  // Ce qui derive en permanence y est deux fois plus discret.
+  function discretion(x) {
+    const colonne = Math.min(1180, largeur - 40);
+    return Math.abs(x - largeur / 2) < colonne / 2 ? 0.5 : 1;
+  }
+
+  // Ce que le contenu occupe a l'ecran : les textes, les boutons, les
+  // cartes, l'en-tete. Un glyphe ou un cadenas qui passe derriere s'y
+  // efface. Un bout de code lu a travers un bouton presque transparent
+  // — le bouton secondaire n'est opaque qu'a 5,5 % — ou sous la barre de
+  // navigation aurait l'air d'un defaut d'affichage, pas d'un decor.
+  const SELECTEUR_CONTENU = [
+    "h1", "h2", "h3", "h4", "p", "li", "a", "button", "label", "input",
+    "textarea", "select", ".eyebrow", ".site-header", ".feature-card",
+    ".partner-card", ".main-partner-inner", ".price-card", ".premium-offer",
+    ".premium-feature", ".faq-box", ".stat", ".stats-big", ".integration",
+    ".wiki-toc", ".premium-note", ".discord-window", ".demo-controls",
+    // Les blocs entiers, pas seulement leurs lignes : entre deux boutons
+    // du hero, un glyphe n'est derriere rien, mais il colle aux controles.
+    ".hero-copy", ".section-heading", ".premium-hero", ".partners-hero",
+    ".wiki-hero"
+  ].join(", ");
+  let zonesContenu = [];
+  let zonesPerimees = true;
+  let imagesDepuisReleve = 0;
+
+  // Releve a chaque defilement, et toutes les demi-secondes : une carte
+  // qui apparait en glissant, un logo qui se charge, deplacent le contenu
+  // sans qu'on ait defile.
+  function releverContenu() {
+    zonesContenu = [];
+    for (const el of document.querySelectorAll(SELECTEUR_CONTENU)) {
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) continue;
+      if (r.bottom < 0 || r.top > hauteur || r.right < 0 || r.left > largeur) continue;
+      zonesContenu.push([r.left - 22, r.top - 16, r.right + 22, r.bottom + 16]);
+    }
+    zonesPerimees = false;
+    imagesDepuisReleve = 0;
+  }
+  window.addEventListener("scroll", () => {
+    zonesPerimees = true;
+  }, { passive: true });
+
+  function sousLeContenu(x, y) {
+    for (const z of zonesContenu) {
+      if (x > z[0] && x < z[2] && y > z[1] && y < z[3]) return true;
+    }
+    return false;
+  }
+
+  // Le voile monte et descend par petites touches : ce qui entre sous un
+  // bouton s'estompe, sans disparaitre d'un coup.
+  function voiler(objet) {
+    const cible = sousLeContenu(objet.x, objet.y) ? 0.08 : 1;
+    objet.voile += (cible - objet.voile) * 0.1;
+    return objet.voile;
+  }
+
+  // Faire naitre ce qui derive la ou l'on voit. Le voile seul effacait
+  // tout ce qui naissait derriere le contenu : sur un petit ecran plein
+  // de texte, il ne restait presque rien. Quelques essais au hasard hors
+  // du contenu ; faute de place, le dernier point tire fera l'affaire,
+  // et le voile s'en chargera. Jamais au ras du bord : centre la-dessus,
+  // un glyphe y serait coupe.
+  function placerLibrement(objet) {
+    // Ni au ras d'un bord, ni tout en haut : un glyphe centre au bord y
+    // serait coupe, et la bande au-dessus de l'en-tete n'en laisse voir
+    // que la moitie.
+    const tirer = () => {
+      objet.x = hasard(30, Math.max(31, largeur - 30));
+      objet.y = hasard(24, Math.max(25, hauteur - 24));
+    };
+    tirer();
+    for (let essai = 0; essai < 12 && (sousLeContenu(objet.x, objet.y) || tropPres(objet)); essai++) {
+      tirer();
+    }
+  }
+
+  // Pas d'amas. Sur un petit ecran, les rares places libres attiraient
+  // tout au meme endroit : cinq mots empiles a cote d'un bouton.
+  function tropPres(objet) {
+    for (const liste of [glyphes, cadenas]) {
+      for (const autre of liste) {
+        if (autre !== objet && Math.abs(autre.x - objet.x) < 70
+            && Math.abs(autre.y - objet.y) < 34) return true;
+      }
+    }
+    return false;
+  }
+
+  // ── Les formes ──────────────────────────────────────────────────────
   function tracerBouclier(taille) {
     ctx.beginPath();
     ctx.moveTo(0, -taille);
@@ -2261,23 +2377,125 @@ function initFondVivant() {
     ctx.closePath();
   }
 
+  // Un cadenas centre en 0,0. `ouverture` va de 0 (ferme) a 1 (ouvert) :
+  // l'anse se souleve, et sa branche droite quitte le corps. La branche
+  // gauche, elle, reste toujours engagee — c'est ainsi qu'un vrai
+  // cadenas s'ouvre.
+  function tracerCadenas(taille, ouverture) {
+    const demi = taille * 0.7;
+    const base = -taille * 0.05;
+    const rayonAnse = taille * 0.42;
+    const leve = ouverture * taille * 0.38;
+    const haut = base - taille * 0.2 - leve;
+    ctx.beginPath();
+    ctx.rect(-demi, base, demi * 2, taille * 1.05);
+    ctx.moveTo(-rayonAnse, base);
+    ctx.lineTo(-rayonAnse, haut);
+    ctx.arc(0, haut, rayonAnse, Math.PI, Math.PI * 2);
+    ctx.lineTo(rayonAnse, base - leve);
+    ctx.moveTo(taille * 0.09, taille * 0.45);
+    ctx.arc(0, taille * 0.45, taille * 0.09, 0, Math.PI * 2);
+  }
+
+  function ecrire(texte, x, y, taille, couleur, alpha) {
+    ctx.font = `600 ${taille}px ${POLICE}`;
+    ctx.fillStyle = teinte(couleur, alpha);
+    ctx.fillText(texte, x, y);
+  }
+
+  // ── Ce qui vit sur la toile ─────────────────────────────────────────
   const eclats = [];
   const ondes = [];
   const sentinelles = [];
-  const MAX_ECLATS = 260;
+  const glyphes = [];
+  const cadenas = [];
+  const menaces = [];
+  const paquets = [];
+  const MAX_ECLATS = 300;
   const pointeur = { x: -10000, y: -10000, vu: -10000 };
   let confinementJusqua = 0;
   let cibleConfinement = null;
+  let prochaineMenace = performance.now() + hasard(1800, 3200);
 
-  for (let i = 0; i < (tactile ? 5 : 9); i++) {
+  // Rien n'est place tant que la fenetre n'a pas de taille : un onglet
+  // ouvert en arriere-plan, ou prerendu, peut naitre a 0 × 0. Tout se
+  // regroupait alors dans le coin haut-gauche.
+  let place = false;
+
+  const JETONS_CODE = [
+    "{ }", "</>", "=>", "&&", "!==", "0x1F", "0xFF", "01", "10", "[ ]",
+    "fn()", "async", "await", "const", "null", "return", "try { }",
+    "0b1010", "git push", "/api", "200 OK"
+  ];
+  const JETONS_SECURITE = [
+    "sha256", "HMAC", "AES-256", "TLS", "2FA", "RSA", "nonce", "salt",
+    "token", "401", "403", "verify()", "encrypt()", "lock()", "ban()",
+    "warn()", "if (raid)", "/securite"
+  ];
+
+  for (let i = 0; i < (tactile ? 7 : 13); i++) {
     sentinelles.push({
-      x: Math.random() * largeur,
-      y: Math.random() * hauteur,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
+      x: 0,
+      y: 0,
+      vx: hasard(-0.15, 0.15),
+      vy: hasard(-0.15, 0.15),
       phase: Math.random() * Math.PI * 2,
-      couleur: i % 3 === 0 ? "cyan" : "violet"
+      couleur: i % 3 === 0 ? "cyan" : "violet",
+      proie: null,
+      voile: 1,
+      presence: 1
     });
+  }
+
+  function nouveauGlyphe(g, depart) {
+    const securite = Math.random() < 0.5;
+    g.texte = auHasard(securite ? JETONS_SECURITE : JETONS_CODE);
+    g.couleur = securite ? auHasard(["cyan", "vert", "lavande"])
+                         : auHasard(["violet", "lavande", "cyan"]);
+    placerLibrement(g);
+    g.vx = hasard(-0.06, 0.06);
+    if (g.voile === undefined) g.voile = 1;
+    g.vy = hasard(-0.28, -0.08);
+    g.taille = Math.round(hasard(10, 14));
+    g.duree = hasard(480, 960);
+    // Au depart, chacun est deja a un point different de sa vie : sans
+    // cela ils apparaitraient tous ensemble, puis s'eteindraient ensemble.
+    g.age = depart ? hasard(0, g.duree) : 0;
+    g.intensite = hasard(0.13, 0.24);
+    return g;
+  }
+  for (let i = 0; i < (tactile ? 12 : 32); i++) glyphes.push(nouveauGlyphe({}, true));
+
+  for (let i = 0; i < (tactile ? 3 : 7); i++) {
+    cadenas.push({
+      x: 0,
+      y: 0,
+      vx: hasard(-0.12, 0.12),
+      vy: hasard(-0.12, 0.12),
+      taille: hasard(6, 9),
+      ouverture: 1,
+      visee: 1,
+      bascule: performance.now() + hasard(1500, 6000),
+      eclat: 0,
+      voile: 1
+    });
+  }
+
+  function toutPlacer() {
+    for (const s of sentinelles) {
+      s.x = hasard(0, largeur);
+      s.y = hasard(0, hauteur);
+    }
+    for (const c of cadenas) placerLibrement(c);
+    for (const g of glyphes) placerLibrement(g);
+  }
+
+  // Sortie d'un bord, entree par l'autre.
+  function boucler(objet, marge) {
+    if (objet.x < -marge) objet.x = largeur + marge;
+    else if (objet.x > largeur + marge) objet.x = -marge;
+    if (objet.y < -marge) objet.y = hauteur + marge;
+    else if (objet.y > hauteur + marge) objet.y = -marge;
   }
 
   function lancerEclats(x, y, puissance) {
@@ -2288,12 +2506,20 @@ function initFondVivant() {
       const tirage = Math.random();
       let forme = "point";
       let couleur = Math.random() < 0.4 ? "cyan" : "violet";
-      if (tirage < 0.18) {
+      let texte = "";
+      if (tirage < 0.14) {
         forme = "bouclier";
         couleur = "lavande";
-      } else if (tirage < 0.34) {
+      } else if (tirage < 0.27) {
         forme = "coche";
         couleur = "vert";
+      } else if (tirage < 0.36) {
+        forme = "cadenas";
+        couleur = "cyan";
+      } else if (tirage < 0.46) {
+        forme = "code";
+        couleur = Math.random() < 0.5 ? "violet" : "lavande";
+        texte = auHasard(["</>", "{ }", "01", "0x", "=>", "#"]);
       }
       eclats.push({
         x: x,
@@ -2306,22 +2532,55 @@ function initFondVivant() {
         rotation: Math.random() * Math.PI * 2,
         spin: (Math.random() - 0.5) * 0.12,
         forme: forme,
-        couleur: couleur
+        couleur: couleur,
+        texte: texte
       });
     }
   }
 
-  function lancerOnde(x, y, grande) {
+  // Trois tailles d'onde. `normale` est celle du toucher, a l'identique
+  // de la premiere version : elle convenait, on n'y touche pas.
+  const GENRES_ONDE = {
+    grande: { vitesse: 14, usure: 0.011, lueur: 240, aura: 0.45, epaisseur: 2.2 },
+    normale: { vitesse: 5.5, usure: 0.022, lueur: 95, aura: 0.35, epaisseur: 1.6 },
+    petite: { vitesse: 2.6, usure: 0.03, lueur: 38, aura: 0.3, epaisseur: 1.2 }
+  };
+
+  function lancerOnde(x, y, genre) {
+    const reglage = GENRES_ONDE[genre];
     ondes.push({
       x: x,
       y: y,
-      grande: grande,
+      genre: genre,
       rayon: 6,
       vie: 1,
-      vitesse: grande ? 14 : 5.5,
-      usure: grande ? 0.011 : 0.022,
+      vitesse: reglage.vitesse,
+      usure: reglage.usure,
+      lueur: reglage.lueur,
+      aura: reglage.aura,
+      epaisseur: reglage.epaisseur,
       rotation: Math.random() * Math.PI
     });
+  }
+
+  // Une menace neutralisee : un petit bouclier, une coche, des points verts.
+  function neutraliser(x, y) {
+    lancerOnde(x, y, "petite");
+    if (eclats.length >= MAX_ECLATS) return;
+    eclats.push({
+      x: x, y: y, vx: 0, vy: -0.45, vie: 1, usure: 0.013, taille: 4.5,
+      rotation: 0, spin: 0, forme: "coche", couleur: "vert", texte: ""
+    });
+    for (let i = 0; i < 6 && eclats.length < MAX_ECLATS; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      eclats.push({
+        x: x, y: y,
+        vx: Math.cos(angle) * hasard(0.6, 1.8),
+        vy: Math.sin(angle) * hasard(0.6, 1.8),
+        vie: 1, usure: hasard(0.02, 0.035), taille: hasard(1.6, 2.6),
+        rotation: 0, spin: 0, forme: "point", couleur: "vert", texte: ""
+      });
+    }
   }
 
   // ── Toucher le fond ─────────────────────────────────────────────────
@@ -2363,13 +2622,13 @@ function initFondVivant() {
     while (rafale.length && maintenant - rafale[0] > 2200) rafale.shift();
     if (rafale.length >= 5) {
       rafale.length = 0;
-      lancerOnde(x, y, true);
+      lancerOnde(x, y, "grande");
       lancerEclats(x, y, 1.8);
       confinementJusqua = maintenant + 1700;
       cibleConfinement = { x: x, y: y };
       return;
     }
-    lancerOnde(x, y, false);
+    lancerOnde(x, y, "normale");
     lancerEclats(x, y, 1);
   });
 
@@ -2381,13 +2640,34 @@ function initFondVivant() {
     }, { passive: true });
   }
 
-  // ── Les sentinelles ─────────────────────────────────────────────────
+  // ── Les glyphes de code et de securite ──────────────────────────────
+  function dessinerGlyphes() {
+    for (const g of glyphes) {
+      g.age += 1;
+      if (g.age >= g.duree) nouveauGlyphe(g, false);
+      g.x += g.vx;
+      g.y += g.vy;
+      // Ils naissent et meurent en fondu : jamais d'apparition seche.
+      const alpha = Math.sin(Math.PI * (g.age / g.duree)) * g.intensite
+        * discretion(g.x) * voiler(g);
+      if (alpha > 0.01) ecrire(g.texte, g.x, g.y, g.taille, g.couleur, alpha);
+    }
+  }
+
+  // ── Les sentinelles, leur reseau, et les paquets qui y circulent ────
   function dessinerSentinelles(temps) {
     const confine = temps < confinementJusqua && cibleConfinement;
     const pointeurRecent = temps - pointeur.vu < 1500;
     for (const s of sentinelles) {
       s.phase += 0.03;
-      if (confine) {
+      if (s.proie) {
+        // En chasse : elle fond sur la menace qu'on lui a confiee.
+        const dx = s.proie.x - s.x;
+        const dy = s.proie.y - s.y;
+        const distance = Math.hypot(dx, dy) || 1;
+        s.vx += (dx / distance) * 0.06;
+        s.vy += (dy / distance) * 0.06;
+      } else if (confine) {
         s.vx += (cibleConfinement.x - s.x) * 0.0012;
         s.vy += (cibleConfinement.y - s.y) * 0.0012;
       } else if (pointeurRecent) {
@@ -2404,43 +2684,169 @@ function initFondVivant() {
       s.vx = (s.vx + (Math.random() - 0.5) * 0.03) * 0.985;
       s.vy = (s.vy + (Math.random() - 0.5) * 0.03) * 0.985;
       const vitesse = Math.hypot(s.vx, s.vy);
-      const plafond = confine ? 5 : 1.4;
+      const plafond = s.proie ? 2.8 : confine ? 5 : 1.4;
       if (vitesse > plafond) {
         s.vx *= plafond / vitesse;
         s.vy *= plafond / vitesse;
       }
       s.x += s.vx;
       s.y += s.vy;
-      if (s.x < -30) s.x = largeur + 30;
-      else if (s.x > largeur + 30) s.x = -30;
-      if (s.y < -30) s.y = hauteur + 30;
-      else if (s.y > hauteur + 30) s.y = -30;
+      boucler(s, 30);
+      // Derriere le contenu, une sentinelle ne s'efface pas — c'est un
+      // point, pas un mot — mais elle descend a quarante pour cent.
+      s.presence = 0.35 + 0.65 * voiler(s);
     }
 
-    // Le reseau : un fil entre deux sentinelles qui se croisent.
+    // Le reseau : un fil entre deux sentinelles qui se croisent, et de
+    // temps en temps un paquet qui le parcourt.
     ctx.lineWidth = 1;
     for (let i = 0; i < sentinelles.length; i++) {
       for (let j = i + 1; j < sentinelles.length; j++) {
         const a = sentinelles[i];
         const b = sentinelles[j];
         const distance = Math.hypot(a.x - b.x, a.y - b.y);
-        if (distance < 180) {
-          ctx.strokeStyle = teinte("pourpre", (1 - distance / 180) * 0.18);
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.stroke();
+        if (distance >= 180) continue;
+        ctx.strokeStyle = teinte("pourpre",
+          (1 - distance / 180) * 0.18 * Math.min(a.presence, b.presence));
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+        if (paquets.length < 24 && Math.random() < 0.003) {
+          paquets.push({
+            a: a, b: b, t: 0,
+            vitesse: hasard(0.012, 0.03),
+            couleur: Math.random() < 0.5 ? "cyan" : "lavande"
+          });
         }
       }
+    }
+    for (let i = paquets.length - 1; i >= 0; i--) {
+      const p = paquets[i];
+      p.t += p.vitesse;
+      // Le fil s'est rompu, ou le paquet est arrive : il disparait.
+      if (p.t >= 1 || Math.hypot(p.a.x - p.b.x, p.a.y - p.b.y) > 200) {
+        paquets.splice(i, 1);
+        continue;
+      }
+      halo(p.couleur, p.a.x + (p.b.x - p.a.x) * p.t, p.a.y + (p.b.y - p.a.y) * p.t, 6,
+        0.6 * Math.min(p.a.presence, p.b.presence));
     }
 
     for (const s of sentinelles) {
       const souffle = 0.6 + Math.sin(s.phase) * 0.25;
-      halo(s.couleur, s.x, s.y, 16 * souffle, 0.5);
-      ctx.fillStyle = teinte("lavande", 0.85);
+      halo(s.couleur, s.x, s.y, 16 * souffle, 0.5 * s.presence);
+      ctx.fillStyle = teinte("lavande", 0.85 * s.presence);
       ctx.beginPath();
       ctx.arc(s.x, s.y, 1.4, 0, Math.PI * 2);
       ctx.fill();
+    }
+  }
+
+  // ── Les cadenas ─────────────────────────────────────────────────────
+  // Le plus souvent fermes. Ils s'ouvrent un instant, puis se referment
+  // dans un eclat vert.
+  function dessinerCadenas(temps) {
+    ctx.lineWidth = 1.3;
+    for (const c of cadenas) {
+      c.x += c.vx;
+      c.y += c.vy;
+      boucler(c, 20);
+      if (temps >= c.bascule) {
+        c.visee = c.visee ? 0 : 1;
+        c.bascule = temps + (c.visee ? hasard(1500, 3500) : hasard(3500, 7500));
+      }
+      const avant = c.ouverture;
+      c.ouverture += (c.visee - c.ouverture) * 0.12;
+      if (avant > 0.05 && c.ouverture <= 0.05) c.eclat = 1;
+      c.eclat *= 0.94;
+      const d = discretion(c.x) * voiler(c);
+      if (c.eclat > 0.02) halo("vert", c.x, c.y, c.taille * 5, c.eclat * 0.5 * d);
+      ctx.save();
+      ctx.translate(c.x, c.y);
+      ctx.strokeStyle = teinte(c.ouverture < 0.2 ? "vert" : "lavande", 0.38 * d);
+      tracerCadenas(c.taille, c.ouverture);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  // ── Les menaces, et leur neutralisation ─────────────────────────────
+  function nouvelleMenace() {
+    // Plutot dans les marges : la neutralisation se voit mieux la ou le
+    // texte ne passe pas.
+    const colonne = Math.min(1180, largeur - 40);
+    const marge = (largeur - colonne) / 2;
+    // Jamais derriere le contenu : on essaie quelques points, et si
+    // l'ecran est plein de texte, la menace attendra la fois suivante.
+    let x = 0;
+    let y = 0;
+    let trouve = false;
+    for (let essai = 0; essai < 12 && !trouve; essai++) {
+      x = hasard(40, largeur - 40);
+      if (marge > 80 && Math.random() < 0.75) {
+        x = Math.random() < 0.5 ? hasard(20, marge - 20) : hasard(largeur - marge + 20, largeur - 20);
+      }
+      y = hasard(hauteur * 0.15, hauteur * 0.85);
+      trouve = !sousLeContenu(x, y);
+    }
+    if (!trouve) return;
+    let chasseur = null;
+    let meilleure = Infinity;
+    for (const s of sentinelles) {
+      if (s.proie) continue;
+      const distance = Math.hypot(s.x - x, s.y - y);
+      if (distance < meilleure) {
+        meilleure = distance;
+        chasseur = s;
+      }
+    }
+    const menace = { x: x, y: y, age: 0, capture: -1, chasseur: chasseur };
+    if (chasseur) chasseur.proie = menace;
+    menaces.push(menace);
+  }
+
+  function dessinerMenaces(temps) {
+    if (temps >= prochaineMenace && largeur > 0) {
+      if (menaces.length < 2) nouvelleMenace();
+      prochaineMenace = temps + (tactile ? hasard(6000, 10000) : hasard(3500, 7000));
+    }
+    for (let i = menaces.length - 1; i >= 0; i--) {
+      const m = menaces[i];
+      const s = m.chasseur;
+      const d = discretion(m.x);
+      m.age += 1;
+      // La capture commence a portee de la sentinelle, ou au bout de trois
+      // secondes : une menace ne reste jamais sans reponse.
+      if (m.capture < 0 && (!s || Math.hypot(s.x - m.x, s.y - m.y) < 90 || m.age > 180)) {
+        m.capture = 0;
+      }
+      if (m.capture < 0) {
+        const pulsation = 0.6 + Math.sin(m.age * 0.25) * 0.4;
+        halo("rouge", m.x, m.y, 14 * pulsation, 0.55 * d);
+        ctx.fillStyle = teinte("rouge", 0.9 * d);
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, 2.2, 0, Math.PI * 2);
+        ctx.fill();
+        continue;
+      }
+      m.capture += 1;
+      const reste = 1 - m.capture / 26;
+      if (s) {
+        ctx.lineWidth = 1.2;
+        ctx.strokeStyle = teinte("cyan", (0.55 * reste + 0.15) * d);
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(m.x, m.y);
+        ctx.stroke();
+        halo("cyan", s.x, s.y, 14, 0.4 * d);
+      }
+      halo("rouge", m.x, m.y, 12 * reste + 2, 0.55 * reste * d);
+      if (m.capture >= 26) {
+        neutraliser(m.x, m.y);
+        if (s) s.proie = null;
+        menaces.splice(i, 1);
+      }
     }
   }
 
@@ -2476,10 +2882,9 @@ function initFondVivant() {
         ondes.splice(i, 1);
         continue;
       }
-      const lueur = (onde.grande ? 240 : 95) * (1.2 - onde.vie * 0.4);
-      halo("violet", onde.x, onde.y, lueur, onde.vie * (onde.grande ? 0.45 : 0.35));
-      if (onde.grande) dessinerRuche(onde);
-      ctx.lineWidth = onde.grande ? 2.2 : 1.6;
+      halo("violet", onde.x, onde.y, onde.lueur * (1.2 - onde.vie * 0.4), onde.vie * onde.aura);
+      if (onde.genre === "grande") dessinerRuche(onde);
+      ctx.lineWidth = onde.epaisseur;
       ctx.strokeStyle = teinte("lavande", onde.vie * 0.75);
       tracerHexagone(onde.x, onde.y, onde.rayon, onde.rotation);
       ctx.stroke();
@@ -2514,9 +2919,15 @@ function initFondVivant() {
       ctx.save();
       ctx.translate(e.x, e.y);
       ctx.rotate(e.rotation);
+      if (e.forme === "code") {
+        ecrire(e.texte, 0, 0, Math.round(e.taille * 3), e.couleur, e.vie);
+        ctx.restore();
+        continue;
+      }
       ctx.lineWidth = 1.4;
       ctx.strokeStyle = teinte(e.couleur, e.vie);
       if (e.forme === "bouclier") tracerBouclier(e.taille * 1.3);
+      else if (e.forme === "cadenas") tracerCadenas(e.taille * 1.2, 0);
       else tracerCoche(e.taille * 1.3);
       ctx.stroke();
       ctx.restore();
@@ -2529,9 +2940,23 @@ function initFondVivant() {
   let arrete = false;
   function image(temps) {
     if (arrete) return;
+    // Le releve d'abord : c'est lui qui dit ou placer librement.
+    imagesDepuisReleve += 1;
+    if (zonesPerimees || imagesDepuisReleve > 30) releverContenu();
+    if (!place && largeur > 0) {
+      toutPlacer();
+      place = true;
+    }
     ctx.clearRect(0, 0, largeur, hauteur);
     ctx.globalCompositeOperation = "lighter";
+    // Redimensionner la toile remet ces reglages a zero : on les repose
+    // a chaque image plutot que de courir apres.
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    dessinerGlyphes();
     dessinerSentinelles(temps);
+    dessinerCadenas(temps);
+    dessinerMenaces(temps);
     dessinerOndes();
     dessinerEclats();
     ctx.globalCompositeOperation = "source-over";
