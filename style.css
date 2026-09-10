@@ -10582,11 +10582,8 @@ body:not(.dashboard-page) .page-glow {
     animation: heroTextEnter 0.82s cubic-bezier(0.2, 0.8, 0.2, 1) 0.18s forwards;
   }
 
-  /* Le JavaScript ne cree pas la toile sous ce reglage, et la retire
-     s'il change en cours de visite. Cette regle couvre l'entre-deux. */
-  .fond-vivant {
-    display: none;
-  }
+  /* La toile, elle, reste : sous ce reglage le JavaScript la fait passer
+     en mode calme — aucun deplacement, seulement des fondus. */
 
   /* Le JavaScript ne la cree deja plus ; la regle couvre le cas ou le
      reglage change apres le chargement de la page. */

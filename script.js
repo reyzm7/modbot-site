@@ -2178,13 +2178,18 @@ function initParallaxeFond() {
  * fois pour toutes dans de petites toiles hors ecran : `shadowBlur` a
  * chaque image couterait cher, un `drawImage` ne coute presque rien.
  *
- * Pages publiques seulement, comme la lueur (§58) : on reste longtemps
- * sur le dashboard, devant des chiffres. Et rien du tout sous
- * « animations reduites ».
+ * Sur toutes les pages, dashboard et administration compris : le voile
+ * y protege les panneaux comme il protege le texte ailleurs.
+ *
+ * Sous « animations reduites », un MODE CALME plutot que rien : aucun
+ * deplacement, tout apparait et s'efface en fondu. C'est ce que
+ * recommandent les guides d'accessibilite — remplacer un mouvement par
+ * un fondu. Sous Windows, ce reglage suit « Effets d'animation » ; coupe,
+ * le decor se taisait entierement, et l'ecran d'un PC restait vide la ou
+ * un telephone le montrait.
  */
 function initFondVivant() {
-  if (document.body.classList.contains("dashboard-page")) return;
-  if (mouvementReduit()) return;
+  let calme = mouvementReduit();
 
   const toile = document.createElement("canvas");
   const ctx = toile.getContext("2d");
@@ -2273,10 +2278,17 @@ function initFondVivant() {
     ".partner-card", ".main-partner-inner", ".price-card", ".premium-offer",
     ".premium-feature", ".faq-box", ".stat", ".stats-big", ".integration",
     ".wiki-toc", ".premium-note", ".discord-window", ".demo-controls",
-    // Les blocs entiers, pas seulement leurs lignes : entre deux boutons
-    // du hero, un glyphe n'est derriere rien, mais il colle aux controles.
-    ".hero-copy", ".section-heading", ".premium-hero", ".partners-hero",
-    ".wiki-hero"
+    // La rangee de boutons du hero, d'un seul tenant : entre deux boutons,
+    // un glyphe n'est derriere rien, mais il colle aux controles. Les
+    // autres blocs d'en-tete ne sont plus exclus en entier : ils avalaient
+    // la place libre des pages chargees, et le decor n'apparaissait plus
+    // que sur l'accueil. Leurs lignes de texte restent protegees.
+    ".hero-actions",
+    // Le dashboard et l'administration : panneaux, cartes, barres.
+    ".dashboard-topbar", ".dashboard-sidebar", ".dashboard-banner",
+    ".dash-panel", ".tool-panel", ".metric-card", ".social-card",
+    ".auth-card", ".server-picker-card", ".server-card", ".admin-panel",
+    ".admin-topbar", ".ai-launcher", ".ai-assistant", ".dashboard-toast"
   ].join(", ");
   let zonesContenu = [];
   let zonesPerimees = true;
@@ -2437,8 +2449,8 @@ function initFondVivant() {
     sentinelles.push({
       x: 0,
       y: 0,
-      vx: hasard(-0.15, 0.15),
-      vy: hasard(-0.15, 0.15),
+      vx: calme ? 0 : hasard(-0.15, 0.15),
+      vy: calme ? 0 : hasard(-0.15, 0.15),
       phase: Math.random() * Math.PI * 2,
       couleur: i % 3 === 0 ? "cyan" : "violet",
       proie: null,
@@ -2456,6 +2468,10 @@ function initFondVivant() {
     g.vx = hasard(-0.06, 0.06);
     if (g.voile === undefined) g.voile = 1;
     g.vy = hasard(-0.28, -0.08);
+    if (calme) {
+      g.vx = 0;
+      g.vy = 0;
+    }
     g.taille = Math.round(hasard(10, 14));
     g.duree = hasard(480, 960);
     // Au depart, chacun est deja a un point different de sa vie : sans
@@ -2470,8 +2486,8 @@ function initFondVivant() {
     cadenas.push({
       x: 0,
       y: 0,
-      vx: hasard(-0.12, 0.12),
-      vy: hasard(-0.12, 0.12),
+      vx: calme ? 0 : hasard(-0.12, 0.12),
+      vy: calme ? 0 : hasard(-0.12, 0.12),
       taille: hasard(6, 9),
       ouverture: 1,
       visee: 1,
@@ -2521,16 +2537,20 @@ function initFondVivant() {
         couleur = Math.random() < 0.5 ? "violet" : "lavande";
         texte = auHasard(["</>", "{ }", "01", "0x", "=>", "#"]);
       }
+      // En mode calme rien ne vole : l'eclat apparait deja a sa place,
+      // tout autour du point touche, et s'efface sans bouger.
+      const portee = calme ? hasard(8, 70 * puissance) : 0;
       eclats.push({
-        x: x,
-        y: y,
-        vx: Math.cos(angle) * vitesse,
-        vy: Math.sin(angle) * vitesse - 0.6,
+        x: x + Math.cos(angle) * portee,
+        y: y + Math.sin(angle) * portee,
+        vx: calme ? 0 : Math.cos(angle) * vitesse,
+        vy: calme ? 0 : Math.sin(angle) * vitesse - 0.6,
+        fixe: calme,
         vie: 1,
         usure: 0.012 + Math.random() * 0.016,
         taille: 2 + Math.random() * 3.5,
         rotation: Math.random() * Math.PI * 2,
-        spin: (Math.random() - 0.5) * 0.12,
+        spin: calme ? 0 : (Math.random() - 0.5) * 0.12,
         forme: forme,
         couleur: couleur,
         texte: texte
@@ -2545,6 +2565,9 @@ function initFondVivant() {
     normale: { vitesse: 5.5, usure: 0.022, lueur: 95, aura: 0.35, epaisseur: 1.6 },
     petite: { vitesse: 2.6, usure: 0.03, lueur: 38, aura: 0.3, epaisseur: 1.2 }
   };
+  // En mode calme, l'onde ne s'etend pas : elle apparait a sa taille, et
+  // s'efface sur place.
+  const RAYON_CALME = { grande: 300, normale: 70, petite: 26 };
 
   function lancerOnde(x, y, genre) {
     const reglage = GENRES_ONDE[genre];
@@ -2552,9 +2575,9 @@ function initFondVivant() {
       x: x,
       y: y,
       genre: genre,
-      rayon: 6,
+      rayon: calme ? RAYON_CALME[genre] : 6,
       vie: 1,
-      vitesse: reglage.vitesse,
+      vitesse: calme ? 0 : reglage.vitesse,
       usure: reglage.usure,
       lueur: reglage.lueur,
       aura: reglage.aura,
@@ -2568,15 +2591,17 @@ function initFondVivant() {
     lancerOnde(x, y, "petite");
     if (eclats.length >= MAX_ECLATS) return;
     eclats.push({
-      x: x, y: y, vx: 0, vy: -0.45, vie: 1, usure: 0.013, taille: 4.5,
+      x: x, y: y, vx: 0, vy: calme ? 0 : -0.45, fixe: calme, vie: 1, usure: 0.013, taille: 4.5,
       rotation: 0, spin: 0, forme: "coche", couleur: "vert", texte: ""
     });
     for (let i = 0; i < 6 && eclats.length < MAX_ECLATS; i++) {
       const angle = Math.random() * Math.PI * 2;
       eclats.push({
-        x: x, y: y,
-        vx: Math.cos(angle) * hasard(0.6, 1.8),
-        vy: Math.sin(angle) * hasard(0.6, 1.8),
+        x: x + (calme ? hasard(-14, 14) : 0),
+        y: y + (calme ? hasard(-14, 14) : 0),
+        vx: calme ? 0 : Math.cos(angle) * hasard(0.6, 1.8),
+        vy: calme ? 0 : Math.sin(angle) * hasard(0.6, 1.8),
+        fixe: calme,
         vie: 1, usure: hasard(0.02, 0.035), taille: hasard(1.6, 2.6),
         rotation: 0, spin: 0, forme: "point", couleur: "vert", texte: ""
       });
@@ -2607,7 +2632,6 @@ function initFondVivant() {
 
   const rafale = [];
   document.addEventListener("click", (evenement) => {
-    if (mouvementReduit()) return;
     const cible = evenement.target;
     if (!cible || cible.closest?.(INTERACTIFS)) return;
     // On selectionnait du texte : ce n'etait pas un geste vers le fond.
@@ -2660,6 +2684,11 @@ function initFondVivant() {
     const pointeurRecent = temps - pointeur.vu < 1500;
     for (const s of sentinelles) {
       s.phase += 0.03;
+      if (calme) {
+        // Elles ne bougent pas : elles respirent, par l'eclat seulement.
+        s.presence = 0.35 + 0.65 * voiler(s);
+        continue;
+      }
       if (s.proie) {
         // En chasse : elle fond sur la menace qu'on lui a confiee.
         const dx = s.proie.x - s.x;
@@ -2712,7 +2741,7 @@ function initFondVivant() {
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
         ctx.stroke();
-        if (paquets.length < 24 && Math.random() < 0.003) {
+        if (!calme && paquets.length < 24 && Math.random() < 0.003) {
           paquets.push({
             a: a, b: b, t: 0,
             vitesse: hasard(0.012, 0.03),
@@ -2734,8 +2763,10 @@ function initFondVivant() {
     }
 
     for (const s of sentinelles) {
-      const souffle = 0.6 + Math.sin(s.phase) * 0.25;
-      halo(s.couleur, s.x, s.y, 16 * souffle, 0.5 * s.presence);
+      // En mode calme, le souffle passe par l'eclat, pas par la taille.
+      const souffle = calme ? 0.75 : 0.6 + Math.sin(s.phase) * 0.25;
+      const eclatCalme = calme ? 0.7 + Math.sin(s.phase) * 0.3 : 1;
+      halo(s.couleur, s.x, s.y, 16 * souffle, 0.5 * s.presence * eclatCalme);
       ctx.fillStyle = teinte("lavande", 0.85 * s.presence);
       ctx.beginPath();
       ctx.arc(s.x, s.y, 1.4, 0, Math.PI * 2);
@@ -2832,7 +2863,9 @@ function initFondVivant() {
       }
       m.capture += 1;
       const reste = 1 - m.capture / 26;
-      if (s) {
+      // En mode calme la sentinelle ne s'est pas approchee : un trait la
+      // relierait a la menace d'un bout a l'autre de l'ecran.
+      if (s && !calme) {
         ctx.lineWidth = 1.2;
         ctx.strokeStyle = teinte("cyan", (0.55 * reste + 0.15) * d);
         ctx.beginPath();
@@ -2898,11 +2931,13 @@ function initFondVivant() {
   function dessinerEclats() {
     for (let i = eclats.length - 1; i >= 0; i--) {
       const e = eclats[i];
-      e.vx *= 0.965;
-      e.vy = e.vy * 0.965 + 0.035;   // un soupcon de gravite
-      e.x += e.vx;
-      e.y += e.vy;
-      e.rotation += e.spin;
+      if (!e.fixe) {
+        e.vx *= 0.965;
+        e.vy = e.vy * 0.965 + 0.035;   // un soupcon de gravite
+        e.x += e.vx;
+        e.y += e.vy;
+        e.rotation += e.spin;
+      }
       e.vie -= e.usure;
       if (e.vie <= 0) {
         eclats.splice(i, 1);
@@ -2937,9 +2972,7 @@ function initFondVivant() {
   // ── La boucle ───────────────────────────────────────────────────────
   // Elle s'arrete d'elle-meme quand l'onglet est cache : c'est ce que
   // fait requestAnimationFrame, et c'est ce qu'on veut ici.
-  let arrete = false;
   function image(temps) {
-    if (arrete) return;
     // Le releve d'abord : c'est lui qui dit ou placer librement.
     imagesDepuisReleve += 1;
     if (zonesPerimees || imagesDepuisReleve > 30) releverContenu();
@@ -2964,12 +2997,20 @@ function initFondVivant() {
   }
   requestAnimationFrame(image);
 
-  // Si le reglage change en cours de visite, on s'efface aussitot.
+  // Si le reglage change en cours de visite, on bascule aussitot : en
+  // mode calme tout s'immobilise sur place ; en mode normal, le mouvement
+  // reprend a la naissance suivante de chaque element.
   const reduit = window.matchMedia?.("(prefers-reduced-motion: reduce)");
   reduit?.addEventListener?.("change", () => {
-    if (!reduit.matches) return;
-    arrete = true;
-    toile.remove();
+    calme = reduit.matches;
+    if (!calme) return;
+    for (const liste of [sentinelles, glyphes, cadenas]) {
+      for (const objet of liste) {
+        objet.vx = 0;
+        objet.vy = 0;
+      }
+    }
+    paquets.length = 0;
   });
 }
 
