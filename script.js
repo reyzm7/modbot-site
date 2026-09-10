@@ -3060,6 +3060,9 @@ function initDashboard() {
   let activePanelName = "overview";
   let hasUnsavedChanges = false;
   let dirtyPanelName = null;
+  // Le dernier etat confirme par le bot (en JSON), pour « Reset » et
+  // « Abandonner ». Repris a chaque chargement, import et enregistrement.
+  let derniereConfigEnregistree = null;
   let ticketNeedsPublish = false;
   let pendingNavigation = null;
   let toastTimer;
@@ -4498,6 +4501,7 @@ function initDashboard() {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/config`, { cache: "no-store" });
       if (!estEncoreLeServeur(guildId)) return;
       recue = data?.config || null;
+      if (recue) derniereConfigEnregistree = JSON.stringify(recue);
     } catch (error) {
       // Ce message annoncait une panne de connexion pour TOUTE erreur :
       // un 403, un 429, un 500 du bot, tout se lisait « bot pas
@@ -6545,7 +6549,10 @@ function initDashboard() {
       showToast(data?.meme_serveur === false
         ? t("js.reglages.restaureAutreServeur")
         : t("js.reglages.restaure"));
-      if (data?.config) applyDashboardConfig(data.config);
+      if (data?.config) {
+        applyDashboardConfig(data.config);
+        derniereConfigEnregistree = JSON.stringify(data.config);
+      }
       clearUnsavedChanges();
     } catch (error) {
       showToast(`${String(error?.message || error).slice(0, 140)}`);
@@ -7597,10 +7604,13 @@ function initDashboard() {
 
   async function saveDashboardConfigToApi() {
     if (!selectedServer.id || !selectedServer.installed) return false;
-    await modbotApiFetch(`/api/guilds/${selectedServer.id}/config`, {
+    const data = await modbotApiFetch(`/api/guilds/${selectedServer.id}/config`, {
       method: "PUT",
       body: JSON.stringify(collectDashboardConfig())
     });
+    // Le bot renvoie ce qu'il a retenu : c'est a cet etat que « Reset »
+    // et « Abandonner » ramenent ensuite.
+    if (data?.config) derniereConfigEnregistree = JSON.stringify(data.config);
     return true;
   }
 
@@ -7980,11 +7990,31 @@ function initDashboard() {
     });
   });
 
+  // « Reset » et « Abandonner » remettaient seulement a zero le drapeau
+  // « non enregistre » : les champs gardaient ce qu'on venait d'y taper,
+  // le toast annoncait une section reinitialisee qui ne l'etait pas, et
+  // ces valeurs repartaient au bot avec l'enregistrement suivant de
+  // n'importe quelle autre rubrique. Ils remettent desormais a l'ecran le
+  // dernier etat confirme par le bot.
+  function remettreDernierEtat() {
+    if (!derniereConfigEnregistree) return false;
+    try {
+      applyDashboardConfig(JSON.parse(derniereConfigEnregistree));
+    } catch (erreur) {
+      console.error("Retour au dernier etat enregistre :", erreur);
+      return false;
+    }
+    if (dirtyPanelName === "tickets") {
+      ticketNeedsPublish = false;
+      setTicketPublishVisible(false);
+    }
+    clearUnsavedChanges();
+    return true;
+  }
+
   document.querySelectorAll("[data-reset-section]").forEach((button) => {
     button.addEventListener("click", () => {
-      const panel = button.closest("[data-dashboard-panel]");
-      markPanelDirty(panel?.dataset.dashboardPanel || activePanelName);
-      showToast(t("js.sectionReinitialisee"));
+      showToast(remettreDernierEtat() ? t("js.sectionReinitialisee") : t("js.selectionneDabord"));
     });
   });
 
@@ -8000,6 +8030,7 @@ function initDashboard() {
   document.querySelector("[data-unsaved-discard]")?.addEventListener("click", () => {
     const action = pendingNavigation;
     closeUnsavedModal();
+    remettreDernierEtat();
     if (dirtyPanelName === "tickets") {
       ticketNeedsPublish = false;
       setTicketPublishVisible(false);
