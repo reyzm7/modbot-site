@@ -2139,6 +2139,415 @@ function initParallaxeFond() {
   }, { passive: true });
 }
 
+/**
+ * LE FOND VIVANT — ce que fait le bot, raconte en lumiere.
+ *
+ * Trois choses, toutes tirees du metier de ModBot :
+ *
+ *   * des SENTINELLES patrouillent : une poignee de points lumineux qui
+ *     derivent, se relient quand ils se croisent — un reseau de serveurs
+ *     sous surveillance — et viennent voir le pointeur de pres, sans
+ *     jamais se poser dessus ;
+ *   * toucher le fond leve un BOUCLIER : un anneau hexagonal qui
+ *     s'etend depuis le point touche, avec sa lueur ;
+ *   * et libere des ECLATS : de petits boucliers, des coches de
+ *     validation vertes et des points qui retombent en s'eteignant.
+ *
+ * Et un secret : cinq touches rapides declenchent le CONFINEMENT. Le
+ * bouclier couvre tout l'ecran, une ruche d'hexagones s'allume sur son
+ * passage, et les sentinelles accourent. C'est `/securite lockdown`, en
+ * miniature.
+ *
+ * Une seule toile, une seule boucle d'images. Les halos sont peints une
+ * fois pour toutes dans de petites toiles hors ecran : `shadowBlur` a
+ * chaque image couterait cher, un `drawImage` ne coute presque rien.
+ *
+ * Pages publiques seulement, comme la lueur (§58) : on reste longtemps
+ * sur le dashboard, devant des chiffres. Et rien du tout sous
+ * « animations reduites ».
+ */
+function initFondVivant() {
+  if (document.body.classList.contains("dashboard-page")) return;
+  if (mouvementReduit()) return;
+
+  const toile = document.createElement("canvas");
+  const ctx = toile.getContext("2d");
+  if (!ctx) return;
+  toile.className = "fond-vivant";
+  toile.setAttribute("aria-hidden", "true");
+  document.body.appendChild(toile);
+
+  const COULEURS = {
+    violet: [177, 92, 255],
+    pourpre: [139, 92, 246],
+    cyan: [98, 230, 255],
+    lavande: [214, 198, 255],
+    vert: [74, 222, 128]
+  };
+  const teinte = (nom, alpha) => {
+    const rvb = COULEURS[nom];
+    return `rgba(${rvb[0]}, ${rvb[1]}, ${rvb[2]}, ${alpha})`;
+  };
+
+  // Sans survol fin — un ecran tactile — les sentinelles ne suivent pas
+  // le doigt, et elles sont moins nombreuses : la batterie compte.
+  const tactile = !window.matchMedia?.("(hover: hover) and (pointer: fine)")?.matches;
+
+  let largeur = 0;
+  let hauteur = 0;
+  function dimensionner() {
+    const ratio = Math.min(window.devicePixelRatio || 1, 2);
+    largeur = window.innerWidth;
+    hauteur = window.innerHeight;
+    toile.width = Math.round(largeur * ratio);
+    toile.height = Math.round(hauteur * ratio);
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+  }
+  dimensionner();
+  let attenteRedimension = 0;
+  window.addEventListener("resize", () => {
+    window.clearTimeout(attenteRedimension);
+    attenteRedimension = window.setTimeout(dimensionner, 120);
+  }, { passive: true });
+
+  const halos = {};
+  for (const [nom, rvb] of Object.entries(COULEURS)) {
+    const petite = document.createElement("canvas");
+    petite.width = 64;
+    petite.height = 64;
+    const pinceau = petite.getContext("2d");
+    const degrade = pinceau.createRadialGradient(32, 32, 0, 32, 32, 32);
+    degrade.addColorStop(0, `rgba(${rvb[0]}, ${rvb[1]}, ${rvb[2]}, 0.9)`);
+    degrade.addColorStop(0.35, `rgba(${rvb[0]}, ${rvb[1]}, ${rvb[2]}, 0.35)`);
+    degrade.addColorStop(1, `rgba(${rvb[0]}, ${rvb[1]}, ${rvb[2]}, 0)`);
+    pinceau.fillStyle = degrade;
+    pinceau.fillRect(0, 0, 64, 64);
+    halos[nom] = petite;
+  }
+
+  function halo(nom, x, y, rayon, alpha) {
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(halos[nom], x - rayon, y - rayon, rayon * 2, rayon * 2);
+    ctx.globalAlpha = 1;
+  }
+
+  // ── Les formes : un bouclier, une coche, un hexagone ────────────────
+  function tracerBouclier(taille) {
+    ctx.beginPath();
+    ctx.moveTo(0, -taille);
+    ctx.quadraticCurveTo(taille * 0.9, -taille * 0.75, taille * 0.85, -taille * 0.1);
+    ctx.quadraticCurveTo(taille * 0.7, taille * 0.7, 0, taille);
+    ctx.quadraticCurveTo(-taille * 0.7, taille * 0.7, -taille * 0.85, -taille * 0.1);
+    ctx.quadraticCurveTo(-taille * 0.9, -taille * 0.75, 0, -taille);
+    ctx.closePath();
+  }
+
+  function tracerCoche(taille) {
+    ctx.beginPath();
+    ctx.moveTo(-taille * 0.6, 0);
+    ctx.lineTo(-taille * 0.15, taille * 0.5);
+    ctx.lineTo(taille * 0.7, -taille * 0.5);
+  }
+
+  function tracerHexagone(x, y, rayon, rotation) {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const angle = rotation + Math.PI / 6 + (i * Math.PI) / 3;
+      const px = x + Math.cos(angle) * rayon;
+      const py = y + Math.sin(angle) * rayon;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+  }
+
+  const eclats = [];
+  const ondes = [];
+  const sentinelles = [];
+  const MAX_ECLATS = 260;
+  const pointeur = { x: -10000, y: -10000, vu: -10000 };
+  let confinementJusqua = 0;
+  let cibleConfinement = null;
+
+  for (let i = 0; i < (tactile ? 5 : 9); i++) {
+    sentinelles.push({
+      x: Math.random() * largeur,
+      y: Math.random() * hauteur,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      phase: Math.random() * Math.PI * 2,
+      couleur: i % 3 === 0 ? "cyan" : "violet"
+    });
+  }
+
+  function lancerEclats(x, y, puissance) {
+    const nombre = Math.round((tactile ? 14 : 20) * puissance);
+    for (let i = 0; i < nombre && eclats.length < MAX_ECLATS; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const vitesse = (1.2 + Math.random() * 3.2) * puissance;
+      const tirage = Math.random();
+      let forme = "point";
+      let couleur = Math.random() < 0.4 ? "cyan" : "violet";
+      if (tirage < 0.18) {
+        forme = "bouclier";
+        couleur = "lavande";
+      } else if (tirage < 0.34) {
+        forme = "coche";
+        couleur = "vert";
+      }
+      eclats.push({
+        x: x,
+        y: y,
+        vx: Math.cos(angle) * vitesse,
+        vy: Math.sin(angle) * vitesse - 0.6,
+        vie: 1,
+        usure: 0.012 + Math.random() * 0.016,
+        taille: 2 + Math.random() * 3.5,
+        rotation: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 0.12,
+        forme: forme,
+        couleur: couleur
+      });
+    }
+  }
+
+  function lancerOnde(x, y, grande) {
+    ondes.push({
+      x: x,
+      y: y,
+      grande: grande,
+      rayon: 6,
+      vie: 1,
+      vitesse: grande ? 14 : 5.5,
+      usure: grande ? 0.011 : 0.022,
+      rotation: Math.random() * Math.PI
+    });
+  }
+
+  // ── Toucher le fond ─────────────────────────────────────────────────
+  const INTERACTIFS = "a, button, input, select, textarea, label, summary, "
+    + "[role='button'], [contenteditable='true'], iframe, video, "
+    + ".discord-window, .demo-controls, .ai-assistant, .ai-launcher";
+
+  // Le fond, c'est ce qui n'a pas de fond. La toile est DERRIERE le
+  // contenu : un eclat leve sous une carte y resterait cache, et le geste
+  // semblerait n'avoir rien fait. On remonte donc depuis l'element touche,
+  // et le premier ancetre qui peint quelque chose de consistant — une
+  // carte, un encadre, une image — dit qu'on n'a pas touche le fond.
+  function surUneSurface(element) {
+    for (let e = element; e && e !== document.body && e !== document.documentElement;
+         e = e.parentElement) {
+      const style = getComputedStyle(e);
+      if (style.backgroundImage !== "none") return true;
+      const morceaux = style.backgroundColor.replace(/[^\d.,]/g, "").split(",");
+      const opacite = morceaux.length > 3 ? Number(morceaux[3]) : 1;
+      if (morceaux.length >= 3 && opacite > 0.35) return true;
+    }
+    return false;
+  }
+
+  const rafale = [];
+  document.addEventListener("click", (evenement) => {
+    if (mouvementReduit()) return;
+    const cible = evenement.target;
+    if (!cible || cible.closest?.(INTERACTIFS)) return;
+    // On selectionnait du texte : ce n'etait pas un geste vers le fond.
+    const selection = window.getSelection?.();
+    if (selection && !selection.isCollapsed) return;
+    if (surUneSurface(cible)) return;
+
+    const x = evenement.clientX;
+    const y = evenement.clientY;
+    const maintenant = performance.now();
+    rafale.push(maintenant);
+    while (rafale.length && maintenant - rafale[0] > 2200) rafale.shift();
+    if (rafale.length >= 5) {
+      rafale.length = 0;
+      lancerOnde(x, y, true);
+      lancerEclats(x, y, 1.8);
+      confinementJusqua = maintenant + 1700;
+      cibleConfinement = { x: x, y: y };
+      return;
+    }
+    lancerOnde(x, y, false);
+    lancerEclats(x, y, 1);
+  });
+
+  if (!tactile) {
+    window.addEventListener("pointermove", (evenement) => {
+      pointeur.x = evenement.clientX;
+      pointeur.y = evenement.clientY;
+      pointeur.vu = performance.now();
+    }, { passive: true });
+  }
+
+  // ── Les sentinelles ─────────────────────────────────────────────────
+  function dessinerSentinelles(temps) {
+    const confine = temps < confinementJusqua && cibleConfinement;
+    const pointeurRecent = temps - pointeur.vu < 1500;
+    for (const s of sentinelles) {
+      s.phase += 0.03;
+      if (confine) {
+        s.vx += (cibleConfinement.x - s.x) * 0.0012;
+        s.vy += (cibleConfinement.y - s.y) * 0.0012;
+      } else if (pointeurRecent) {
+        // Curieuses, pas collantes : attirees jusqu'a quarante pixels,
+        // elles tournent autour du pointeur sans jamais s'y poser.
+        const dx = pointeur.x - s.x;
+        const dy = pointeur.y - s.y;
+        const distance = Math.hypot(dx, dy);
+        if (distance < 260 && distance > 40) {
+          s.vx += (dx / distance) * 0.018;
+          s.vy += (dy / distance) * 0.018;
+        }
+      }
+      s.vx = (s.vx + (Math.random() - 0.5) * 0.03) * 0.985;
+      s.vy = (s.vy + (Math.random() - 0.5) * 0.03) * 0.985;
+      const vitesse = Math.hypot(s.vx, s.vy);
+      const plafond = confine ? 5 : 1.4;
+      if (vitesse > plafond) {
+        s.vx *= plafond / vitesse;
+        s.vy *= plafond / vitesse;
+      }
+      s.x += s.vx;
+      s.y += s.vy;
+      if (s.x < -30) s.x = largeur + 30;
+      else if (s.x > largeur + 30) s.x = -30;
+      if (s.y < -30) s.y = hauteur + 30;
+      else if (s.y > hauteur + 30) s.y = -30;
+    }
+
+    // Le reseau : un fil entre deux sentinelles qui se croisent.
+    ctx.lineWidth = 1;
+    for (let i = 0; i < sentinelles.length; i++) {
+      for (let j = i + 1; j < sentinelles.length; j++) {
+        const a = sentinelles[i];
+        const b = sentinelles[j];
+        const distance = Math.hypot(a.x - b.x, a.y - b.y);
+        if (distance < 180) {
+          ctx.strokeStyle = teinte("pourpre", (1 - distance / 180) * 0.18);
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    for (const s of sentinelles) {
+      const souffle = 0.6 + Math.sin(s.phase) * 0.25;
+      halo(s.couleur, s.x, s.y, 16 * souffle, 0.5);
+      ctx.fillStyle = teinte("lavande", 0.85);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, 1.4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // ── Le confinement : une ruche s'allume sur le passage de l'onde ────
+  function dessinerRuche(onde) {
+    const rayon = 22;
+    const pasX = Math.sqrt(3) * rayon;
+    const pasY = 1.5 * rayon;
+    ctx.lineWidth = 1;
+    for (let ligne = -1; ligne * pasY < hauteur + pasY; ligne++) {
+      const decalage = ligne % 2 === 0 ? 0 : pasX / 2;
+      for (let colonne = -1; colonne * pasX < largeur + pasX; colonne++) {
+        const cx = colonne * pasX + decalage;
+        const cy = ligne * pasY;
+        const ecart = Math.abs(Math.hypot(cx - onde.x, cy - onde.y) - onde.rayon);
+        if (ecart < 70) {
+          ctx.strokeStyle = teinte("pourpre", (1 - ecart / 70) * onde.vie * 0.5);
+          tracerHexagone(cx, cy, rayon * 0.92, 0);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  // ── Les boucliers qui s'etendent ────────────────────────────────────
+  function dessinerOndes() {
+    for (let i = ondes.length - 1; i >= 0; i--) {
+      const onde = ondes[i];
+      // L'onde ralentit en s'eteignant : elle se pose, elle ne file pas.
+      onde.rayon += onde.vitesse * (0.4 + onde.vie * 0.8);
+      onde.vie -= onde.usure;
+      if (onde.vie <= 0) {
+        ondes.splice(i, 1);
+        continue;
+      }
+      const lueur = (onde.grande ? 240 : 95) * (1.2 - onde.vie * 0.4);
+      halo("violet", onde.x, onde.y, lueur, onde.vie * (onde.grande ? 0.45 : 0.35));
+      if (onde.grande) dessinerRuche(onde);
+      ctx.lineWidth = onde.grande ? 2.2 : 1.6;
+      ctx.strokeStyle = teinte("lavande", onde.vie * 0.75);
+      tracerHexagone(onde.x, onde.y, onde.rayon, onde.rotation);
+      ctx.stroke();
+      ctx.strokeStyle = teinte("cyan", onde.vie * 0.35);
+      tracerHexagone(onde.x, onde.y, onde.rayon * 0.82, onde.rotation + 0.26);
+      ctx.stroke();
+    }
+  }
+
+  // ── Les eclats qui retombent ────────────────────────────────────────
+  function dessinerEclats() {
+    for (let i = eclats.length - 1; i >= 0; i--) {
+      const e = eclats[i];
+      e.vx *= 0.965;
+      e.vy = e.vy * 0.965 + 0.035;   // un soupcon de gravite
+      e.x += e.vx;
+      e.y += e.vy;
+      e.rotation += e.spin;
+      e.vie -= e.usure;
+      if (e.vie <= 0) {
+        eclats.splice(i, 1);
+        continue;
+      }
+      halo(e.couleur, e.x, e.y, e.taille * 5, e.vie * 0.6);
+      if (e.forme === "point") {
+        ctx.fillStyle = teinte(e.couleur, e.vie);
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.taille * 0.45, 0, Math.PI * 2);
+        ctx.fill();
+        continue;
+      }
+      ctx.save();
+      ctx.translate(e.x, e.y);
+      ctx.rotate(e.rotation);
+      ctx.lineWidth = 1.4;
+      ctx.strokeStyle = teinte(e.couleur, e.vie);
+      if (e.forme === "bouclier") tracerBouclier(e.taille * 1.3);
+      else tracerCoche(e.taille * 1.3);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  // ── La boucle ───────────────────────────────────────────────────────
+  // Elle s'arrete d'elle-meme quand l'onglet est cache : c'est ce que
+  // fait requestAnimationFrame, et c'est ce qu'on veut ici.
+  let arrete = false;
+  function image(temps) {
+    if (arrete) return;
+    ctx.clearRect(0, 0, largeur, hauteur);
+    ctx.globalCompositeOperation = "lighter";
+    dessinerSentinelles(temps);
+    dessinerOndes();
+    dessinerEclats();
+    ctx.globalCompositeOperation = "source-over";
+    requestAnimationFrame(image);
+  }
+  requestAnimationFrame(image);
+
+  // Si le reglage change en cours de visite, on s'efface aussitot.
+  const reduit = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+  reduit?.addEventListener?.("change", () => {
+    if (!reduit.matches) return;
+    arrete = true;
+    toile.remove();
+  });
+}
+
 function initRevealAnimations() {
   const selectors = [
     ".stat",
@@ -8283,8 +8692,16 @@ document.addEventListener("DOMContentLoaded", () => {
   initDemo();
   initAssistant();
   initRevealAnimations();
-  initOndeAuClic();
-  initParallaxeFond();
+  // Le decor ne doit jamais emporter le reste. Une exception levee ici
+  // interromprait ce gestionnaire, et les statistiques comme le dashboard
+  // qui s'initialisent juste apres ne demarreraient pas.
+  [initOndeAuClic, initParallaxeFond, initFondVivant].forEach((decor) => {
+    try {
+      decor();
+    } catch (erreur) {
+      console.warn("Decor desactive :", erreur);
+    }
+  });
   initPublicStats();
   initDashboard();
   remplirSelecteurPays();

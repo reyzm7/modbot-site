@@ -10533,6 +10533,24 @@ body:not(.dashboard-page) .page-glow {
   }
 }
 
+/* ── LE FOND VIVANT : sentinelles, boucliers et eclats ────────────── */
+/*    La toile est creee par le JavaScript (`initFondVivant`), sur les
+      pages publiques seulement. Fixee, derriere tout ce qui se lit, et
+      transparente aux clics : c'est le document qui ecoute, pas elle.
+
+      Le z-index negatif la glisse sous le contenu sans creer de
+      contexte d'empilement. Elle passe au-dessus de la lueur, qui la
+      precede dans le document, et sous `body::after` — le degrade sobre
+      a 22 % d'opacite, qui la voile a peine. */
+.fond-vivant {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 /* ── Le silence, quand le systeme le demande ──────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .dash-panel.is-active,
@@ -10562,6 +10580,12 @@ body:not(.dashboard-page) .page-glow {
      est blanc et le halo fixe — le titre d'avant, a l'identique. */
   .hero-copy h1 {
     animation: heroTextEnter 0.82s cubic-bezier(0.2, 0.8, 0.2, 1) 0.18s forwards;
+  }
+
+  /* Le JavaScript ne cree pas la toile sous ce reglage, et la retire
+     s'il change en cours de visite. Cette regle couvre l'entre-deux. */
+  .fond-vivant {
+    display: none;
   }
 
   /* Le JavaScript ne la cree deja plus ; la regle couvre le cas ou le
