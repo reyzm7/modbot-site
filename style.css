@@ -10465,6 +10465,74 @@ body:not(.dashboard-page) .page-glow {
   }
 }
 
+/* ── LE TITRE DE L'ACCUEIL : un halo qui respire, un reflet qui passe ─ */
+/*    Le reflet est un degrade peint DANS les lettres
+      (`background-clip: text`), avec une bande lavande qui traverse le
+      mot de gauche a droite, puis se tait quatre secondes.
+
+      Le halo ne peut plus etre un `text-shadow`. Avec un texte
+      transparent, l'ombre de texte se peint PAR-DESSUS le degrade
+      decoupe dans les lettres : le titre virait au lavande terne, loin
+      du blanc d'origine. `filter: drop-shadow` s'applique au rendu
+      fini, donc derriere lui — mesure a l'ecran, c'est la seule des
+      deux versions qui garde le blanc.
+
+      `heroTextEnter` est repete dans la liste, avec son delai de
+      0,18 s. Ce selecteur est plus precis que `.hero-copy > *` : un
+      `animation` qui l'omettrait remplacerait l'entree, et le titre
+      resterait a l'opacite nulle d'ou il part.
+
+      Le tout sous `@supports` : sur un navigateur qui ne sait pas
+      decouper un fond dans du texte, un texte transparent serait
+      invisible. Il garde alors le titre d'avant, blanc et fixe. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero-copy h1 {
+    background:
+      linear-gradient(100deg,
+        #ffffff 0%, #ffffff 38%,
+        #d6c6ff 47%,
+        #ffffff 56%, #ffffff 100%)
+      100% 0 / 260% 100% no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+    filter:
+      drop-shadow(0 0 22px rgba(139, 92, 246, 0.55))
+      drop-shadow(0 12px 34px rgba(0, 0, 0, 0.55));
+    animation:
+      heroTextEnter 0.82s cubic-bezier(0.2, 0.8, 0.2, 1) 0.18s forwards,
+      haloRespire 6.5s ease-in-out 1.2s infinite alternate,
+      refletTitre 7s ease-in-out 2s infinite;
+  }
+}
+
+@keyframes haloRespire {
+  from {
+    filter:
+      drop-shadow(0 0 22px rgba(139, 92, 246, 0.55))
+      drop-shadow(0 12px 34px rgba(0, 0, 0, 0.55));
+  }
+  to {
+    filter:
+      drop-shadow(0 0 38px rgba(139, 92, 246, 0.82))
+      drop-shadow(0 12px 34px rgba(0, 0, 0, 0.55));
+  }
+}
+
+/*    La bande est a 47 % d'un degrade large de 260 %. A 100 % puis a
+      0 % elle est hors du mot : le debut et la fin du cycle sont donc
+      tous deux du blanc pur, et le retour a zero ne se voit pas. */
+@keyframes refletTitre {
+  0%, 18% {
+    background-position: 100% 0;
+  }
+  46%, 100% {
+    background-position: 0% 0;
+  }
+}
+
 /* ── Le silence, quand le systeme le demande ──────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .dash-panel.is-active,
@@ -10487,6 +10555,13 @@ body:not(.dashboard-page) .page-glow {
   body:not(.dashboard-page) .page-glow {
     animation: none;
     transform: none;
+  }
+
+  /* Le titre garde son entree et rien d'autre : sans elle il resterait
+     a l'opacite nulle d'ou part `.hero-copy > *`. Au repos, le degrade
+     est blanc et le halo fixe — le titre d'avant, a l'identique. */
+  .hero-copy h1 {
+    animation: heroTextEnter 0.82s cubic-bezier(0.2, 0.8, 0.2, 1) 0.18s forwards;
   }
 
   /* Le JavaScript ne la cree deja plus ; la regle couvre le cas ou le
