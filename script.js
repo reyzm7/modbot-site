@@ -2530,15 +2530,9 @@ function initParallaxeFond() {
  *     sentinelle la plus proche fond dessus, la vise, et la neutralise en
  *     une coche verte.
  *
- * Au toucher du fond :
- *   * un BOUCLIER hexagonal s'etend depuis le point touche ;
- *   * des ECLATS en jaillissent : boucliers, coches, cadenas, bouts de
- *     code, points qui retombent.
- *
- * Et un secret : cinq touches rapides declenchent le CONFINEMENT. Le
- * bouclier couvre tout l'ecran, une ruche d'hexagones s'allume sur son
- * passage, et les sentinelles accourent. C'est `/securite lockdown`, en
- * miniature.
+ * Le fond ne reagit plus au clic : le bouclier et les eclats qui en
+ * jaillissaient surprenaient plus qu'ils n'amusaient, et un clic a cote
+ * d'un bouton semblait avoir declenche quelque chose. Le decor vit seul.
  *
  * LA LISIBILITE D'ABORD. Tout est derriere le contenu. Ce qui derive en
  * permanence reste faible, et deux fois plus faible encore dans la
@@ -2892,52 +2886,8 @@ function initFondVivant() {
     else if (objet.y > hauteur + marge) objet.y = -marge;
   }
 
-  function lancerEclats(x, y, puissance) {
-    const nombre = Math.round((tactile ? 14 : 20) * puissance);
-    for (let i = 0; i < nombre && eclats.length < MAX_ECLATS; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const vitesse = (1.2 + Math.random() * 3.2) * puissance;
-      const tirage = Math.random();
-      let forme = "point";
-      let couleur = Math.random() < 0.4 ? "cyan" : "violet";
-      let texte = "";
-      if (tirage < 0.14) {
-        forme = "bouclier";
-        couleur = "lavande";
-      } else if (tirage < 0.27) {
-        forme = "coche";
-        couleur = "vert";
-      } else if (tirage < 0.36) {
-        forme = "cadenas";
-        couleur = "cyan";
-      } else if (tirage < 0.46) {
-        forme = "code";
-        couleur = Math.random() < 0.5 ? "violet" : "lavande";
-        texte = auHasard(["</>", "{ }", "01", "0x", "=>", "#"]);
-      }
-      // En mode calme rien ne vole : l'eclat apparait deja a sa place,
-      // tout autour du point touche, et s'efface sans bouger.
-      const portee = calme ? hasard(8, 70 * puissance) : 0;
-      eclats.push({
-        x: x + Math.cos(angle) * portee,
-        y: y + Math.sin(angle) * portee,
-        vx: calme ? 0 : Math.cos(angle) * vitesse,
-        vy: calme ? 0 : Math.sin(angle) * vitesse - 0.6,
-        fixe: calme,
-        vie: 1,
-        usure: 0.012 + Math.random() * 0.016,
-        taille: 2 + Math.random() * 3.5,
-        rotation: Math.random() * Math.PI * 2,
-        spin: calme ? 0 : (Math.random() - 0.5) * 0.12,
-        forme: forme,
-        couleur: couleur,
-        texte: texte
-      });
-    }
-  }
-
-  // Trois tailles d'onde. `normale` est celle du toucher, a l'identique
-  // de la premiere version : elle convenait, on n'y touche pas.
+  // Trois tailles d'onde. Seule la petite sert encore, a la
+  // neutralisation d'une menace ; les autres restent pour memoire.
   const GENRES_ONDE = {
     grande: { vitesse: 14, usure: 0.011, lueur: 240, aura: 0.45, epaisseur: 2.2 },
     normale: { vitesse: 5.5, usure: 0.022, lueur: 95, aura: 0.35, epaisseur: 1.6 },
@@ -2985,54 +2935,6 @@ function initFondVivant() {
       });
     }
   }
-
-  // ── Toucher le fond ─────────────────────────────────────────────────
-  const INTERACTIFS = "a, button, input, select, textarea, label, summary, "
-    + "[role='button'], [contenteditable='true'], iframe, video, "
-    + ".discord-window, .demo-controls, .ai-assistant, .ai-launcher";
-
-  // Le fond, c'est ce qui n'a pas de fond. La toile est DERRIERE le
-  // contenu : un eclat leve sous une carte y resterait cache, et le geste
-  // semblerait n'avoir rien fait. On remonte donc depuis l'element touche,
-  // et le premier ancetre qui peint quelque chose de consistant — une
-  // carte, un encadre, une image — dit qu'on n'a pas touche le fond.
-  function surUneSurface(element) {
-    for (let e = element; e && e !== document.body && e !== document.documentElement;
-         e = e.parentElement) {
-      const style = getComputedStyle(e);
-      if (style.backgroundImage !== "none") return true;
-      const morceaux = style.backgroundColor.replace(/[^\d.,]/g, "").split(",");
-      const opacite = morceaux.length > 3 ? Number(morceaux[3]) : 1;
-      if (morceaux.length >= 3 && opacite > 0.35) return true;
-    }
-    return false;
-  }
-
-  const rafale = [];
-  document.addEventListener("click", (evenement) => {
-    const cible = evenement.target;
-    if (!cible || cible.closest?.(INTERACTIFS)) return;
-    // On selectionnait du texte : ce n'etait pas un geste vers le fond.
-    const selection = window.getSelection?.();
-    if (selection && !selection.isCollapsed) return;
-    if (surUneSurface(cible)) return;
-
-    const x = evenement.clientX;
-    const y = evenement.clientY;
-    const maintenant = performance.now();
-    rafale.push(maintenant);
-    while (rafale.length && maintenant - rafale[0] > 2200) rafale.shift();
-    if (rafale.length >= 5) {
-      rafale.length = 0;
-      lancerOnde(x, y, "grande");
-      lancerEclats(x, y, 1.8);
-      confinementJusqua = maintenant + 1700;
-      cibleConfinement = { x: x, y: y };
-      return;
-    }
-    lancerOnde(x, y, "normale");
-    lancerEclats(x, y, 1);
-  });
 
   if (!tactile) {
     window.addEventListener("pointermove", (evenement) => {
@@ -9871,17 +9773,17 @@ const BOUTIQUE_ARTICLES = [
     idealClef: "bq.site_dashboard.ideal",
     points: [{ texteClef: "bq.site_dashboard.p1" }, { texteClef: "bq.site_dashboard.p2" },
              { texteClef: "bq.site_dashboard.p3" }, { texteClef: "bq.site_dashboard.p4" }] },
-  { key: "pack_starter", categorie: "pack", prix: 3900, delai: 7, revisions: 1,
+  { key: "pack_starter", categorie: "pack", prix: 4200, delai: 7, revisions: 1,
     contient: ["bot_essentiel", "site_vitrine"],
     titreClef: "bq.pack_starter.titre", resumeClef: "bq.pack_starter.resume",
     idealClef: "bq.pack_starter.ideal",
     points: [{ texteClef: "bq.packEnsemble" }, { texteClef: "bq.miseEnLigne" }] },
-  { key: "pack_serveur", categorie: "pack", prix: 9900, delai: 14, revisions: 2, recommande: true,
+  { key: "pack_serveur", categorie: "pack", prix: 10900, delai: 14, revisions: 2, recommande: true,
     contient: ["bot_avance", "site_complet"],
     titreClef: "bq.pack_serveur.titre", resumeClef: "bq.pack_serveur.resume",
     idealClef: "bq.pack_serveur.ideal",
     points: [{ texteClef: "bq.packEnsemble" }, { texteClef: "bq.miseEnLigne" }] },
-  { key: "pack_pro", categorie: "pack", prix: 22900, delai: 30, revisions: 3,
+  { key: "pack_pro", categorie: "pack", prix: 24900, delai: 30, revisions: 3,
     contient: ["bot_pro", "site_dashboard"],
     titreClef: "bq.pack_pro.titre", resumeClef: "bq.pack_pro.resume",
     idealClef: "bq.pack_pro.ideal",
@@ -9896,6 +9798,12 @@ const BOUTIQUE_NUMERO = /^MB-\d{6}-[A-HJ-NP-Z2-9]{4}$/;
 const BOUTIQUE_DEVIS = /^DV-\d{6}-[A-HJ-NP-Z2-9]{4}$/;
 
 const BOUTIQUE_ICONES = { bot: "u-rocket", site: "u-globe", pack: "u-gift" };
+
+// Les cartes acceptees, sur le bouton « Carte bancaire » : on paie plus
+// volontiers quand on reconnait sa carte.
+const BOUTIQUE_MARQUES_CARTE = '<span class="boutique-marques" aria-hidden="true">'
+  + '<svg viewBox="0 0 38 24"><use href="#i-visa"/></svg>'
+  + '<svg viewBox="0 0 38 24"><use href="#i-mastercard"/></svg></span>';
 
 const BOUTIQUE_CATEGORIES = {
   bot: { numero: 1, libelleClef: "bq.devisCatBot" },
@@ -10057,7 +9965,7 @@ function initPageBoutique() {
     const paiement = caisseOuverte
       ? `<button class="primary-btn" type="button" data-boutique-payer="carte" data-article="${cle}">
            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg>
-           ${escapeHtmlValue(t("bq.carte"))}</button>
+           ${escapeHtmlValue(t("bq.carte"))}${BOUTIQUE_MARQUES_CARTE}</button>
          <button class="secondary-btn" type="button" data-boutique-payer="paypal" data-article="${cle}">
            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-paypal"/></svg>
            ${escapeHtmlValue(t("bq.paypal"))}</button>`
@@ -10392,7 +10300,7 @@ function initTonDevis() {
         <div class="boutique-payer">
           <button class="primary-btn" type="button" data-devis-payer="carte">
             <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg>
-            ${escapeHtmlValue(t("bq.carte"))}</button>
+            ${escapeHtmlValue(t("bq.carte"))}${BOUTIQUE_MARQUES_CARTE}</button>
           <button class="secondary-btn" type="button" data-devis-payer="paypal">
             <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-paypal"/></svg>
             ${escapeHtmlValue(t("bq.paypal"))}</button>

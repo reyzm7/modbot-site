@@ -11882,3 +11882,63 @@ body:not(.dashboard-page) .page-glow {
     display: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LA BARRE DU HAUT, AVEC SES ICONES
+   Chaque lien porte son icone, a gauche du libelle, comme « Boutique ».
+   ═══════════════════════════════════════════════════════════════════ */
+.nav-links > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.nav-links > a .ui-icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+/* Dans le tiroir du telephone, les liens gardent toute la largeur. */
+@media (max-width: 980px) {
+  .nav-links > a { display: flex; gap: 10px; }
+}
+
+/* Un libelle de la barre ne se coupe jamais en deux : « Ajouter ModBot »
+   passait sur deux lignes des que la place manquait, et gonflait l'en-tete. */
+@media (min-width: 981px) {
+  .navbar .nav-links > a,
+  .navbar .nav-menu-trigger { white-space: nowrap; }
+}
+
+/* Grands ecrans : les icones tiennent toutes si l'on resserre un peu les
+   pastilles. Sans cela, elles faisaient 1159 px pour 1076 disponibles. */
+@media (min-width: 1321px) {
+  .navbar .nav-links { gap: 6px; }
+  .navbar .nav-links > a,
+  .navbar .nav-menu-trigger { padding: 0 11px; font-size: 0.875rem; }
+}
+
+/* Entre le tiroir et les grands ecrans : barre compacte, icones effacees
+   sauf celle de la boutique. Ce passage debordait deja avant les icones :
+   la page glissait de cote a 1000 et 1100 px. */
+@media (min-width: 981px) and (max-width: 1320px) {
+  .navbar { padding-left: 12px; padding-right: 12px; }
+  .navbar .nav-links { gap: 4px; }
+  .navbar .nav-links > a,
+  .navbar .nav-menu-trigger { padding: 0 10px; font-size: 0.8rem; }
+  .navbar .nav-links > a:not(.nav-boutique) .ui-icon { display: none; }
+}
+
+/* ── Les cartes acceptees, sur le bouton « Carte bancaire » ── */
+.boutique-marques {
+  display: inline-flex;
+  gap: 4px;
+  margin-inline-start: 2px;
+}
+
+.boutique-marques svg {
+  width: 30px;
+  height: 19px;
+  border-radius: 3px;
+}
