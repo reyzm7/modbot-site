@@ -343,14 +343,15 @@
           </ol>
         </div>
         <form class="boutique-formulaire" data-devis-formulaire novalidate>
-          <label data-i18n="bq.devisCategorie">Ce que tu veux
-            <select name="categorie" data-devis-categorie>
-              <option value="bot" data-i18n="bq.devisCatBot">Un bot Discord</option>
-              <option value="site" data-i18n="bq.devisCatSite">Un site web</option>
-              <option value="les_deux" data-i18n="bq.devisCatLesDeux">Un bot et un site</option>
-              <option value="autre" data-i18n="bq.devisCatAutre">Autre chose</option>
-            </select>
-          </label>
+          <fieldset class="boutique-choix" data-devis-categorie>
+            <legend data-i18n="bq.devisCategorie">Ce que tu veux</legend>
+            <div class="boutique-choix-grille">
+              <label class="boutique-choix-option"><input type="radio" name="categorie" value="bot"><span class="boutique-choix-numero">1</span><span data-i18n="bq.devisCatBot">Un bot Discord</span></label>
+              <label class="boutique-choix-option"><input type="radio" name="categorie" value="site"><span class="boutique-choix-numero">2</span><span data-i18n="bq.devisCatSite">Un site web</span></label>
+              <label class="boutique-choix-option"><input type="radio" name="categorie" value="les_deux"><span class="boutique-choix-numero">3</span><span data-i18n="bq.devisCatLesDeux">Un bot et un site</span></label>
+              <label class="boutique-choix-option"><input type="radio" name="categorie" value="autre"><span class="boutique-choix-numero">4</span><span data-i18n="bq.devisCatAutre">Autre chose</span></label>
+            </div>
+          </fieldset>
           <label data-i18n="bq.devisDescription">Ton projet, en détail
             <textarea name="description" rows="5" maxlength="2000" required data-devis-description placeholder="Ce que doit faire ta création, pour quel serveur, tes couleurs, un exemple qui te plaît…" data-i18n-placeholder="bq.devisDescriptionPlaceholder"></textarea>
           </label>

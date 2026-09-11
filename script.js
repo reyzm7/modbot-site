@@ -1550,10 +1550,10 @@ function initAdminZone() {
     clos: { libelleClef: "js.adm.btqSavClos" },
   };
   const BTQ_CATEGORIES = {
-    bot: { libelleClef: "bq.devisCatBot" },
-    site: { libelleClef: "bq.devisCatSite" },
-    les_deux: { libelleClef: "bq.devisCatLesDeux" },
-    autre: { libelleClef: "bq.devisCatAutre" },
+    bot: { numero: 1, libelleClef: "bq.devisCatBot" },
+    site: { numero: 2, libelleClef: "bq.devisCatSite" },
+    les_deux: { numero: 3, libelleClef: "bq.devisCatLesDeux" },
+    autre: { numero: 4, libelleClef: "bq.devisCatAutre" },
   };
   const BTQ_SUJETS = {
     installation: { libelleClef: "bq.aideSujetInstallation" },
@@ -1642,6 +1642,7 @@ function initAdminZone() {
   function ficheDevisAdmin(devis) {
     const id = escapeHtmlValue(devis.id);
     const ouvert = devis.statut === "nouveau" || devis.statut === "propose";
+    const categorie = BTQ_CATEGORIES[devis.categorie] || BTQ_CATEGORIES.autre;
     const meta = [btqClient(devis), escapeHtmlValue(tp("js.adm.btqCreeLe", { date: btqDate(devis.creee_le) }))];
     if (devis.budget) meta.push(escapeHtmlValue(tp("js.adm.btqBudget", { budget: devis.budget })));
     if (devis.delai) meta.push(escapeHtmlValue(tp("js.adm.btqDelai", { delai: devis.delai })));
@@ -1673,7 +1674,7 @@ function initAdminZone() {
     return `
       <article class="btq-fiche">
         <div class="btq-fiche-tete">
-          <span class="btq-ident"><code>${id}</code><strong>${escapeHtmlValue(t(BTQ_CATEGORIES[devis.categorie]?.libelleClef || "bq.devisCatAutre"))}</strong></span>
+          <span class="btq-ident"><code>${id}</code><strong>${escapeHtmlValue(`${categorie.numero} · ${t(categorie.libelleClef)}`)}</strong></span>
           ${prixActuel ? `<span class="btq-montant">${escapeHtmlValue(boutiquePrix(prixActuel))}</span>` : ""}
           <span class="btq-tag" data-statut="d-${escapeHtmlValue(devis.statut)}">${escapeHtmlValue(t(BTQ_DEVIS[devis.statut]?.libelleClef || "js.adm.btqDevisNouveau"))}</span>
         </div>
@@ -9870,10 +9871,10 @@ const BOUTIQUE_DEVIS = /^DV-\d{6}-[A-HJ-NP-Z2-9]{4}$/;
 const BOUTIQUE_ICONES = { bot: "u-rocket", site: "u-globe", pack: "u-gift" };
 
 const BOUTIQUE_CATEGORIES = {
-  bot: { libelleClef: "bq.devisCatBot" },
-  site: { libelleClef: "bq.devisCatSite" },
-  les_deux: { libelleClef: "bq.devisCatLesDeux" },
-  autre: { libelleClef: "bq.devisCatAutre" },
+  bot: { numero: 1, libelleClef: "bq.devisCatBot" },
+  site: { numero: 2, libelleClef: "bq.devisCatSite" },
+  les_deux: { numero: 3, libelleClef: "bq.devisCatLesDeux" },
+  autre: { numero: 4, libelleClef: "bq.devisCatAutre" },
 };
 
 function boutiquePrix(centimes) {
@@ -10248,6 +10249,14 @@ function initDemandeDevis() {
   formulaire.addEventListener("submit", (evenement) => {
     evenement.preventDefault();
     formulaire.querySelectorAll(".boutique-erreur, .boutique-succes").forEach((zone) => { zone.hidden = true; });
+    // La premiere question : 1 = bot, 2 = site, 3 = les deux, 4 = autre.
+    // Rien n'est coche d'avance, pour que le choix soit celui du client.
+    const choix = formulaire.querySelector("[data-devis-categorie] input:checked");
+    if (!choix) {
+      signalerDemandeBoutique(formulaire, t("bq.devisChoixRequis"),
+                              formulaire.querySelector("[data-devis-categorie] input"));
+      return;
+    }
     const champDescription = formulaire.querySelector("[data-devis-description]");
     const description = (champDescription?.value || "").trim();
     if (description.length < 20) {
@@ -10263,7 +10272,7 @@ function initDemandeDevis() {
     envoyerDemandeBoutique(formulaire, () => modbotApiFetch("/api/boutique/devis", {
       method: "POST",
       body: JSON.stringify({
-        categorie: formulaire.querySelector("[data-devis-categorie]")?.value || "autre",
+        categorie: choix.value,
         description,
         budget: formulaire.querySelector("[data-devis-budget]")?.value || "",
         delai: formulaire.querySelector("[data-devis-delai]")?.value || "",
@@ -10336,7 +10345,8 @@ function initTonDevis() {
         <p>${escapeHtmlValue(t("bq.tonDevisIntrouvable"))}</p>`);
       return;
     }
-    const categorie = t(BOUTIQUE_CATEGORIES[devis.categorie]?.libelleClef || "bq.devisCatAutre");
+    const choixCategorie = BOUTIQUE_CATEGORIES[devis.categorie] || BOUTIQUE_CATEGORIES.autre;
+    const categorie = `${choixCategorie.numero} · ${t(choixCategorie.libelleClef)}`;
     let suite;
     if (devis.payable) {
       suite = `

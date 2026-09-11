@@ -9829,6 +9829,73 @@ select {
 
 .boutique-formulaire .primary-btn { justify-self: start; gap: 8px; }
 
+/* La premiere question du sur-mesure : quatre cases numerotees. Le bouton
+   radio est cache mais reste atteignable au clavier (fleches, Tab). */
+.boutique-choix { min-width: 0; margin: 0; padding: 0; border: 0; }
+
+.boutique-choix legend {
+  margin-bottom: 8px;
+  padding: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.boutique-choix-grille {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.boutique-formulaire label.boutique-choix-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+}
+
+.boutique-formulaire .boutique-choix-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.boutique-choix-numero {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(241, 196, 15, 0.16);
+  color: #f1c40f;
+  font-weight: 800;
+}
+
+.boutique-choix-option input:checked + .boutique-choix-numero { background: #f1c40f; color: #1a1300; }
+
+.boutique-choix-option:has(input:checked) {
+  border-color: rgba(241, 196, 15, 0.7);
+  background: rgba(241, 196, 15, 0.12);
+}
+
+.boutique-choix-option:has(input:focus-visible) {
+  outline: 2px solid rgba(241, 196, 15, 0.55);
+  outline-offset: 1px;
+}
+
+@media (max-width: 420px) {
+  .boutique-choix-grille { grid-template-columns: 1fr; }
+}
+
 /* Le bloc devis grise ses paragraphes ; pas les messages du formulaire. */
 .boutique-devis-inner .boutique-formulaire .boutique-erreur { max-width: none; color: #ff9b9b; }
 .boutique-devis-inner .boutique-formulaire .boutique-succes { max-width: none; color: #8ff0bd; }
