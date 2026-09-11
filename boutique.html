@@ -44,9 +44,9 @@
         <a href="index.html#donate" data-i18n="nav.pricing" data-teinte="rose">Soutenir</a>
         <a href="wiki.html" data-i18n="nav.wiki" data-teinte="ambre">Wiki</a>
         <a href="partenaires.html" data-i18n="nav.partenaires" data-teinte="menthe">Partenaires</a>
-        <a href="boutique.html" data-i18n="nav.boutique" data-teinte="or">Boutique</a>
         <a href="index.html#faq" data-i18n="home.faq" data-teinte="rouge">FAQ</a>
 
+        <a class="nav-boutique" href="boutique.html" aria-current="page"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
         <a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="wiki.supportDiscord" data-teinte="vert">Support Discord</a>
 
         <div class="nav-menu" data-nav-menu>
@@ -82,14 +82,34 @@
     </nav>
   </header>
 
-  <main class="premium-shell boutique-shell">
+  <main class="boutique-shell">
 
-    <!-- ── Le haut : ce qu'on vend ─────────────────────────────────── -->
-    <section class="premium-hero section-shell">
-      <p class="eyebrow" data-i18n="bq.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg> Boutique</p>
-      <h1 data-i18n="bq.titre">Ton bot et ton site, faits sur mesure</h1>
-      <p class="premium-lead" data-i18n="bq.chapo">Un bot qui fait exactement ce dont ton serveur a besoin, un site qui lui ressemble. Tu choisis une formule, tu paies en ligne, on s'occupe du reste.</p>
+    <!-- ── La vitrine ──────────────────────────────────────────────── -->
+    <section class="boutique-hero section-shell">
+      <p class="boutique-hero-tag" data-i18n="bq.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg> Boutique</p>
+      <h1 class="boutique-hero-titre" data-i18n="bq.titre">Ton bot et ton site, faits sur mesure</h1>
+      <p class="boutique-hero-chapo" data-i18n="bq.chapo">Un bot qui fait exactement ce dont ton serveur a besoin, un site qui lui ressemble. Tu choisis une formule, tu paies en ligne, on s'occupe du reste.</p>
+      <ul class="boutique-confiance">
+        <li><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg><span data-i18n="bq.confiance1">Paiement sécurisé par Stripe</span></li>
+        <li><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-paypal"/></svg><span data-i18n="bq.confiance2">Carte bancaire ou PayPal</span></li>
+        <li><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n="bq.confiance3">Réponse sous 24 h sur Discord</span></li>
+      </ul>
+      <nav class="boutique-rayons" aria-label="Rayons de la boutique" data-i18n-aria="bq.rayons">
+        <a href="#packs"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg><span data-i18n="bq.packsEyebrow">Packs</span><small data-boutique-des="pack"></small></a>
+        <a href="#bots"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-rocket"/></svg><span data-i18n="bq.botsEyebrow">Bots Discord</span><small data-boutique-des="bot"></small></a>
+        <a href="#sites"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="bq.sitesEyebrow">Sites web</span><small data-boutique-des="site"></small></a>
+      </nav>
       <div class="boutique-retour" data-boutique-retour role="status" hidden></div>
+    </section>
+
+    <!-- ── Les rayons : les packs d'abord ──────────────────────────── -->
+    <section class="boutique-section section-shell" id="packs">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="bq.packsEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg> Packs</p>
+        <h2 data-i18n="bq.packsTitre">Le bot et le site ensemble</h2>
+        <p data-i18n="bq.packsChapo">Les deux créations, aux mêmes couleurs et livrées ensemble : moins cher que séparément.</p>
+      </div>
+      <div class="boutique-grille" data-boutique-grille="pack"></div>
     </section>
 
     <section class="boutique-section section-shell" id="bots">
@@ -110,16 +130,37 @@
       <div class="boutique-grille" data-boutique-grille="site"></div>
     </section>
 
-    <section class="boutique-section section-shell" id="packs">
-      <div class="section-heading">
-        <p class="eyebrow" data-i18n="bq.packsEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg> Packs</p>
-        <h2 data-i18n="bq.packsTitre">Le bot et le site ensemble</h2>
-        <p data-i18n="bq.packsChapo">Les deux créations, aux mêmes couleurs et livrées ensemble : moins cher que séparément.</p>
-      </div>
-      <div class="boutique-grille" data-boutique-grille="pack"></div>
-    </section>
-
     <p class="field-help premium-note" data-i18n-html="bq.note">Paiement sécurisé par <strong>Stripe</strong>, par carte bancaire ou PayPal. ModBot ne voit jamais tes données bancaires.</p>
+
+    <!-- ── Ce qui est toujours compris ─────────────────────────────── -->
+    <section class="boutique-atouts section-shell">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="bq.atoutsEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-check"/></svg> Toujours compris</p>
+        <h2 data-i18n="bq.atoutsTitre">Ce que tu reçois, quelle que soit la formule</h2>
+      </div>
+      <div class="boutique-atouts-grille">
+        <article>
+          <span class="boutique-atout-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-key"/></svg></span>
+          <h3 data-i18n="bq.atout1Titre">Le code est à toi</h3>
+          <p data-i18n="bq.atout1">Tout ce qui est livré t'appartient : tu peux le modifier et l'héberger où tu veux.</p>
+        </article>
+        <article>
+          <span class="boutique-atout-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-refresh"/></svg></span>
+          <h3 data-i18n="bq.atout2Titre">Des révisions incluses</h3>
+          <p data-i18n="bq.atout2">Chaque formule prévoit des retouches : le résultat doit te plaire.</p>
+        </article>
+        <article>
+          <span class="boutique-atout-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-scales"/></svg></span>
+          <h3 data-i18n="bq.atout3Titre">Remboursable</h3>
+          <p data-i18n="bq.atout3">Intégralement, tant que le travail n'a pas commencé.</p>
+        </article>
+        <article>
+          <span class="boutique-atout-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-rocket"/></svg></span>
+          <h3 data-i18n="bq.atout4Titre">Mis en ligne pour toi</h3>
+          <p data-i18n="bq.atout4">Si tu le souhaites, on publie le site et on lance le bot à ta place.</p>
+        </article>
+      </div>
+    </section>
 
     <!-- ── Ce qui se passe apres ──────────────────────────────────── -->
     <section class="boutique-etapes section-shell">
@@ -161,10 +202,17 @@
           <h3 data-i18n="bq.q3">Puis-je être remboursé ?</h3>
           <p data-i18n="bq.r3">Intégralement tant que le travail n'a pas commencé. Ensuite, le remboursement tient compte de ce qui a déjà été fait. Tout est détaillé dans les conditions.</p>
         </article>
-        <article>
-          <h3 data-i18n="bq.q4">Mon projet ne rentre dans aucune formule.</h3>
-          <p data-i18n="bq.r4">Écris-nous sur le serveur de support : on te propose un devis sur mesure.</p>
-        </article>
+      </div>
+    </section>
+
+    <!-- ── Le reste : sur devis ───────────────────────────────────── -->
+    <section class="boutique-devis section-shell">
+      <div class="boutique-devis-inner">
+        <div>
+          <h2 data-i18n="bq.devisTitre">Un projet qui sort des formules ?</h2>
+          <p data-i18n="bq.devisTexte">Chaque formule est un point de départ : tout s'adapte. Décris-nous ton idée sur Discord, on te répond avec un prix.</p>
+        </div>
+        <a class="primary-btn" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg> <span data-i18n="bq.devisBouton">Demander un devis</span></a>
       </div>
     </section>
 

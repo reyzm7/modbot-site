@@ -80,9 +80,10 @@
 
 
 
-<a href="partenaires.html" data-i18n="nav.partenaires" data-teinte="menthe">Partenaires</a><a href="boutique.html" data-i18n="nav.boutique" data-teinte="or">Boutique</a>
+<a href="partenaires.html" data-i18n="nav.partenaires" data-teinte="menthe">Partenaires</a>
 <a href="#faq" data-i18n="home.faq" data-teinte="rouge">FAQ</a>
 
+<a class="nav-boutique" href="boutique.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
 <a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite data-i18n="nav.cta" data-teinte="vert">Ajouter ModBot</a>
 
         <div class="nav-menu" data-nav-menu>
@@ -150,6 +151,23 @@
              target="_blank" rel="noreferrer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg> <span data-i18n="home.rejoindre">Rejoindre</span></a>
           <a class="secondary-btn compact" href="partenaires.html" data-i18n="home.tousPartenaires">Tous nos partenaires</a>
         </div>
+      </div>
+    </section>
+
+    <!-- ── La boutique, juste apres le partenaire principal ────────── -->
+    <section class="home-boutique section-shell" aria-labelledby="accueil-boutique">
+      <div class="home-boutique-inner">
+        <div class="home-boutique-texte">
+          <span class="home-boutique-tag" data-i18n="home.boutiqueTag"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg> Nouveau : la boutique</span>
+          <h2 id="accueil-boutique" data-i18n="home.boutiqueTitre">Un bot et un site rien que pour ton serveur</h2>
+          <p data-i18n="home.boutiqueTexte">L'équipe de ModBot crée aussi des bots Discord et des sites web sur mesure pour ta communauté.</p>
+        </div>
+        <ul class="home-boutique-apercu">
+          <li><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-rocket"/></svg><span data-i18n="bq.botsEyebrow">Bots Discord</span><strong data-boutique-des="bot"></strong></li>
+          <li><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="bq.sitesEyebrow">Sites web</span><strong data-boutique-des="site"></strong></li>
+          <li><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg><span data-i18n="bq.packsEyebrow">Packs</span><strong data-boutique-des="pack"></strong></li>
+        </ul>
+        <a class="primary-btn home-boutique-bouton" href="boutique.html"><span data-i18n="home.boutiqueBouton">Aller à la boutique</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-arrow-left"/></svg></a>
       </div>
     </section>
 

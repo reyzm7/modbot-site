@@ -2278,6 +2278,8 @@ function initFondVivant() {
     ".partner-card", ".main-partner-inner", ".price-card", ".premium-offer",
     ".premium-feature", ".faq-box", ".stat", ".stats-big", ".integration",
     ".wiki-toc", ".premium-note", ".discord-window", ".demo-controls",
+    ".boutique-carte", ".boutique-rayons a", ".boutique-atouts-grille article",
+    ".boutique-devis-inner", ".home-boutique-inner",
     // La rangee de boutons du hero, d'un seul tenant : entre deux boutons,
     // un glyphe n'est derriere rien, mais il colle aux controles. Les
     // autres blocs d'en-tete ne sont plus exclus en entier : ils avalaient
@@ -9490,18 +9492,15 @@ const BOUTIQUE_ARTICLES = [
   { key: "pack_starter", categorie: "pack", prix: 8900, delai: 7, revisions: 1,
     contient: ["bot_essentiel", "site_vitrine"],
     titreClef: "bq.pack_starter.titre", resumeClef: "bq.pack_starter.resume",
-    points: [{ texteClef: "bq.bot_essentiel.titre" }, { texteClef: "bq.site_vitrine.titre" },
-             { texteClef: "bq.packEnsemble" }] },
+    points: [{ texteClef: "bq.packEnsemble" }, { texteClef: "bq.miseEnLigne" }] },
   { key: "pack_serveur", categorie: "pack", prix: 22900, delai: 14, revisions: 2, recommande: true,
     contient: ["bot_avance", "site_complet"],
     titreClef: "bq.pack_serveur.titre", resumeClef: "bq.pack_serveur.resume",
-    points: [{ texteClef: "bq.bot_avance.titre" }, { texteClef: "bq.site_complet.titre" },
-             { texteClef: "bq.packEnsemble" }] },
+    points: [{ texteClef: "bq.packEnsemble" }, { texteClef: "bq.miseEnLigne" }] },
   { key: "pack_pro", categorie: "pack", prix: 49900, delai: 30, revisions: 3,
     contient: ["bot_pro", "site_dashboard"],
     titreClef: "bq.pack_pro.titre", resumeClef: "bq.pack_pro.resume",
-    points: [{ texteClef: "bq.bot_pro.titre" }, { texteClef: "bq.site_dashboard.titre" },
-             { texteClef: "bq.packEnsemble" }] },
+    points: [{ texteClef: "bq.packEnsemble" }, { texteClef: "bq.miseEnLigne" }] },
 ];
 
 // Les memes regles que boutique.py : le bot refuserait de toute facon,
@@ -9509,6 +9508,33 @@ const BOUTIQUE_ARTICLES = [
 const BOUTIQUE_ID_DISCORD = /^\d{17,20}$/;
 const BOUTIQUE_PSEUDO = /^[\p{L}\p{N}_.]{2,32}(#\d{4})?$/u;
 const BOUTIQUE_NUMERO = /^MB-\d{6}-[A-HJ-NP-Z2-9]{4}$/;
+
+const BOUTIQUE_ICONES = { bot: "u-rocket", site: "u-globe", pack: "u-gift" };
+
+function boutiquePrix(centimes) {
+  return new Intl.NumberFormat(localeAffichage(), {
+    style: "currency", currency: "EUR",
+    minimumFractionDigits: centimes % 100 ? 2 : 0, maximumFractionDigits: 2,
+  }).format(centimes / 100);
+}
+
+function boutiqueValeurDuPack(article) {
+  return (article.contient || []).reduce(
+    (total, clef) => total + (BOUTIQUE_ARTICLES.find((a) => a.key === clef)?.prix || 0), 0);
+}
+
+/* « dès 39 € » : le prix d'appel de chaque rayon, calcule depuis le
+   catalogue plutot qu'ecrit dans les traductions — il suit les prix tout
+   seul. Sert a l'accueil comme a la page Boutique. */
+function remplirPrixDAppel() {
+  document.querySelectorAll("[data-boutique-des]").forEach((element) => {
+    const prix = BOUTIQUE_ARTICLES
+      .filter((article) => article.categorie === element.dataset.boutiqueDes)
+      .map((article) => article.prix);
+    element.textContent = prix.length
+      ? tp("bq.aPartirDe", { prix: boutiquePrix(Math.min(...prix)) }) : "";
+  });
+}
 
 function initPageBoutique() {
   const grilles = document.querySelectorAll("[data-boutique-grille]");
@@ -9526,13 +9552,8 @@ function initPageBoutique() {
   let declencheur = null;
   let caisseOuverte = true;
 
-  const prixAffiche = (centimes) => new Intl.NumberFormat(localeAffichage(), {
-    style: "currency", currency: "EUR",
-    minimumFractionDigits: centimes % 100 ? 2 : 0, maximumFractionDigits: 2,
-  }).format(centimes / 100);
-
-  const valeurDuPack = (article) => (article.contient || []).reduce(
-    (total, clef) => total + (BOUTIQUE_ARTICLES.find((a) => a.key === clef)?.prix || 0), 0);
+  const prixAffiche = boutiquePrix;
+  const valeurDuPack = boutiqueValeurDuPack;
 
   const nomDuMoyen = (moyen) => t(moyen === "paypal" ? "bq.paypal" : "bq.carte");
 
@@ -9542,7 +9563,7 @@ function initPageBoutique() {
       ? `<p class="boutique-valeur">${escapeHtmlValue(tp("bq.auLieuDe", { prix: prixAffiche(valeur) }))}</p>`
       : "";
     const badge = article.recommande
-      ? `<span class="premium-badge">${escapeHtmlValue(t("bq.recommande"))}</span>` : "";
+      ? `<span class="boutique-badge">${escapeHtmlValue(t("bq.recommande"))}</span>` : "";
     const points = article.points
       .map((point) => `<li>${escapeHtmlValue(t(point.texteClef))}</li>`).join("");
     const revisions = tn("bq.revisionUne", "bq.revisionsPlusieurs", article.revisions,
@@ -9556,13 +9577,33 @@ function initPageBoutique() {
            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-paypal"/></svg>
            ${escapeHtmlValue(t("bq.paypal"))}</button>`
       : `<p class="boutique-bientot">${escapeHtmlValue(t("bq.bientot"))}</p>`;
+    const economie = valeur > article.prix
+      ? `<span class="boutique-economie">${escapeHtmlValue(
+          tp("bq.economise", { montant: prixAffiche(valeur - article.prix) }))}</span>`
+      : "";
+    // Un pack montre ce qu'il contient : les deux pieces, cote a cote.
+    const pieces = (article.contient || [])
+      .map((clef) => BOUTIQUE_ARTICLES.find((a) => a.key === clef))
+      .filter(Boolean)
+      .map((piece) => `<span class="boutique-piece"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#${BOUTIQUE_ICONES[piece.categorie]}"/></svg>${escapeHtmlValue(t(piece.titreClef))}</span>`)
+      .join('<span class="boutique-plus" aria-hidden="true">+</span>');
+    const contenu = pieces
+      ? `<div class="boutique-contenu" role="group" aria-label="${escapeHtmlValue(t("bq.contient"))}">${pieces}</div>`
+      : "";
     return `
-      <article class="premium-offer boutique-carte${article.recommande ? " is-featured" : ""}">
+      <article class="boutique-carte boutique-carte-${escapeHtmlValue(article.categorie)}${article.recommande ? " is-featured" : ""}">
         ${badge}
+        <div class="boutique-carte-tete">
+          <span class="boutique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#${BOUTIQUE_ICONES[article.categorie]}"/></svg></span>
+          ${economie}
+        </div>
         <h3>${escapeHtmlValue(t(article.titreClef))}</h3>
         <p class="boutique-resume">${escapeHtmlValue(t(article.resumeClef))}</p>
-        <p class="premium-price">${escapeHtmlValue(prixAffiche(article.prix))}</p>
-        ${barre}
+        ${contenu}
+        <div class="boutique-prix">
+          <span class="boutique-montant">${escapeHtmlValue(prixAffiche(article.prix))}</span>
+          ${barre}
+        </div>
         <ul class="boutique-points">${points}</ul>
         <p class="boutique-delai">${escapeHtmlValue(tp("bq.delai", { jours: article.delai }))} · ${escapeHtmlValue(revisions)}</p>
         <div class="boutique-payer">${paiement}</div>
@@ -9703,6 +9744,8 @@ function initPageBoutique() {
 }
 
 initPageBoutique();
+remplirPrixDAppel();
+document.addEventListener("modbot:language", remplirPrixDAppel);
 
 /* ══════════════════════════════════════════════════════════════════
    MENU D'ACCES
