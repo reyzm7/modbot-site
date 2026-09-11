@@ -9937,6 +9937,7 @@ select {
 }
 
 .boutique-ton-devis-description { white-space: pre-wrap; font-size: 0.9rem; }
+.boutique-ton-devis-pdf { justify-self: start; gap: 8px; }
 
 .boutique-ton-devis-boite .boutique-conditions {
   display: flex;

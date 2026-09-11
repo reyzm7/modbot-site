@@ -1452,7 +1452,9 @@ function initAdminZone() {
     const avatar = boite.querySelector("[data-admin-avatar]");
     if (nom) nom.textContent = utilisateur.username || "Discord";
     if (id) id.textContent = `ID ${utilisateur.user_id || "\u2014"}`;
-    if (avatar && utilisateur.avatar) avatar.src = utilisateur.avatar;
+    // `avatar` n'est que l'empreinte Discord ; l'adresse de l'image est
+    // `avatar_url`. Prise pour une adresse, l'empreinte donnait une image cassee.
+    if (avatar && utilisateur.avatar_url) avatar.src = utilisateur.avatar_url;
   }
 
   function oublierSession() {
@@ -1654,6 +1656,9 @@ function initAdminZone() {
         <a href="${escapeHtmlValue(devis.lien)}" target="_blank" rel="noreferrer">${escapeHtmlValue(devis.lien)}</a>
         <button type="button" class="secondary-btn compact" data-btq-action="copier" data-btq-lien="${escapeHtmlValue(devis.lien)}">${escapeHtmlValue(t("js.adm.btqCopierLien"))}</button></p>` : "";
     const prixActuel = Number(devis.prix) || 0;
+    const pdf = prixActuel
+      ? `<button type="button" class="secondary-btn compact" data-btq-action="pdf" data-btq-id="${id}">${escapeHtmlValue(t("js.adm.btqPdf"))}</button>`
+      : "";
     const formulaire = ouvert ? `
       <div class="btq-formulaire">
         <input type="text" inputmode="decimal" maxlength="12" data-btq-prix
@@ -1681,6 +1686,7 @@ function initAdminZone() {
         <p class="btq-meta">${meta.join(" · ")}</p>
         <p class="btq-texte">${escapeHtmlValue(devis.description || "")}</p>
         ${lien}
+        ${pdf ? `<div class="btq-actions">${pdf}</div>` : ""}
         ${formulaire}
         ${btqSuivi(devis.historique, libelleEntree)}
       </article>`;
@@ -1805,6 +1811,27 @@ function initAdminZone() {
         showAdminToast(t("js.adm.btqLienCopie"));
       } catch (erreur) {
         showAdminToast(bouton.dataset.btqLien || "", 7000);
+      }
+      return;
+    }
+    if (action === "pdf") {
+      // La route demande la session d'un administrateur : on la joint, puis
+      // on enregistre le fichier sous son nom.
+      const base = getModbotApiBase();
+      try {
+        const reponse = await fetch(`${base}/api/admin/boutique/devis/${encodeURIComponent(id)}/pdf`, {
+          headers: modbotAuthHeaders(), cache: "no-store" });
+        if (!reponse.ok) throw new Error(String(reponse.status));
+        const adresse = URL.createObjectURL(await reponse.blob());
+        const lienPdf = document.createElement("a");
+        lienPdf.href = adresse;
+        lienPdf.download = `devis-${id}.pdf`;
+        document.body.appendChild(lienPdf);
+        lienPdf.click();
+        lienPdf.remove();
+        window.setTimeout(() => URL.revokeObjectURL(adresse), 60000);
+      } catch (erreur) {
+        showAdminToast(t("js.adm.btqPdfEchec"), 5000);
       }
       return;
     }
@@ -9814,47 +9841,47 @@ initPagePremium();
    ══════════════════════════════════════════════════════════════════ */
 
 const BOUTIQUE_ARTICLES = [
-  { key: "bot_essentiel", categorie: "bot", prix: 3900, delai: 3, revisions: 1,
+  { key: "bot_essentiel", categorie: "bot", prix: 1900, delai: 3, revisions: 1,
     titreClef: "bq.bot_essentiel.titre", resumeClef: "bq.bot_essentiel.resume",
     idealClef: "bq.bot_essentiel.ideal",
     points: [{ texteClef: "bq.bot_essentiel.p1" }, { texteClef: "bq.bot_essentiel.p2" },
              { texteClef: "bq.bot_essentiel.p3" }, { texteClef: "bq.bot_essentiel.p4" }] },
-  { key: "bot_avance", categorie: "bot", prix: 8900, delai: 7, revisions: 2, recommande: true,
+  { key: "bot_avance", categorie: "bot", prix: 4900, delai: 7, revisions: 2, recommande: true,
     titreClef: "bq.bot_avance.titre", resumeClef: "bq.bot_avance.resume",
     idealClef: "bq.bot_avance.ideal",
     points: [{ texteClef: "bq.bot_avance.p1" }, { texteClef: "bq.bot_avance.p2" },
              { texteClef: "bq.bot_avance.p3" }, { texteClef: "bq.bot_avance.p4" }] },
-  { key: "bot_pro", categorie: "bot", prix: 19900, delai: 14, revisions: 3,
+  { key: "bot_pro", categorie: "bot", prix: 9900, delai: 14, revisions: 3,
     titreClef: "bq.bot_pro.titre", resumeClef: "bq.bot_pro.resume",
     idealClef: "bq.bot_pro.ideal",
     points: [{ texteClef: "bq.bot_pro.p1" }, { texteClef: "bq.bot_pro.p2" },
              { texteClef: "bq.bot_pro.p3" }, { texteClef: "bq.bot_pro.p4" }] },
-  { key: "site_vitrine", categorie: "site", prix: 6900, delai: 4, revisions: 1,
+  { key: "site_vitrine", categorie: "site", prix: 2900, delai: 4, revisions: 1,
     titreClef: "bq.site_vitrine.titre", resumeClef: "bq.site_vitrine.resume",
     idealClef: "bq.site_vitrine.ideal",
     points: [{ texteClef: "bq.site_vitrine.p1" }, { texteClef: "bq.site_vitrine.p2" },
              { texteClef: "bq.miseEnLigne" }] },
-  { key: "site_complet", categorie: "site", prix: 17900, delai: 10, revisions: 2, recommande: true,
+  { key: "site_complet", categorie: "site", prix: 7900, delai: 10, revisions: 2, recommande: true,
     titreClef: "bq.site_complet.titre", resumeClef: "bq.site_complet.resume",
     idealClef: "bq.site_complet.ideal",
     points: [{ texteClef: "bq.site_complet.p1" }, { texteClef: "bq.site_complet.p2" },
              { texteClef: "bq.site_complet.p3" }, { texteClef: "bq.miseEnLigne" }] },
-  { key: "site_dashboard", categorie: "site", prix: 39900, delai: 21, revisions: 3,
+  { key: "site_dashboard", categorie: "site", prix: 17900, delai: 21, revisions: 3,
     titreClef: "bq.site_dashboard.titre", resumeClef: "bq.site_dashboard.resume",
     idealClef: "bq.site_dashboard.ideal",
     points: [{ texteClef: "bq.site_dashboard.p1" }, { texteClef: "bq.site_dashboard.p2" },
              { texteClef: "bq.site_dashboard.p3" }, { texteClef: "bq.site_dashboard.p4" }] },
-  { key: "pack_starter", categorie: "pack", prix: 8900, delai: 7, revisions: 1,
+  { key: "pack_starter", categorie: "pack", prix: 3900, delai: 7, revisions: 1,
     contient: ["bot_essentiel", "site_vitrine"],
     titreClef: "bq.pack_starter.titre", resumeClef: "bq.pack_starter.resume",
     idealClef: "bq.pack_starter.ideal",
     points: [{ texteClef: "bq.packEnsemble" }, { texteClef: "bq.miseEnLigne" }] },
-  { key: "pack_serveur", categorie: "pack", prix: 22900, delai: 14, revisions: 2, recommande: true,
+  { key: "pack_serveur", categorie: "pack", prix: 9900, delai: 14, revisions: 2, recommande: true,
     contient: ["bot_avance", "site_complet"],
     titreClef: "bq.pack_serveur.titre", resumeClef: "bq.pack_serveur.resume",
     idealClef: "bq.pack_serveur.ideal",
     points: [{ texteClef: "bq.packEnsemble" }, { texteClef: "bq.miseEnLigne" }] },
-  { key: "pack_pro", categorie: "pack", prix: 49900, delai: 30, revisions: 3,
+  { key: "pack_pro", categorie: "pack", prix: 22900, delai: 30, revisions: 3,
     contient: ["bot_pro", "site_dashboard"],
     titreClef: "bq.pack_pro.titre", resumeClef: "bq.pack_pro.resume",
     idealClef: "bq.pack_pro.ideal",
@@ -9924,7 +9951,7 @@ function peindreCompteBoutique() {
     // Discord n'accepte un message prive que d'un bot avec qui l'on
     // partage un serveur : l'invitation vaut dans les deux cas.
     zone.innerHTML = (boutiqueCompte
-      ? `${boutiqueCompte.avatar ? `<img src="${escapeHtmlValue(boutiqueCompte.avatar)}" alt="">` : ""}
+      ? `${boutiqueCompte.avatar_url ? `<img src="${escapeHtmlValue(boutiqueCompte.avatar_url)}" alt="" onerror="this.remove()">` : ""}
          <span>${escapeHtmlValue(tp("bq.compteConnecte", { nom }))}</span>
          <button type="button" class="boutique-compte-lien" data-boutique-deconnexion>${escapeHtmlValue(t("bq.compteDeconnexion"))}</button>`
       : `<span>${escapeHtmlValue(t("bq.compteInvite"))}</span>
@@ -10347,6 +10374,12 @@ function initTonDevis() {
     }
     const choixCategorie = BOUTIQUE_CATEGORIES[devis.categorie] || BOUTIQUE_CATEGORIES.autre;
     const categorie = `${choixCategorie.numero} · ${t(choixCategorie.libelleClef)}`;
+    // Le devis detaille en PDF : le meme que celui joint au message prive.
+    const pdf = Number(devis.prix) > 0
+      ? `<a class="secondary-btn boutique-ton-devis-pdf" href="${escapeHtmlValue(`${getModbotApiBase()}/api/boutique/devis/${encodeURIComponent(id)}/pdf?cle=${encodeURIComponent(cle)}`)}" target="_blank" rel="noopener">
+           <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-download"/></svg>
+           ${escapeHtmlValue(t("bq.tonDevisPdf"))}</a>`
+      : "";
     let suite;
     if (devis.payable) {
       suite = `
@@ -10374,7 +10407,8 @@ function initTonDevis() {
     zone.innerHTML = boite(`
       <h2>${escapeHtmlValue(tp("bq.tonDevisTitre", { id: devis.id }))}</h2>
       <p class="boutique-ton-devis-description"><strong>${escapeHtmlValue(categorie)}</strong> — ${escapeHtmlValue(devis.description || "")}</p>
-      ${suite}`);
+      ${suite}
+      ${pdf}`);
   }
 
   zone.addEventListener("click", async (evenement) => {
