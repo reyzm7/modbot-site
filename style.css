@@ -9125,9 +9125,11 @@ select {
 
 .boutique-delai { margin: 0; color: var(--muted); font-size: 0.8rem; }
 
+/* Cote a cote quand la carte est large, l'un sous l'autre sinon :
+   « Carte bancaire » coupe en deux lignes se lit mal. */
 .boutique-payer {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 8px;
   margin-top: auto;
   padding-top: 14px;
