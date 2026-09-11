@@ -74,11 +74,20 @@ def modeles_du_site(script):
     return re.findall(r'gabarit:\s*"([^"]+)"', bloc)
 
 
+def articles_du_site(script):
+    """BOUTIQUE_ARTICLES : clef → (categorie, prix, delai, revisions)."""
+    bloc = bloc_js(script, "const BOUTIQUE_ARTICLES = [", "\n];")
+    return {clef: (categorie, int(prix), int(delai), int(revisions))
+            for clef, categorie, prix, delai, revisions in re.findall(
+                r'key:\s*"([a-z_]+)",\s*categorie:\s*"([a-z]+)",\s*prix:\s*(\d+),'
+                r'\s*delai:\s*(\d+),\s*revisions:\s*(\d+)', bloc)}
+
+
 # ─────────────────────────────────────────────────────────────────────
 #  Le repli HTML, celui qu'on voit avant que le JavaScript ne passe
 # ─────────────────────────────────────────────────────────────────────
 PAGES = ["index.html", "dashboard.html", "admin.html", "wiki.html",
-         "premium.html", "partenaires.html",
+         "premium.html", "partenaires.html", "boutique.html",
          "confidentialite.html", "conditions.html"]
 
 # `applySiteLanguage` ne remplace le textContent ENTIER que d'un element
@@ -149,6 +158,18 @@ def main():
                  "les modeles de compteur proposes sont ceux du bot"
                  + (f" -> site {gabarits_site} / bot {gabarits_bot}"
                     if gabarits_site != gabarits_bot else ""))
+
+        # La boutique : le site recopie le catalogue pour ses textes en cinq
+        # langues. Le client paie le prix du bot — c'est lui qui l'envoie a
+        # Stripe — et la page doit afficher le meme, au centime pres.
+        import boutique
+        articles_site = articles_du_site(script)
+        articles_bot = {clef: (a["categorie"], a["prix"], a["delai"], a["revisions"])
+                        for clef, a in boutique.ARTICLES.items()}
+        ecarts = sorted(set(articles_site.items()) ^ set(articles_bot.items()))
+        verifier(not ecarts and len(articles_site) == len(articles_bot),
+                 "la boutique affiche les articles, prix, delais et revisions du bot"
+                 + (f" -> ecarts : {ecarts[:4]}" if ecarts else ""))
 
     # ── 4 : le repli HTML contre la valeur francaise ──────────────────
     fr = francais()

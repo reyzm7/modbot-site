@@ -9454,6 +9454,257 @@ function initPagePremium() {
 initPagePremium();
 
 /* ══════════════════════════════════════════════════════════════════
+   PAGE BOUTIQUE
+   Bots et sites faits sur mesure. Le catalogue est recopie de celui du
+   bot (boutique.py) parce qu'il lui faut des textes en cinq langues ;
+   les prix, eux, font foi cote bot — c'est lui qui les envoie a Stripe,
+   quoi que dise la page — et test_derives.py verifie que les deux
+   copies disent la meme chose.
+   ══════════════════════════════════════════════════════════════════ */
+
+const BOUTIQUE_ARTICLES = [
+  { key: "bot_essentiel", categorie: "bot", prix: 3900, delai: 3, revisions: 1,
+    titreClef: "bq.bot_essentiel.titre", resumeClef: "bq.bot_essentiel.resume",
+    points: [{ texteClef: "bq.bot_essentiel.p1" }, { texteClef: "bq.bot_essentiel.p2" },
+             { texteClef: "bq.bot_essentiel.p3" }, { texteClef: "bq.bot_essentiel.p4" }] },
+  { key: "bot_avance", categorie: "bot", prix: 8900, delai: 7, revisions: 2, recommande: true,
+    titreClef: "bq.bot_avance.titre", resumeClef: "bq.bot_avance.resume",
+    points: [{ texteClef: "bq.bot_avance.p1" }, { texteClef: "bq.bot_avance.p2" },
+             { texteClef: "bq.bot_avance.p3" }, { texteClef: "bq.bot_avance.p4" }] },
+  { key: "bot_pro", categorie: "bot", prix: 19900, delai: 14, revisions: 3,
+    titreClef: "bq.bot_pro.titre", resumeClef: "bq.bot_pro.resume",
+    points: [{ texteClef: "bq.bot_pro.p1" }, { texteClef: "bq.bot_pro.p2" },
+             { texteClef: "bq.bot_pro.p3" }, { texteClef: "bq.bot_pro.p4" }] },
+  { key: "site_vitrine", categorie: "site", prix: 6900, delai: 4, revisions: 1,
+    titreClef: "bq.site_vitrine.titre", resumeClef: "bq.site_vitrine.resume",
+    points: [{ texteClef: "bq.site_vitrine.p1" }, { texteClef: "bq.site_vitrine.p2" },
+             { texteClef: "bq.miseEnLigne" }] },
+  { key: "site_complet", categorie: "site", prix: 17900, delai: 10, revisions: 2, recommande: true,
+    titreClef: "bq.site_complet.titre", resumeClef: "bq.site_complet.resume",
+    points: [{ texteClef: "bq.site_complet.p1" }, { texteClef: "bq.site_complet.p2" },
+             { texteClef: "bq.site_complet.p3" }, { texteClef: "bq.miseEnLigne" }] },
+  { key: "site_dashboard", categorie: "site", prix: 39900, delai: 21, revisions: 3,
+    titreClef: "bq.site_dashboard.titre", resumeClef: "bq.site_dashboard.resume",
+    points: [{ texteClef: "bq.site_dashboard.p1" }, { texteClef: "bq.site_dashboard.p2" },
+             { texteClef: "bq.site_dashboard.p3" }, { texteClef: "bq.site_dashboard.p4" }] },
+  { key: "pack_starter", categorie: "pack", prix: 8900, delai: 7, revisions: 1,
+    contient: ["bot_essentiel", "site_vitrine"],
+    titreClef: "bq.pack_starter.titre", resumeClef: "bq.pack_starter.resume",
+    points: [{ texteClef: "bq.bot_essentiel.titre" }, { texteClef: "bq.site_vitrine.titre" },
+             { texteClef: "bq.packEnsemble" }] },
+  { key: "pack_serveur", categorie: "pack", prix: 22900, delai: 14, revisions: 2, recommande: true,
+    contient: ["bot_avance", "site_complet"],
+    titreClef: "bq.pack_serveur.titre", resumeClef: "bq.pack_serveur.resume",
+    points: [{ texteClef: "bq.bot_avance.titre" }, { texteClef: "bq.site_complet.titre" },
+             { texteClef: "bq.packEnsemble" }] },
+  { key: "pack_pro", categorie: "pack", prix: 49900, delai: 30, revisions: 3,
+    contient: ["bot_pro", "site_dashboard"],
+    titreClef: "bq.pack_pro.titre", resumeClef: "bq.pack_pro.resume",
+    points: [{ texteClef: "bq.bot_pro.titre" }, { texteClef: "bq.site_dashboard.titre" },
+             { texteClef: "bq.packEnsemble" }] },
+];
+
+// Les memes regles que boutique.py : le bot refuserait de toute facon,
+// mais le client merite de l'apprendre avant de quitter la page.
+const BOUTIQUE_ID_DISCORD = /^\d{17,20}$/;
+const BOUTIQUE_PSEUDO = /^[\p{L}\p{N}_.]{2,32}(#\d{4})?$/u;
+const BOUTIQUE_NUMERO = /^MB-\d{6}-[A-HJ-NP-Z2-9]{4}$/;
+
+function initPageBoutique() {
+  const grilles = document.querySelectorAll("[data-boutique-grille]");
+  if (!grilles.length) return;
+  const fenetre = document.querySelector("[data-boutique-fenetre]");
+  const formulaire = document.querySelector("[data-boutique-formulaire]");
+  const champDiscord = document.querySelector("[data-boutique-discord]");
+  const champProjet = document.querySelector("[data-boutique-projet]");
+  const caseConditions = document.querySelector("[data-boutique-conditions]");
+  const zoneErreur = document.querySelector("[data-boutique-erreur]");
+  const recap = document.querySelector("[data-boutique-recap]");
+  const boutonEnvoyer = document.querySelector("[data-boutique-envoyer]");
+  const zoneRetour = document.querySelector("[data-boutique-retour]");
+  let enCours = null;
+  let declencheur = null;
+  let caisseOuverte = true;
+
+  const prixAffiche = (centimes) => new Intl.NumberFormat(localeAffichage(), {
+    style: "currency", currency: "EUR",
+    minimumFractionDigits: centimes % 100 ? 2 : 0, maximumFractionDigits: 2,
+  }).format(centimes / 100);
+
+  const valeurDuPack = (article) => (article.contient || []).reduce(
+    (total, clef) => total + (BOUTIQUE_ARTICLES.find((a) => a.key === clef)?.prix || 0), 0);
+
+  const nomDuMoyen = (moyen) => t(moyen === "paypal" ? "bq.paypal" : "bq.carte");
+
+  function carte(article) {
+    const valeur = valeurDuPack(article);
+    const barre = valeur > article.prix
+      ? `<p class="boutique-valeur">${escapeHtmlValue(tp("bq.auLieuDe", { prix: prixAffiche(valeur) }))}</p>`
+      : "";
+    const badge = article.recommande
+      ? `<span class="premium-badge">${escapeHtmlValue(t("bq.recommande"))}</span>` : "";
+    const points = article.points
+      .map((point) => `<li>${escapeHtmlValue(t(point.texteClef))}</li>`).join("");
+    const revisions = tn("bq.revisionUne", "bq.revisionsPlusieurs", article.revisions,
+                         { n: article.revisions });
+    const cle = escapeHtmlValue(article.key);
+    const paiement = caisseOuverte
+      ? `<button class="primary-btn" type="button" data-boutique-payer="carte" data-article="${cle}">
+           <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg>
+           ${escapeHtmlValue(t("bq.carte"))}</button>
+         <button class="secondary-btn" type="button" data-boutique-payer="paypal" data-article="${cle}">
+           <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-paypal"/></svg>
+           ${escapeHtmlValue(t("bq.paypal"))}</button>`
+      : `<p class="boutique-bientot">${escapeHtmlValue(t("bq.bientot"))}</p>`;
+    return `
+      <article class="premium-offer boutique-carte${article.recommande ? " is-featured" : ""}">
+        ${badge}
+        <h3>${escapeHtmlValue(t(article.titreClef))}</h3>
+        <p class="boutique-resume">${escapeHtmlValue(t(article.resumeClef))}</p>
+        <p class="premium-price">${escapeHtmlValue(prixAffiche(article.prix))}</p>
+        ${barre}
+        <ul class="boutique-points">${points}</ul>
+        <p class="boutique-delai">${escapeHtmlValue(tp("bq.delai", { jours: article.delai }))} · ${escapeHtmlValue(revisions)}</p>
+        <div class="boutique-payer">${paiement}</div>
+      </article>`;
+  }
+
+  function dessiner() {
+    grilles.forEach((grille) => {
+      grille.innerHTML = BOUTIQUE_ARTICLES
+        .filter((article) => article.categorie === grille.dataset.boutiqueGrille)
+        .map(carte).join("");
+    });
+    document.querySelectorAll("[data-boutique-payer]").forEach((bouton) => {
+      bouton.addEventListener("click", () => {
+        const article = BOUTIQUE_ARTICLES.find((a) => a.key === bouton.dataset.article);
+        if (article) ouvrir(article, bouton.dataset.boutiquePayer, bouton);
+      });
+    });
+  }
+
+  function montrerErreur(message, champ) {
+    if (!zoneErreur) return;
+    zoneErreur.textContent = message;
+    zoneErreur.hidden = false;
+    champ?.focus();
+  }
+
+  function ecrireRecap() {
+    if (!recap || !enCours) return;
+    recap.textContent = tp("bq.recap", {
+      article: t(enCours.article.titreClef),
+      prix: prixAffiche(enCours.article.prix),
+      moyen: nomDuMoyen(enCours.moyen),
+    });
+  }
+
+  // Le client clique d'abord sur « Carte » ou « PayPal » ; la fenetre lui
+  // demande ensuite son contact Discord, puis l'envoie payer.
+  function ouvrir(article, moyen, bouton) {
+    if (!fenetre) return;
+    enCours = { article, moyen };
+    declencheur = bouton;
+    ecrireRecap();
+    if (zoneErreur) zoneErreur.hidden = true;
+    fenetre.hidden = false;
+    document.body.classList.add("boutique-fenetre-ouverte");
+    champDiscord?.focus();
+  }
+
+  function fermer() {
+    if (!fenetre || fenetre.hidden) return;
+    fenetre.hidden = true;
+    document.body.classList.remove("boutique-fenetre-ouverte");
+    declencheur?.focus();
+  }
+
+  document.querySelectorAll("[data-boutique-fermer]").forEach((element) => {
+    element.addEventListener("click", fermer);
+  });
+  document.addEventListener("keydown", (evenement) => {
+    if (evenement.key === "Escape") fermer();
+  });
+
+  formulaire?.addEventListener("submit", async (evenement) => {
+    evenement.preventDefault();
+    if (!enCours) return;
+    const discord = (champDiscord?.value || "").trim().replace(/^@/, "").trim();
+    if (!BOUTIQUE_ID_DISCORD.test(discord) && !BOUTIQUE_PSEUDO.test(discord)) {
+      montrerErreur(t("bq.discordInvalide"), champDiscord);
+      return;
+    }
+    if (!caseConditions?.checked) {
+      montrerErreur(t("bq.conditionsRequises"), caseConditions);
+      return;
+    }
+    if (zoneErreur) zoneErreur.hidden = true;
+    boutonEnvoyer.disabled = true;
+    boutonEnvoyer.textContent = t("bq.redirection");
+    try {
+      // Le montant n'est pas envoye : le bot le prend dans son catalogue.
+      const data = await modbotApiFetch("/api/boutique/commande", {
+        method: "POST",
+        body: JSON.stringify({
+          article: enCours.article.key,
+          moyen: enCours.moyen,
+          discord,
+          projet: champProjet?.value || "",
+          conditions: true,
+        }),
+      });
+      if (data?.url) {
+        location.href = data.url;
+        return;
+      }
+      montrerErreur(t("bq.indisponible"));
+    } catch (erreur) {
+      montrerErreur(erreur?.message || t("bq.indisponible"));
+    }
+    boutonEnvoyer.disabled = false;
+    boutonEnvoyer.textContent = t("bq.continuer");
+  });
+
+  // Retour de Stripe. Ce message n'est qu'un accuse de lecture : c'est le
+  // webhook, pas cette adresse, qui dit si la commande est payee.
+  function afficherRetour() {
+    const parametres = new URLSearchParams(location.search);
+    const retour = parametres.get("commande");
+    if (!zoneRetour || (retour !== "reussie" && retour !== "annulee")) return;
+    const numero = parametres.get("numero") || "";
+    zoneRetour.textContent = retour === "annulee"
+      ? t("bq.annule")
+      : BOUTIQUE_NUMERO.test(numero) ? tp("bq.merci", { numero }) : t("bq.merciSansNumero");
+    zoneRetour.classList.toggle("is-ok", retour === "reussie");
+    zoneRetour.hidden = false;
+  }
+
+  async function verifierCaisse() {
+    try {
+      const data = await modbotApiFetch("/api/boutique/offres", { cache: "no-store" });
+      if (data && data.checkout_available === false) {
+        caisseOuverte = false;
+        dessiner();
+      }
+    } catch (erreur) {
+      // Bot injoignable : les cartes restent affichees ; l'erreur, s'il y
+      // en a une, arrivera au moment de payer, avec un message qui la nomme.
+    }
+  }
+
+  dessiner();
+  afficherRetour();
+  verifierCaisse();
+  document.addEventListener("modbot:language", () => {
+    dessiner();
+    ecrireRecap();
+    afficherRetour();
+  });
+}
+
+initPageBoutique();
+
+/* ══════════════════════════════════════════════════════════════════
    MENU D'ACCES
    Dashboard, Ajouter ModBot, Premium, Admin et la langue occupaient
    cinq places dans la barre, melanges aux ancres de la page. Ils sont

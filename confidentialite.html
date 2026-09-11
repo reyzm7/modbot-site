@@ -59,7 +59,7 @@
             <a href="index.html" class="nav-menu-home" data-teinte="acier"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-home"/></svg><span data-i18n="nav.retourSite">Revenir au site</span></a>
             <a href="dashboard.html" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
             <a href="dashboard.html?flow=invite" data-discord-bot-invite data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg><span data-i18n="nav.ajouter">Ajouter ModBot</span></a>
-            <a href="premium.html" data-teinte="or"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="nav.premium">Premium</span></a>
+            <a href="premium.html" data-teinte="or"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="nav.premium">Premium</span></a><a href="boutique.html" data-teinte="cyan"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
             <a href="admin.html" data-teinte="rouge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg><span data-i18n="nav.admin">Admin</span></a>
             <label class="nav-menu-lang">
               <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="nav.langue">Langue</span></span>
@@ -83,7 +83,7 @@
       <p class="eyebrow" data-i18n="priv.eyebrow">Données personnelles</p>
       <h1 data-i18n="priv.titre">Politique de confidentialité</h1>
       <p data-i18n="priv.chapo">Ce que ModBot traite, pourquoi, combien de temps, et à qui cela est transmis. Ce document décrit le fonctionnement réel du bot, pas une intention.</p>
-      <p class="field-help" data-i18n="priv.maj">Dernière mise à jour : 12 août 2026.</p>
+      <p class="field-help" data-i18n="priv.maj">Dernière mise à jour : 11 septembre 2026.</p>
     </section>
 
     <div class="wiki-layout">
@@ -94,6 +94,7 @@
         <a href="#jamais" data-i18n="priv.tocJamais">Ce qui n'est pas fait</a>
         <a href="#duree" data-i18n="priv.tocDuree">Durées</a>
         <a href="#destinataires" data-i18n="priv.tocDestinataires">Destinataires</a>
+        <a href="#boutique" data-i18n="priv.tocBoutique">Boutique</a>
         <a href="#visites" data-i18n="priv.tocVisites">Compteur de visites</a>
         <a href="#base" data-i18n="priv.tocBase">Base légale</a>
         <a href="#droits" data-i18n="priv.tocDroits">Tes droits</a>
@@ -234,8 +235,8 @@
                 </tr>
                 <tr>
                   <td>Stripe</td>
-                  <td data-i18n="priv.dest5">Les informations de paiement, saisies directement chez lui : ModBot ne les voit jamais et n'en conserve rien. Seuls l'identifiant de l'abonnement et la date de fin reviennent au bot</td>
-                  <td data-i18n="priv.destQuand5">Uniquement lors d'une souscription ou d'un renouvellement premium</td>
+                  <td data-i18n="priv.dest5">Les informations de paiement, saisies directement chez lui : ModBot ne les voit jamais et n'en conserve rien. Reviennent seulement au bot l'identifiant de l'abonnement et sa date de fin, ou, pour une commande de la boutique, l'adresse e-mail et le nom saisis au paiement</td>
+                  <td data-i18n="priv.destQuand5">Lors d'une souscription ou d'un renouvellement premium, et d'une commande à la boutique</td>
                 </tr>
                 <tr>
                   <td data-i18n="priv.dest6nom">Google Traduction, puis MyMemory en secours</td>
@@ -246,6 +247,14 @@
             </table>
           </div>
           <p class="field-help" data-i18n="priv.destNote">Autrement dit : sans assistant IA et sans commande de traduction, rien ne sort de Discord, Railway et Vercel.</p>
+        </section>
+
+        <section id="boutique" class="wiki-section">
+          <h2 data-i18n="priv.boutiqueTitre">Commandes de la boutique</h2>
+          <p data-i18n="priv.boutiqueTexte">Quand tu commandes une création, ModBot enregistre ton pseudo ou ton identifiant Discord, la description de ton projet si tu en donnes une, l'article, le montant et le moyen de paiement, ainsi que l'adresse e-mail et le nom saisis chez Stripe au moment de payer. Ils servent à te recontacter, à réaliser la commande et à en garder la trace.</p>
+          <p data-i18n="priv.boutiqueStripe">Le paiement lui-même est traité par Stripe, et par PayPal si tu le choisis : eux seuls voient tes données bancaires, ModBot n'en reçoit aucune.</p>
+          <p data-i18n="priv.boutiqueEquipe">Chaque commande payée est signalée à l'équipe, avec ces informations, dans un salon Discord privé et par message privé aux administrateurs du bot.</p>
+          <p data-i18n="priv.boutiqueDuree">Une commande jamais payée est effacée au bout de deux jours. Une commande payée est conservée le temps de sa réalisation, puis aussi longtemps que l'exigent les obligations comptables ; tu peux demander l'effacement de tout ce qui n'y est pas soumis.</p>
         </section>
 
         <section id="visites" class="wiki-section">

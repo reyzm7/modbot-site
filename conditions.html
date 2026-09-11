@@ -59,7 +59,7 @@
             <a href="index.html" class="nav-menu-home" data-teinte="acier"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-home"/></svg><span data-i18n="nav.retourSite">Revenir au site</span></a>
             <a href="dashboard.html" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
             <a href="dashboard.html?flow=invite" data-discord-bot-invite data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg><span data-i18n="nav.ajouter">Ajouter ModBot</span></a>
-            <a href="premium.html" data-teinte="or"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="nav.premium">Premium</span></a>
+            <a href="premium.html" data-teinte="or"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="nav.premium">Premium</span></a><a href="boutique.html" data-teinte="cyan"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
             <a href="admin.html" data-teinte="rouge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg><span data-i18n="nav.admin">Admin</span></a>
             <label class="nav-menu-lang">
               <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="nav.langue">Langue</span></span>
@@ -83,7 +83,7 @@
       <p class="eyebrow" data-i18n="cgu.eyebrow">Conditions</p>
       <h1 data-i18n="cgu.titre">Conditions d'utilisation</h1>
       <p data-i18n="cgu.chapo">Les règles du service, en clair. Ajouter ModBot à un serveur vaut acceptation de ce qui suit.</p>
-      <p class="field-help" data-i18n="cgu.maj">Dernière mise à jour : 12 août 2026.</p>
+      <p class="field-help" data-i18n="cgu.maj">Dernière mise à jour : 11 septembre 2026.</p>
     </section>
 
     <div class="wiki-layout">
@@ -92,6 +92,7 @@
         <a href="#acces" data-i18n="cgu.tocAcces">Qui peut l'utiliser</a>
         <a href="#gratuit" data-i18n="cgu.tocGratuit">Gratuité et dons</a>
         <a href="#abonnement" data-i18n="cgu.tocAbonnement">Abonnement premium</a>
+        <a href="#boutique" data-i18n="cgu.tocBoutique">Boutique</a>
         <a href="#permissions" data-i18n="cgu.tocPermissions">Permissions demandées</a>
         <a href="#admin" data-i18n="cgu.tocAdmin">Rôle de l'administrateur</a>
         <a href="#interdits" data-i18n="cgu.tocInterdits">Usages interdits</a>
@@ -131,6 +132,17 @@
           <p data-i18n="cgu.abonnementRetractation">Conformément à l'article L221-28 du code de la consommation, l'accès aux fonctionnalités premium étant fourni immédiatement, vous renoncez à votre droit de rétractation de quatorze jours en souscrivant. Une somme prélevée par erreur est remboursée sur demande.</p>
           <p data-i18n="cgu.abonnementCadeau">L'équipe ModBot peut offrir le premium à un serveur, ou une licence à une personne — elle en répartit alors les places comme elle l'entend. Ce cadeau ne donne lieu à aucun paiement, ne se renouvelle pas, et prend fin à la date affichée en tête du tableau de bord concerné.</p>
           <p data-i18n="cgu.abonnementFin">À la fin d'un abonnement, les réglages premium déjà enregistrés sont conservés mais cessent d'être appliqués. Ils reprennent tels quels si l'abonnement redevient actif. Aucune donnée n'est supprimée de ce seul fait. Une place posée sur un serveur y reste jusqu'à l'échéance et ne peut pas être déplacée ; en cas d'erreur de serveur, l'équipe peut la rendre sur demande, sans perte de durée.</p>
+        </section>
+
+        <section id="boutique" class="wiki-section">
+          <h2 data-i18n="cgu.boutiqueTitre">Créations sur mesure (boutique)</h2>
+          <p data-i18n="cgu.boutiqueOffres">La boutique vend des créations faites sur mesure : bots Discord, sites web, et packs réunissant les deux. Les prix sont indiqués toutes taxes comprises sur la page Boutique ; le prix payé est celui affiché au moment de la commande.</p>
+          <p data-i18n="cgu.boutiquePaiement">Le paiement est traité par Stripe, par carte bancaire ou PayPal, en une seule fois à la commande. Aucune donnée bancaire ne transite par ModBot ni n'y est conservée.</p>
+          <p data-i18n="cgu.boutiqueCommande">Avant de payer, tu indiques ton pseudo ou ton identifiant Discord. Dans les 24 heures qui suivent le paiement, nous te contactons sur Discord pour préciser ton projet. Si nous ne parvenons pas à te joindre, écris-nous sur le serveur de support en rappelant ton numéro de commande.</p>
+          <p data-i18n="cgu.boutiqueDelais">Les délais annoncés courent à partir du moment où ton projet est précisé et les éléments nécessaires fournis (textes, couleurs, logos). Ils sont indicatifs ; un retard important te permet d'annuler la commande et d'être remboursé.</p>
+          <p data-i18n="cgu.boutiqueRevisions">Chaque formule comprend le nombre de révisions indiqué sur sa carte : une révision est une série de retouches demandées en une fois. Une demande qui dépasse la formule fait l'objet d'un prix annoncé à l'avance, que tu es libre de refuser.</p>
+          <p data-i18n="cgu.boutiqueRetractation">Tu disposes d'un droit de rétractation de quatorze jours. En cochant la case prévue avant le paiement, tu demandes que le travail commence sans attendre la fin de ce délai : si tu te rétractes ensuite, tu es remboursé de ce qui n'a pas encore été réalisé (article L221-25 du code de la consommation). Tant que le travail n'a pas commencé, le remboursement est intégral. Une fois la création entièrement livrée, le droit de rétractation ne s'applique plus (article L221-28).</p>
+          <p data-i18n="cgu.boutiquePropriete">À la livraison, le code et les fichiers de la création te sont remis : tu es libre de les utiliser, de les modifier et de les héberger où tu veux. L'hébergement n'est pas compris dans le prix, sauf accord contraire.</p>
         </section>
 
         <section id="permissions" class="wiki-section">

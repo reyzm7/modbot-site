@@ -8542,7 +8542,7 @@ label,
 .social-icon.brand-twitch    { color: #9146ff; background: rgba(145, 70, 255, 0.12); border-color: rgba(145, 70, 255, 0.32); }
 .social-icon.brand-tiktok    { color: #ff0050; background: rgba(255, 0, 80, 0.10);   border-color: rgba(255, 0, 80, 0.30); }
 .social-icon.brand-instagram { color: #e1306c; background: rgba(225, 48, 108, 0.11); border-color: rgba(225, 48, 108, 0.30); }
-.social-icon.brand-x         { color: #e8ecf4; background: rgba(232, 236, 244, 0.08); border-color: rgba(232, 236, 244, 0.22); }
+.social-icon.brand-x         { color: #e8ecf4; background: rgba(232, 236, 244, 0.08); border-color: rgba(232, 236, 244, 0.22); }
 .social-icon.brand-youtube   { color: #ff0000; background: rgba(255, 0, 0, 0.10);     border-color: rgba(255, 0, 0, 0.30); }
 
 @media (prefers-reduced-motion: reduce) {
@@ -9072,6 +9072,242 @@ select {
   gap: 14px;
   margin-top: 20px;
 }
+
+/* ── LA BOUTIQUE ─────────────────────────────────────────────────── */
+/*    Les cartes reprennent celles des offres premium : meme bordure,
+      meme prix en grand. Elles se lisent a gauche — une liste de ce
+      qui est inclus ne se lit pas centree. */
+
+.boutique-section { margin-top: 44px; }
+
+.boutique-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 22px;
+  align-items: stretch;
+}
+
+.boutique-carte { text-align: left; gap: 8px; }
+.boutique-carte h3 { font-size: 1.1rem; }
+.boutique-resume { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.45; }
+.boutique-carte .premium-price { margin-top: 8px; }
+
+.boutique-valeur {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-decoration: line-through;
+}
+
+.boutique-points {
+  display: grid;
+  gap: 7px;
+  margin: 8px 0 4px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+}
+
+.boutique-points li { position: relative; padding-inline-start: 22px; line-height: 1.4; }
+
+.boutique-points li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 3px;
+  top: 0.42em;
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid #43b581;
+  border-bottom: 2px solid #43b581;
+  transform: rotate(-45deg);
+}
+
+.boutique-delai { margin: 0; color: var(--muted); font-size: 0.8rem; }
+
+.boutique-payer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.boutique-carte .boutique-payer button {
+  margin-top: 0;
+  justify-content: center;
+  padding: 11px 10px;
+}
+
+.boutique-bientot {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.boutique-retour {
+  max-width: 560px;
+  margin: 0 auto 24px;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.boutique-retour.is-ok {
+  border-color: rgba(67, 181, 129, 0.5);
+  background: rgba(67, 181, 129, 0.1);
+}
+
+.boutique-etapes { margin-top: 48px; }
+
+.boutique-etapes-liste {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: etape;
+}
+
+.boutique-etapes-liste li {
+  position: relative;
+  padding: 20px;
+  padding-inline-start: 64px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  counter-increment: etape;
+}
+
+.boutique-etapes-liste li::before {
+  content: counter(etape);
+  position: absolute;
+  inset-inline-start: 20px;
+  top: 18px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(241, 196, 15, 0.14);
+  color: #f1c40f;
+  font-weight: 800;
+}
+
+.boutique-etapes-liste p { margin: 6px 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+
+/* La fenetre de commande. Opaque : un formulaire de paiement lu a
+   travers le decor anime ne donnerait pas confiance. */
+.boutique-fenetre {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.boutique-fenetre[hidden] { display: none; }
+
+.boutique-fenetre-fond {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 8, 14, 0.74);
+  backdrop-filter: blur(4px);
+}
+
+.boutique-fenetre-boite {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  width: min(480px, 100%);
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  padding: 26px 22px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: rgb(20, 24, 33);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.boutique-fenetre-boite h2 { margin: 0; font-size: 1.25rem; }
+.boutique-recap { margin: 0; color: var(--muted); }
+
+.boutique-fenetre-boite label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.boutique-fenetre-boite input[type="text"],
+.boutique-fenetre-boite textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  font-weight: 500;
+  resize: vertical;
+}
+
+.boutique-fenetre-boite input[type="text"]:focus,
+.boutique-fenetre-boite textarea:focus {
+  outline: 2px solid rgba(241, 196, 15, 0.55);
+  outline-offset: 1px;
+}
+
+.boutique-fenetre-boite .boutique-conditions {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.boutique-conditions input { margin-top: 3px; flex: none; }
+.boutique-conditions a { color: #f7d354; }
+
+.boutique-erreur {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(240, 71, 71, 0.12);
+  color: #ff9b9b;
+  font-size: 0.88rem;
+}
+
+.boutique-fenetre-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.boutique-fenetre-x {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 10px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.boutique-fenetre-x:hover { background: rgba(255, 255, 255, 0.06); color: inherit; }
+
+body.boutique-fenetre-ouverte { overflow: hidden; }
 
 .premium-faq-grid article {
   padding: 18px 20px;

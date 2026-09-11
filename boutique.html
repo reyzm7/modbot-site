@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boutique ModBot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
+       la connexion au dashboard est automatique, rien a saisir.
+       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
+  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
+  <meta name="modbot-discord-client-id" content="1510405235544424620">
+  <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
+  <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
+  <meta name="modbot-bot-permissions" content="3124257994829047">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="assets/modbot-mark.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+</head>
+<body class="premium-page boutique-page">
+  <script src="icons.js"></script>
+  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
+  <div class="page-glow" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navigation de la boutique" data-i18n-aria="bq.navigation">
+      <a class="brand" href="index.html" aria-label="Accueil ModBot" data-i18n-aria="wiki.accueilModbot">
+        <span class="brand-mark">
+          <img src="assets/modbot-mark.png" alt="" width="128" height="128" decoding="async" fetchpriority="high">
+        </span>
+        <span>ModBot</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="wiki.ouvrirLeMenu">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#features" data-i18n="nav.features" data-teinte="violet">Fonctionnalités</a>
+        <a href="index.html#donate" data-i18n="nav.pricing" data-teinte="rose">Soutenir</a>
+        <a href="wiki.html" data-i18n="nav.wiki" data-teinte="ambre">Wiki</a>
+        <a href="partenaires.html" data-i18n="nav.partenaires" data-teinte="menthe">Partenaires</a>
+        <a href="boutique.html" data-i18n="nav.boutique" data-teinte="or">Boutique</a>
+        <a href="index.html#faq" data-i18n="home.faq" data-teinte="rouge">FAQ</a>
+
+        <a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="wiki.supportDiscord" data-teinte="vert">Support Discord</a>
+
+        <div class="nav-menu" data-nav-menu>
+          <button class="nav-menu-trigger" type="button" data-nav-menu-trigger
+                  aria-expanded="false" aria-haspopup="true">
+            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-menu"/></svg></span>
+            <span data-i18n="nav.menu">Accès</span>
+            <svg class="nav-menu-chevron" viewBox="0 0 12 8" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav-menu-panel" data-nav-menu-panel hidden>
+            <a href="index.html" class="nav-menu-home" data-teinte="acier"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-home"/></svg><span data-i18n="nav.retourSite">Revenir au site</span></a>
+            <a href="dashboard.html" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
+            <a href="dashboard.html?flow=invite" data-discord-bot-invite data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg><span data-i18n="nav.ajouter">Ajouter ModBot</span></a>
+            <a href="premium.html" data-teinte="or"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="nav.premium">Premium</span></a>
+            <a href="boutique.html" data-teinte="cyan"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
+            <a href="admin.html" data-teinte="rouge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg><span data-i18n="nav.admin">Admin</span></a>
+            <label class="nav-menu-lang">
+              <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="nav.langue">Langue</span></span>
+              <select data-nav-language>
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+                <option value="es">Español</option>
+                <option value="de">Deutsch</option>
+              </select>
+            </label>
+          </div>
+        </div>
+</div>
+    </nav>
+  </header>
+
+  <main class="premium-shell boutique-shell">
+
+    <!-- ── Le haut : ce qu'on vend ─────────────────────────────────── -->
+    <section class="premium-hero section-shell">
+      <p class="eyebrow" data-i18n="bq.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg> Boutique</p>
+      <h1 data-i18n="bq.titre">Ton bot et ton site, faits sur mesure</h1>
+      <p class="premium-lead" data-i18n="bq.chapo">Un bot qui fait exactement ce dont ton serveur a besoin, un site qui lui ressemble. Tu choisis une formule, tu paies en ligne, on s'occupe du reste.</p>
+      <div class="boutique-retour" data-boutique-retour role="status" hidden></div>
+    </section>
+
+    <section class="boutique-section section-shell" id="bots">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="bq.botsEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-rocket"/></svg> Bots Discord</p>
+        <h2 data-i18n="bq.botsTitre">Un bot à ton nom</h2>
+        <p data-i18n="bq.botsChapo">Codé pour ton serveur, à tes couleurs, avec les commandes dont ta communauté a besoin.</p>
+      </div>
+      <div class="boutique-grille" data-boutique-grille="bot"></div>
+    </section>
+
+    <section class="boutique-section section-shell" id="sites">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="bq.sitesEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg> Sites web</p>
+        <h2 data-i18n="bq.sitesTitre">Un site pour ton serveur</h2>
+        <p data-i18n="bq.sitesChapo">Rapide, beau sur mobile comme sur ordinateur, et mis en ligne pour toi.</p>
+      </div>
+      <div class="boutique-grille" data-boutique-grille="site"></div>
+    </section>
+
+    <section class="boutique-section section-shell" id="packs">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="bq.packsEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg> Packs</p>
+        <h2 data-i18n="bq.packsTitre">Le bot et le site ensemble</h2>
+        <p data-i18n="bq.packsChapo">Les deux créations, aux mêmes couleurs et livrées ensemble : moins cher que séparément.</p>
+      </div>
+      <div class="boutique-grille" data-boutique-grille="pack"></div>
+    </section>
+
+    <p class="field-help premium-note" data-i18n-html="bq.note">Paiement sécurisé par <strong>Stripe</strong>, par carte bancaire ou PayPal. ModBot ne voit jamais tes données bancaires.</p>
+
+    <!-- ── Ce qui se passe apres ──────────────────────────────────── -->
+    <section class="boutique-etapes section-shell">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="bq.etapesEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-compass"/></svg> Comment ça marche</p>
+        <h2 data-i18n="bq.etapesTitre">De la commande à la livraison</h2>
+      </div>
+      <ol class="boutique-etapes-liste">
+        <li>
+          <strong data-i18n="bq.etape1Titre">Tu choisis et tu paies</strong>
+          <p data-i18n="bq.etape1">Par carte bancaire ou PayPal. Avant de payer, tu donnes ton pseudo Discord : c'est là qu'on te recontacte.</p>
+        </li>
+        <li>
+          <strong data-i18n="bq.etape2Titre">On en parle sur Discord</strong>
+          <p data-i18n="bq.etape2">Sous 24 h, on te contacte sur Discord pour préciser ton projet : fonctions, couleurs, textes.</p>
+        </li>
+        <li>
+          <strong data-i18n="bq.etape3Titre">Tu reçois ta création</strong>
+          <p data-i18n="bq.etape3">Dans le délai annoncé, avec ses révisions incluses, et mise en ligne si tu le souhaites.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="premium-faq section-shell">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="bq.faqEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-question"/></svg> Questions</p>
+        <h2 data-i18n="bq.faqTitre">Avant de commander</h2>
+      </div>
+      <div class="premium-faq-grid">
+        <article>
+          <h3 data-i18n="bq.q1">À qui appartient ce qui est livré ?</h3>
+          <p data-i18n="bq.r1">À toi. Le code du bot et du site t'est remis : tu peux le garder, le modifier, le faire héberger où tu veux.</p>
+        </article>
+        <article>
+          <h3 data-i18n="bq.q2">Et si le résultat ne me convient pas ?</h3>
+          <p data-i18n="bq.r2">Les révisions incluses servent à ça. Au-delà, on te donne un prix avant de faire quoi que ce soit.</p>
+        </article>
+        <article>
+          <h3 data-i18n="bq.q3">Puis-je être remboursé ?</h3>
+          <p data-i18n="bq.r3">Intégralement tant que le travail n'a pas commencé. Ensuite, le remboursement tient compte de ce qui a déjà été fait. Tout est détaillé dans les conditions.</p>
+        </article>
+        <article>
+          <h3 data-i18n="bq.q4">Mon projet ne rentre dans aucune formule.</h3>
+          <p data-i18n="bq.r4">Écris-nous sur le serveur de support : on te propose un devis sur mesure.</p>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p data-i18n-html="bq.pied">© 2026 ModBot — <a href="conditions.html#boutique">Conditions de la boutique</a> · <a href="confidentialite.html#boutique">Confidentialité</a></p>
+  </footer>
+
+  <!-- ── La fenetre de commande ─────────────────────────────────────── -->
+  <div class="boutique-fenetre" data-boutique-fenetre hidden>
+    <div class="boutique-fenetre-fond" data-boutique-fermer></div>
+    <form class="boutique-fenetre-boite" role="dialog" aria-modal="true" aria-labelledby="boutiqueFenetreTitre" data-boutique-formulaire novalidate>
+      <button class="boutique-fenetre-x" type="button" data-boutique-fermer aria-label="Fermer" data-i18n-aria="bq.fermer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button>
+      <h2 id="boutiqueFenetreTitre" data-i18n="bq.fenetreTitre">Ta commande</h2>
+      <p class="boutique-recap" data-boutique-recap></p>
+      <label data-i18n="bq.discordLabel">Ton pseudo ou ton identifiant Discord
+        <input type="text" name="discord" autocomplete="off" spellcheck="false" maxlength="40" required data-boutique-discord placeholder="ex. : modbot_fan" data-i18n-placeholder="bq.discordPlaceholder">
+      </label>
+      <p class="field-help" data-i18n="bq.discordAide">C'est là qu'on te contactera après le paiement : ton pseudo, ou ton identifiant de 17 à 20 chiffres.</p>
+      <label data-i18n="bq.projetLabel">Ton projet en quelques mots (facultatif)
+        <textarea name="projet" rows="4" maxlength="1000" data-boutique-projet placeholder="Ce que doit faire ton bot ou ton site, tes couleurs, un exemple…" data-i18n-placeholder="bq.projetPlaceholder"></textarea>
+      </label>
+      <label class="boutique-conditions">
+        <input type="checkbox" data-boutique-conditions required>
+        <span data-i18n-html="bq.conditions">J'ai lu les <a href="conditions.html#boutique" target="_blank" rel="noreferrer">conditions de la boutique</a> et je demande que le travail commence dès le paiement.</span>
+      </label>
+      <p class="boutique-erreur" data-boutique-erreur role="alert" hidden></p>
+      <div class="boutique-fenetre-actions">
+        <button class="secondary-btn" type="button" data-boutique-fermer data-i18n="bq.annuler">Annuler</button>
+        <button class="primary-btn" type="submit" data-boutique-envoyer data-i18n="bq.continuer">Continuer vers le paiement</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="translations.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
