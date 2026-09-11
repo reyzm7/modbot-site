@@ -112,10 +112,11 @@
         <button class="admin-nav is-active" type="button" data-admin-tab="overview" data-i18n="adm.navVueGlobale"><span>01</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg> Vue globale</button>
         <button class="admin-nav" type="button" data-admin-tab="admins" data-i18n="adm.navAdministrateurs"><span>02</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg> Administrateurs</button>
         <button class="admin-nav" type="button" data-admin-tab="premium" data-i18n="adm.navPremium"><span>03</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Premium</button>
-        <button class="admin-nav" type="button" data-admin-tab="blacklist" data-i18n="adm.navBlacklist"><span>04</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-ban"/></svg> Blacklist bot</button>
-        <button class="admin-nav" type="button" data-admin-tab="servers" data-i18n="adm.navServeurs"><span>05</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-compass"/></svg> Serveurs</button>
-        <button class="admin-nav" type="button" data-admin-tab="visites" data-i18n="adm.navVisites"><span>06</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-trend"/></svg> Visites</button>
-        <button class="admin-nav" type="button" data-admin-tab="activity" data-i18n="adm.navLogs"><span>07</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs globaux</button>
+        <button class="admin-nav" type="button" data-admin-tab="boutique" data-i18n="adm.navBoutique"><span>04</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg> Achats et paiements</button>
+        <button class="admin-nav" type="button" data-admin-tab="blacklist" data-i18n="adm.navBlacklist"><span>05</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-ban"/></svg> Blacklist bot</button>
+        <button class="admin-nav" type="button" data-admin-tab="servers" data-i18n="adm.navServeurs"><span>06</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-compass"/></svg> Serveurs</button>
+        <button class="admin-nav" type="button" data-admin-tab="visites" data-i18n="adm.navVisites"><span>07</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-trend"/></svg> Visites</button>
+        <button class="admin-nav" type="button" data-admin-tab="activity" data-i18n="adm.navLogs"><span>08</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Logs globaux</button>
       </aside>
 
       <div class="admin-main">
@@ -200,6 +201,26 @@
             <p class="admin-hint" data-i18n="adm.premiumAcheteursAide">Une licence payée mais jamais posée apparaît en tête : c'est celle qui demande une action.</p>
             <div class="admin-buyers" data-premium-buyers data-admin-sensitive>
               <div class="admin-buyer"><span><strong data-i18n="adm.chargement2">Chargement…</strong></span></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="admin-view" data-admin-panel="boutique">
+          <article class="admin-panel">
+            <div class="admin-panel-head">
+              <h3 data-i18n="adm.btqTitre"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg> Achats et paiements</h3>
+              <button class="secondary-btn compact" type="button" data-btq-rafraichir data-i18n="adm.btqRafraichir">Rafraîchir</button>
+            </div>
+            <p class="admin-hint" data-i18n="adm.btqChapo">Chaque bouton prévient le client en message privé, avec son numéro de commande. Les mêmes boutons se trouvent sous les annonces du salon des paiements, sur Discord.</p>
+            <div class="btq-compteurs" data-btq-compteurs data-admin-sensitive></div>
+            <div class="btq-onglets" role="tablist" aria-label="Achats et paiements" data-i18n-aria="adm.btqOnglets">
+              <button class="btq-onglet is-active" type="button" role="tab" aria-selected="true" data-btq-onglet="en_cours"><span data-i18n="adm.btqOngletEnCours">En cours</span><span class="btq-nombre" data-btq-nombre></span></button>
+              <button class="btq-onglet" type="button" role="tab" aria-selected="false" data-btq-onglet="devis"><span data-i18n="adm.btqOngletDevis">Sur mesure</span><span class="btq-nombre" data-btq-nombre></span></button>
+              <button class="btq-onglet" type="button" role="tab" aria-selected="false" data-btq-onglet="sav"><span data-i18n="adm.btqOngletSav">Assistance</span><span class="btq-nombre" data-btq-nombre></span></button>
+              <button class="btq-onglet" type="button" role="tab" aria-selected="false" data-btq-onglet="historique"><span data-i18n="adm.btqOngletHistorique">Historique</span><span class="btq-nombre" data-btq-nombre></span></button>
+            </div>
+            <div class="btq-liste" data-btq-liste data-admin-sensitive>
+              <p class="field-help" data-i18n="adm.chargement">Chargement…</p>
             </div>
           </article>
         </section>

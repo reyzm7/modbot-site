@@ -99,8 +99,17 @@
         <a href="#bots"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-rocket"/></svg><span data-i18n="bq.botsEyebrow">Bots Discord</span><small data-boutique-des="bot"></small></a>
         <a href="#sites"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="bq.sitesEyebrow">Sites web</span><small data-boutique-des="site"></small></a>
       </nav>
+      <div class="boutique-actions-hero">
+        <a class="secondary-btn" href="#exemples"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-eye"/></svg><span data-i18n="bq.voirExemples">Voir des exemples</span></a>
+        <a class="secondary-btn" href="#devis"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-send"/></svg><span data-i18n="bq.devisBouton">Demander un devis</span></a>
+        <a class="secondary-btn" href="#assistance"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-tools"/></svg><span data-i18n="bq.aideBouton">Besoin d'aide ?</span></a>
+      </div>
+      <div class="boutique-compte" data-boutique-compte aria-live="polite"></div>
       <div class="boutique-retour" data-boutique-retour role="status" hidden></div>
     </section>
+
+    <!-- ── Le devis du client, ouvert depuis le lien recu en prive ───── -->
+    <section class="boutique-ton-devis section-shell" id="ton-devis" data-ton-devis aria-live="polite" hidden></section>
 
     <!-- ── Les rayons : les packs d'abord ──────────────────────────── -->
     <section class="boutique-section section-shell" id="packs">
@@ -131,6 +140,117 @@
     </section>
 
     <p class="field-help premium-note" data-i18n-html="bq.note">Paiement sécurisé par <strong>Stripe</strong>, par carte bancaire ou PayPal. ModBot ne voit jamais tes données bancaires.</p>
+
+    <!-- ── Des exemples concrets ───────────────────────────────────── -->
+    <section class="boutique-exemples section-shell" id="exemples">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="bq.exEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg> Exemples concrets</p>
+        <h2 data-i18n="bq.exTitre">Ce qu'on peut construire pour ton serveur</h2>
+        <p data-i18n="bq.exChapo">Quatre situations que vivent les serveurs Discord, et la formule qui y répond.</p>
+      </div>
+      <div class="boutique-exemples-grille">
+        <article class="boutique-exemple">
+          <div class="mk" aria-hidden="true">
+            <div class="mk-message">
+              <span class="mk-avatar"></span>
+              <div>
+                <span class="mk-nom" data-i18n="bq.mkBot">Ton bot</span>
+                <div class="mk-embed">
+                  <strong data-i18n="bq.mk1Titre">🎫 Ticket n° 42 — Recrutement</strong>
+                  <span data-i18n="bq.mk1Texte">Merci ! Un membre du staff arrive.</span>
+                  <div class="mk-boutons">
+                    <span class="mk-bouton is-rouge" data-i18n="bq.mk1Fermer">Fermer</span>
+                    <span class="mk-bouton" data-i18n="bq.mk1Transcript">Transcript</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h3 data-i18n="bq.ex1Titre">Des tickets pour un serveur RP</h3>
+          <p data-i18n="bq.ex1Texte">Un joueur ouvre un ticket en un clic ; le staff le prend en charge, et la conversation est archivée à la fermeture.</p>
+          <ul>
+            <li data-i18n="bq.ex1a">Catégories : recrutement, plainte, boutique</li>
+            <li data-i18n="bq.ex1b">Transcript envoyé à la fermeture</li>
+            <li data-i18n="bq.ex1c">Journal des actions pour le staff</li>
+          </ul>
+          <p class="boutique-exemple-formule"><a href="#bots" data-exemple-formule="bot_avance"></a></p>
+        </article>
+        <article class="boutique-exemple">
+          <div class="mk" aria-hidden="true">
+            <div class="mk-message">
+              <span class="mk-avatar"></span>
+              <div>
+                <span class="mk-nom" data-i18n="bq.mkBot">Ton bot</span>
+                <div class="mk-embed is-vert">
+                  <strong data-i18n="bq.mk2Titre">👋 Bienvenue, Alex !</strong>
+                  <span data-i18n="bq.mk2Texte">Lis les règles avec /règles, puis présente-toi.</span>
+                </div>
+                <div class="mk-embed">
+                  <span data-i18n="bq.mk2Alerte">⚠️ Max a reçu un avertissement : langage.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h3 data-i18n="bq.ex2Titre">Un accueil soigné, un serveur propre</h3>
+          <p data-i18n="bq.ex2Texte">Chaque arrivant est accueilli par son nom, et les écarts de langage sont repris sans qu'un modérateur ait à veiller.</p>
+          <ul>
+            <li data-i18n="bq.ex2a">Message de bienvenue à tes couleurs</li>
+            <li data-i18n="bq.ex2b">Filtre de mots et avertissements</li>
+            <li data-i18n="bq.ex2c">Tes propres commandes, comme /règles</li>
+          </ul>
+          <p class="boutique-exemple-formule"><a href="#bots" data-exemple-formule="bot_essentiel"></a></p>
+        </article>
+        <article class="boutique-exemple">
+          <div class="mk mk-web" aria-hidden="true">
+            <div class="mk-barre"><span></span><span></span><span></span></div>
+            <div class="mk-page">
+              <strong data-i18n="bq.mk3Nom">Le Repaire</strong>
+              <small data-i18n="bq.mk3Chapo">La communauté des joueurs de nuit</small>
+              <span class="mk-bouton is-bleu" data-i18n="bq.mk3Bouton">Rejoindre le Discord</span>
+              <small data-i18n="bq.mk3Membres">1 240 membres · 86 en ligne</small>
+            </div>
+          </div>
+          <h3 data-i18n="bq.ex3Titre">La vitrine de ton serveur</h3>
+          <p data-i18n="bq.ex3Texte">Une page qui présente ta communauté et donne envie d'y entrer, avec un bouton pour la rejoindre.</p>
+          <ul>
+            <li data-i18n="bq.ex3a">Belle sur mobile comme sur ordinateur</li>
+            <li data-i18n="bq.ex3b">Le bouton « Rejoindre le Discord »</li>
+            <li data-i18n="bq.ex3c">Mise en ligne comprise</li>
+          </ul>
+          <p class="boutique-exemple-formule"><a href="#sites" data-exemple-formule="site_vitrine"></a></p>
+        </article>
+        <article class="boutique-exemple">
+          <div class="mk mk-web" aria-hidden="true">
+            <div class="mk-barre"><span></span><span></span><span></span></div>
+            <div class="mk-dash">
+              <div class="mk-dash-menu"><span></span><span></span><span></span><span></span></div>
+              <div class="mk-dash-corps">
+                <strong data-i18n="bq.mk4Titre">Réglages du bot</strong>
+                <div class="mk-reglage"><span data-i18n="bq.mk4a">Anti-raid</span><i class="mk-interrupteur"></i></div>
+                <div class="mk-reglage"><span data-i18n="bq.mk4b">Tickets</span><i class="mk-interrupteur"></i></div>
+                <div class="mk-reglage"><span data-i18n="bq.mk4c">Mode lent</span><i class="mk-interrupteur is-off"></i></div>
+              </div>
+            </div>
+          </div>
+          <h3 data-i18n="bq.ex4Titre">Des réglages en ligne</h3>
+          <p data-i18n="bq.ex4Texte">Tes modérateurs règlent le bot depuis un site, connectés avec Discord — comme le dashboard de ModBot.</p>
+          <ul>
+            <li data-i18n="bq.ex4a">Connexion avec Discord</li>
+            <li data-i18n="bq.ex4b">Modules activés d'un clic</li>
+            <li data-i18n="bq.ex4c">Changements appliqués en direct</li>
+          </ul>
+          <p class="boutique-exemple-formule"><a href="#sites" data-exemple-formule="site_dashboard"></a></p>
+        </article>
+      </div>
+      <div class="boutique-preuve">
+        <div>
+          <h3 data-i18n="bq.exPreuveTitre">La preuve : ModBot</h3>
+          <p data-i18n="bq.exPreuveTexte">Le bot ModBot et ce site sont faits par la même équipe. Ce que tu vois ici, c'est ce qu'on sait faire.</p>
+        </div>
+        <a class="secondary-btn" href="dashboard.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg><span data-i18n="bq.exPreuveBouton">Voir le dashboard</span></a>
+      </div>
+      <p class="boutique-exemples-note" data-i18n="bq.exNote">Aperçus d'illustration : les noms sont inventés, les fonctions sont celles que comprend chaque formule.</p>
+    </section>
 
     <!-- ── Ce qui est toujours compris ─────────────────────────────── -->
     <section class="boutique-atouts section-shell">
@@ -202,18 +322,115 @@
           <h3 data-i18n="bq.q3">Puis-je être remboursé ?</h3>
           <p data-i18n="bq.r3">Intégralement tant que le travail n'a pas commencé. Ensuite, le remboursement tient compte de ce qui a déjà été fait. Tout est détaillé dans les conditions.</p>
         </article>
+        <article>
+          <h3 data-i18n="bq.q4">Et si mon idée n'entre dans aucune formule ?</h3>
+          <p data-i18n="bq.r4">Décris-la dans une demande sur mesure : on te répond en message privé avec un prix, et tu ne paies que si tu l'acceptes.</p>
+        </article>
       </div>
     </section>
 
-    <!-- ── Le reste : sur devis ───────────────────────────────────── -->
-    <section class="boutique-devis section-shell">
-      <div class="boutique-devis-inner">
+    <!-- ── Le sur-mesure : tu decris, on chiffre, tu paies ─────────── -->
+    <section class="boutique-devis section-shell" id="devis">
+      <div class="boutique-devis-inner boutique-demande">
         <div>
+          <p class="eyebrow" data-i18n="bq.devisEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-send"/></svg> Sur mesure</p>
           <h2 data-i18n="bq.devisTitre">Un projet qui sort des formules ?</h2>
-          <p data-i18n="bq.devisTexte">Chaque formule est un point de départ : tout s'adapte. Décris-nous ton idée sur Discord, on te répond avec un prix.</p>
+          <p data-i18n="bq.devisTexte">Décris ce que tu veux exactement. On étudie ta demande et on t'envoie un prix en message privé sur Discord, avec un lien pour payer.</p>
+          <ol class="boutique-demande-etapes">
+            <li data-i18n="bq.devisEtape1">Tu décris ton projet</li>
+            <li data-i18n="bq.devisEtape2">On t'envoie un prix en message privé</li>
+            <li data-i18n="bq.devisEtape3">Tu paies en ligne, et on commence</li>
+          </ol>
         </div>
-        <a class="primary-btn" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg> <span data-i18n="bq.devisBouton">Demander un devis</span></a>
+        <form class="boutique-formulaire" data-devis-formulaire novalidate>
+          <label data-i18n="bq.devisCategorie">Ce que tu veux
+            <select name="categorie" data-devis-categorie>
+              <option value="bot" data-i18n="bq.devisCatBot">Un bot Discord</option>
+              <option value="site" data-i18n="bq.devisCatSite">Un site web</option>
+              <option value="les_deux" data-i18n="bq.devisCatLesDeux">Un bot et un site</option>
+              <option value="autre" data-i18n="bq.devisCatAutre">Autre chose</option>
+            </select>
+          </label>
+          <label data-i18n="bq.devisDescription">Ton projet, en détail
+            <textarea name="description" rows="5" maxlength="2000" required data-devis-description placeholder="Ce que doit faire ta création, pour quel serveur, tes couleurs, un exemple qui te plaît…" data-i18n-placeholder="bq.devisDescriptionPlaceholder"></textarea>
+          </label>
+          <div class="boutique-formulaire-ligne">
+            <label data-i18n="bq.devisBudget">Ton budget (facultatif)
+              <input type="text" name="budget" maxlength="80" autocomplete="off" data-devis-budget placeholder="ex. : 100 €" data-i18n-placeholder="bq.devisBudgetPlaceholder">
+            </label>
+            <label data-i18n="bq.devisDelai">Pour quand ? (facultatif)
+              <input type="text" name="delai" maxlength="80" autocomplete="off" data-devis-delai placeholder="ex. : dans deux semaines" data-i18n-placeholder="bq.devisDelaiPlaceholder">
+            </label>
+          </div>
+          <div data-boutique-contact>
+            <label data-i18n="bq.discordLabel">Ton pseudo ou ton identifiant Discord
+              <input type="text" name="discord" autocomplete="off" spellcheck="false" maxlength="40" data-devis-discord placeholder="ex. : modbot_fan" data-i18n-placeholder="bq.discordPlaceholder">
+            </label>
+          </div>
+          <p class="boutique-connecte" data-boutique-connecte hidden></p>
+          <p class="boutique-erreur" data-devis-erreur role="alert" hidden></p>
+          <p class="boutique-succes" data-devis-succes role="status" hidden></p>
+          <button class="primary-btn" type="submit" data-devis-envoyer data-i18n="bq.devisEnvoyer">Envoyer ma demande</button>
+        </form>
       </div>
+    </section>
+
+    <!-- ── L'assistance : installer, decouvrir, depanner ─────────────── -->
+    <section class="boutique-aide section-shell" id="assistance">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="bq.aideEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-tools"/></svg> Assistance</p>
+        <h2 data-i18n="bq.aideTitre">Besoin d'aide avec ton bot ?</h2>
+        <p data-i18n="bq.aideChapo">Pour installer ModBot, découvrir ce qu'il sait faire ou régler un souci : on t'aide, en message privé sur Discord.</p>
+      </div>
+      <div class="boutique-aide-grille">
+        <article>
+          <span class="boutique-aide-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-plus"/></svg></span>
+          <h3 data-i18n="bq.aide1Titre">Installer ModBot</h3>
+          <p data-i18n="bq.aide1">Ajoute le bot à ton serveur en deux clics, puis règle-le depuis le dashboard.</p>
+          <a href="dashboard.html?flow=invite" data-discord-bot-invite data-i18n="bq.aide1Lien">Ajouter ModBot</a>
+        </article>
+        <article>
+          <span class="boutique-aide-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-compass"/></svg></span>
+          <h3 data-i18n="bq.aide2Titre">Découvrir ses fonctions</h3>
+          <p data-i18n="bq.aide2">Modération, tickets, captcha, bienvenue… Le wiki explique chaque module, pas à pas.</p>
+          <a href="wiki.html" data-i18n="bq.aide2Lien">Ouvrir le wiki</a>
+        </article>
+        <article>
+          <span class="boutique-aide-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-gear"/></svg></span>
+          <h3 data-i18n="bq.aide3Titre">Tout régler en ligne</h3>
+          <p data-i18n="bq.aide3">Chaque module se règle depuis le dashboard, sans taper une seule commande.</p>
+          <a href="dashboard.html" data-i18n="bq.aide3Lien">Ouvrir le dashboard</a>
+        </article>
+      </div>
+      <form class="boutique-aide-formulaire boutique-formulaire" data-aide-formulaire novalidate>
+        <h3 data-i18n="bq.aideFormTitre">Écrire à l'équipe</h3>
+        <p class="field-help" data-i18n="bq.aideFormTexte">Une question, un souci, une création à installer ? On te répond en message privé sur Discord.</p>
+        <div class="boutique-formulaire-ligne">
+          <label data-i18n="bq.aideSujet">Ta demande concerne
+            <select name="sujet" data-aide-sujet>
+              <option value="installation" data-i18n="bq.aideSujetInstallation">L'installation de mon bot</option>
+              <option value="decouverte" data-i18n="bq.aideSujetDecouverte">Découvrir ce qu'il sait faire</option>
+              <option value="probleme" data-i18n="bq.aideSujetProbleme">Un problème</option>
+              <option value="autre" data-i18n="bq.aideSujetAutre">Autre chose</option>
+            </select>
+          </label>
+          <label data-i18n="bq.aideNumero">Numéro de commande (facultatif)
+            <input type="text" name="numero" maxlength="14" autocomplete="off" spellcheck="false" data-aide-numero placeholder="ex. : MB-260911-ABCD" data-i18n-placeholder="bq.aideNumeroPlaceholder">
+          </label>
+        </div>
+        <label data-i18n="bq.aideMessage">Ce dont tu as besoin
+          <textarea name="message" rows="4" maxlength="2000" required data-aide-message placeholder="Explique ta question ou ton problème…" data-i18n-placeholder="bq.aideMessagePlaceholder"></textarea>
+        </label>
+        <div data-boutique-contact>
+          <label data-i18n="bq.discordLabel">Ton pseudo ou ton identifiant Discord
+            <input type="text" name="discord" autocomplete="off" spellcheck="false" maxlength="40" data-aide-discord placeholder="ex. : modbot_fan" data-i18n-placeholder="bq.discordPlaceholder">
+          </label>
+        </div>
+        <p class="boutique-connecte" data-boutique-connecte hidden></p>
+        <p class="boutique-erreur" data-aide-erreur role="alert" hidden></p>
+        <p class="boutique-succes" data-aide-succes role="status" hidden></p>
+        <button class="primary-btn" type="submit" data-aide-envoyer data-i18n="bq.aideEnvoyer">Envoyer ma demande d'aide</button>
+      </form>
     </section>
 
   </main>
@@ -229,10 +446,13 @@
       <button class="boutique-fenetre-x" type="button" data-boutique-fermer aria-label="Fermer" data-i18n-aria="bq.fermer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button>
       <h2 id="boutiqueFenetreTitre" data-i18n="bq.fenetreTitre">Ta commande</h2>
       <p class="boutique-recap" data-boutique-recap></p>
+      <div data-boutique-contact>
       <label data-i18n="bq.discordLabel">Ton pseudo ou ton identifiant Discord
         <input type="text" name="discord" autocomplete="off" spellcheck="false" maxlength="40" required data-boutique-discord placeholder="ex. : modbot_fan" data-i18n-placeholder="bq.discordPlaceholder">
       </label>
       <p class="field-help" data-i18n="bq.discordAide">C'est là qu'on te contactera après le paiement : ton pseudo, ou ton identifiant de 17 à 20 chiffres.</p>
+      </div>
+      <p class="boutique-connecte" data-boutique-connecte hidden></p>
       <label data-i18n="bq.projetLabel">Ton projet en quelques mots (facultatif)
         <textarea name="projet" rows="4" maxlength="1000" data-boutique-projet placeholder="Ce que doit faire ton bot ou ton site, tes couleurs, un exemple…" data-i18n-placeholder="bq.projetPlaceholder"></textarea>
       </label>

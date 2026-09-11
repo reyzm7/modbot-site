@@ -1270,18 +1270,21 @@ function initAdminZone() {
   let adminToastTimer;
 
 
-  function showAdminToast(message) {
+  // Une duree plus longue pour ce qu'il faut lire en entier : un message
+  // prive qui n'est pas parti, et pourquoi.
+  function showAdminToast(message, duree = 2400) {
     if (!toast) return;
     toast.textContent = message;
     toast.classList.add("is-visible");
     window.clearTimeout(adminToastTimer);
-    adminToastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 2400);
+    adminToastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), duree);
   }
 
   function openAdminPanel(panelName) {
     adminTabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.adminTab === panelName));
     adminPanels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.adminPanel === panelName));
     suivreVisites(panelName === "visites");
+    if (panelName === "boutique") chargerBoutiqueAdmin();
   }
 
   function formatStat(value) {
@@ -1406,6 +1409,7 @@ function initAdminZone() {
     afficherIdentite(utilisateur);
     loadAdminStats();
     chargerAdministrateurs();
+    chargerBoutiqueAdmin();
     showAdminToast(t("js.adm.accesOuvert"));
   }
 
@@ -1518,6 +1522,348 @@ function initAdminZone() {
     verrouiller("attente", t("js.adm.sessionRequise"));
     showAdminToast(t("js.adm.deconnecte"));
   });
+
+  /* ── Achats & paiements ────────────────────────────────────────────
+     Les commandes de la boutique, les demandes sur mesure et
+     l'assistance. Chaque action passe par le bot, qui previent le client
+     en message prive : cette page affiche ce qu'il repond, et dit quand
+     un message n'a pas pu partir. */
+  const BTQ_STATUTS = {
+    payee: { libelleClef: "js.adm.btqStatutPayee" },
+    attente: { libelleClef: "js.adm.btqStatutAttente" },
+    planifiee: { libelleClef: "js.adm.btqStatutPlanifiee" },
+    en_cours: { libelleClef: "js.adm.btqStatutEnCours" },
+    livree: { libelleClef: "js.adm.btqStatutLivree" },
+    annulee: { libelleClef: "js.adm.btqStatutAnnulee" },
+    en_attente: { libelleClef: "js.adm.btqStatutEnAttente" },
+  };
+  const BTQ_EN_COURS = ["payee", "attente", "planifiee", "en_cours"];
+  const BTQ_DEVIS = {
+    nouveau: { libelleClef: "js.adm.btqDevisNouveau" },
+    propose: { libelleClef: "js.adm.btqDevisPropose" },
+    payee: { libelleClef: "js.adm.btqDevisPayee" },
+    clos: { libelleClef: "js.adm.btqDevisClos" },
+  };
+  const BTQ_SAV = {
+    ouvert: { libelleClef: "js.adm.btqSavOuvert" },
+    repondu: { libelleClef: "js.adm.btqSavRepondu" },
+    clos: { libelleClef: "js.adm.btqSavClos" },
+  };
+  const BTQ_CATEGORIES = {
+    bot: { libelleClef: "bq.devisCatBot" },
+    site: { libelleClef: "bq.devisCatSite" },
+    les_deux: { libelleClef: "bq.devisCatLesDeux" },
+    autre: { libelleClef: "bq.devisCatAutre" },
+  };
+  const BTQ_SUJETS = {
+    installation: { libelleClef: "bq.aideSujetInstallation" },
+    decouverte: { libelleClef: "bq.aideSujetDecouverte" },
+    probleme: { libelleClef: "bq.aideSujetProbleme" },
+    autre: { libelleClef: "bq.aideSujetAutre" },
+  };
+  const btqListe = document.querySelector("[data-btq-liste]");
+  let btqDonnees = null;
+  let btqOnglet = "en_cours";
+
+  function btqDate(iso, avecHeure = true) {
+    const quand = new Date(iso || 0);
+    if (!iso || Number.isNaN(quand.getTime())) return "—";
+    return quand.toLocaleString(localeAffichage(), avecHeure
+      ? { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }
+      : { day: "2-digit", month: "2-digit", year: "numeric" });
+  }
+
+  // « Commence le 14/09/2026 » : la date seule, prise a midi pour qu'aucun
+  // fuseau ne la fasse glisser d'un jour.
+  function btqLibelleStatut(statut, debut) {
+    if (statut === "planifiee") {
+      return tp("js.adm.btqStatutPlanifiee", { date: debut ? btqDate(`${debut}T12:00:00`, false) : "—" });
+    }
+    return t(BTQ_STATUTS[statut]?.libelleClef || "js.adm.btqStatutEnAttente");
+  }
+
+  // Un pseudo tape n'est pas verifie : c'est l'identifiant qui permet au
+  // bot d'ecrire en prive. On le montre, pour savoir a quoi s'attendre.
+  function btqClient(fiche) {
+    const nom = fiche.discord_nom || fiche.discord || "?";
+    const morceaux = [`<b>${escapeHtmlValue(nom)}</b>`];
+    morceaux.push(fiche.discord_id
+      ? `ID ${escapeHtmlValue(fiche.discord_id)}`
+      : escapeHtmlValue(t("js.adm.btqPseudoNonVerifie")));
+    return morceaux.join(" · ");
+  }
+
+  function btqSuivi(entrees, libelle) {
+    if (!Array.isArray(entrees) || !entrees.length) return "";
+    const lignes = entrees.slice().reverse().map((entree) => {
+      const qui = entree.par ? ` — ${escapeHtmlValue(tp("js.adm.btqPar", { nom: entree.par }))}` : "";
+      const message = entree.message === true
+        ? ` · ${escapeHtmlValue(t("js.adm.btqMessageOk"))}`
+        : entree.message === false ? ` · <em>${escapeHtmlValue(t("js.adm.btqMessageEchec"))}</em>` : "";
+      return `<li><time>${escapeHtmlValue(btqDate(entree.date))}</time> ${escapeHtmlValue(libelle(entree))}${qui}${message}</li>`;
+    }).join("");
+    return `<details class="btq-suivi"><summary>${escapeHtmlValue(tp("js.adm.btqSuivi", { n: entrees.length }))}</summary><ol>${lignes}</ol></details>`;
+  }
+
+  function ficheCommandeAdmin(commande) {
+    const id = escapeHtmlValue(commande.numero);
+    const actions = BTQ_EN_COURS.includes(commande.statut) ? `
+      <div class="btq-actions">
+        <button type="button" class="secondary-btn compact" data-btq-action="statut" data-btq-statut="en_cours" data-btq-id="${id}">${escapeHtmlValue(t("js.adm.btqEnCours"))}</button>
+        <span class="btq-jours">
+          <label>${escapeHtmlValue(t("js.adm.btqCommenceDans"))}
+            <input type="number" min="1" max="180" step="1" value="3" data-btq-jours> ${escapeHtmlValue(t("js.adm.btqJours"))}</label>
+          <button type="button" class="secondary-btn compact" data-btq-action="statut" data-btq-statut="planifiee" data-btq-id="${id}">${escapeHtmlValue(t("js.adm.btqProgrammer"))}</button>
+        </span>
+        <button type="button" class="secondary-btn compact" data-btq-action="statut" data-btq-statut="attente" data-btq-id="${id}">${escapeHtmlValue(t("js.adm.btqAttente"))}</button>
+        <button type="button" class="primary-btn compact" data-btq-action="statut" data-btq-statut="livree" data-btq-id="${id}">${escapeHtmlValue(t("js.adm.btqLivree"))}</button>
+      </div>` : "";
+    const meta = [btqClient(commande)];
+    meta.push(escapeHtmlValue(commande.payee_le
+      ? tp("js.adm.btqPayeLe", { date: btqDate(commande.payee_le) })
+      : tp("js.adm.btqCreeLe", { date: btqDate(commande.creee_le) })));
+    if (commande.moyen) meta.push(escapeHtmlValue(t(commande.moyen === "paypal" ? "bq.paypal" : "bq.carte")));
+    if (commande.email) meta.push(escapeHtmlValue(commande.email));
+    if (commande.devis) meta.push(escapeHtmlValue(tp("js.adm.btqDevisLie", { id: commande.devis })));
+    return `
+      <article class="btq-fiche">
+        <div class="btq-fiche-tete">
+          <span class="btq-ident"><code>${id}</code><strong>${escapeHtmlValue(commande.libelle || commande.article || "")}</strong></span>
+          <span class="btq-montant">${escapeHtmlValue(boutiquePrix(Number(commande.montant) || 0))}</span>
+          <span class="btq-tag" data-statut="${escapeHtmlValue(commande.statut)}">${escapeHtmlValue(btqLibelleStatut(commande.statut, commande.debut_prevu))}</span>
+        </div>
+        <p class="btq-meta">${meta.join(" · ")}</p>
+        ${commande.projet ? `<p class="btq-texte">${escapeHtmlValue(commande.projet)}</p>` : ""}
+        ${actions}
+        ${btqSuivi(commande.historique, (entree) => btqLibelleStatut(entree.statut, entree.debut))}
+      </article>`;
+  }
+
+  function ficheDevisAdmin(devis) {
+    const id = escapeHtmlValue(devis.id);
+    const ouvert = devis.statut === "nouveau" || devis.statut === "propose";
+    const meta = [btqClient(devis), escapeHtmlValue(tp("js.adm.btqCreeLe", { date: btqDate(devis.creee_le) }))];
+    if (devis.budget) meta.push(escapeHtmlValue(tp("js.adm.btqBudget", { budget: devis.budget })));
+    if (devis.delai) meta.push(escapeHtmlValue(tp("js.adm.btqDelai", { delai: devis.delai })));
+    if (devis.commande) meta.push(escapeHtmlValue(tp("js.adm.btqCommande", { numero: devis.commande })));
+    // Le lien reste visible : si le message prive n'est pas parti, c'est
+    // lui qu'on transmet au client par un autre moyen.
+    const lien = devis.lien ? `
+      <p class="btq-lien"><span>${escapeHtmlValue(t("js.adm.btqLienPaiement"))}</span>
+        <a href="${escapeHtmlValue(devis.lien)}" target="_blank" rel="noreferrer">${escapeHtmlValue(devis.lien)}</a>
+        <button type="button" class="secondary-btn compact" data-btq-action="copier" data-btq-lien="${escapeHtmlValue(devis.lien)}">${escapeHtmlValue(t("js.adm.btqCopierLien"))}</button></p>` : "";
+    const prixActuel = Number(devis.prix) || 0;
+    const formulaire = ouvert ? `
+      <div class="btq-formulaire">
+        <input type="text" inputmode="decimal" maxlength="12" data-btq-prix
+               placeholder="${escapeHtmlValue(t("js.adm.btqPrixPlaceholder"))}"
+               value="${prixActuel ? escapeHtmlValue(String(prixActuel / 100).replace(".", ",")) : ""}">
+        <textarea rows="2" maxlength="1000" data-btq-message placeholder="${escapeHtmlValue(t("js.adm.btqMessagePlaceholder"))}">${escapeHtmlValue(devis.message_prix || "")}</textarea>
+        <div class="btq-actions">
+          <button type="button" class="primary-btn compact" data-btq-action="prix" data-btq-id="${id}">${escapeHtmlValue(t(devis.statut === "propose" ? "js.adm.btqRenvoyerPrix" : "js.adm.btqProposerPrix"))}</button>
+          <button type="button" class="secondary-btn compact" data-btq-action="clore-devis" data-btq-id="${id}">${escapeHtmlValue(t("js.adm.btqClore"))}</button>
+        </div>
+      </div>` : "";
+    const libelleEntree = (entree) => {
+      const base = t(BTQ_DEVIS[entree.statut]?.libelleClef || "js.adm.btqDevisNouveau");
+      if (entree.prix) return `${base} (${boutiquePrix(Number(entree.prix))})`;
+      if (entree.commande) return `${base} (${entree.commande})`;
+      return base;
+    };
+    return `
+      <article class="btq-fiche">
+        <div class="btq-fiche-tete">
+          <span class="btq-ident"><code>${id}</code><strong>${escapeHtmlValue(t(BTQ_CATEGORIES[devis.categorie]?.libelleClef || "bq.devisCatAutre"))}</strong></span>
+          ${prixActuel ? `<span class="btq-montant">${escapeHtmlValue(boutiquePrix(prixActuel))}</span>` : ""}
+          <span class="btq-tag" data-statut="d-${escapeHtmlValue(devis.statut)}">${escapeHtmlValue(t(BTQ_DEVIS[devis.statut]?.libelleClef || "js.adm.btqDevisNouveau"))}</span>
+        </div>
+        <p class="btq-meta">${meta.join(" · ")}</p>
+        <p class="btq-texte">${escapeHtmlValue(devis.description || "")}</p>
+        ${lien}
+        ${formulaire}
+        ${btqSuivi(devis.historique, libelleEntree)}
+      </article>`;
+  }
+
+  function ficheSavAdmin(demande) {
+    const id = escapeHtmlValue(demande.id);
+    const meta = [btqClient(demande), escapeHtmlValue(tp("js.adm.btqCreeLe", { date: btqDate(demande.creee_le) }))];
+    if (demande.numero) meta.push(escapeHtmlValue(tp("js.adm.btqCommande", { numero: demande.numero })));
+    const reponses = (demande.reponses || []).map((reponse) => `
+      <li><time>${escapeHtmlValue(btqDate(reponse.date))}</time> <b>${escapeHtmlValue(reponse.par || "")}</b>${
+        reponse.message === false ? ` · <em>${escapeHtmlValue(t("js.adm.btqMessageEchec"))}</em>` : ""}
+        <p>${escapeHtmlValue(reponse.texte || "")}</p></li>`).join("");
+    const formulaire = demande.statut !== "clos" ? `
+      <div class="btq-formulaire">
+        <textarea rows="3" maxlength="1800" data-btq-reponse placeholder="${escapeHtmlValue(t("js.adm.btqReponsePlaceholder"))}"></textarea>
+        <div class="btq-actions">
+          <button type="button" class="primary-btn compact" data-btq-action="repondre" data-btq-id="${id}">${escapeHtmlValue(t("js.adm.btqRepondre"))}</button>
+          <button type="button" class="secondary-btn compact" data-btq-action="clore-sav" data-btq-id="${id}">${escapeHtmlValue(t("js.adm.btqClore"))}</button>
+        </div>
+      </div>` : "";
+    return `
+      <article class="btq-fiche">
+        <div class="btq-fiche-tete">
+          <span class="btq-ident"><code>${id}</code><strong>${escapeHtmlValue(t(BTQ_SUJETS[demande.sujet]?.libelleClef || "bq.aideSujetAutre"))}</strong></span>
+          <span class="btq-tag" data-statut="s-${escapeHtmlValue(demande.statut)}">${escapeHtmlValue(t(BTQ_SAV[demande.statut]?.libelleClef || "js.adm.btqSavOuvert"))}</span>
+        </div>
+        <p class="btq-meta">${meta.join(" · ")}</p>
+        <p class="btq-texte">${escapeHtmlValue(demande.message || "")}</p>
+        ${reponses ? `<ol class="btq-reponses">${reponses}</ol>` : ""}
+        ${formulaire}
+      </article>`;
+  }
+
+  function peindreBoutiqueAdmin() {
+    // Rien ne se peint dans un espace verrouille, meme sur un changement
+    // de langue : un `hidden` retire a la main ne doit rien montrer.
+    if (!btqListe || !btqDonnees || btqListe.closest("[data-admin-protected]")?.hidden) return;
+    const { commandes, devis, sav } = btqDonnees;
+    const enCours = commandes.filter((commande) => BTQ_EN_COURS.includes(commande.statut));
+    const historique = commandes.filter((commande) => !BTQ_EN_COURS.includes(commande.statut));
+    const encaisse = commandes
+      .filter((commande) => commande.statut !== "en_attente" && commande.statut !== "annulee")
+      .reduce((total, commande) => total + (Number(commande.montant) || 0), 0);
+    // Les demandes ouvertes d'abord : ce sont elles qui attendent.
+    const ouvertsDabord = (liste, ouvert) =>
+      liste.filter(ouvert).concat(liste.filter((element) => !ouvert(element)));
+    const listes = {
+      en_cours: enCours,
+      devis: ouvertsDabord(devis, (element) => element.statut === "nouveau" || element.statut === "propose"),
+      sav: ouvertsDabord(sav, (element) => element.statut !== "clos"),
+      historique,
+    };
+
+    const compteurs = document.querySelector("[data-btq-compteurs]");
+    if (compteurs) {
+      compteurs.innerHTML = [
+        [enCours.filter((commande) => commande.statut === "payee").length, "js.adm.btqCompteATraiter"],
+        [devis.filter((element) => element.statut === "nouveau").length, "js.adm.btqCompteDevis"],
+        [sav.filter((element) => element.statut === "ouvert").length, "js.adm.btqCompteSav"],
+        [boutiquePrix(encaisse), "js.adm.btqCompteEncaisse"],
+      ].map(([valeur, clef]) =>
+        `<div><strong>${escapeHtmlValue(String(valeur))}</strong><span>${escapeHtmlValue(t(clef))}</span></div>`).join("");
+    }
+
+    document.querySelectorAll("[data-btq-onglet]").forEach((onglet) => {
+      const nom = onglet.dataset.btqOnglet;
+      onglet.classList.toggle("is-active", nom === btqOnglet);
+      onglet.setAttribute("aria-selected", String(nom === btqOnglet));
+      const nombre = onglet.querySelector("[data-btq-nombre]");
+      if (nombre) nombre.textContent = String((listes[nom] || []).length);
+    });
+
+    const fabriques = { en_cours: ficheCommandeAdmin, historique: ficheCommandeAdmin,
+                        devis: ficheDevisAdmin, sav: ficheSavAdmin };
+    const vides = { en_cours: "js.adm.btqAucuneEnCours", historique: "js.adm.btqAucunHistorique",
+                    devis: "js.adm.btqAucunDevis", sav: "js.adm.btqAucunSav" };
+    const liste = listes[btqOnglet] || [];
+    btqListe.innerHTML = liste.length
+      ? liste.map(fabriques[btqOnglet]).join("")
+      : `<p class="field-help">${escapeHtmlValue(t(vides[btqOnglet]))}</p>`;
+  }
+
+  async function chargerBoutiqueAdmin() {
+    if (!btqListe) return;
+    try {
+      const data = await modbotApiFetch("/api/admin/boutique", { cache: "no-store" });
+      btqDonnees = { commandes: data.commandes || [], devis: data.devis || [], sav: data.sav || [] };
+      peindreBoutiqueAdmin();
+    } catch (erreur) {
+      btqListe.innerHTML = `<p class="field-help">${escapeHtmlValue(etatAdminIndisponible(erreur))}</p>`;
+    }
+  }
+
+  // Le bot dit si le message prive est parti ; on le repete, longtemps
+  // quand il ne l'est pas : c'est a l'equipe de prendre le relais.
+  async function actionBoutique(requete) {
+    try {
+      const data = await requete;
+      if (data?.message_envoye === false) {
+        showAdminToast(tp("js.adm.btqNonPrevenu", { raison: data.raison || "?" }), 7000);
+      } else if (data?.message_envoye === true) {
+        showAdminToast(t("js.adm.btqPrevenu"));
+      } else {
+        showAdminToast(t("js.adm.btqFait"));
+      }
+      await chargerBoutiqueAdmin();
+    } catch (erreur) {
+      showAdminToast(erreur?.message || t("js.adm.premiumEchec"), 5000);
+    }
+  }
+
+  btqListe?.addEventListener("click", async (evenement) => {
+    const bouton = evenement.target.closest("[data-btq-action]");
+    if (!bouton || bouton.disabled) return;
+    const fiche = bouton.closest(".btq-fiche");
+    const id = bouton.dataset.btqId || "";
+    const action = bouton.dataset.btqAction;
+    if (action === "copier") {
+      try {
+        await navigator.clipboard.writeText(bouton.dataset.btqLien || "");
+        showAdminToast(t("js.adm.btqLienCopie"));
+      } catch (erreur) {
+        showAdminToast(bouton.dataset.btqLien || "", 7000);
+      }
+      return;
+    }
+    bouton.disabled = true;
+    try {
+      if (action === "statut") {
+        const statut = bouton.dataset.btqStatut;
+        const corps = { statut };
+        if (statut === "planifiee") {
+          const jours = Number(fiche?.querySelector("[data-btq-jours]")?.value);
+          if (!Number.isInteger(jours) || jours < 1 || jours > 180) {
+            showAdminToast(t("js.adm.btqJoursInvalides"));
+            return;
+          }
+          corps.jours = jours;
+        }
+        if (statut === "livree" && !window.confirm(tp("js.adm.btqConfirmerLivree", { numero: id }))) return;
+        await actionBoutique(modbotApiFetch(`/api/admin/boutique/commandes/${encodeURIComponent(id)}/statut`, {
+          method: "POST", body: JSON.stringify(corps) }));
+      } else if (action === "prix") {
+        const prix = (fiche?.querySelector("[data-btq-prix]")?.value || "").trim();
+        // Le bot revalide ; ce controle evite seulement un aller-retour.
+        if (!/^\d{1,5}([.,]\d{1,2})?$/.test(prix.replace(/[\s€]/g, ""))) {
+          showAdminToast(t("js.adm.btqPrixInvalide"));
+          return;
+        }
+        if (!window.confirm(tp("js.adm.btqConfirmerPrix", { prix: `${prix} €`, id }))) return;
+        await actionBoutique(modbotApiFetch(`/api/admin/boutique/devis/${encodeURIComponent(id)}/prix`, {
+          method: "POST",
+          body: JSON.stringify({ prix, message: fiche?.querySelector("[data-btq-message]")?.value || "" }) }));
+      } else if (action === "clore-devis") {
+        if (!window.confirm(tp("js.adm.btqConfirmerClore", { id }))) return;
+        await actionBoutique(modbotApiFetch(`/api/admin/boutique/devis/${encodeURIComponent(id)}/clore`, {
+          method: "POST" }));
+      } else if (action === "repondre") {
+        const texte = (fiche?.querySelector("[data-btq-reponse]")?.value || "").trim();
+        if (!texte) {
+          showAdminToast(t("js.adm.btqReponseVide"));
+          return;
+        }
+        await actionBoutique(modbotApiFetch(`/api/admin/boutique/sav/${encodeURIComponent(id)}/reponse`, {
+          method: "POST", body: JSON.stringify({ texte }) }));
+      } else if (action === "clore-sav") {
+        if (!window.confirm(tp("js.adm.btqConfirmerClore", { id }))) return;
+        await actionBoutique(modbotApiFetch(`/api/admin/boutique/sav/${encodeURIComponent(id)}/clore`, {
+          method: "POST" }));
+      }
+    } finally {
+      bouton.disabled = false;
+    }
+  });
+
+  document.querySelectorAll("[data-btq-onglet]").forEach((onglet) => {
+    onglet.addEventListener("click", () => {
+      btqOnglet = onglet.dataset.btqOnglet || "en_cours";
+      peindreBoutiqueAdmin();
+    });
+  });
+  document.querySelector("[data-btq-rafraichir]")?.addEventListener("click", chargerBoutiqueAdmin);
+  document.addEventListener("modbot:language", peindreBoutiqueAdmin);
 
   adminTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -2280,6 +2626,8 @@ function initFondVivant() {
     ".wiki-toc", ".premium-note", ".discord-window", ".demo-controls",
     ".boutique-carte", ".boutique-rayons a", ".boutique-atouts-grille article",
     ".boutique-devis-inner", ".home-boutique-inner",
+    ".boutique-exemple", ".boutique-preuve", ".boutique-aide-grille article",
+    ".boutique-aide-formulaire", ".boutique-ton-devis-boite", ".boutique-compte",
     // La rangee de boutons du hero, d'un seul tenant : entre deux boutons,
     // un glyphe n'est derriere rien, mais il colle aux controles. Les
     // autres blocs d'en-tete ne sont plus exclus en entier : ils avalaient
@@ -9467,39 +9815,48 @@ initPagePremium();
 const BOUTIQUE_ARTICLES = [
   { key: "bot_essentiel", categorie: "bot", prix: 3900, delai: 3, revisions: 1,
     titreClef: "bq.bot_essentiel.titre", resumeClef: "bq.bot_essentiel.resume",
+    idealClef: "bq.bot_essentiel.ideal",
     points: [{ texteClef: "bq.bot_essentiel.p1" }, { texteClef: "bq.bot_essentiel.p2" },
              { texteClef: "bq.bot_essentiel.p3" }, { texteClef: "bq.bot_essentiel.p4" }] },
   { key: "bot_avance", categorie: "bot", prix: 8900, delai: 7, revisions: 2, recommande: true,
     titreClef: "bq.bot_avance.titre", resumeClef: "bq.bot_avance.resume",
+    idealClef: "bq.bot_avance.ideal",
     points: [{ texteClef: "bq.bot_avance.p1" }, { texteClef: "bq.bot_avance.p2" },
              { texteClef: "bq.bot_avance.p3" }, { texteClef: "bq.bot_avance.p4" }] },
   { key: "bot_pro", categorie: "bot", prix: 19900, delai: 14, revisions: 3,
     titreClef: "bq.bot_pro.titre", resumeClef: "bq.bot_pro.resume",
+    idealClef: "bq.bot_pro.ideal",
     points: [{ texteClef: "bq.bot_pro.p1" }, { texteClef: "bq.bot_pro.p2" },
              { texteClef: "bq.bot_pro.p3" }, { texteClef: "bq.bot_pro.p4" }] },
   { key: "site_vitrine", categorie: "site", prix: 6900, delai: 4, revisions: 1,
     titreClef: "bq.site_vitrine.titre", resumeClef: "bq.site_vitrine.resume",
+    idealClef: "bq.site_vitrine.ideal",
     points: [{ texteClef: "bq.site_vitrine.p1" }, { texteClef: "bq.site_vitrine.p2" },
              { texteClef: "bq.miseEnLigne" }] },
   { key: "site_complet", categorie: "site", prix: 17900, delai: 10, revisions: 2, recommande: true,
     titreClef: "bq.site_complet.titre", resumeClef: "bq.site_complet.resume",
+    idealClef: "bq.site_complet.ideal",
     points: [{ texteClef: "bq.site_complet.p1" }, { texteClef: "bq.site_complet.p2" },
              { texteClef: "bq.site_complet.p3" }, { texteClef: "bq.miseEnLigne" }] },
   { key: "site_dashboard", categorie: "site", prix: 39900, delai: 21, revisions: 3,
     titreClef: "bq.site_dashboard.titre", resumeClef: "bq.site_dashboard.resume",
+    idealClef: "bq.site_dashboard.ideal",
     points: [{ texteClef: "bq.site_dashboard.p1" }, { texteClef: "bq.site_dashboard.p2" },
              { texteClef: "bq.site_dashboard.p3" }, { texteClef: "bq.site_dashboard.p4" }] },
   { key: "pack_starter", categorie: "pack", prix: 8900, delai: 7, revisions: 1,
     contient: ["bot_essentiel", "site_vitrine"],
     titreClef: "bq.pack_starter.titre", resumeClef: "bq.pack_starter.resume",
+    idealClef: "bq.pack_starter.ideal",
     points: [{ texteClef: "bq.packEnsemble" }, { texteClef: "bq.miseEnLigne" }] },
   { key: "pack_serveur", categorie: "pack", prix: 22900, delai: 14, revisions: 2, recommande: true,
     contient: ["bot_avance", "site_complet"],
     titreClef: "bq.pack_serveur.titre", resumeClef: "bq.pack_serveur.resume",
+    idealClef: "bq.pack_serveur.ideal",
     points: [{ texteClef: "bq.packEnsemble" }, { texteClef: "bq.miseEnLigne" }] },
   { key: "pack_pro", categorie: "pack", prix: 49900, delai: 30, revisions: 3,
     contient: ["bot_pro", "site_dashboard"],
     titreClef: "bq.pack_pro.titre", resumeClef: "bq.pack_pro.resume",
+    idealClef: "bq.pack_pro.ideal",
     points: [{ texteClef: "bq.packEnsemble" }, { texteClef: "bq.miseEnLigne" }] },
 ];
 
@@ -9508,8 +9865,16 @@ const BOUTIQUE_ARTICLES = [
 const BOUTIQUE_ID_DISCORD = /^\d{17,20}$/;
 const BOUTIQUE_PSEUDO = /^[\p{L}\p{N}_.]{2,32}(#\d{4})?$/u;
 const BOUTIQUE_NUMERO = /^MB-\d{6}-[A-HJ-NP-Z2-9]{4}$/;
+const BOUTIQUE_DEVIS = /^DV-\d{6}-[A-HJ-NP-Z2-9]{4}$/;
 
 const BOUTIQUE_ICONES = { bot: "u-rocket", site: "u-globe", pack: "u-gift" };
+
+const BOUTIQUE_CATEGORIES = {
+  bot: { libelleClef: "bq.devisCatBot" },
+  site: { libelleClef: "bq.devisCatSite" },
+  les_deux: { libelleClef: "bq.devisCatLesDeux" },
+  autre: { libelleClef: "bq.devisCatAutre" },
+};
 
 function boutiquePrix(centimes) {
   return new Intl.NumberFormat(localeAffichage(), {
@@ -9525,7 +9890,8 @@ function boutiqueValeurDuPack(article) {
 
 /* « dès 39 € » : le prix d'appel de chaque rayon, calcule depuis le
    catalogue plutot qu'ecrit dans les traductions — il suit les prix tout
-   seul. Sert a l'accueil comme a la page Boutique. */
+   seul. Sert a l'accueil comme a la page Boutique. Les exemples, eux,
+   nomment la formule qui les rend possibles, avec son prix. */
 function remplirPrixDAppel() {
   document.querySelectorAll("[data-boutique-des]").forEach((element) => {
     const prix = BOUTIQUE_ARTICLES
@@ -9534,6 +9900,97 @@ function remplirPrixDAppel() {
     element.textContent = prix.length
       ? tp("bq.aPartirDe", { prix: boutiquePrix(Math.min(...prix)) }) : "";
   });
+  document.querySelectorAll("[data-exemple-formule]").forEach((element) => {
+    const article = BOUTIQUE_ARTICLES.find((a) => a.key === element.dataset.exempleFormule);
+    if (!article) return;
+    element.textContent = tp("bq.exAvec", {
+      formule: t(article.titreClef), prix: boutiquePrix(article.prix) });
+  });
+}
+
+/* ── Le compte Discord du client ─────────────────────────────────────
+   Connecte, il n'a rien a taper : le bot prend son identifiant dans la
+   session, et c'est cet identifiant qui lui permet d'ecrire en prive a
+   chaque etape — prix d'un devis, debut du travail, livraison. Sans
+   connexion, un pseudo suffit, mais le bot doit le retrouver. */
+let boutiqueCompte = null;
+
+function peindreCompteBoutique() {
+  const zone = document.querySelector("[data-boutique-compte]");
+  const nom = boutiqueCompte ? (boutiqueCompte.username || boutiqueCompte.user_id) : "";
+  if (zone) {
+    zone.classList.toggle("is-connecte", Boolean(boutiqueCompte));
+    // Discord n'accepte un message prive que d'un bot avec qui l'on
+    // partage un serveur : l'invitation vaut dans les deux cas.
+    zone.innerHTML = (boutiqueCompte
+      ? `${boutiqueCompte.avatar ? `<img src="${escapeHtmlValue(boutiqueCompte.avatar)}" alt="">` : ""}
+         <span>${escapeHtmlValue(tp("bq.compteConnecte", { nom }))}</span>
+         <button type="button" class="boutique-compte-lien" data-boutique-deconnexion>${escapeHtmlValue(t("bq.compteDeconnexion"))}</button>`
+      : `<span>${escapeHtmlValue(t("bq.compteInvite"))}</span>
+         <button type="button" class="secondary-btn compact" data-boutique-connexion>
+           <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg>
+           ${escapeHtmlValue(t("bq.compteBouton"))}</button>`)
+      + `<span>${t("bq.compteServeur")}</span>`;
+  }
+  // Connecte : le champ Discord s'efface des formulaires, et une ligne
+  // dit a qui l'on ecrira.
+  document.querySelectorAll("[data-boutique-contact]").forEach((champ) => {
+    champ.hidden = Boolean(boutiqueCompte);
+  });
+  document.querySelectorAll("[data-boutique-connecte]").forEach((ligne) => {
+    ligne.hidden = !boutiqueCompte;
+    ligne.textContent = boutiqueCompte ? tp("bq.compteConnecte", { nom }) : "";
+  });
+}
+
+async function connecterBoutique() {
+  const base = await trouverBaseApiJoignable();
+  if (!base) {
+    document.querySelector("[data-boutique-compte]")?.insertAdjacentHTML("beforeend",
+      `<span class="boutique-erreur">${escapeHtmlValue(t("bq.connexionImpossible"))}</span>`);
+    return;
+  }
+  // Le retour garde la recherche : un client qui se connecte depuis le
+  // lien de son devis doit y revenir.
+  const retour = location.origin + location.pathname + location.search;
+  location.href = `${base}/api/auth/discord/login?redirect=${encodeURIComponent(retour)}`;
+}
+
+function deconnecterBoutique() {
+  localStorage.removeItem("modbot-dashboard-session");
+  sessionStorage.removeItem("modbot-dashboard-session");
+  boutiqueCompte = null;
+  peindreCompteBoutique();
+}
+
+async function chargerCompteBoutique() {
+  const zone = document.querySelector("[data-boutique-compte]");
+  if (!zone) return;
+  zone.addEventListener("click", (evenement) => {
+    if (evenement.target.closest("[data-boutique-connexion]")) connecterBoutique();
+    if (evenement.target.closest("[data-boutique-deconnexion]")) deconnecterBoutique();
+  });
+  document.addEventListener("modbot:language", peindreCompteBoutique);
+  peindreCompteBoutique();
+  if (!getModbotSessionToken()) return;
+  try {
+    const data = await modbotApiFetch("/api/me", { cache: "no-store" });
+    const utilisateur = data?.user || {};
+    boutiqueCompte = BOUTIQUE_ID_DISCORD.test(String(utilisateur.user_id || "")) ? utilisateur : null;
+  } catch (erreur) {
+    // Session expiree ou bot injoignable : on retombe sur le pseudo a
+    // taper, qui marche aussi.
+    boutiqueCompte = null;
+  }
+  peindreCompteBoutique();
+}
+
+// Le contact a envoyer : rien si le client est connecte (le bot prend son
+// compte), sinon un pseudo ou un identifiant valable.
+function lireContactBoutique(champ) {
+  if (boutiqueCompte) return { ok: true, valeur: "" };
+  const valeur = (champ?.value || "").trim().replace(/^@/, "").trim();
+  return { ok: BOUTIQUE_ID_DISCORD.test(valeur) || BOUTIQUE_PSEUDO.test(valeur), valeur };
 }
 
 function initPageBoutique() {
@@ -9599,6 +10056,7 @@ function initPageBoutique() {
         </div>
         <h3>${escapeHtmlValue(t(article.titreClef))}</h3>
         <p class="boutique-resume">${escapeHtmlValue(t(article.resumeClef))}</p>
+        <p class="boutique-ideal"><strong>${escapeHtmlValue(t("bq.idealPour"))}</strong> ${escapeHtmlValue(t(article.idealClef))}</p>
         ${contenu}
         <div class="boutique-prix">
           <span class="boutique-montant">${escapeHtmlValue(prixAffiche(article.prix))}</span>
@@ -9641,7 +10099,8 @@ function initPageBoutique() {
   }
 
   // Le client clique d'abord sur « Carte » ou « PayPal » ; la fenetre lui
-  // demande ensuite son contact Discord, puis l'envoie payer.
+  // demande ensuite son contact Discord — sauf s'il est connecte — puis
+  // l'envoie payer.
   function ouvrir(article, moyen, bouton) {
     if (!fenetre) return;
     enCours = { article, moyen };
@@ -9650,7 +10109,7 @@ function initPageBoutique() {
     if (zoneErreur) zoneErreur.hidden = true;
     fenetre.hidden = false;
     document.body.classList.add("boutique-fenetre-ouverte");
-    champDiscord?.focus();
+    (boutiqueCompte ? champProjet : champDiscord)?.focus();
   }
 
   function fermer() {
@@ -9670,8 +10129,8 @@ function initPageBoutique() {
   formulaire?.addEventListener("submit", async (evenement) => {
     evenement.preventDefault();
     if (!enCours) return;
-    const discord = (champDiscord?.value || "").trim().replace(/^@/, "").trim();
-    if (!BOUTIQUE_ID_DISCORD.test(discord) && !BOUTIQUE_PSEUDO.test(discord)) {
+    const contact = lireContactBoutique(champDiscord);
+    if (!contact.ok) {
       montrerErreur(t("bq.discordInvalide"), champDiscord);
       return;
     }
@@ -9689,7 +10148,7 @@ function initPageBoutique() {
         body: JSON.stringify({
           article: enCours.article.key,
           moyen: enCours.moyen,
-          discord,
+          discord: contact.valeur,
           projet: champProjet?.value || "",
           conditions: true,
         }),
@@ -9743,9 +10202,234 @@ function initPageBoutique() {
   });
 }
 
+/* ── Les demandes : sur mesure et assistance ─────────────────────────
+   Les deux arrivent dans l'administration et dans le salon des
+   paiements ; la reponse de l'equipe part en message prive. */
+async function envoyerDemandeBoutique(formulaire, requete, { succesClef }) {
+  const erreur = formulaire.querySelector(".boutique-erreur");
+  const succes = formulaire.querySelector(".boutique-succes");
+  const bouton = formulaire.querySelector("button[type='submit']");
+  const libelle = bouton?.textContent || "";
+  if (bouton) {
+    bouton.disabled = true;
+    bouton.textContent = t("bq.envoi");
+  }
+  try {
+    const data = await requete();
+    formulaire.reset();
+    if (succes) {
+      succes.textContent = tp(succesClef, { id: data?.id || "" });
+      succes.hidden = false;
+    }
+  } catch (echec) {
+    if (erreur) {
+      erreur.textContent = echec?.message || t("bq.envoiImpossible");
+      erreur.hidden = false;
+    }
+  }
+  if (bouton) {
+    bouton.disabled = false;
+    bouton.textContent = libelle;
+  }
+}
+
+function signalerDemandeBoutique(formulaire, message, champ) {
+  const erreur = formulaire.querySelector(".boutique-erreur");
+  if (erreur) {
+    erreur.textContent = message;
+    erreur.hidden = false;
+  }
+  champ?.focus();
+}
+
+function initDemandeDevis() {
+  const formulaire = document.querySelector("[data-devis-formulaire]");
+  if (!formulaire) return;
+  formulaire.addEventListener("submit", (evenement) => {
+    evenement.preventDefault();
+    formulaire.querySelectorAll(".boutique-erreur, .boutique-succes").forEach((zone) => { zone.hidden = true; });
+    const champDescription = formulaire.querySelector("[data-devis-description]");
+    const description = (champDescription?.value || "").trim();
+    if (description.length < 20) {
+      signalerDemandeBoutique(formulaire, t("bq.devisTropCourt"), champDescription);
+      return;
+    }
+    const champDiscord = formulaire.querySelector("[data-devis-discord]");
+    const contact = lireContactBoutique(champDiscord);
+    if (!contact.ok) {
+      signalerDemandeBoutique(formulaire, t("bq.discordInvalide"), champDiscord);
+      return;
+    }
+    envoyerDemandeBoutique(formulaire, () => modbotApiFetch("/api/boutique/devis", {
+      method: "POST",
+      body: JSON.stringify({
+        categorie: formulaire.querySelector("[data-devis-categorie]")?.value || "autre",
+        description,
+        budget: formulaire.querySelector("[data-devis-budget]")?.value || "",
+        delai: formulaire.querySelector("[data-devis-delai]")?.value || "",
+        discord: contact.valeur,
+      }),
+    }), { succesClef: "bq.devisEnvoye" });
+  });
+}
+
+function initDemandeAide() {
+  const formulaire = document.querySelector("[data-aide-formulaire]");
+  if (!formulaire) return;
+  formulaire.addEventListener("submit", (evenement) => {
+    evenement.preventDefault();
+    formulaire.querySelectorAll(".boutique-erreur, .boutique-succes").forEach((zone) => { zone.hidden = true; });
+    const champNumero = formulaire.querySelector("[data-aide-numero]");
+    const numero = (champNumero?.value || "").trim().toUpperCase();
+    if (numero && !BOUTIQUE_NUMERO.test(numero)) {
+      signalerDemandeBoutique(formulaire, t("bq.aideNumeroInvalide"), champNumero);
+      return;
+    }
+    const champMessage = formulaire.querySelector("[data-aide-message]");
+    const message = (champMessage?.value || "").trim();
+    if (message.length < 10) {
+      signalerDemandeBoutique(formulaire, t("bq.aideTropCourt"), champMessage);
+      return;
+    }
+    const champDiscord = formulaire.querySelector("[data-aide-discord]");
+    const contact = lireContactBoutique(champDiscord);
+    if (!contact.ok) {
+      signalerDemandeBoutique(formulaire, t("bq.discordInvalide"), champDiscord);
+      return;
+    }
+    envoyerDemandeBoutique(formulaire, () => modbotApiFetch("/api/boutique/sav", {
+      method: "POST",
+      body: JSON.stringify({
+        sujet: formulaire.querySelector("[data-aide-sujet]")?.value || "autre",
+        numero,
+        message,
+        discord: contact.valeur,
+      }),
+    }), { succesClef: "bq.aideEnvoye" });
+  });
+}
+
+/* ── Le devis du client ──────────────────────────────────────────────
+   Le lien recu en message prive ouvre la boutique sur SON devis : le
+   prix, le mot de l'equipe, et de quoi payer. Une page Stripe expire au
+   bout d'un jour ; ce lien-la reste valable, chaque clic en ouvre une
+   neuve. */
+function initTonDevis() {
+  const zone = document.querySelector("[data-ton-devis]");
+  if (!zone) return;
+  const parametres = new URLSearchParams(location.search);
+  const id = parametres.get("devis") || "";
+  const cle = parametres.get("cle") || "";
+  if (!BOUTIQUE_DEVIS.test(id) || !cle) return;
+  zone.hidden = false;
+  let devis = null;
+  let etat = "chargement";
+
+  function peindre() {
+    const boite = (contenu) => `<div class="boutique-ton-devis-boite">${contenu}</div>`;
+    if (etat === "chargement") {
+      zone.innerHTML = boite(`<p>${escapeHtmlValue(t("bq.tonDevisChargement"))}</p>`);
+      return;
+    }
+    if (etat === "introuvable" || !devis) {
+      zone.innerHTML = boite(`<h2>${escapeHtmlValue(t("bq.tonDevisTitreSeul"))}</h2>
+        <p>${escapeHtmlValue(t("bq.tonDevisIntrouvable"))}</p>`);
+      return;
+    }
+    const categorie = t(BOUTIQUE_CATEGORIES[devis.categorie]?.libelleClef || "bq.devisCatAutre");
+    let suite;
+    if (devis.payable) {
+      suite = `
+        <div><span class="field-help">${escapeHtmlValue(t("bq.tonDevisPrix"))}</span>
+          <div class="boutique-ton-devis-prix">${escapeHtmlValue(boutiquePrix(Number(devis.prix) || 0))}</div></div>
+        ${devis.message ? `<div><span class="field-help">${escapeHtmlValue(t("bq.tonDevisMessage"))}</span>
+          <blockquote>${escapeHtmlValue(devis.message)}</blockquote></div>` : ""}
+        <label class="boutique-conditions"><input type="checkbox" data-devis-conditions><span>${t("bq.conditions")}</span></label>
+        <p class="boutique-erreur" data-devis-paiement-erreur role="alert" hidden></p>
+        <div class="boutique-payer">
+          <button class="primary-btn" type="button" data-devis-payer="carte">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg>
+            ${escapeHtmlValue(t("bq.carte"))}</button>
+          <button class="secondary-btn" type="button" data-devis-payer="paypal">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-paypal"/></svg>
+            ${escapeHtmlValue(t("bq.paypal"))}</button>
+        </div>`;
+    } else if (devis.statut === "payee") {
+      suite = `<p class="boutique-succes">${escapeHtmlValue(t("bq.tonDevisPaye"))}</p>`;
+    } else if (devis.statut === "clos") {
+      suite = `<p>${escapeHtmlValue(t("bq.tonDevisClos"))}</p>`;
+    } else {
+      suite = `<p>${escapeHtmlValue(t("bq.tonDevisAttente"))}</p>`;
+    }
+    zone.innerHTML = boite(`
+      <h2>${escapeHtmlValue(tp("bq.tonDevisTitre", { id: devis.id }))}</h2>
+      <p class="boutique-ton-devis-description"><strong>${escapeHtmlValue(categorie)}</strong> — ${escapeHtmlValue(devis.description || "")}</p>
+      ${suite}`);
+  }
+
+  zone.addEventListener("click", async (evenement) => {
+    const bouton = evenement.target.closest("[data-devis-payer]");
+    if (!bouton || bouton.disabled) return;
+    const erreur = zone.querySelector("[data-devis-paiement-erreur]");
+    const dire = (message) => {
+      if (!erreur) return;
+      erreur.textContent = message;
+      erreur.hidden = false;
+    };
+    if (!zone.querySelector("[data-devis-conditions]")?.checked) {
+      dire(t("bq.conditionsRequises"));
+      return;
+    }
+    bouton.disabled = true;
+    try {
+      // Ni prix ni montant : le bot prend celui du devis.
+      const data = await modbotApiFetch(`/api/boutique/devis/${encodeURIComponent(id)}/payer`, {
+        method: "POST",
+        body: JSON.stringify({ cle, moyen: bouton.dataset.devisPayer, conditions: true }),
+      });
+      if (data?.url) {
+        location.href = data.url;
+        return;
+      }
+      dire(t("bq.indisponible"));
+    } catch (echec) {
+      dire(echec?.message || t("bq.indisponible"));
+    }
+    bouton.disabled = false;
+  });
+
+  async function charger() {
+    peindre();
+    try {
+      const data = await modbotApiFetch(
+        `/api/boutique/devis/${encodeURIComponent(id)}?cle=${encodeURIComponent(cle)}`,
+        { cache: "no-store" });
+      devis = data?.devis || null;
+      etat = devis ? "pret" : "introuvable";
+    } catch (erreur) {
+      etat = "introuvable";
+    }
+    peindre();
+    zone.scrollIntoView({ block: "start" });
+  }
+
+  document.addEventListener("modbot:language", peindre);
+  charger();
+}
+
 initPageBoutique();
+initDemandeDevis();
+initDemandeAide();
+initTonDevis();
 remplirPrixDAppel();
 document.addEventListener("modbot:language", remplirPrixDAppel);
+// Apres l'ecouteur qui range la session revenue de Discord : il est
+// inscrit plus haut dans ce fichier, donc appele avant celui-ci.
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", chargerCompteBoutique);
+} else {
+  chargerCompteBoutique();
+}
 
 /* ══════════════════════════════════════════════════════════════════
    MENU D'ACCES

@@ -9461,6 +9461,644 @@ select {
 .boutique-devis-inner p { max-width: 58ch; margin: 0; color: var(--muted); }
 .boutique-devis-inner .primary-btn { gap: 8px; white-space: nowrap; }
 
+/* ── Le compte Discord : connecte, on sait a qui ecrire ── */
+.boutique-actions-hero {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.boutique-actions-hero a { gap: 8px; }
+
+.boutique-compte {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 14px;
+  max-width: 680px;
+  margin: 18px auto 0;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.boutique-compte:empty { display: none; }
+
+.boutique-compte.is-connecte {
+  border-color: rgba(88, 101, 242, 0.5);
+  background: rgba(88, 101, 242, 0.1);
+  color: inherit;
+}
+
+.boutique-compte img { width: 28px; height: 28px; border-radius: 50%; }
+.boutique-compte .secondary-btn { gap: 8px; }
+.boutique-compte a { color: #aab4ff; }
+
+.boutique-compte-lien {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--soft);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.boutique-connecte {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(88, 101, 242, 0.12);
+  font-size: 0.88rem;
+}
+
+.boutique-succes {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(67, 181, 129, 0.12);
+  color: #8ff0bd;
+  font-size: 0.9rem;
+}
+
+/* ── « Ideal pour » : a qui s'adresse chaque formule ── */
+.boutique-ideal {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.boutique-ideal strong { color: hsl(var(--teinte, 45 93% 60%)); }
+
+/* ── Des exemples concrets ── */
+.boutique-exemples { margin-top: 64px; scroll-margin-top: 96px; }
+
+/* Quatre, deux ou une colonne : jamais trois, qui laisserait la
+   quatrieme carte seule sur sa ligne. */
+.boutique-exemples-grille {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+@media (max-width: 1180px) {
+  .boutique-exemples-grille { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 620px) {
+  .boutique-exemples-grille { grid-template-columns: 1fr; }
+}
+
+.boutique-exemple {
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.boutique-exemple h3 { margin: 4px 0 0; font-size: 1rem; }
+.boutique-exemple > p { margin: 0; color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+
+.boutique-exemple ul {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.86rem;
+}
+
+.boutique-exemple li { display: flex; align-items: flex-start; gap: 8px; }
+.boutique-exemple li::before { content: "✓"; color: #6ee7a8; font-weight: 800; }
+
+.boutique-exemple-formule {
+  margin: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  color: #f7d354;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.boutique-exemple-formule a { color: inherit; text-decoration: none; }
+.boutique-exemple-formule a:hover { text-decoration: underline; }
+
+.boutique-exemples-note {
+  margin: 14px auto 0;
+  max-width: 70ch;
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+/* Les apercus : dessines en HTML, pas en image — ils suivent la langue
+   de la page, et restent nets a toutes les tailles. */
+.mk {
+  position: relative;
+  min-height: 150px;
+  padding: 12px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #313338;
+  color: #dbdee1;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.mk-message { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 10px; }
+
+.mk-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #22d3ee);
+}
+
+.mk-nom { color: #fff; font-weight: 700; }
+
+.mk-nom::after {
+  content: "BOT";
+  margin-inline-start: 6px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: #5865f2;
+  color: #fff;
+  font-size: 0.6rem;
+  vertical-align: middle;
+}
+
+.mk-embed {
+  margin-top: 6px;
+  padding: 8px 10px;
+  border-inline-start: 4px solid #f1c40f;
+  border-radius: 4px;
+  background: #2b2d31;
+}
+
+.mk-embed.is-vert { border-inline-start-color: #43b581; }
+.mk-embed strong { display: block; margin-bottom: 3px; color: #fff; }
+
+.mk-boutons { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+.mk-bouton {
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: #4e5058;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.mk-bouton.is-rouge { background: #da373c; }
+.mk-bouton.is-bleu { background: #5865f2; }
+.mk-bouton.is-vert { background: #248046; }
+
+.mk-web { padding: 0; background: #0f1320; }
+
+.mk-barre { display: flex; gap: 5px; padding: 8px 10px; background: #1b2030; }
+.mk-barre span { width: 8px; height: 8px; border-radius: 50%; background: #3a4152; }
+
+.mk-page {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 18px 12px;
+  background: radial-gradient(circle at 50% 0, rgba(139, 92, 246, 0.35), transparent 70%);
+  text-align: center;
+}
+
+.mk-page strong { color: #fff; font-size: 1rem; }
+.mk-page small { color: #aab0c0; }
+
+.mk-dash { display: grid; grid-template-columns: 64px minmax(0, 1fr); min-height: 126px; }
+
+.mk-dash-menu {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  padding: 12px 8px;
+  background: #151a28;
+}
+
+.mk-dash-menu span { height: 7px; border-radius: 4px; background: #2c3347; }
+.mk-dash-menu span:first-child { background: #8b5cf6; }
+
+.mk-dash-corps { display: grid; align-content: start; gap: 7px; padding: 10px; }
+.mk-dash-corps strong { color: #fff; }
+
+.mk-reglage {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: #1b2030;
+}
+
+.mk-interrupteur {
+  position: relative;
+  flex: none;
+  width: 26px;
+  height: 14px;
+  border-radius: 999px;
+  background: #43b581;
+}
+
+.mk-interrupteur::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  inset-inline-end: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.mk-interrupteur.is-off { background: #4e5058; }
+.mk-interrupteur.is-off::after { inset-inline-end: auto; inset-inline-start: 2px; }
+
+.boutique-preuve {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 18px;
+  padding: 18px 22px;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(120deg, rgba(139, 92, 246, 0.14), transparent 70%),
+    var(--panel);
+}
+
+.boutique-preuve h3 { margin: 0 0 4px; font-size: 1.05rem; }
+.boutique-preuve p { max-width: 60ch; margin: 0; color: var(--muted); font-size: 0.9rem; }
+.boutique-preuve .secondary-btn { gap: 8px; white-space: nowrap; }
+
+/* ── La demande sur mesure : un vrai formulaire ── */
+.boutique-devis { scroll-margin-top: 96px; }
+
+.boutique-devis-inner.boutique-demande {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  align-items: start;
+  gap: 28px;
+  text-align: start;
+}
+
+.boutique-demande-etapes {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: demande;
+}
+
+.boutique-demande-etapes li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  counter-increment: demande;
+}
+
+.boutique-demande-etapes li::before {
+  content: counter(demande);
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(241, 196, 15, 0.16);
+  color: #f1c40f;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.boutique-formulaire { display: grid; gap: 12px; }
+
+.boutique-formulaire label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.boutique-formulaire input,
+.boutique-formulaire textarea,
+.boutique-formulaire select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  font-weight: 500;
+  resize: vertical;
+}
+
+.boutique-formulaire :is(input, textarea, select):focus {
+  outline: 2px solid rgba(241, 196, 15, 0.55);
+  outline-offset: 1px;
+}
+
+.boutique-formulaire-ligne {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.boutique-formulaire .primary-btn { justify-self: start; gap: 8px; }
+
+/* Le bloc devis grise ses paragraphes ; pas les messages du formulaire. */
+.boutique-devis-inner .boutique-formulaire .boutique-erreur { max-width: none; color: #ff9b9b; }
+.boutique-devis-inner .boutique-formulaire .boutique-succes { max-width: none; color: #8ff0bd; }
+.boutique-devis-inner .boutique-formulaire .boutique-connecte { max-width: none; color: inherit; }
+.boutique-devis-inner .boutique-formulaire .field-help { max-width: none; }
+
+@media (max-width: 860px) {
+  .boutique-devis-inner.boutique-demande { grid-template-columns: 1fr; }
+}
+
+/* ── Le devis du client, ouvert depuis son lien ── */
+.boutique-ton-devis { margin-top: 36px; scroll-margin-top: 96px; }
+
+.boutique-ton-devis-boite {
+  display: grid;
+  gap: 14px;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px;
+  border: 1px solid rgba(241, 196, 15, 0.45);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(135deg, rgba(241, 196, 15, 0.12), transparent 70%),
+    var(--panel);
+}
+
+.boutique-ton-devis-boite h2 { margin: 0; font-size: 1.3rem; }
+.boutique-ton-devis-boite > p { margin: 0; color: var(--muted); }
+
+.boutique-ton-devis-prix { color: #f7d354; font-size: 2rem; font-weight: 800; }
+
+.boutique-ton-devis-boite blockquote {
+  margin: 0;
+  padding: 10px 14px;
+  border-inline-start: 3px solid rgba(241, 196, 15, 0.5);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  white-space: pre-wrap;
+}
+
+.boutique-ton-devis-description { white-space: pre-wrap; font-size: 0.9rem; }
+
+.boutique-ton-devis-boite .boutique-conditions {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+/* ── L'assistance ── */
+.boutique-aide { margin-top: 64px; scroll-margin-top: 96px; }
+
+.boutique-aide-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.boutique-aide-grille article {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.boutique-aide-grille h3 { margin: 0; font-size: 0.98rem; }
+.boutique-aide-grille p { margin: 0; color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+.boutique-aide-grille a { justify-self: start; color: #7dd3fc; font-size: 0.88rem; font-weight: 700; }
+
+.boutique-aide-icone {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(34, 211, 238, 0.14);
+  color: #67e8f9;
+}
+
+.boutique-aide-formulaire {
+  margin-top: 14px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.boutique-aide-formulaire h3 { margin: 0 0 4px; font-size: 1.05rem; }
+
+/* ── Achats & paiements, dans l'administration ── */
+.btq-compteurs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 16px 0 4px;
+}
+
+.btq-compteurs div {
+  display: grid;
+  gap: 2px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.btq-compteurs strong { font-size: 1.35rem; }
+.btq-compteurs span { color: var(--muted); font-size: 0.8rem; }
+
+.btq-onglets { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 12px; }
+
+.btq-onglet {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btq-onglet.is-active {
+  border-color: rgba(241, 196, 15, 0.6);
+  background: rgba(241, 196, 15, 0.14);
+  color: #f7d354;
+}
+
+.btq-nombre {
+  min-width: 22px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.btq-nombre:empty { display: none; }
+
+.btq-liste { display: grid; gap: 12px; }
+
+.btq-fiche {
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.btq-fiche-tete { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.btq-ident { display: grid; gap: 2px; min-width: 0; margin-inline-end: auto; }
+.btq-ident code { color: var(--soft); font-size: 0.78rem; letter-spacing: 0.04em; }
+.btq-montant { color: #f7d354; font-weight: 800; white-space: nowrap; }
+
+.btq-tag {
+  padding: 3px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* Orange : ce qui attend l'equipe. Violet : en travail. Bleu : programme
+   ou chiffre. Vert : fait. Gris : termine sans suite. */
+.btq-tag[data-statut="payee"],
+.btq-tag[data-statut="d-nouveau"],
+.btq-tag[data-statut="s-ouvert"] { background: hsl(34 92% 60% / 0.18); color: hsl(34 92% 68%); }
+.btq-tag[data-statut="en_cours"] { background: hsl(265 85% 68% / 0.18); color: hsl(265 85% 80%); }
+.btq-tag[data-statut="planifiee"],
+.btq-tag[data-statut="d-propose"] { background: hsl(210 90% 60% / 0.18); color: hsl(210 90% 74%); }
+.btq-tag[data-statut="attente"] { background: hsl(45 93% 60% / 0.16); color: hsl(45 93% 68%); }
+.btq-tag[data-statut="livree"],
+.btq-tag[data-statut="d-payee"],
+.btq-tag[data-statut="s-repondu"] { background: hsl(142 62% 52% / 0.16); color: hsl(142 62% 64%); }
+
+.btq-meta { margin: 0; color: var(--muted); font-size: 0.84rem; line-height: 1.5; }
+.btq-meta b { color: var(--text, #fff); }
+
+.btq-texte {
+  margin: 0;
+  padding: 10px 12px;
+  border-inline-start: 3px solid rgba(241, 196, 15, 0.45);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.btq-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+.btq-jours {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  padding-inline-start: 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.btq-jours label { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 0.85rem; }
+
+.btq-jours input {
+  width: 64px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+}
+
+.btq-formulaire { display: grid; gap: 8px; }
+
+.btq-formulaire input,
+.btq-formulaire textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  resize: vertical;
+}
+
+.btq-formulaire input { max-width: 240px; }
+
+.btq-lien { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; color: var(--muted); font-size: 0.84rem; }
+.btq-lien a { color: #f7d354; overflow-wrap: anywhere; }
+
+.btq-suivi summary { color: var(--soft); font-size: 0.84rem; cursor: pointer; }
+
+.btq-suivi ol,
+.btq-reponses {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding-inline-start: 18px;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.btq-suivi time,
+.btq-reponses time { color: var(--soft); }
+.btq-reponses p { margin: 4px 0 0; color: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
+.btq-suivi em,
+.btq-reponses em { color: #ff9b9b; font-style: normal; }
+
+/* Le champ Discord des formulaires : range comme ses voisins, et
+   vraiment cache quand le client est connecte — un `display` pose ici
+   l'emporterait sinon sur l'attribut `hidden`. */
+[data-boutique-contact] { display: grid; gap: 12px; }
+[data-boutique-contact][hidden],
+.boutique-ton-devis[hidden] { display: none; }
+
 @media (max-width: 640px) {
   .boutique-hero { padding-top: 48px; }
   .boutique-rayons { grid-template-columns: 1fr; }
