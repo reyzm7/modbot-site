@@ -854,7 +854,7 @@ window.MODBOT_TRANSLATIONS = {
     "home.commentContacterLeSupport": "Comment contacter le support ?",
     "home.ouVoirLesPatch": "Où voir les patch notes ?",
     "home.modbotRespectNonToxicite": "© 2026 ModBot - Respect - Non-toxicité - Bienveillance",
-    "home.piedLiens": "<a href=\"confidentialite.html\">Politique de confidentialité</a> · <a href=\"conditions.html\">Conditions d'utilisation</a> · <a href=\"wiki.html\">Wiki</a> · <a href=\"mentions.html\">Mentions légales</a>",
+    "home.piedLiens": "<a href=\"confidentialite.html\">Politique de confidentialité</a> · <a href=\"conditions.html\">Conditions d'utilisation</a> · <a href=\"wiki.html\">Wiki</a> · <a href=\"articles.html\">Guides</a> · <a href=\"mentions.html\">Mentions légales</a>",
 
     // ── Dashboard serveur ─────────────────────────────────────────
     "dash.connexionDashboard": "Connexion dashboard",
@@ -3193,7 +3193,7 @@ window.MODBOT_TRANSLATIONS = {
     "home.commentContacterLeSupport": "How do I contact support?",
     "home.ouVoirLesPatch": "Where can I see the patch notes?",
     "home.modbotRespectNonToxicite": "© 2026 ModBot - Respect - No toxicity - Kindness",
-    "home.piedLiens": "<a href=\"confidentialite.html\">Privacy policy</a> · <a href=\"conditions.html\">Terms of use</a> · <a href=\"wiki.html\">Wiki</a> · <a href=\"mentions.html\">Legal notice</a>",
+    "home.piedLiens": "<a href=\"confidentialite.html\">Privacy policy</a> · <a href=\"conditions.html\">Terms of use</a> · <a href=\"wiki.html\">Wiki</a> · <a href=\"articles.html\">Guides</a> · <a href=\"mentions.html\">Legal notice</a>",
 
     // ── Dashboard serveur ─────────────────────────────────────────
     "dash.connexionDashboard": "Dashboard sign-in",
@@ -5532,7 +5532,7 @@ window.MODBOT_TRANSLATIONS = {
     "home.commentContacterLeSupport": "كيف أتواصل مع الدعم؟",
     "home.ouVoirLesPatch": "أين أجد سجل التحديثات؟",
     "home.modbotRespectNonToxicite": "© 2026 ModBot - احترام - بلا سُمّية - لُطف",
-    "home.piedLiens": "<a href=\"confidentialite.html\">سياسة الخصوصية</a> · <a href=\"conditions.html\">شروط الاستخدام</a> · <a href=\"wiki.html\">الويكي</a> · <a href=\"mentions.html\">البيانات القانونية</a>",
+    "home.piedLiens": "<a href=\"confidentialite.html\">سياسة الخصوصية</a> · <a href=\"conditions.html\">شروط الاستخدام</a> · <a href=\"wiki.html\">الويكي</a> · <a href=\"articles.html\">أدلة</a> · <a href=\"mentions.html\">البيانات القانونية</a>",
 
     // ── Dashboard serveur ─────────────────────────────────────────
     "dash.connexionDashboard": "تسجيل الدخول إلى لوحة التحكم",
@@ -7866,7 +7866,7 @@ window.MODBOT_TRANSLATIONS = {
     "home.commentContacterLeSupport": "¿Cómo contactar con el soporte?",
     "home.ouVoirLesPatch": "¿Dónde ver las notas de versión?",
     "home.modbotRespectNonToxicite": "© 2026 ModBot - Respeto - Sin toxicidad - Amabilidad",
-    "home.piedLiens": "<a href=\"confidentialite.html\">Política de privacidad</a> · <a href=\"conditions.html\">Condiciones de uso</a> · <a href=\"wiki.html\">Wiki</a> · <a href=\"mentions.html\">Aviso legal</a>",
+    "home.piedLiens": "<a href=\"confidentialite.html\">Política de privacidad</a> · <a href=\"conditions.html\">Condiciones de uso</a> · <a href=\"wiki.html\">Wiki</a> · <a href=\"articles.html\">Guías</a> · <a href=\"mentions.html\">Aviso legal</a>",
     "dash.connexionDashboard": "Conexión al panel",
     "dash.connecteToiAvecDiscord": "Conéctate con Discord",
     "dash.leDashboardAfficheraEnsuite": "El panel mostrará después únicamente los servidores donde tienes acceso a la configuración de ModBot.",
@@ -10144,7 +10144,7 @@ window.MODBOT_TRANSLATIONS = {
     "home.commentContacterLeSupport": "Wie erreiche ich den Support?",
     "home.ouVoirLesPatch": "Wo finde ich die Patchnotes?",
     "home.modbotRespectNonToxicite": "© 2026 ModBot – Respekt – Keine Toxizität – Freundlichkeit",
-    "home.piedLiens": "<a href=\"confidentialite.html\">Datenschutzerklärung</a> · <a href=\"conditions.html\">Nutzungsbedingungen</a> · <a href=\"wiki.html\">Wiki</a> · <a href=\"mentions.html\">Impressum</a>",
+    "home.piedLiens": "<a href=\"confidentialite.html\">Datenschutzerklärung</a> · <a href=\"conditions.html\">Nutzungsbedingungen</a> · <a href=\"wiki.html\">Wiki</a> · <a href=\"articles.html\">Ratgeber</a> · <a href=\"mentions.html\">Impressum</a>",
     "dash.connexionDashboard": "Dashboard-Anmeldung",
     "dash.connecteToiAvecDiscord": "Melde dich mit Discord an",
     "dash.leDashboardAfficheraEnsuite": "Das Dashboard zeigt anschließend nur die Server, auf denen du Zugriff auf die ModBot-Konfiguration hast.",

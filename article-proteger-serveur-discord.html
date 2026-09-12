@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protéger un serveur Discord d'un raid : ce qui marche vraiment — ModBot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta name="description" content="Reconnaître un raid, la vérification qui l'arrête, le niveau de vérification de Discord, les permissions à couper et la réaction automatique.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/article-proteger-serveur-discord.html">
+  <meta property="og:site_name" content="ModBot">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:url" content="https://modbot-website.vercel.app/article-proteger-serveur-discord.html">
+  <meta property="og:title" content="Protéger un serveur Discord d'un raid : ce qui marche vraiment">
+  <meta property="og:description" content="Reconnaître un raid, la vérification qui l'arrête, le niveau de vérification de Discord, les permissions à couper et la réaction automatique.">
+  <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Protéger un serveur Discord d'un raid : ce qui marche vraiment">
+  <meta name="twitter:description" content="Reconnaître un raid, la vérification qui l'arrête, le niveau de vérification de Discord, les permissions à couper et la réaction automatique.">
+  <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.png">
+  <link rel="stylesheet" href="style.css">
+  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
+       la connexion au dashboard est automatique, rien a saisir.
+       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
+  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
+  <meta name="modbot-discord-client-id" content="1510405235544424620">
+  <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
+  <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
+  <meta name="modbot-bot-permissions" content="3124257994829047">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="assets/modbot-mark.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Protéger un serveur Discord d'un raid : ce qui marche vraiment",
+    "description": "Reconnaître un raid, la vérification qui l'arrête, le niveau de vérification de Discord, les permissions à couper et la réaction automatique.",
+    "inLanguage": "fr-FR",
+    "datePublished": "2026-09-12",
+    "dateModified": "2026-09-12",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/article-proteger-serveur-discord.html",
+    "author": { "@type": "Organization", "name": "ModBot" },
+    "publisher": { "@type": "Organization", "name": "ModBot",
+                    "logo": { "@type": "ImageObject", "url": "https://modbot-website.vercel.app/logo.png" } }
+  }
+  </script>
+</head>
+<body class="wiki-page">
+  <script src="icons.js"></script>
+  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
+  <div class="page-glow" aria-hidden="true"></div>
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navigation ModBot" data-i18n-aria="cgu.navigation">
+      <a class="brand" href="index.html" aria-label="Accueil ModBot" data-i18n-aria="cgu.accueilModbot">
+        <span class="brand-mark">
+          <img src="assets/modbot-mark.png" alt="" width="128" height="128" decoding="async" fetchpriority="high">
+        </span>
+        <span>ModBot</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="cgu.ouvrirLeMenu">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#features" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg><span data-i18n="cgu.fonctionnalites">Fonctionnalités</span></a>
+        <a href="index.html#pricing"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="cgu.tarifs">Tarifs</span></a>
+
+
+<a class="nav-boutique" href="boutique.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
+<a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n="cgu.supportDiscord">Support Discord</span></a>
+
+        <div class="nav-menu" data-nav-menu>
+          <button class="nav-menu-trigger" type="button" data-nav-menu-trigger
+                  aria-expanded="false" aria-haspopup="true">
+            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-menu"/></svg></span>
+            <span data-i18n="nav.menu">Accès</span>
+            <svg class="nav-menu-chevron" viewBox="0 0 12 8" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav-menu-panel" data-nav-menu-panel hidden>
+            <a href="index.html" class="nav-menu-home" data-teinte="acier"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-home"/></svg><span data-i18n="nav.retourSite">Revenir au site</span></a>
+            <a href="dashboard.html" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
+            <a href="dashboard.html?flow=invite" data-discord-bot-invite data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg><span data-i18n="nav.ajouter">Ajouter ModBot</span></a>
+            <a href="premium.html" data-teinte="or"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="nav.premium">Premium</span></a><a href="boutique.html" data-teinte="cyan"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
+            <a href="admin.html" data-teinte="rouge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg><span data-i18n="nav.admin">Admin</span></a>
+            <label class="nav-menu-lang">
+              <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="nav.langue">Langue</span></span>
+              <select data-nav-language>
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+                <option value="es">Español</option>
+                <option value="de">Deutsch</option>
+              </select>
+            </label>
+          </div>
+        </div>
+</div>
+    </nav>
+  </header>
+
+
+  <main class="wiki-shell section-shell">
+    <article class="wiki-hero">
+      <p class="eyebrow">Guide</p>
+      <h1>Protéger un serveur Discord d'un raid : ce qui marche vraiment</h1>
+      <p>Un raid, ce n'est pas une attaque de film. C'est trente comptes créés le même jour qui arrivent ensemble, spamment quatre minutes, et repartent en laissant un serveur vidé de ses membres. Voici ce qui l'arrête, dans l'ordre où ça compte.</p>
+      <p class="field-help">Mis à jour le 12 septembre 2026 · 6 minutes de lecture</p>
+    </article>
+
+    <div class="wiki-layout">
+      <aside class="wiki-toc" aria-label="Sommaire de l'article">
+        <a href="#reconnaitre">Reconnaître un raid</a>
+        <a href="#verification">1. La porte d'entrée</a>
+        <a href="#niveau">2. Le niveau de vérification</a>
+        <a href="#permissions">3. Les permissions par défaut</a>
+        <a href="#automatique">4. La réaction automatique</a>
+        <a href="#apres">Après coup</a>
+        <a href="#erreurs">Les erreurs fréquentes</a>
+      </aside>
+
+      <div class="wiki-content">
+        <section id="reconnaitre" class="wiki-section">
+          <h2>Reconnaître un raid, et ne pas le confondre avec du succès</h2>
+          <p>Un serveur qui grandit reçoit des arrivées régulières, réparties dans la journée, avec des comptes d'âges variés. Un raid, c'est autre chose : une dizaine ou une centaine d'arrivées en quelques minutes, des comptes créés dans la même semaine, souvent sans photo de profil, et des messages identiques postés dans plusieurs salons à la fois.</p>
+          <p>La différence se mesure. Trois signes suffisent à trancher :</p>
+          <ul class="wiki-check-list">
+            <li><strong>La cadence.</strong> Plus de cinq arrivées en moins d'une minute sur un serveur qui en reçoit dix par jour, c'est anormal.</li>
+            <li><strong>L'âge des comptes.</strong> Un compte Discord de moins de sept jours n'est pas suspect en soi ; vingt d'un coup, si.</li>
+            <li><strong>La répétition.</strong> Le même message, ou le même lien, posté par des comptes différents en moins d'une minute.</li>
+          </ul>
+          <p>Un bot de modération comme ModBot surveille ces trois signaux en continu. Ce n'est pas de la magie : c'est un compteur, un seuil, et une action.</p>
+        </section>
+
+        <section id="verification" class="wiki-section">
+          <h2>1. La porte d'entrée : une vérification avant tout le reste</h2>
+          <p>La mesure la plus efficace est aussi la plus simple : un nouvel arrivant ne voit rien tant qu'il n'a pas prouvé qu'il est humain. Concrètement, un salon de vérification, un bouton, une image à recopier, et un rôle donné au succès.</p>
+          <p>Cela arrête la quasi-totalité des raids, parce que les raids sont automatisés. Un script qui rejoint cent serveurs ne lit pas une image et ne clique pas sur un bouton. Il faudrait qu'une personne le fasse à la main, cent fois — et à ce moment-là, ce n'est plus un raid, c'est un travail.</p>
+          <p>Deux détails qui changent tout :</p>
+          <ul class="wiki-check-list">
+            <li><strong>Ne fais pas passer la vérification par les messages privés.</strong> Beaucoup de gens les ferment ; ils resteraient bloqués sans comprendre. Une réponse éphémère dans le serveur marche pour tout le monde.</li>
+            <li><strong>Donne un rôle, ne retire pas un rôle.</strong> Le rôle « @everyone » doit voir le strict minimum. C'est le rôle donné après vérification qui ouvre le serveur.</li>
+          </ul>
+        </section>
+
+        <section id="niveau" class="wiki-section">
+          <h2>2. Le niveau de vérification de Discord</h2>
+          <p>Discord propose son propre filtre, dans <em>Paramètres du serveur → Modération</em>. Il est gratuit, il est intégré, et beaucoup de serveurs le laissent au minimum sans savoir ce qu'il fait.</p>
+          <ul class="wiki-check-list">
+            <li><strong>Moyen</strong> : le compte doit être inscrit sur Discord depuis plus de cinq minutes. Cela suffit déjà à écarter les comptes créés à la volée.</li>
+            <li><strong>Élevé</strong> : il faut être membre du serveur depuis plus de dix minutes avant de pouvoir écrire. Excellent pendant un raid, pénible en temps normal.</li>
+            <li><strong>Très élevé</strong> : numéro de téléphone vérifié exigé. Radical, mais il écarte aussi de vrais membres qui ne veulent pas donner leur numéro — et c'est leur droit.</li>
+          </ul>
+          <p>Le bon réglage au quotidien est <strong>Moyen</strong>. Le réglage <strong>Élevé</strong> se garde pour la durée d'une attaque, et se redescend après : c'est exactement ce qu'un mode « confinement » automatique fait pour toi.</p>
+        </section>
+
+        <section id="permissions" class="wiki-section">
+          <h2>3. Les permissions par défaut : là où se perdent les serveurs</h2>
+          <p>La plupart des dégâts d'un raid ne viennent pas des messages, mais des permissions laissées ouvertes. Trois à vérifier tout de suite sur le rôle <code>@everyone</code> :</p>
+          <ul class="wiki-check-list">
+            <li><strong>Mentionner @everyone et @here</strong> — à couper. Un seul message peut alors notifier tout le serveur.</li>
+            <li><strong>Joindre des fichiers et intégrer des liens</strong> — à réserver au rôle donné après vérification. C'est par là que passent les images choquantes.</li>
+            <li><strong>Créer des invitations</strong> — à couper si ton serveur se rejoint par un lien public que tu contrôles. Un raid se propage par les invitations qu'il fabrique lui-même.</li>
+          </ul>
+          <p>Une permission retirée ne casse rien : la fonction correspondante cesse simplement d'exister pour ce rôle. C'est réversible en un clic, et ça vaut mieux que de découvrir après coup qui pouvait quoi.</p>
+        </section>
+
+        <section id="automatique" class="wiki-section">
+          <h2>4. La réaction automatique : la seule qui aille assez vite</h2>
+          <p>Un raid dure quatre minutes. Le temps qu'une notification arrive sur ton téléphone, que tu ouvres Discord et que tu comprennes ce qui se passe, c'est fini. La seule réponse à l'échelle est automatique.</p>
+          <p>Ce qu'une protection anti-raid doit savoir faire, dans cet ordre :</p>
+          <ol class="boutique-demande-etapes">
+            <li><strong>Détecter</strong> — compter les arrivées sur une fenêtre courte et comparer à un seuil.</li>
+            <li><strong>Confiner</strong> — fermer l'écriture le temps de comprendre, plutôt que bannir à l'aveugle.</li>
+            <li><strong>Prévenir</strong> — écrire aux administrateurs en message privé, avec un bouton « fausse alerte » qui annule tout.</li>
+            <li><strong>Lever</strong> — rendre le serveur à son état normal une fois la vague passée, sans intervention.</li>
+          </ol>
+          <p>Le troisième point est le plus important, et le plus souvent oublié. Une protection qui bannit sans demander finit par bannir de vrais membres — et personne ne la garde active longtemps après ça.</p>
+        </section>
+
+        <section id="apres" class="wiki-section">
+          <h2>Après coup : ce qu'il faut regarder</h2>
+          <p>Un raid laisse des traces. Trois choses à faire dans l'heure qui suit :</p>
+          <ul class="wiki-check-list">
+            <li><strong>Lire le journal.</strong> Qui est arrivé, qui a écrit quoi, quels salons ont été touchés. Sans journal, tu n'as que des souvenirs.</li>
+            <li><strong>Vérifier les invitations.</strong> Supprime celles que tu ne reconnais pas, et régénère le lien public.</li>
+            <li><strong>Vérifier les rôles.</strong> Un raid qui a réussi laisse parfois un compte avec un rôle qu'il n'aurait pas dû obtenir.</li>
+          </ul>
+          <p>Et une sauvegarde des salons et des rôles, faite avant, vaut toutes les réparations faites après.</p>
+        </section>
+
+        <section id="erreurs" class="wiki-section">
+          <h2>Les erreurs qui reviennent le plus souvent</h2>
+          <ul class="wiki-check-list">
+            <li><strong>Tout activer d'un coup.</strong> Un serveur verrouillé de partout devient désagréable, l'équipe finit par tout désactiver, et il ne reste plus rien. Active la vérification et l'anti-raid d'abord ; le reste, seulement si le besoin apparaît.</li>
+            <li><strong>Donner « Administrateur » au bot… et à six personnes.</strong> Un nuke vient presque toujours d'un compte administrateur piraté. Moins il y en a, moins la surface est grande.</li>
+            <li><strong>Croire qu'un bot remplace une équipe.</strong> Un bot applique des règles ; il ne les écrit pas, et il ne parle pas aux gens. Les deux sont nécessaires.</li>
+          </ul>
+          <p>Si tu veux voir à quoi ressemblent ces protections une fois réglées, la <a href="wiki.html#verification">documentation de ModBot</a> décrit chaque module et ce qu'il fait exactement. Le bot est gratuit sur l'essentiel : modération, anti-raid, anti-spam, captcha, tickets et sauvegardes.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 ModBot — <a href="index.html">Accueil</a> · <a href="articles.html">Articles</a> · <a href="boutique.html">Boutique</a> · <a href="mentions.html">Mentions légales</a></p>
+  </footer>
+
+  <script src="translations.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

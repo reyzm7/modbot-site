@@ -21,6 +21,11 @@ SITE = os.path.dirname(os.path.abspath(__file__))
 PAGES = ["index.html", "dashboard.html", "admin.html", "wiki.html",
          "premium.html", "partenaires.html", "boutique.html",
          "confidentialite.html", "conditions.html", "mentions.html"]
+# Les pages d'articles ne sont PAS dans cette liste, et c'est voulu : un
+# article de fond est ecrit pour les recherches d'une langue, pas traduit
+# mot a mot dans cinq. Elles portent lang="fr" et aucun data-i18n ; les
+# y inclure exigerait de traduire trois mille mots cinq fois, pour un
+# resultat que personne ne chercherait.
 LANGUES = ["fr", "en", "ar", "es", "de"]
 
 # Balises dont le contenu n'est pas du texte affiche

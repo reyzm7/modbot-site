@@ -40,4 +40,24 @@
     <lastmod>2026-09-12</lastmod>
     <priority>0.3</priority>
   </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/articles.html</loc>
+    <lastmod>2026-09-12</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-proteger-serveur-discord.html</loc>
+    <lastmod>2026-09-12</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-permissions-discord.html</loc>
+    <lastmod>2026-09-12</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-bot-ou-site.html</loc>
+    <lastmod>2026-09-12</lastmod>
+    <priority>0.6</priority>
+  </url>
 </urlset>

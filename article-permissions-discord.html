@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les permissions Discord, expliquées simplement — ModBot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta name="description" content="Trois règles suffisent pour comprendre les permissions Discord : elles s'additionnent, le refus l'emporte dans un salon, et « Administrateur » ignore tout le reste.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/article-permissions-discord.html">
+  <meta property="og:site_name" content="ModBot">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:url" content="https://modbot-website.vercel.app/article-permissions-discord.html">
+  <meta property="og:title" content="Les permissions Discord, expliquées simplement">
+  <meta property="og:description" content="Trois règles suffisent pour comprendre les permissions Discord : elles s'additionnent, le refus l'emporte dans un salon, et « Administrateur » ignore tout le reste.">
+  <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Les permissions Discord, expliquées simplement">
+  <meta name="twitter:description" content="Trois règles suffisent pour comprendre les permissions Discord : elles s'additionnent, le refus l'emporte dans un salon, et « Administrateur » ignore tout le reste.">
+  <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.png">
+  <link rel="stylesheet" href="style.css">
+  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
+       la connexion au dashboard est automatique, rien a saisir.
+       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
+  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
+  <meta name="modbot-discord-client-id" content="1510405235544424620">
+  <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
+  <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
+  <meta name="modbot-bot-permissions" content="3124257994829047">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="assets/modbot-mark.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Les permissions Discord, expliquées simplement",
+    "description": "Trois règles suffisent pour comprendre les permissions Discord : elles s'additionnent, le refus l'emporte dans un salon, et « Administrateur » ignore tout le reste.",
+    "inLanguage": "fr-FR",
+    "datePublished": "2026-09-12",
+    "dateModified": "2026-09-12",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/article-permissions-discord.html",
+    "author": { "@type": "Organization", "name": "ModBot" },
+    "publisher": { "@type": "Organization", "name": "ModBot",
+                    "logo": { "@type": "ImageObject", "url": "https://modbot-website.vercel.app/logo.png" } }
+  }
+  </script>
+</head>
+<body class="wiki-page">
+  <script src="icons.js"></script>
+  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
+  <div class="page-glow" aria-hidden="true"></div>
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navigation ModBot" data-i18n-aria="cgu.navigation">
+      <a class="brand" href="index.html" aria-label="Accueil ModBot" data-i18n-aria="cgu.accueilModbot">
+        <span class="brand-mark">
+          <img src="assets/modbot-mark.png" alt="" width="128" height="128" decoding="async" fetchpriority="high">
+        </span>
+        <span>ModBot</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="cgu.ouvrirLeMenu">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#features" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg><span data-i18n="cgu.fonctionnalites">Fonctionnalités</span></a>
+        <a href="index.html#pricing"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="cgu.tarifs">Tarifs</span></a>
+
+
+<a class="nav-boutique" href="boutique.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
+<a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n="cgu.supportDiscord">Support Discord</span></a>
+
+        <div class="nav-menu" data-nav-menu>
+          <button class="nav-menu-trigger" type="button" data-nav-menu-trigger
+                  aria-expanded="false" aria-haspopup="true">
+            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-menu"/></svg></span>
+            <span data-i18n="nav.menu">Accès</span>
+            <svg class="nav-menu-chevron" viewBox="0 0 12 8" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav-menu-panel" data-nav-menu-panel hidden>
+            <a href="index.html" class="nav-menu-home" data-teinte="acier"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-home"/></svg><span data-i18n="nav.retourSite">Revenir au site</span></a>
+            <a href="dashboard.html" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
+            <a href="dashboard.html?flow=invite" data-discord-bot-invite data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg><span data-i18n="nav.ajouter">Ajouter ModBot</span></a>
+            <a href="premium.html" data-teinte="or"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="nav.premium">Premium</span></a><a href="boutique.html" data-teinte="cyan"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
+            <a href="admin.html" data-teinte="rouge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg><span data-i18n="nav.admin">Admin</span></a>
+            <label class="nav-menu-lang">
+              <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="nav.langue">Langue</span></span>
+              <select data-nav-language>
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+                <option value="es">Español</option>
+                <option value="de">Deutsch</option>
+              </select>
+            </label>
+          </div>
+        </div>
+</div>
+    </nav>
+  </header>
+
+
+  <main class="wiki-shell section-shell">
+    <article class="wiki-hero">
+      <p class="eyebrow">Guide</p>
+      <h1>Les permissions Discord, expliquées simplement</h1>
+      <p>Les permissions sont la seule chose qui décide vraiment de ce qui peut arriver à ton serveur. Elles ont mauvaise réputation parce qu'on les explique mal. En réalité, il y a trois règles, et tout le reste en découle.</p>
+      <p class="field-help">Mis à jour le 12 septembre 2026 · 7 minutes de lecture</p>
+    </article>
+
+    <div class="wiki-layout">
+      <aside class="wiki-toc" aria-label="Sommaire de l'article">
+        <a href="#trois">Les trois règles</a>
+        <a href="#hierarchie">La hiérarchie des rôles</a>
+        <a href="#salons">Les permissions de salon</a>
+        <a href="#everyone">Le rôle @everyone</a>
+        <a href="#staff">Donner du pouvoir sans tout donner</a>
+        <a href="#bots">Les permissions d'un bot</a>
+        <a href="#verifier">Vérifier son serveur en cinq minutes</a>
+      </aside>
+
+      <div class="wiki-content">
+        <section id="trois" class="wiki-section">
+          <h2>Les trois règles</h2>
+          <ol class="boutique-demande-etapes">
+            <li><strong>Les permissions s'additionnent.</strong> Quelqu'un qui a trois rôles a la somme de leurs permissions. Il suffit qu'un seul rôle accorde une permission pour qu'elle soit accordée.</li>
+            <li><strong>Sauf dans un salon, où le refus l'emporte.</strong> Dans les réglages d'un salon, un rouge (refusé) bat un vert (autorisé), quel que soit le rôle.</li>
+            <li><strong>« Administrateur » ignore tout le reste.</strong> Cette permission donne tout, partout, et aucun refus de salon ne s'y oppose. C'est la seule qui casse les deux règles précédentes.</li>
+          </ol>
+          <p>Si tu retiens ces trois phrases, tu peux raisonner sur n'importe quelle situation sans deviner.</p>
+        </section>
+
+        <section id="hierarchie" class="wiki-section">
+          <h2>La hiérarchie : qui peut agir sur qui</h2>
+          <p>Dans la liste des rôles, la position compte autant que les cases cochées. Une personne ne peut agir que sur quelqu'un dont le rôle le plus haut est <strong>strictement en dessous</strong> du sien.</p>
+          <p>C'est ce qui explique la plupart des « ça ne marche pas » :</p>
+          <ul class="wiki-check-list">
+            <li>Un modérateur ne peut pas bannir un autre modérateur du même rang.</li>
+            <li>Un bot ne peut pas donner un rôle placé au-dessus du sien — même s'il a la permission « Gérer les rôles ».</li>
+            <li>Le propriétaire du serveur est au-dessus de tout le monde, toujours.</li>
+          </ul>
+          <p>Règle pratique : le rôle du bot se place <strong>juste en dessous du rôle du staff, et au-dessus de tous les rôles qu'il doit gérer</strong>. C'est le seul endroit où il fonctionne sans surprise.</p>
+        </section>
+
+        <section id="salons" class="wiki-section">
+          <h2>Les permissions de salon : trois états, pas deux</h2>
+          <p>Dans un salon, chaque permission a trois positions, et c'est la troisième qu'on oublie :</p>
+          <ul class="wiki-check-list">
+            <li><strong>Vert (autorisé)</strong> — accordé ici, même si le rôle ne l'a pas globalement.</li>
+            <li><strong>Gris (neutre)</strong> — on ne décide rien ici ; c'est la permission du rôle qui s'applique.</li>
+            <li><strong>Rouge (refusé)</strong> — refusé ici, même si le rôle l'a globalement. Le rouge gagne toujours.</li>
+          </ul>
+          <p>Le gris est la position par défaut, et c'est presque toujours la bonne. Mettre du vert partout « pour être sûr » fabrique des serveurs impossibles à démêler six mois plus tard.</p>
+          <p>Un salon privé se construit ainsi : <code>@everyone</code> → « Voir le salon » en rouge, puis le rôle autorisé → « Voir le salon » en vert. Deux réglages, pas dix.</p>
+        </section>
+
+        <section id="everyone" class="wiki-section">
+          <h2>Le rôle @everyone est un rôle comme les autres</h2>
+          <p>C'est le point que presque tout le monde manque. <code>@everyone</code> n'est pas « les gens sans rôle » : c'est un rôle que <strong>tout le monde</strong> possède, y compris toi, y compris les bots. Ce qu'il accorde est accordé à tous.</p>
+          <p>Ce qu'il vaut mieux lui retirer, sur à peu près tous les serveurs :</p>
+          <ul class="wiki-check-list">
+            <li><strong>Mentionner @everyone, @here et tous les rôles</strong> — un seul message notifierait tout le monde.</li>
+            <li><strong>Gérer les messages</strong> — permet de supprimer les messages des autres.</li>
+            <li><strong>Créer une invitation</strong> — si tu veux contrôler qui entre et par quel lien.</li>
+            <li><strong>Changer de pseudo pour les autres</strong> — « Gérer les pseudos », à réserver au staff.</li>
+          </ul>
+        </section>
+
+        <section id="staff" class="wiki-section">
+          <h2>Donner du pouvoir sans tout donner</h2>
+          <p>La tentation est de créer un rôle « Staff » avec la permission Administrateur, parce que c'est plus simple. C'est aussi ce qui transforme un compte piraté en serveur détruit.</p>
+          <p>Un rôle de modération bien dosé tient en cinq permissions :</p>
+          <ul class="wiki-check-list">
+            <li><strong>Gérer les messages</strong> — supprimer et épingler.</li>
+            <li><strong>Expulser des membres</strong> — réversible, contrairement au bannissement.</li>
+            <li><strong>Bannir des membres</strong> — seulement si tu fais confiance à ce niveau.</li>
+            <li><strong>Exclure temporairement</strong> (timeout) — la sanction la plus utile au quotidien.</li>
+            <li><strong>Voir le journal d'audit</strong> — pour comprendre ce qui s'est passé.</li>
+          </ul>
+          <p>« Gérer le serveur », « Gérer les rôles » et « Gérer les salons » se gardent pour deux ou trois personnes. Ce sont elles qui permettent de tout défaire.</p>
+        </section>
+
+        <section id="bots" class="wiki-section">
+          <h2>Les permissions d'un bot</h2>
+          <p>À l'installation, Discord affiche la liste de ce qu'un bot demande. Elle mérite d'être lue : chaque permission doit correspondre à une fonction que tu comptes utiliser.</p>
+          <p>Pour un bot de modération, la liste normale ressemble à ceci : gérer les messages (automodération), gérer les rôles (captcha et rôles-réactions), créer des salons (tickets), expulser et bannir (sanctions), exclure temporairement, voir le journal d'audit.</p>
+          <p>Un bot qui demande Administrateur sans autre explication demande tout. Ce n'est pas forcément malveillant — c'est souvent de la paresse de configuration — mais tu peux presque toujours retirer la permission après coup : la fonction correspondante cessera simplement de marcher, sans casser le reste.</p>
+        </section>
+
+        <section id="verifier" class="wiki-section">
+          <h2>Vérifier son serveur en cinq minutes</h2>
+          <ol class="boutique-demande-etapes">
+            <li>Ouvre <em>Paramètres du serveur → Rôles → @everyone</em> et coupe les quatre permissions de la section précédente.</li>
+            <li>Compte combien de rôles ont « Administrateur ». Si c'est plus de deux, demande-toi pourquoi.</li>
+            <li>Vérifie que le rôle du bot est au-dessus des rôles qu'il doit donner.</li>
+            <li>Ouvre un salon sensible et regarde qui peut y écrire : Discord affiche la liste des membres concernés.</li>
+            <li>Active le journal : sans lui, tu ne sauras jamais ce qui a changé, ni par qui.</li>
+          </ol>
+          <p>ModBot calcule ce diagnostic pour toi et rend une note, avec la liste des réglages à corriger classés du plus utile au moins urgent. C'est décrit dans <a href="wiki.html#dashboard">la documentation du tableau de bord</a>.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 ModBot — <a href="index.html">Accueil</a> · <a href="articles.html">Articles</a> · <a href="boutique.html">Boutique</a> · <a href="mentions.html">Mentions légales</a></p>
+  </footer>
+
+  <script src="translations.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
