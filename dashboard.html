@@ -302,6 +302,7 @@
       <button class="dash-nav" type="button" data-dashboard-tab="roles"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-mask"/></svg></span><span data-i18n="nav.roles">Rôles</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="voice"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-broadcast"/></svg></span><span data-i18n="nav.voice">Vocaux</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="events"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span><span data-i18n="nav.events">Événements</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="communaute"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-heart"/></svg></span><span data-i18n="nav.communaute">Vie du serveur</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="giveaways"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg></span><span data-i18n="nav.giveaways">Giveaways</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="ratings" data-i18n="dash.navRatings"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span>Ratings</button>
 
@@ -1066,6 +1067,53 @@
             </div>
           </div>
 
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="communaute">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="vie.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-heart"/></svg> Vie du serveur</p>
+            <h2 data-i18n="vie.titre">Niveaux, anniversaires, mur des messages</h2>
+          </div>
+        </div>
+
+        <p class="field-help" data-i18n="vie.intro">Trois choses qui font revenir les membres : voir sa progression, être souhaité le bon jour, et voir un bon message mis en avant par les autres. Tout est éteint tant que tu n'as rien choisi ici.</p>
+
+        <div class="welcome-layout">
+          <div class="tool-panel">
+            <h3 data-i18n="vie.xpTitre">Niveaux et expérience</h3>
+
+            <label class="toggle-line">
+              <input type="checkbox" data-vie-xp><span></span>
+              <strong data-i18n="vie.xpActiver">Activer les niveaux</strong>
+              <small data-i18n="vie.xpAide">Un message rapporte de 15 à 25 points, une fois par minute au plus : écrire dix fois d'affilée ne vaut pas dix fois plus.</small>
+            </label>
+
+            <label class="mini-form"><span data-i18n="vie.xpSalon">Salon des passages de niveau</span>
+              <select data-vie-xp-salon><option value="">— Chargement… —</option></select>
+            </label>
+            <p class="field-help" data-i18n-html="vie.xpSalonAide">Laisse vide pour annoncer dans le salon où le membre écrivait. Les commandes <code>/niveau</code> et <code>/classement</code> répondent en privé, sans encombrer personne.</p>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="vie.annivTitre">Anniversaires</h3>
+
+            <label class="mini-form"><span data-i18n="vie.annivSalon">Salon des anniversaires</span>
+              <select data-vie-anniv-salon><option value="">— Chargement… —</option></select>
+            </label>
+            <p class="field-help" data-i18n-html="vie.annivAide">Chacun donne son jour avec <code>/anniversaire</code>. On ne demande jamais l'année : on souhaite un anniversaire, on ne tient pas un fichier d'âges. Un seul message par jour, pour tout le monde à la fois.</p>
+
+            <h3 data-i18n="vie.murTitre">Le mur des meilleurs messages</h3>
+
+            <label class="mini-form"><span data-i18n="vie.murSalon">Salon du mur</span>
+              <select data-vie-mur-salon><option value="">— Chargement… —</option></select>
+            </label>
+            <label class="mini-form"><span data-i18n="vie.murSeuil">Étoiles nécessaires</span>
+              <input type="number" min="2" max="50" step="1" value="5" data-vie-mur-seuil>
+            </label>
+            <p class="field-help" data-i18n="vie.murAide">Ce sont les membres qui décident, avec la réaction ⭐. Au seuil atteint, le message est recopié sur le mur avec un lien vers l'original. Un message de bot n'y va jamais.</p>
+          </div>
         </div>
       </section>
 

@@ -3914,6 +3914,9 @@ function initDashboard() {
     // La porte d'entree est un salon VOCAL, l'accueil une CATEGORIE :
     // le bot renvoie deux listes dediees pour ne pas melanger les types.
     remplirSelect("[data-voice-hub]", optionsSalonsVocaux, t("js.aucun"));
+    remplirSelect("[data-vie-xp-salon]", optionsSalons, t("js.aucun"));
+    remplirSelect("[data-vie-anniv-salon]", optionsSalons, t("js.aucun"));
+    remplirSelect("[data-vie-mur-salon]", optionsSalons, t("js.aucun"));
     remplirSelect("[data-voice-category]", optionsCategories, t("js.aucun"));
     document.querySelectorAll("[data-event-channel]").forEach((champ) => {
       remplirSelect(champ, optionsSalons, t("js.aucun"));
@@ -4979,6 +4982,7 @@ function initDashboard() {
     sansCasser("roles automatiques", () => applyAutoRoles(config.auto_roles));
     sansCasser("assistant IA", () => applyAiState(config.ai));
     sansCasser("vocaux", () => applyVoiceState(config.voice));
+    sansCasser("vie du serveur", () => applyCommunauteState(config.communaute));
     sansCasser("evenements", () => applyEventsState(config.events));
 
     sansCasser("relais reseaux", () => {
@@ -7668,6 +7672,42 @@ function initDashboard() {
     { token: "{tag}", label: "js.voc.varTag" },
   ];
 
+  // ── La vie du serveur : niveaux, anniversaires, mur ────────────────
+  //
+  // Trois reglages, trois salons. Rien ne se calcule ici : le bot rend ce
+  // qu'il a, on le repose tel quel, et on le lui renvoie tel quel.
+  function applyCommunauteState(vie) {
+    if (!vie || typeof vie !== "object") return;
+    const actif = document.querySelector("[data-vie-xp]");
+    if (actif) {
+      actif.checked = Boolean(vie.xp);
+      actif.closest(".toggle-line")?.classList.toggle("is-on", Boolean(vie.xp));
+    }
+    const poser = (selecteur, valeur) => {
+      const champ = document.querySelector(selecteur);
+      if (!champ) return;
+      champ.dataset.attendu = valeur || "";
+      champ.value = valeur || "";
+    };
+    poser("[data-vie-xp-salon]", vie.xp_salon);
+    poser("[data-vie-anniv-salon]", vie.anniv_salon);
+    poser("[data-vie-mur-salon]", vie.mur_salon);
+    const seuil = document.querySelector("[data-vie-mur-seuil]");
+    if (seuil) seuil.value = vie.mur_seuil ?? 5;
+  }
+
+  function collectCommunauteConfig() {
+    const actif = document.querySelector("[data-vie-xp]");
+    if (!actif) return undefined;
+    return {
+      xp: Boolean(actif.checked),
+      xp_salon: document.querySelector("[data-vie-xp-salon]")?.value || "",
+      anniv_salon: document.querySelector("[data-vie-anniv-salon]")?.value || "",
+      mur_salon: document.querySelector("[data-vie-mur-salon]")?.value || "",
+      mur_seuil: Number(document.querySelector("[data-vie-mur-seuil]")?.value || 5),
+    };
+  }
+
   function applyVoiceState(voice) {
     if (!voice || typeof voice !== "object") return;
     const actif = document.querySelector("[data-voice-enabled]");
@@ -8179,6 +8219,7 @@ function initDashboard() {
       auto_roles: collectAutoRoles(),
       ai: collectAiConfig(),
       voice: collectVoiceConfig(),
+      communaute: collectCommunauteConfig(),
       ...(document.querySelector("[data-event-list]")
         ? { events: lireEvenementsDuDom() } : {}),
       recurring_messages: recurringMessages,
