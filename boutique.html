@@ -449,6 +449,25 @@
       </div>
     </section>
 
+    <!-- ── L'abonnement maintenance ─────────────────────────────────── -->
+    <section class="boutique-abo section-shell" id="maintenance">
+      <div class="boutique-abo-inner">
+        <div>
+          <p class="eyebrow" data-i18n="bq.aboEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-tools"/></svg> Après la livraison</p>
+          <h2 data-i18n="bq.aboTitre">Maintenance et évolutions</h2>
+          <p data-i18n="bq.aboChapo">Ta création vit : Discord change, les hébergeurs changent, tes besoins changent. L'abonnement s'occupe de tout ça pour toi, tous les mois.</p>
+          <ul class="wiki-check-list" data-abo-avantages></ul>
+        </div>
+        <aside class="boutique-abo-carte">
+          <p class="boutique-abo-prix" data-abo-prix></p>
+          <p class="boutique-abo-periode" data-i18n="bq.aboPeriode">par mois, sans engagement</p>
+          <button class="primary-btn" type="button" data-abo-souscrire data-i18n="bq.aboBouton">Activer la maintenance</button>
+          <p class="boutique-abo-etat" data-abo-etat role="status" hidden></p>
+          <p class="field-help" data-i18n="bq.aboResiliation">Résiliable en un clic depuis Stripe. Le mois déjà payé reste servi jusqu'à son terme.</p>
+        </aside>
+      </div>
+    </section>
+
     <!-- ── L'assistance : installer, decouvrir, depanner ─────────────── -->
     <section class="boutique-aide section-shell" id="assistance">
       <div class="section-heading">
@@ -520,6 +539,18 @@
       <button class="boutique-fenetre-x" type="button" data-boutique-fermer aria-label="Fermer" data-i18n-aria="bq.fermer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg></button>
       <h2 id="boutiqueFenetreTitre" data-i18n="bq.fenetreTitre">Ta commande</h2>
       <p class="boutique-recap" data-boutique-recap></p>
+      <fieldset class="boutique-options" data-boutique-options hidden>
+        <legend data-i18n="bq.optionsTitre">Des options, si tu veux</legend>
+        <div class="boutique-options-liste" data-boutique-options-liste></div>
+      </fieldset>
+      <div class="boutique-promo">
+        <label data-i18n="bq.promoLabel">Un code promo ?
+          <input type="text" maxlength="20" autocomplete="off" spellcheck="false" data-boutique-promo placeholder="ex. : BIENVENUE10" data-i18n-placeholder="bq.promoPlaceholder">
+        </label>
+        <button class="secondary-btn compact" type="button" data-boutique-promo-appliquer data-i18n="bq.promoAppliquer">Appliquer</button>
+      </div>
+      <p class="boutique-promo-etat" data-boutique-promo-etat role="status" hidden></p>
+      <p class="boutique-total" data-boutique-total aria-live="polite"></p>
       <div data-boutique-contact>
       <label data-i18n="bq.discordLabel">Ton pseudo ou ton identifiant Discord
         <input type="text" name="discord" autocomplete="off" spellcheck="false" maxlength="40" required data-boutique-discord placeholder="ex. : modbot_fan" data-i18n-placeholder="bq.discordPlaceholder">

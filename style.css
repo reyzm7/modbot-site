@@ -12016,3 +12016,46 @@ body:not(.dashboard-page) .page-glow {
 @media (max-width: 900px) {
   .boutique-calcul-inner { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ── Options, code promo, total, abonnement, codes de l'administration ──
+   Le total est la seule ligne qui compte vraiment dans la fenetre de
+   commande : il est gros, et le prix d'avant reste barre a cote pour que
+   la remise se voie sans se calculer. */
+.boutique-options { border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px;
+  padding: 12px 14px; margin: 0; }
+.boutique-options legend { padding: 0 6px; font-size: 0.82rem; font-weight: 700;
+  color: var(--text-dim, #aab2c5); }
+.boutique-options-liste { display: grid; gap: 8px; }
+.boutique-option { display: flex; gap: 10px; align-items: flex-start; cursor: pointer;
+  padding: 8px; border-radius: 10px; transition: background 0.15s ease; }
+.boutique-option:hover { background: rgba(255, 255, 255, 0.04); }
+.boutique-option input { margin-top: 3px; flex: 0 0 auto; }
+.boutique-option span { display: grid; gap: 2px; }
+.boutique-option small { color: var(--text-dim, #8a93a6); font-size: 0.8rem; }
+.boutique-promo { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+.boutique-promo label { flex: 1 1 190px; }
+.boutique-promo-etat { margin: 6px 0 0; font-size: 0.86rem; color: #f0a5a5; }
+.boutique-promo-etat.is-ok { color: #7fd6a9; }
+.boutique-total { margin: 4px 0 0; font-size: 1.3rem; font-weight: 800; }
+.boutique-total s { margin-left: 8px; font-size: 0.95rem; font-weight: 600;
+  color: var(--text-dim, #8a93a6); }
+
+.boutique-abo-inner { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 26px; align-items: start; }
+.boutique-abo-carte { border: 1px solid rgba(241, 196, 15, 0.28); border-radius: 18px;
+  padding: 24px; background: rgba(241, 196, 15, 0.06); text-align: center; }
+.boutique-abo-prix { margin: 0; font-size: 2.4rem; font-weight: 900;
+  color: var(--or, #f1c40f); min-height: 1.2em; }
+.boutique-abo-periode { margin: 0 0 16px; color: var(--text-dim, #aab2c5); }
+.boutique-abo-etat { margin: 10px 0 0; font-size: 0.86rem; color: #f0a5a5; }
+.boutique-abo-etat.is-ok { color: #7fd6a9; }
+
+.btq-promo-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px; align-items: end; margin-bottom: 16px; }
+.btq-promos { display: grid; gap: 10px; }
+.btq-promo { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px;
+  padding: 14px 16px; background: rgba(255, 255, 255, 0.03); }
+
+@media (max-width: 900px) {
+  .boutique-abo-inner { grid-template-columns: minmax(0, 1fr); }
+}

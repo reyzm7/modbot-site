@@ -227,6 +227,29 @@
               <p class="field-help" data-i18n="adm.chargement">Chargement…</p>
             </div>
           </article>
+
+          <article class="admin-panel">
+            <div class="admin-panel-head">
+              <h3 data-i18n="adm.promoTitre"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg> Codes promo</h3>
+            </div>
+            <p class="admin-hint" data-i18n="adm.promoChapo">Une remise réelle, avec une limite d'utilisations et une date de fin. Le compteur monte au paiement, jamais au clic : un panier abandonné n'use pas un code.</p>
+            <form class="btq-promo-form" data-promo-formulaire novalidate>
+              <label data-i18n="adm.promoCode">Le code
+                <input type="text" maxlength="20" autocomplete="off" spellcheck="false" required data-promo-code placeholder="ex. : BIENVENUE10" data-i18n-placeholder="adm.promoCodePlaceholder">
+              </label>
+              <label data-i18n="adm.promoRemise">Remise (%)
+                <input type="number" min="1" max="80" step="1" value="10" required data-promo-remise>
+              </label>
+              <label data-i18n="adm.promoLimite">Utilisations (0 = illimité)
+                <input type="number" min="0" max="10000" step="1" value="0" data-promo-limite>
+              </label>
+              <label data-i18n="adm.promoJours">Valable (jours, 0 = sans fin)
+                <input type="number" min="0" max="365" step="1" value="30" data-promo-jours>
+              </label>
+              <button class="primary-btn compact" type="submit" data-promo-creer data-i18n="adm.promoCreer">Créer le code</button>
+            </form>
+            <div class="btq-promos" data-promo-liste data-admin-sensitive></div>
+          </article>
         </section>
 
         <section class="admin-view" data-admin-panel="blacklist">

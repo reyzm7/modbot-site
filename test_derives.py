@@ -83,6 +83,14 @@ def articles_du_site(script):
                 r'\s*delai:\s*(\d+),\s*revisions:\s*(\d+)', bloc)}
 
 
+def options_du_site(script):
+    """BOUTIQUE_OPTIONS : clef → (prix, categories concernees)."""
+    bloc = bloc_js(script, "const BOUTIQUE_OPTIONS = [", "\n];")
+    return {clef: (int(prix), tuple(re.findall(r'"(\w+)"', pour)))
+            for clef, prix, pour in re.findall(
+                r'key:\s*"(\w+)",\s*prix:\s*(\d+),\s*pour:\s*\[([^\]]*)\]', bloc)}
+
+
 # ─────────────────────────────────────────────────────────────────────
 #  Le repli HTML, celui qu'on voit avant que le JavaScript ne passe
 # ─────────────────────────────────────────────────────────────────────
@@ -170,6 +178,17 @@ def main():
         verifier(not ecarts and len(articles_site) == len(articles_bot),
                  "la boutique affiche les articles, prix, delais et revisions du bot"
                  + (f" -> ecarts : {ecarts[:4]}" if ecarts else ""))
+
+        # Les options s'ajoutent au montant porte a Stripe : le site doit
+        # annoncer le meme prix, et ne proposer une option que la ou le bot
+        # l'accepte — sinon la case cochee disparaitrait sans explication.
+        options_site = options_du_site(script)
+        options_bot = {clef: (o["prix"], tuple(o["pour"]))
+                       for clef, o in boutique.OPTIONS.items()}
+        ecarts_options = sorted(set(options_site.items()) ^ set(options_bot.items()))
+        verifier(not ecarts_options and len(options_site) == len(options_bot),
+                 "les options payantes ont le meme prix et la meme portee des deux cotes"
+                 + (f" -> ecarts : {ecarts_options[:4]}" if ecarts_options else ""))
 
     # ── 4 : le repli HTML contre la valeur francaise ──────────────────
     fr = francais()

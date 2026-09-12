@@ -1620,6 +1620,12 @@ function initAdminZone() {
         <button type="button" class="secondary-btn compact" data-btq-action="statut" data-btq-statut="attente" data-btq-id="${id}">${escapeHtmlValue(t("js.adm.btqAttente"))}</button>
         <button type="button" class="primary-btn compact" data-btq-action="statut" data-btq-statut="livree" data-btq-id="${id}">${escapeHtmlValue(t("js.adm.btqLivree"))}</button>
       </div>` : "";
+    // Une commande payee a toujours une facture : elle s'etablit au
+    // premier clic, et garde ensuite son numero pour toujours.
+    const facture = commande.statut === "en_attente" ? "" : `
+      <div class="btq-actions">
+        <button type="button" class="secondary-btn compact" data-btq-action="facture" data-btq-id="${id}">${escapeHtmlValue(t("js.adm.btqFacture"))}</button>
+      </div>`;
     const meta = [btqClient(commande)];
     meta.push(escapeHtmlValue(commande.payee_le
       ? tp("js.adm.btqPayeLe", { date: btqDate(commande.payee_le) })
@@ -1637,6 +1643,7 @@ function initAdminZone() {
         <p class="btq-meta">${meta.join(" · ")}</p>
         ${commande.projet ? `<p class="btq-texte">${escapeHtmlValue(commande.projet)}</p>` : ""}
         ${actions}
+        ${facture}
         ${btqSuivi(commande.historique, (entree) => btqLibelleStatut(entree.statut, entree.debut))}
       </article>`;
   }
@@ -1846,6 +1853,91 @@ function initAdminZone() {
     document.addEventListener("visibilitychange", btqSurveiller);
   }
 
+  // ── Les codes promo ────────────────────────────────────────────────
+  //
+  // La liste dit ce que le bot sait : combien de fois le code a servi,
+  // combien de fois il peut encore servir, et jusqu'a quand. Rien n'est
+  // calcule ici — ce serait une deuxieme verite.
+  const promoListe = document.querySelector("[data-promo-liste]");
+
+  function fichePromo(promo) {
+    const code = escapeHtmlValue(promo.code || "");
+    const details = [tp("js.adm.promoRemiseDite", { remise: Number(promo.remise) || 0 })];
+    details.push(promo.limite
+      ? tp("js.adm.promoUsages", { faits: Number(promo.utilisations) || 0, total: promo.limite })
+      : tp("js.adm.promoUsagesLibres", { faits: Number(promo.utilisations) || 0 }));
+    if (promo.fin) details.push(tp("js.adm.promoFin", { date: btqDate(promo.fin, false) }));
+    const etat = promo.utilisable ? "actif" : "clos";
+    return `
+      <article class="btq-promo" data-btq-fiche="${code}">
+        <div class="btq-fiche-tete">
+          <span class="btq-ident"><code>${code}</code></span>
+          <span class="btq-tag" data-statut="${etat}">${escapeHtmlValue(
+            t(promo.utilisable ? "js.adm.promoActif" : "js.adm.promoClos"))}</span>
+        </div>
+        <p class="btq-meta">${details.map(escapeHtmlValue).join(" · ")}</p>
+        ${promo.utilisable ? `<div class="btq-actions">
+          <button type="button" class="secondary-btn compact" data-promo-retirer="${code}">${escapeHtmlValue(t("js.adm.promoRetirer"))}</button>
+        </div>` : ""}
+      </article>`;
+  }
+
+  function peindrePromos(promos) {
+    if (!promoListe) return;
+    promoListe.innerHTML = promos.length
+      ? promos.map(fichePromo).join("")
+      : `<p class="field-help">${escapeHtmlValue(t("js.adm.promoAucun"))}</p>`;
+  }
+
+  async function chargerPromos() {
+    if (!promoListe) return;
+    try {
+      const data = await modbotApiFetch("/api/admin/boutique/promos", { cache: "no-store" });
+      peindrePromos(data.promos || []);
+    } catch (erreur) {
+      promoListe.innerHTML = `<p class="field-help">${escapeHtmlValue(etatAdminIndisponible(erreur))}</p>`;
+    }
+  }
+
+  document.querySelector("[data-promo-formulaire]")?.addEventListener("submit", async (evenement) => {
+    evenement.preventDefault();
+    const bouton = document.querySelector("[data-promo-creer]");
+    const corps = {
+      code: document.querySelector("[data-promo-code]")?.value || "",
+      remise: Number(document.querySelector("[data-promo-remise]")?.value),
+      limite: Number(document.querySelector("[data-promo-limite]")?.value) || 0,
+      jours: Number(document.querySelector("[data-promo-jours]")?.value) || 0,
+    };
+    if (bouton) bouton.disabled = true;
+    try {
+      await modbotApiFetch("/api/admin/boutique/promos", {
+        method: "POST", body: JSON.stringify(corps) });
+      const champ = document.querySelector("[data-promo-code]");
+      if (champ) champ.value = "";
+      showAdminToast(t("js.adm.promoCree"));
+      await chargerPromos();
+    } catch (erreur) {
+      showAdminToast(erreur?.message || t("js.adm.premiumEchec"), 5000);
+    }
+    if (bouton) bouton.disabled = false;
+  });
+
+  promoListe?.addEventListener("click", async (evenement) => {
+    const bouton = evenement.target.closest("[data-promo-retirer]");
+    if (!bouton || bouton.disabled) return;
+    bouton.disabled = true;
+    try {
+      await modbotApiFetch(
+        `/api/admin/boutique/promos/${encodeURIComponent(bouton.dataset.promoRetirer)}/retirer`,
+        { method: "POST" });
+      showAdminToast(t("js.adm.promoRetire"));
+      await chargerPromos();
+    } catch (erreur) {
+      showAdminToast(erreur?.message || t("js.adm.premiumEchec"), 5000);
+      bouton.disabled = false;
+    }
+  });
+
   async function chargerBoutiqueAdmin() {
     if (!btqListe) return;
     try {
@@ -1853,6 +1945,7 @@ function initAdminZone() {
       btqDonnees = { commandes: data.commandes || [], devis: data.devis || [], sav: data.sav || [] };
       peindreBoutiqueAdmin();
       btqDemarrerDirect();
+      chargerPromos();
     } catch (erreur) {
       btqListe.innerHTML = `<p class="field-help">${escapeHtmlValue(etatAdminIndisponible(erreur))}</p>`;
     }
@@ -1876,6 +1969,26 @@ function initAdminZone() {
     }
   }
 
+  // Un PDF d'administration se demande avec la session, puis s'enregistre
+  // sous son nom : le devis et la facture suivent le meme chemin.
+  async function telechargerPdf(chemin, nom) {
+    try {
+      const reponse = await fetch(`${getModbotApiBase()}${chemin}`, {
+        headers: modbotAuthHeaders(), cache: "no-store" });
+      if (!reponse.ok) throw new Error(String(reponse.status));
+      const adresse = URL.createObjectURL(await reponse.blob());
+      const lienPdf = document.createElement("a");
+      lienPdf.href = adresse;
+      lienPdf.download = nom;
+      document.body.appendChild(lienPdf);
+      lienPdf.click();
+      lienPdf.remove();
+      window.setTimeout(() => URL.revokeObjectURL(adresse), 60000);
+    } catch (erreur) {
+      showAdminToast(t("js.adm.btqPdfEchec"), 5000);
+    }
+  }
+
   btqListe?.addEventListener("click", async (evenement) => {
     const bouton = evenement.target.closest("[data-btq-action]");
     if (!bouton || bouton.disabled) return;
@@ -1892,24 +2005,13 @@ function initAdminZone() {
       return;
     }
     if (action === "pdf") {
-      // La route demande la session d'un administrateur : on la joint, puis
-      // on enregistre le fichier sous son nom.
-      const base = getModbotApiBase();
-      try {
-        const reponse = await fetch(`${base}/api/admin/boutique/devis/${encodeURIComponent(id)}/pdf`, {
-          headers: modbotAuthHeaders(), cache: "no-store" });
-        if (!reponse.ok) throw new Error(String(reponse.status));
-        const adresse = URL.createObjectURL(await reponse.blob());
-        const lienPdf = document.createElement("a");
-        lienPdf.href = adresse;
-        lienPdf.download = `devis-${id}.pdf`;
-        document.body.appendChild(lienPdf);
-        lienPdf.click();
-        lienPdf.remove();
-        window.setTimeout(() => URL.revokeObjectURL(adresse), 60000);
-      } catch (erreur) {
-        showAdminToast(t("js.adm.btqPdfEchec"), 5000);
-      }
+      await telechargerPdf(`/api/admin/boutique/devis/${encodeURIComponent(id)}/pdf`,
+                           `devis-${id}.pdf`);
+      return;
+    }
+    if (action === "facture") {
+      await telechargerPdf(`/api/admin/boutique/commandes/${encodeURIComponent(id)}/facture`,
+                           `facture-${id}.pdf`);
       return;
     }
     bouton.disabled = true;
@@ -9819,6 +9921,19 @@ initPagePremium();
    copies disent la meme chose.
    ══════════════════════════════════════════════════════════════════ */
 
+// Les options payantes. Leur clef, leur prix et les categories qu'elles
+// concernent sont ceux de boutique.py : test_derives echoue si les deux
+// listes se separent, parce que c'est le bot qui porte le montant a
+// Stripe — pas cette page.
+const BOUTIQUE_OPTIONS = [
+  { key: "express", prix: 1900, pour: ["bot", "site", "pack"],
+    libelleClef: "bq.optExpress", detailClef: "bq.optExpressDetail" },
+  { key: "page_extra", prix: 1500, pour: ["site", "pack"],
+    libelleClef: "bq.optPage", detailClef: "bq.optPageDetail" },
+  { key: "hebergement", prix: 2900, pour: ["site", "pack"],
+    libelleClef: "bq.optHebergement", detailClef: "bq.optHebergementDetail" },
+];
+
 const BOUTIQUE_ARTICLES = [
   { key: "bot_essentiel", categorie: "bot", prix: 1900, delai: 3, revisions: 1,
     titreClef: "bq.bot_essentiel.titre", resumeClef: "bq.bot_essentiel.resume",
@@ -10011,6 +10126,69 @@ function lireContactBoutique(champ) {
 // Les cartes montrent une formule a la fois ; ce tableau les met en
 // regard. Il se fabrique a partir de BOUTIQUE_ARTICLES : rien a tenir a
 // jour deux fois, et aucun prix qui puisse mentir.
+// ── L'abonnement maintenance ─────────────────────────────────────────
+//
+// Le prix vient du bot, jamais d'ici : c'est lui qui le porte a Stripe,
+// et une page qui annoncerait 8 € pour un prelevement de 10 € serait un
+// mensonge, meme involontaire.
+function initAbonnement() {
+  const bouton = document.querySelector("[data-abo-souscrire]");
+  const zonePrix = document.querySelector("[data-abo-prix]");
+  const zoneAvantages = document.querySelector("[data-abo-avantages]");
+  const etat = document.querySelector("[data-abo-etat]");
+  if (!bouton || !zonePrix) return;
+
+
+  function direAbonnement(message, bon) {
+    if (!etat) return;
+    etat.textContent = message;
+    etat.classList.toggle("is-ok", Boolean(bon));
+    etat.hidden = false;
+  }
+
+  function dessinerAbonnement() {
+    if (zoneAvantages) {
+      zoneAvantages.innerHTML = [t("bq.aboAvantage1"), t("bq.aboAvantage2"),
+                                 t("bq.aboAvantage3"), t("bq.aboAvantage4")]
+        .map((texte) => `<li>${escapeHtmlValue(texte)}</li>`).join("");
+    }
+  }
+
+  async function lirePrix() {
+    try {
+      const data = await modbotApiFetch("/api/boutique/offres", { cache: "no-store" });
+      const offre = data?.abonnement;
+      if (offre?.prix_label) zonePrix.textContent = offre.prix_label;
+    } catch (erreur) {
+      // Bot injoignable : mieux vaut pas de prix qu'un prix invente.
+    }
+  }
+
+  bouton.addEventListener("click", async () => {
+    bouton.disabled = true;
+    try {
+      const data = await modbotApiFetch("/api/boutique/abonnement", { method: "POST" });
+      if (data?.url) {
+        location.href = data.url;
+        return;
+      }
+      direAbonnement(t("bq.indisponible"), false);
+    } catch (erreur) {
+      direAbonnement(erreur?.message || t("bq.indisponible"), false);
+    }
+    bouton.disabled = false;
+  });
+
+  const retour = new URLSearchParams(location.search).get("abonnement");
+  if (retour === "reussi") direAbonnement(t("bq.aboMerci"), true);
+  if (retour === "annule") direAbonnement(t("bq.aboAnnule"), false);
+
+  dessinerAbonnement();
+  lirePrix();
+  document.addEventListener("modbot:language", dessinerAbonnement);
+}
+
+
 function initComparatif() {
   const table = document.querySelector("[data-cmp-table]");
   if (!table) return;
@@ -10284,6 +10462,86 @@ function initPageBoutique() {
     champ?.focus();
   }
 
+  // ── Les options et le code promo ──────────────────────────────────
+  const zoneOptions = document.querySelector("[data-boutique-options]");
+  const listeOptions = document.querySelector("[data-boutique-options-liste]");
+  const champPromo = document.querySelector("[data-boutique-promo]");
+  const etatPromo = document.querySelector("[data-boutique-promo-etat]");
+  const zoneTotal = document.querySelector("[data-boutique-total]");
+  let promoApplique = null;
+
+  const optionsChoisies = () =>
+    [...(listeOptions?.querySelectorAll("[data-boutique-option]:checked") || [])]
+      .map((case_) => case_.dataset.boutiqueOption);
+
+  function montantCommande() {
+    const base = (enCours?.article.prix || 0) + optionsChoisies().reduce(
+      (total, clef) => total + (BOUTIQUE_OPTIONS.find((o) => o.key === clef)?.prix || 0), 0);
+    if (!promoApplique) return { base, total: base };
+    // La meme formule que le bot, au centime pres : le montant moins la
+    // remise entiere, jamais sous 1 € — Stripe refuse en dessous.
+    return { base, total: Math.max(base - Math.floor((base * promoApplique.remise) / 100), 100) };
+  }
+
+  function ecrireTotal() {
+    if (!zoneTotal || !enCours) return;
+    const { base, total } = montantCommande();
+    const dit = escapeHtmlValue(tp("bq.total", { prix: prixAffiche(total) }));
+    zoneTotal.innerHTML = total < base
+      ? `${dit} <s>${escapeHtmlValue(prixAffiche(base))}</s>` : dit;
+  }
+
+  function dessinerOptions(article) {
+    if (!zoneOptions || !listeOptions) return;
+    const utiles = BOUTIQUE_OPTIONS.filter((option) => option.pour.includes(article.categorie));
+    zoneOptions.hidden = !utiles.length;
+    listeOptions.innerHTML = utiles.map((option) => `
+      <label class="boutique-option">
+        <input type="checkbox" data-boutique-option="${escapeHtmlValue(option.key)}">
+        <span>
+          <strong>${escapeHtmlValue(t(option.libelleClef))} · ${escapeHtmlValue(prixAffiche(option.prix))}</strong>
+          <small>${escapeHtmlValue(t(option.detailClef))}</small>
+        </span>
+      </label>`).join("");
+  }
+
+  function direPromo(message, bon) {
+    if (!etatPromo) return;
+    etatPromo.textContent = message;
+    etatPromo.classList.toggle("is-ok", Boolean(bon));
+    etatPromo.hidden = false;
+  }
+
+  async function appliquerPromo() {
+    if (!enCours || !champPromo) return;
+    const code = (champPromo.value || "").trim();
+    if (!code) return;
+    try {
+      // Le site ne decide rien : il demande au bot ce que vaut ce code, et
+      // le bot le revérifiera de toute facon au moment d'ouvrir la caisse.
+      const data = await modbotApiFetch("/api/boutique/promo", {
+        method: "POST",
+        body: JSON.stringify({ article: enCours.article.key, code,
+                               options: optionsChoisies() }),
+      });
+      promoApplique = { code: data.code, remise: Number(data.remise) || 0 };
+      direPromo(tp("bq.promoApplique", { remise: promoApplique.remise }), true);
+    } catch (erreur) {
+      promoApplique = null;
+      direPromo(erreur?.message || t("bq.promoRefuse"), false);
+    }
+    ecrireTotal();
+  }
+
+  listeOptions?.addEventListener("change", ecrireTotal);
+  document.querySelector("[data-boutique-promo-appliquer]")
+    ?.addEventListener("click", appliquerPromo);
+  champPromo?.addEventListener("keydown", (evenement) => {
+    if (evenement.key !== "Enter") return;
+    evenement.preventDefault();
+    appliquerPromo();
+  });
+
   function ecrireRecap() {
     if (!recap || !enCours) return;
     recap.textContent = tp("bq.recap", {
@@ -10291,6 +10549,7 @@ function initPageBoutique() {
       prix: prixAffiche(enCours.article.prix),
       moyen: nomDuMoyen(enCours.moyen),
     });
+    ecrireTotal();
   }
 
   // Le client clique d'abord sur « Carte » ou « PayPal » ; la fenetre lui
@@ -10300,6 +10559,12 @@ function initPageBoutique() {
     if (!fenetre) return;
     enCours = { article, moyen };
     declencheur = bouton;
+    // Une commande neuve part sans option ni code : garder ceux de la
+    // precedente ferait payer autre chose que ce qui est affiche.
+    promoApplique = null;
+    if (champPromo) champPromo.value = "";
+    if (etatPromo) etatPromo.hidden = true;
+    dessinerOptions(article);
     ecrireRecap();
     if (zoneErreur) zoneErreur.hidden = true;
     fenetre.hidden = false;
@@ -10345,6 +10610,8 @@ function initPageBoutique() {
           moyen: enCours.moyen,
           discord: contact.valeur,
           projet: champProjet?.value || "",
+          options: optionsChoisies(),
+          promo: promoApplique?.code || "",
           conditions: true,
         }),
       });
@@ -10631,6 +10898,7 @@ function initTonDevis() {
 initPageBoutique();
 initComparatif();
 initCalculateur();
+initAbonnement();
 initDemandeDevis();
 initDemandeAide();
 initTonDevis();
