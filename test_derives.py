@@ -88,7 +88,7 @@ def articles_du_site(script):
 # ─────────────────────────────────────────────────────────────────────
 PAGES = ["index.html", "dashboard.html", "admin.html", "wiki.html",
          "premium.html", "partenaires.html", "boutique.html",
-         "confidentialite.html", "conditions.html"]
+         "confidentialite.html", "conditions.html", "mentions.html"]
 
 # `applySiteLanguage` ne remplace le textContent ENTIER que d'un element
 # sans balise interne. Un element qui en contient ne voit remplacer que

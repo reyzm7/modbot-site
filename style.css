@@ -1972,7 +1972,9 @@ h1 {
   }
 
   .wiki-layout {
-    grid-template-columns: 1fr;
+    /* minmax(0, 1fr) et pas 1fr : sinon un bloc large — le formulaire de
+       retractation — ferait grandir la colonne au lieu de defiler seul. */
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .wiki-toc {
@@ -11958,3 +11960,59 @@ body:not(.dashboard-page) .page-glow {
   100% { box-shadow: 0 0 0 0 rgba(67, 181, 129, 0); }
 }
 @media (prefers-reduced-motion: reduce) { .btq-pastille { animation: none; } }
+
+/* Le formulaire type de retractation : un texte a recopier tel quel, donc
+   une chasse fixe et des retours a la ligne conserves. Il defile seul
+   plutot que de pousser la page de cote sur telephone. */
+.wiki-content { min-width: 0; }
+.wiki-code { margin: 14px 0 0; padding: 16px 18px; border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);
+  font: 12px/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--text-dim, #aab2c5); white-space: pre; overflow-x: auto;
+  max-width: 100%; }
+
+/* ── Le tableau comparatif et le calculateur ────────────────────────────
+   Le tableau defile seul quand il ne tient pas : trois colonnes de texte
+   sur un telephone, c'est illisible autrement. La premiere colonne reste
+   collee a gauche pour qu'on sache toujours quelle ligne on lit. */
+.boutique-cmp-onglets { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  margin: 0 0 18px; }
+.boutique-cmp-onglet { border: 1px solid rgba(255, 255, 255, 0.12); background: transparent;
+  color: var(--text-dim, #aab2c5); border-radius: 999px; padding: 8px 18px;
+  font: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease; }
+.boutique-cmp-onglet:hover { color: #fff; border-color: rgba(255, 255, 255, 0.28); }
+.boutique-cmp-onglet.is-active { background: rgba(88, 101, 242, 0.18);
+  border-color: rgba(88, 101, 242, 0.55); color: #fff; }
+.boutique-cmp-cadre { overflow-x: auto; border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.03); }
+.boutique-cmp { width: 100%; min-width: 620px; border-collapse: collapse; }
+.boutique-cmp th, .boutique-cmp td { padding: 14px 16px; text-align: left; vertical-align: top;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.92rem; }
+.boutique-cmp tbody th { width: 150px; color: var(--text-dim, #aab2c5); font-weight: 600;
+  white-space: nowrap; background: rgba(255, 255, 255, 0.02); }
+.boutique-cmp thead th { font-size: 1.02rem; color: #fff; }
+.boutique-cmp-nom { display: block; }
+.boutique-cmp thead .boutique-badge { position: static; display: inline-block; margin-top: 6px; }
+.boutique-cmp-prix { font-size: 1.25rem; color: var(--or, #f1c40f); }
+.boutique-cmp-points { margin: 0; padding-left: 18px; }
+.boutique-cmp-points li { margin: 0 0 4px; }
+.boutique-cmp tfoot td { border-bottom: 0; }
+
+.boutique-calcul-inner { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 22px; align-items: start; }
+.boutique-calcul-form { display: grid; gap: 16px; }
+.boutique-calcul-resultat { border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px;
+  padding: 22px; background: rgba(88, 101, 242, 0.08); }
+.boutique-calcul-resultat h3 { margin: 4px 0 2px; }
+.boutique-calcul-etiquette { margin: 0; font-size: 0.78rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text-dim, #8a93a6); }
+.boutique-calcul-montant { margin: 6px 0 2px; font-size: 2rem; font-weight: 800;
+  color: var(--or, #f1c40f); }
+.boutique-calcul-detail { margin: 0 0 10px; color: var(--text-dim, #aab2c5); font-size: 0.88rem; }
+.boutique-calcul-resume { margin: 0 0 16px; }
+.boutique-calcul-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+
+@media (max-width: 900px) {
+  .boutique-calcul-inner { grid-template-columns: minmax(0, 1fr); }
+}

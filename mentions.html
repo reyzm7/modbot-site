@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mentions légales — ModBot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta name="description" content="Éditeur, hébergement, paiements, propriété intellectuelle et formulaire type de rétractation.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/mentions.html">
+  <meta property="og:site_name" content="ModBot">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:url" content="https://modbot-website.vercel.app/mentions.html">
+  <meta property="og:title" content="Mentions légales de ModBot">
+  <meta property="og:description" content="Éditeur, hébergement, paiements, propriété intellectuelle et formulaire type de rétractation.">
+  <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ModBot — modération Discord">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mentions légales de ModBot">
+  <meta name="twitter:description" content="Éditeur, hébergement, paiements, propriété intellectuelle et formulaire type de rétractation.">
+  <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.png">
+  <link rel="stylesheet" href="style.css">
+  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
+       la connexion au dashboard est automatique, rien a saisir.
+       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
+  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
+  <meta name="modbot-discord-client-id" content="1510405235544424620">
+  <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
+  <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
+  <meta name="modbot-bot-permissions" content="3124257994829047">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="assets/modbot-mark.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+</head>
+<body class="wiki-page">
+  <script src="icons.js"></script>
+  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
+  <div class="page-glow" aria-hidden="true"></div>
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navigation ModBot" data-i18n-aria="cgu.navigation">
+      <a class="brand" href="index.html" aria-label="Accueil ModBot" data-i18n-aria="cgu.accueilModbot">
+        <span class="brand-mark">
+          <img src="assets/modbot-mark.png" alt="" width="128" height="128" decoding="async" fetchpriority="high">
+        </span>
+        <span>ModBot</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="cgu.ouvrirLeMenu">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#features" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg><span data-i18n="cgu.fonctionnalites">Fonctionnalités</span></a>
+        <a href="index.html#pricing"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="cgu.tarifs">Tarifs</span></a>
+
+
+<a class="nav-boutique" href="boutique.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
+<a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n="cgu.supportDiscord">Support Discord</span></a>
+
+        <div class="nav-menu" data-nav-menu>
+          <button class="nav-menu-trigger" type="button" data-nav-menu-trigger
+                  aria-expanded="false" aria-haspopup="true">
+            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-menu"/></svg></span>
+            <span data-i18n="nav.menu">Accès</span>
+            <svg class="nav-menu-chevron" viewBox="0 0 12 8" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav-menu-panel" data-nav-menu-panel hidden>
+            <a href="index.html" class="nav-menu-home" data-teinte="acier"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-home"/></svg><span data-i18n="nav.retourSite">Revenir au site</span></a>
+            <a href="dashboard.html" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
+            <a href="dashboard.html?flow=invite" data-discord-bot-invite data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg><span data-i18n="nav.ajouter">Ajouter ModBot</span></a>
+            <a href="premium.html" data-teinte="or"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="nav.premium">Premium</span></a><a href="boutique.html" data-teinte="cyan"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
+            <a href="admin.html" data-teinte="rouge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg><span data-i18n="nav.admin">Admin</span></a>
+            <label class="nav-menu-lang">
+              <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="nav.langue">Langue</span></span>
+              <select data-nav-language>
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+                <option value="es">Español</option>
+                <option value="de">Deutsch</option>
+              </select>
+            </label>
+          </div>
+        </div>
+</div>
+    </nav>
+  </header>
+
+
+  <main class="wiki-shell section-shell">
+    <section class="wiki-hero">
+      <p class="eyebrow" data-i18n="ml.eyebrow">Mentions légales</p>
+      <h1 data-i18n="ml.titre">Mentions légales</h1>
+      <p data-i18n="ml.chapo">Qui édite ce site, qui l'héberge, et comment nous joindre. Tout est ici, sans détour.</p>
+      <p class="field-help" data-i18n="ml.maj">Dernière mise à jour : 12 septembre 2026.</p>
+    </section>
+
+    <div class="wiki-layout">
+      <aside class="wiki-toc" aria-label="Sommaire" data-i18n-aria="ml.sommaire">
+        <a href="#editeur" data-i18n="ml.tocEditeur">Éditeur</a>
+        <a href="#contact" data-i18n="ml.tocContact">Nous joindre</a>
+        <a href="#hebergement" data-i18n="ml.tocHebergement">Hébergement</a>
+        <a href="#paiement" data-i18n="ml.tocPaiement">Paiements</a>
+        <a href="#propriete" data-i18n="ml.tocPropriete">Propriété intellectuelle</a>
+        <a href="#donnees" data-i18n="ml.tocDonnees">Données personnelles</a>
+        <a href="#retractation" data-i18n="ml.tocRetractation">Rétractation</a>
+        <a href="#formulaire" data-i18n="ml.tocFormulaire">Formulaire type</a>
+      </aside>
+
+      <div class="wiki-content">
+        <section id="editeur" class="wiki-section">
+          <h2 data-i18n="ml.editeurTitre">Éditeur du site</h2>
+          <p data-i18n="ml.editeurTexte">Le site modbot-website.vercel.app, le bot Discord ModBot et la boutique qui s'y rattache sont édités par une personne physique exerçant en micro-entreprise.</p>
+          <ul class="wiki-check-list">
+            <li data-i18n="ml.editeurNom">Éditeur et directeur de la publication : GimsKh (Buffle).</li>
+            <li data-i18n="ml.editeurStatut">Statut : micro-entreprise, sans TVA — TVA non applicable, article 293 B du Code général des impôts.</li>
+            <li data-i18n="ml.editeurContact">Contact : le serveur Discord de support, indiqué ci-dessous.</li>
+          </ul>
+        </section>
+
+        <section id="contact" class="wiki-section">
+          <h2 data-i18n="ml.contactTitre">Nous joindre</h2>
+          <p data-i18n-html="ml.contactTexte">Le canal officiel est le <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer">serveur Discord de support</a>. On y répond aux questions sur le bot, aux commandes de la boutique, aux demandes de devis et aux réclamations. Une demande écrite y reçoit une réponse sous quelques jours ouvrés.</p>
+          <p data-i18n="ml.contactCommande">Pour une commande, rappelle toujours ton numéro de commande : c'est lui qui permet de la retrouver immédiatement.</p>
+        </section>
+
+        <section id="hebergement" class="wiki-section">
+          <h2 data-i18n="ml.hebTitre">Hébergement</h2>
+          <p data-i18n-html="ml.hebSite">Le site est hébergé par <strong>Vercel Inc.</strong> (États-Unis) — <a href="https://vercel.com" target="_blank" rel="noreferrer">vercel.com</a>.</p>
+          <p data-i18n-html="ml.hebBot">Le bot et son interface d'administration sont hébergés par <strong>Railway Corporation</strong> (États-Unis) — <a href="https://railway.app" target="_blank" rel="noreferrer">railway.app</a>.</p>
+          <p data-i18n="ml.hebPrecision">Ces prestataires n'éditent aucun contenu : ils fournissent la machine. Toute réclamation portant sur le contenu du site s'adresse à l'éditeur.</p>
+        </section>
+
+        <section id="paiement" class="wiki-section">
+          <h2 data-i18n="ml.paiementTitre">Paiements</h2>
+          <p data-i18n-html="ml.paiementTexte">Les paiements sont traités par <strong>Stripe Payments Europe, Ltd.</strong> Aucune donnée bancaire ne transite par ModBot et aucune n'y est conservée : le formulaire de paiement appartient à Stripe, qui en est seul responsable. Les moyens acceptés sont la carte bancaire et PayPal.</p>
+          <p data-i18n="ml.paiementFacture">Chaque commande payée donne lieu à une facture numérotée, envoyée en message privé sur Discord et disponible à tout moment sur simple demande.</p>
+        </section>
+
+        <section id="propriete" class="wiki-section">
+          <h2 data-i18n="ml.propTitre">Propriété intellectuelle</h2>
+          <p data-i18n="ml.propTexte">Le nom ModBot, son logo, les textes et la mise en page de ce site appartiennent à leur éditeur. Les reproduire sans autorisation n'est pas permis, à l'exception des courtes citations avec lien vers la source.</p>
+          <p data-i18n="ml.propCreations">Les créations vendues par la boutique — code, fichiers, contenus — sont remises au client à la livraison : il est libre de les utiliser, de les modifier et de les héberger où il veut. Les briques réutilisables de ModBot restent la propriété de leur auteur.</p>
+          <p data-i18n="ml.propMarques">Discord, Stripe, PayPal, Vercel et Railway sont des marques de leurs titulaires respectifs. ModBot n'est affilié à aucune d'elles.</p>
+        </section>
+
+        <section id="donnees" class="wiki-section">
+          <h2 data-i18n="ml.donneesTitre">Données personnelles</h2>
+          <p data-i18n-html="ml.donneesTexte">Ce qui est collecté, pourquoi, combien de temps, et comment le faire effacer est détaillé dans la <a href="confidentialite.html">politique de confidentialité</a>. Pour la boutique : le pseudo ou l'identifiant Discord, le contenu de la demande, et l'adresse e-mail transmise par Stripe au moment du paiement.</p>
+        </section>
+
+        <section id="retractation" class="wiki-section">
+          <h2 data-i18n="ml.retTitre">Droit de rétractation</h2>
+          <p data-i18n="ml.retTexte">Pour un achat de la boutique, tu disposes de quatorze jours à compter de la commande pour te rétracter, sans avoir à te justifier et sans pénalité.</p>
+          <p data-i18n="ml.retDemarrage">Si tu as demandé que le travail commence immédiatement — c'est la case cochée avant le paiement — et que tu te rétractes ensuite, tu règles ce qui a déjà été réalisé, au prorata, et le reste t'est remboursé (article L221-25 du code de la consommation).</p>
+          <p data-i18n="ml.retFin">Une fois la création entièrement livrée avec ton accord exprès, le droit de rétractation ne s'applique plus (article L221-28 du code de la consommation).</p>
+          <p data-i18n="ml.retComment">Pour l'exercer : écris-le sur le serveur Discord de support, avec ton numéro de commande. Le formulaire ci-dessous peut être recopié, mais toute déclaration claire suffit. Le remboursement est effectué sous quatorze jours par le même moyen de paiement.</p>
+        </section>
+
+        <section id="formulaire" class="wiki-section">
+          <h2 data-i18n="ml.formTitre">Formulaire type de rétractation</h2>
+          <p data-i18n="ml.formIntro">À recopier et à renvoyer uniquement si tu souhaites te rétracter. Il reprend le modèle de l'annexe à l'article R221-1 du code de la consommation.</p>
+          <pre class="wiki-code" data-i18n="ml.formTexte">À l'attention de GimsKh (ModBot) — serveur Discord de support :
+
+Je vous notifie par la présente ma rétractation du contrat portant sur la
+prestation de services ci-dessous :
+
+  — Commandée le : ................................................
+  — Numéro de commande : ..........................................
+  — Prestation : ..................................................
+  — Nom du consommateur : .........................................
+  — Pseudo ou identifiant Discord : ...............................
+  — Adresse du consommateur : .....................................
+
+Signature (uniquement en cas de notification sur papier) : .........
+
+Date : .............................................................</pre>
+        </section>
+
+        <section class="wiki-section">
+          <h2 data-i18n="ml.litigeTitre">Réclamations et litiges</h2>
+          <p data-i18n="ml.litigeTexte">Toute réclamation se règle d'abord directement : écris sur le serveur de support, avec ton numéro de commande. La très grande majorité des différends se résout en quelques messages.</p>
+          <p data-i18n="ml.litigeDroit">Le présent site et les ventes qui s'y rattachent sont soumis au droit français. À défaut d'accord amiable, les tribunaux français sont compétents.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p data-i18n-html="ml.pied">© 2026 ModBot — <a href="index.html">Accueil</a> · <a href="conditions.html">Conditions</a> · <a href="confidentialite.html">Confidentialité</a></p>
+  </footer>
+
+  <script src="translations.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

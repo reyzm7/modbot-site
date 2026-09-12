@@ -7,6 +7,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta name="description" content="Un bot Discord ou un site web fait pour toi, à partir de 19 €. Prix affichés, délais annoncés, devis gratuit pour les projets sur mesure.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/boutique.html">
+  <meta property="og:site_name" content="ModBot">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:url" content="https://modbot-website.vercel.app/boutique.html">
+  <meta property="og:title" content="Boutique ModBot — bots Discord et sites web sur mesure">
+  <meta property="og:description" content="Un bot Discord ou un site web fait pour toi, à partir de 19 €. Prix affichés, délais annoncés, devis gratuit pour les projets sur mesure.">
+  <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ModBot — modération Discord">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Boutique ModBot — bots Discord et sites web sur mesure">
+  <meta name="twitter:description" content="Un bot Discord ou un site web fait pour toi, à partir de 19 €. Prix affichés, délais annoncés, devis gratuit pour les projets sur mesure.">
+  <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.png">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
        la connexion au dashboard est automatique, rien a saisir.
@@ -19,6 +35,16 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="assets/modbot-mark.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://modbot-website.vercel.app/" },
+      { "@type": "ListItem", "position": 2, "name": "Boutique", "item": "https://modbot-website.vercel.app/boutique.html" }
+    ]
+  }
+  </script>
 </head>
 <body class="premium-page boutique-page">
   <script src="icons.js"></script>
@@ -140,6 +166,23 @@
     </section>
 
     <p class="field-help premium-note" data-i18n-html="bq.note">Paiement sécurisé par <strong>Stripe</strong>, par carte bancaire ou PayPal. ModBot ne voit jamais tes données bancaires.</p>
+
+    <!-- ── Les formules cote a cote ─────────────────────────────────── -->
+    <section class="boutique-comparer section-shell" id="comparer">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="bq.cmpEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-scales"/></svg> Comparer</p>
+        <h2 data-i18n="bq.cmpTitre">Les formules côte à côte</h2>
+        <p data-i18n="bq.cmpChapo">Le même tableau pour toutes : le prix, le délai, les révisions, et ce que chacune contient vraiment.</p>
+      </div>
+      <div class="boutique-cmp-onglets" role="tablist" aria-label="Familles de formules" data-i18n-aria="bq.cmpOnglets">
+        <button class="boutique-cmp-onglet is-active" type="button" role="tab" aria-selected="true" data-cmp-onglet="bot" data-i18n="bq.cmpBots">Les bots</button>
+        <button class="boutique-cmp-onglet" type="button" role="tab" aria-selected="false" data-cmp-onglet="site" data-i18n="bq.cmpSites">Les sites</button>
+        <button class="boutique-cmp-onglet" type="button" role="tab" aria-selected="false" data-cmp-onglet="pack" data-i18n="bq.cmpPacks">Les packs</button>
+      </div>
+      <div class="boutique-cmp-cadre" tabindex="0" role="group" aria-label="Tableau comparatif" data-i18n-aria="bq.cmpTableau">
+        <table class="boutique-cmp" data-cmp-table></table>
+      </div>
+    </section>
 
     <!-- ── Des exemples concrets ───────────────────────────────────── -->
     <section class="boutique-exemples section-shell" id="exemples">
@@ -330,6 +373,36 @@
     </section>
 
     <!-- ── Le sur-mesure : tu decris, on chiffre, tu paies ─────────── -->
+    <!-- ── Trouver sa formule en trois clics ────────────────────────── -->
+    <section class="boutique-calcul section-shell" id="estimer">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="bq.calcEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-trend"/></svg> Estimer</p>
+        <h2 data-i18n="bq.calcTitre">Combien ça coûte, pour toi ?</h2>
+        <p data-i18n="bq.calcChapo">Deux questions, et tu as le prix exact. Aucune surprise à la fin : c'est le prix affiché qui est débité.</p>
+      </div>
+      <div class="boutique-calcul-inner">
+        <form class="boutique-calcul-form" data-calcul novalidate>
+          <fieldset class="boutique-choix">
+            <legend data-i18n="bq.calcType">Ce que tu veux</legend>
+            <div class="boutique-choix-grille">
+              <label class="boutique-choix-option"><input type="radio" name="calcType" value="bot" checked><span class="boutique-choix-numero">1</span><span data-i18n="bq.calcTypeBot">Un bot Discord</span></label>
+              <label class="boutique-choix-option"><input type="radio" name="calcType" value="site"><span class="boutique-choix-numero">2</span><span data-i18n="bq.calcTypeSite">Un site web</span></label>
+              <label class="boutique-choix-option"><input type="radio" name="calcType" value="pack"><span class="boutique-choix-numero">3</span><span data-i18n="bq.calcTypeDeux">Les deux</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="boutique-choix">
+            <legend data-i18n="bq.calcTaille">Jusqu'où tu vas</legend>
+            <div class="boutique-choix-grille">
+              <label class="boutique-choix-option"><input type="radio" name="calcTaille" value="0" checked><span class="boutique-choix-numero">1</span><span data-i18n="bq.calcTailleSimple">L'essentiel</span></label>
+              <label class="boutique-choix-option"><input type="radio" name="calcTaille" value="1"><span class="boutique-choix-numero">2</span><span data-i18n="bq.calcTailleComplet">Complet</span></label>
+              <label class="boutique-choix-option"><input type="radio" name="calcTaille" value="2"><span class="boutique-choix-numero">3</span><span data-i18n="bq.calcTaillePro">Tout, sans limite</span></label>
+            </div>
+          </fieldset>
+        </form>
+        <aside class="boutique-calcul-resultat" data-calcul-resultat aria-live="polite"></aside>
+      </div>
+    </section>
+
     <section class="boutique-devis section-shell" id="devis">
       <div class="boutique-devis-inner boutique-demande">
         <div>
@@ -437,7 +510,7 @@
   </main>
 
   <footer class="footer">
-    <p data-i18n-html="bq.pied">© 2026 ModBot — <a href="conditions.html#boutique">Conditions de la boutique</a> · <a href="confidentialite.html#boutique">Confidentialité</a></p>
+    <p data-i18n-html="bq.pied">© 2026 ModBot — <a href="conditions.html#boutique">Conditions de la boutique</a> · <a href="confidentialite.html#boutique">Confidentialité</a> · <a href="mentions.html">Mentions légales</a></p>
   </footer>
 
   <!-- ── La fenetre de commande ─────────────────────────────────────── -->

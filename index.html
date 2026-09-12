@@ -7,6 +7,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta name="description" content="Modération automatique, anti-raid, tickets, captcha et tableau de bord : ModBot protège ton serveur Discord 24 h sur 24. Gratuit sur l'essentiel.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/">
+  <meta property="og:site_name" content="ModBot">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:url" content="https://modbot-website.vercel.app/">
+  <meta property="og:title" content="ModBot — la modération Discord qui tient toute seule">
+  <meta property="og:description" content="Modération automatique, anti-raid, tickets, captcha et tableau de bord : ModBot protège ton serveur Discord 24 h sur 24. Gratuit sur l'essentiel.">
+  <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ModBot — modération Discord">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ModBot — la modération Discord qui tient toute seule">
+  <meta name="twitter:description" content="Modération automatique, anti-raid, tickets, captcha et tableau de bord : ModBot protège ton serveur Discord 24 h sur 24. Gratuit sur l'essentiel.">
+  <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.png">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
        la connexion au dashboard est automatique, rien a saisir.
@@ -18,18 +34,6 @@
   <meta name="modbot-bot-permissions" content="3124257994829047">
 
   <!-- Aperçu du site quand le lien est partagé sur Discord / réseaux -->
-  <meta name="description" content="ModBot protège votre communauté Discord avec une modération intelligente, des tickets, des sanctions et une configuration personnalisée.">
-  <meta property="og:title" content="ModBot - Protection Discord intelligente">
-  <meta property="og:description" content="Automatisez la modération, gérez les tickets et protégez votre communauté Discord 24/7.">
-  <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://modbot-website.vercel.app/">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ModBot - Protection Discord intelligente">
-  <meta name="twitter:description" content="La modération intelligente qui protège votre communauté Discord.">
-  <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.png">
 
   <script>
     document.documentElement.classList.add("site-is-loading");
@@ -43,6 +47,47 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="assets/modbot-mark.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <!-- Donnees structurees : ce que les moteurs affichent sous le lien.
+       Aucune note, aucun avis, aucun chiffre inventes — seulement ce qui
+       est vrai et verifiable sur le site. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://modbot-website.vercel.app/#organisation",
+        "name": "ModBot",
+        "url": "https://modbot-website.vercel.app/",
+        "logo": "https://modbot-website.vercel.app/logo.png",
+        "sameAs": ["https://discord.gg/CK8CbFtYuv"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://modbot-website.vercel.app/#site",
+        "url": "https://modbot-website.vercel.app/",
+        "name": "ModBot",
+        "inLanguage": "fr-FR",
+        "publisher": { "@id": "https://modbot-website.vercel.app/#organisation" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "ModBot",
+        "applicationCategory": "Bot de moderation Discord",
+        "operatingSystem": "Discord",
+        "url": "https://modbot-website.vercel.app/",
+        "description": "Moderation automatique, anti-raid, anti-spam, captcha, tickets, sauvegardes et tableau de bord pour serveurs Discord.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "EUR",
+          "description": "L'essentiel est gratuit, sans limite de duree. Un abonnement facultatif ouvre douze modules de plus."
+        },
+        "publisher": { "@id": "https://modbot-website.vercel.app/#organisation" }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <!-- Le jeu d'icônes, écrit une seule fois dans icons.js et posé ici
@@ -407,7 +452,7 @@
 
   <footer class="footer">
     <p data-i18n="home.modbotRespectNonToxicite">© 2026 ModBot - Respect - Non-toxicité - Bienveillance</p>
-    <p class="footer-links" data-i18n-html="home.piedLiens"><a href="confidentialite.html">Politique de confidentialité</a> · <a href="conditions.html">Conditions d'utilisation</a> · <a href="wiki.html">Wiki</a></p>
+    <p class="footer-links" data-i18n-html="home.piedLiens"><a href="confidentialite.html">Politique de confidentialité</a> · <a href="conditions.html">Conditions d'utilisation</a> · <a href="wiki.html">Wiki</a> · <a href="mentions.html">Mentions légales</a></p>
   </footer>
 
   <script src="translations.js"></script>

@@ -10006,6 +10006,146 @@ function lireContactBoutique(champ) {
   return { ok: BOUTIQUE_ID_DISCORD.test(valeur) || BOUTIQUE_PSEUDO.test(valeur), valeur };
 }
 
+// ── Les formules cote a cote ─────────────────────────────────────────
+//
+// Les cartes montrent une formule a la fois ; ce tableau les met en
+// regard. Il se fabrique a partir de BOUTIQUE_ARTICLES : rien a tenir a
+// jour deux fois, et aucun prix qui puisse mentir.
+function initComparatif() {
+  const table = document.querySelector("[data-cmp-table]");
+  if (!table) return;
+  const onglets = document.querySelectorAll("[data-cmp-onglet]");
+  let famille = "bot";
+
+  function dessinerComparatif() {
+    const articles = BOUTIQUE_ARTICLES.filter((article) => article.categorie === famille);
+    if (!articles.length) {
+      table.innerHTML = "";
+      return;
+    }
+    const colonnes = articles.map((article) =>
+      `<th scope="col"><span class="boutique-cmp-nom">${escapeHtmlValue(t(article.titreClef))}</span>`
+      + (article.recommande
+        ? `<span class="boutique-badge">${escapeHtmlValue(t("bq.recommande"))}</span>` : "")
+      + "</th>").join("");
+    const ligne = (libelle, cellules) =>
+      `<tr><th scope="row">${escapeHtmlValue(libelle)}</th>`
+      + cellules.map((cellule) => `<td>${cellule}</td>`).join("") + "</tr>";
+    table.innerHTML = `<thead><tr><td></td>${colonnes}</tr></thead><tbody>`
+      + ligne(t("bq.cmpPrix"), articles.map((article) =>
+        `<strong class="boutique-cmp-prix">${escapeHtmlValue(boutiquePrix(article.prix))}</strong>`))
+      + ligne(t("bq.cmpDelai"), articles.map((article) =>
+        escapeHtmlValue(tp("bq.delai", { jours: article.delai }))))
+      + ligne(t("bq.cmpRevisions"), articles.map((article) =>
+        escapeHtmlValue(tn("bq.revisionUne", "bq.revisionsPlusieurs", article.revisions,
+                           { n: article.revisions }))))
+      + ligne(t("bq.cmpIdeal"), articles.map((article) => escapeHtmlValue(t(article.idealClef))))
+      + ligne(t("bq.cmpInclus"), articles.map((article) =>
+        `<ul class="boutique-cmp-points">${article.points
+          .map((point) => `<li>${escapeHtmlValue(t(point.texteClef))}</li>`).join("")}</ul>`))
+      + `</tbody><tfoot><tr><td></td>${articles.map((article) =>
+        `<td><button class="primary-btn compact" type="button" data-cmp-choisir="${escapeHtmlValue(article.key)}">${escapeHtmlValue(t("bq.cmpCommander"))}</button></td>`)
+        .join("")}</tr></tfoot>`;
+  }
+
+  onglets.forEach((onglet) => {
+    onglet.addEventListener("click", () => {
+      famille = onglet.dataset.cmpOnglet;
+      onglets.forEach((autre) => {
+        const actif = autre === onglet;
+        autre.classList.toggle("is-active", actif);
+        autre.setAttribute("aria-selected", String(actif));
+      });
+      dessinerComparatif();
+    });
+  });
+
+  // Commander depuis le tableau, c'est commander depuis la carte : un
+  // seul chemin de paiement, donc un seul endroit ou il peut casser.
+  table.addEventListener("click", (evenement) => {
+    const bouton = evenement.target.closest("[data-cmp-choisir]");
+    if (!bouton) return;
+    document.querySelector(
+      `[data-boutique-payer="carte"][data-article="${bouton.dataset.cmpChoisir}"]`)?.click();
+  });
+
+  document.addEventListener("modbot:language", dessinerComparatif);
+  dessinerComparatif();
+}
+
+
+// ── Le calculateur : deux questions, un prix exact ───────────────────
+//
+// Il ne devine rien et n'estime rien : il choisit dans le catalogue la
+// formule qui correspond, et affiche SON prix — celui qui sera debite.
+// Ce qui sort du catalogue part en devis, la description deja ecrite.
+const CALCUL_FORMULES = {
+  bot: ["bot_essentiel", "bot_avance", "bot_pro"],
+  site: ["site_vitrine", "site_complet", "site_dashboard"],
+  pack: ["pack_starter", "pack_serveur", "pack_pro"],
+};
+
+function initCalculateur() {
+  const formulaire = document.querySelector("[data-calcul]");
+  const sortie = document.querySelector("[data-calcul-resultat]");
+  if (!formulaire || !sortie) return;
+
+  const choix = (nom, defaut) =>
+    formulaire.querySelector(`[name="${nom}"]:checked`)?.value ?? defaut;
+
+  function formuleChoisie() {
+    const clef = (CALCUL_FORMULES[choix("calcType", "bot")] || [])[Number(choix("calcTaille", "0"))];
+    return BOUTIQUE_ARTICLES.find((article) => article.key === clef) || null;
+  }
+
+  function dessinerCalcul() {
+    const article = formuleChoisie();
+    if (!article) {
+      sortie.innerHTML = "";
+      return;
+    }
+    sortie.innerHTML = `
+      <p class="boutique-calcul-etiquette">${escapeHtmlValue(t("bq.calcResultat"))}</p>
+      <h3>${escapeHtmlValue(t(article.titreClef))}</h3>
+      <p class="boutique-calcul-montant">${escapeHtmlValue(boutiquePrix(article.prix))}</p>
+      <p class="boutique-calcul-detail">${escapeHtmlValue(tp("bq.delai", { jours: article.delai }))} · ${escapeHtmlValue(tn("bq.revisionUne", "bq.revisionsPlusieurs", article.revisions, { n: article.revisions }))}</p>
+      <p class="boutique-calcul-resume">${escapeHtmlValue(t(article.resumeClef))}</p>
+      <div class="boutique-calcul-actions">
+        <button class="primary-btn" type="button" data-calcul-commander>${escapeHtmlValue(t("bq.calcCommander"))}</button>
+        <button class="secondary-btn" type="button" data-calcul-devis>${escapeHtmlValue(t("bq.calcDevis"))}</button>
+      </div>
+      <p class="field-help">${escapeHtmlValue(t("bq.calcHorsFormule"))}</p>`;
+  }
+
+  sortie.addEventListener("click", (evenement) => {
+    const article = formuleChoisie();
+    if (!article) return;
+    if (evenement.target.closest("[data-calcul-commander]")) {
+      document.querySelector(
+        `[data-boutique-payer="carte"][data-article="${article.key}"]`)?.click();
+      return;
+    }
+    if (!evenement.target.closest("[data-calcul-devis]")) return;
+    // La demande part deja remplie : la categorie cochee, et une premiere
+    // phrase que le client n'a plus qu'a completer. On n'ecrase jamais ce
+    // qu'il a deja ecrit.
+    const categorie = { bot: "bot", site: "site", pack: "les_deux" }[choix("calcType", "bot")];
+    const radio = document.querySelector(`[data-devis-categorie] input[value="${categorie}"]`);
+    if (radio) radio.checked = true;
+    const description = document.querySelector("[data-devis-description]");
+    if (description && !description.value.trim()) {
+      description.value = tp("bq.calcDescription", { formule: t(article.titreClef) });
+    }
+    document.querySelector("#devis")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (description) description.focus();
+  });
+
+  formulaire.addEventListener("change", dessinerCalcul);
+  document.addEventListener("modbot:language", dessinerCalcul);
+  dessinerCalcul();
+}
+
+
 function initPageBoutique() {
   const grilles = document.querySelectorAll("[data-boutique-grille]");
   if (!grilles.length) return;
@@ -10081,6 +10221,47 @@ function initPageBoutique() {
       </article>`;
   }
 
+  // Le catalogue, dit aux moteurs de recherche.
+  //
+  // Il se fabrique a partir de BOUTIQUE_ARTICLES, jamais a la main : un
+  // prix change a un seul endroit et la balise suit. Une fiche qui
+  // annoncerait 39 € quand la page en demande 42 serait pire qu'une
+  // absence de fiche.
+  let catalogueDit = false;
+
+  function donneesStructureesBoutique() {
+    if (catalogueDit) return;
+    catalogueDit = true;
+    const balise = document.createElement("script");
+    balise.type = "application/ld+json";
+    balise.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: "Créations sur mesure ModBot",
+      itemListElement: BOUTIQUE_ARTICLES.map((article, rang) => ({
+        "@type": "ListItem",
+        position: rang + 1,
+        item: {
+          "@type": "Service",
+          name: t(article.titreClef),
+          description: t(article.resumeClef),
+          serviceType: article.categorie === "pack"
+            ? "Bot Discord et site web"
+            : article.categorie === "bot" ? "Bot Discord" : "Site web",
+          provider: { "@type": "Organization", name: "ModBot" },
+          offers: {
+            "@type": "Offer",
+            price: (article.prix / 100).toFixed(2),
+            priceCurrency: "EUR",
+            availability: "https://schema.org/InStock",
+            url: "https://modbot-website.vercel.app/boutique.html",
+          },
+        },
+      })),
+    });
+    document.head.appendChild(balise);
+  }
+
   function dessiner() {
     grilles.forEach((grille) => {
       grille.innerHTML = BOUTIQUE_ARTICLES
@@ -10093,6 +10274,7 @@ function initPageBoutique() {
         if (article) ouvrir(article, bouton.dataset.boutiquePayer, bouton);
       });
     });
+    donneesStructureesBoutique();
   }
 
   function montrerErreur(message, champ) {
@@ -10447,6 +10629,8 @@ function initTonDevis() {
 }
 
 initPageBoutique();
+initComparatif();
+initCalculateur();
 initDemandeDevis();
 initDemandeAide();
 initTonDevis();

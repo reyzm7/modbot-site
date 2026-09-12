@@ -1,0 +1,8 @@
+# Les pages publiques sont ouvertes ; l'administration et le tableau de
+# bord ne regardent personne d'autre que leur proprietaire.
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /dashboard.html
+
+Sitemap: https://modbot-website.vercel.app/sitemap.xml
