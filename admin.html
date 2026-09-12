@@ -209,7 +209,10 @@
           <article class="admin-panel">
             <div class="admin-panel-head">
               <h3 data-i18n="adm.btqTitre"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg> Achats et paiements</h3>
-              <button class="secondary-btn compact" type="button" data-btq-rafraichir data-i18n="adm.btqRafraichir">Rafraîchir</button>
+              <div class="admin-panel-outils">
+                <span class="btq-direct" data-btq-direct hidden><span class="btq-pastille" aria-hidden="true"></span><span data-i18n="adm.btqDirect">En direct</span></span>
+                <button class="secondary-btn compact" type="button" data-btq-rafraichir data-i18n="adm.btqRafraichir">Rafraîchir</button>
+              </div>
             </div>
             <p class="admin-hint" data-i18n="adm.btqChapo">Chaque bouton prévient le client en message privé, avec son numéro de commande. Les mêmes boutons se trouvent sous les annonces du salon des paiements, sur Discord.</p>
             <div class="btq-compteurs" data-btq-compteurs data-admin-sensitive></div>

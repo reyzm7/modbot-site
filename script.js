@@ -1628,7 +1628,7 @@ function initAdminZone() {
     if (commande.email) meta.push(escapeHtmlValue(commande.email));
     if (commande.devis) meta.push(escapeHtmlValue(tp("js.adm.btqDevisLie", { id: commande.devis })));
     return `
-      <article class="btq-fiche">
+      <article class="btq-fiche" data-btq-fiche="${id}">
         <div class="btq-fiche-tete">
           <span class="btq-ident"><code>${id}</code><strong>${escapeHtmlValue(commande.libelle || commande.article || "")}</strong></span>
           <span class="btq-montant">${escapeHtmlValue(boutiquePrix(Number(commande.montant) || 0))}</span>
@@ -1677,7 +1677,7 @@ function initAdminZone() {
       return base;
     };
     return `
-      <article class="btq-fiche">
+      <article class="btq-fiche" data-btq-fiche="${id}">
         <div class="btq-fiche-tete">
           <span class="btq-ident"><code>${id}</code><strong>${escapeHtmlValue(`${categorie.numero} · ${t(categorie.libelleClef)}`)}</strong></span>
           ${prixActuel ? `<span class="btq-montant">${escapeHtmlValue(boutiquePrix(prixActuel))}</span>` : ""}
@@ -1709,7 +1709,7 @@ function initAdminZone() {
         </div>
       </div>` : "";
     return `
-      <article class="btq-fiche">
+      <article class="btq-fiche" data-btq-fiche="${id}">
         <div class="btq-fiche-tete">
           <span class="btq-ident"><code>${id}</code><strong>${escapeHtmlValue(t(BTQ_SUJETS[demande.sujet]?.libelleClef || "bq.aideSujetAutre"))}</strong></span>
           <span class="btq-tag" data-statut="s-${escapeHtmlValue(demande.statut)}">${escapeHtmlValue(t(BTQ_SAV[demande.statut]?.libelleClef || "js.adm.btqSavOuvert"))}</span>
@@ -1765,9 +1765,85 @@ function initAdminZone() {
     const vides = { en_cours: "js.adm.btqAucuneEnCours", historique: "js.adm.btqAucunHistorique",
                     devis: "js.adm.btqAucunDevis", sav: "js.adm.btqAucunSav" };
     const liste = listes[btqOnglet] || [];
+    // Le panneau se recharge tout seul des qu'un dossier bouge sur
+    // Discord. Une reponse a moitie ecrite ne doit pas disparaitre pour
+    // autant : on garde les champs, et le curseur avec.
+    const saisies = new Map();
+    btqListe.querySelectorAll("[data-btq-fiche] input, [data-btq-fiche] textarea")
+      .forEach((champ) => saisies.set(btqClefChamp(champ), champ.value));
+    const actif = document.activeElement;
+    const clefActive = actif && btqListe.contains(actif) ? btqClefChamp(actif) : "";
+    const debut = clefActive ? actif.selectionStart : 0;
+    const fin = clefActive ? actif.selectionEnd : 0;
+
     btqListe.innerHTML = liste.length
       ? liste.map(fabriques[btqOnglet]).join("")
       : `<p class="field-help">${escapeHtmlValue(t(vides[btqOnglet]))}</p>`;
+
+    btqListe.querySelectorAll("[data-btq-fiche] input, [data-btq-fiche] textarea")
+      .forEach((champ) => {
+        const clef = btqClefChamp(champ);
+        const garde = saisies.get(clef);
+        if (garde !== undefined && garde !== "" && garde !== champ.value) champ.value = garde;
+        if (clef && clef === clefActive) {
+          champ.focus();
+          try { champ.setSelectionRange(debut, fin); } catch (erreur) { /* champ sans selection */ }
+        }
+      });
+  }
+
+  // Un champ se retrouve par sa fiche et son role : « DV-7K2M|btqPrix ».
+  function btqClefChamp(champ) {
+    const fiche = champ.closest("[data-btq-fiche]");
+    if (!fiche) return "";
+    const role = Object.keys(champ.dataset).find((clef) => clef.startsWith("btq"));
+    return `${fiche.dataset.btqFiche}|${role || champ.type || "champ"}`;
+  }
+
+  // ── Le direct : le panneau suit Discord sans qu'on clique ───────────
+  //
+  // Le bot rend une empreinte de seize caracteres de l'etat de la
+  // boutique. Tant qu'elle ne bouge pas, il n'y a rien a recharger ;
+  // quand elle bouge, c'est qu'un dossier a ete traite — ici ou sur
+  // Discord — et le panneau se remet a jour tout seul.
+  const BTQ_DIRECT_MS = 3000;
+  let btqVersion = "";
+  let btqDirectTimer = null;
+  let btqEnVol = false;
+
+  function btqPanneauOuvert() {
+    if (!btqListe || document.visibilityState !== "visible") return false;
+    if (btqListe.closest("[data-admin-protected]")?.hidden) return false;
+    return Boolean(btqListe.closest("[data-admin-panel]")?.classList.contains("is-active"));
+  }
+
+  function btqTemoinDirect(actif) {
+    const temoin = document.querySelector("[data-btq-direct]");
+    if (temoin) temoin.hidden = !actif;
+  }
+
+  async function btqSurveiller() {
+    // Un seul appel a la fois : un reseau lent ne doit pas en empiler dix.
+    if (btqEnVol || !btqPanneauOuvert()) return;
+    btqEnVol = true;
+    try {
+      const data = await modbotApiFetch("/api/admin/boutique/version", { cache: "no-store" });
+      const version = String(data?.version || "");
+      btqTemoinDirect(true);
+      if (version && btqVersion && version !== btqVersion) await chargerBoutiqueAdmin();
+      btqVersion = version;
+    } catch (erreur) {
+      btqTemoinDirect(false);
+    } finally {
+      btqEnVol = false;
+    }
+  }
+
+  function btqDemarrerDirect() {
+    if (btqDirectTimer || !btqListe) return;
+    btqDirectTimer = window.setInterval(btqSurveiller, BTQ_DIRECT_MS);
+    // Revenir sur l'onglet ne doit pas attendre trois secondes de plus.
+    document.addEventListener("visibilitychange", btqSurveiller);
   }
 
   async function chargerBoutiqueAdmin() {
@@ -1776,6 +1852,7 @@ function initAdminZone() {
       const data = await modbotApiFetch("/api/admin/boutique", { cache: "no-store" });
       btqDonnees = { commandes: data.commandes || [], devis: data.devis || [], sav: data.sav || [] };
       peindreBoutiqueAdmin();
+      btqDemarrerDirect();
     } catch (erreur) {
       btqListe.innerHTML = `<p class="field-help">${escapeHtmlValue(etatAdminIndisponible(erreur))}</p>`;
     }

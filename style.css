@@ -11942,3 +11942,19 @@ body:not(.dashboard-page) .page-glow {
   height: 19px;
   border-radius: 3px;
 }
+
+/* Le temoin « en direct » du panneau des achats : discret quand tout va
+   bien, absent des que le bot ne repond plus — un mensonge vert serait
+   pire que rien. */
+.admin-panel-outils { display: flex; align-items: center; gap: 10px; }
+.btq-direct { display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.78rem; color: var(--text-dim, #8a93a6); white-space: nowrap; }
+.btq-pastille { width: 7px; height: 7px; border-radius: 50%;
+  background: #43b581; box-shadow: 0 0 0 0 rgba(67, 181, 129, 0.5);
+  animation: btq-pouls 2.4s ease-out infinite; }
+@keyframes btq-pouls {
+  0% { box-shadow: 0 0 0 0 rgba(67, 181, 129, 0.5); }
+  70% { box-shadow: 0 0 0 6px rgba(67, 181, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(67, 181, 129, 0); }
+}
+@media (prefers-reduced-motion: reduce) { .btq-pastille { animation: none; } }
