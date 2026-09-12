@@ -11042,6 +11042,7 @@ function initTonDevis() {
         ${devis.message ? `<div><span class="field-help">${escapeHtmlValue(t("bq.tonDevisMessage"))}</span>
           <blockquote>${escapeHtmlValue(devis.message)}</blockquote></div>` : ""}
         <label class="boutique-conditions"><input type="checkbox" data-devis-conditions><span>${t("bq.conditions")}</span></label>
+        <p class="field-help">${escapeHtmlValue(t("bq.pasRemboursable"))}</p>
         <p class="boutique-erreur" data-devis-paiement-erreur role="alert" hidden></p>
         <div class="boutique-payer">
           <button class="primary-btn" type="button" data-devis-payer="carte">
