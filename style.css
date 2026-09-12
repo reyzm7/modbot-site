@@ -12059,3 +12059,40 @@ body:not(.dashboard-page) .page-glow {
 @media (max-width: 900px) {
   .boutique-abo-inner { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ── Les chiffres, les etapes, la livraison, les avis ───────────────────
+   La courbe des douze mois est faite de barres : pas de bibliotheque, pas
+   de requete de plus, et elle reste lisible sur un telephone. */
+.btq-courbe { display: flex; align-items: flex-end; gap: 6px; height: 140px;
+  margin: 16px 0; padding: 10px 8px 0; border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03); }
+.btq-barre { flex: 1 1 0; display: flex; flex-direction: column; justify-content: flex-end;
+  align-items: center; height: 100%; gap: 6px; }
+.btq-barre span { display: block; width: 70%; min-height: 2px; border-radius: 5px 5px 0 0;
+  background: linear-gradient(180deg, rgba(88, 101, 242, 0.95), rgba(88, 101, 242, 0.45)); }
+.btq-barre small { font-size: 0.68rem; color: var(--text-dim, #8a93a6); }
+.btq-top { display: grid; gap: 6px; }
+.btq-top-ligne { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px;
+  margin: 0; padding: 8px 12px; border-radius: 10px; font-size: 0.88rem;
+  background: rgba(255, 255, 255, 0.03); }
+.btq-top-ligne span:nth-child(2) { color: var(--text-dim, #8a93a6); }
+
+.btq-etapes { margin: 10px 0 0; padding: 12px 14px; border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03); display: grid; gap: 6px; }
+.btq-etapes-tete { margin: 0 0 4px; font-size: 0.8rem; font-weight: 700;
+  color: var(--text-dim, #aab2c5); }
+.btq-etape { display: flex; gap: 9px; align-items: center; font-size: 0.9rem; cursor: pointer; }
+.btq-livrer { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-top: 10px; }
+.btq-livrer label { flex: 1 1 220px; font-size: 0.82rem; }
+.btq-livrer input[type="text"] { flex: 1 1 220px; }
+
+.boutique-avis-moyenne { margin: 10px 0 0; font-size: 1.05rem; font-weight: 700;
+  color: var(--or, #f1c40f); }
+.boutique-avis-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px; }
+.boutique-avis-carte { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px;
+  padding: 18px 20px; background: rgba(255, 255, 255, 0.03); }
+.boutique-avis-note { margin: 0 0 8px; color: var(--or, #f1c40f); letter-spacing: 2px; }
+.boutique-avis-texte { margin: 0 0 12px; }
+.boutique-avis-pied { margin: 0; display: flex; flex-wrap: wrap; gap: 8px;
+  font-size: 0.84rem; color: var(--text-dim, #8a93a6); }

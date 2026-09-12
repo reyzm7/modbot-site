@@ -230,6 +230,16 @@
 
           <article class="admin-panel">
             <div class="admin-panel-head">
+              <h3 data-i18n="adm.statsTitre"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-trend"/></svg> Les chiffres</h3>
+            </div>
+            <p class="admin-hint" data-i18n="adm.statsChapo">Tout se recalcule à la demande depuis les commandes réelles : aucun compteur n'est tenu à côté, donc aucun ne peut mentir.</p>
+            <div class="btq-compteurs" data-stats-cles data-admin-sensitive></div>
+            <div class="btq-courbe" data-stats-mois data-admin-sensitive></div>
+            <div class="btq-top" data-stats-articles data-admin-sensitive></div>
+          </article>
+
+          <article class="admin-panel">
+            <div class="admin-panel-head">
               <h3 data-i18n="adm.promoTitre"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg> Codes promo</h3>
             </div>
             <p class="admin-hint" data-i18n="adm.promoChapo">Une remise réelle, avec une limite d'utilisations et une date de fin. Le compteur monte au paiement, jamais au clic : un panier abandonné n'use pas un code.</p>

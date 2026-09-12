@@ -1620,6 +1620,22 @@ function initAdminZone() {
         <button type="button" class="secondary-btn compact" data-btq-action="statut" data-btq-statut="attente" data-btq-id="${id}">${escapeHtmlValue(t("js.adm.btqAttente"))}</button>
         <button type="button" class="primary-btn compact" data-btq-action="statut" data-btq-statut="livree" data-btq-id="${id}">${escapeHtmlValue(t("js.adm.btqLivree"))}</button>
       </div>` : "";
+    // Les etapes se cochent une par une. Le client les voit dans le fil
+    // de sa commande, et recoit un mot a chaque etape cochee.
+    const suivi = commande.statut === "en_attente" ? "" : `
+      <div class="btq-etapes">
+        <p class="btq-etapes-tete">${escapeHtmlValue(tp("js.adm.btqEtapes", {
+          faites: commande.faites || 0, total: commande.etapes_total || 0 }))}</p>
+        ${(commande.etapes || []).map((etape) => `<label class="btq-etape">
+          <input type="checkbox" ${etape.fait ? "checked" : ""} data-btq-etape="${escapeHtmlValue(etape.clef)}" data-btq-id="${id}">
+          <span>${escapeHtmlValue(etape.libelle)}</span></label>`).join("")}
+      </div>
+      <form class="btq-livrer" data-btq-livrer="${id}">
+        <label>${escapeHtmlValue(t("js.adm.btqFichier"))}
+          <input type="file" data-btq-fichier></label>
+        <input type="text" maxlength="1000" data-btq-mot placeholder="${escapeHtmlValue(t("js.adm.btqMot"))}">
+        <button class="primary-btn compact" type="submit">${escapeHtmlValue(t("js.adm.btqLivrer"))}</button>
+      </form>`;
     // Une commande payee a toujours une facture : elle s'etablit au
     // premier clic, et garde ensuite son numero pour toujours.
     const facture = commande.statut === "en_attente" ? "" : `
@@ -1643,6 +1659,7 @@ function initAdminZone() {
         <p class="btq-meta">${meta.join(" · ")}</p>
         ${commande.projet ? `<p class="btq-texte">${escapeHtmlValue(commande.projet)}</p>` : ""}
         ${actions}
+        ${suivi}
         ${facture}
         ${btqSuivi(commande.historique, (entree) => btqLibelleStatut(entree.statut, entree.debut))}
       </article>`;
@@ -1853,6 +1870,57 @@ function initAdminZone() {
     document.addEventListener("visibilitychange", btqSurveiller);
   }
 
+  // ── Les etapes de production, et la livraison ──────────────────────
+  //
+  // Cocher une etape previent le client ; decocher ne previent personne.
+  // Le fichier part directement vers Discord : il ne passe ni par le
+  // disque du serveur, ni par une adresse publique.
+  btqListe?.addEventListener("change", async (evenement) => {
+    const boite = evenement.target.closest("[data-btq-etape]");
+    if (!boite || boite.disabled) return;
+    boite.disabled = true;
+    try {
+      await actionBoutique(modbotApiFetch(
+        `/api/admin/boutique/commandes/${encodeURIComponent(boite.dataset.btqId)}/etape`,
+        { method: "POST", body: JSON.stringify({ etape: boite.dataset.btqEtape }) }));
+    } finally {
+      boite.disabled = false;
+    }
+  });
+
+  btqListe?.addEventListener("submit", async (evenement) => {
+    const formulaire = evenement.target.closest("[data-btq-livrer]");
+    if (!formulaire) return;
+    evenement.preventDefault();
+    const champ = formulaire.querySelector("[data-btq-fichier]");
+    const fichier = champ?.files?.[0];
+    if (!fichier) {
+      showAdminToast(t("js.adm.btqFichierManquant"));
+      return;
+    }
+    const corps = new FormData();
+    corps.append("fichier", fichier, fichier.name);
+    corps.append("message", formulaire.querySelector("[data-btq-mot]")?.value || "");
+    const bouton = formulaire.querySelector("button[type=submit]");
+    if (bouton) bouton.disabled = true;
+    try {
+      // FormData porte son propre Content-Type avec sa frontiere : on ne
+      // joint que l'authentification, jamais un en-tete JSON.
+      const reponse = await fetch(
+        `${getModbotApiBase()}/api/admin/boutique/commandes/${encodeURIComponent(formulaire.dataset.btqLivrer)}/livrer`,
+        { method: "POST", headers: modbotAuthHeaders(), body: corps });
+      const data = await reponse.json().catch(() => ({}));
+      if (!reponse.ok) throw new Error(data?.error || String(reponse.status));
+      showAdminToast(data.message_envoye === false
+        ? tp("js.adm.btqNonPrevenu", { raison: data.raison || "?" })
+        : t("js.adm.btqLivre"), data.message_envoye === false ? 7000 : 2400);
+      await chargerBoutiqueAdmin();
+    } catch (erreur) {
+      showAdminToast(erreur?.message || t("js.adm.premiumEchec"), 5000);
+    }
+    if (bouton) bouton.disabled = false;
+  });
+
   // ── Les codes promo ────────────────────────────────────────────────
   //
   // La liste dit ce que le bot sait : combien de fois le code a servi,
@@ -1938,6 +2006,67 @@ function initAdminZone() {
     }
   });
 
+  // ── Les chiffres de la boutique ────────────────────────────────────
+  //
+  // Rien n'est calcule ici : le bot rend des centimes et des comptes, et
+  // cette fonction ne fait que les mettre en forme. Deux calculs pour un
+  // meme chiffre finiraient par ne plus dire la meme chose.
+  const statsCles = document.querySelector("[data-stats-cles]");
+  const statsMois = document.querySelector("[data-stats-mois]");
+  const statsArticles = document.querySelector("[data-stats-articles]");
+
+  function moisLisible(clef) {
+    const [annee, mois] = String(clef).split("-");
+    const quand = new Date(Number(annee), Number(mois) - 1, 1);
+    return Number.isNaN(quand.getTime()) ? clef
+      : quand.toLocaleDateString(localeAffichage(), { month: "short" });
+  }
+
+  function peindreStats(chiffres) {
+    if (!statsCles) return;
+    statsCles.innerHTML = [
+      [boutiquePrix(chiffres.ca_total || 0), "js.adm.statsCA"],
+      [String(chiffres.commandes_payees || 0), "js.adm.statsCommandes"],
+      [boutiquePrix(chiffres.panier_moyen || 0), "js.adm.statsPanier"],
+      [`${chiffres.devis?.taux || 0} %`, "js.adm.statsConversion"],
+    ].map(([valeur, clef]) =>
+      `<div><strong>${escapeHtmlValue(valeur)}</strong><span>${escapeHtmlValue(t(clef))}</span></div>`)
+      .join("");
+
+    if (statsMois) {
+      const mois = chiffres.mois || [];
+      const sommet = Math.max(1, ...mois.map((m) => Number(m.total) || 0));
+      statsMois.innerHTML = mois.map((m) => {
+        const part = Math.round((100 * (Number(m.total) || 0)) / sommet);
+        return `<div class="btq-barre" title="${escapeHtmlValue(boutiquePrix(m.total || 0))}">
+          <span style="height:${part}%"></span>
+          <small>${escapeHtmlValue(moisLisible(m.mois))}</small>
+        </div>`;
+      }).join("");
+    }
+
+    if (statsArticles) {
+      const lignes = (chiffres.articles || []).slice(0, 6);
+      statsArticles.innerHTML = lignes.length
+        ? lignes.map((ligne) => `<p class="btq-top-ligne">
+            <span>${escapeHtmlValue(ligne.libelle || ligne.article)}</span>
+            <span>${escapeHtmlValue(tp("js.adm.statsVendus", { n: ligne.commandes }))}</span>
+            <strong>${escapeHtmlValue(boutiquePrix(ligne.total || 0))}</strong>
+          </p>`).join("")
+        : `<p class="field-help">${escapeHtmlValue(t("js.adm.statsRien"))}</p>`;
+    }
+  }
+
+  async function chargerStats() {
+    if (!statsCles) return;
+    try {
+      const data = await modbotApiFetch("/api/admin/boutique/stats", { cache: "no-store" });
+      peindreStats(data);
+    } catch (erreur) {
+      statsCles.innerHTML = `<p class="field-help">${escapeHtmlValue(etatAdminIndisponible(erreur))}</p>`;
+    }
+  }
+
   async function chargerBoutiqueAdmin() {
     if (!btqListe) return;
     try {
@@ -1946,6 +2075,7 @@ function initAdminZone() {
       peindreBoutiqueAdmin();
       btqDemarrerDirect();
       chargerPromos();
+      chargerStats();
     } catch (erreur) {
       btqListe.innerHTML = `<p class="field-help">${escapeHtmlValue(etatAdminIndisponible(erreur))}</p>`;
     }
@@ -10126,6 +10256,55 @@ function lireContactBoutique(champ) {
 // Les cartes montrent une formule a la fois ; ce tableau les met en
 // regard. Il se fabrique a partir de BOUTIQUE_ARTICLES : rien a tenir a
 // jour deux fois, et aucun prix qui puisse mentir.
+// ── Les avis vérifiés ────────────────────────────────────────────────
+//
+// Rien n'est ecrit ici : la section reste absente tant que le bot ne rend
+// aucun avis. Une page qui montrerait trois temoignages inventes se
+// repererait tout de suite, et couterait plus cher que le vide.
+function initAvis() {
+  const section = document.querySelector("[data-avis-section]");
+  const liste = document.querySelector("[data-avis-liste]");
+  const moyenne = document.querySelector("[data-avis-moyenne]");
+  if (!section || !liste) return;
+  let recus = null;
+
+  const etoiles = (note) => "★".repeat(note) + "☆".repeat(5 - note);
+
+  function dessinerAvis() {
+    if (!recus || !recus.avis.length) {
+      section.hidden = true;
+      return;
+    }
+    section.hidden = false;
+    if (moyenne) {
+      moyenne.textContent = tp("bq.avisMoyenne",
+                               { note: recus.moyenne, total: recus.total });
+    }
+    liste.innerHTML = recus.avis.map((avis) => `
+      <article class="boutique-avis-carte">
+        <p class="boutique-avis-note" aria-label="${escapeHtmlValue(
+          tp("bq.avisSurCinq", { note: avis.note }))}">${escapeHtmlValue(etoiles(avis.note))}</p>
+        <p class="boutique-avis-texte">${escapeHtmlValue(avis.texte)}</p>
+        <p class="boutique-avis-pied">
+          <strong>${escapeHtmlValue(avis.auteur)}</strong>
+          <span>${escapeHtmlValue(avis.libelle)}</span>
+        </p>
+      </article>`).join("");
+  }
+
+  (async () => {
+    try {
+      const data = await modbotApiFetch("/api/boutique/avis", { cache: "no-store" });
+      recus = { avis: data.avis || [], moyenne: data.moyenne || 0, total: data.total || 0 };
+    } catch (erreur) {
+      recus = null;   // Bot injoignable : on ne montre rien, on n'invente rien.
+    }
+    dessinerAvis();
+  })();
+
+  document.addEventListener("modbot:language", dessinerAvis);
+}
+
 // ── L'abonnement maintenance ─────────────────────────────────────────
 //
 // Le prix vient du bot, jamais d'ici : c'est lui qui le porte a Stripe,
@@ -10899,6 +11078,7 @@ initPageBoutique();
 initComparatif();
 initCalculateur();
 initAbonnement();
+initAvis();
 initDemandeDevis();
 initDemandeAide();
 initTonDevis();
