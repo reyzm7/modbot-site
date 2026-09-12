@@ -48,6 +48,12 @@ body {
   color: var(--text);
   font-family: Inter, Arial, sans-serif;
   font-weight: 600;
+  /* Le francais a des mots longs : « confidentialite »,
+     « administration ». Sur un telephone etroit, un seul de ces mots
+     depassait de son cadre et se faisait couper. La propriete s'herite,
+     donc une ligne suffit pour tout le site, et elle n'agit QUE quand un
+     mot ne tient vraiment pas. */
+  overflow-wrap: break-word;
 }
 
 body::before {
@@ -5100,7 +5106,7 @@ main,
 
 .log-toggle-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
   gap: 10px;
 }
 
@@ -5762,7 +5768,7 @@ label,
 
 .pricing-duo {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
   gap: 20px;
   max-width: 880px;
   margin: 0 auto;
@@ -6384,7 +6390,7 @@ label,
 
 .server-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
   gap: 14px;
 }
 
@@ -6862,7 +6868,7 @@ label,
 
 .search-detail-facts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
   gap: 10px;
   margin-bottom: 14px;
 }
@@ -7028,7 +7034,7 @@ label,
 
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
   gap: 14px;
   max-width: 720px;
   margin: 0 auto;
@@ -7405,7 +7411,7 @@ label,
 
 .giveaway-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
   gap: 12px;
 }
 
@@ -8972,7 +8978,7 @@ select {
 
 .premium-offers {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
   gap: 16px;
   margin-bottom: 24px;
   align-items: stretch;
@@ -9041,7 +9047,7 @@ select {
 
 .premium-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
   gap: 14px;
   margin-top: 22px;
 }
@@ -9070,7 +9076,7 @@ select {
 
 .premium-faq-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 14px;
   margin-top: 20px;
 }
@@ -9181,7 +9187,7 @@ select {
 
 .boutique-grille {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 18px;
   margin-top: 26px;
   align-items: stretch;
@@ -9330,7 +9336,7 @@ select {
    « Carte bancaire » coupe en deux lignes se lit mal. */
 .boutique-payer {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(168px, 100%), 1fr));
   gap: 8px;
   margin-top: auto;
   padding-top: 14px;
@@ -9372,7 +9378,7 @@ select {
 
 .boutique-atouts-grille {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: 14px;
   margin-top: 24px;
 }
@@ -9405,7 +9411,7 @@ select {
 
 .boutique-etapes-liste {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
   gap: 14px;
   margin: 22px 0 0;
   padding: 0;
@@ -9825,7 +9831,7 @@ select {
 
 .boutique-formulaire-ligne {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
   gap: 12px;
 }
 
@@ -9848,7 +9854,11 @@ select {
   gap: 8px;
 }
 
-.boutique-formulaire label.boutique-choix-option {
+/* Volontairement SANS le prefixe « .boutique-formulaire » : ces cases
+   servent aussi au calculateur de la boutique, qui n'est pas ce
+   formulaire-la. Scopees, elles s'y affichaient sans cadre, avec le
+   bouton radio d'origine visible au-dessus de la pastille. */
+label.boutique-choix-option {
   position: relative;
   display: flex;
   align-items: center;
@@ -9860,7 +9870,7 @@ select {
   cursor: pointer;
 }
 
-.boutique-formulaire .boutique-choix-option input {
+.boutique-choix-option input[type="radio"] {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -9954,7 +9964,7 @@ select {
 
 .boutique-aide-grille {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: 14px;
   margin-top: 24px;
 }
@@ -9996,7 +10006,7 @@ select {
 /* ── Achats & paiements, dans l'administration ── */
 .btq-compteurs {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
   gap: 10px;
   margin: 16px 0 4px;
 }
@@ -10612,7 +10622,7 @@ body.boutique-fenetre-ouverte { overflow: hidden; }
 
 .partners-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 16px;
   margin-top: 22px;
 }
@@ -10987,7 +10997,7 @@ body.boutique-fenetre-ouverte { overflow: hidden; }
 
 .visite-chiffres {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
   gap: 14px;
   margin: 18px 0 26px;
 }
@@ -11365,7 +11375,7 @@ button.visite-barre:focus-visible i {
 
 .licence-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
   gap: 12px;
 }
 
@@ -11558,7 +11568,7 @@ button.visite-barre:focus-visible i {
 
 .score-familles {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: 12px;
   margin-bottom: 26px;
 }
@@ -11964,7 +11974,15 @@ body:not(.dashboard-page) .page-glow {
 /* Le formulaire type de retractation : un texte a recopier tel quel, donc
    une chasse fixe et des retours a la ligne conserves. Il defile seul
    plutot que de pousser la page de cote sur telephone. */
+/* Les sections du wiki sont les cases d'une grille, et une case de
+   grille ne descend PAS sous la largeur de son contenu tant qu'on ne le
+   lui permet pas. Un tableau un peu large suffisait donc a pousser toute
+   la section a 574 px dans un telephone de 375 : le texte etait coupe a
+   droite sur les conditions, la confidentialite, les mentions et les
+   guides. Avec min-width:0 la section suit l'ecran, et ce qui est
+   vraiment trop large (un tableau) defile seul dans son cadre. */
 .wiki-content { min-width: 0; }
+.wiki-content > * { min-width: 0; }
 .wiki-code { margin: 14px 0 0; padding: 16px 18px; border-radius: 12px;
   background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);
   font: 12px/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -11993,7 +12011,15 @@ body:not(.dashboard-page) .page-glow {
   white-space: nowrap; background: rgba(255, 255, 255, 0.02); }
 .boutique-cmp thead th { font-size: 1.02rem; color: #fff; }
 .boutique-cmp-nom { display: block; }
-.boutique-cmp thead .boutique-badge { position: static; display: inline-block; margin-top: 6px; }
+.boutique-cmp thead .boutique-badge {
+  position: static;
+  display: inline-block;
+  margin-top: 6px;
+  /* --teinte n'est declaree que sur les cartes : hors d'elles, la
+     pastille se retrouvait noire sur noir. */
+  background: var(--or, #f1c40f);
+  color: #1a1300;
+}
 .boutique-cmp-prix { font-size: 1.25rem; color: var(--or, #f1c40f); }
 .boutique-cmp-points { margin: 0; padding-left: 18px; }
 .boutique-cmp-points li { margin: 0 0 4px; }
@@ -12050,7 +12076,7 @@ body:not(.dashboard-page) .page-glow {
 .boutique-abo-etat { margin: 10px 0 0; font-size: 0.86rem; color: #f0a5a5; }
 .boutique-abo-etat.is-ok { color: #7fd6a9; }
 
-.btq-promo-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+.btq-promo-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
   gap: 12px; align-items: end; margin-bottom: 16px; }
 .btq-promos { display: grid; gap: 10px; }
 .btq-promo { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px;
@@ -12088,7 +12114,7 @@ body:not(.dashboard-page) .page-glow {
 
 .boutique-avis-moyenne { margin: 10px 0 0; font-size: 1.05rem; font-weight: 700;
   color: var(--or, #f1c40f); }
-.boutique-avis-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+.boutique-avis-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
   gap: 16px; }
 .boutique-avis-carte { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px;
   padding: 18px 20px; background: rgba(255, 255, 255, 0.03); }
@@ -12096,3 +12122,69 @@ body:not(.dashboard-page) .page-glow {
 .boutique-avis-texte { margin: 0 0 12px; }
 .boutique-avis-pied { margin: 0; display: flex; flex-wrap: wrap; gap: 8px;
   font-size: 0.84rem; color: var(--text-dim, #8a93a6); }
+
+
+/* ── Les tout petits écrans (320 à 400 px) ─────────────────────────────
+   Une case de grille ne descend pas sous la largeur de son contenu tant
+   qu'on ne le lui permet pas : c'est ce qui faisait dépasser une section,
+   une liste numérotée ou un bouton de quelques pixels, juste assez pour
+   que le texte soit coupé à droite sur un téléphone étroit. */
+.wiki-content > *,
+.wiki-section > *,
+.boutique-formulaire > *,
+.boutique-calcul-form > * { min-width: 0; }
+
+@media (max-width: 480px) {
+  /* La maquette de salon Discord de l'accueil : à cette largeur, deux
+     colonnes de statistiques ne tiennent plus, et l'embed était rogné. */
+  .embed-grid { grid-template-columns: minmax(0, 1fr); }
+  .embed-actions > * { min-width: 0; }
+  .discord-embed { min-width: 0; }
+
+  /* Un bouton ne doit jamais être plus large que ce qui le contient. */
+  .primary-btn,
+  .secondary-btn,
+  .boutique-payer > * { max-width: 100%; }
+}
+
+/* Une liste à puces numérotées est faite de lignes flex : sans min-width
+   nulle, la ligne refuse de descendre sous la longueur de son texte, et
+   la section entière s'élargit pour la suivre. */
+.boutique-demande-etapes li { min-width: 0; }
+.boutique-demande-etapes li > * { min-width: 0; }
+
+@media (max-width: 480px) {
+  /* Les pastilles de la maquette Discord et les boutons : plutôt deux
+     lignes qu'un mot coupé au bord de l'écran. */
+  .embed-actions span { min-width: 0; max-width: 100%; white-space: normal;
+                        text-align: center; }
+  .primary-btn,
+  .secondary-btn {
+    height: auto;
+    min-width: 0;
+    min-height: 44px;
+    padding: 10px 16px;
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+/* Sur téléphone, le tableau comparatif est plus large que l'écran : il
+   défile dans son cadre. On garde alors la colonne des intitulés collée à
+   gauche — sans elle, on fait glisser « 49 € » sans plus savoir si on lit
+   un prix, un délai ou des révisions. Le fond doit être opaque : une
+   colonne collée à moitié transparente laisse passer le texte qui glisse
+   dessous. */
+@media (max-width: 760px) {
+  .boutique-cmp tbody th {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    width: 118px;
+    background: #15111f;
+    box-shadow: 1px 0 0 rgba(255, 255, 255, 0.07);
+  }
+  .boutique-cmp { min-width: 560px; }
+  .boutique-cmp th,
+  .boutique-cmp td { padding: 12px 12px; font-size: 0.86rem; }
+}
