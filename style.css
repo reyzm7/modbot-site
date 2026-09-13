@@ -3504,7 +3504,13 @@ main,
   text-align: left;
 }
 
-.dash-nav span {
+/* Le symbole, et lui seul. La regle visait TOUS les span de l'entree :
+   la moitie des rubriques portent leur libelle dans un <span> pour le
+   traduire, et ce libelle se retrouvait dans une boite de 28 px, en
+   grille centree, coupee par le bouton. « Vie du serveur » n'a jamais
+   pu s'afficher en entier, et ces rubriques-la n'avaient ni la meme
+   taille de texte ni le meme alignement que les autres. */
+.dash-nav > span[aria-hidden="true"] {
   display: grid;
   place-items: center;
   width: 28px;
@@ -3522,7 +3528,7 @@ main,
   background: rgba(139, 92, 246, 0.18);
 }
 
-.dash-nav.is-active span {
+.dash-nav.is-active > span[aria-hidden="true"] {
   background: linear-gradient(135deg, var(--purple), var(--cyan));
   color: #fff;
 }
@@ -5215,11 +5221,11 @@ main,
 
 /* ── Navigation latérale : emoji au lieu du numéro ─────────────────── */
 
-.dash-nav span {
+.dash-nav > span[aria-hidden="true"] {
   font-size: 0.95rem;
   background: rgba(255, 255, 255, 0.05);
 }
-.dash-nav.is-active span {
+.dash-nav.is-active > span[aria-hidden="true"] {
   background: linear-gradient(135deg, var(--purple), var(--cyan));
 }
 .sidebar-label:not(:first-child) { margin-top: 18px; }
@@ -5935,7 +5941,7 @@ label,
   font-weight: 500;
   border-radius: 8px;
 }
-.dash-nav span {
+.dash-nav > span[aria-hidden="true"] {
   width: 22px;
   height: 22px;
   margin-left: 8px;
@@ -5946,10 +5952,13 @@ label,
 .dash-nav.is-active {
   background: var(--accent-soft);
   color: var(--text);
-  font-weight: 600;
+  /* Pas de gras : la barre a gauche, le fond et la couleur du symbole
+     designent deja la rubrique ouverte trois fois. Le gras, lui,
+     elargissait le mot et faisait sauter la liste d'une rubrique a
+     l'autre. */
   box-shadow: inset 2px 0 0 var(--accent);
 }
-.dash-nav.is-active span { background: none; }
+.dash-nav.is-active > span[aria-hidden="true"] { background: none; }
 
 .dashboard-banner {
   padding: 22px 24px;
@@ -6593,8 +6602,12 @@ label,
   font-weight: 500;
 }
 
+/* L'apercu et les boutons se separent des que la colonne descend sous
+   150 px : sinon « Choisir une image » se retrouvait dans 64 px, moitie
+   coupee, dans les panneaux a deux colonnes. */
 .image-picker-body {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   gap: 14px;
 }
@@ -6633,7 +6646,15 @@ label,
   align-items: center;
   gap: 8px;
   min-width: 0;
-  flex: 1;
+  flex: 1 1 150px;
+}
+.image-picker-actions > button {
+  height: auto;
+  min-height: 38px;
+  min-width: 0;
+  padding: 8px 14px;
+  white-space: normal;
+  text-align: center;
 }
 .image-picker-hint {
   flex: 1 1 100%;
@@ -8590,6 +8611,231 @@ h3 > .ui-icon,
   height: 1.1em;
   margin-right: 0.42em;
   color: var(--purple-2);
+}
+
+/* ── La navigation du dashboard ecrit d'une seule main ──────────────── */
+/*
+   Une rubrique sur deux porte son libelle dans un <span> — c'est ce
+   qu'exige la traduction quand le symbole occupe deja le premier. Sans
+   cette regle, ce <span> heritait de la pastille : taille differente,
+   boite de 22 px, texte coupe. On fixe donc le libelle lui-meme, plutot
+   que de compter sur ce que l'entree lui transmet.
+*/
+.dash-nav > span:not([aria-hidden="true"]),
+.admin-nav > span:not(:first-child) {
+  display: inline;
+  min-width: 0;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+/* Le libelle du menu deroulant des petits ecrans nomme la rubrique
+   ouverte : c'est un nom, pas une mise en avant. */
+.sidebar-toggle-label strong { font-weight: 500; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LE WIKI SE LIT
+   Une documentation grise et compacte ne se lit pas, elle se survole.
+   Ce bloc lui donne des reperes : un numero par chapitre, une puce
+   coloree, une mesure de ligne, et un sommaire qui dit ou l'on est.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.wiki-content { counter-reset: chapitre; }
+
+.wiki-section { counter-increment: chapitre; }
+
+/* Le numero du chapitre, dans la marge du titre. Il donne un rythme a
+   treize sections qui se ressemblaient toutes. */
+.wiki-section > h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 14px;
+  font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+  line-height: 1.25;
+}
+.wiki-section > h2::before {
+  content: counter(chapitre, decimal-leading-zero);
+  flex: none;
+  color: var(--purple-2, #b794ff);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  opacity: 0.85;
+}
+
+/* Le titre reste sous la barre du haut quand on vient du sommaire. */
+.wiki-section { scroll-margin-top: 104px; }
+
+/* Une ligne de quatre-vingt-dix caracteres se relit deux fois. On la
+   ramene a ce que l'oeil suit sans se perdre. */
+.wiki-section > p,
+.wiki-section > .wiki-check-list {
+  max-width: 74ch;
+}
+
+/* Le premier paragraphe annonce le chapitre : il se lit d'abord. */
+.wiki-section > h2 + p {
+  color: var(--text);
+  font-size: 1.02rem;
+}
+
+.wiki-check-list li {
+  padding-left: 4px;
+}
+.wiki-check-list li::marker {
+  color: var(--purple-2, #b794ff);
+  content: "▸  ";
+}
+
+/* Une commande au milieu d'une phrase doit se voir comme une commande. */
+.wiki-section p code,
+.wiki-check-list code {
+  padding: 2px 7px;
+  border: 1px solid rgba(158, 110, 255, 0.22);
+  border-radius: 7px;
+  background: rgba(139, 92, 246, 0.14);
+  color: #dccdff;
+  font-size: 0.9em;
+  /* Pas de nowrap : un gabarit comme « {account} est en live, venez le
+     voir ! » tenait alors sur une seule ligne de 260 px et sortait de
+     l'ecran a 320. Sans lui il se coupe a ses espaces, et une commande
+     d'un seul mot ne se coupe de toute facon que si elle ne tient pas. */
+  max-width: 100%;
+}
+
+@media (max-width: 480px) {
+  /* Vingt-six pixels de marge de chaque cote sur un ecran de 320, c'est
+     un sixieme de la page rendu a la bordure. */
+  .wiki-section { padding: 18px 16px; }
+}
+
+.wiki-section strong { color: var(--text); }
+
+/* Le sommaire : le chapitre ouvert se designe par un filet et un fond,
+   pas par du gras — le gras elargissait le mot et faisait sauter la
+   liste entiere d'une entree a l'autre. */
+.wiki-toc a {
+  font-weight: 500;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+.wiki-toc a.is-active {
+  border-left-color: var(--accent, #8b5cf6);
+  background: rgba(139, 92, 246, 0.16);
+  color: var(--text);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LES OUVERTURES
+   Une page qui apparait d'un bloc donne l'impression d'un saut ; un
+   menu dont tout arrive en meme temps ne se lit pas. Tout ici est
+   court — au-dela de trois cents millisecondes, on attend.
+   ═══════════════════════════════════════════════════════════════════ */
+
+@keyframes page-ouverture {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes menu-ouverture {
+  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes menu-entree {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Une balise <main> qui entre dans la page — au chargement, ou quand
+     le dashboard passe d'un ecran a l'autre — monte en fondu. L'anim
+     repart d'elle-meme a chaque fois que l'element cesse d'etre
+     `hidden` : c'est le passage par display:none qui la relance. */
+  main,
+  .dashboard-app {
+    animation: page-ouverture 380ms cubic-bezier(0.22, 0.7, 0.3, 1) both;
+  }
+
+  /* Le menu « Accès » : le panneau s'ouvre, puis ses entrees arrivent
+     une par une. Quarante millisecondes d'ecart suffisent a faire lire
+     la liste de haut en bas ; au-dela, on attend le dernier bouton. */
+  .nav-menu-panel {
+    animation: menu-ouverture 200ms cubic-bezier(0.22, 0.7, 0.3, 1) both;
+    transform-origin: top right;
+  }
+  .nav-menu-panel > * {
+    animation: menu-entree 240ms cubic-bezier(0.22, 0.7, 0.3, 1) both;
+  }
+  .nav-menu-panel > *:nth-child(1) { animation-delay: 60ms; }
+  .nav-menu-panel > *:nth-child(2) { animation-delay: 100ms; }
+  .nav-menu-panel > *:nth-child(3) { animation-delay: 140ms; }
+  .nav-menu-panel > *:nth-child(4) { animation-delay: 180ms; }
+  .nav-menu-panel > *:nth-child(5) { animation-delay: 220ms; }
+  .nav-menu-panel > *:nth-child(6) { animation-delay: 260ms; }
+  .nav-menu-panel > *:nth-child(7) { animation-delay: 300ms; }
+  .nav-menu-panel > *:nth-child(n + 8) { animation-delay: 340ms; }
+
+  /* Le dashboard change de rubrique : le panneau qui prend la place
+     arrive en fondu, sinon le contenu saute d'un coup. */
+  .dash-panel:not([hidden]) {
+    animation: page-ouverture 260ms cubic-bezier(0.22, 0.7, 0.3, 1) both;
+  }
+}
+
+/* Le bouton « Nous écrire » terminait la page collé à gauche, sous un
+   titre centré. */
+.partners-join > .primary-btn {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+/* ── Les paliers de niveau ──────────────────────────────────────────── */
+/*
+   Un palier tient sur une ligne : le niveau, le role, et la croix qui
+   l'enleve. Sous 520 px la ligne se plie en deux plutot que d'ecraser
+   la liste des roles a soixante pixels.
+*/
+.recompense-list {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.recompense-row {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 8px;
+}
+
+.recompense-row .mini-form { margin: 0; min-width: 0; }
+.recompense-row .mini-form.compact span { font-size: 0.76rem; }
+.recompense-row > button { align-self: end; min-height: 38px; }
+
+@media (max-width: 520px) {
+  .recompense-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .recompense-row .mini-form:first-child { grid-column: 1 / -1; }
+}
+
+/* La vie du serveur compte maintenant trois blocs — les niveaux, les
+   paliers, puis les anniversaires et le mur. Deux colonnes fixes en
+   laissaient un seul, large et vide, sur la deuxieme ligne. */
+[data-dashboard-panel="communaute"] .welcome-layout {
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
 }
 
 /* Dans un bouton, l'icône se sépare du libellé sans espace insécable */
@@ -10597,18 +10843,36 @@ body.boutique-fenetre-ouverte { overflow: hidden; }
    le `width: 100%` de la fenetre se resolvait contre cette largeur —
    chacun attendait l'autre, la fenetre tombait a 194 px et l'entete
    « # salon-test » se retrouvait a l'etroit. */
+/* La fenetre a gauche, les commandes a droite. Elles etaient dessous,
+   sur toute la largeur : une commande de douze caracteres par ligne de
+   douze cents pixels, et il fallait remonter apres chaque clic pour
+   voir la reponse. Cote a cote, on clique et on lit sans bouger. */
 .demo-duo {
   display: grid;
-  grid-template-columns: min(680px, 100%);
-  justify-content: center;
+  grid-template-columns: minmax(0, 1fr) 288px;
+  gap: 18px;
+  align-items: start;
 }
 
 .demo-duo .discord-window {
-  min-height: 300px;
+  min-height: 430px;
 }
 
-@media (max-width: 900px) {
-  .demo-duo .discord-window { min-height: 230px; }
+.demo-duo .demo-controls {
+  max-height: 430px;
+  padding: 12px;
+  border: 1px solid rgba(158, 110, 255, 0.2);
+  border-radius: var(--radius-lg);
+  background: rgba(11, 7, 24, 0.6);
+}
+.demo-duo .demo-group { background: transparent; }
+
+@media (max-width: 980px) {
+  /* Empilees, les commandes reprennent deux colonnes : c'est deja ce
+     que prevoit la regle des petits ecrans plus haut. */
+  .demo-duo { grid-template-columns: minmax(0, 1fr); }
+  .demo-duo .discord-window { min-height: 260px; }
+  .demo-duo .demo-controls { max-height: 300px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════

@@ -673,7 +673,15 @@ function applySiteLanguage(language) {
     if (element.children.length) {
       const noeudTexte = [...element.childNodes]
         .find((n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim());
-      if (noeudTexte) noeudTexte.textContent = valeur;
+      if (noeudTexte) {
+        // Le texte d'origine porte les espaces qui le separent des
+        // balises voisines : « Configuration du serveur <strong>… ».
+        // Les perdre collait les deux mots — « du serveurBuffle »,
+        // « 0évaluations ». On remet ce qui encadrait.
+        const avant = /^\s*/.exec(noeudTexte.textContent)[0];
+        const apres = /\s*$/.exec(noeudTexte.textContent)[0];
+        noeudTexte.textContent = avant + valeur + apres;
+      }
       return;
     }
     element.textContent = valeur;
@@ -3915,6 +3923,13 @@ function initDashboard() {
     // le bot renvoie deux listes dediees pour ne pas melanger les types.
     remplirSelect("[data-voice-hub]", optionsSalonsVocaux, t("js.aucun"));
     remplirSelect("[data-vie-xp-salon]", optionsSalons, t("js.aucun"));
+    remplirSelect("[data-vie-xp-exclus-picker]", optionsSalons, t("js.vie.ajouterSalon"));
+    remplirSelect("[data-antilink-picker]", optionsSalons, t("js.vie.ajouterSalon"));
+    // Les pastilles portent un nom de salon : sans les salons, elles
+    // resteraient sur « #123456 ».
+    redessinerSalonsSansXp();
+    redessinerSalonsLibres();
+    redessinerRecompenses();
     remplirSelect("[data-vie-anniv-salon]", optionsSalons, t("js.aucun"));
     remplirSelect("[data-vie-mur-salon]", optionsSalons, t("js.aucun"));
     remplirSelect("[data-voice-category]", optionsCategories, t("js.aucun"));
@@ -4868,6 +4883,12 @@ function initDashboard() {
         champ.value = channels[clef] || "";
         setInputState(champ);
       });
+    });
+
+    sansCasser("salons ou les liens passent", () => {
+      salonsLiensLibres = [...new Set((security.antilink_channels || []).map(String))]
+        .slice(0, SALONS_LISTE_MAX);
+      redessinerSalonsLibres();
     });
 
     sansCasser("interrupteurs de securite", () => {
@@ -7676,6 +7697,159 @@ function initDashboard() {
   //
   // Trois reglages, trois salons. Rien ne se calcule ici : le bot rend ce
   // qu'il a, on le repose tel quel, et on le lui renvoie tel quel.
+
+  // Ce que la page tient entre deux enregistrements. Le bot reste seul
+  // juge : ces trois listes ne servent qu'a dessiner.
+  let salonsSansXp = [];
+  let salonsLiensLibres = [];
+  let recompensesNiveau = [];
+  const RECOMPENSES_MAX = 20;
+  const SALONS_LISTE_MAX = 40;
+
+  function redessinerSalonsSansXp() {
+    const hote = document.querySelector("[data-vie-xp-exclus]");
+    if (!hote) return;
+    hote.innerHTML = salonsSansXp.length
+      ? salonsSansXp.map((id) => (
+          `<button type="button" class="variable-chip" data-retirer-sans-xp="${escapeHtml(id)}"
+                   title="${escapeHtml(t("js.vie.retirerSalon"))}">${escapeHtml(nomDuSalon(id))} &times;</button>`
+        )).join("")
+      : `<span class="field-help">${escapeHtml(t("js.vie.tousLesSalons"))}</span>`;
+  }
+
+  function redessinerSalonsLibres() {
+    const hote = document.querySelector("[data-antilink-salons]");
+    if (!hote) return;
+    hote.innerHTML = salonsLiensLibres.length
+      ? salonsLiensLibres.map((id) => (
+          `<button type="button" class="variable-chip" data-retirer-lien-libre="${escapeHtml(id)}"
+                   title="${escapeHtml(t("js.vie.retirerSalon"))}">${escapeHtml(nomDuSalon(id))} &times;</button>`
+        )).join("")
+      : `<span class="field-help">${escapeHtml(t("js.sec.aucunSalonLibre"))}</span>`;
+  }
+
+  function redessinerRecompenses() {
+    const hote = document.querySelector("[data-vie-recompenses]");
+    if (!hote) return;
+    if (!recompensesNiveau.length) {
+      hote.innerHTML = `<span class="field-help">${escapeHtml(t("js.vie.aucunPalier"))}</span>`;
+      return;
+    }
+    hote.innerHTML = recompensesNiveau.map((ligne, rang) => (
+      `<div class="recompense-row" data-recompense-rang="${rang}">
+         <label class="mini-form compact">
+           <span>${escapeHtml(t("js.vie.palierNiveau"))}</span>
+           <input type="number" min="1" max="500" step="1" data-recompense-niveau
+                  value="${escapeHtml(String(ligne.niveau || 1))}">
+         </label>
+         <label class="mini-form compact">
+           <span>${escapeHtml(t("js.vie.palierRole"))}</span>
+           <select data-recompense-role></select>
+         </label>
+         <button type="button" class="secondary-btn compact danger" data-recompense-retirer
+                 title="${escapeHtml(t("js.vie.retirerPalier"))}">&times;</button>
+       </div>`
+    )).join("");
+    // Les listes de roles sont remplies apres coup : elles n'existaient
+    // pas au moment ou le serveur a rendu ses roles.
+    hote.querySelectorAll(".recompense-row").forEach((row, rang) => {
+      const champ = row.querySelector("[data-recompense-role]");
+      remplirSelect(champ, optionsRoles, t("js.choisirRole"));
+      champ.value = recompensesNiveau[rang]?.role || "";
+    });
+  }
+
+  function lireRecompensesDuDom() {
+    const hote = document.querySelector("[data-vie-recompenses]");
+    if (!hote) return recompensesNiveau;
+    return [...hote.querySelectorAll(".recompense-row")].map((row) => ({
+      niveau: Number(row.querySelector("[data-recompense-niveau]")?.value || 0),
+      role: row.querySelector("[data-recompense-role]")?.value || "",
+    }));
+  }
+
+  function initVieDuServeur() {
+    // Les salons sans experience.
+    const pickerXp = document.querySelector("[data-vie-xp-exclus-picker]");
+    const hoteXp = document.querySelector("[data-vie-xp-exclus]");
+    if (pickerXp && hoteXp) {
+      pickerXp.addEventListener("change", () => {
+        const id = pickerXp.value;
+        pickerXp.value = "";
+        if (!id || salonsSansXp.includes(id)) return;
+        if (salonsSansXp.length >= SALONS_LISTE_MAX) return showToast(t("js.vie.tropDeSalons"));
+        salonsSansXp.push(id);
+        redessinerSalonsSansXp();
+        markPanelDirty("communaute");
+      });
+      hoteXp.addEventListener("click", (evenement) => {
+        const chip = evenement.target.closest("[data-retirer-sans-xp]");
+        if (!chip) return;
+        salonsSansXp = salonsSansXp.filter((x) => x !== chip.dataset.retirerSansXp);
+        redessinerSalonsSansXp();
+        markPanelDirty("communaute");
+      });
+    }
+
+    // Les salons ou les liens restent permis.
+    const pickerLien = document.querySelector("[data-antilink-picker]");
+    const hoteLien = document.querySelector("[data-antilink-salons]");
+    if (pickerLien && hoteLien) {
+      pickerLien.addEventListener("change", () => {
+        const id = pickerLien.value;
+        pickerLien.value = "";
+        if (!id || salonsLiensLibres.includes(id)) return;
+        if (salonsLiensLibres.length >= SALONS_LISTE_MAX) return showToast(t("js.vie.tropDeSalons"));
+        salonsLiensLibres.push(id);
+        redessinerSalonsLibres();
+        markPanelDirty("security");
+      });
+      hoteLien.addEventListener("click", (evenement) => {
+        const chip = evenement.target.closest("[data-retirer-lien-libre]");
+        if (!chip) return;
+        salonsLiensLibres = salonsLiensLibres.filter((x) => x !== chip.dataset.retirerLienLibre);
+        redessinerSalonsLibres();
+        markPanelDirty("security");
+      });
+    }
+
+    // Les paliers.
+    const hoteRec = document.querySelector("[data-vie-recompenses]");
+    document.querySelector("[data-vie-recompense-ajouter]")?.addEventListener("click", () => {
+      recompensesNiveau = lireRecompensesDuDom();
+      if (recompensesNiveau.length >= RECOMPENSES_MAX) {
+        return showToast(t("js.vie.tropDePaliers"));
+      }
+      // Le palier propose suit le dernier : on ne redemande pas un niveau
+      // deja pris, et la table reste triee a l'oeil.
+      const dernier = recompensesNiveau.reduce((max, l) => Math.max(max, Number(l.niveau) || 0), 0);
+      recompensesNiveau.push({ niveau: Math.min(dernier + 5 || 5, 500), role: "" });
+      redessinerRecompenses();
+      markPanelDirty("communaute");
+    });
+    if (hoteRec) {
+      hoteRec.addEventListener("click", (evenement) => {
+        const bouton = evenement.target.closest("[data-recompense-retirer]");
+        if (!bouton) return;
+        const rang = Number(bouton.closest(".recompense-row")?.dataset.recompenseRang);
+        recompensesNiveau = lireRecompensesDuDom().filter((_, i) => i !== rang);
+        redessinerRecompenses();
+        markPanelDirty("communaute");
+      });
+      hoteRec.addEventListener("change", () => {
+        recompensesNiveau = lireRecompensesDuDom();
+        markPanelDirty("communaute");
+      });
+    }
+  }
+
+    // Les trois listes commencent vides : sans ce premier dessin, le
+    // bloc reste blanc tant que le bot n'a rien renvoye, et rien ne dit
+    // que « vide » veut dire « partout ».
+    redessinerSalonsSansXp();
+    redessinerSalonsLibres();
+    redessinerRecompenses();
+
   function applyCommunauteState(vie) {
     if (!vie || typeof vie !== "object") return;
     const actif = document.querySelector("[data-vie-xp]");
@@ -7694,6 +7868,21 @@ function initDashboard() {
     poser("[data-vie-mur-salon]", vie.mur_salon);
     const seuil = document.querySelector("[data-vie-mur-seuil]");
     if (seuil) seuil.value = vie.mur_seuil ?? 5;
+    const annonce = document.querySelector("[data-vie-xp-message]");
+    if (annonce) annonce.value = vie.xp_message || "";
+    const cumul = document.querySelector("[data-vie-recompenses-cumul]");
+    if (cumul) {
+      const garde = vie.recompenses_cumul !== false;
+      cumul.checked = garde;
+      cumul.closest(".toggle-line")?.classList.toggle("is-on", garde);
+    }
+    salonsSansXp = [...new Set((vie.xp_salons_exclus || []).map(String))].slice(0, SALONS_LISTE_MAX);
+    recompensesNiveau = (vie.recompenses || [])
+      .filter((l) => l && typeof l === "object")
+      .map((l) => ({ niveau: Number(l.niveau) || 1, role: String(l.role || "") }))
+      .slice(0, RECOMPENSES_MAX);
+    redessinerSalonsSansXp();
+    redessinerRecompenses();
   }
 
   function collectCommunauteConfig() {
@@ -7705,6 +7894,14 @@ function initDashboard() {
       anniv_salon: document.querySelector("[data-vie-anniv-salon]")?.value || "",
       mur_salon: document.querySelector("[data-vie-mur-salon]")?.value || "",
       mur_seuil: Number(document.querySelector("[data-vie-mur-seuil]")?.value || 5),
+      xp_message: document.querySelector("[data-vie-xp-message]")?.value || "",
+      xp_salons_exclus: salonsSansXp.slice(0, SALONS_LISTE_MAX),
+      recompenses_cumul: document.querySelector("[data-vie-recompenses-cumul]")?.checked !== false,
+      // Un palier sans role n'en est pas un : le bot le refuserait, et
+      // la ligne vide reviendrait a chaque rechargement.
+      recompenses: lireRecompensesDuDom()
+        .filter((l) => l.role && Number(l.niveau) >= 1)
+        .slice(0, RECOMPENSES_MAX),
     };
   }
 
@@ -8183,6 +8380,7 @@ function initDashboard() {
       },
       security: {
         antilink: Boolean(securityToggles[0]?.checked),
+        antilink_channels: salonsLiensLibres.slice(0, SALONS_LISTE_MAX),
         insultes_enabled: Boolean(securityToggles[1]?.checked),
         antispam: Boolean(securityToggles[2]?.checked),
         antiraid: Boolean(securityToggles[3]?.checked),
@@ -9061,6 +9259,7 @@ function initDashboard() {
   initCompteurs();
   initAutoRoles();
   initImagesTicket();
+  initVieDuServeur();
   /* ══════════════════════════════════════════════════════════════
      ASSISTANT IA DU SERVEUR
      A ne pas confondre avec l'assistant flottant de cette page, qui
@@ -11184,6 +11383,61 @@ function initMenuAcces() {
 }
 
 initMenuAcces();
+
+/* ══════════════════════════════════════════════════════════════════
+   LE SOMMAIRE DU WIKI SUIT LA LECTURE
+   Treize chapitres, un sommaire fixe a gauche, et rien qui disait
+   lequel on etait en train de lire : on redescendait au titre pour se
+   reperer. L'entree du chapitre visible s'allume desormais toute
+   seule, et le sommaire defile pour la garder a l'ecran.
+   ══════════════════════════════════════════════════════════════════ */
+function initSommaireWiki() {
+  const sommaire = document.querySelector(".wiki-toc");
+  if (!sommaire || !("IntersectionObserver" in window)) return;
+  const liens = new Map();
+  sommaire.querySelectorAll("a[href^='#']").forEach((lien) => {
+    const cible = document.getElementById(lien.getAttribute("href").slice(1));
+    if (cible) liens.set(cible, lien);
+  });
+  if (!liens.size) return;
+
+  let actif = null;
+  const allumer = (lien) => {
+    if (lien === actif) return;
+    if (actif) actif.classList.remove("is-active");
+    actif = lien;
+    if (!lien) return;
+    lien.classList.add("is-active");
+    // Le sommaire defile tout seul : avec treize entrees sur un ecran
+    // court, celle qu'on allume finissait hors de sa propre boite.
+    if (sommaire.scrollHeight > sommaire.clientHeight + 4) {
+      lien.scrollIntoView({ block: "nearest" });
+    }
+  };
+
+  // On retient ce qui est visible, et on allume le plus haut : deux
+  // chapitres courts tiennent souvent a l'ecran en meme temps, et
+  // allumer le dernier arrive donnerait un sommaire qui clignote.
+  const visibles = new Set();
+  const observateur = new IntersectionObserver((entrees) => {
+    entrees.forEach((e) => {
+      if (e.isIntersecting) visibles.add(e.target);
+      else visibles.delete(e.target);
+    });
+    if (!visibles.size) return;
+    const haut = [...visibles].sort(
+      (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)[0];
+    allumer(liens.get(haut) || null);
+  }, {
+    // La barre du haut cache une centaine de pixels : un chapitre
+    // cache dessous n'est pas « celui qu'on lit ».
+    rootMargin: "-110px 0px -55% 0px",
+    threshold: 0,
+  });
+  liens.forEach((_, section) => observateur.observe(section));
+}
+
+initSommaireWiki();
 
 /* ══════════════════════════════════════════════════════════════════
    LOGOS DES PARTENAIRES

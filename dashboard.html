@@ -588,6 +588,15 @@
           <label class="toggle-line danger"><input type="checkbox"><span></span><strong data-i18n="dash.lockdown"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg> Lockdown</strong><small data-i18n="dash.masqueLesSalonsEn">Masque les salons en urgence.</small></label>
         </div>
 
+        <div class="tool-panel">
+          <h3 data-i18n="sec.liensLibresTitre">Salons où les liens sont permis</h3>
+          <p class="field-help" data-i18n="sec.liensLibresAide">L'anti-lien ne s'applique pas dans ces salons : #partage, #vos-créations, #clips. Choisis une catégorie et tous ses salons sont concernés ; un fil suit le salon qui le porte.</p>
+          <label class="mini-form"><span data-i18n="sec.liensLibresAjouter">Ajouter un salon</span>
+            <select data-antilink-picker><option value="" data-i18n="dash.chargement">— Chargement… —</option></select>
+          </label>
+          <div class="variable-chips" data-antilink-salons></div>
+        </div>
+
         <div class="dashboard-grid three">
           <label class="tool-panel mini-form" data-i18n="dash.messagesMax"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-message"/></svg> Messages max<input type="number" value="5"></label>
           <label class="tool-panel mini-form" data-i18n="dash.fenetreAntiSpam"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-timer"/></svg> Fenêtre anti-spam<input type="number" value="5"></label>
@@ -1094,6 +1103,31 @@
               <select data-vie-xp-salon><option value="">— Chargement… —</option></select>
             </label>
             <p class="field-help" data-i18n-html="vie.xpSalonAide">Laisse vide pour annoncer dans le salon où le membre écrivait. Les commandes <code>/niveau</code> et <code>/classement</code> répondent en privé, sans encombrer personne.</p>
+
+            <label class="mini-form"><span data-i18n="vie.xpMessage">Message de montée de niveau</span>
+              <textarea rows="2" data-vie-xp-message data-i18n-placeholder="vie.xpMessagePlaceholder" placeholder="🎉 {membre} passe au niveau {niveau} !"></textarea>
+            </label>
+            <p class="field-help" data-i18n-html="vie.xpMessageAide">Laisse vide pour la phrase par défaut. <code>{membre}</code> devient la mention, <code>{niveau}</code> le niveau atteint.</p>
+
+            <label class="mini-form"><span data-vie-xp-exclus-label data-i18n="vie.xpExclus">Salons sans expérience</span>
+              <select data-vie-xp-exclus-picker><option value="" data-i18n="dash.chargement">— Chargement… —</option></select>
+            </label>
+            <div class="variable-chips" data-vie-xp-exclus></div>
+            <p class="field-help" data-i18n="vie.xpExclusAide">Un salon de commandes ou de jeu fausse le classement. Une catégorie vaut pour tous ses salons.</p>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="vie.recompensesTitre">Rôles par palier</h3>
+            <p class="field-help" data-i18n="vie.recompensesAide">Un rôle donné au niveau atteint. Rien n'est retenu de ce qui a déjà été donné : déplace un palier et il se corrige tout seul à la montée suivante.</p>
+
+            <label class="toggle-line">
+              <input type="checkbox" data-vie-recompenses-cumul checked><span></span>
+              <strong data-i18n="vie.recompensesCumul">Garder les rôles des paliers précédents</strong>
+              <small data-i18n="vie.recompensesCumulAide">Décoché, un seul rang à la fois : le rôle du palier précédent est retiré. C'est ce que veut un serveur qui affiche Bronze, Argent, Or.</small>
+            </label>
+
+            <div class="recompense-list" data-vie-recompenses></div>
+            <button class="secondary-btn compact" type="button" data-vie-recompense-ajouter data-i18n="vie.recompensesAjouter"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Ajouter un palier</button>
           </div>
 
           <div class="tool-panel">
