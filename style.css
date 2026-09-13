@@ -12609,3 +12609,11 @@ body:not(.dashboard-page) .page-glow {
   flex: 0 0 auto;
 }
 .boutique-options .boutique-option span { min-width: 0; }
+
+/* Les deux abonnements se suivent dans la meme section : sans cet air,
+   le surtitre du second collait a la derniere ligne du premier. */
+.boutique-abo-inner + .boutique-abo-inner {
+  margin-top: 34px;
+  padding-top: 30px;
+  border-top: 1px solid var(--line);
+}
