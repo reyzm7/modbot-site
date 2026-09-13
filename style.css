@@ -3177,24 +3177,46 @@ main,
   box-shadow: none;
 }
 
+.server-select-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 14px;
+  margin-bottom: 18px;
+}
+
 .server-select-heading h1 {
-  margin: 0 0 10px;
-  font-size: clamp(2rem, 4vw, 3rem);
-  line-height: 1.05;
+  margin: 0;
+  /* 3 rem pour « Sélectionnez un serveur » au-dessus d'une liste de
+     quatre cartes : le titre pesait plus lourd que ce qu'on vient
+     choisir. */
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  line-height: 1.15;
   letter-spacing: 0;
 }
 
+/* Le nombre de serveurs : une pastille a cote du titre, pas une phrase
+   sur sa propre ligne. */
 .server-select-heading p {
-  margin: 0 0 18px;
+  margin: 0;
+  padding: 3px 10px;
+  border: 1px solid var(--line, #454750);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
   color: #b5bac1;
+  font-size: 0.82rem;
   font-weight: 650;
 }
 
+/* La recherche, le rafraichissement et l'invitation sur une seule
+   ligne. Le grand bouton violet passait toute la largeur sous la
+   recherche : sur un ecran dont le seul travail est de choisir un
+   serveur, il pesait plus que les serveurs. */
 .server-select-toolbar {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 10px;
   align-items: center;
 }
 
@@ -3228,9 +3250,13 @@ main,
   color: #9499a3;
 }
 
+/* Trois colonnes imposees : sur un grand ecran les cartes s'etiraient
+   a cinq cents pixels pour un nom et un chiffre, et la quatrieme
+   restait seule sur sa ligne. Le nombre de colonnes suit desormais la
+   largeur — quatre sur un grand ecran, une sur un telephone. */
 .server-picker .server-grid {
-  grid-template-columns: repeat(3, minmax(260px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(min(272px, 100%), 1fr));
+  gap: 14px;
 }
 
 .server-picker .server-card {
@@ -6403,47 +6429,87 @@ label,
   gap: 14px;
 }
 
+/* C'est CE bloc qui gouverne les cartes de serveur : la reprise sobre
+   recouvre entierement celui d'en haut. */
 .server-card-banner {
   display: block;
   height: 56px;
   background:
     linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.45)),
-    var(--server-banner, linear-gradient(135deg, #2a2f63, #151735)) center / cover;
+    /* Sans banniere, une teinte tiree de l'identifiant du serveur :
+       quatre bandeaux identiques se ressemblent tous, et on clique sur
+       le mauvais. Rien n'est invente — la couleur sort du numero. */
+    var(--server-banner, linear-gradient(135deg,
+      hsl(var(--server-teinte, 250) 30% 18%),
+      hsl(calc(var(--server-teinte, 250) + 40) 36% 30%))) center / cover;
 }
+
+/* Le nom passe avant tout : c'est ce qu'on cherche des yeux. Partageant
+   sa ligne avec la pastille d'action, « BE VPG Belgique BE » devenait
+   « BE VPG Belgiq… » — un ecran de choix ou l'on ne peut plus choisir.
+   L'action descend sur sa propre ligne, le nom prend la carte. */
 .server-card-body {
-  display: flex;
+  display: grid;
+  /* « auto » et non 42 px : la pastille du logo est portee a 64 px par
+     une regle plus specifique plus haut, et une colonne de 42 la
+     laissait recouvrir la premiere lettre du nom. */
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
+  gap: 10px 12px;
   padding: 14px 16px 16px;
 }
 .server-card-body .server-logo-shell {
-  flex: 0 0 auto;
   width: 42px;
   height: 42px;
   margin-top: -32px;
   border: 2px solid var(--panel);
   border-radius: 12px;
 }
-.server-card-copy { display: grid; gap: 2px; min-width: 0; flex: 1; }
+.server-card-copy { display: grid; gap: 2px; min-width: 0; }
 .server-card-copy strong {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
+  /* Deux lignes, puis on coupe : au-dela c'est la carte qui grandit et
+     la grille qui se deregle. */
+  overflow-wrap: anywhere;
   font-size: 0.94rem;
   font-weight: 650;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.25;
 }
 .server-card-copy small { color: var(--muted); font-size: 0.79rem; }
+
+/* « Ouvrir » etait une pastille grise, de la couleur du texte secondaire :
+   la seule chose sur laquelle on vient cliquer n'avait pas l'air d'un
+   bouton. */
 .server-card-action {
-  flex: 0 0 auto;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--surface-1);
-  color: var(--muted);
-  font-size: 0.74rem;
-  font-weight: 500;
+  grid-column: 1 / -1;
+  min-height: 34px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  color: var(--soft);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.server-card:hover .server-card-action {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
 }
 .server-card.is-uninstalled .server-card-action {
   background: rgba(232, 163, 61, 0.14);
+  border-color: rgba(232, 163, 61, 0.32);
+  color: var(--warn);
+}
+.server-card.is-uninstalled:hover .server-card-action {
+  background: rgba(232, 163, 61, 0.26);
   color: var(--warn);
 }
 
@@ -7304,11 +7370,16 @@ label,
 }
 
 /* Puces de variables insÃ©rables au curseur */
+/* Le -4 px collait les pastilles au champ qu'elles remplissent. Sous
+   une etiquette complete — son intitule ET sa liste deroulante — il
+   les faisait remonter DANS la liste : les noms de salons passaient
+   par-dessus le bord du champ. Deux pixels d'air a la place. */
 .variable-chips {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
   gap: 6px;
-  margin: -4px 0 14px;
+  margin: 2px 0 14px;
 }
 
 .variable-chip {
@@ -8836,6 +8907,69 @@ h3 > .ui-icon,
    laissaient un seul, large et vide, sur la deuxieme ligne. */
 [data-dashboard-panel="communaute"] .welcome-layout {
   grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+}
+
+/* ── Les salons ou un filtre recule ─────────────────────────────────── */
+/*
+   Trois blocs, mais rarement trois a l'ecran : chacun n'apparait que si
+   son filtre est allume. La grille s'adapte donc au nombre visible
+   plutot que de reserver trois colonnes dont deux resteraient vides.
+*/
+.exempt-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.exempt-bloc h3 { margin: 0 0 8px; font-size: 0.95rem; }
+.exempt-bloc .mini-form { margin-bottom: 0; }
+/* Un nom de salon Discord tient parfois vingt-cinq caracteres : la
+   pastille se coupe plutot que de pousser la colonne. */
+.exempt-bloc .variable-chip {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── L'ecran de choix du serveur ────────────────────────────────────── */
+/*
+   Ce qu'on vient y faire tient en un geste : reconnaitre son serveur et
+   cliquer dessus. Tout le reste doit s'effacer derriere.
+*/
+
+/* Une carte se souleve au survol : elle se clique, il faut que ca se
+   voie avant de cliquer. */
+.server-picker .server-card {
+  transition: transform 0.16s ease, border-color 0.16s ease,
+              box-shadow 0.16s ease;
+}
+.server-picker .server-card:hover,
+.server-picker .server-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--accent, #5865f2);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+@media (prefers-reduced-motion: reduce) {
+  .server-picker .server-card:hover,
+  .server-picker .server-card:focus-visible { transform: none; }
+}
+
+/* Un serveur ou ModBot n'est pas encore installe se distingue d'un coup
+   d'oeil : le liseré le dit avant qu'on lise l'etiquette. */
+.server-picker .server-card.is-uninstalled { border-style: dashed; }
+
+/* Le nom d'un serveur Discord fait parfois trente caracteres ; le
+   compte des membres, jamais. L'un se coupe, l'autre pas. */
+.server-card-copy small { white-space: nowrap; }
+
+/* Sur telephone, l'invitation passe sous la recherche : trois boutons
+   sur une ligne de 360 px ne laissent plus de place a la recherche. */
+@media (max-width: 620px) {
+  .server-select-toolbar { grid-template-columns: minmax(0, 1fr); }
+  .server-select-toolbar > * { width: 100%; }
+  .server-picker-card { width: min(100% - 24px, 1320px); padding: 26px 0; }
 }
 
 /* Dans un bouton, l'icône se sépare du libellé sans espace insécable */
@@ -12452,3 +12586,26 @@ body:not(.dashboard-page) .page-glow {
   .boutique-cmp th,
   .boutique-cmp td { padding: 12px 12px; font-size: 0.86rem; }
 }
+
+/* ── Les options de la fenetre de commande ─────────────────────────── */
+/*
+   « .boutique-fenetre-boite label » impose une grille a TOUTES les
+   etiquettes de la fenetre. La case a cocher s'y etirait sur toute la
+   largeur et se retrouvait centree AU-DESSUS de son texte, au lieu
+   d'etre a sa gauche : on ne voyait plus ce qu'elle cochait. Une option
+   se lit case a gauche, texte a droite.
+*/
+.boutique-options .boutique-option {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.boutique-options .boutique-option input {
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  margin-top: 3px;
+  padding: 0;
+  flex: 0 0 auto;
+}
+.boutique-options .boutique-option span { min-width: 0; }

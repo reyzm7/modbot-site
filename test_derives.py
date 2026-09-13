@@ -91,6 +91,13 @@ def options_du_site(script):
                 r'key:\s*"(\w+)",\s*prix:\s*(\d+),\s*pour:\s*\[([^\]]*)\]', bloc)}
 
 
+def hebergement_du_site(script):
+    """BOUTIQUE_HEBERGEMENT : clef → prix en centimes."""
+    bloc = bloc_js(script, "const BOUTIQUE_HEBERGEMENT = [", "\n];")
+    return {clef: int(prix) for clef, prix in re.findall(
+        r'key:\s*"(\w+)",\s*prix:\s*(\d+)', bloc)}
+
+
 # ─────────────────────────────────────────────────────────────────────
 #  Le repli HTML, celui qu'on voit avant que le JavaScript ne passe
 # ─────────────────────────────────────────────────────────────────────
@@ -189,6 +196,18 @@ def main():
         verifier(not ecarts_options and len(options_site) == len(options_bot),
                  "les options payantes ont le meme prix et la meme portee des deux cotes"
                  + (f" -> ecarts : {ecarts_options[:4]}" if ecarts_options else ""))
+
+        # Le choix d'hebergement annonce un prix mensuel : la page qui
+        # dirait 2,50 € pour un prelevement de 3,50 € mentirait, meme
+        # sans le vouloir.
+        heb_site = hebergement_du_site(script)
+        heb_bot = {clef: o["prix"] for clef, o in boutique.HEBERGEMENT.items()}
+        ecarts_heb = sorted(set(heb_site.items()) ^ set(heb_bot.items()))
+        verifier(not ecarts_heb and len(heb_site) == len(heb_bot),
+                 "le choix d'hebergement a les memes clefs et le meme prix des deux cotes"
+                 + (f" -> ecarts : {ecarts_heb[:4]}" if ecarts_heb else ""))
+        verifier(heb_bot.get("modbot") == boutique.ABONNEMENTS["hebergement"]["prix"],
+                 "l'hebergement annonce a la commande est celui qu'on preleve ensuite")
 
     # ── 4 : le repli HTML contre la valeur francaise ──────────────────
     fr = francais()

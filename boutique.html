@@ -67,7 +67,6 @@
 
       <div class="nav-links" id="navLinks">
         <a href="index.html#features" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg><span data-i18n="nav.features">Fonctionnalités</span></a>
-        <a href="index.html#donate" data-teinte="rose"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-heart"/></svg><span data-i18n="nav.pricing">Soutenir</span></a>
         <a href="wiki.html" data-teinte="ambre"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-compass"/></svg><span data-i18n="nav.wiki">Wiki</span></a>
         <a href="partenaires.html" data-teinte="menthe"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg><span data-i18n="nav.partenaires">Partenaires</span></a>
         <a href="index.html#faq" data-teinte="rouge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-question"/></svg><span data-i18n="home.faq">FAQ</span></a>
@@ -461,7 +460,7 @@
       <div class="boutique-avis-grille" data-avis-liste></div>
     </section>
 
-    <!-- ── L'abonnement maintenance ─────────────────────────────────── -->
+    <!-- ── Les abonnements : la maintenance, et l'hebergement ───────── -->
     <section class="boutique-abo section-shell" id="maintenance">
       <div class="boutique-abo-inner">
         <div>
@@ -476,6 +475,22 @@
           <button class="primary-btn" type="button" data-abo-souscrire data-i18n="bq.aboBouton">Activer la maintenance</button>
           <p class="boutique-abo-etat" data-abo-etat role="status" hidden></p>
           <p class="field-help" data-i18n="bq.aboResiliation">Résiliable en un clic depuis Stripe. Le mois déjà payé reste servi jusqu'à son terme.</p>
+        </aside>
+      </div>
+
+      <div class="boutique-abo-inner">
+        <div>
+          <p class="eyebrow" data-i18n="bq.hebEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg> Rester en ligne</p>
+          <h2 data-i18n="bq.hebAboTitre">Hébergement</h2>
+          <p data-i18n="bq.hebAboChapo">Un bot ou un site a besoin d'une machine allumée. Ou tu la gères — on te livre tout ce qu'il faut —, ou on la garde allumée pour toi.</p>
+          <ul class="wiki-check-list" data-heb-avantages></ul>
+        </div>
+        <aside class="boutique-abo-carte">
+          <p class="boutique-abo-prix" data-heb-prix></p>
+          <p class="boutique-abo-periode" data-i18n="bq.aboPeriode">par mois, sans engagement</p>
+          <button class="primary-btn" type="button" data-heb-souscrire data-i18n="bq.hebBouton">Activer l'hébergement</button>
+          <p class="boutique-abo-etat" data-heb-etat role="status" hidden></p>
+          <p class="field-help" data-i18n="bq.hebResiliation">Résiliable en un clic. Ta création est éteinte au terme du mois déjà payé, et les fichiers restent à toi.</p>
         </aside>
       </div>
     </section>
@@ -554,6 +569,15 @@
       <fieldset class="boutique-options" data-boutique-options hidden>
         <legend data-i18n="bq.optionsTitre">Des options, si tu veux</legend>
         <div class="boutique-options-liste" data-boutique-options-liste></div>
+      </fieldset>
+      <!-- OU VIVRA LA CREATION
+           La question se pose pour tout : un bot comme un site a besoin
+           d'une machine allumee. La laisser implicite, c'est livrer un
+           bot qui s'eteint le soir meme. -->
+      <fieldset class="boutique-options boutique-hebergement">
+        <legend data-i18n="bq.hebTitre">Où vivra ta création ?</legend>
+        <div class="boutique-options-liste" data-boutique-hebergement></div>
+        <p class="field-help" data-i18n="bq.hebAide">L'abonnement n'est pas compris dans le paiement d'aujourd'hui : il démarre à la livraison, et c'est toi qui l'actives.</p>
       </fieldset>
       <div class="boutique-promo">
         <label data-i18n="bq.promoLabel">Un code promo ?

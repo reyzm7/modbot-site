@@ -123,11 +123,12 @@
     </header>
 
     <section class="server-picker-card">
+      <!-- Le titre et le compte sur la meme ligne : un <div> les
+           enfermait, et la pastille du compte s'etirait sous le titre
+           au lieu de se poser a cote. -->
       <div class="server-select-heading">
-        <div>
-          <h1 data-i18n="dash.selectionnezUnServeur">Sélectionnez un serveur</h1>
-          <p data-server-count-label data-i18n="dash.vosServeursAdministrablesApparaissent">Vos serveurs administrables apparaissent ici.</p>
-        </div>
+        <h1 data-i18n="dash.selectionnezUnServeur">Sélectionnez un serveur</h1>
+        <p data-server-count-label data-i18n="dash.vosServeursAdministrablesApparaissent">Vos serveurs administrables apparaissent ici.</p>
       </div>
 
       <!-- Le grand bouton d'activation. Il n'apparait QUE si un achat
@@ -588,13 +589,37 @@
           <label class="toggle-line danger"><input type="checkbox"><span></span><strong data-i18n="dash.lockdown"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg> Lockdown</strong><small data-i18n="dash.masqueLesSalonsEn">Masque les salons en urgence.</small></label>
         </div>
 
-        <div class="tool-panel">
-          <h3 data-i18n="sec.liensLibresTitre">Salons où les liens sont permis</h3>
-          <p class="field-help" data-i18n="sec.liensLibresAide">L'anti-lien ne s'applique pas dans ces salons : #partage, #vos-créations, #clips. Choisis une catégorie et tous ses salons sont concernés ; un fil suit le salon qui le porte.</p>
-          <label class="mini-form"><span data-i18n="sec.liensLibresAjouter">Ajouter un salon</span>
-            <select data-antilink-picker><option value="" data-i18n="dash.chargement">— Chargement… —</option></select>
-          </label>
-          <div class="variable-chips" data-antilink-salons></div>
+        <!-- LES SALONS OU CHAQUE FILTRE RECULE
+             Un bloc par filtre, visible seulement quand ce filtre est
+             actif : une liste d'exceptions a un filtre eteint n'a rien
+             a faire a l'ecran. -->
+        <div class="exempt-grille">
+          <div class="tool-panel exempt-bloc" data-exempt-bloc="lien" hidden>
+            <h3 data-i18n="sec.liensLibresTitre">Salons où les liens sont permis</h3>
+            <p class="field-help" data-i18n="sec.liensLibresAide">L'anti-lien ne s'applique pas dans ces salons : #partage, #vos-créations, #clips. Choisis une catégorie et tous ses salons sont concernés ; un fil suit le salon qui le porte.</p>
+            <label class="mini-form"><span data-i18n="sec.liensLibresAjouter">Ajouter un salon</span>
+              <select data-antilink-picker><option value="" data-i18n="dash.chargement">— Chargement… —</option></select>
+            </label>
+            <div class="variable-chips" data-antilink-salons></div>
+          </div>
+
+          <div class="tool-panel exempt-bloc" data-exempt-bloc="spam" hidden>
+            <h3 data-i18n="sec.spamLibresTitre">Salons sans anti-spam</h3>
+            <p class="field-help" data-i18n="sec.spamLibresAide">Un salon de mèmes ou de compte à rebours vit de messages rapides. L'anti-spam n'y sanctionne plus personne, et reste entier ailleurs.</p>
+            <label class="mini-form"><span data-i18n="sec.liensLibresAjouter">Ajouter un salon</span>
+              <select data-antispam-picker><option value="" data-i18n="dash.chargement">— Chargement… —</option></select>
+            </label>
+            <div class="variable-chips" data-antispam-salons></div>
+          </div>
+
+          <div class="tool-panel exempt-bloc" data-exempt-bloc="filtre" hidden>
+            <h3 data-i18n="sec.filtreLibresTitre">Salons sans filtre de langage</h3>
+            <p class="field-help" data-i18n="sec.filtreLibresAide">Un salon entre adultes prévenus, ou un salon de jeux de mots. Les gros mots y passent, et le filtre continue de travailler partout ailleurs.</p>
+            <label class="mini-form"><span data-i18n="sec.liensLibresAjouter">Ajouter un salon</span>
+              <select data-filtre-picker><option value="" data-i18n="dash.chargement">— Chargement… —</option></select>
+            </label>
+            <div class="variable-chips" data-filtre-salons></div>
+          </div>
         </div>
 
         <div class="dashboard-grid three">
@@ -1107,7 +1132,8 @@
             <label class="mini-form"><span data-i18n="vie.xpMessage">Message de montée de niveau</span>
               <textarea rows="2" data-vie-xp-message data-i18n-placeholder="vie.xpMessagePlaceholder" placeholder="🎉 {membre} passe au niveau {niveau} !"></textarea>
             </label>
-            <p class="field-help" data-i18n-html="vie.xpMessageAide">Laisse vide pour la phrase par défaut. <code>{membre}</code> devient la mention, <code>{niveau}</code> le niveau atteint.</p>
+            <div class="variable-chips" data-vie-variables aria-label="Variables disponibles" data-i18n-aria="dash.variablesDisponibles"></div>
+            <p class="field-help" data-i18n="vie.xpMessageAide">Clique sur une étiquette pour la poser dans le message. Laisse vide pour la phrase par défaut.</p>
 
             <label class="mini-form"><span data-vie-xp-exclus-label data-i18n="vie.xpExclus">Salons sans expérience</span>
               <select data-vie-xp-exclus-picker><option value="" data-i18n="dash.chargement">— Chargement… —</option></select>

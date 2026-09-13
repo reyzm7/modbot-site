@@ -3924,11 +3924,13 @@ function initDashboard() {
     remplirSelect("[data-voice-hub]", optionsSalonsVocaux, t("js.aucun"));
     remplirSelect("[data-vie-xp-salon]", optionsSalons, t("js.aucun"));
     remplirSelect("[data-vie-xp-exclus-picker]", optionsSalons, t("js.vie.ajouterSalon"));
-    remplirSelect("[data-antilink-picker]", optionsSalons, t("js.vie.ajouterSalon"));
+    Object.values(EXEMPTS).forEach((config) => {
+      remplirSelect(config.picker, optionsSalons, t("js.vie.ajouterSalon"));
+    });
     // Les pastilles portent un nom de salon : sans les salons, elles
     // resteraient sur « #123456 ».
     redessinerSalonsSansXp();
-    redessinerSalonsLibres();
+    redessinerTousLesExempts();
     redessinerRecompenses();
     remplirSelect("[data-vie-anniv-salon]", optionsSalons, t("js.aucun"));
     remplirSelect("[data-vie-mur-salon]", optionsSalons, t("js.aucun"));
@@ -3973,27 +3975,17 @@ function initDashboard() {
       ? moderation.sanctions
       : (Array.isArray(moderation.bans) ? moderation.bans : []);
 
-    // Les mots arrivent du bot : ils alimentent les pastilles, qui sont
-    // desormais la source de verite a l'enregistrement.
-    appliquerMotsFiltres(customWords);
+    // Les mots livres avec le bot, retenus pour redessiner la liste sans
+    // rien redemander quand on en ajoute un.
+    motsParDefaut = filteredWords
+      .filter((item) => (item?.source || "default") !== "custom")
+      .map((item) => String(item?.word || item || "").trim())
+      .filter(Boolean);
 
-    const wordList = document.querySelector("[data-filtered-word-list]");
-    if (wordList) {
-      const seen = new Set();
-      const words = filteredWords.filter((item) => {
-        const word = String(item?.word || item || "").trim();
-        const key = word.toLowerCase();
-        if (!word || seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
-      wordList.innerHTML = words.length ? words.map((item) => {
-        const word = String(item.word || item).trim();
-        const source = item.source === "custom" ? "custom" : "default";
-        const label = t(source === "custom" ? "js.personnalise" : "js.parDefaut");
-        return `<span class="filtered-word-chip is-${source}"><strong>${escapeHtml(word)}</strong><em>${label}</em></span>`;
-      }).join("") : `<div class="dashboard-empty-state"><strong>${escapeHtml(t("js.aucunMotPersonnalise"))}</strong><span>${escapeHtml(t("js.listeChargeeDepuisBot"))}</span></div>`;
-    }
+    // Les mots arrivent du bot : ils alimentent les pastilles, qui sont
+    // desormais la source de verite a l'enregistrement — et qui
+    // redessinent la liste du bas et la zone du panneau Securite.
+    appliquerMotsFiltres(customWords);
 
     const sanctionList = document.querySelector("[data-sanction-list]");
     if (sanctionList) {
@@ -4133,11 +4125,18 @@ function initDashboard() {
   function updateServerCount(guilds) {
     if (!serverCountLabel) return;
     const realGuilds = guilds.filter((guild) => !guild.local);
-    if (realGuilds.length) {
-      serverCountLabel.textContent = tn("js.rejointUnServeur", "js.rejointDesServeurs", realGuilds.length);
+    if (!realGuilds.length) {
+      serverCountLabel.textContent = t("js.choisisOuAjoute");
       return;
     }
-    serverCountLabel.textContent = t("js.choisisOuAjoute");
+    // « Vous avez rejoint 4 serveurs » disait ce que la liste montrait
+    // deja. Le chiffre qui manquait etait celui des serveurs ou ModBot
+    // est la : c'est celui-la qu'on vient chercher.
+    const avecBot = realGuilds.filter((guild) => guild.installed).length;
+    const total = tn("js.compteServeurs", "js.compteServeursPluriel", realGuilds.length);
+    serverCountLabel.textContent = avecBot
+      ? `${total} · ${tp("js.compteAvecBot", { n: avecBot })}`
+      : total;
   }
 
   function currentServerSearchTerm() {
@@ -4290,6 +4289,15 @@ function initDashboard() {
     }
   }
 
+  // Une teinte stable par serveur, tiree de son identifiant. Elle ne
+  // dit rien du serveur : elle sert juste a ne pas avoir quatre cartes
+  // identiques ou l'on clique sur la mauvaise.
+  function teinteDuServeur(id) {
+    const chiffres = String(id || "").replace(/\D/g, "");
+    if (!chiffres) return 250;
+    return Number(chiffres.slice(-4)) % 360;
+  }
+
   function renderGuildChoices(guilds) {
     // Le menu déroulant de la barre suit la même source de données
     if (typeof renderSwitcherList === "function") renderSwitcherList();
@@ -4298,9 +4306,16 @@ function initDashboard() {
     const safeGuilds = normalizeDashboardGuilds(guilds);
     updateServerCount(safeGuilds);
     const term = currentServerSearchTerm();
-    const visibleGuilds = term
+    const trouves = term
       ? safeGuilds.filter((guild) => guild.name.toLowerCase().includes(term))
       : safeGuilds;
+    // Les serveurs ou ModBot est deja installe d'abord : on vient ici
+    // pour en ouvrir un, pas pour en inviter un. L'ordre de Discord est
+    // garde a l'interieur de chaque groupe.
+    const visibleGuilds = [
+      ...trouves.filter((guild) => guild.installed),
+      ...trouves.filter((guild) => !guild.installed),
+    ];
     if (!safeGuilds.length) {
       serverGrid.innerHTML = emptyGuildMarkup(t("js.connecteApiOuInvitation"));
       return;
@@ -4311,7 +4326,7 @@ function initDashboard() {
     }
     serverGrid.innerHTML = visibleGuilds.map((guild) => `
       <button class="server-card ${guild.installed ? "is-installed" : "is-uninstalled"} ${guild.local ? "is-local" : ""}" type="button" data-server-name="${escapeHtml(guild.name)}" data-server-id="${escapeHtml(guild.id)}" data-server-logo="${escapeHtml(guild.logo || modbotDefaultLogo)}" data-server-initials="${escapeHtml(guild.initials || "MB")}" data-server-installed="${guild.installed ? "true" : "false"}" data-server-local="${guild.local ? "true" : "false"}" data-server-can-manage="${guild.can_manage ? "true" : "false"}">
-        <span class="server-card-banner" style="--server-banner:url('${escapeHtml(guild.banner || modbotDefaultBanner)}')"></span>
+        <span class="server-card-banner" style="--server-banner:url('${escapeHtml(guild.banner || modbotDefaultBanner)}');--server-teinte:${teinteDuServeur(guild.id)}"></span>
         <span class="server-card-body">
           <span class="server-logo-shell" data-initials="${escapeHtml(guild.initials || "MB")}">
             <img class="server-logo" src="${escapeHtml(guild.logo || modbotDefaultLogo)}" alt="" data-logo-img>
@@ -4885,10 +4900,18 @@ function initDashboard() {
       });
     });
 
-    sansCasser("salons ou les liens passent", () => {
-      salonsLiensLibres = [...new Set((security.antilink_channels || []).map(String))]
-        .slice(0, SALONS_LISTE_MAX);
-      redessinerSalonsLibres();
+    sansCasser("salons ou un filtre recule", () => {
+      const recu = {
+        lien: security.antilink_channels,
+        spam: security.antispam_channels,
+        filtre: security.filtre_channels,
+      };
+      Object.entries(EXEMPTS).forEach(([quoi, config]) => {
+        config.salons = [...new Set((recu[quoi] || []).map(String))]
+          .slice(0, SALONS_LISTE_MAX);
+      });
+      redessinerTousLesExempts();
+      accorderBlocsExempts();
     });
 
     sansCasser("interrupteurs de securite", () => {
@@ -5575,7 +5598,9 @@ function initDashboard() {
 
     setChecked("[data-security-insultes]", filter.enabled);
     setChecked("[data-filter-tolerant]", filter.tolerant);
-    setValue("[data-filter-custom-words]", (filter.custom_words || []).join("\n"));
+    // Une seule liste de mots : celle des pastilles. Cette zone la
+    // montre, elle ne la double pas.
+    appliquerMotsFiltres(filter.custom_words || []);
     setValue("[data-filter-allowlist]", (filter.allowlist || []).join("\n"));
 
     sanctionLadder = Array.isArray(filter.ladder) && filter.ladder.length
@@ -5703,7 +5728,12 @@ function initDashboard() {
         enabled: readChecked("[data-security-insultes]"),
         tolerant: readChecked("[data-filter-tolerant]"),
         ladder: sanctionLadder,
-        custom_words: linesToList(readValue("[data-filter-custom-words]")),
+        // La source de verite reste les pastilles de la rubrique
+        // Moderation : c'est la meme liste, et deux ecrans qui
+        // s'envoyaient chacun la leur effacaient l'ajout de l'autre.
+        custom_words: motsFiltres.length
+          ? motsFiltres.slice()
+          : linesToList(readValue("[data-filter-custom-words]")),
         allowlist: linesToList(readValue("[data-filter-allowlist]"))
       },
       captcha: {
@@ -7699,12 +7729,58 @@ function initDashboard() {
   // qu'il a, on le repose tel quel, et on le lui renvoie tel quel.
 
   // Ce que la page tient entre deux enregistrements. Le bot reste seul
-  // juge : ces trois listes ne servent qu'a dessiner.
+  // juge : ces listes ne servent qu'a dessiner.
   let salonsSansXp = [];
-  let salonsLiensLibres = [];
   let recompensesNiveau = [];
   const RECOMPENSES_MAX = 20;
   const SALONS_LISTE_MAX = 40;
+
+  /* ── Les salons ou un filtre recule ────────────────────────────────
+     Trois filtres, trois listes, un seul code. Le bloc de chacun ne
+     s'affiche que si SON interrupteur est allume : une liste
+     d'exceptions a un filtre eteint n'apprend rien a personne, et
+     occupe une place que le reste du panneau reclame.
+     `rang` est la place de l'interrupteur dans le panneau Securite —
+     ils s'y lisent par rang, comme a l'enregistrement. */
+  const EXEMPTS = {
+    lien:   { rang: 0, picker: "[data-antilink-picker]", hote: "[data-antilink-salons]",
+              vide: "js.sec.aucunSalonLibre", salons: [] },
+    spam:   { rang: 2, picker: "[data-antispam-picker]", hote: "[data-antispam-salons]",
+              vide: "js.sec.aucunSalonSpam", salons: [] },
+    filtre: { rang: 1, picker: "[data-filtre-picker]", hote: "[data-filtre-salons]",
+              vide: "js.sec.aucunSalonFiltre", salons: [] },
+  };
+
+  function redessinerExempts(quoi) {
+    const config = EXEMPTS[quoi];
+    const hote = document.querySelector(config.hote);
+    if (!hote) return;
+    hote.innerHTML = config.salons.length
+      ? config.salons.map((id) => (
+          `<button type="button" class="variable-chip" data-retirer-exempt="${escapeHtml(id)}"
+                   title="${escapeHtml(t("js.vie.retirerSalon"))}">${escapeHtml(nomDuSalon(id))} &times;</button>`
+        )).join("")
+      : `<span class="field-help">${escapeHtml(t(config.vide))}</span>`;
+  }
+
+  function redessinerTousLesExempts() {
+    Object.keys(EXEMPTS).forEach(redessinerExempts);
+  }
+
+  // Le bloc suit son interrupteur, tout de suite : sans cela on coche
+  // « Anti-spam » et rien n'apparait avant le rechargement suivant.
+  function accorderBlocsExempts() {
+    const boutons = document.querySelectorAll(
+      "[data-dashboard-panel='security'] .toggle-grid .toggle-line input");
+    Object.entries(EXEMPTS).forEach(([quoi, config]) => {
+      const bloc = document.querySelector(`[data-exempt-bloc="${quoi}"]`);
+      if (bloc) bloc.hidden = !boutons[config.rang]?.checked;
+    });
+    const grille = document.querySelector(".exempt-grille");
+    if (grille) {
+      grille.hidden = !document.querySelector('[data-exempt-bloc]:not([hidden])');
+    }
+  }
 
   function redessinerSalonsSansXp() {
     const hote = document.querySelector("[data-vie-xp-exclus]");
@@ -7715,17 +7791,6 @@ function initDashboard() {
                    title="${escapeHtml(t("js.vie.retirerSalon"))}">${escapeHtml(nomDuSalon(id))} &times;</button>`
         )).join("")
       : `<span class="field-help">${escapeHtml(t("js.vie.tousLesSalons"))}</span>`;
-  }
-
-  function redessinerSalonsLibres() {
-    const hote = document.querySelector("[data-antilink-salons]");
-    if (!hote) return;
-    hote.innerHTML = salonsLiensLibres.length
-      ? salonsLiensLibres.map((id) => (
-          `<button type="button" class="variable-chip" data-retirer-lien-libre="${escapeHtml(id)}"
-                   title="${escapeHtml(t("js.vie.retirerSalon"))}">${escapeHtml(nomDuSalon(id))} &times;</button>`
-        )).join("")
-      : `<span class="field-help">${escapeHtml(t("js.sec.aucunSalonLibre"))}</span>`;
   }
 
   function redessinerRecompenses() {
@@ -7791,27 +7856,34 @@ function initDashboard() {
       });
     }
 
-    // Les salons ou les liens restent permis.
-    const pickerLien = document.querySelector("[data-antilink-picker]");
-    const hoteLien = document.querySelector("[data-antilink-salons]");
-    if (pickerLien && hoteLien) {
-      pickerLien.addEventListener("change", () => {
-        const id = pickerLien.value;
-        pickerLien.value = "";
-        if (!id || salonsLiensLibres.includes(id)) return;
-        if (salonsLiensLibres.length >= SALONS_LISTE_MAX) return showToast(t("js.vie.tropDeSalons"));
-        salonsLiensLibres.push(id);
-        redessinerSalonsLibres();
+    // Les salons ou chaque filtre recule : le meme geste pour les trois.
+    Object.entries(EXEMPTS).forEach(([quoi, config]) => {
+      const picker = document.querySelector(config.picker);
+      const hote = document.querySelector(config.hote);
+      if (!picker || !hote) return;
+      picker.addEventListener("change", () => {
+        const id = picker.value;
+        picker.value = "";
+        if (!id || config.salons.includes(id)) return;
+        if (config.salons.length >= SALONS_LISTE_MAX) return showToast(t("js.vie.tropDeSalons"));
+        config.salons.push(id);
+        redessinerExempts(quoi);
         markPanelDirty("security");
       });
-      hoteLien.addEventListener("click", (evenement) => {
-        const chip = evenement.target.closest("[data-retirer-lien-libre]");
+      hote.addEventListener("click", (evenement) => {
+        const chip = evenement.target.closest("[data-retirer-exempt]");
         if (!chip) return;
-        salonsLiensLibres = salonsLiensLibres.filter((x) => x !== chip.dataset.retirerLienLibre);
-        redessinerSalonsLibres();
+        config.salons = config.salons.filter((x) => x !== chip.dataset.retirerExempt);
+        redessinerExempts(quoi);
         markPanelDirty("security");
       });
-    }
+    });
+
+    // Cocher « Anti-spam » fait apparaitre ses exceptions sur-le-champ.
+    document.querySelectorAll(
+      "[data-dashboard-panel='security'] .toggle-grid .toggle-line input"
+    ).forEach((bouton) => bouton.addEventListener("change", accorderBlocsExempts));
+    accorderBlocsExempts();
 
     // Les paliers.
     const hoteRec = document.querySelector("[data-vie-recompenses]");
@@ -7841,14 +7913,45 @@ function initDashboard() {
         markPanelDirty("communaute");
       });
     }
+
+    // Les listes commencent vides : sans ce premier dessin, le bloc
+    // reste blanc tant que le bot n'a rien renvoye, et rien ne dit que
+    // « vide » veut dire « partout ».
+    redessinerSalonsSansXp();
+    redessinerTousLesExempts();
+    redessinerRecompenses();
   }
 
-    // Les trois listes commencent vides : sans ce premier dessin, le
-    // bloc reste blanc tant que le bot n'a rien renvoye, et rien ne dit
-    // que « vide » veut dire « partout ».
-    redessinerSalonsSansXp();
-    redessinerSalonsLibres();
-    redessinerRecompenses();
+  // Les deux etiquettes du message de montee de niveau. Ecrites en
+  // toutes lettres sous le champ, elles se voient ; noyees dans une
+  // phrase d'aide, il fallait les recopier a la main.
+  const VIE_VARIABLES = [
+    { token: "{membre}", label: "js.vie.varMembre" },
+    { token: "{niveau}", label: "js.vie.varNiveau" },
+  ];
+
+  function initVariablesVie() {
+    const hote = document.querySelector("[data-vie-variables]");
+    const zone = document.querySelector("[data-vie-xp-message]");
+    if (!hote || !zone) return;
+    hote.innerHTML = VIE_VARIABLES.map((v) => (
+      `<button type="button" class="variable-chip" data-variable-vie="${escapeHtml(v.token)}"
+               title="${escapeHtml(t(v.label))}">${escapeHtml(v.token)}</button>`
+    )).join("");
+    hote.addEventListener("click", (evenement) => {
+      const chip = evenement.target.closest("[data-variable-vie]");
+      if (!chip) return;
+      // A la position du curseur, pas a la fin : on ecrit « Bravo … ! »
+      // avant de poser la mention au milieu.
+      const debut = zone.selectionStart ?? zone.value.length;
+      const fin = zone.selectionEnd ?? zone.value.length;
+      const jeton = chip.dataset.variableVie;
+      zone.value = zone.value.slice(0, debut) + jeton + zone.value.slice(fin);
+      zone.focus();
+      zone.setSelectionRange(debut + jeton.length, debut + jeton.length);
+      markPanelDirty("communaute");
+    });
+  }
 
   function applyCommunauteState(vie) {
     if (!vie || typeof vie !== "object") return;
@@ -8380,7 +8483,9 @@ function initDashboard() {
       },
       security: {
         antilink: Boolean(securityToggles[0]?.checked),
-        antilink_channels: salonsLiensLibres.slice(0, SALONS_LISTE_MAX),
+        antilink_channels: EXEMPTS.lien.salons.slice(0, SALONS_LISTE_MAX),
+        antispam_channels: EXEMPTS.spam.salons.slice(0, SALONS_LISTE_MAX),
+        filtre_channels: EXEMPTS.filtre.salons.slice(0, SALONS_LISTE_MAX),
         insultes_enabled: Boolean(securityToggles[1]?.checked),
         antispam: Boolean(securityToggles[2]?.checked),
         antiraid: Boolean(securityToggles[3]?.checked),
@@ -9260,6 +9365,7 @@ function initDashboard() {
   initAutoRoles();
   initImagesTicket();
   initVieDuServeur();
+  initVariablesVie();
   /* ══════════════════════════════════════════════════════════════
      ASSISTANT IA DU SERVEUR
      A ne pas confondre avec l'assistant flottant de cette page, qui
@@ -9393,11 +9499,43 @@ function initDashboard() {
      ajoute le mot, il n'etait nulle part. */
 
   let motsFiltres = [];
+  // Les mots livres avec le bot. On les garde pour pouvoir redessiner la
+  // liste complete sans rien redemander : sans eux, un mot ajoute ne
+  // rejoignait les autres qu'au rechargement suivant.
+  let motsParDefaut = [];
+
+  function redessinerListeMots() {
+    const liste = document.querySelector("[data-filtered-word-list]");
+    if (!liste) return;
+    const vus = new Set();
+    const lignes = [
+      ...motsParDefaut.map((mot) => ({ mot, source: "default" })),
+      ...motsFiltres.map((mot) => ({ mot, source: "custom" })),
+    ].filter(({ mot }) => {
+      const clef = String(mot || "").trim().toLowerCase();
+      if (!clef || vus.has(clef)) return false;
+      vus.add(clef);
+      return true;
+    });
+    liste.innerHTML = lignes.length
+      ? lignes.map(({ mot, source }) => {
+          const etiquette = t(source === "custom" ? "js.personnalise" : "js.parDefaut");
+          return `<span class="filtered-word-chip is-${source}"><strong>${escapeHtml(String(mot).trim())}</strong><em>${escapeHtml(etiquette)}</em></span>`;
+        }).join("")
+      : `<div class="dashboard-empty-state"><strong>${escapeHtml(t("js.aucunMotPersonnalise"))}</strong><span>${escapeHtml(t("js.listeChargeeDepuisBot"))}</span></div>`;
+  }
 
   function redessinerMots() {
     const hote = document.querySelector("[data-word-chips]");
     const cache = document.querySelector("[data-custom-words]");
     if (cache) cache.value = motsFiltres.join(", ");
+    // Le panneau Securite montre la MEME liste dans une zone de texte.
+    // Deux ecrans pour une seule liste, et chacun l'envoyait au bot a
+    // l'enregistrement : celui qui n'avait pas ete rafraichi effacait ce
+    // que l'autre venait d'ajouter. Le mot ajoute disparaissait.
+    const zone = document.querySelector("[data-filter-custom-words]");
+    if (zone) zone.value = motsFiltres.join("\n");
+    redessinerListeMots();
     if (!hote) return;
     hote.innerHTML = motsFiltres.length
       ? motsFiltres.map((mot) => (
@@ -9435,6 +9573,16 @@ function initDashboard() {
   }
 
   function initMotsFiltres() {
+    // La zone de texte du panneau Securite reste modifiable : ce qu'on
+    // y tape rejoint la meme liste, sinon elle repartirait vide.
+    const zone = document.querySelector("[data-filter-custom-words]");
+    if (zone) {
+      zone.addEventListener("change", () => {
+        appliquerMotsFiltres(zone.value.split(/[\n,;]+/));
+        markPanelDirty("security");
+      });
+    }
+
     const champ = document.querySelector("[data-word-input]");
     const bouton = document.querySelector("[data-word-add]");
     const hote = document.querySelector("[data-word-chips]");
@@ -10300,8 +10448,16 @@ const BOUTIQUE_OPTIONS = [
     libelleClef: "bq.optExpress", detailClef: "bq.optExpressDetail" },
   { key: "page_extra", prix: 1500, pour: ["site", "pack"],
     libelleClef: "bq.optPage", detailClef: "bq.optPageDetail" },
-  { key: "hebergement", prix: 2900, pour: ["site", "pack"],
-    libelleClef: "bq.optHebergement", detailClef: "bq.optHebergementDetail" },
+];
+
+// Ou vivra la creation. Recopie de `boutique.HEBERGEMENT` cote bot,
+// comme les articles et les options : le navigateur n'envoie qu'une
+// clef, le bot garde les prix. « Hébergement un an, 29 € » etait une
+// option de catalogue payee une fois ; c'est desormais ce choix-la.
+const BOUTIQUE_HEBERGEMENT = [
+  { key: "soi", prix: 0, libelleClef: "bq.hebSoi", detailClef: "bq.hebSoiDetail" },
+  { key: "modbot", prix: 350, periodeClef: "bq.hebParMois",
+    libelleClef: "bq.hebNous", detailClef: "bq.hebNousDetail" },
 ];
 
 const BOUTIQUE_ARTICLES = [
@@ -10545,38 +10701,42 @@ function initAvis() {
   document.addEventListener("modbot:language", dessinerAvis);
 }
 
-// ── L'abonnement maintenance ─────────────────────────────────────────
+// ── Les abonnements : la maintenance, et l'hebergement ────────────────
 //
 // Le prix vient du bot, jamais d'ici : c'est lui qui le porte a Stripe,
 // et une page qui annoncerait 8 € pour un prelevement de 10 € serait un
 // mensonge, meme involontaire.
-function initAbonnement() {
-  const bouton = document.querySelector("[data-abo-souscrire]");
-  const zonePrix = document.querySelector("[data-abo-prix]");
-  const zoneAvantages = document.querySelector("[data-abo-avantages]");
-  const etat = document.querySelector("[data-abo-etat]");
-  if (!bouton || !zonePrix) return;
+//
+// Deux cartes, un seul code : elles ne different que par leur produit,
+// leurs selecteurs et leurs quatre avantages.
+function carteAbonnement({ produit, prefixe, avantages }) {
+  const bouton = document.querySelector(`[data-${prefixe}-souscrire]`);
+  const zonePrix = document.querySelector(`[data-${prefixe}-prix]`);
+  const zoneAvantages = document.querySelector(`[data-${prefixe}-avantages]`);
+  const etat = document.querySelector(`[data-${prefixe}-etat]`);
+  if (!bouton || !zonePrix) return null;
 
-
-  function direAbonnement(message, bon) {
+  function dire(message, bon) {
     if (!etat) return;
     etat.textContent = message;
     etat.classList.toggle("is-ok", Boolean(bon));
     etat.hidden = false;
   }
 
-  function dessinerAbonnement() {
-    if (zoneAvantages) {
-      zoneAvantages.innerHTML = [t("bq.aboAvantage1"), t("bq.aboAvantage2"),
-                                 t("bq.aboAvantage3"), t("bq.aboAvantage4")]
-        .map((texte) => `<li>${escapeHtmlValue(texte)}</li>`).join("");
-    }
+  function dessiner() {
+    if (!zoneAvantages) return;
+    zoneAvantages.innerHTML = avantages
+      .map((a) => `<li>${escapeHtmlValue(t(a.texteClef))}</li>`).join("");
   }
 
   async function lirePrix() {
     try {
       const data = await modbotApiFetch("/api/boutique/offres", { cache: "no-store" });
-      const offre = data?.abonnement;
+      const offres = Array.isArray(data?.abonnements) ? data.abonnements : [];
+      // « abonnement » au singulier : ce que rendait le bot avant qu'il
+      // y en ait deux. Un bot pas encore redemarre le renvoie encore.
+      const offre = offres.find((o) => o.key === produit)
+        || (produit === "maintenance" ? data?.abonnement : null);
       if (offre?.prix_label) zonePrix.textContent = offre.prix_label;
     } catch (erreur) {
       // Bot injoignable : mieux vaut pas de prix qu'un prix invente.
@@ -10586,25 +10746,45 @@ function initAbonnement() {
   bouton.addEventListener("click", async () => {
     bouton.disabled = true;
     try {
-      const data = await modbotApiFetch("/api/boutique/abonnement", { method: "POST" });
+      const data = await modbotApiFetch("/api/boutique/abonnement", {
+        method: "POST", body: JSON.stringify({ produit }),
+      });
       if (data?.url) {
         location.href = data.url;
         return;
       }
-      direAbonnement(t("bq.indisponible"), false);
+      dire(t("bq.indisponible"), false);
     } catch (erreur) {
-      direAbonnement(erreur?.message || t("bq.indisponible"), false);
+      dire(erreur?.message || t("bq.indisponible"), false);
     }
     bouton.disabled = false;
   });
 
-  const retour = new URLSearchParams(location.search).get("abonnement");
-  if (retour === "reussi") direAbonnement(t("bq.aboMerci"), true);
-  if (retour === "annule") direAbonnement(t("bq.aboAnnule"), false);
-
-  dessinerAbonnement();
+  dessiner();
   lirePrix();
-  document.addEventListener("modbot:language", dessinerAbonnement);
+  document.addEventListener("modbot:language", dessiner);
+  return dire;
+}
+
+function initAbonnement() {
+  const direMaintenance = carteAbonnement({
+    produit: "maintenance", prefixe: "abo",
+    avantages: [{ texteClef: "bq.aboAvantage1" }, { texteClef: "bq.aboAvantage2" },
+                { texteClef: "bq.aboAvantage3" }, { texteClef: "bq.aboAvantage4" }],
+  });
+  const direHebergement = carteAbonnement({
+    produit: "hebergement", prefixe: "heb",
+    avantages: [{ texteClef: "bq.hebAvantage1" }, { texteClef: "bq.hebAvantage2" },
+                { texteClef: "bq.hebAvantage3" }, { texteClef: "bq.hebAvantage4" }],
+  });
+
+  // Stripe renvoie sur la meme adresse pour les deux : on parle a celle
+  // qui est la, la maintenance d'abord — c'est la plus ancienne.
+  const dire = direMaintenance || direHebergement;
+  if (!dire) return;
+  const retour = new URLSearchParams(location.search).get("abonnement");
+  if (retour === "reussi") dire(t("bq.aboMerci"), true);
+  if (retour === "annule") dire(t("bq.aboAnnule"), false);
 }
 
 
@@ -10910,6 +11090,32 @@ function initPageBoutique() {
       ? `${dit} <s>${escapeHtmlValue(prixAffiche(base))}</s>` : dit;
   }
 
+  const zoneHebergement = document.querySelector("[data-boutique-hebergement]");
+
+  const hebergementChoisi = () =>
+    zoneHebergement?.querySelector("[data-boutique-heb]:checked")?.dataset.boutiqueHeb
+    || "soi";
+
+  function dessinerHebergement() {
+    if (!zoneHebergement) return;
+    // « Moi-meme » est coche d'avance : personne ne doit se retrouver
+    // abonne a quelque chose qu'il n'a pas choisi.
+    zoneHebergement.innerHTML = BOUTIQUE_HEBERGEMENT.map((offre, rang) => {
+      const prix = offre.prix
+        ? ` · ${prixAffiche(offre.prix)} ${t(offre.periodeClef)}`
+        : "";
+      return `
+      <label class="boutique-option">
+        <input type="radio" name="boutique-hebergement" ${rang === 0 ? "checked" : ""}
+               data-boutique-heb="${escapeHtmlValue(offre.key)}">
+        <span>
+          <strong>${escapeHtmlValue(t(offre.libelleClef))}${escapeHtmlValue(prix)}</strong>
+          <small>${escapeHtmlValue(t(offre.detailClef))}</small>
+        </span>
+      </label>`;
+    }).join("");
+  }
+
   function dessinerOptions(article) {
     if (!zoneOptions || !listeOptions) return;
     const utiles = BOUTIQUE_OPTIONS.filter((option) => option.pour.includes(article.categorie));
@@ -10984,6 +11190,7 @@ function initPageBoutique() {
     if (champPromo) champPromo.value = "";
     if (etatPromo) etatPromo.hidden = true;
     dessinerOptions(article);
+    dessinerHebergement();
     ecrireRecap();
     if (zoneErreur) zoneErreur.hidden = true;
     fenetre.hidden = false;
@@ -11030,6 +11237,7 @@ function initPageBoutique() {
           discord: contact.valeur,
           projet: champProjet?.value || "",
           options: optionsChoisies(),
+          hebergement: hebergementChoisi(),
           promo: promoApplique?.code || "",
           conditions: true,
         }),
