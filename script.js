@@ -11648,6 +11648,68 @@ function initSommaireWiki() {
 initSommaireWiki();
 
 /* ══════════════════════════════════════════════════════════════════
+   LE PASSAGE D'UNE PAGE A L'AUTRE
+   ══════════════════════════════════════════════════════════════════
+   Le voile est deja dans la page (voile-page) : il s'y efface tout
+   seul a l'arrivee, sans une ligne de script. Ce qui suit ne gere que
+   le DEPART — poser le noir, puis partir.
+
+   Les cent quatre-vingt-dix millisecondes d'attente sont un vrai
+   retard ajoute a chaque clic. Elles ne valent que parce qu'elles
+   remplacent un saut : au-dela, on attend le site.
+
+   Tout ce qui n'est pas une navigation ordinaire passe SANS etre
+   touche — clic du milieu, Ctrl, nouvel onglet, telechargement, autre
+   domaine, ancre de la meme page. Rien de ce qui marchait avant ne doit
+   commencer a dependre de ce code.
+   ══════════════════════════════════════════════════════════════════ */
+function initTransitionPage() {
+  if (mouvementReduit()) return;
+  const racine = document.documentElement;
+
+  // Un retour par le bouton « precedent » ressort parfois de la memoire
+  // du navigateur, la page telle qu'on l'a quittee : voile pose. On le
+  // leve a chaque affichage.
+  window.addEventListener("pageshow", () => racine.classList.remove("page-part"));
+
+  document.addEventListener("click", (evenement) => {
+    if (evenement.defaultPrevented) return;
+    // Bouton du milieu, Ctrl/Cmd/Maj/Alt : l'onglet s'ouvre a cote, la
+    // page courante ne bouge pas.
+    if (evenement.button !== 0 || evenement.metaKey || evenement.ctrlKey
+        || evenement.shiftKey || evenement.altKey) return;
+
+    const lien = evenement.target.closest("a[href]");
+    if (!lien || lien.hasAttribute("download")) return;
+    if (lien.target && lien.target !== "_self") return;
+
+    let url;
+    try {
+      url = new URL(lien.getAttribute("href"), location.href);
+    } catch (erreur) {
+      return;
+    }
+    if (url.origin !== location.origin) return;
+    if (!/^https?:$/.test(url.protocol)) return;
+    // Une ancre de la MEME page ne change pas de page : la voiler
+    // noircirait l'ecran pour un simple defilement.
+    if (url.pathname === location.pathname && url.search === location.search) return;
+
+    evenement.preventDefault();
+    racine.classList.add("page-part");
+    // Si la navigation n'arrive pas — elle a ete bloquee, l'adresse est
+    // morte —, l'ecran ne doit pas rester noir.
+    const secours = window.setTimeout(() => racine.classList.remove("page-part"), 2500);
+    window.setTimeout(() => {
+      window.clearTimeout(secours);
+      location.href = url.href;
+    }, 190);
+  });
+}
+
+initTransitionPage();
+
+/* ══════════════════════════════════════════════════════════════════
    LOGOS DES PARTENAIRES
    Discord publie, sans authentification, ce que contient un lien
    d'invitation : le nom du serveur, son avatar et son nombre de

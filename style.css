@@ -12617,3 +12617,129 @@ body:not(.dashboard-page) .page-glow {
   padding-top: 30px;
   border-top: 1px solid var(--line);
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   L'ecran de choix laisse voir le fond du site
+   ═══════════════════════════════════════════════════════════════════
+   Il portait un aplat gris Discord (#313338) etale sur toute la
+   hauteur : les etoiles, le halo et le decor vivant etaient bien la,
+   derriere, et on n'en voyait rien. Quatre cartes grises sur un gris
+   uni, et six cents pixels de vide en dessous.
+
+   Le gris part ; ce qui restait en gris Discord — la barre du haut, la
+   recherche, les cartes — reprend la palette du site, sinon on aurait
+   des boites grises posees sur un ciel violet.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.server-picker {
+  background: transparent;
+  color: var(--text);
+}
+
+/* Le fond vivant est peint DERRIERE (z-index -1) : un voile suffit a
+   garder les cartes lisibles sans effacer le decor. */
+.server-picker::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 520px at 50% -10%, rgba(139, 92, 246, 0.16), transparent 70%),
+    linear-gradient(180deg, rgba(5, 2, 13, 0.55), rgba(5, 2, 13, 0.82));
+}
+
+.server-select-topbar {
+  background: rgba(10, 6, 22, 0.72);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+.server-select-brand { color: var(--text); }
+.server-select-nav a { color: var(--muted); font-weight: 650; }
+.server-select-nav a:hover { color: var(--text); }
+
+.server-picker .secondary-btn {
+  background: var(--surface-1);
+  border-color: var(--line);
+}
+
+.server-search {
+  border-color: var(--line);
+  background: rgba(10, 6, 22, 0.6);
+  color: var(--muted);
+}
+.server-search input { color: var(--text); font-weight: 600; }
+.server-search input::placeholder { color: var(--muted); }
+
+.server-picker .server-card {
+  border-color: var(--line);
+  background: var(--panel);
+  color: var(--text);
+}
+
+.server-picker .server-card .server-logo-shell {
+  border-color: rgba(18, 12, 34, 0.9);
+  background: var(--bg);
+}
+
+.server-card-copy strong { color: var(--text); }
+
+.server-picker .dashboard-empty-state {
+  border-color: var(--line);
+  background: var(--panel);
+}
+
+/* Le compte des serveurs et le titre se lisent sur le decor. */
+.server-select-heading p {
+  background: rgba(10, 6, 22, 0.55);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LA TRANSITION D'UNE PAGE A L'AUTRE
+   ═══════════════════════════════════════════════════════════════════
+   Un clic dans la barre du haut remplacait l'ecran d'un coup : le fond
+   sautait, le decor repartait de zero, et l'oeil devait retrouver ou il
+   en etait. Le voile noir tient la seconde qui manque — il se pose au
+   depart, il s'efface a l'arrivee.
+
+   L'opacite de REPOS est zero, et l'animation part de un. Si les
+   animations ne tournent pas — vieux navigateur, moteur en panne — le
+   voile reste donc invisible. L'inverse aurait laisse un ecran noir.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.voile-page {
+  position: fixed;
+  inset: 0;
+  /* Au-dessus de tout, assistant compris (9001) : un voile qu'un
+     panneau traverse ne voile rien. */
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  background: #05020d;
+}
+
+@keyframes voile-arrivee {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes voile-depart {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* L'arrivee : le noir s'efface. Un peu plus long que le depart —
+     on decouvre une page, on ne la quitte pas. */
+  .voile-page {
+    animation: voile-arrivee 420ms cubic-bezier(0.22, 0.7, 0.3, 1);
+  }
+
+  /* Le depart : le noir se pose, et RESTE pose jusqu'a ce que la page
+     suivante s'affiche (« forwards »). Sans cela, l'ecran se rallumerait
+     une fraction de seconde avant de changer. */
+  html.page-part .voile-page {
+    animation: voile-depart 190ms cubic-bezier(0.4, 0, 1, 1) forwards;
+  }
+}
