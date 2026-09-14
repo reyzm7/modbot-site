@@ -12743,3 +12743,47 @@ body:not(.dashboard-page) .page-glow {
     animation: voile-depart 190ms cubic-bezier(0.4, 0, 1, 1) forwards;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   « Gerer mon abonnement », sous les deux cartes
+   ═══════════════════════════════════════════════════════════════════
+   Une seule ligne pour les deux : chez Stripe, maintenance et
+   hebergement sont le meme client. La poser dans l'une des deux cartes
+   aurait laisse croire qu'elle ne gere que celle-la.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.boutique-abo-gerer {
+  margin-top: 26px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 16px;
+  text-align: center;
+}
+
+.boutique-abo-gerer .field-help {
+  margin: 0;
+  max-width: 46ch;
+}
+
+.boutique-abo-gerer .boutique-abo-etat { flex-basis: 100%; margin: 0; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   « Hebergement a activer », sur la fiche d'une commande
+   ═══════════════════════════════════════════════════════════════════
+   Une creation livree, hebergee par nous, dont l'abonnement n'a jamais
+   demarre : elle tourne sur notre machine sans que rien ne soit
+   preleve, ou elle est eteinte et le client ne le sait pas encore. Les
+   deux valent qu'on regarde la fiche. D'ou la couleur d'alerte, la
+   seule de cette liste.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.btq-tag.btq-tag-alerte {
+  background: rgba(232, 163, 61, 0.16);
+  border: 1px solid rgba(232, 163, 61, 0.38);
+  color: var(--warn);
+  font-weight: 700;
+}

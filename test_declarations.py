@@ -34,7 +34,9 @@ import re
 import sys
 
 SITE = os.path.dirname(os.path.abspath(__file__))
-SCRIPTS = ("script.js", "translations.js", "icons.js", "devserver.js")
+SCRIPTS = ("script.js", "translations.js", "icons.js", "devserver.js",
+           "traductions-en.js", "traductions-ar.js", "traductions-es.js",
+           "traductions-de.js")
 
 resultats = []
 

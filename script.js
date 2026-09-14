@@ -611,12 +611,52 @@ function initNavigation() {
 const LANGUE_PAR_DEFAUT = "fr";
 const CLEF_LANGUE = "modbot-site-language";
 
+/**
+ * Les langues du site.
+ *
+ * La liste ne se déduit plus de `siteTranslations` : seul le français y
+ * est au chargement, les quatre autres arrivent à la demande. Se fier au
+ * contenu aurait ramené tout le monde au français.
+ */
+const LANGUES_DU_SITE = Array.isArray(window.MODBOT_LANGUES)
+  ? window.MODBOT_LANGUES
+  : Object.keys(siteTranslations);
+
+/**
+ * Charge le dictionnaire d'une langue, une seule fois.
+ *
+ * Les cinq langues tenaient dans un seul fichier de 904 Ko, téléchargé
+ * par tout le monde sur chaque page : un lecteur français recevait
+ * l'arabe, l'allemand, l'espagnol et l'anglais pour ne jamais les lire.
+ *
+ * Un échec — fichier absent, réseau coupé — se résout quand même : la
+ * page reste en français, ce qu'elle est déjà dans son HTML. Mieux vaut
+ * une langue qu'on n'attendait pas qu'une page vide.
+ */
+const dictionnairesDemandes = new Map();
+function chargerDictionnaire(langue) {
+  if (langue === LANGUE_PAR_DEFAUT || siteTranslations[langue]
+      || !LANGUES_DU_SITE.includes(langue)) {
+    return Promise.resolve();
+  }
+  if (!dictionnairesDemandes.has(langue)) {
+    dictionnairesDemandes.set(langue, new Promise((fini) => {
+      const balise = document.createElement("script");
+      balise.src = `traductions-${langue}.js`;
+      balise.addEventListener("load", () => fini());
+      balise.addEventListener("error", () => fini());
+      document.head.appendChild(balise);
+    }));
+  }
+  return dictionnairesDemandes.get(langue);
+}
+
 /** Langue retenue : celle choisie, sinon celle du navigateur, sinon le français. */
 function getSiteLanguage() {
   const enregistree = localStorage.getItem(CLEF_LANGUE);
-  if (enregistree && siteTranslations[enregistree]) return enregistree;
+  if (enregistree && LANGUES_DU_SITE.includes(enregistree)) return enregistree;
   const navigateur = (navigator.language || "").slice(0, 2).toLowerCase();
-  return siteTranslations[navigateur] ? navigateur : LANGUE_PAR_DEFAUT;
+  return LANGUES_DU_SITE.includes(navigateur) ? navigateur : LANGUE_PAR_DEFAUT;
 }
 
 /** Texte traduit, avec repli sur le français puis sur la clef elle-même. */
@@ -657,6 +697,24 @@ function tn(clefUn, clefPlusieurs, nombre, valeurs = {}) {
  * du HTML en place plutôt que de vider l'élément.
  */
 function applySiteLanguage(language) {
+  // Le dictionnaire n'est peut-être pas encore là : on retient le choix
+  // tout de suite — pour que `t()` et un rechargement le voient — et on
+  // repeint dès qu'il arrive. En attendant, la page garde le français
+  // qu'elle porte déjà dans son HTML : rien ne clignote.
+  if (language !== LANGUE_PAR_DEFAUT && !siteTranslations[language]
+      && LANGUES_DU_SITE.includes(language)) {
+    try {
+      localStorage.setItem(CLEF_LANGUE, language);
+    } catch (erreur) {
+      // Stockage refusé : la langue vaudra pour cette page seulement.
+    }
+    chargerDictionnaire(language).then(() => appliquerLangue(language));
+    return;
+  }
+  appliquerLangue(language);
+}
+
+function appliquerLangue(language) {
   const dictionnaire = siteTranslations[language] || siteTranslations[LANGUE_PAR_DEFAUT] || {};
   const repli = siteTranslations[LANGUE_PAR_DEFAUT] || {};
   const lire = (clef) => dictionnaire[clef] || repli[clef];
@@ -1615,6 +1673,29 @@ function initAdminZone() {
     return `<details class="btq-suivi"><summary>${escapeHtmlValue(tp("js.adm.btqSuivi", { n: entrees.length }))}</summary><ol>${lignes}</ol></details>`;
   }
 
+  /**
+   * Cette commande doit-elle un hébergement qui n'est pas payé ?
+   *
+   * La question ne se posait nulle part : le mot « hébergement »
+   * n'apparaissait pas une fois dans l'administration. Une création
+   * livrée « hébergée par nous » dont le client n'a jamais activé son
+   * abonnement ne se voyait donc pas — on l'apprenait quand il écrivait
+   * pour demander pourquoi son bot était éteint. Ou jamais.
+   *
+   * Rend "" (rien à dire), "atteinte" (choisi, payé) ou "manquant".
+   */
+  function hebergementDuA(commande) {
+    if ((commande.hebergement || "soi") !== "modbot") return "";
+    const abonnements = (btqDonnees && btqDonnees.abonnements) || [];
+    const paye = abonnements.some((abo) => abo.produit === "hebergement"
+      && abo.actif && String(abo.discord_id) === String(commande.discord_id || ""));
+    if (paye) return "atteinte";
+    // Tant que ce n'est pas livré, il n'y a rien à réclamer : l'abonnement
+    // ne démarre qu'à la livraison, et le client le sait — on le lui a
+    // écrit deux fois.
+    return commande.statut === "livree" ? "manquant" : "attendu";
+  }
+
   function ficheCommandeAdmin(commande) {
     const id = escapeHtmlValue(commande.numero);
     const actions = BTQ_EN_COURS.includes(commande.statut) ? `
@@ -1657,12 +1738,16 @@ function initAdminZone() {
     if (commande.moyen) meta.push(escapeHtmlValue(t(commande.moyen === "paypal" ? "bq.paypal" : "bq.carte")));
     if (commande.email) meta.push(escapeHtmlValue(commande.email));
     if (commande.devis) meta.push(escapeHtmlValue(tp("js.adm.btqDevisLie", { id: commande.devis })));
+    const heberge = hebergementDuA(commande);
+    if (heberge) meta.push(escapeHtmlValue(t("js.adm.btqHebergeParNous")));
+    else if (commande.hebergement === "soi") meta.push(escapeHtmlValue(t("js.adm.btqHebergeLuiMeme")));
     return `
       <article class="btq-fiche" data-btq-fiche="${id}">
         <div class="btq-fiche-tete">
           <span class="btq-ident"><code>${id}</code><strong>${escapeHtmlValue(commande.libelle || commande.article || "")}</strong></span>
           <span class="btq-montant">${escapeHtmlValue(boutiquePrix(Number(commande.montant) || 0))}</span>
           <span class="btq-tag" data-statut="${escapeHtmlValue(commande.statut)}">${escapeHtmlValue(btqLibelleStatut(commande.statut, commande.debut_prevu))}</span>
+          ${heberge === "manquant" ? `<span class="btq-tag btq-tag-alerte">${escapeHtmlValue(t("js.adm.btqHebergementManquant"))}</span>` : ""}
         </div>
         <p class="btq-meta">${meta.join(" · ")}</p>
         ${commande.projet ? `<p class="btq-texte">${escapeHtmlValue(commande.projet)}</p>` : ""}
@@ -2079,7 +2164,8 @@ function initAdminZone() {
     if (!btqListe) return;
     try {
       const data = await modbotApiFetch("/api/admin/boutique", { cache: "no-store" });
-      btqDonnees = { commandes: data.commandes || [], devis: data.devis || [], sav: data.sav || [] };
+      btqDonnees = { commandes: data.commandes || [], devis: data.devis || [],
+                     sav: data.sav || [], abonnements: data.abonnements || [] };
       peindreBoutiqueAdmin();
       btqDemarrerDirect();
       chargerPromos();
@@ -10787,6 +10873,47 @@ function initAbonnement() {
   if (retour === "annule") dire(t("bq.aboAnnule"), false);
 }
 
+initGestionAbonnement();
+
+
+
+/**
+ * « Gérer mon abonnement » : la page de Stripe, pas la nôtre.
+ *
+ * Le bot ouvre une session de portail et rend l'adresse. Rien n'est
+ * stocké ici, et aucun numéro de carte ne traverse le site — c'est
+ * exactement pourquoi on envoie chez Stripe plutôt que de fabriquer un
+ * formulaire.
+ */
+function initGestionAbonnement() {
+  const bouton = document.querySelector("[data-abo-gerer]");
+  if (!bouton) return;
+  const etat = document.querySelector("[data-abo-gerer-etat]");
+
+  function dire(message) {
+    if (!etat) return;
+    etat.textContent = message;
+    etat.hidden = false;
+  }
+
+  bouton.addEventListener("click", async () => {
+    bouton.disabled = true;
+    if (etat) etat.hidden = true;
+    try {
+      const data = await modbotApiFetch("/api/boutique/portail", { method: "POST" });
+      if (data?.url) {
+        location.href = data.url;
+        return;
+      }
+      dire(t("bq.indisponible"));
+    } catch (erreur) {
+      // Le bot repond « aucun abonnement a gerer » quand il n'y a rien :
+      // sa phrase est plus juste que la notre, on la montre telle quelle.
+      dire(erreur?.message || t("bq.indisponible"));
+    }
+    bouton.disabled = false;
+  });
+}
 
 function initComparatif() {
   const table = document.querySelector("[data-cmp-table]");

@@ -50,9 +50,26 @@ def verifier(condition, message):
 # ─────────────────────────────────────────────────────────────────────
 #  Lecture de translations.js
 # ─────────────────────────────────────────────────────────────────────
+def source_traductions():
+    """
+    Les cinq dictionnaires, bout a bout.
+
+    Le francais vit dans translations.js — il sert de repli et doit etre
+    la sans attendre ; les quatre autres ont leur fichier, charge a la
+    demande. Les relire ensemble garde ce test tel qu'il etait : cinq
+    blocs « xx: { … } », et les memes clefs partout.
+    """
+    morceaux = [io.open(f"{SITE}/translations.js", encoding="utf-8").read()]
+    for langue in LANGUES:
+        chemin = f"{SITE}/traductions-{langue}.js"
+        if os.path.exists(chemin):
+            morceaux.append(io.open(chemin, encoding="utf-8").read())
+    return "\n".join(morceaux)
+
+
 def charger_traductions():
-    """Relit translations.js sans moteur JavaScript."""
-    src = io.open(f"{SITE}/translations.js", encoding="utf-8").read()
+    """Relit les dictionnaires sans moteur JavaScript."""
+    src = source_traductions()
     blocs = dict(re.findall(r"^  (\w+): \{(.*?)^  \},?$", src, re.S | re.M))
     ligne = re.compile(r'^\s*"([^"]+)":\s*"(.*?)",?\s*$', re.M)
     return {lg: dict(ligne.findall(bloc)) for lg, bloc in blocs.items()}
@@ -223,7 +240,7 @@ def main():
     #    par un correctif etait donc annulee par celle qui existait deja
     #    plus bas — le nouveau message ne s'affichait jamais, et rien
     #    n'expliquait pourquoi.
-    src_brut = io.open(f"{SITE}/translations.js", encoding="utf-8").read()
+    src_brut = source_traductions()
     blocs_bruts = dict(re.findall(r"^  (\w+): \{(.*?)^  \},?$", src_brut,
                                   re.S | re.M))
     doublons = []

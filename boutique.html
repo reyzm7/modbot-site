@@ -497,6 +497,17 @@
           <p class="field-help" data-i18n="bq.hebResiliation">Résiliable en un clic. Ta création est éteinte au terme du mois déjà payé, et les fichiers restent à toi.</p>
         </aside>
       </div>
+
+      <!-- Une seule page de gestion pour les deux abonnements : chez
+           Stripe, c'est le meme client. Changer de carte obligeait
+           jusqu'ici a resilier puis re-souscrire — et entre les deux,
+           l'hebergement s'arrete. -->
+      <div class="boutique-abo-gerer">
+        <button class="secondary-btn compact" type="button" data-abo-gerer
+                data-i18n="bq.aboGerer">Gérer mon abonnement</button>
+        <p class="field-help" data-i18n="bq.aboGererAide">Changer de carte, retrouver ses factures ou arrêter : tout se passe chez Stripe, aucun numéro de carte ne passe par ici.</p>
+        <p class="boutique-abo-etat" data-abo-gerer-etat role="status" hidden></p>
+      </div>
     </section>
 
     <!-- ── L'assistance : installer, decouvrir, depanner ─────────────── -->
