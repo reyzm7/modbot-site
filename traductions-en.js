@@ -1726,7 +1726,7 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "wiki.cmdDeleteRoles": "Removes a role from a member from the channel.",
     "wiki.groupesTitre": "Grouped commands",
     "wiki.groupesTexte": "Five sets gather their subcommands under a single word. Discord offers them as soon as you type the group name.",
-    "wiki.grpSecurite": "status, antiraid, antinuke, whitelist, alertes, lockdown — the server's protections.",
+    "wiki.grpSecurite": "status, antiraid, antinuke, whitelist, alertes, lockdown, ia-test — the server's protections.",
     "wiki.grpBackup": "create, list, restore, delete — channel and role backups.",
     "wiki.grpGiveaway": "create, list, end, reroll, delete — the giveaways.",
     "wiki.commandesPermissions": "Moderation commands are reserved for the staff: Discord only shows each person the ones they are allowed to use.",

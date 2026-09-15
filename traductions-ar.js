@@ -1726,7 +1726,7 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "wiki.cmdDeleteRoles": "ينزع رتبة من عضو من القناة.",
     "wiki.groupesTitre": "الأوامر المجمّعة",
     "wiki.groupesTexte": "خمس مجموعات تضم أوامرها الفرعية تحت كلمة واحدة. ويعرضها ديسكورد بمجرد كتابة اسم المجموعة.",
-    "wiki.grpSecurite": "status و antiraid و antinuke و whitelist و alertes و lockdown — حمايات الخادم.",
+    "wiki.grpSecurite": "status و antiraid و antinuke و whitelist و alertes و lockdown و ia-test — حمايات الخادم.",
     "wiki.grpBackup": "create و list و restore و delete — نسخ القنوات والرتب.",
     "wiki.grpGiveaway": "create و list و end و reroll و delete — السحوبات.",
     "wiki.commandesPermissions": "أوامر الإشراف مخصّصة لفريق الإدارة: لا يعرض ديسكورد لكل شخص إلا ما يحق له استخدامه.",

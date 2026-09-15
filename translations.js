@@ -1745,7 +1745,7 @@ window.MODBOT_TRANSLATIONS = {
     "wiki.cmdDeleteRoles": "Retire un rôle à un membre depuis le salon.",
     "wiki.groupesTitre": "Commandes groupées",
     "wiki.groupesTexte": "Cinq ensembles regroupent leurs sous-commandes sous un même mot. Discord les propose à la suite dès que tu tapes le nom du groupe.",
-    "wiki.grpSecurite": "status, antiraid, antinuke, whitelist, alertes, lockdown — les protections du serveur.",
+    "wiki.grpSecurite": "status, antiraid, antinuke, whitelist, alertes, lockdown, ia-test — les protections du serveur.",
     "wiki.grpBackup": "create, list, restore, delete — les sauvegardes de salons et de rôles.",
     "wiki.grpGiveaway": "create, list, end, reroll, delete — les tirages au sort.",
     "wiki.commandesPermissions": "Les commandes de modération sont réservées au staff : Discord n’affiche à chacun que celles qu’il a le droit d’utiliser.",
