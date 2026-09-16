@@ -8864,6 +8864,23 @@ function initDashboard() {
     renderGuildChoices(dashboardGuilds);
   });
 
+  // Inviter ModBot ouvre Discord dans un autre onglet. En revenant, la
+  // liste des serveurs doit déjà montrer le nouveau : on la relit en
+  // silence, au plus toutes les dix secondes, si l'écran des serveurs est
+  // affiché et qu'une session existe.
+  let serveursRelusLe = 0;
+  document.addEventListener("visibilitychange", async () => {
+    if (document.hidden || !serverScreen || serverScreen.hidden) return;
+    if (!(getModbotSessionToken() || getModbotApiToken())) return;
+    if (Date.now() - serveursRelusLe < 10000) return;
+    serveursRelusLe = Date.now();
+    try {
+      await loadDashboardGuilds();
+    } catch (erreur) {
+      // la liste affichée reste la dernière connue
+    }
+  });
+
   refreshDashboardServersButton?.addEventListener("click", async () => {
     if (getModbotSessionToken() || getModbotApiToken()) {
       try {
@@ -10170,29 +10187,21 @@ function remplirSelecteurPays() {
 
 let derniersStatsPubliques = null;
 
-async function initPublicStats() {
-  const section = document.querySelector("[data-live-stats]");
-  if (!section) return;
+// Le bot rejoint un serveur : le chiffre doit bouger sans que le visiteur
+// recharge la page. Une minute, comme le cache du bot — relire plus
+// souvent redemanderait les mêmes chiffres.
+const STATS_PUBLIQUES_INTERVALLE = 60000;
 
-  const membres = section.querySelector("[data-stat-members]");
-  const serveurs = section.querySelector("[data-stat-servers]");
-  const pays = section.querySelector("[data-stat-countries]");
-  const resume = section.querySelector("[data-stat-summary]");
-
-  // On essaie TOUTES les adresses candidates, pas seulement la première.
-  // L'accueil n'a aucun champ pour corriger une adresse : une adresse
-  // fausse enregistrée une fois dans ce navigateur rendait ces chiffres
-  // indisponibles pour toujours, sur cet appareil et sur lui seul — d'où
-  // « ça marche sur mon téléphone ».
-  const candidates = getModbotApiCandidates();
-  if (!candidates.length) return;
-
-  // Tant que le bot n'a pas repondu, le tiret d'attente est peint en
-  // degrade comme un chiffre : il se lisait comme une barre bleue, et on
-  // croyait a une image cassee. On le dit en attente, c'est tout.
-  section.classList.add("stats-attente");
-
-  let stats = null;
+/**
+ * Les chiffres publics du bot, ou une erreur si aucune adresse ne répond.
+ *
+ * On essaie TOUTES les adresses candidates, pas seulement la première.
+ * L'accueil n'a aucun champ pour corriger une adresse : une adresse
+ * fausse enregistrée une fois dans ce navigateur rendait ces chiffres
+ * indisponibles pour toujours, sur cet appareil et sur lui seul — d'où
+ * « ça marche sur mon téléphone ».
+ */
+async function lireStatsPubliques(candidates) {
   let derniereErreur = null;
   for (const base of candidates) {
     try {
@@ -10211,22 +10220,71 @@ async function initPublicStats() {
       if (!reponse.ok) throw new Error(`HTTP ${reponse.status}`);
       const lues = (await reponse.json())?.stats;
       if (!lues) throw new Error(t("js.reponseVide"));
-      stats = lues;
       rememberApiBase(base);   // et oublie l'adresse fausse, s'il y en avait une
-      break;
+      return lues;
     } catch (error) {
       derniereErreur = error;
     }
   }
+  throw derniereErreur || new Error(t("js.reponseVide"));
+}
 
-  if (stats) {
+async function initPublicStats() {
+  const section = document.querySelector("[data-live-stats]");
+  if (!section) return;
+
+  const membres = section.querySelector("[data-stat-members]");
+  const serveurs = section.querySelector("[data-stat-servers]");
+  const pays = section.querySelector("[data-stat-countries]");
+  const resume = section.querySelector("[data-stat-summary]");
+
+  const candidates = getModbotApiCandidates();
+  if (!candidates.length) return;
+
+  // Tant que le bot n'a pas repondu, le tiret d'attente est peint en
+  // degrade comme un chiffre : il se lisait comme une barre bleue, et on
+  // croyait a une image cassee. On le dit en attente, c'est tout.
+  section.classList.add("stats-attente");
+
+  const afficher = (stats) => {
+    const premiereFois = !derniersStatsPubliques;
     derniersStatsPubliques = stats;
-    section.classList.remove("stats-attente");
-    animerCompteur(membres, stats.members_protected);
-    animerCompteur(serveurs, stats.servers);
+    section.classList.remove("stats-attente", "stats-offline");
+    if (premiereFois) {
+      animerCompteur(membres, stats.members_protected);
+      animerCompteur(serveurs, stats.servers);
+    } else {
+      // Une mise à jour ne recompte pas depuis zéro : le chiffre change, c'est tout.
+      if (membres) membres.textContent = formatNombreFr(stats.members_protected);
+      if (serveurs) serveurs.textContent = formatNombreFr(stats.servers);
+    }
     if (pays) pays.textContent = formatNombreFr(stats.countries);
     peindreStatsPubliques(stats);
+  };
+
+  // Relire en arrière-plan : chaque minute, et en revenant sur l'onglet.
+  // Un échec ici garde les derniers chiffres affichés, sans rien signaler.
+  let enVol = false;
+  const rafraichir = async () => {
+    if (document.hidden || enVol) return;
+    enVol = true;
+    try {
+      afficher(await lireStatsPubliques(getModbotApiCandidates()));
+    } catch (erreur) {
+      // les chiffres affichés restent les derniers connus
+    } finally {
+      enVol = false;
+    }
+  };
+  window.setInterval(rafraichir, STATS_PUBLIQUES_INTERVALLE);
+  document.addEventListener("visibilitychange", rafraichir);
+
+  let derniereErreur = null;
+  try {
+    afficher(await lireStatsPubliques(candidates));
     return;
+  } catch (erreur) {
+    derniereErreur = erreur;
   }
 
   // Le bot est injoignable : on retire les tirets plutôt que de mentir
