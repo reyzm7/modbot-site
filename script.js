@@ -8238,9 +8238,33 @@ function initDashboard() {
     }
   }
 
+  // « Tout corriger » : le bot regle ce qu'il peut regler seul (protections,
+  // salon de journal prive, niveau de verification) et rend le nouveau
+  // score. Ce qui demande un choix humain reste dans la liste.
+  async function corrigerScoreSecurite(bouton) {
+    if (!selectedServer.id || !window.confirm(t("score.corrigerConfirmer"))) return;
+    const demande = selectedServer.id;
+    bouton.disabled = true;
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${demande}/security/corriger`, { method: "POST" });
+      if (!estEncoreLeServeur(demande)) return;
+      peindreScore(data?.score || {});
+      const faits = (data?.faits || []).length;
+      showToast(faits
+        ? tp("score.corrigeResume", { avant: data.avant, apres: data.apres, faits })
+        : t("score.corrigeRien"));
+    } catch (erreur) {
+      showToast(erreur?.message || t("score.indisponible"));
+    } finally {
+      bouton.disabled = false;
+    }
+  }
+
   function initScorePanel() {
     document.querySelector("[data-score-refresh]")
       ?.addEventListener("click", chargerScoreSecurite);
+    const corriger = document.querySelector("[data-score-corriger]");
+    corriger?.addEventListener("click", () => corrigerScoreSecurite(corriger));
   }
 
   function initVoicePanel() {
