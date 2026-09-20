@@ -10383,6 +10383,19 @@ async function lireStatsPubliques(candidates) {
   throw derniereErreur || new Error(t("js.reponseVide"));
 }
 
+/**
+ * La pastille du bouton « Etat du service », sur l'accueil.
+ *
+ * Elle ne lance rien : elle lit le resultat de la requete des chiffres
+ * publics, qui part de toute facon. Le bot a repondu, donc il tourne.
+ */
+function marquerEtatAccueil(enLigne) {
+  const puce = document.querySelector("[data-etat-puce]");
+  if (!puce) return;
+  puce.classList.toggle("est-en-ligne", enLigne === true);
+  puce.classList.toggle("est-hors-ligne", enLigne === false);
+}
+
 async function initPublicStats() {
   const section = document.querySelector("[data-live-stats]");
   if (!section) return;
@@ -10401,6 +10414,7 @@ async function initPublicStats() {
   section.classList.add("stats-attente");
 
   const afficher = (stats) => {
+    marquerEtatAccueil(true);
     const premiereFois = !derniersStatsPubliques;
     derniersStatsPubliques = stats;
     section.classList.remove("stats-attente", "stats-offline");
@@ -10425,7 +10439,9 @@ async function initPublicStats() {
     try {
       afficher(await lireStatsPubliques(getModbotApiCandidates()));
     } catch (erreur) {
-      // les chiffres affichés restent les derniers connus
+      // les chiffres affichés restent les derniers connus, mais la
+      // pastille, elle, doit dire la verite du moment.
+      marquerEtatAccueil(false);
     } finally {
       enVol = false;
     }
@@ -10447,6 +10463,7 @@ async function initPublicStats() {
                derniereErreur?.message || derniereErreur);
   section.classList.remove("stats-attente");
   section.classList.add("stats-offline");
+  marquerEtatAccueil(false);
   if (resume) resume.textContent = t("js.chiffresIndisponibles");
   [membres, serveurs, pays].forEach((el) => {
     if (el && el.textContent === "—") el.textContent = "·";

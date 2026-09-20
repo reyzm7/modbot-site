@@ -12804,3 +12804,17 @@ body:not(.dashboard-page) .page-glow {
 /* L'essai deja utilise : le bouton reste la, en retrait, et s'explique
    quand on clique dessus. */
 .primary-btn.is-indisponible { opacity:.55; }
+
+/* Le bouton « Etat du service » du hero, et sa pastille de sante. */
+.etat-bouton { display:inline-flex; align-items:center; gap:.55rem; }
+.etat-puce { width:.6rem; height:.6rem; border-radius:50%;
+  background:rgba(255,255,255,.35); flex:none; }
+.etat-puce.est-en-ligne { background:#2ECC71; box-shadow:0 0 0 .18rem rgba(46,204,113,.22); }
+.etat-puce.est-hors-ligne { background:#ED4245; box-shadow:0 0 0 .18rem rgba(237,66,69,.22); }
+@media (prefers-reduced-motion: no-preference) {
+  .etat-puce.est-en-ligne { animation:etat-battement 2.4s ease-in-out infinite; }
+}
+@keyframes etat-battement {
+  0%, 100% { box-shadow:0 0 0 .18rem rgba(46,204,113,.22); }
+  50% { box-shadow:0 0 0 .34rem rgba(46,204,113,.08); }
+}
