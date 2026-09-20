@@ -1390,6 +1390,7 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "nav.ajouter": "إضافة ModBot",
     "nav.langue": "اللغة",
     "nav.menu": "الوصول",
+    "nav.theme": "تغيير المظهر",
     "home.partenairePrincipal": "الشريك الرئيسي",
     "home.partenairePrincipalTexte": "هنا تُجرَّب كل ميزة جديدة أولًا، أمام أعضاء حقيقيين.",
     "home.rejoindre": "انضمام",

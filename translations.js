@@ -1409,6 +1409,7 @@ window.MODBOT_TRANSLATIONS = {
     "nav.ajouter": "Ajouter ModBot",
     "nav.langue": "Langue",
     "nav.menu": "Accès",
+    "nav.theme": "Changer le thème",
     "home.partenairePrincipal": "Partenaire principal",
     "home.partenairePrincipalTexte": "C'est là que chaque nouveauté est essayée en premier, devant de vrais membres.",
     "home.rejoindre": "Rejoindre",

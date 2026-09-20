@@ -558,6 +558,80 @@ function initAssistant() {
   addAssistantMessage("bot", "Bonjour, je suis l’assistant ModBot. Comment puis-je vous aider ?");
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   LE THEME CLAIR ET LE THEME SOMBRE
+
+   Le site est ne sombre, et le reste par defaut : c'est son visage.
+   Celui qui prefere le clair le dit une fois, et son choix le suit
+   d'une page a l'autre — le <head> le repose avant le premier rendu.
+
+   On ne suit pas la preference du systeme sans rien demander : la
+   plupart des ordinateurs sont en clair d'usine, et le site entier
+   aurait change d'apparence du jour au lendemain pour des visiteurs
+   qui n'avaient rien demande.
+   ══════════════════════════════════════════════════════════════════ */
+
+const THEME_MEMOIRE = "modbot-theme";
+
+function themeActuel() {
+  return document.documentElement.dataset.theme === "light" ? "light" : "dark";
+}
+
+function poserTheme(theme) {
+  const clair = theme === "light";
+  if (clair) document.documentElement.dataset.theme = "light";
+  else delete document.documentElement.dataset.theme;
+  try {
+    localStorage.setItem(THEME_MEMOIRE, clair ? "light" : "dark");
+  } catch (erreur) {
+    // Navigation privee, stockage refuse : le choix ne vaut que pour
+    // cette page. Mieux que de ne pas basculer du tout.
+  }
+  document.querySelector("[data-theme-bouton]")
+    ?.setAttribute("aria-pressed", clair ? "true" : "false");
+  // Le fond anime repeint avec l'autre palette.
+  document.dispatchEvent(new CustomEvent("modbot:theme"));
+}
+
+function initTheme() {
+  // Le bouton est pose ici plutot que dans les quinze pages : une seule
+  // source, et il ne peut pas manquer a l'une d'elles.
+  const bouton = document.createElement("button");
+  bouton.className = "theme-bouton";
+  bouton.type = "button";
+  bouton.dataset.themeBouton = "";
+  // Le libelle passe par les attributs traduits : appliquerLangue, qui
+  // tourne juste apres, les remplira dans la langue du visiteur.
+  bouton.dataset.i18nAria = "nav.theme";
+  bouton.dataset.i18nTitle = "nav.theme";
+  bouton.setAttribute("aria-label", t("nav.theme"));
+  bouton.setAttribute("title", t("nav.theme"));
+  bouton.innerHTML =
+    '<svg class="ui-icon theme-soleil" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-soleil"/></svg>' +
+    '<svg class="ui-icon theme-lune" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lune"/></svg>';
+
+  // Dans la barre elle-meme, jamais dans le menu deroulant : sur un
+  // telephone, ce menu est ferme, et le bouton aurait disparu derriere
+  // trois traits. L'ordre le renvoie a droite sur grand ecran.
+  const barre = document.querySelector(".site-header .navbar");
+  const bascule = document.querySelector(".nav-toggle");
+  const langue = document.querySelector(".language-switch");
+  if (barre && bascule) barre.insertBefore(bouton, bascule);
+  else if (langue?.parentElement) langue.parentElement.insertBefore(bouton, langue);
+  else (barre || document.querySelector(".dashboard-topbar"))?.appendChild(bouton);
+
+  bouton.addEventListener("click", () => {
+    poserTheme(themeActuel() === "light" ? "dark" : "light");
+  });
+
+  // Le meme navigateur, un autre onglet : les deux suivent.
+  window.addEventListener("storage", (event) => {
+    if (event.key === THEME_MEMOIRE && event.newValue) poserTheme(event.newValue);
+  });
+
+  poserTheme(themeActuel());
+}
+
 function initNavigation() {
   const toggle = document.querySelector(".nav-toggle");
   const links = document.getElementById("navLinks");
@@ -2969,17 +3043,39 @@ function initFondVivant() {
   toile.setAttribute("aria-hidden", "true");
   document.body.appendChild(toile);
 
-  const COULEURS = {
-    violet: [177, 92, 255],
-    pourpre: [139, 92, 246],
-    cyan: [98, 230, 255],
-    lavande: [214, 198, 255],
-    vert: [74, 222, 128],
-    rouge: [255, 92, 122]
+  // Les memes six teintes dans les deux themes, mais pas les memes
+  // valeurs : claires elles brillent sur du noir, foncees elles se
+  // lisent sur du blanc. Peindre le fond clair avec la palette sombre
+  // revenait a ne rien peindre du tout.
+  const PALETTES = {
+    dark: {
+      violet: [177, 92, 255],
+      pourpre: [139, 92, 246],
+      cyan: [98, 230, 255],
+      lavande: [214, 198, 255],
+      vert: [74, 222, 128],
+      rouge: [255, 92, 122]
+    },
+    light: {
+      violet: [108, 44, 188],
+      pourpre: [78, 52, 172],
+      cyan: [20, 108, 162],
+      lavande: [98, 88, 152],
+      vert: [26, 118, 64],
+      rouge: [174, 38, 62]
+    }
   };
+  const palette = () => PALETTES[
+    document.documentElement.dataset.theme === "light" ? "light" : "dark"];
+  let COULEURS = palette();
+  // Sur fond clair, la meme opacite ne rend pas la meme chose : un
+  // trait a 15 % se detache sur du noir, il s'efface sur du blanc. Tout
+  // ce qui est peint passe par ici, donc un seul facteur suffit.
+  const encre = () =>
+    document.documentElement.dataset.theme === "light" ? 1.75 : 1;
   const teinte = (nom, alpha) => {
     const rvb = COULEURS[nom];
-    return `rgba(${rvb[0]}, ${rvb[1]}, ${rvb[2]}, ${alpha})`;
+    return `rgba(${rvb[0]}, ${rvb[1]}, ${rvb[2]}, ${Math.min(1, alpha * encre())})`;
   };
   const hasard = (min, max) => min + Math.random() * (max - min);
   const auHasard = (liste) => liste[Math.floor(Math.random() * liste.length)];
@@ -3010,23 +3106,35 @@ function initFondVivant() {
     }, 120);
   }, { passive: true });
 
+  // Chaque halo est peint une fois dans une petite image, puis etire :
+  // un degrade radial par particule et par image couterait cher.
   const halos = {};
-  for (const [nom, rvb] of Object.entries(COULEURS)) {
-    const petite = document.createElement("canvas");
-    petite.width = 64;
-    petite.height = 64;
-    const pinceau = petite.getContext("2d");
-    const degrade = pinceau.createRadialGradient(32, 32, 0, 32, 32, 32);
-    degrade.addColorStop(0, `rgba(${rvb[0]}, ${rvb[1]}, ${rvb[2]}, 0.9)`);
-    degrade.addColorStop(0.35, `rgba(${rvb[0]}, ${rvb[1]}, ${rvb[2]}, 0.35)`);
-    degrade.addColorStop(1, `rgba(${rvb[0]}, ${rvb[1]}, ${rvb[2]}, 0)`);
-    pinceau.fillStyle = degrade;
-    pinceau.fillRect(0, 0, 64, 64);
-    halos[nom] = petite;
+  function fabriquerHalos() {
+    for (const [nom, rvb] of Object.entries(COULEURS)) {
+      const petite = document.createElement("canvas");
+      petite.width = 64;
+      petite.height = 64;
+      const pinceau = petite.getContext("2d");
+      const degrade = pinceau.createRadialGradient(32, 32, 0, 32, 32, 32);
+      degrade.addColorStop(0, `rgba(${rvb[0]}, ${rvb[1]}, ${rvb[2]}, 0.9)`);
+      degrade.addColorStop(0.35, `rgba(${rvb[0]}, ${rvb[1]}, ${rvb[2]}, 0.35)`);
+      degrade.addColorStop(1, `rgba(${rvb[0]}, ${rvb[1]}, ${rvb[2]}, 0)`);
+      pinceau.fillStyle = degrade;
+      pinceau.fillRect(0, 0, 64, 64);
+      halos[nom] = petite;
+    }
   }
+  fabriquerHalos();
+
+  // La bascule clair/sombre : on repeint avec l'autre palette, sans
+  // recharger la page et sans interrompre l'animation en cours.
+  document.addEventListener("modbot:theme", () => {
+    COULEURS = palette();
+    fabriquerHalos();
+  });
 
   function halo(nom, x, y, rayon, alpha) {
-    ctx.globalAlpha = alpha;
+    ctx.globalAlpha = Math.min(1, alpha * encre());
     ctx.drawImage(halos[nom], x - rayon, y - rayon, rayon * 2, rayon * 2);
     ctx.globalAlpha = 1;
   }
@@ -3184,6 +3292,49 @@ function initFondVivant() {
     ctx.arc(0, taille * 0.45, taille * 0.09, 0, Math.PI * 2);
   }
 
+  // L'ecusson de ModBot : ce qu'on voit sur le bouton, le favicon et
+  // la barre du site. Trace a la main, pas de fichier a charger.
+  function tracerBouclier(taille) {
+    const l = taille * 1.05;
+    const h = taille * 1.25;
+    ctx.beginPath();
+    ctx.moveTo(0, -h);
+    ctx.lineTo(l, -h * 0.55);
+    ctx.lineTo(l, h * 0.1);
+    ctx.quadraticCurveTo(l * 0.9, h * 0.75, 0, h);
+    ctx.quadraticCurveTo(-l * 0.9, h * 0.75, -l, h * 0.1);
+    ctx.lineTo(-l, -h * 0.55);
+    ctx.closePath();
+  }
+
+  // La coche : ce que le bot repond quand tout est en ordre.
+  function tracerCoche(taille) {
+    ctx.beginPath();
+    ctx.moveTo(-taille, 0);
+    ctx.lineTo(-taille * 0.25, taille * 0.72);
+    ctx.lineTo(taille * 1.05, -taille * 0.82);
+  }
+
+  // La bulle : un message, un ticket, une reponse.
+  function tracerBulle(taille) {
+    const l = taille * 1.15;
+    const h = taille * 0.85;
+    const r = taille * 0.4;
+    ctx.beginPath();
+    ctx.moveTo(-l + r, -h);
+    ctx.lineTo(l - r, -h);
+    ctx.quadraticCurveTo(l, -h, l, -h + r);
+    ctx.lineTo(l, h - r);
+    ctx.quadraticCurveTo(l, h, l - r, h);
+    ctx.lineTo(-l * 0.45, h);
+    ctx.lineTo(-l * 0.75, h + taille * 0.55);
+    ctx.lineTo(-l * 0.72, h);
+    ctx.lineTo(-l + r, h);
+    ctx.quadraticCurveTo(-l, h, -l, h - r);
+    ctx.lineTo(-l, -h + r);
+    ctx.quadraticCurveTo(-l, -h, -l + r, -h);
+  }
+
   function ecrire(texte, x, y, taille, couleur, alpha) {
     ctx.font = `600 ${taille}px ${POLICE}`;
     ctx.fillStyle = teinte(couleur, alpha);
@@ -3220,7 +3371,7 @@ function initFondVivant() {
     "warn()", "if (raid)", "/securite"
   ];
 
-  for (let i = 0; i < (tactile ? 7 : 13); i++) {
+  for (let i = 0; i < (tactile ? 11 : 13); i++) {
     sentinelles.push({
       x: 0,
       y: 0,
@@ -3255,15 +3406,17 @@ function initFondVivant() {
     g.intensite = hasard(0.13, 0.24);
     return g;
   }
-  for (let i = 0; i < (tactile ? 12 : 32); i++) glyphes.push(nouveauGlyphe({}, true));
+  for (let i = 0; i < (tactile ? 24 : 32); i++) glyphes.push(nouveauGlyphe({}, true));
 
-  for (let i = 0; i < (tactile ? 3 : 7); i++) {
+  for (let i = 0; i < (tactile ? 6 : 9); i++) {
     cadenas.push({
       x: 0,
       y: 0,
       vx: calme ? 0 : hasard(-0.12, 0.12),
       vy: calme ? 0 : hasard(-0.12, 0.12),
       taille: hasard(6, 9),
+      forme: auHasard(["cadenas", "cadenas", "cadenas", "bouclier", "bouclier",
+                       "coche", "bulle"]),
       ouverture: 1,
       visee: 1,
       bascule: performance.now() + hasard(1500, 6000),
@@ -3478,8 +3631,21 @@ function initFondVivant() {
       if (c.eclat > 0.02) halo("vert", c.x, c.y, c.taille * 5, c.eclat * 0.5 * d);
       ctx.save();
       ctx.translate(c.x, c.y);
-      ctx.strokeStyle = teinte(c.ouverture < 0.2 ? "vert" : "lavande", 0.38 * d);
-      tracerCadenas(c.taille, c.ouverture);
+      // Seul le cadenas s'ouvre ; les autres emblemes respirent avec
+      // la meme horloge, mais sans se deformer.
+      if (c.forme === "bouclier") {
+        ctx.strokeStyle = teinte("violet", 0.34 * d);
+        tracerBouclier(c.taille);
+      } else if (c.forme === "coche") {
+        ctx.strokeStyle = teinte("vert", 0.36 * d);
+        tracerCoche(c.taille);
+      } else if (c.forme === "bulle") {
+        ctx.strokeStyle = teinte("cyan", 0.32 * d);
+        tracerBulle(c.taille);
+      } else {
+        ctx.strokeStyle = teinte(c.ouverture < 0.2 ? "vert" : "lavande", 0.38 * d);
+        tracerCadenas(c.taille, c.ouverture);
+      }
       ctx.stroke();
       ctx.restore();
     }
@@ -10570,6 +10736,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initStarfield();
   trackSiteAnalytics();
   initNavigation();
+  initTheme();
   initSiteLanguage();
   initAdminZone();
   initDemo();

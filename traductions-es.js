@@ -1369,6 +1369,7 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "nav.ajouter": "Añadir ModBot",
     "nav.langue": "Idioma",
     "nav.menu": "Acceso",
+    "nav.theme": "Cambiar el tema",
     "home.partenairePrincipal": "Socio principal",
     "home.partenairePrincipalTexte": "Aquí es donde cada novedad se prueba primero, ante miembros reales.",
     "home.rejoindre": "Unirse",

@@ -190,10 +190,15 @@ verifier("le reset de police couvre select et textarea",
 # Une <option> sans fond propre est peinte par le navigateur avec SA
 # couleur — blanche — sous un texte quasi blanc : la liste s'ouvrait sur
 # du vide, et on ne pouvait choisir ni salon ni role.
+# Depuis les deux themes, ce fond ne peut plus etre une couleur ecrite
+# en clair : il suit la palette. Ce qui compte reste le meme — qu'il
+# soit pose, et pas laisse au navigateur.
 verifier("les options portent un fond explicite",
-         "select option," in style and "background-color: #14101f" in style)
+         "select option," in style and "background-color: var(--panel-strong)" in style)
 verifier("la racine declare un schema sombre",
          "color-scheme: dark" in style)
+verifier("et le theme clair declare le sien",
+         "color-scheme: light" in style)
 
 # Un <select> vide est une boite grise sans rien dedans tant que les
 # ressources du serveur ne sont pas arrivees.
