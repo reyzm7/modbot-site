@@ -1,0 +1,142 @@
+# Le veilleur.
+#
+# La page d'etat du site dit ce que le bot a tenu — mais c'est le bot
+# lui-meme qui l'ecrit. S'il tombe, il ne le sait qu'a son retour, et
+# personne n'est prevenu entre-temps. Un temoin qui ne depend pas de
+# celui qu'il surveille manquait.
+#
+# Ce fichier vit dans le depot du SITE, pas dans celui du bot : on ne
+# demande pas a quelqu'un de certifier sa propre presence.
+#
+# L'etat tient dans une issue. Tant qu'elle est ouverte, la panne est
+# connue et on n'alerte plus ; quand le bot repond de nouveau, on ecrit
+# combien de temps il a manque, et on la ferme. Pas de base de donnees,
+# pas de service tiers : l'historique des pannes, c'est la liste des
+# issues fermees.
+name: Veilleur ModBot
+
+on:
+  schedule:
+    # Toutes les cinq minutes. GitHub ne promet pas l'exactitude : un
+    # cron peut partir avec dix minutes de retard quand la file est
+    # chargee. C'est une veille, pas un chronometre.
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+concurrency:
+  # Deux executions qui se croisent ouvriraient deux issues pour la meme
+  # panne. La derniere attend son tour.
+  group: veilleur
+  cancel-in-progress: false
+
+jobs:
+  veiller:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Interroger le bot
+        id: sonde
+        env:
+          BASE: https://web-production-6ad2d.up.railway.app
+        run: |
+          # Trois essais espaces : un reseau qui hoquette, un conteneur
+          # qui se reveille, une requete perdue — rien de tout cela n'est
+          # une panne. Trois silences de suite, si.
+          etat="hs"
+          detail=""
+          for essai in 1 2 3; do
+            code=$(curl -s -o /tmp/sante.json -w "%{http_code}" -m 12 "$BASE/api/health" || echo "000")
+            if [ "$code" = "200" ] && grep -q '"ready": *true' /tmp/sante.json; then
+              etat="ok"
+              detail="HTTP 200, ready"
+              break
+            fi
+            detail="HTTP $code"
+            if grep -q '"ready"' /tmp/sante.json 2>/dev/null; then
+              detail="$detail, ready=false"
+            fi
+            [ "$essai" -lt 3 ] && sleep 20
+          done
+          echo "etat=$etat" >> "$GITHUB_OUTPUT"
+          echo "detail=$detail" >> "$GITHUB_OUTPUT"
+          echo "Le bot est : $etat ($detail)"
+
+      - name: Ouvrir ou fermer l'avis de panne
+        uses: actions/github-script@v7
+        env:
+          ETAT: ${{ steps.sonde.outputs.etat }}
+          DETAIL: ${{ steps.sonde.outputs.detail }}
+          WEBHOOK: ${{ secrets.VEILLE_WEBHOOK_DISCORD }}
+        script: |
+          const TITRE = "Veille : ModBot ne repond plus";
+          const etat = process.env.ETAT;
+          const detail = process.env.DETAIL;
+
+          const ouvertes = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: "open",
+            labels: "veille",
+          });
+          const encours = ouvertes.data.find((i) => i.title === TITRE);
+
+          // Prevenir sur Discord n'est possible que si le secret existe.
+          // Sans lui, l'issue suffit : elle arrive par courriel a qui
+          // suit le depot.
+          const prevenir = async (texte) => {
+            if (!process.env.WEBHOOK) return;
+            try {
+              await fetch(process.env.WEBHOOK, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ content: texte }),
+              });
+            } catch (erreur) {
+              core.warning("Discord injoignable : " + erreur.message);
+            }
+          };
+
+          const quand = new Date().toISOString().replace("T", " ").slice(0, 16);
+
+          if (etat === "hs" && !encours) {
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: TITRE,
+              labels: ["veille"],
+              body: [
+                `Le bot n'a pas repondu a trois appels d'affilee.`,
+                ``,
+                `* Premier silence : ${quand} UTC`,
+                `* Derniere reponse lue : ${detail}`,
+                `* Adresse : https://web-production-6ad2d.up.railway.app/api/health`,
+                ``,
+                `Cette issue se fermera d'elle-meme au retour du bot, avec la duree.`,
+              ].join("\n"),
+            });
+            await prevenir(`ModBot ne repond plus depuis ${quand} UTC (${detail}). Avis : ${issue.data.html_url}`);
+            core.notice("Panne ouverte : " + issue.data.html_url);
+          } else if (etat === "ok" && encours) {
+            const depuis = new Date(encours.created_at);
+            const minutes = Math.round((Date.now() - depuis.getTime()) / 60000);
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: encours.number,
+              body: `Le bot repond de nouveau a ${quand} UTC. Silence : environ ${minutes} minute(s).`,
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: encours.number,
+              state: "closed",
+            });
+            await prevenir(`ModBot repond de nouveau. Il aura manque environ ${minutes} minute(s).`);
+            core.notice("Retour du bot apres " + minutes + " minute(s).");
+          } else if (etat === "hs") {
+            core.warning("Toujours hors ligne — avis deja ouvert, on n'alerte pas deux fois.");
+          } else {
+            core.info("Le bot repond.");
+          }
