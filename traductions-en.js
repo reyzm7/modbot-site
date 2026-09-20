@@ -915,6 +915,7 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "home.pretProtegerVotreDiscord": "Ready to protect your Discord?",
     "home.rejoignezLeServeurModbot": "Join the ModBot server and ask for your install.",
     "home.rejoindreDiscord": "Join Discord",
+    "home.etatBouton": "Service status",
     "home.ouvrirAssistantModbot": "Open the ModBot assistant",
     "home.assistantModbot": "ModBot assistant",
     "home.assistantModbot2": "ModBot assistant",

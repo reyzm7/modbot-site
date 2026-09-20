@@ -12800,3 +12800,7 @@ body:not(.dashboard-page) .page-glow {
 .etat-carte strong { font-size:1.8rem; line-height:1.1; }
 .etat-carte span { font-weight:600; }
 .etat-carte small { opacity:.7; }
+
+/* L'essai deja utilise : le bouton reste la, en retrait, et s'explique
+   quand on clique dessus. */
+.primary-btn.is-indisponible { opacity:.55; }

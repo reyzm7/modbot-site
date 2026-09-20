@@ -934,6 +934,7 @@ window.MODBOT_TRANSLATIONS = {
     "home.pretProtegerVotreDiscord": "Prêt à protéger votre Discord ?",
     "home.rejoignezLeServeurModbot": "Rejoignez le serveur ModBot et demandez votre installation.",
     "home.rejoindreDiscord": "Rejoindre Discord",
+    "home.etatBouton": "État du service",
     "home.ouvrirAssistantModbot": "Ouvrir l’assistant ModBot",
     "home.assistantModbot": "Assistant ModBot",
     "home.assistantModbot2": "Assistant ModBot",

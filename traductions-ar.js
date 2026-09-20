@@ -915,6 +915,7 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "home.pretProtegerVotreDiscord": "جاهز لحماية خادم ديسكورد الخاص بك؟",
     "home.rejoignezLeServeurModbot": "انضم إلى خادم ModBot واطلب التثبيت.",
     "home.rejoindreDiscord": "الانضمام إلى ديسكورد",
+    "home.etatBouton": "حالة الخدمة",
     "home.ouvrirAssistantModbot": "فتح مساعد ModBot",
     "home.assistantModbot": "مساعد ModBot",
     "home.assistantModbot2": "مساعد ModBot",

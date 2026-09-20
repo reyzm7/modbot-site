@@ -8285,9 +8285,14 @@ function initDashboard() {
     const bloc = carte.querySelector("[data-croissance-essai]");
     const refus = carte.querySelector("[data-essai-refus]");
     const bouton = carte.querySelector("[data-essai-demarrer]");
-    // Un serveur deja premium n'a pas besoin qu'on lui propose un essai.
-    if (bloc) bloc.hidden = Boolean(premiumEtat.active) && !essai.possible;
-    if (bouton) bouton.hidden = !essai.possible;
+    // Le bouton reste affiche, toujours. Une offre qui disparait sans un
+    // mot laisse croire a une panne ; le refus se dit au clic, et la
+    // raison s'ecrit en dessous.
+    if (bloc) bloc.hidden = false;
+    if (bouton) {
+      bouton.hidden = false;
+      bouton.classList.toggle("is-indisponible", !essai.possible);
+    }
     if (refus) {
       refus.hidden = Boolean(essai.possible);
       refus.textContent = premiumEtat.active ? t("croiss.essaiActif") : t("croiss.essaiIndispo");
@@ -8333,6 +8338,12 @@ function initDashboard() {
       const bouton = event.currentTarget;
       const demande = selectedServer.id;
       if (!demande) return;
+      // Deja pris, ou premium en cours : on le dit ici, sans aller
+      // demander au bot une reponse qu'on connait.
+      if (!croissanceEtat?.essai?.possible) {
+        showToast(premiumEtat.active ? t("croiss.essaiActif") : t("croiss.essaiIndispo"));
+        return;
+      }
       bouton.disabled = true;
       try {
         const data = await modbotApiFetch(`/api/guilds/${demande}/premium/essai`, { method: "POST" });
