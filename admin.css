@@ -1,0 +1,526 @@
+/* ══════════════════════════════════════════════════════════════════
+   LES STYLES DE L'ADMINISTRATION
+
+   Ils vivaient dans style.css, donc sur les quinze pages du site, alors
+   qu'une seule les emploie et qu'elle est reservee a l'equipe. Ils sont
+   poses ici, apres style.css : l'ordre de la cascade est conserve.
+
+   Ne rien ecrire ici a la main : ce fichier est produit par un tri des
+   regles dont aucun nom n'apparait ailleurs que dans admin.html.
+   ══════════════════════════════════════════════════════════════════ */
+
+
+.admin-site {
+  padding-top: 118px;
+}
+
+.admin-hero {
+  margin-bottom: 22px;
+}
+
+.admin-grid,
+.admin-gate-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.admin-workspace {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 18px;
+}
+
+.admin-sidebar-panel {
+  position: sticky;
+  top: 96px;
+  align-self: start;
+  padding: 16px;
+  border: 1px solid rgba(158, 110, 255, 0.24);
+  border-radius: var(--radius-lg);
+  background: rgba(var(--canal-fond), 0.78);
+  box-shadow: var(--shadow);
+}
+
+.admin-view {
+  display: none;
+}
+
+.admin-login-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-access-note {
+  display: grid;
+  align-content: start;
+}
+
+.admin-panel-head {
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.admin-panel-head h3 {
+  margin: 0;
+}
+
+.admin-badge {
+  min-height: 28px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.16);
+  color: var(--soft);
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.site-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.site-stat-grid div,
+.admin-list div,
+.blacklist-list div,
+.server-log-feed div,
+.admin-server-list div {
+  border: 1px solid rgba(158, 110, 255, 0.18);
+  border-radius: var(--radius);
+  background: rgba(var(--canal-clair), 0.045);
+}
+
+.site-stat-grid div {
+  min-height: 104px;
+  padding: 16px;
+  display: grid;
+  align-content: space-between;
+}
+
+.site-stat-grid span {
+  font-size: 1.7rem;
+  font-weight: 900;
+}
+
+.site-stat-grid small,
+.admin-server-list small {
+  color: var(--muted);
+}
+
+.admin-list,
+.blacklist-list,
+.server-log-feed,
+.admin-server-list {
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.admin-list div,
+.blacklist-list div {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.admin-list strong,
+.admin-list small,
+.blacklist-list strong,
+.blacklist-list small {
+  display: block;
+}
+
+.admin-list small,
+.blacklist-list small {
+  margin-top: 3px;
+}
+
+.admin-list button,
+.blacklist-list button {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(158, 110, 255, 0.24);
+  background: rgba(var(--canal-clair), 0.06);
+  color: var(--text);
+}
+
+.admin-list button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.server-log-feed div {
+  padding: 14px;
+  display: grid;
+  grid-template-columns: 74px minmax(160px, 0.55fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.server-log-feed span {
+  color: var(--cyan);
+  font-weight: 900;
+}
+
+.server-log-feed em {
+  color: var(--soft);
+  font-style: normal;
+}
+
+.admin-server-list div {
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-server-list strong,
+.admin-server-list small {
+  display: block;
+}
+
+.dashboard-server {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto 34px auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid rgba(158, 110, 255, 0.26);
+  border-radius: var(--radius);
+  background: rgba(var(--canal-clair), 0.045);
+}
+
+.dashboard-server label {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.dashboard-server span:not(.server-dot) {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.dashboard-server strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-server select {
+  min-height: 38px;
+  padding: 0 10px;
+}
+
+.server-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 14px rgba(101, 245, 150, 0.7);
+}
+
+/* ── Espace d'administration : finitions ──────────────────────────── */
+/* Ces règles corrigent des vides et des signaux contradictoires : une
+   colonne réservait 520 px pour cinq entrées, une carte flottait au milieu
+   d'une boîte étirée, une pastille verte annonçait « Verrouillé ». */
+
+/* Les deux cartes de la porte d'entrée se calent en haut. Sans cela la
+   grille les étire à la même hauteur, et la plus courte donnait
+   l'impression d'un bloc vide avec du texte au milieu. */
+.admin-gate-grid {
+  align-items: start;
+}
+
+/* Tuiles de chiffres : un peu plus compactes, le chiffre et son libellé
+   étaient séparés par un vide qui les faisait paraître sans rapport. */
+.site-stat-grid div {
+  min-height: 88px;
+  gap: 6px;
+  align-content: center;
+}
+
+/* État de la vérification : attente, refus, erreur */
+.admin-gate-state {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 11px 13px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--soft);
+}
+
+.admin-gate-dot {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.admin-gate-dot[data-level="attente"] {
+  background: var(--warn);
+  animation: admin-pulse 1.6s ease-in-out infinite;
+}
+
+.admin-gate-dot[data-level="refus"]  { background: var(--err); }
+.admin-gate-dot[data-level="erreur"] { background: var(--err); }
+
+.admin-gate-state[data-level="refus"] {
+  border-color: rgba(237, 66, 69, 0.45);
+  background: rgba(237, 66, 69, 0.08);
+  color: var(--tffb3b4);
+}
+
+.admin-gate-state[data-level="erreur"] {
+  border-color: rgba(232, 163, 61, 0.45);
+  background: rgba(232, 163, 61, 0.08);
+  color: var(--tf5cf94);
+}
+
+/* Compte Discord connecté */
+.admin-identity {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: 14px;
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel-strong);
+}
+
+.admin-identity img {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg-soft);
+}
+
+.admin-identity > div { flex: 1; min-width: 0; }
+
+.admin-identity strong {
+  display: block;
+  font-size: 0.92rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-identity small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+/* Explication du fonctionnement */
+.admin-steps {
+  margin: 12px 0;
+  padding-left: 20px;
+  font-size: 0.87rem;
+  line-height: 1.65;
+  color: var(--soft);
+}
+
+.admin-steps li { margin-bottom: 6px; }
+
+.admin-steps code,
+.admin-access-note code {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--bg-soft);
+  font-size: 0.85em;
+  color: var(--text);
+}
+
+/* ── Achats & paiements, dans l'administration ── */
+.btq-compteurs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  gap: 10px;
+  margin: 16px 0 4px;
+}
+
+.btq-compteurs div {
+  display: grid;
+  gap: 2px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.btq-compteurs strong { font-size: 1.35rem; }
+.btq-compteurs span { color: var(--muted); font-size: 0.8rem; }
+
+.btq-onglets { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 12px; }
+
+.btq-onglet {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btq-nombre {
+  min-width: 22px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(var(--canal-clair), 0.08);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.btq-nombre:empty { display: none; }
+
+.btq-liste { display: grid; gap: 12px; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LES VISITES
+   Deux chiffres et quatorze barres. Pas de camembert, pas de courbe
+   lissee : on compare des jours entre eux, une barre par jour suffit.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.visite-chiffres {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: 14px;
+  margin: 18px 0 26px;
+}
+
+.visite-carte {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.visite-carte.is-jour {
+  border-color: var(--accent-line);
+  background: linear-gradient(180deg, rgba(139, 92, 246, 0.09), transparent 70%), var(--panel);
+}
+
+.visite-carte strong {
+  display: block;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.visite-carte span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.visite-sous-titre {
+  margin: 0 0 12px;
+  color: var(--soft);
+  font-size: 0.92rem;
+}
+
+.visite-histogramme {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  align-items: end;
+  gap: 6px;
+  min-height: 150px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  overflow-x: auto;
+}
+
+.visite-aide {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.visite-correction {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.visite-correction h4 {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+}
+
+.visite-corrections {
+  display: grid;
+  gap: 8px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LES ACHETEURS PREMIUM
+   Un identifiant Discord ne dit rien a personne : on montre le visage
+   et le pseudo, comme pour les serveurs.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.admin-sous-titre {
+  margin: 26px 0 4px;
+  color: var(--soft);
+  font-size: 0.95rem;
+}
+
+.admin-buyers {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* Le temoin « en direct » du panneau des achats : discret quand tout va
+   bien, absent des que le bot ne repond plus — un mensonge vert serait
+   pire que rien. */
+.admin-panel-outils { display: flex; align-items: center; gap: 10px; }
+.btq-direct { display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.78rem; color: var(--text-dim, #8a93a6); white-space: nowrap; }
+.btq-pastille { width: 7px; height: 7px; border-radius: 50%;
+  background: #43b581; box-shadow: 0 0 0 0 rgba(67, 181, 129, 0.5);
+  animation: btq-pouls 2.4s ease-out infinite; }
+
+.btq-promo-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  gap: 12px; align-items: end; margin-bottom: 16px; }
+.btq-promos { display: grid; gap: 10px; }
+
+/* ── Les chiffres, les etapes, la livraison, les avis ───────────────────
+   La courbe des douze mois est faite de barres : pas de bibliotheque, pas
+   de requete de plus, et elle reste lisible sur un telephone. */
+.btq-courbe { display: flex; align-items: flex-end; gap: 6px; height: 140px;
+  margin: 16px 0; padding: 10px 8px 0; border-radius: 14px;
+  background: rgba(var(--canal-clair), 0.03); }
+.btq-top { display: grid; gap: 6px; }

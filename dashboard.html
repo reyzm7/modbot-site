@@ -13,9 +13,10 @@
   <title>Dashboard ModBot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
   <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
        la connexion au dashboard est automatique, rien a saisir.
        A changer uniquement si le bot est deplace vers un autre hebergeur. -->
@@ -25,7 +26,7 @@
   <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
   <meta name="modbot-bot-permissions" content="3124257994829047">
   <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="icon" href="assets/modbot-mark.png" type="image/png">
+  <link rel="icon" href="assets/modbot-mark.webp" type="image/webp">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 </head>
 <body class="dashboard-page">
@@ -43,7 +44,7 @@
 
   <main class="dashboard-auth" data-auth-screen>
     <section class="auth-card">
-      <img class="auth-logo" src="assets/modbot-logo.png" alt="ModBot" width="485" height="512">
+      <img class="auth-logo" src="assets/modbot-logo.webp" alt="ModBot" width="182" height="192">
       <p class="eyebrow" data-i18n="dash.connexionDashboard">Connexion dashboard</p>
       <h1 data-i18n="dash.connecteToiAvecDiscord">Connecte-toi avec Discord</h1>
       <p data-i18n="dash.leDashboardAfficheraEnsuite">Le dashboard affichera ensuite uniquement les serveurs où tu as accès à la configuration ModBot.</p>
@@ -93,7 +94,7 @@
   <main class="server-picker" data-server-screen hidden>
     <header class="server-select-topbar">
       <a class="server-select-brand" href="index.html" aria-label="Accueil ModBot" data-i18n-aria="dash.accueilModbot">
-        <img src="assets/modbot-mark.png" alt="" width="128" height="128" decoding="async" fetchpriority="high">
+        <img src="assets/modbot-mark.webp" alt="" width="128" height="128" decoding="async" fetchpriority="high">
         <span>ModBot</span>
       </a>
       <nav class="server-select-nav" aria-label="Navigation" data-i18n-aria="dash.navigation">
@@ -186,7 +187,7 @@
   <header class="dashboard-topbar">
     <a class="brand" href="index.html" aria-label="Retour au site ModBot" data-i18n-aria="dash.retourAuSiteModbot">
       <span class="brand-mark">
-        <img src="assets/modbot-mark.png" alt="" width="128" height="128" decoding="async" fetchpriority="high">
+        <img src="assets/modbot-mark.webp" alt="" width="128" height="128" decoding="async" fetchpriority="high">
       </span>
       <span>ModBot</span>
     </a>
