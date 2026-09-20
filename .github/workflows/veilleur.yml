@@ -69,74 +69,75 @@ jobs:
           ETAT: ${{ steps.sonde.outputs.etat }}
           DETAIL: ${{ steps.sonde.outputs.detail }}
           WEBHOOK: ${{ secrets.VEILLE_WEBHOOK_DISCORD }}
-        script: |
-          const TITRE = "Veille : ModBot ne repond plus";
-          const etat = process.env.ETAT;
-          const detail = process.env.DETAIL;
+        with:
+          script: |
+            const TITRE = "Veille : ModBot ne repond plus";
+            const etat = process.env.ETAT;
+            const detail = process.env.DETAIL;
 
-          const ouvertes = await github.rest.issues.listForRepo({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            state: "open",
-            labels: "veille",
-          });
-          const encours = ouvertes.data.find((i) => i.title === TITRE);
+            const ouvertes = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: "veille",
+            });
+            const encours = ouvertes.data.find((i) => i.title === TITRE);
 
-          // Prevenir sur Discord n'est possible que si le secret existe.
-          // Sans lui, l'issue suffit : elle arrive par courriel a qui
-          // suit le depot.
-          const prevenir = async (texte) => {
-            if (!process.env.WEBHOOK) return;
-            try {
-              await fetch(process.env.WEBHOOK, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ content: texte }),
+            // Prevenir sur Discord n'est possible que si le secret existe.
+            // Sans lui, l'issue suffit : elle arrive par courriel a qui
+            // suit le depot.
+            const prevenir = async (texte) => {
+              if (!process.env.WEBHOOK) return;
+              try {
+                await fetch(process.env.WEBHOOK, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ content: texte }),
+                });
+              } catch (erreur) {
+                core.warning("Discord injoignable : " + erreur.message);
+              }
+            };
+
+            const quand = new Date().toISOString().replace("T", " ").slice(0, 16);
+
+            if (etat === "hs" && !encours) {
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: TITRE,
+                labels: ["veille"],
+                body: [
+                  `Le bot n'a pas repondu a trois appels d'affilee.`,
+                  ``,
+                  `* Premier silence : ${quand} UTC`,
+                  `* Derniere reponse lue : ${detail}`,
+                  `* Adresse : https://web-production-6ad2d.up.railway.app/api/health`,
+                  ``,
+                  `Cette issue se fermera d'elle-meme au retour du bot, avec la duree.`,
+                ].join("\n"),
               });
-            } catch (erreur) {
-              core.warning("Discord injoignable : " + erreur.message);
+              await prevenir(`ModBot ne repond plus depuis ${quand} UTC (${detail}). Avis : ${issue.data.html_url}`);
+              core.notice("Panne ouverte : " + issue.data.html_url);
+            } else if (etat === "ok" && encours) {
+              const depuis = new Date(encours.created_at);
+              const minutes = Math.round((Date.now() - depuis.getTime()) / 60000);
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: encours.number,
+                body: `Le bot repond de nouveau a ${quand} UTC. Silence : environ ${minutes} minute(s).`,
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: encours.number,
+                state: "closed",
+              });
+              await prevenir(`ModBot repond de nouveau. Il aura manque environ ${minutes} minute(s).`);
+              core.notice("Retour du bot apres " + minutes + " minute(s).");
+            } else if (etat === "hs") {
+              core.warning("Toujours hors ligne — avis deja ouvert, on n'alerte pas deux fois.");
+            } else {
+              core.info("Le bot repond.");
             }
-          };
-
-          const quand = new Date().toISOString().replace("T", " ").slice(0, 16);
-
-          if (etat === "hs" && !encours) {
-            const issue = await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: TITRE,
-              labels: ["veille"],
-              body: [
-                `Le bot n'a pas repondu a trois appels d'affilee.`,
-                ``,
-                `* Premier silence : ${quand} UTC`,
-                `* Derniere reponse lue : ${detail}`,
-                `* Adresse : https://web-production-6ad2d.up.railway.app/api/health`,
-                ``,
-                `Cette issue se fermera d'elle-meme au retour du bot, avec la duree.`,
-              ].join("\n"),
-            });
-            await prevenir(`ModBot ne repond plus depuis ${quand} UTC (${detail}). Avis : ${issue.data.html_url}`);
-            core.notice("Panne ouverte : " + issue.data.html_url);
-          } else if (etat === "ok" && encours) {
-            const depuis = new Date(encours.created_at);
-            const minutes = Math.round((Date.now() - depuis.getTime()) / 60000);
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: encours.number,
-              body: `Le bot repond de nouveau a ${quand} UTC. Silence : environ ${minutes} minute(s).`,
-            });
-            await github.rest.issues.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: encours.number,
-              state: "closed",
-            });
-            await prevenir(`ModBot repond de nouveau. Il aura manque environ ${minutes} minute(s).`);
-            core.notice("Retour du bot apres " + minutes + " minute(s).");
-          } else if (etat === "hs") {
-            core.warning("Toujours hors ligne — avis deja ouvert, on n'alerte pas deux fois.");
-          } else {
-            core.info("Le bot repond.");
-          }
