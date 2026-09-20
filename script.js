@@ -5278,6 +5278,7 @@ function initDashboard() {
     }
     // Les modules sécurité / logs / sauvegardes ont leurs propres endpoints :
     // on les charge en parallèle sans bloquer l'affichage de la configuration.
+    chargerCroissance(guildId);
     Promise.allSettled([
       loadGuildSecurity(guildId),
       loadGuildLogs(guildId),
@@ -8260,7 +8261,125 @@ function initDashboard() {
     }
   }
 
+  /* ══════════════════════════════════════════════════════════════
+     L'ESSAI ET LE PARRAINAGE
+
+     Le bot decide de tout (un essai par serveur et par proprietaire,
+     conditions du parrainage) : ici, on montre ce qu'il repond et on
+     lui renvoie le clic. Rien n'est decide dans le navigateur.
+     ══════════════════════════════════════════════════════════════ */
+
+  let croissanceEtat = null;
+
+  function peindreCroissance() {
+    const carte = document.querySelector("[data-croissance]");
+    if (!carte) return;
+    if (!croissanceEtat) {
+      carte.hidden = true;
+      return;
+    }
+    const essai = croissanceEtat.essai || {};
+    const parrainage = croissanceEtat.parrainage || {};
+    carte.hidden = false;
+
+    const bloc = carte.querySelector("[data-croissance-essai]");
+    const refus = carte.querySelector("[data-essai-refus]");
+    const bouton = carte.querySelector("[data-essai-demarrer]");
+    // Un serveur deja premium n'a pas besoin qu'on lui propose un essai.
+    if (bloc) bloc.hidden = Boolean(premiumEtat.active) && !essai.possible;
+    if (bouton) bouton.hidden = !essai.possible;
+    if (refus) {
+      refus.hidden = Boolean(essai.possible);
+      refus.textContent = premiumEtat.active ? t("croiss.essaiActif") : t("croiss.essaiIndispo");
+    }
+
+    const texte = carte.querySelector("[data-parrainage-texte]");
+    if (texte) texte.textContent = tp("croiss.parrainageTexte", { jours: parrainage.jours ?? 20 });
+    const code = carte.querySelector("[data-parrainage-code]");
+    if (code) code.textContent = parrainage.code || "······";
+    const filleuls = carte.querySelector("[data-parrainage-filleuls]");
+    if (filleuls) filleuls.textContent = tp("croiss.filleuls", { n: parrainage.filleuls ?? 0 });
+    const recu = carte.querySelector("[data-parrainage-recu]");
+    // Un serveur deja parraine ne peut plus l'etre : on retire le champ
+    // plutot que de laisser essayer pour rien.
+    if (recu) recu.hidden = Boolean(parrainage.parraine);
+    const recuTexte = carte.querySelector("[data-parrainage-recu-texte]");
+    if (recuTexte) {
+      recuTexte.textContent = tp("croiss.recuTexte", {
+        jours: parrainage.fenetre_jours ?? 14, offerts: parrainage.jours ?? 20 });
+    }
+  }
+
+  async function chargerCroissance(guildId) {
+    if (!guildId) return;
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/premium`, { cache: "no-store" });
+      if (!estEncoreLeServeur(guildId)) return;
+      if (data?.premium) appliquerPremium(data.premium);
+      croissanceEtat = data?.croissance || null;
+      peindreCroissance();
+    } catch (erreur) {
+      // Le bot est injoignable : on n'affiche pas une offre qu'on ne
+      // saurait pas honorer.
+      croissanceEtat = null;
+      peindreCroissance();
+    }
+  }
+
+  function initCroissancePanel() {
+    const carte = document.querySelector("[data-croissance]");
+    if (!carte) return;
+    carte.querySelector("[data-essai-demarrer]")?.addEventListener("click", async (event) => {
+      const bouton = event.currentTarget;
+      const demande = selectedServer.id;
+      if (!demande) return;
+      bouton.disabled = true;
+      try {
+        const data = await modbotApiFetch(`/api/guilds/${demande}/premium/essai`, { method: "POST" });
+        if (!estEncoreLeServeur(demande)) return;
+        if (data?.premium) appliquerPremium(data.premium);
+        croissanceEtat = data?.croissance || croissanceEtat;
+        peindreCroissance();
+        showToast(t("croiss.essaiOk"));
+      } catch (erreur) {
+        showToast(erreur?.message || t("croiss.essaiIndispo"));
+      } finally {
+        bouton.disabled = false;
+      }
+    });
+    carte.querySelector("[data-parrainage-copier]")?.addEventListener("click", async () => {
+      const code = carte.querySelector("[data-parrainage-code]")?.textContent || "";
+      try {
+        await navigator.clipboard.writeText(code.trim());
+        showToast(t("croiss.copie"));
+      } catch (erreur) {
+        showToast(code.trim());
+      }
+    });
+    carte.querySelector("[data-parrainage-valider]")?.addEventListener("click", async (event) => {
+      const bouton = event.currentTarget;
+      const saisie = carte.querySelector("[data-parrainage-saisie]");
+      const demande = selectedServer.id;
+      if (!demande || !saisie?.value.trim()) return;
+      bouton.disabled = true;
+      try {
+        const data = await modbotApiFetch(`/api/guilds/${demande}/premium/parrainage`, {
+          method: "POST", body: JSON.stringify({ code: saisie.value.trim() }) });
+        if (!estEncoreLeServeur(demande)) return;
+        croissanceEtat = data?.croissance || croissanceEtat;
+        saisie.value = "";
+        peindreCroissance();
+        showToast(t("croiss.recuOk"));
+      } catch (erreur) {
+        showToast(erreur?.message || t("croiss.dejaParraine"));
+      } finally {
+        bouton.disabled = false;
+      }
+    });
+  }
+
   function initScorePanel() {
+    initCroissancePanel();
     document.querySelector("[data-score-refresh]")
       ?.addEventListener("click", chargerScoreSecurite);
     const corriger = document.querySelector("[data-score-corriger]");
@@ -10333,6 +10452,89 @@ document.addEventListener("modbot:language", () => {
   peindreStatsPubliques(derniersStatsPubliques);
 });
 
+/* ══════════════════════════════════════════════════════════════════
+   LA PAGE D'ETAT DU SERVICE
+
+   Le bot est seul a connaitre ses coupures : il les mesure a son
+   retour, et les publie. Si LUI ne repond pas, la page le dit — c'est
+   encore une information, et la plus honnete qui soit.
+   ══════════════════════════════════════════════════════════════════ */
+
+function dureeLisible(minutes) {
+  const total = Math.max(0, Math.round(Number(minutes) || 0));
+  if (total < 60) return tp("etat.minutesCourt", { n: total });
+  const heures = Math.floor(total / 60);
+  const reste = total % 60;
+  return reste ? `${heures} h ${String(reste).padStart(2, "0")}` : `${heures} h`;
+}
+
+async function initStatutPage() {
+  const hote = document.querySelector("[data-statut]");
+  const pastille = document.querySelector("[data-statut-etat]");
+  if (!hote) return;
+
+  let statut = null;
+  for (const base of getModbotApiCandidates()) {
+    // Le meme garde-fou que les chiffres de l'accueil : un bot
+    // injoignable ne doit pas laisser la page tourner dans le vide.
+    const controleur = new AbortController();
+    const minuterie = window.setTimeout(() => controleur.abort(), 8000);
+    try {
+      const reponse = await fetch(`${base}/api/public/statut`, {
+        cache: "no-store", headers: { Accept: "application/json" },
+        signal: controleur.signal });
+      if (!reponse.ok) throw new Error(`HTTP ${reponse.status}`);
+      statut = (await reponse.json())?.statut;
+      if (statut) { rememberApiBase(base); break; }
+    } catch (erreur) {
+      statut = null;
+    } finally {
+      window.clearTimeout(minuterie);
+    }
+  }
+
+  if (!statut) {
+    if (pastille) {
+      pastille.textContent = t("etat.injoignable");
+      pastille.classList.add("est-hors-ligne");
+    }
+    const aucune = document.querySelector("[data-statut-aucune]");
+    if (aucune) {
+      aucune.hidden = false;
+      aucune.textContent = t("etat.indispo");
+    }
+    return;
+  }
+
+  if (pastille) {
+    pastille.textContent = t("etat.enLigne");
+    pastille.classList.add("est-en-ligne");
+  }
+  const ecrire = (selecteur, valeur) => {
+    const cible = document.querySelector(selecteur);
+    if (cible) cible.textContent = valeur;
+  };
+  ecrire("[data-statut-dispo]", `${formatNombreFr(statut.disponibilite)} %`);
+  ecrire("[data-statut-coupures]", formatNombreFr(statut.coupures));
+  ecrire("[data-statut-minutes]", formatNombreFr(statut.minutes_hors_ligne));
+  const depuis = new Date(statut.en_ligne_depuis || statut.observe_depuis);
+  ecrire("[data-statut-depuis]", Number.isNaN(depuis.getTime()) ? "—"
+    : depuis.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }));
+
+  const corps = document.querySelector("[data-statut-incidents]");
+  const aucune = document.querySelector("[data-statut-aucune]");
+  const incidents = Array.isArray(statut.incidents) ? statut.incidents : [];
+  if (corps) {
+    corps.innerHTML = incidents.map((incident) => {
+      const debut = new Date(incident.debut);
+      const quand = Number.isNaN(debut.getTime()) ? "—"
+        : debut.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+      return `<tr><td>${escapeHtml(quand)}</td><td>${escapeHtml(dureeLisible(incident.minutes))}</td></tr>`;
+    }).join("");
+  }
+  if (aucune) aucune.hidden = incidents.length > 0;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   resetInitialScroll();
   initApiBridgeFromUrl();
@@ -10356,6 +10558,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   initPublicStats();
+  initStatutPage();
   initDashboard();
   remplirSelecteurPays();
 });

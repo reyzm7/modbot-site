@@ -365,6 +365,36 @@
         <span class="premium-banner-source" data-premium-banner-source hidden data-i18n="prem.offertPar">Offert par l'équipe ModBot</span>
       </div>
 
+      <!-- L'essai et le parrainage : ils n'existaient qu'en commandes
+           Discord. Quelqu'un qui ouvre le tableau de bord ne les
+           connaissait pas — c'est ici qu'il les voit. -->
+      <div class="croissance-carte" data-croissance hidden>
+        <p class="eyebrow" data-i18n="croiss.titre">Essai et parrainage</p>
+        <div class="croissance-bloc" data-croissance-essai hidden>
+          <strong data-i18n="croiss.essaiTitre">Essai gratuit de 7 jours</strong>
+          <p data-i18n="croiss.essaiTexte">Tout ModBot Premium pendant 7 jours : score de sécurité, journal complet, assistant IA, relais réseaux. Sans carte bancaire et sans reconduction.</p>
+          <button class="primary-btn compact" type="button" data-essai-demarrer data-i18n="croiss.essaiBouton"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Activer l'essai</button>
+          <small data-essai-refus hidden></small>
+        </div>
+        <div class="croissance-bloc">
+          <strong data-i18n="croiss.parrainageTitre">Parrainage</strong>
+          <p data-parrainage-texte></p>
+          <div class="croissance-code">
+            <code data-parrainage-code>······</code>
+            <button class="secondary-btn compact" type="button" data-parrainage-copier data-i18n="croiss.copier">Copier</button>
+          </div>
+          <small data-parrainage-filleuls></small>
+          <div data-parrainage-recu>
+            <strong data-i18n="croiss.recuTitre">Un serveur vous a fait découvrir ModBot ?</strong>
+            <p data-parrainage-recu-texte></p>
+            <div class="croissance-code">
+              <input data-parrainage-saisie maxlength="9" data-i18n-placeholder="croiss.recuPlaceholder" placeholder="Code à 6 caractères">
+              <button class="secondary-btn compact" type="button" data-parrainage-valider data-i18n="croiss.valider">Valider</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <section class="dash-panel is-active" data-dashboard-panel="overview">
         <div class="panel-title">
           <div>

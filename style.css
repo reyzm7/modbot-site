@@ -12787,3 +12787,16 @@ body:not(.dashboard-page) .page-glow {
   color: var(--warn);
   font-weight: 700;
 }
+
+/* L'etat du service : quatre chiffres, une pastille, un tableau. */
+.etat-pastille { display:inline-flex; align-items:center; gap:.5rem; padding:.35rem .9rem;
+  border-radius:999px; border:1px solid rgba(255,255,255,.14); font-weight:600; }
+.etat-pastille.est-en-ligne { color:#2ECC71; border-color:rgba(46,204,113,.45); }
+.etat-pastille.est-hors-ligne { color:#ED4245; border-color:rgba(237,66,69,.45); }
+.etat-cartes { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  margin-bottom:2rem; }
+.etat-carte { padding:1.1rem 1.2rem; border-radius:16px; background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08); display:flex; flex-direction:column; gap:.2rem; }
+.etat-carte strong { font-size:1.8rem; line-height:1.1; }
+.etat-carte span { font-weight:600; }
+.etat-carte small { opacity:.7; }
