@@ -4155,6 +4155,10 @@ main,
    rond, mais un bloc qui arrive apparait encore en fondu. Un site
    entierement fige se lit comme un site casse. */
 :root {
+  --entree-page: 10px;      /* une page, ou un ecran du dashboard */
+  --entree-menu: 8px;       /* le panneau du menu « Acces » */
+  --echelle-menu: 0.98;
+  --entree-bouton: 6px;     /* chacun de ses boutons */
   --entree-panneau: 12px;   /* la rubrique qui s'ouvre */
   --entree-bloc: 14px;      /* ses cartes, l'une apres l'autre */
   --reveal-decalage: 34px;  /* ce qui se revele au defilement */
@@ -4165,6 +4169,10 @@ main,
 
 @media (prefers-reduced-motion: reduce) {
   :root {
+    --entree-page: 0px;
+    --entree-menu: 0px;
+    --echelle-menu: 1;
+    --entree-bouton: 0px;
     --entree-panneau: 0px;
     --entree-bloc: 0px;
     --reveal-decalage: 0px;
@@ -7049,21 +7057,28 @@ h3 > .ui-icon,
    ═══════════════════════════════════════════════════════════════════ */
 
 @keyframes page-ouverture {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(var(--entree-page)); }
   to   { opacity: 1; transform: none; }
 }
 
 @keyframes menu-ouverture {
-  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  from {
+    opacity: 0;
+    transform: translateY(calc(0px - var(--entree-menu))) scale(var(--echelle-menu));
+  }
   to   { opacity: 1; transform: none; }
 }
 
 @keyframes menu-entree {
-  from { opacity: 0; transform: translateY(-6px); }
+  from { opacity: 0; transform: translateY(calc(0px - var(--entree-bouton))); }
   to   { opacity: 1; transform: none; }
 }
 
-@media (prefers-reduced-motion: no-preference) {
+/* Ce qui suit vivait sous « prefers-reduced-motion: no-preference » :
+   une machine reglee sur le calme n'en voyait rien, pas meme un fondu.
+   Le mouvement passe maintenant par des variables mises a zero dans ce
+   cas ; la duree, elle, reste. */
+
   /* Une balise <main> qui entre dans la page — au chargement, ou quand
      le dashboard passe d'un ecran a l'autre — monte en fondu. L'anim
      repart d'elle-meme a chaque fois que l'element cesse d'etre
@@ -7097,7 +7112,6 @@ h3 > .ui-icon,
   .dash-panel:not([hidden]) {
     animation: page-ouverture 260ms cubic-bezier(0.22, 0.7, 0.3, 1) both;
   }
-}
 
 /* Le bouton « Nous écrire » terminait la page collé à gauche, sous un
    titre centré. */
