@@ -2891,6 +2891,22 @@ function observeReveals() {
   }
 
   revealItems.forEach((item) => revealObserver.observe(item));
+
+  // Le filet. Un IntersectionObserver ne se declenche que si la page est
+  // reellement peinte : dans un onglet ouvert en arriere-plan, ou dans un
+  // navigateur qui met le rendu en veille, il ne dit jamais rien — et
+  // tout ce qui attend d'etre revele reste a zero d'opacite, c'est-a-dire
+  // que la page parait vide. On verifie donc nous-memes, une fois, ce qui
+  // se trouve deja dans l'ecran.
+  window.setTimeout(() => {
+    document.querySelectorAll(".reveal:not(.is-visible)").forEach((item) => {
+      const boite = item.getBoundingClientRect();
+      if (boite.top < window.innerHeight && boite.bottom > 0) {
+        item.classList.add("is-visible");
+        revealObserver?.unobserve(item);
+      }
+    });
+  }, 1200);
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -3864,6 +3880,11 @@ function initFondVivant() {
 }
 
 function initRevealAnimations() {
+  // Tout bloc qui se lit comme une carte. La liste tenait en sept
+  // entrees, ecrites du temps ou le site n'avait que l'accueil : la
+  // boutique, le wiki, les articles, la page d'etat et la page premium
+  // arrivaient sans un mouvement, d'un coup, au milieu d'un site qui
+  // respire partout ailleurs.
   const selectors = [
     ".stat",
     ".feature-card",
@@ -3871,7 +3892,24 @@ function initRevealAnimations() {
     ".faq-box",
     ".partner-card",
     ".discord-window",
-    ".demo-controls"
+    ".demo-controls",
+    ".premium-offer",
+    ".premium-feature",
+    ".premium-essai",
+    ".premium-faq-grid article",
+    ".boutique-exemple",
+    ".boutique-preuve",
+    ".boutique-choix-option",
+    ".boutique-atouts-grille article",
+    ".boutique-aide-grille article",
+    ".boutique-avis-carte",
+    ".wiki-section",
+    ".wiki-card",
+    ".etat-carte",
+    ".integration",
+    ".main-partner-inner",
+    ".home-boutique-inner",
+    ".section-heading"
   ];
 
   document.querySelectorAll(selectors.join(",")).forEach((element) => {
@@ -5370,6 +5408,11 @@ function initDashboard() {
   }
 
   async function chargerConfigDuServeur(guildId) {
+    // Le contenu affiche est encore celui de l'ancien serveur : on le
+    // met en attente plutot que de le laisser mentir.
+    const contenu = document.querySelector(".dashboard-content");
+    contenu?.classList.add("est-en-attente");
+
     // Les ressources et la configuration sont deux appels distincts :
     // l'echec de l'un ne doit pas emporter l'autre. Ils etaient dans le
     // meme `try`, et une liste de salons qui n'arrivait pas — un 429 au
@@ -5388,7 +5431,7 @@ function initDashboard() {
     let panne = null;
     try {
       const data = await modbotApiFetch(`/api/guilds/${guildId}/config`, { cache: "no-store" });
-      if (!estEncoreLeServeur(guildId)) return;
+      if (!estEncoreLeServeur(guildId)) { contenu?.classList.remove("est-en-attente"); return; }
       recue = data?.config || null;
       if (recue) derniereConfigEnregistree = JSON.stringify(recue);
     } catch (error) {
@@ -5435,7 +5478,7 @@ function initDashboard() {
       try {
         const etat = await modbotApiFetch(`/api/guilds/${guildId}/premium`,
                                           { cache: "no-store" });
-        if (!estEncoreLeServeur(guildId)) return;
+        if (!estEncoreLeServeur(guildId)) { contenu?.classList.remove("est-en-attente"); return; }
         if (etat?.premium) appliquerPremium(etat.premium);
       } catch (erreur) {
         // Injoignable des deux cotes : on ne touche a rien plutot que
@@ -5444,6 +5487,7 @@ function initDashboard() {
     }
     // Les modules sécurité / logs / sauvegardes ont leurs propres endpoints :
     // on les charge en parallèle sans bloquer l'affichage de la configuration.
+    contenu?.classList.remove("est-en-attente");
     chargerCroissance(guildId);
     Promise.allSettled([
       loadGuildSecurity(guildId),
@@ -10868,6 +10912,9 @@ function initPagePremium() {
     if (hoteFonctions) {
       hoteFonctions.innerHTML = PREMIUM_FONCTIONS.map(carteFonction).join("");
     }
+    // Ces cartes naissent apres le premier passage : sans ce rappel,
+    // elles arriveraient sans le mouvement de tout le reste du site.
+    initRevealAnimations();
   }
 
   async function acheter(plan) {

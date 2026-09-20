@@ -474,7 +474,9 @@ verifier("chaque section est isolee",
          bloc_apply.count("sansCasser(") >= 8,
          "%d sections" % bloc_apply.count("sansCasser("))
 
-bloc_secours = script[script.index("async function chargerConfigDuServeur"):][:2800]
+# La fenetre suit la fonction : elle s'est allongee d'une mise en
+# attente du contenu pendant que le bot repond.
+bloc_secours = script[script.index("async function chargerConfigDuServeur"):][:3200]
 verifier("une erreur d'affichage n'est pas dite panne du bot",
          "js.configAffichageErreur" in bloc_secours)
 verifier("et le premium est pose meme dans ce cas",

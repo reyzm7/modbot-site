@@ -10871,3 +10871,137 @@ body:not(.dashboard-page) .page-glow {
    a copier, pas un paragraphe a lire. */
 .croissance-carte.est-compacte { margin-bottom: 18px; }
 .croissance-carte.est-compacte .croissance-bloc p { margin-bottom: 10px; }
+
+/* ══════════════════════════════════════════════════════════════════
+   LES RUBRIQUES S'OUVRENT EN CASCADE
+
+   Le panneau entier montait d'un bloc : on voyait un rectangle
+   glisser, pas un ecran se construire. Ses enfants directs arrivent
+   maintenant l'un apres l'autre. Trente-cinq millisecondes suffisent
+   a donner le sens de lecture — de haut en bas — sans faire attendre :
+   le douzieme bloc est en place en moins d'une demi-seconde.
+   ══════════════════════════════════════════════════════════════════ */
+
+.dash-panel.is-active > *,
+.admin-view.is-active > * {
+  animation: blocEntre 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes blocEntre {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dash-panel.is-active > *:nth-child(1) { animation-delay: 0ms; }
+.dash-panel.is-active > *:nth-child(2) { animation-delay: 35ms; }
+.dash-panel.is-active > *:nth-child(3) { animation-delay: 70ms; }
+.dash-panel.is-active > *:nth-child(4) { animation-delay: 105ms; }
+.dash-panel.is-active > *:nth-child(5) { animation-delay: 140ms; }
+.dash-panel.is-active > *:nth-child(6) { animation-delay: 175ms; }
+.dash-panel.is-active > *:nth-child(7) { animation-delay: 210ms; }
+.dash-panel.is-active > *:nth-child(8) { animation-delay: 245ms; }
+.dash-panel.is-active > *:nth-child(n+9) { animation-delay: 280ms; }
+
+/* Les cartes d'une grille arrivent aussi en cascade, dans leur sens
+   de lecture — sinon douze cartes apparaissent d'un coup au milieu
+   d'un ecran qui, lui, se construit posement. */
+.dash-panel.is-active .metric-grid > *,
+.dash-panel.is-active .dashboard-grid > *,
+.dash-panel.is-active .toggle-grid > * {
+  animation: blocEntre 0.38s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.dash-panel.is-active .metric-grid > *:nth-child(2),
+.dash-panel.is-active .dashboard-grid > *:nth-child(2),
+.dash-panel.is-active .toggle-grid > *:nth-child(2) { animation-delay: 45ms; }
+.dash-panel.is-active .metric-grid > *:nth-child(3),
+.dash-panel.is-active .dashboard-grid > *:nth-child(3),
+.dash-panel.is-active .toggle-grid > *:nth-child(3) { animation-delay: 90ms; }
+.dash-panel.is-active .metric-grid > *:nth-child(n+4),
+.dash-panel.is-active .dashboard-grid > *:nth-child(n+4),
+.dash-panel.is-active .toggle-grid > *:nth-child(n+4) { animation-delay: 135ms; }
+
+/* ══════════════════════════════════════════════════════════════════
+   L'ATTENTE D'UN SERVEUR
+
+   Entre deux serveurs, le contenu affiche est celui du precedent :
+   des chiffres justes, mais pour quelqu'un d'autre. Il s'efface a
+   demi, cesse de repondre au clic, et une barre court en haut pour
+   dire que ca travaille.
+   ══════════════════════════════════════════════════════════════════ */
+
+.dashboard-content { position: relative; }
+
+.dashboard-content.est-en-attente > .dash-panel {
+  opacity: 0.38;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.dashboard-content.est-en-attente::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 5;
+  border-radius: 2px;
+  background: linear-gradient(90deg,
+    transparent, var(--accent) 35%, var(--purple-2) 65%, transparent);
+  background-size: 40% 100%;
+  background-repeat: no-repeat;
+  animation: barreDAttente 1.1s ease-in-out infinite;
+}
+
+@keyframes barreDAttente {
+  from { background-position: -40% 0; }
+  to { background-position: 140% 0; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LES CARTES REPONDENT AU SURVOL
+
+   Un bloc qui ne bouge pas sous la souris se lit comme une image.
+   Deux pixels suffisent a dire qu'il est vivant.
+   ══════════════════════════════════════════════════════════════════ */
+
+@media (hover: hover) and (pointer: fine) {
+  .metric-card,
+  .tool-panel,
+  .feature-card,
+  .boutique-carte,
+  .premium-feature,
+  .etat-carte,
+  .partner-card {
+    transition: transform 0.22s var(--ease, ease), border-color 0.22s ease,
+                box-shadow 0.22s ease;
+  }
+  .metric-card:hover,
+  .feature-card:hover,
+  .boutique-carte:hover,
+  .premium-feature:hover,
+  .etat-carte:hover,
+  .partner-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-line);
+    box-shadow: var(--shadow);
+  }
+}
+
+/* Le systeme peut demander le silence : on le respecte partout. */
+@media (prefers-reduced-motion: reduce) {
+  .dash-panel.is-active > *,
+  .admin-view.is-active > *,
+  .dash-panel.is-active .metric-grid > *,
+  .dash-panel.is-active .dashboard-grid > *,
+  .dash-panel.is-active .toggle-grid > * {
+    animation: none;
+  }
+  .dashboard-content.est-en-attente::before { animation: none; }
+  .metric-card:hover,
+  .feature-card:hover,
+  .boutique-carte:hover,
+  .premium-feature:hover,
+  .etat-carte:hover,
+  .partner-card:hover { transform: none; }
+}
