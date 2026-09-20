@@ -124,6 +124,24 @@
         <span data-premium-state-detail></span>
       </div>
 
+      <!-- L'essai se presente avant les prix : sept jours offerts,
+           c'est ce qu'on veut savoir avant de sortir une carte. Il
+           reste hors de [data-premium-offers], qui est rempli depuis
+           les offres du bot et croise avec elles a chaque test. -->
+      <article class="premium-essai">
+        <div class="premium-essai-texte">
+          <p class="eyebrow" data-i18n="prem.essaiEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg> Avant de payer</p>
+          <h2 data-i18n="prem.essaiTitre">Sept jours de Premium, gratuits</h2>
+          <p data-i18n="prem.essaiTexte">Tout ce que la page décrit plus bas, ouvert sur votre serveur pendant sept jours : score de sécurité, journal complet, assistant IA, relais des réseaux. Sans carte bancaire, et sans reconduction — à la fin, le serveur revient simplement à la version gratuite.</p>
+          <p class="field-help" data-i18n="prem.essaiNote">Un essai par serveur, et un par propriétaire. Il s'active depuis le tableau de bord, ou avec la commande /premium essai sur Discord.</p>
+        </div>
+        <div class="premium-essai-prix">
+          <p class="premium-price">0 €</p>
+          <p class="premium-period" data-i18n="prem.essaiDuree">7 jours</p>
+          <a class="primary-btn" href="dashboard.html" data-i18n="prem.essaiBouton">Activer l'essai</a>
+        </div>
+      </article>
+
       <div class="premium-offers" data-premium-offers>
         <p class="field-help" data-i18n="prem.chargementOffres">Chargement des offres…</p>
       </div>

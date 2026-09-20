@@ -10819,3 +10819,50 @@ body:not(.dashboard-page) .page-glow {
 @media (max-width: 980px) {
   .site-header .navbar .theme-bouton { margin-left: auto; margin-right: 10px; }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   L'ESSAI GRATUIT, EN TETE DE LA PAGE PREMIUM
+
+   Une bande large plutot qu'une quatrieme carte : mise a cote des
+   trois offres, la gratuite aurait ecrase les payantes. Elle se lit
+   d'abord, puis on descend vers les prix.
+   ══════════════════════════════════════════════════════════════════ */
+
+.premium-essai {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 26px;
+  margin: 0 0 26px;
+  padding: 24px 26px;
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(135deg, var(--accent-soft), transparent 70%),
+    var(--panel);
+  text-align: left;
+}
+
+.premium-essai h2 { margin: 0 0 8px; font-size: clamp(1.3rem, 2.6vw, 1.7rem); }
+.premium-essai p { margin: 0 0 8px; }
+.premium-essai .field-help { margin: 0; }
+
+.premium-essai-prix {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-width: 190px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(var(--canal-clair), 0.04);
+}
+
+.premium-essai-prix .premium-price { margin: 0; }
+.premium-essai-prix .primary-btn { margin-top: 6px; }
+
+@media (max-width: 760px) {
+  /* Le prix passe dessous : a cette largeur, deux colonnes coupent
+     le texte en tranches de quatre mots. */
+  .premium-essai { grid-template-columns: minmax(0, 1fr); }
+}
