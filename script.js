@@ -2870,6 +2870,7 @@ function initAdminZone() {
 }
 
 let revealObserver;
+let filetPose = false;
 
 function observeReveals() {
   const revealItems = document.querySelectorAll(".reveal:not(.is-visible)");
@@ -2892,21 +2893,56 @@ function observeReveals() {
 
   revealItems.forEach((item) => revealObserver.observe(item));
 
-  // Le filet. Un IntersectionObserver ne se declenche que si la page est
-  // reellement peinte : dans un onglet ouvert en arriere-plan, ou dans un
-  // navigateur qui met le rendu en veille, il ne dit jamais rien — et
-  // tout ce qui attend d'etre revele reste a zero d'opacite, c'est-a-dire
-  // que la page parait vide. On verifie donc nous-memes, une fois, ce qui
-  // se trouve deja dans l'ecran.
-  window.setTimeout(() => {
-    document.querySelectorAll(".reveal:not(.is-visible)").forEach((item) => {
+  poserLeFilet();
+}
+
+/**
+ * Le filet des revelations.
+ *
+ * Un IntersectionObserver ne dit rien tant que la page n'est pas
+ * reellement peinte : dans un onglet ouvert en arriere-plan, ou dans un
+ * navigateur qui met son rendu en veille, il se tait — et tout ce qui
+ * attend d'etre revele reste a zero d'opacite, c'est-a-dire que la page
+ * parait vide. Trente-sept blocs, sur la boutique.
+ *
+ * On regarde donc nous-memes ce qui se trouve dans l'ecran : une
+ * premiere fois apres le chargement, puis a chaque defilement. Le filet
+ * se retire des qu'il n'a plus rien a rattraper.
+ */
+function poserLeFilet() {
+  if (filetPose) return;
+  filetPose = true;
+
+  let attente = 0;
+
+  const rattraper = () => {
+    const restants = document.querySelectorAll(".reveal:not(.is-visible)");
+    if (!restants.length) {
+      window.removeEventListener("scroll", auDefilement);
+      window.removeEventListener("resize", auDefilement);
+      filetPose = false;
+      return;
+    }
+    restants.forEach((item) => {
       const boite = item.getBoundingClientRect();
       if (boite.top < window.innerHeight && boite.bottom > 0) {
         item.classList.add("is-visible");
         revealObserver?.unobserve(item);
       }
     });
-  }, 1200);
+  };
+
+  // Au plus une verification toutes les 250 ms : un defilement en
+  // declenche des dizaines par seconde, et chacune relit la position
+  // de tout ce qui reste.
+  const auDefilement = () => {
+    if (attente) return;
+    attente = window.setTimeout(() => { attente = 0; rattraper(); }, 250);
+  };
+
+  window.setTimeout(rattraper, 1200);
+  window.addEventListener("scroll", auDefilement, { passive: true });
+  window.addEventListener("resize", auDefilement, { passive: true });
 }
 
 /* ══════════════════════════════════════════════════════════════════
