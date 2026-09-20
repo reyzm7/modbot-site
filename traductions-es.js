@@ -972,6 +972,8 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "dash.navigationDashboard": "Navegación del panel",
     "dash.pilotage": "Control",
     "dash.protection": "Protección",
+    "dash.premium": "Premium",
+    "dash.navEssaiParrainage": "Prueba y padrinazgo",
     "dash.navSecurite": "Seguridad",
     "dash.navModeration": "Moderación",
     "dash.navRecherche": "Búsqueda",

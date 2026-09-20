@@ -8437,20 +8437,28 @@ function initDashboard() {
 
   let croissanceEtat = null;
 
+  // Les champs vivent a deux endroits : le code de parrainage sur la
+  // vue globale, l'essai et le reste du parrainage dans la rubrique
+  // Premium. On peint donc partout ou le champ se trouve, sans supposer
+  // qu'il n'y en a qu'un.
+  function partout(selecteur, faire) {
+    document.querySelectorAll(selecteur).forEach(faire);
+  }
+
   function peindreCroissance() {
-    const carte = document.querySelector("[data-croissance]");
-    if (!carte) return;
+    const cartes = document.querySelectorAll("[data-croissance]");
+    if (!cartes.length) return;
     if (!croissanceEtat) {
-      carte.hidden = true;
+      cartes.forEach((carte) => { carte.hidden = true; });
       return;
     }
     const essai = croissanceEtat.essai || {};
     const parrainage = croissanceEtat.parrainage || {};
-    carte.hidden = false;
+    cartes.forEach((carte) => { carte.hidden = false; });
 
-    const bloc = carte.querySelector("[data-croissance-essai]");
-    const refus = carte.querySelector("[data-essai-refus]");
-    const bouton = carte.querySelector("[data-essai-demarrer]");
+    const bloc = document.querySelector("[data-croissance-essai]");
+    const refus = document.querySelector("[data-essai-refus]");
+    const bouton = document.querySelector("[data-essai-demarrer]");
     // Le bouton reste affiche, toujours. Une offre qui disparait sans un
     // mot laisse croire a une panne ; le refus se dit au clic, et la
     // raison s'ecrit en dessous.
@@ -8464,21 +8472,24 @@ function initDashboard() {
       refus.textContent = premiumEtat.active ? t("croiss.essaiActif") : t("croiss.essaiIndispo");
     }
 
-    const texte = carte.querySelector("[data-parrainage-texte]");
-    if (texte) texte.textContent = tp("croiss.parrainageTexte", { jours: parrainage.jours ?? 20 });
-    const code = carte.querySelector("[data-parrainage-code]");
-    if (code) code.textContent = parrainage.code || "······";
-    const filleuls = carte.querySelector("[data-parrainage-filleuls]");
-    if (filleuls) filleuls.textContent = tp("croiss.filleuls", { n: parrainage.filleuls ?? 0 });
-    const recu = carte.querySelector("[data-parrainage-recu]");
+    partout("[data-parrainage-texte]", (element) => {
+      element.textContent = tp("croiss.parrainageTexte", { jours: parrainage.jours ?? 20 });
+    });
+    partout("[data-parrainage-code]", (element) => {
+      element.textContent = parrainage.code || "······";
+    });
+    partout("[data-parrainage-filleuls]", (element) => {
+      element.textContent = tp("croiss.filleuls", { n: parrainage.filleuls ?? 0 });
+    });
     // Un serveur deja parraine ne peut plus l'etre : on retire le champ
     // plutot que de laisser essayer pour rien.
-    if (recu) recu.hidden = Boolean(parrainage.parraine);
-    const recuTexte = carte.querySelector("[data-parrainage-recu-texte]");
-    if (recuTexte) {
-      recuTexte.textContent = tp("croiss.recuTexte", {
+    partout("[data-parrainage-recu]", (element) => {
+      element.hidden = Boolean(parrainage.parraine);
+    });
+    partout("[data-parrainage-recu-texte]", (element) => {
+      element.textContent = tp("croiss.recuTexte", {
         jours: parrainage.fenetre_jours ?? 14, offerts: parrainage.jours ?? 20 });
-    }
+    });
   }
 
   async function chargerCroissance(guildId) {
@@ -8498,9 +8509,8 @@ function initDashboard() {
   }
 
   function initCroissancePanel() {
-    const carte = document.querySelector("[data-croissance]");
-    if (!carte) return;
-    carte.querySelector("[data-essai-demarrer]")?.addEventListener("click", async (event) => {
+    if (!document.querySelector("[data-croissance]")) return;
+    document.querySelector("[data-essai-demarrer]")?.addEventListener("click", async (event) => {
       const bouton = event.currentTarget;
       const demande = selectedServer.id;
       if (!demande) return;
@@ -8524,8 +8534,8 @@ function initDashboard() {
         bouton.disabled = false;
       }
     });
-    carte.querySelector("[data-parrainage-copier]")?.addEventListener("click", async () => {
-      const code = carte.querySelector("[data-parrainage-code]")?.textContent || "";
+    document.querySelector("[data-parrainage-copier]")?.addEventListener("click", async () => {
+      const code = document.querySelector("[data-parrainage-code]")?.textContent || "";
       try {
         await navigator.clipboard.writeText(code.trim());
         showToast(t("croiss.copie"));
@@ -8533,9 +8543,9 @@ function initDashboard() {
         showToast(code.trim());
       }
     });
-    carte.querySelector("[data-parrainage-valider]")?.addEventListener("click", async (event) => {
+    document.querySelector("[data-parrainage-valider]")?.addEventListener("click", async (event) => {
       const bouton = event.currentTarget;
-      const saisie = carte.querySelector("[data-parrainage-saisie]");
+      const saisie = document.querySelector("[data-parrainage-saisie]");
       const demande = selectedServer.id;
       if (!demande || !saisie?.value.trim()) return;
       bouton.disabled = true;

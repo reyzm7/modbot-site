@@ -998,6 +998,8 @@ window.MODBOT_TRANSLATIONS = {
     "dash.navigationDashboard": "Navigation dashboard",
     "dash.pilotage": "Pilotage",
     "dash.protection": "Protection",
+    "dash.premium": "Premium",
+    "dash.navEssaiParrainage": "Essai et parrainage",
     "dash.navSecurite": "Sécurité",
     "dash.navModeration": "Modération",
     "dash.navRecherche": "Recherche",

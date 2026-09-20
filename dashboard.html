@@ -300,6 +300,9 @@
       <p class="sidebar-label" data-i18n="dash.pilotage">Pilotage</p>
       <button class="dash-nav is-active" type="button" data-dashboard-tab="overview" data-i18n="dash.navVueGlobale"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg></span>Vue globale</button>
 
+      <p class="sidebar-label" data-i18n="dash.premium">Premium</p>
+      <button class="dash-nav" type="button" data-dashboard-tab="premium" data-i18n="dash.navEssaiParrainage"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span>Essai et parrainage</button>
+
       <p class="sidebar-label" data-i18n="dash.protection">Protection</p>
       <button class="dash-nav" type="button" data-dashboard-tab="score" data-i18n="dash.navScore"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg></span>Score de sécurité</button>
       <button class="dash-nav" type="button" data-dashboard-tab="security" data-i18n="dash.navSecurite"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg></span>Sécurité</button>
@@ -369,36 +372,6 @@
         <span class="premium-banner-source" data-premium-banner-source hidden data-i18n="prem.offertPar">Offert par l'équipe ModBot</span>
       </div>
 
-      <!-- L'essai et le parrainage : ils n'existaient qu'en commandes
-           Discord. Quelqu'un qui ouvre le tableau de bord ne les
-           connaissait pas — c'est ici qu'il les voit. -->
-      <div class="croissance-carte" data-croissance hidden>
-        <p class="eyebrow" data-i18n="croiss.titre">Essai et parrainage</p>
-        <div class="croissance-bloc" data-croissance-essai hidden>
-          <strong data-i18n="croiss.essaiTitre">Essai gratuit de 7 jours</strong>
-          <p data-i18n="croiss.essaiTexte">Tout ModBot Premium pendant 7 jours : score de sécurité, journal complet, assistant IA, relais réseaux. Sans carte bancaire et sans reconduction.</p>
-          <button class="primary-btn compact" type="button" data-essai-demarrer data-i18n="croiss.essaiBouton"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Activer l'essai</button>
-          <small data-essai-refus hidden></small>
-        </div>
-        <div class="croissance-bloc">
-          <strong data-i18n="croiss.parrainageTitre">Parrainage</strong>
-          <p data-parrainage-texte></p>
-          <div class="croissance-code">
-            <code data-parrainage-code>······</code>
-            <button class="secondary-btn compact" type="button" data-parrainage-copier data-i18n="croiss.copier">Copier</button>
-          </div>
-          <small data-parrainage-filleuls></small>
-          <div data-parrainage-recu>
-            <strong data-i18n="croiss.recuTitre">Un serveur vous a fait découvrir ModBot ?</strong>
-            <p data-parrainage-recu-texte></p>
-            <div class="croissance-code">
-              <input data-parrainage-saisie maxlength="9" data-i18n-placeholder="croiss.recuPlaceholder" placeholder="Code à 6 caractères">
-              <button class="secondary-btn compact" type="button" data-parrainage-valider data-i18n="croiss.valider">Valider</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <section class="dash-panel is-active" data-dashboard-panel="overview">
         <div class="panel-title">
           <div>
@@ -430,6 +403,21 @@
           </article>
         </div>
 
+        <!-- Le code de parrainage se donne a quelqu'un : on vient le
+             chercher, on le copie, on repart. Il reste donc ici, sur
+             la premiere vue ; ce qu'il faut lire pour le comprendre
+             est range dans la rubrique Premium. -->
+        <div class="croissance-carte est-compacte" data-croissance hidden>
+          <div class="croissance-bloc">
+            <strong data-i18n="croiss.parrainageTitre">Parrainage</strong>
+            <p data-parrainage-texte></p>
+            <div class="croissance-code">
+              <code data-parrainage-code>······</code>
+              <button class="secondary-btn compact" type="button" data-parrainage-copier data-i18n="croiss.copier">Copier</button>
+            </div>
+          </div>
+        </div>
+
         <div class="dashboard-grid two">
           <div class="tool-panel">
             <h3 data-i18n="dash.actionsRapides"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg> Actions rapides</h3>
@@ -449,6 +437,37 @@
             <ul class="check-list" data-overview-checklist>
               <li data-i18n="dash.chargementDeEtatDu">Chargement de l'état du serveur…</li>
             </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="premium">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="dash.premium"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Premium</p>
+            <h2 data-i18n="croiss.titre">Essai et parrainage</h2>
+          </div>
+        </div>
+
+        <div class="croissance-carte" data-croissance hidden>
+          <div class="croissance-bloc" data-croissance-essai hidden>
+            <strong data-i18n="croiss.essaiTitre">Essai gratuit de 7 jours</strong>
+            <p data-i18n="croiss.essaiTexte">Tout ModBot Premium pendant 7 jours : score de sécurité, journal complet, assistant IA, relais réseaux. Sans carte bancaire et sans reconduction.</p>
+            <button class="primary-btn compact" type="button" data-essai-demarrer data-i18n="croiss.essaiBouton"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Activer l'essai</button>
+            <small data-essai-refus hidden></small>
+          </div>
+          <div class="croissance-bloc">
+            <strong data-i18n="croiss.parrainageTitre">Parrainage</strong>
+            <p data-parrainage-texte></p>
+            <small data-parrainage-filleuls></small>
+            <div data-parrainage-recu>
+              <strong data-i18n="croiss.recuTitre">Un serveur vous a fait découvrir ModBot ?</strong>
+              <p data-parrainage-recu-texte></p>
+              <div class="croissance-code">
+                <input data-parrainage-saisie maxlength="9" data-i18n-placeholder="croiss.recuPlaceholder" placeholder="Code à 6 caractères">
+                <button class="secondary-btn compact" type="button" data-parrainage-valider data-i18n="croiss.valider">Valider</button>
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -10866,3 +10866,8 @@ body:not(.dashboard-page) .page-glow {
      le texte en tranches de quatre mots. */
   .premium-essai { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Sur la vue globale, le parrainage se reduit a son code : une ligne
+   a copier, pas un paragraphe a lire. */
+.croissance-carte.est-compacte { margin-bottom: 18px; }
+.croissance-carte.est-compacte .croissance-bloc p { margin-bottom: 10px; }
