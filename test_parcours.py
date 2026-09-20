@@ -114,19 +114,28 @@ def titre_visible(page):
 
 
 def blocs_invisibles(page):
-    """Un bloc dans l'ecran, mais peint a zero d'opacite."""
+    """Un bloc dans l'ecran, mais peint a zero d'opacite.
+
+    Rend aussi le nombre de blocs EXAMINES. Un test qui ne trouve rien a
+    regarder passe au vert sans rien garantir : c'est arrive ici meme,
+    dans une fenetre de hauteur nulle ou plus aucun element n'etait
+    "dans l'ecran". On verifie donc que le filet a bien peche.
+    """
     return page.evaluate(
         """() => {
           const dedans = (e) => {
             const b = e.getBoundingClientRect();
             return b.height > 8 && b.width > 8 && b.top < innerHeight && b.bottom > 0;
           };
-          return [...document.querySelectorAll("main *")]
-            .filter((e) => dedans(e)
-              && parseFloat(getComputedStyle(e).opacity) < 0.05
-              && e.textContent.trim().length > 12)
-            .map((e) => (e.className || e.tagName).toString().slice(0, 40))
-            .slice(0, 5);
+          const vus = [...document.querySelectorAll("main *")].filter(dedans);
+          return {
+            examines: vus.length,
+            caches: vus
+              .filter((e) => parseFloat(getComputedStyle(e).opacity) < 0.05
+                && e.textContent.trim().length > 12)
+              .map((e) => (e.className || e.tagName).toString().slice(0, 40))
+              .slice(0, 5),
+          };
         }"""
     )
 
@@ -151,8 +160,11 @@ with sync_playwright() as p:
             verifier(f"{nom} : aucune erreur", not erreurs, str(erreurs[:2]))
             lisible, detail = titre_visible(page)
             verifier(f"{nom} : son titre se lit", lisible, detail)
-            caches = blocs_invisibles(page)
-            verifier(f"{nom} : rien d'invisible a l'ecran", not caches, str(caches))
+            vu = blocs_invisibles(page)
+            verifier(f"{nom} : rien d'invisible a l'ecran",
+                     not vu["caches"], str(vu["caches"]))
+            verifier(f"{nom} : le test a bien regarde quelque chose",
+                     vu["examines"] >= 3, f"{vu['examines']} bloc(s) examines")
             contexte.close()
 
     print("\n--- Sur un telephone, dans les deux themes ---")
