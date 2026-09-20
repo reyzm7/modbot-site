@@ -1729,8 +1729,8 @@ h1 {
 
 .reveal {
   opacity: 0;
-  filter: blur(10px);
-  transform: translateY(34px) scale(0.985);
+  filter: blur(var(--reveal-flou));
+  transform: translateY(var(--reveal-decalage)) scale(var(--reveal-echelle));
 }
 
 .reveal.is-visible {
@@ -4144,15 +4144,44 @@ main,
   border-radius: var(--radius);
 }
 
+/* ── Ce que « reduire les animations » supprime, et ce qu'il garde ──
+   Le reglage du systeme visait ici TOUTE animation et TOUTE transition,
+   ramenees a un centieme de milliseconde : le site entier se figeait,
+   fondus compris. Or ce qui gene, dans une animation, c'est le
+   deplacement — un glissement, un parallaxe, une boucle sans fin.
+
+   Les deplacements passent donc par ces variables. Sous la preference
+   elles valent zero : plus rien ne glisse, ne flotte ni ne tourne en
+   rond, mais un bloc qui arrive apparait encore en fondu. Un site
+   entierement fige se lit comme un site casse. */
+:root {
+  --entree-panneau: 12px;   /* la rubrique qui s'ouvre */
+  --entree-bloc: 14px;      /* ses cartes, l'une apres l'autre */
+  --reveal-decalage: 34px;  /* ce qui se revele au defilement */
+  --reveal-echelle: 0.985;
+  --reveal-flou: 10px;
+  --levee-survol: -2px;     /* une carte sous la souris */
+}
+
 @media (prefers-reduced-motion: reduce) {
+  :root {
+    --entree-panneau: 0px;
+    --entree-bloc: 0px;
+    --reveal-decalage: 0px;
+    --reveal-echelle: 1;
+    --reveal-flou: 0px;
+    --levee-survol: 0px;
+  }
+
+  /* Une boucle qui ne s'arrete jamais, c'est exactement ce dont on ne
+     veut pas : elle tourne une fois, puis se tait. */
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
+
+  html { scroll-behavior: auto !important; }
 }
 
 /* Barre de défilement discrète et cohérente avec le thème */
@@ -9904,7 +9933,7 @@ button.visite-barre:focus-visible i {
 @keyframes rubriqueEntre {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(var(--entree-panneau));
   }
   to {
     opacity: 1;
@@ -10064,17 +10093,11 @@ body:not(.dashboard-page) .page-glow {
   pointer-events: none;
 }
 
-/* ── Le silence, quand le systeme le demande ──────────────────────── */
+/* ── Le silence, quand le systeme le demande ────────────────────────
+   Ce qui suit ne coupe plus le fondu d'une rubrique ni celui d'une
+   carte : leur deplacement est deja a zero, plus haut, par les
+   variables. Seul reste supprime ce qui bouge vraiment. */
 @media (prefers-reduced-motion: reduce) {
-  .dash-panel.is-active,
-  .admin-view.is-active {
-    animation: none;
-  }
-
-  .partner-card,
-  .premium-feature {
-    transition: none;
-  }
 
   .partner-card:hover,
   .premium-feature:hover {
@@ -10888,7 +10911,7 @@ body:not(.dashboard-page) .page-glow {
 }
 
 @keyframes blocEntre {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(var(--entree-bloc)); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -10982,7 +11005,7 @@ body:not(.dashboard-page) .page-glow {
   .premium-feature:hover,
   .etat-carte:hover,
   .partner-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(var(--levee-survol));
     border-color: var(--accent-line);
     box-shadow: var(--shadow);
   }
@@ -10990,14 +11013,10 @@ body:not(.dashboard-page) .page-glow {
 
 /* Le systeme peut demander le silence : on le respecte partout. */
 @media (prefers-reduced-motion: reduce) {
-  .dash-panel.is-active > *,
-  .admin-view.is-active > *,
-  .dash-panel.is-active .metric-grid > *,
-  .dash-panel.is-active .dashboard-grid > *,
-  .dash-panel.is-active .toggle-grid > * {
-    animation: none;
-  }
-  .dashboard-content.est-en-attente::before { animation: none; }
+  /* La cascade garde son fondu : « --entree-bloc » vaut deja zero, donc
+     plus rien ne glisse. La barre d'attente, elle, tourne en rond — et
+     l'« animation-iteration-count: 1 » du haut l'arrete apres un
+     passage, ce qui suffit a dire que ca travaille. */
   .metric-card:hover,
   .feature-card:hover,
   .boutique-carte:hover,
