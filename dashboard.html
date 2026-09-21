@@ -797,6 +797,23 @@
           </label>
         </div>
 
+        <!-- L'IMMUNITE DU STAFF. Une annonce du staff porte le lien du
+             serveur et un @everyone : les signaux memes d'une arnaque.
+             Sans ce reglage, l'anti-arnaque la supprimait et inscrivait
+             trois points d'infraction a son auteur. -->
+        <div class="tool-panel security-block">
+          <h3 data-i18n="dash.immuniteStaffTitre"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg> Immunité du staff</h3>
+          <p class="field-help" data-i18n="dash.immuniteStaffTexte">Pour ModBot, le staff, ce sont les administrateurs, les rôles staff du serveur, le rôle support des tickets, et quiconque peut gérer les messages ou le serveur. Rien à configurer : votre équipe est reconnue d'office.</p>
+          <label class="toggle-line">
+            <input type="checkbox" data-filter-immunize-staff><span></span>
+            <strong data-i18n="dash.immuniteStaffAuto">Immunisé contre les sanctions automatiques</strong><small data-i18n="dash.immuniteStaffAutoAide">Filtre de langage, anti-spam, anti-lien, garde de nuit et anti-arnaque ne touchent jamais au staff.</small>
+          </label>
+          <label class="toggle-line">
+            <input type="checkbox" data-antinuke-truststaff><span></span>
+            <strong data-i18n="dash.immuniteStaffNuke">Non surveillé par l'anti-nuke</strong><small data-i18n="dash.immuniteStaffNukeAide">Déconseillé : un compte staff piraté ne serait plus arrêté. Pour un seul membre de confiance, utilisez plutôt la liste blanche ci-dessus.</small>
+          </label>
+        </div>
+
         <!-- SANCTIONS -->
         <div class="tool-panel security-block">
           <div class="table-head">
