@@ -5241,18 +5241,24 @@ function initDashboard() {
     });
 
     sansCasser("interrupteurs de securite", () => {
-    const securityToggles = document.querySelectorAll("[data-dashboard-panel='security'] .toggle-line input");
+    // Chaque carte par son nom. Elles se lisaient par leur rang : une
+    // carte de plus decalait toutes les autres, et « Anti-raid » aurait
+    // affiche — puis enregistre — la valeur d'« Anti-spam ».
     [
-      security.antilink,
-      security.insultes_enabled ?? true,
-      security.antispam,
-      security.antiraid,
-      security.staff_alert,
-      security.lockdown
-    ].forEach((value, index) => {
-      if (typeof value === "boolean" && securityToggles[index]) {
-        securityToggles[index].checked = value;
-        securityToggles[index].closest(".toggle-line")?.classList.toggle("is-on", value);
+      ["[data-security-antilink]", security.antilink],
+      ["[data-security-insultes]", security.insultes_enabled ?? true],
+      ["[data-security-antispam]", security.antispam],
+      // Actif par defaut cote bot : une valeur absente (un bot pas encore
+      // mis a jour) ne doit pas afficher une protection eteinte.
+      ["[data-security-antiscam]", security.antiscam ?? true],
+      ["[data-security-antiraid]", security.antiraid],
+      ["[data-security-staffalert]", security.staff_alert],
+      ["[data-security-lockdown]", security.lockdown]
+    ].forEach(([selecteur, value]) => {
+      const bouton = document.querySelector(selecteur);
+      if (typeof value === "boolean" && bouton) {
+        bouton.checked = value;
+        bouton.closest(".toggle-line")?.classList.toggle("is-on", value);
       }
     });
     });
@@ -8079,14 +8085,13 @@ function initDashboard() {
      s'affiche que si SON interrupteur est allume : une liste
      d'exceptions a un filtre eteint n'apprend rien a personne, et
      occupe une place que le reste du panneau reclame.
-     `rang` est la place de l'interrupteur dans le panneau Securite —
-     ils s'y lisent par rang, comme a l'enregistrement. */
+     `carte` designe l'interrupteur de la grille par son nom. */
   const EXEMPTS = {
-    lien:   { rang: 0, picker: "[data-antilink-picker]", hote: "[data-antilink-salons]",
+    lien:   { carte: "[data-security-antilink]", picker: "[data-antilink-picker]", hote: "[data-antilink-salons]",
               vide: "js.sec.aucunSalonLibre", salons: [] },
-    spam:   { rang: 2, picker: "[data-antispam-picker]", hote: "[data-antispam-salons]",
+    spam:   { carte: "[data-security-antispam]", picker: "[data-antispam-picker]", hote: "[data-antispam-salons]",
               vide: "js.sec.aucunSalonSpam", salons: [] },
-    filtre: { rang: 1, picker: "[data-filtre-picker]", hote: "[data-filtre-salons]",
+    filtre: { carte: "[data-security-insultes]", picker: "[data-filtre-picker]", hote: "[data-filtre-salons]",
               vide: "js.sec.aucunSalonFiltre", salons: [] },
   };
 
@@ -8109,11 +8114,9 @@ function initDashboard() {
   // Le bloc suit son interrupteur, tout de suite : sans cela on coche
   // « Anti-spam » et rien n'apparait avant le rechargement suivant.
   function accorderBlocsExempts() {
-    const boutons = document.querySelectorAll(
-      "[data-dashboard-panel='security'] .toggle-grid .toggle-line input");
     Object.entries(EXEMPTS).forEach(([quoi, config]) => {
       const bloc = document.querySelector(`[data-exempt-bloc="${quoi}"]`);
-      if (bloc) bloc.hidden = !boutons[config.rang]?.checked;
+      if (bloc) bloc.hidden = !document.querySelector(config.carte)?.checked;
     });
     const grille = document.querySelector(".exempt-grille");
     if (grille) {
@@ -8217,6 +8220,19 @@ function initDashboard() {
         markPanelDirty("security");
       });
     });
+
+    // La carte Anti-raid et l'interrupteur de la section detaillee
+    // reglent le meme anti-raid : l'un suit l'autre, sinon on eteint la
+    // carte, on laisse la section allumee, et le dernier enregistre gagne.
+    const raidCarte = document.querySelector("[data-security-antiraid]");
+    const raidSection = document.querySelector("[data-antiraid-enabled]");
+    if (raidCarte && raidSection) {
+      raidCarte.addEventListener("change", () => { raidSection.checked = raidCarte.checked; });
+      raidSection.addEventListener("change", () => {
+        raidCarte.checked = raidSection.checked;
+        raidCarte.closest(".toggle-line")?.classList.toggle("is-on", raidCarte.checked);
+      });
+    }
 
     // Cocher « Anti-spam » fait apparaitre ses exceptions sur-le-champ.
     document.querySelectorAll(
@@ -8967,7 +8983,7 @@ function initDashboard() {
       last_sent: item.dataset.lastSent || "",
     }));
     const languageValue = document.querySelector("[data-bot-language]")?.value || "fr";
-    const securityToggles = document.querySelectorAll("[data-dashboard-panel='security'] .toggle-line input");
+    const coche = (selecteur) => Boolean(document.querySelector(selecteur)?.checked);
     const customWords = (motsFiltres.length
       ? motsFiltres.join(", ")
       : document.querySelector("[data-custom-words]")?.value || "")
@@ -8984,15 +9000,16 @@ function initDashboard() {
         staff_alert: salonSysteme("staff_alert"),
       },
       security: {
-        antilink: Boolean(securityToggles[0]?.checked),
+        antilink: coche("[data-security-antilink]"),
         antilink_channels: EXEMPTS.lien.salons.slice(0, SALONS_LISTE_MAX),
         antispam_channels: EXEMPTS.spam.salons.slice(0, SALONS_LISTE_MAX),
         filtre_channels: EXEMPTS.filtre.salons.slice(0, SALONS_LISTE_MAX),
-        insultes_enabled: Boolean(securityToggles[1]?.checked),
-        antispam: Boolean(securityToggles[2]?.checked),
-        antiraid: Boolean(securityToggles[3]?.checked),
-        staff_alert: Boolean(securityToggles[4]?.checked),
-        lockdown: Boolean(securityToggles[5]?.checked),
+        insultes_enabled: coche("[data-security-insultes]"),
+        antispam: coche("[data-security-antispam]"),
+        antiscam: coche("[data-security-antiscam]"),
+        antiraid: coche("[data-security-antiraid]"),
+        staff_alert: coche("[data-security-staffalert]"),
+        lockdown: coche("[data-security-lockdown]"),
         custom_words: customWords,
       },
       tickets: {

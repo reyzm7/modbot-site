@@ -643,12 +643,15 @@
         </div>
 
         <div class="toggle-grid">
-          <label class="toggle-line"><input type="checkbox" checked><span></span><strong data-i18n="dash.antiLien"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-link"/></svg> Anti-lien</strong><small data-i18n="dash.bloqueLesLiensEt">Bloque les liens et invitations Discord.</small></label>
+          <label class="toggle-line"><input type="checkbox" checked data-security-antilink><span></span><strong data-i18n="dash.antiLien"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-link"/></svg> Anti-lien</strong><small data-i18n="dash.bloqueLesLiensEt">Bloque les liens et invitations Discord.</small></label>
           <label class="toggle-line"><input type="checkbox" checked data-security-insultes><span></span><strong data-i18n="dash.filtreDeLangage"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-ban"/></svg> Filtre de langage</strong><small data-i18n="dash.supprimeLesInsultesEt">Supprime les insultes et applique les sanctions graduées.</small></label>
-          <label class="toggle-line"><input type="checkbox" checked><span></span><strong data-i18n="dash.antiSpam"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-message"/></svg> Anti-spam</strong><small data-i18n="dash.detecteLesMessagesTrop">Détecte les messages trop rapides.</small></label>
-          <label class="toggle-line"><input type="checkbox"><span></span><strong data-i18n="dash.antiRaid"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-siren"/></svg> Anti-raid</strong><small data-i18n="dash.surveilleLesVaguesArrivees">Surveille les vagues d'arrivées suspectes.</small></label>
-          <label class="toggle-line"><input type="checkbox"><span></span><strong data-i18n="dash.staffAlert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Staff alert</strong><small data-i18n="dash.previensLeStaffDes">Préviens le staff des actions importantes.</small></label>
-          <label class="toggle-line danger"><input type="checkbox"><span></span><strong data-i18n="dash.lockdown"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg> Lockdown</strong><small data-i18n="dash.masqueLesSalonsEn">Masque les salons en urgence.</small></label>
+          <label class="toggle-line"><input type="checkbox" checked data-security-antispam><span></span><strong data-i18n="dash.antiSpam"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-message"/></svg> Anti-spam</strong><small data-i18n="dash.detecteLesMessagesTrop">Détecte les messages trop rapides.</small></label>
+          <!-- L'anti-pub : l'anti-arnaque tournait, actif par defaut, sans
+               aucun interrupteur ici. -->
+          <label class="toggle-line"><input type="checkbox" checked data-security-antiscam><span></span><strong data-i18n="dash.antiPub"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-alert"/></svg> Anti-pub</strong><small data-i18n="dash.antiPubAide">Supprime les publicités d'arnaque : faux cadeaux Nitro, faux support, services de nuke.</small></label>
+          <label class="toggle-line"><input type="checkbox" data-security-antiraid><span></span><strong data-i18n="dash.antiRaid"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-siren"/></svg> Anti-raid</strong><small data-i18n="dash.surveilleLesVaguesArrivees">Surveille les vagues d'arrivées suspectes.</small></label>
+          <label class="toggle-line"><input type="checkbox" data-security-staffalert><span></span><strong data-i18n="dash.staffAlert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Staff alert</strong><small data-i18n="dash.previensLeStaffDes">Préviens le staff des actions importantes.</small></label>
+          <label class="toggle-line danger"><input type="checkbox" data-security-lockdown><span></span><strong data-i18n="dash.lockdown"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg> Lockdown</strong><small data-i18n="dash.masqueLesSalonsEn">Masque les salons en urgence.</small></label>
         </div>
 
         <!-- LES SALONS OU CHAQUE FILTRE RECULE
@@ -788,6 +791,16 @@
                 <strong data-i18n="dash.proprietaireDeConfiance">Propriétaire de confiance</strong><small data-i18n="dash.neJamaisSanctionnerLe">Ne jamais sanctionner le propriétaire.</small>
               </label>
             </div>
+          </div>
+          <!-- La confiance anti-nuke se confondait avec l'immunite, et ne
+               se reglait qu'en collant des identifiants. On dit qui est de
+               confiance, et comment en ajouter sans en taper un seul. -->
+          <div class="alert-panel subtle confiance-aide">
+            <strong data-i18n="dash.confianceTitre">Qui l'anti-nuke laisse faire</strong>
+            <p data-i18n="dash.confianceDefaut">Par défaut, seuls le propriétaire du serveur et ModBot. Les administrateurs sont surveillés eux aussi : un compte admin piraté est justement ce que l'anti-nuke existe pour arrêter.</p>
+            <p data-i18n-html="dash.confianceComment">Pour rendre un membre ou un rôle de confiance : rubrique <strong>Recherche</strong>, ouvrez-le, puis <strong>Confiance anti-nuke</strong>. Dans Discord : <code>/securite whitelist</code>, action <strong>Ajouter</strong>. Pour tout le staff d'un coup : le bloc <strong>Immunité du staff</strong> plus bas — déconseillé.</p>
+            <p data-i18n="dash.confianceDifference">À ne pas confondre avec l'immunité : l'immunité dispense des filtres de messages, la confiance dispense de l'anti-nuke. On peut avoir l'une sans l'autre.</p>
+            <button class="secondary-btn compact" type="button" data-dashboard-jump="search" data-i18n="dash.confianceOuvrirRecherche"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-search"/></svg> Ouvrir la recherche</button>
           </div>
           <label class="mini-form" data-i18n="dash.listeBlancheIdsDe">Liste blanche — IDs de membres (séparés par une virgule)
             <input type="text" placeholder="123456789012345678, 987654321098765432" data-antinuke-users>

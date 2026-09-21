@@ -600,6 +600,22 @@ for ligne in corps_apply.split(chr(10)):
 verifier("chaque affichage passe par le filet", not nues, str(nues[:3]))
 
 
+# ══════════════════════════════════════════════════════════════════════
+print("\n--- Les protections se lisent par leur nom ---")
+
+# Les cartes de la grille « Protections serveur » se lisaient par leur
+# rang dans la page. La carte Anti-pub, inseree au milieu, aurait decale
+# toutes les autres : « Anti-raid » aurait affiche puis enregistre la
+# valeur d'« Anti-spam ». Chaque carte porte desormais son nom.
+grille = html[html.index('<div class="toggle-grid">', html.index('data-dashboard-panel="security"')):]
+grille = grille[:grille.index("</div>")]
+cartes = re.findall(r"<input[^>]*type=\"checkbox\"[^>]*>", grille)
+anonymes = [c for c in cartes if "data-security-" not in c]
+verifier("chaque carte de protection porte son nom", not anonymes, str(anonymes[:2]))
+verifier("la carte Anti-pub est dans la grille", "data-security-antiscam" in grille)
+verifier("plus aucune carte lue par son rang", "securityToggles[" not in script)
+verifier("les exceptions suivent leur carte par son nom", "config.rang" not in script)
+
 rates = [n for n, ok, _ in resultats if not ok]
 print("\n" + "=" * 62)
 print(f"RESULTAT : {len(resultats) - len(rates)}/{len(resultats)} verifications passees")
