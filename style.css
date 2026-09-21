@@ -5615,6 +5615,10 @@ label,
 /* ── Une ligne de résultat ──────────────────────────────────────── */
 
 .search-result {
+  /* La liste est une colonne limitee en hauteur : sans « flex: none »,
+     vingt resultats y etaient ecrases a trente pixels chacun au lieu de
+     defiler, et le nom du role recouvrait son nombre de membres. */
+  flex: none;
   display: flex;
   align-items: center;
   gap: 11px;
