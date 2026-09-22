@@ -309,7 +309,7 @@
       <button class="dash-nav" type="button" data-dashboard-tab="moderation" data-i18n="dash.navModeration"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg></span>Modération</button>
       <button class="dash-nav" type="button" data-dashboard-tab="verification"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg></span><span data-i18n="nav.verification">Vérification</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="search" data-i18n="dash.navRecherche"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-search"/></svg></span>Recherche</button>
-      <button class="dash-nav" type="button" data-dashboard-tab="backups" data-i18n="dash.navSauvegardes"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg></span>Sauvegardes</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="proteges"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg></span><span data-i18n="nav.proteges">Salons protégés</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="logs" data-i18n="dash.navLogs"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg></span>Logs</button>
 
       <p class="sidebar-label" data-i18n="dash.communaute">Communauté</p>
@@ -331,6 +331,13 @@
       <p class="sidebar-label" data-i18n="dash.apparence">Apparence</p>
       <button class="dash-nav" type="button" data-dashboard-tab="ai"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg></span><span data-i18n="nav.ai">Assistant IA</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="language" data-i18n="dash.navLangue"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg></span>Langue du bot</button>
+
+      <!-- Tout en bas : les outils qui agissent sur le serveur entier, et
+           les sauvegardes, qu'on vient chercher le jour ou il faut
+           remettre un serveur debout. -->
+      <p class="sidebar-label" data-i18n="dash.outils">Outils</p>
+      <button class="dash-nav" type="button" data-dashboard-tab="massroles"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-user"/></svg></span><span data-i18n="nav.massroles">Rôles en masse</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="backups" data-i18n="dash.navSauvegardes"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg></span>Sauvegardes</button>
     </aside>
 
     <section class="dashboard-content">
@@ -417,6 +424,61 @@
             </div>
           </div>
         </div>
+
+
+        <!-- Le guide des rubriques. Replie par defaut : il sert une fois,
+             puis on sait. Une ligne par rubrique, et un clic y mene. -->
+        <details class="guide-rubriques" data-guide-rubriques>
+          <summary>
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-compass"/></svg>
+            <span data-i18n="guide.titre">À quoi sert chaque rubrique ?</span>
+            <small data-i18n="guide.sousTitre">Une ligne par rubrique — clique pour y aller.</small>
+          </summary>
+          <div class="guide-grille">
+            <div class="guide-groupe">
+              <p class="guide-groupe-titre" data-i18n="dash.premium">Premium</p>
+              <button type="button" data-dashboard-jump="premium"><strong data-i18n="dash.navEssaiParrainage">Essai et parrainage</strong><small data-i18n="guide.premium">L'essai gratuit de 7 jours et le parrainage.</small></button>
+            </div>
+            <div class="guide-groupe">
+              <p class="guide-groupe-titre" data-i18n="dash.protection">Protection</p>
+              <button type="button" data-dashboard-jump="score"><strong data-i18n="dash.navScore">Score de sécurité</strong><small data-i18n="guide.score">Une note sur 100, et les réglages à corriger en premier.</small></button>
+              <button type="button" data-dashboard-jump="security"><strong data-i18n="dash.navSecurite">Sécurité</strong><small data-i18n="guide.securite">Anti-raid, anti-nuke, anti-pub, filtres, immunité du staff.</small></button>
+              <button type="button" data-dashboard-jump="moderation"><strong data-i18n="dash.navModeration">Modération</strong><small data-i18n="guide.moderation">Mots interdits et échelle des sanctions.</small></button>
+              <button type="button" data-dashboard-jump="proteges"><strong data-i18n="nav.proteges">Salons protégés</strong><small data-i18n="guide.proteges">Messages supprimés d'office dans un salon, auteur averti.</small></button>
+              <button type="button" data-dashboard-jump="verification"><strong data-i18n="nav.verification">Vérification</strong><small data-i18n="guide.verification">Un captcha à l'arrivée contre les robots.</small></button>
+              <button type="button" data-dashboard-jump="search"><strong data-i18n="dash.navRecherche">Recherche</strong><small data-i18n="guide.recherche">Trouver un membre ou un rôle, et agir dessus.</small></button>
+              <button type="button" data-dashboard-jump="logs"><strong data-i18n="dash.navLogs">Logs</strong><small data-i18n="guide.logs">Le journal de ce qui se passe sur le serveur.</small></button>
+            </div>
+            <div class="guide-groupe">
+              <p class="guide-groupe-titre" data-i18n="dash.communaute">Communauté</p>
+              <button type="button" data-dashboard-jump="tickets"><strong data-i18n="nav.tickets">Tickets</strong><small data-i18n="guide.tickets">Le panneau de support et ses catégories.</small></button>
+              <button type="button" data-dashboard-jump="welcome"><strong data-i18n="nav.welcome">Bienvenue</strong><small data-i18n="guide.bienvenue">Messages d'arrivée et de départ.</small></button>
+              <button type="button" data-dashboard-jump="roles"><strong data-i18n="nav.roles">Rôles</strong><small data-i18n="guide.roles">Rôles donnés à l'arrivée ou par réaction.</small></button>
+              <button type="button" data-dashboard-jump="voice"><strong data-i18n="nav.voice">Vocaux</strong><small data-i18n="guide.vocaux">Un salon vocal créé pour chacun, à la demande.</small></button>
+              <button type="button" data-dashboard-jump="events"><strong data-i18n="nav.events">Événements</strong><small data-i18n="guide.evenements">Annoncer un événement et suivre les inscrits.</small></button>
+              <button type="button" data-dashboard-jump="communaute"><strong data-i18n="nav.communaute">Vie du serveur</strong><small data-i18n="guide.vie">Niveaux, anniversaires, comptage, réactions automatiques.</small></button>
+              <button type="button" data-dashboard-jump="giveaways"><strong data-i18n="nav.giveaways">Giveaways</strong><small data-i18n="guide.giveaways">Des tirages au sort, tirés par le bot.</small></button>
+              <button type="button" data-dashboard-jump="ratings"><strong data-i18n="dash.navRatings">Ratings</strong><small data-i18n="guide.ratings">Les notes laissées après les tickets.</small></button>
+            </div>
+            <div class="guide-groupe">
+              <p class="guide-groupe-titre" data-i18n="dash.contenus">Contenus</p>
+              <button type="button" data-dashboard-jump="channels"><strong data-i18n="dash.navSalons">Salons</strong><small data-i18n="guide.salons">Où ModBot publie : logs, suggestions, signalements.</small></button>
+              <button type="button" data-dashboard-jump="recurring"><strong data-i18n="dash.navRecurrents">Messages récurrents</strong><small data-i18n="guide.recurrents">Un message republié à intervalle régulier.</small></button>
+              <button type="button" data-dashboard-jump="compteurs"><strong data-i18n="dash.navCompteurs">Compteurs</strong><small data-i18n="guide.compteurs">Un salon qui affiche un chiffre en direct.</small></button>
+              <button type="button" data-dashboard-jump="socials"><strong data-i18n="dash.navReseaux">Réseaux</strong><small data-i18n="guide.reseaux">Annonces automatiques Twitch, TikTok, Instagram, X.</small></button>
+            </div>
+            <div class="guide-groupe">
+              <p class="guide-groupe-titre" data-i18n="dash.apparence">Apparence</p>
+              <button type="button" data-dashboard-jump="ai"><strong data-i18n="nav.ai">Assistant IA</strong><small data-i18n="guide.ia">L'IA qui répond quand on mentionne le bot.</small></button>
+              <button type="button" data-dashboard-jump="language"><strong data-i18n="dash.navLangue">Langue du bot</strong><small data-i18n="guide.langue">La langue de tout ce que le bot écrit.</small></button>
+            </div>
+            <div class="guide-groupe">
+              <p class="guide-groupe-titre" data-i18n="dash.outils">Outils</p>
+              <button type="button" data-dashboard-jump="massroles"><strong data-i18n="nav.massroles">Rôles en masse</strong><small data-i18n="guide.massroles">Donner ou retirer un rôle à tout le serveur.</small></button>
+              <button type="button" data-dashboard-jump="backups"><strong data-i18n="dash.navSauvegardes">Sauvegardes</strong><small data-i18n="guide.sauvegardes">Sauvegarder le serveur, et le remettre en place ailleurs.</small></button>
+            </div>
+          </div>
+        </details>
 
         <div class="dashboard-grid two">
           <div class="tool-panel">
@@ -866,7 +928,9 @@
           </div>
           <div class="panel-title-actions">
             <button class="secondary-btn compact" type="button" data-backups-reload data-i18n="dash.actualiser2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg> Actualiser</button>
+            <button class="secondary-btn compact" type="button" data-backup-import-pick><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-upload"/></svg> <span data-i18n="dash.importerSauvegarde">Importer un fichier</span></button>
             <button class="primary-btn compact" type="button" data-backup-create data-i18n="dash.creerUneSauvegarde"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> Créer une sauvegarde</button>
+            <input type="file" accept="application/json,.json" data-backup-import-file data-hors-config hidden>
           </div>
         </div>
 
@@ -902,6 +966,7 @@
               <li data-i18n-html="dash.uneSauvegardeContientLes">Une sauvegarde contient les <strong>rôles</strong>, <strong>catégories</strong>, <strong>salons</strong> et leurs <strong>permissions</strong>.</li>
               <li data-i18n-html="dash.laRestaurationEst">La restauration est <strong>additive</strong> : elle recrée ce qui manque, sans jamais rien supprimer.</li>
               <li data-i18n-html="dash.confirmationObligatoire">Une <strong>confirmation</strong> est obligatoire avant toute restauration.</li>
+              <li data-i18n-html="dash.sauvegardeAutreServeur"><strong>Télécharge</strong> une sauvegarde pour la garder chez toi, puis <strong>importe</strong>-la sur ce serveur ou sur n'importe quel autre : les rôles et les permissions sont retrouvés par leur nom.</li>
               <li data-i18n="dash.lesSauvegardesLesPlus">Les 10 sauvegardes les plus récentes sont conservées par serveur.</li>
             </ul>
           </div>
@@ -914,6 +979,151 @@
           </div>
           <div class="backup-list" data-backup-list>
             <div class="backup-empty" data-i18n="dash.aucuneSauvegardePourLe">Aucune sauvegarde pour le moment.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="proteges">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg> <span data-i18n="nav.proteges">Salons protégés</span></p>
+            <h2 data-i18n="prot.titre">Messages supprimés, auteur averti</h2>
+          </div>
+        </div>
+
+        <p class="field-help" data-i18n="prot.intro">Dans un salon protégé, ModBot supprime aussitôt chaque message et prévient son auteur. Pour un salon d'annonces, de règles ou de rôles-réactions — ou pour un salon réservé aux images.</p>
+
+        <div class="welcome-layout">
+          <div class="tool-panel">
+            <h3 data-i18n="prot.salonsTitre">Les salons</h3>
+            <label class="toggle-line">
+              <input type="checkbox" data-prot-actif><span></span>
+              <strong data-i18n="prot.activer">Activer les salons protégés</strong>
+              <small data-i18n="prot.activerAide">Coupé, plus rien n'est supprimé ; la liste reste enregistrée.</small>
+            </label>
+            <div class="outil-liste" data-prot-salons></div>
+            <label class="mini-form"><span data-i18n="prot.ajouter">Protéger un salon</span>
+              <select data-prot-picker><option value="">— Chargement… —</option></select>
+            </label>
+            <p class="field-help" data-i18n-html="prot.modesAide"><strong>Tout supprimer</strong> : aucun message ne reste. <strong>Images seulement</strong> : une image, une vidéo ou un fichier reste, même avec une légende ; un texte seul part.</p>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="prot.avertTitre">L'avertissement</h3>
+            <label class="mini-form"><span data-i18n="prot.avertir">Prévenir l'auteur</span>
+              <select data-prot-avertir>
+                <option value="salon" data-i18n="prot.avertirSalon">Dans le salon, par un message qui s'efface</option>
+                <option value="mp" data-i18n="prot.avertirMp">En message privé</option>
+                <option value="aucun" data-i18n="prot.avertirAucun">Ne pas prévenir</option>
+              </select>
+            </label>
+            <label class="mini-form"><span data-i18n="prot.duree">Durée du message dans le salon (secondes)</span>
+              <input type="number" min="3" max="60" step="1" value="8" data-prot-duree>
+            </label>
+            <label class="mini-form"><span data-i18n="prot.message">Message d'avertissement</span>
+              <textarea rows="2" data-prot-message data-i18n-placeholder="prot.messagePlaceholder" placeholder="{membre}, on n'écrit pas dans {salon} : ton message a été supprimé."></textarea>
+            </label>
+            <p class="field-help" data-i18n-html="prot.messageAide"><code>{membre}</code> devient la mention de l'auteur, <code>{salon}</code> celle du salon. Laisse vide pour la phrase par défaut, traduite dans la langue du bot.</p>
+            <label class="toggle-line">
+              <input type="checkbox" data-prot-infraction><span></span>
+              <strong data-i18n="prot.infraction">Compter un avertissement officiel</strong>
+              <small data-i18n="prot.infractionAide">Il s'ajoute à ceux de /warn et suit l'échelle des sanctions : mute, puis bannissement. Une seule fois par rafale de messages.</small>
+            </label>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="prot.exceptionsTitre">Qui peut écrire quand même</h3>
+            <label class="toggle-line">
+              <input type="checkbox" data-prot-staff checked><span></span>
+              <strong data-i18n="prot.staff">Le staff écrit librement</strong>
+              <small data-i18n="prot.staffAide">Administrateurs, rôles staff et quiconque peut gérer les messages : c'est eux qui publient les annonces.</small>
+            </label>
+            <label class="mini-form"><span data-i18n="prot.rolesAutorises">Rôles autorisés</span>
+              <select data-prot-role-picker><option value="">— Chargement… —</option></select>
+            </label>
+            <div class="variable-chips" data-prot-roles></div>
+            <p class="field-help" data-i18n="prot.rolesAutorisesAide">Un rôle d'animateurs, de créateurs de contenu : ses membres écrivent dans tous les salons protégés. Les bots ne sont jamais touchés.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="massroles">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-user"/></svg> <span data-i18n="nav.massroles">Rôles en masse</span></p>
+            <h2 data-i18n="mass.titre">Un rôle pour tout le serveur, en une fois</h2>
+          </div>
+        </div>
+
+        <p class="field-help" data-i18n-html="mass.intro"><code>/massrole</code> donne un rôle à tous les membres qui ne l'ont pas ; <code>/demassrole</code> le retire à tous ceux qui l'ont. Tu peux aussi le lancer d'ici. Un rôle qui porte un pouvoir de modération ou d'administration n'est jamais distribué à tout le monde.</p>
+
+        <div class="welcome-layout">
+          <div class="tool-panel" data-hors-config>
+            <h3 data-i18n="mass.lancerTitre">Lancer maintenant</h3>
+            <label class="mini-form"><span data-i18n="mass.action">Action</span>
+              <select data-mass-action>
+                <option value="ajouter" data-i18n="mass.actionAjouter">Donner le rôle à ceux qui ne l'ont pas</option>
+                <option value="retirer" data-i18n="mass.actionRetirer">Retirer le rôle à ceux qui l'ont</option>
+              </select>
+            </label>
+            <label class="mini-form"><span data-i18n="mass.role">Rôle</span>
+              <select data-mass-role><option value="">— Chargement… —</option></select>
+            </label>
+            <label class="mini-form"><span data-i18n="mass.cible">Qui est concerné</span>
+              <select data-mass-cible>
+                <option value="humains" data-i18n="mass.cibleHumains">Les humains seulement</option>
+                <option value="bots" data-i18n="mass.cibleBots">Les bots seulement</option>
+                <option value="tous" data-i18n="mass.cibleTous">Tout le monde</option>
+              </select>
+            </label>
+            <label class="mini-form"><span data-i18n="mass.seulement">Seulement les membres qui ont déjà</span>
+              <select data-mass-seulement><option value="">— Chargement… —</option></select>
+            </label>
+            <div class="image-picker-actions">
+              <button class="secondary-btn compact" type="button" data-mass-apercu><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-search"/></svg> <span data-i18n="mass.apercu">Compter les membres</span></button>
+              <button class="primary-btn compact" type="button" data-mass-lancer><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-send"/></svg> <span data-i18n="mass.lancer">Lancer</span></button>
+            </div>
+            <p class="field-help" data-mass-apercu-texte hidden></p>
+            <div class="mass-progression" data-mass-progression hidden>
+              <div class="mass-barre"><span data-mass-barre></span></div>
+              <p class="field-help" data-mass-etat></p>
+              <button class="secondary-btn compact danger" type="button" data-mass-arreter><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg> <span data-i18n="mass.arreter">Arrêter</span></button>
+            </div>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="mass.reglagesTitre">Réglages</h3>
+            <label class="toggle-line">
+              <input type="checkbox" data-mass-actif checked><span></span>
+              <strong data-i18n="mass.activer">Autoriser les rôles en masse</strong>
+              <small data-i18n="mass.activerAide">Coupé, /massrole et /demassrole refusent de s'exécuter sur ce serveur.</small>
+            </label>
+            <label class="mini-form"><span data-i18n="mass.cibleDefaut">Qui est concerné, quand la commande ne le précise pas</span>
+              <select data-mass-cible-defaut>
+                <option value="humains" data-i18n="mass.cibleHumains">Les humains seulement</option>
+                <option value="bots" data-i18n="mass.cibleBots">Les bots seulement</option>
+                <option value="tous" data-i18n="mass.cibleTous">Tout le monde</option>
+              </select>
+            </label>
+            <label class="toggle-line">
+              <input type="checkbox" data-mass-journal checked><span></span>
+              <strong data-i18n="mass.journal">Noter chaque opération dans les logs</strong>
+              <small data-i18n="mass.journalAide">Qui l'a lancée, combien de membres, combien d'échecs.</small>
+            </label>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="mass.exceptionsTitre">Exceptions</h3>
+            <label class="mini-form"><span data-i18n="mass.interdits">Rôles jamais distribués en masse</span>
+              <select data-mass-interdit-picker><option value="">— Chargement… —</option></select>
+            </label>
+            <div class="variable-chips" data-mass-interdits></div>
+            <p class="field-help" data-i18n="mass.interditsAide">Un rôle payant, un rôle de vérification : personne ne pourra le donner à tout le serveur.</p>
+            <label class="mini-form"><span data-i18n="mass.ignorer">Membres jamais touchés</span>
+              <select data-mass-ignorer-picker><option value="">— Chargement… —</option></select>
+            </label>
+            <div class="variable-chips" data-mass-ignores></div>
+            <p class="field-help" data-i18n="mass.ignorerAide">Les membres qui portent l'un de ces rôles — une quarantaine, par exemple — sont laissés de côté.</p>
           </div>
         </div>
       </section>
@@ -1200,11 +1410,11 @@
         <div class="panel-title">
           <div>
             <p class="eyebrow" data-i18n="vie.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-heart"/></svg> Vie du serveur</p>
-            <h2 data-i18n="vie.titre">Niveaux, anniversaires, mur des messages</h2>
+            <h2 data-i18n="vie.titre">Niveaux, anniversaires, jeux et réactions</h2>
           </div>
         </div>
 
-        <p class="field-help" data-i18n="vie.intro">Trois choses qui font revenir les membres : voir sa progression, être souhaité le bon jour, et voir un bon message mis en avant par les autres. Tout est éteint tant que tu n'as rien choisi ici.</p>
+        <p class="field-help" data-i18n="vie.intro">Ce qui fait revenir les membres : voir sa progression, être souhaité le bon jour, jouer ensemble, voir un bon message mis en avant. Tout est éteint tant que tu n'as rien choisi ici.</p>
 
         <div class="welcome-layout">
           <div class="tool-panel">
@@ -1232,6 +1442,17 @@
             </label>
             <div class="variable-chips" data-vie-xp-exclus></div>
             <p class="field-help" data-i18n="vie.xpExclusAide">Un salon de commandes ou de jeu fausse le classement. Une catégorie vaut pour tous ses salons.</p>
+
+            <label class="toggle-line">
+              <input type="checkbox" data-vie-vocal><span></span>
+              <strong data-i18n="vie.vocalActiver">Gagner de l'expérience en vocal</strong>
+              <small data-i18n="vie.vocalAide">Quelques points par minute passée à parler — à deux au moins, jamais en sourdine ni dans le salon AFK.</small>
+            </label>
+
+            <h3 data-i18n="vie.bonusTitre">Bonus d'expérience</h3>
+            <p class="field-help" data-i18n="vie.bonusAide">Un rôle multiplie l'expérience gagnée : les boosters, les donateurs. Le plus fort bonus s'applique, ils ne s'additionnent pas.</p>
+            <div class="outil-liste" data-vie-bonus></div>
+            <button class="secondary-btn compact" type="button" data-vie-bonus-ajouter><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> <span data-i18n="vie.bonusAjouter">Ajouter un bonus</span></button>
           </div>
 
           <div class="tool-panel">
@@ -1255,6 +1476,14 @@
               <select data-vie-anniv-salon><option value="">— Chargement… —</option></select>
             </label>
             <p class="field-help" data-i18n-html="vie.annivAide">Chacun donne son jour avec <code>/anniversaire</code>. On ne demande jamais l'année : on souhaite un anniversaire, on ne tient pas un fichier d'âges. Un seul message par jour, pour tout le monde à la fois.</p>
+            <label class="mini-form"><span data-i18n="vie.annivRole">Rôle du jour d'anniversaire</span>
+              <select data-vie-anniv-role><option value="">— Chargement… —</option></select>
+            </label>
+            <p class="field-help" data-i18n="vie.annivRoleAide">Porté toute la journée, repris le lendemain — seulement à ceux à qui ModBot l'a donné.</p>
+            <label class="mini-form"><span data-i18n="vie.annivMessage">Message d'anniversaire</span>
+              <textarea rows="2" data-vie-anniv-message data-i18n-placeholder="vie.annivMessagePlaceholder" placeholder="🎂 Joyeux anniversaire {membres} !"></textarea>
+            </label>
+            <p class="field-help" data-i18n-html="vie.annivMessageAide"><code>{membres}</code> devient la liste des personnes fêtées. Laisse vide pour la phrase par défaut.</p>
 
             <h3 data-i18n="vie.murTitre">Le mur des meilleurs messages</h3>
 
@@ -1265,6 +1494,30 @@
               <input type="number" min="2" max="50" step="1" value="5" data-vie-mur-seuil>
             </label>
             <p class="field-help" data-i18n="vie.murAide">Ce sont les membres qui décident, avec la réaction ⭐. Au seuil atteint, le message est recopié sur le mur avec un lien vers l'original. Un message de bot n'y va jamais.</p>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="vie.comptageTitre">Le salon de comptage</h3>
+            <label class="mini-form"><span data-i18n="vie.comptageSalon">Salon de comptage</span>
+              <select data-vie-comptage-salon><option value="">— Chargement… —</option></select>
+            </label>
+            <p class="field-help" data-i18n="vie.comptageAide">On compte ensemble, chacun son tour : 1, 2, 3… ModBot valide chaque nombre d'un ✅, salue un record d'un 🏆, et signale une erreur. Un message qui ne commence pas par un nombre est laissé tranquille.</p>
+            <label class="toggle-line">
+              <input type="checkbox" data-vie-comptage-repartir checked><span></span>
+              <strong data-i18n="vie.comptageRepartir">Une erreur remet la série à zéro</strong>
+              <small data-i18n="vie.comptageRepartirAide">Décoché, l'erreur est signalée et l'on attend toujours le bon nombre.</small>
+            </label>
+            <label class="toggle-line">
+              <input type="checkbox" data-vie-comptage-seul checked><span></span>
+              <strong data-i18n="vie.comptageSeul">Jamais deux fois de suite</strong>
+              <small data-i18n="vie.comptageSeulAide">La même personne ne peut pas enchaîner deux nombres : on ne compte pas seul.</small>
+            </label>
+            <p class="field-help" data-vie-comptage-record hidden></p>
+
+            <h3 data-i18n="vie.reactionsTitre">Réactions automatiques</h3>
+            <p class="field-help" data-i18n="vie.reactionsAide">ModBot pose ces réactions sous chaque nouveau message du salon : 👍 👎 sous les idées, ❤️ sous les photos. Cinq au plus par salon.</p>
+            <div class="outil-liste" data-vie-reactions></div>
+            <button class="secondary-btn compact" type="button" data-vie-reactions-ajouter><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg> <span data-i18n="vie.reactionsAjouter">Ajouter un salon</span></button>
           </div>
         </div>
       </section>

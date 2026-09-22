@@ -4282,6 +4282,7 @@ function initDashboard() {
     document.querySelectorAll(".social-card").forEach((carte) => {
       poserRolesDeLaCarte(carte, rolesDeLaCarte(carte));
     });
+    sansCasser("listes des outils", remplirSelectsOutils);
   }
 
   function renderModerationConfig(config = {}) {
@@ -5359,6 +5360,8 @@ function initDashboard() {
     sansCasser("assistant IA", () => applyAiState(config.ai));
     sansCasser("vocaux", () => applyVoiceState(config.voice));
     sansCasser("vie du serveur", () => applyCommunauteState(config.communaute));
+    sansCasser("salons proteges", () => applySalonsProteges(config.salons_proteges));
+    sansCasser("roles en masse", () => applyRolesMasse(config.roles_masse));
     sansCasser("evenements", () => applyEventsState(config.events));
 
     sansCasser("relais reseaux", () => {
@@ -7369,7 +7372,9 @@ function initDashboard() {
           <span>${Number(counts.channels || 0)}</span>
         </div>
         <div class="backup-actions">
-          <button class="primary-btn compact" type="button" data-backup-restore="${escapeHtml(entry.id)}">Restaurer</button>
+          <button class="secondary-btn compact" type="button" data-backup-export="${escapeHtml(entry.id)}"
+                  title="${escapeHtml(t("dash.telechargerSauvegarde"))}">${escapeHtml(t("js.demo.actTelecharger"))}</button>
+          <button class="primary-btn compact" type="button" data-backup-restore="${escapeHtml(entry.id)}">${escapeHtml(t("js.demo.actRestaurer"))}</button>
           <button class="secondary-btn compact danger" type="button" data-backup-delete="${escapeHtml(entry.id)}"></button>
         </div>
       </article>`;
@@ -7439,6 +7444,49 @@ function initDashboard() {
       loadGuildLogs(guildId);
     } catch (error) {
       showToast(`${error?.message || t("js.restaurationImpossible")}`);
+    }
+  }
+
+  /* Une sauvegarde se telecharge, et le fichier se remet en place ici ou
+     sur n'importe quel autre serveur : on l'importe, il rejoint la liste,
+     puis on le restaure avec la meme confirmation que les autres. */
+  async function exporterSauvegarde(backupId) {
+    const guildId = selectedServer.id;
+    if (!guildId || !backupId) return;
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/backups/${backupId}/export`, { cache: "no-store" });
+      const blob = new Blob([JSON.stringify(data, null, 1)], { type: "application/json" });
+      const lien = document.createElement("a");
+      lien.href = URL.createObjectURL(blob);
+      lien.download = `modbot-sauvegarde-${backupId}.json`;
+      document.body.appendChild(lien);
+      lien.click();
+      lien.remove();
+      URL.revokeObjectURL(lien.href);
+      showToast(t("js.sauvegardeTelechargee"));
+    } catch (error) {
+      showToast(`${String(error?.message || error).slice(0, 140)}`);
+    }
+  }
+
+  async function importerSauvegarde(fichier) {
+    const guildId = selectedServer.id;
+    if (!guildId) return showToast(t("js.selectionneDabord"));
+    let contenu;
+    try {
+      contenu = JSON.parse(await fichier.text());
+    } catch (error) {
+      return showToast(t("js.sauvegardeIllisible"));
+    }
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/backups/import`, {
+        method: "POST",
+        body: JSON.stringify(contenu),
+      });
+      await loadGuildBackups(guildId);
+      showToast(tp("js.sauvegardeImportee", { id: data?.backup?.id || "" }));
+    } catch (error) {
+      showToast(`${String(error?.message || error).slice(0, 160)}`);
     }
   }
 
@@ -7565,6 +7613,8 @@ function initDashboard() {
     showToast(t("js.sauvegardesRechargees"));
   });
   document.querySelector("[data-backup-list]")?.addEventListener("click", (event) => {
+    const exportBtn = event.target.closest("[data-backup-export]");
+    if (exportBtn) return exporterSauvegarde(exportBtn.dataset.backupExport);
     const restoreBtn = event.target.closest("[data-backup-restore]");
     if (restoreBtn) return restoreBackup(restoreBtn.dataset.backupRestore);
     const deleteBtn = event.target.closest("[data-backup-delete]");
@@ -8341,6 +8391,7 @@ function initDashboard() {
       .slice(0, RECOMPENSES_MAX);
     redessinerSalonsSansXp();
     redessinerRecompenses();
+    applyVieExtras(vie);
   }
 
   function collectCommunauteConfig() {
@@ -8360,6 +8411,7 @@ function initDashboard() {
       recompenses: lireRecompensesDuDom()
         .filter((l) => l.role && Number(l.niveau) >= 1)
         .slice(0, RECOMPENSES_MAX),
+      ...collectVieExtras(),
     };
   }
 
@@ -8397,6 +8449,561 @@ function initDashboard() {
       // salons il a crees. Un client qui l'ecraserait laisserait des
       // salons que plus rien ne supprimerait.
     };
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     LES OUTILS DU SERVEUR
+
+     Les salons proteges, les roles en masse, et ce que la vie du
+     serveur a gagne : comptage, reactions automatiques, bonus
+     d'experience, vocal, anniversaire. Meme principe qu'au-dessus :
+     la page dessine ce que le bot a rendu et le lui renvoie ; le bot
+     reste seul juge de ce qu'il retient.
+     ══════════════════════════════════════════════════════════════ */
+
+  let salonsProteges = [];
+  let rolesAutorisesProteges = [];
+  let rolesInterditsMasse = [];
+  let rolesIgnoresMasse = [];
+  let bonusXp = [];
+  let reactionsAuto = [];
+  let massroleSuivi = null;
+  const PROTEGES_MAX = 25;
+  const OUTILS_ROLES_MAX = 25;
+  const BONUS_MAX = 10;
+  const REACTIONS_MAX = 10;
+
+  function poserCase(selecteur, valeur) {
+    const champ = document.querySelector(selecteur);
+    if (!champ) return;
+    champ.checked = Boolean(valeur);
+    champ.closest(".toggle-line")?.classList.toggle("is-on", Boolean(valeur));
+  }
+
+  function poserChoix(selecteur, valeur) {
+    const champ = document.querySelector(selecteur);
+    if (!champ) return;
+    champ.dataset.attendu = valeur || "";
+    champ.value = valeur || "";
+  }
+
+  function lireIds(liste, max) {
+    return [...new Set((liste || []).map(String).filter((x) => /^\d+$/.test(x)))].slice(0, max);
+  }
+
+  function pastillesDeRoles(selecteur, ids, attribut) {
+    const hote = document.querySelector(selecteur);
+    if (!hote) return;
+    hote.innerHTML = ids.length
+      ? ids.map((id) => (
+          `<button type="button" class="variable-chip" ${attribut}="${escapeHtml(id)}"
+                   title="${escapeHtml(t("js.retirerCeRole"))}">${escapeHtml(nomDuRole(id))} &times;</button>`
+        )).join("")
+      : `<span class="field-help">${escapeHtml(t("outils.aucunRole"))}</span>`;
+  }
+
+  // ── Les salons proteges ────────────────────────────────────────────
+  function redessinerSalonsProteges() {
+    const hote = document.querySelector("[data-prot-salons]");
+    if (!hote) return;
+    if (!salonsProteges.length) {
+      hote.innerHTML = `<span class="field-help">${escapeHtml(t("prot.aucunSalon"))}</span>`;
+      return;
+    }
+    hote.innerHTML = salonsProteges.map((salon, rang) => (
+      `<div class="outil-ligne" data-prot-rang="${rang}">
+         <strong>${escapeHtml(nomDuSalon(salon.id))}</strong>
+         <select data-prot-mode aria-label="${escapeHtml(t("prot.mode"))}">
+           <option value="tout"${salon.mode === "medias" ? "" : " selected"}>${escapeHtml(t("prot.modeTout"))}</option>
+           <option value="medias"${salon.mode === "medias" ? " selected" : ""}>${escapeHtml(t("prot.modeMedias"))}</option>
+         </select>
+         <button type="button" class="secondary-btn compact danger" data-prot-retirer
+                 title="${escapeHtml(t("prot.retirer"))}">&times;</button>
+       </div>`
+    )).join("");
+  }
+
+  function applySalonsProteges(config) {
+    if (!config || typeof config !== "object") return;
+    poserCase("[data-prot-actif]", config.enabled);
+    poserChoix("[data-prot-avertir]", config.avertir || "salon");
+    const duree = document.querySelector("[data-prot-duree]");
+    if (duree) duree.value = config.duree ?? 8;
+    const message = document.querySelector("[data-prot-message]");
+    if (message) message.value = config.message || "";
+    poserCase("[data-prot-infraction]", config.infraction);
+    poserCase("[data-prot-staff]", config.staff_ecrit !== false);
+    salonsProteges = (config.salons || [])
+      .filter((s) => s && /^\d+$/.test(String(s.id)))
+      .map((s) => ({ id: String(s.id), mode: s.mode === "medias" ? "medias" : "tout" }))
+      .slice(0, PROTEGES_MAX);
+    rolesAutorisesProteges = lireIds(config.roles_autorises, OUTILS_ROLES_MAX);
+    redessinerSalonsProteges();
+    pastillesDeRoles("[data-prot-roles]", rolesAutorisesProteges, "data-retirer-prot-role");
+  }
+
+  function collectSalonsProteges() {
+    const actif = document.querySelector("[data-prot-actif]");
+    if (!actif) return undefined;
+    return {
+      enabled: Boolean(actif.checked),
+      salons: salonsProteges.slice(0, PROTEGES_MAX),
+      avertir: document.querySelector("[data-prot-avertir]")?.value || "salon",
+      duree: Number(document.querySelector("[data-prot-duree]")?.value || 8),
+      message: document.querySelector("[data-prot-message]")?.value || "",
+      infraction: Boolean(document.querySelector("[data-prot-infraction]")?.checked),
+      staff_ecrit: document.querySelector("[data-prot-staff]")?.checked !== false,
+      roles_autorises: rolesAutorisesProteges.slice(0, OUTILS_ROLES_MAX),
+    };
+  }
+
+  // ── Les roles en masse ─────────────────────────────────────────────
+  // Un role de moderation est grise : le bot le refuserait de toute
+  // facon, autant ne pas le proposer.
+  function optionsRolesMasse(choisi = "", libelleVide = null) {
+    const tete = libelleVide === null ? ""
+      : `<option value="">${escapeHtml(libelleVide)}</option>`;
+    return tete + dashboardResources.roles.map((role) => {
+      const libelle = roleLabel(role) + (role.dangereux ? ` — ${t("mass.roleDangereux")}` : "");
+      return `<option value="${escapeHtml(role.id)}"${role.dangereux ? " disabled" : ""}${String(role.id) === String(choisi) ? " selected" : ""}>${escapeHtml(libelle)}</option>`;
+    }).join("");
+  }
+
+  function applyRolesMasse(config) {
+    if (!config || typeof config !== "object") return;
+    poserCase("[data-mass-actif]", config.enabled !== false);
+    poserChoix("[data-mass-cible-defaut]", config.cible || "humains");
+    poserCase("[data-mass-journal]", config.journal !== false);
+    rolesInterditsMasse = lireIds(config.roles_interdits, OUTILS_ROLES_MAX);
+    rolesIgnoresMasse = lireIds(config.ignorer_roles, OUTILS_ROLES_MAX);
+    pastillesDeRoles("[data-mass-interdits]", rolesInterditsMasse, "data-retirer-interdit");
+    pastillesDeRoles("[data-mass-ignores]", rolesIgnoresMasse, "data-retirer-ignore");
+    // Le lanceur part du reglage du serveur.
+    const cible = document.querySelector("[data-mass-cible]");
+    if (cible) cible.value = config.cible || "humains";
+    const apercu = document.querySelector("[data-mass-apercu-texte]");
+    if (apercu) apercu.hidden = true;
+    afficherTravail(config.travail || null);
+    if (config.travail?.etat === "en_cours") suivreMassrole(selectedServer.id);
+  }
+
+  function collectRolesMasse() {
+    const actif = document.querySelector("[data-mass-actif]");
+    if (!actif) return undefined;
+    return {
+      enabled: Boolean(actif.checked),
+      cible: document.querySelector("[data-mass-cible-defaut]")?.value || "humains",
+      journal: document.querySelector("[data-mass-journal]")?.checked !== false,
+      roles_interdits: rolesInterditsMasse.slice(0, OUTILS_ROLES_MAX),
+      ignorer_roles: rolesIgnoresMasse.slice(0, OUTILS_ROLES_MAX),
+    };
+  }
+
+  function lireLanceur() {
+    return {
+      action: document.querySelector("[data-mass-action]")?.value || "ajouter",
+      role_id: document.querySelector("[data-mass-role]")?.value || "",
+      cible: document.querySelector("[data-mass-cible]")?.value || "humains",
+      seulement_avec: document.querySelector("[data-mass-seulement]")?.value || "",
+    };
+  }
+
+  function dureeLisible(secondes) {
+    return secondes < 60
+      ? t("mass.dureeCourte")
+      : tp("mass.dureeMinutes", { n: Math.max(1, Math.round(secondes / 60)) });
+  }
+
+  async function apercuMassrole() {
+    const guildId = selectedServer.id;
+    if (!guildId) { showToast(t("js.selectionneDabord")); return null; }
+    const demande = lireLanceur();
+    if (!demande.role_id) { showToast(t("mass.choisirRole")); return null; }
+    const texte = document.querySelector("[data-mass-apercu-texte]");
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/massrole`, {
+        method: "POST",
+        body: JSON.stringify(demande),
+      });
+      const n = Number(data?.apercu?.total || 0);
+      if (texte) {
+        texte.hidden = false;
+        texte.textContent = n
+          ? tp("mass.apercuTexte", { n, duree: dureeLisible(Number(data.apercu.secondes || 0)) })
+          : t("mass.rien");
+      }
+      return { total: n, secondes: Number(data?.apercu?.secondes || 0) };
+    } catch (error) {
+      showToast(`${String(error?.message || error).slice(0, 180)}`);
+      return null;
+    }
+  }
+
+  async function lancerMassrole() {
+    const guildId = selectedServer.id;
+    const apercu = await apercuMassrole();
+    if (!apercu) return;
+    if (!apercu.total) return showToast(t("mass.rien"));
+    const demande = lireLanceur();
+    const role = nomDuRole(demande.role_id);
+    const question = demande.action === "retirer"
+      ? tp("mass.confirmerRetrait", { n: apercu.total, role })
+      : tp("mass.confirmerAjout", { n: apercu.total, role });
+    if (!window.confirm(question)) return;
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/massrole`, {
+        method: "POST",
+        body: JSON.stringify({ ...demande, confirm: true }),
+      });
+      afficherTravail(data?.travail || null);
+      if (data?.travail?.etat === "en_cours") suivreMassrole(guildId);
+    } catch (error) {
+      showToast(`${String(error?.message || error).slice(0, 180)}`);
+    }
+  }
+
+  function afficherTravail(travail) {
+    const bloc = document.querySelector("[data-mass-progression]");
+    if (!bloc) return;
+    if (!travail) {
+      bloc.hidden = true;
+      return;
+    }
+    bloc.hidden = false;
+    const total = Number(travail.total) || 0;
+    const faits = Number(travail.faits) || 0;
+    const echecs = Number(travail.echecs) || 0;
+    const barre = bloc.querySelector("[data-mass-barre]");
+    if (barre) barre.style.width = `${Math.min(100, Math.round(((faits + echecs) / Math.max(total, 1)) * 100))}%`;
+    const clefs = { en_cours: "js.mass.etatEnCours", fini: "js.mass.etatFini",
+                    arrete: "js.mass.etatArrete", interrompu: "js.mass.etatInterrompu" };
+    const etat = bloc.querySelector("[data-mass-etat]");
+    if (etat) {
+      etat.textContent = tp(clefs[travail.etat] || "js.mass.etatEnCours",
+                            { faits, total, echecs, role: travail.role ? `@${travail.role}` : "" })
+        + (travail.erreur ? ` — ${travail.erreur}` : "");
+    }
+    const arret = bloc.querySelector("[data-mass-arreter]");
+    if (arret) arret.hidden = travail.etat !== "en_cours";
+    bloc.classList.toggle("est-fini", travail.etat !== "en_cours");
+  }
+
+  // Le bot fait le travail ; la page vient voir ou il en est, toutes les
+  // deux secondes, tant que ca tourne — et s'arrete des qu'on change de
+  // serveur.
+  function suivreMassrole(guildId, essais = 0) {
+    clearTimeout(massroleSuivi);
+    massroleSuivi = setTimeout(async () => {
+      if (!estEncoreLeServeur(guildId)) return;
+      try {
+        const data = await modbotApiFetch(`/api/guilds/${guildId}/massrole`, { cache: "no-store" });
+        if (!estEncoreLeServeur(guildId)) return;
+        afficherTravail(data?.travail || null);
+        if (data?.travail?.etat === "en_cours") suivreMassrole(guildId);
+      } catch (error) {
+        if (essais < 5) suivreMassrole(guildId, essais + 1);
+      }
+    }, 2000);
+  }
+
+  async function arreterMassrole() {
+    const guildId = selectedServer.id;
+    if (!guildId) return;
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/massrole/stop`, { method: "POST" });
+      afficherTravail(data?.travail || null);
+    } catch (error) {
+      showToast(`${String(error?.message || error).slice(0, 160)}`);
+    }
+  }
+
+  // ── La vie du serveur : bonus, reactions, comptage, anniversaire ───
+  function redessinerBonus() {
+    const hote = document.querySelector("[data-vie-bonus]");
+    if (!hote) return;
+    if (!bonusXp.length) {
+      hote.innerHTML = `<span class="field-help">${escapeHtml(t("vie.aucunBonus"))}</span>`;
+      return;
+    }
+    hote.innerHTML = bonusXp.map((ligne) => (
+      `<div class="outil-ligne">
+         <select data-bonus-role aria-label="${escapeHtml(t("vie.bonusRole"))}"></select>
+         <label class="outil-nombre"><span aria-hidden="true">&times;</span>
+           <input type="number" min="1.1" max="3" step="0.1" data-bonus-valeur
+                  value="${escapeHtml(String(ligne.multiplicateur || 1.5))}"
+                  aria-label="${escapeHtml(t("vie.bonusMultiplicateur"))}">
+         </label>
+         <button type="button" class="secondary-btn compact danger" data-bonus-retirer
+                 title="${escapeHtml(t("vie.retirerBonus"))}">&times;</button>
+       </div>`
+    )).join("");
+    hote.querySelectorAll(".outil-ligne").forEach((ligne, rang) => {
+      // Le role voulu est retenu sur la liste elle-meme : si les roles du
+      // serveur ne sont pas encore arrives, la valeur ne se perd pas.
+      const champ = ligne.querySelector("[data-bonus-role]");
+      champ.dataset.attendu = bonusXp[rang]?.role || "";
+      remplirSelect(champ, optionsRoles, t("js.choisirRole"));
+    });
+  }
+
+  function lireBonusDuDom() {
+    const hote = document.querySelector("[data-vie-bonus]");
+    if (!hote) return bonusXp;
+    return [...hote.querySelectorAll(".outil-ligne")].map((ligne) => ({
+      role: ((champ) => champ?.value || champ?.dataset.attendu || "")(ligne.querySelector("[data-bonus-role]")),
+      multiplicateur: Number(ligne.querySelector("[data-bonus-valeur]")?.value || 1.5),
+    }));
+  }
+
+  function redessinerReactions() {
+    const hote = document.querySelector("[data-vie-reactions]");
+    if (!hote) return;
+    if (!reactionsAuto.length) {
+      hote.innerHTML = `<span class="field-help">${escapeHtml(t("vie.aucuneReaction"))}</span>`;
+      return;
+    }
+    hote.innerHTML = reactionsAuto.map((ligne) => (
+      `<div class="outil-ligne">
+         <select data-rauto-salon aria-label="${escapeHtml(t("vie.reactionsSalon"))}"></select>
+         <input type="text" maxlength="200" data-rauto-emojis
+                value="${escapeHtml((ligne.emojis || []).join(" "))}"
+                placeholder="${escapeHtml(t("vie.reactionsPlaceholder"))}"
+                aria-label="${escapeHtml(t("vie.reactionsEmojis"))}">
+         <button type="button" class="secondary-btn compact danger" data-rauto-retirer
+                 title="${escapeHtml(t("vie.retirerReaction"))}">&times;</button>
+       </div>`
+    )).join("");
+    hote.querySelectorAll(".outil-ligne").forEach((ligne, rang) => {
+      const champ = ligne.querySelector("[data-rauto-salon]");
+      champ.dataset.attendu = reactionsAuto[rang]?.salon || "";
+      remplirSelect(champ, optionsSalons, t("js.aucun"));
+    });
+  }
+
+  function lireReactionsDuDom() {
+    const hote = document.querySelector("[data-vie-reactions]");
+    if (!hote) return reactionsAuto;
+    return [...hote.querySelectorAll(".outil-ligne")].map((ligne) => ({
+      salon: ((champ) => champ?.value || champ?.dataset.attendu || "")(ligne.querySelector("[data-rauto-salon]")),
+      emojis: (ligne.querySelector("[data-rauto-emojis]")?.value || "")
+        .split(/[\s,;]+/).filter(Boolean).slice(0, 5),
+    }));
+  }
+
+  function applyVieExtras(vie) {
+    poserCase("[data-vie-vocal]", vie.xp_vocal);
+    poserChoix("[data-vie-anniv-role]", vie.anniv_role);
+    const message = document.querySelector("[data-vie-anniv-message]");
+    if (message) message.value = vie.anniv_message || "";
+    poserChoix("[data-vie-comptage-salon]", vie.comptage_salon);
+    poserCase("[data-vie-comptage-repartir]", vie.comptage_repartir !== false);
+    poserCase("[data-vie-comptage-seul]", vie.comptage_seul !== false);
+    const record = document.querySelector("[data-vie-comptage-record]");
+    if (record) {
+      const n = Number(vie.comptage_record || 0);
+      record.hidden = !n;
+      record.textContent = n ? tp("vie.comptageRecord", { n }) : "";
+    }
+    bonusXp = (vie.xp_bonus || [])
+      .filter((l) => l && typeof l === "object")
+      .map((l) => ({ role: String(l.role || ""), multiplicateur: Number(l.multiplicateur) || 1.5 }))
+      .slice(0, BONUS_MAX);
+    reactionsAuto = (vie.reactions_auto || [])
+      .filter((l) => l && typeof l === "object")
+      .map((l) => ({ salon: String(l.salon || ""), emojis: Array.isArray(l.emojis) ? l.emojis.map(String) : [] }))
+      .slice(0, REACTIONS_MAX);
+    redessinerBonus();
+    redessinerReactions();
+  }
+
+  function collectVieExtras() {
+    return {
+      xp_vocal: Boolean(document.querySelector("[data-vie-vocal]")?.checked),
+      anniv_role: document.querySelector("[data-vie-anniv-role]")?.value || "",
+      anniv_message: document.querySelector("[data-vie-anniv-message]")?.value || "",
+      comptage_salon: document.querySelector("[data-vie-comptage-salon]")?.value || "",
+      comptage_repartir: document.querySelector("[data-vie-comptage-repartir]")?.checked !== false,
+      comptage_seul: document.querySelector("[data-vie-comptage-seul]")?.checked !== false,
+      // Une ligne sans role ou sans salon n'en est pas une : le bot la
+      // refuserait, et elle reviendrait vide a chaque rechargement.
+      xp_bonus: lireBonusDuDom().filter((l) => l.role).slice(0, BONUS_MAX),
+      reactions_auto: lireReactionsDuDom().filter((l) => l.salon && l.emojis.length).slice(0, REACTIONS_MAX),
+    };
+  }
+
+  // Les listes arrivent avec les ressources du serveur ; les pastilles et
+  // les lignes portent des noms, il faut les redessiner a ce moment-la.
+  function remplirSelectsOutils() {
+    remplirSelect("[data-prot-picker]", optionsSalons, t("prot.ajouterSalon"));
+    remplirSelect("[data-prot-role-picker]", optionsRoles, t("js.ajouterCeRole"));
+    remplirSelect("[data-mass-role]", optionsRolesMasse, t("js.choisirRole"));
+    remplirSelect("[data-mass-seulement]", optionsRoles, t("mass.seulementPeuImporte"));
+    remplirSelect("[data-mass-interdit-picker]", optionsRoles, t("js.ajouterCeRole"));
+    remplirSelect("[data-mass-ignorer-picker]", optionsRoles, t("js.ajouterCeRole"));
+    remplirSelect("[data-vie-anniv-role]", optionsRoles, t("js.aucun"));
+    remplirSelect("[data-vie-comptage-salon]", optionsSalons, t("js.aucun"));
+    redessinerSalonsProteges();
+    pastillesDeRoles("[data-prot-roles]", rolesAutorisesProteges, "data-retirer-prot-role");
+    pastillesDeRoles("[data-mass-interdits]", rolesInterditsMasse, "data-retirer-interdit");
+    pastillesDeRoles("[data-mass-ignores]", rolesIgnoresMasse, "data-retirer-ignore");
+    // Redessinees depuis l'etat, qui suit chaque changement : relire les
+    // lignes ici perdrait un role que la liste ne connaissait pas encore.
+    redessinerBonus();
+    redessinerReactions();
+  }
+
+  // Ajouter par une liste, retirer par une pastille : le meme geste
+  // partout, comme pour les salons sans experience.
+  function brancherPastilles(picker, hote, attribut, lire, ecrire, redessiner, panneau) {
+    const champ = document.querySelector(picker);
+    champ?.addEventListener("change", () => {
+      const id = champ.value;
+      champ.value = "";
+      if (!id || lire().includes(id)) return;
+      if (lire().length >= OUTILS_ROLES_MAX) return showToast(t("outils.tropDElements"));
+      ecrire([...lire(), id]);
+      redessiner();
+      markPanelDirty(panneau);
+    });
+    document.querySelector(hote)?.addEventListener("click", (evenement) => {
+      const pastille = evenement.target.closest(`[${attribut}]`);
+      if (!pastille) return;
+      ecrire(lire().filter((x) => x !== pastille.getAttribute(attribut)));
+      redessiner();
+      markPanelDirty(panneau);
+    });
+  }
+
+  function initOutilsServeur() {
+    // Les salons proteges.
+    const pickerSalon = document.querySelector("[data-prot-picker]");
+    pickerSalon?.addEventListener("change", () => {
+      const id = pickerSalon.value;
+      pickerSalon.value = "";
+      if (!id || salonsProteges.some((s) => s.id === id)) return;
+      if (salonsProteges.length >= PROTEGES_MAX) return showToast(t("outils.tropDElements"));
+      salonsProteges.push({ id, mode: "tout" });
+      redessinerSalonsProteges();
+      markPanelDirty("proteges");
+    });
+    const hoteSalons = document.querySelector("[data-prot-salons]");
+    hoteSalons?.addEventListener("click", (evenement) => {
+      const bouton = evenement.target.closest("[data-prot-retirer]");
+      if (!bouton) return;
+      const rang = Number(bouton.closest(".outil-ligne")?.dataset.protRang);
+      salonsProteges = salonsProteges.filter((_, i) => i !== rang);
+      redessinerSalonsProteges();
+      markPanelDirty("proteges");
+    });
+    hoteSalons?.addEventListener("change", (evenement) => {
+      const choix = evenement.target.closest("[data-prot-mode]");
+      if (!choix) return;
+      const rang = Number(choix.closest(".outil-ligne")?.dataset.protRang);
+      if (salonsProteges[rang]) salonsProteges[rang].mode = choix.value === "medias" ? "medias" : "tout";
+    });
+    brancherPastilles("[data-prot-role-picker]", "[data-prot-roles]", "data-retirer-prot-role",
+      () => rolesAutorisesProteges, (v) => { rolesAutorisesProteges = v; },
+      () => pastillesDeRoles("[data-prot-roles]", rolesAutorisesProteges, "data-retirer-prot-role"), "proteges");
+
+    // Les roles en masse : les exceptions, puis le lanceur.
+    brancherPastilles("[data-mass-interdit-picker]", "[data-mass-interdits]", "data-retirer-interdit",
+      () => rolesInterditsMasse, (v) => { rolesInterditsMasse = v; },
+      () => pastillesDeRoles("[data-mass-interdits]", rolesInterditsMasse, "data-retirer-interdit"), "massroles");
+    brancherPastilles("[data-mass-ignorer-picker]", "[data-mass-ignores]", "data-retirer-ignore",
+      () => rolesIgnoresMasse, (v) => { rolesIgnoresMasse = v; },
+      () => pastillesDeRoles("[data-mass-ignores]", rolesIgnoresMasse, "data-retirer-ignore"), "massroles");
+    document.querySelector("[data-mass-apercu]")?.addEventListener("click", apercuMassrole);
+    document.querySelector("[data-mass-lancer]")?.addEventListener("click", lancerMassrole);
+    document.querySelector("[data-mass-arreter]")?.addEventListener("click", arreterMassrole);
+    // Changer le role ou l'action rend l'apercu faux : on le retire.
+    document.querySelector("[data-dashboard-panel='massroles'] [data-hors-config]")?.addEventListener("change", () => {
+      const apercu = document.querySelector("[data-mass-apercu-texte]");
+      if (apercu) apercu.hidden = true;
+    });
+
+    // Les bonus d'experience.
+    document.querySelector("[data-vie-bonus-ajouter]")?.addEventListener("click", () => {
+      bonusXp = lireBonusDuDom();
+      if (bonusXp.length >= BONUS_MAX) return showToast(t("outils.tropDElements"));
+      bonusXp.push({ role: "", multiplicateur: 1.5 });
+      redessinerBonus();
+      markPanelDirty("communaute");
+    });
+    const hoteBonus = document.querySelector("[data-vie-bonus]");
+    hoteBonus?.addEventListener("click", (evenement) => {
+      const bouton = evenement.target.closest("[data-bonus-retirer]");
+      if (!bouton) return;
+      const lignes = [...hoteBonus.querySelectorAll(".outil-ligne")];
+      const rang = lignes.indexOf(bouton.closest(".outil-ligne"));
+      bonusXp = lireBonusDuDom().filter((_, i) => i !== rang);
+      redessinerBonus();
+      markPanelDirty("communaute");
+    });
+    hoteBonus?.addEventListener("change", (evenement) => {
+      if (evenement.target.matches("select")) evenement.target.dataset.attendu = evenement.target.value;
+      bonusXp = lireBonusDuDom();
+    });
+
+    // Les reactions automatiques.
+    document.querySelector("[data-vie-reactions-ajouter]")?.addEventListener("click", () => {
+      reactionsAuto = lireReactionsDuDom();
+      if (reactionsAuto.length >= REACTIONS_MAX) return showToast(t("outils.tropDElements"));
+      reactionsAuto.push({ salon: "", emojis: ["👍", "👎"] });
+      redessinerReactions();
+      markPanelDirty("communaute");
+    });
+    const hoteReactions = document.querySelector("[data-vie-reactions]");
+    hoteReactions?.addEventListener("click", (evenement) => {
+      const bouton = evenement.target.closest("[data-rauto-retirer]");
+      if (!bouton) return;
+      const lignes = [...hoteReactions.querySelectorAll(".outil-ligne")];
+      const rang = lignes.indexOf(bouton.closest(".outil-ligne"));
+      reactionsAuto = lireReactionsDuDom().filter((_, i) => i !== rang);
+      redessinerReactions();
+      markPanelDirty("communaute");
+    });
+    hoteReactions?.addEventListener("change", (evenement) => {
+      if (evenement.target.matches("select")) evenement.target.dataset.attendu = evenement.target.value;
+      reactionsAuto = lireReactionsDuDom();
+    });
+
+    // Les sauvegardes : importer un fichier.
+    document.querySelector("[data-backup-import-pick]")?.addEventListener("click", () => {
+      document.querySelector("[data-backup-import-file]")?.click();
+    });
+    document.querySelector("[data-backup-import-file]")?.addEventListener("change", async (evenement) => {
+      const fichier = evenement.target.files?.[0];
+      if (fichier) await importerSauvegarde(fichier);
+      // Sans cela, reprendre le meme fichier ne declencherait rien.
+      evenement.target.value = "";
+    });
+
+    // Le guide des rubriques se souvient d'avoir ete ouvert. Une
+    // commodite : sans stockage, il reste simplement replie.
+    const guide = document.querySelector("[data-guide-rubriques]");
+    if (guide) {
+      try {
+        if (localStorage.getItem("modbot-guide-rubriques") === "ouvert") guide.open = true;
+      } catch (erreur) { /* stockage refuse */ }
+      guide.addEventListener("toggle", () => {
+        try {
+          localStorage.setItem("modbot-guide-rubriques", guide.open ? "ouvert" : "ferme");
+        } catch (erreur) { /* stockage refuse */ }
+      });
+    }
+
+    redessinerSalonsProteges();
+    pastillesDeRoles("[data-prot-roles]", rolesAutorisesProteges, "data-retirer-prot-role");
+    pastillesDeRoles("[data-mass-interdits]", rolesInterditsMasse, "data-retirer-interdit");
+    pastillesDeRoles("[data-mass-ignores]", rolesIgnoresMasse, "data-retirer-ignore");
+    redessinerBonus();
+    redessinerReactions();
+
+    // Les lignes, les pastilles et les listes sont du HTML deja genere :
+    // changer de langue ne les retraduit pas, il faut les redessiner.
+    document.addEventListener("modbot:language", () => {
+      sansCasser("outils : langue", remplirSelectsOutils);
+    });
   }
 
   /* ══════════════════════════════════════════════════════════════
@@ -9042,6 +9649,8 @@ function initDashboard() {
       ai: collectAiConfig(),
       voice: collectVoiceConfig(),
       communaute: collectCommunauteConfig(),
+      salons_proteges: collectSalonsProteges(),
+      roles_masse: collectRolesMasse(),
       ...(document.querySelector("[data-event-list]")
         ? { events: lireEvenementsDuDom() } : {}),
       recurring_messages: recurringMessages,
@@ -9517,13 +10126,18 @@ function initDashboard() {
 
   panels.forEach((panel) => {
     const panelName = panel.dataset.dashboardPanel;
+    // Un champ marque « hors config » — le lanceur des roles en masse, le
+    // fichier d'une sauvegarde — sert a agir, pas a regler : le toucher ne
+    // doit pas faire croire a des changements non enregistres.
     panel.addEventListener("input", (event) => {
+      if (event.target.closest("[data-hors-config]")) return;
       if (event.target.matches("input, textarea, select")) {
         if (event.target.closest(".channel-row")) setInputState(event.target);
         markPanelDirty(panelName);
       }
     });
     panel.addEventListener("change", (event) => {
+      if (event.target.closest("[data-hors-config]")) return;
       if (event.target.matches("input, textarea, select")) {
         if (event.target.closest(".channel-row")) setInputState(event.target);
         markPanelDirty(panelName);
@@ -9901,6 +10515,7 @@ function initDashboard() {
   initAutoRoles();
   initImagesTicket();
   initVieDuServeur();
+  initOutilsServeur();
   initVariablesVie();
   /* ══════════════════════════════════════════════════════════════
      ASSISTANT IA DU SERVEUR

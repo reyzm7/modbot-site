@@ -11042,3 +11042,151 @@ body:not(.dashboard-page) .page-glow {
   .etat-carte:hover,
   .partner-card:hover { transform: none; }
 }
+
+/* ── Le guide des rubriques, dans la vue globale ──────────────────────
+   Replie par defaut : une seule ligne tant qu'on ne l'ouvre pas. Ouvert,
+   une grille de petits boutons — le nom, puis une ligne d'explication —
+   et un clic mene a la rubrique. */
+.guide-rubriques {
+  margin: 14px 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+.guide-rubriques > summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  padding: 12px 14px;
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.guide-rubriques > summary::-webkit-details-marker { display: none; }
+.guide-rubriques > summary small {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.guide-rubriques > summary::after {
+  content: "▾";
+  margin-inline-start: auto;
+  color: var(--muted);
+  transition: transform 0.2s var(--ease, ease);
+}
+.guide-rubriques[open] > summary::after { transform: rotate(180deg); }
+.guide-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr));
+  gap: 10px 16px;
+  padding: 0 14px 14px;
+}
+.guide-groupe {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+}
+.guide-groupe-titre {
+  margin: 6px 0 2px;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.guide-groupe button {
+  display: grid;
+  gap: 1px;
+  width: 100%;
+  padding: 6px 9px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: background 0.14s ease, border-color 0.14s ease;
+}
+.guide-groupe button strong { font-size: 0.86rem; }
+.guide-groupe button small {
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+.guide-groupe button:hover {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+}
+
+/* ── Les lignes des outils : salons proteges, bonus, reactions ───────── */
+.outil-liste {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0;
+}
+.outil-ligne {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+/* Un nom de salon tient parfois vingt-cinq caracteres : il se coupe
+   plutot que de pousser la ligne hors du bloc. */
+.outil-ligne > strong {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0.88rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.outil-ligne select,
+.outil-ligne input {
+  min-height: 38px;
+  padding: 0 10px;
+}
+.outil-ligne > button { min-height: 38px; }
+.outil-nombre {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--muted);
+}
+@media (max-width: 520px) {
+  .outil-ligne { grid-template-columns: minmax(0, 1fr) auto; }
+  .outil-ligne > :first-child { grid-column: 1 / -1; }
+}
+
+/* Trois blocs par rubrique, comme la vie du serveur : la grille suit le
+   nombre de blocs au lieu de laisser une colonne vide. */
+[data-dashboard-panel="proteges"] .welcome-layout,
+[data-dashboard-panel="massroles"] .welcome-layout {
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+}
+
+/* ── Le suivi des roles en masse ────────────────────────────────────── */
+.mass-progression {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+.mass-barre {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--line);
+}
+.mass-barre > span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 0.4s var(--ease, ease);
+}
+.mass-progression.est-fini .mass-barre > span { background: var(--green, var(--accent)); }
+.mass-progression .field-help { margin: 0; }
+.mass-progression > button { justify-self: start; }
