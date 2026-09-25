@@ -2552,5 +2552,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "wiki.grpVocal": "deconnecter, deplacer — sacar a alguien de un canal de voz o llevarlo a otro.",
     "wiki.grpNote": "ajouter, lister, retirer — lo que el equipo sabe de un miembro sin que sea una sanción. Las notas aparecen en /infractions.",
     "wiki.cmdClearMessage": "Recorre de 1 a 100 mensajes del canal y los borra. Dos filtros opcionales: los de un miembro o los que contienen un texto.",
+    "wiki.cmdInstaller": "Configura ModBot en tres preguntas: dónde escribir el registro, dónde dar la bienvenida, qué rol dar al llegar. Nada se guarda antes de confirmar.",
   },
 });

@@ -2613,5 +2613,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "wiki.grpVocal": "deconnecter و deplacer — إخراج شخص من قناة صوتية أو نقله إلى أخرى.",
     "wiki.grpNote": "ajouter و lister و retirer — ما يعرفه الفريق عن عضو دون أن يكون عقوبة. وتظهر الملاحظات في /infractions.",
     "wiki.cmdClearMessage": "يمر على 1 إلى 100 رسالة في القناة ويحذفها. ومرشّحان اختياريان: رسائل عضو معيّن، أو الرسائل التي تحتوي نصًا ما.",
+    "wiki.cmdInstaller": "يُعدّ ModBot بثلاثة أسئلة: أين يُكتب السجل، وأين يُرحَّب بالقادمين، وأي دور يُمنح عند الوصول. ولا يُحفظ شيء قبل التأكيد.",
   },
 });

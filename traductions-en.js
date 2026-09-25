@@ -2613,5 +2613,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "wiki.grpVocal": "deconnecter, deplacer — pull someone out of a voice channel, or move them elsewhere.",
     "wiki.grpNote": "ajouter, lister, retirer — what the team knows about a member without it being a sanction. Notes show up in /infractions.",
     "wiki.cmdClearMessage": "Goes through 1 to 100 messages in the channel and deletes them. Two optional filters: those of one member, or those containing a text.",
+    "wiki.cmdInstaller": "Sets ModBot up in three questions: where to write the log, where to welcome arrivals, which role to give on arrival. Nothing is saved until you confirm.",
   },
 });

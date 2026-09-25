@@ -2632,5 +2632,6 @@ window.MODBOT_TRANSLATIONS = {
     "wiki.grpVocal": "deconnecter, deplacer — sortir quelqu'un d'un salon vocal, ou l'emmener ailleurs.",
     "wiki.grpNote": "ajouter, lister, retirer — ce que l'équipe sait d'un membre sans que ce soit une sanction. Les notes apparaissent dans /infractions.",
     "wiki.cmdClearMessage": "Parcourt de 1 à 100 messages du salon et les supprime. Deux filtres facultatifs : ceux d'un membre, ou ceux qui contiennent un texte.",
+    "wiki.cmdInstaller": "Règle ModBot en trois questions : où écrire le journal, où souhaiter la bienvenue, quel rôle donner à l’arrivée. Rien n’est enregistré avant de confirmer.",
   },
 };
