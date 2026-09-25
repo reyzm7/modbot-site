@@ -2626,5 +2626,6 @@ window.MODBOT_TRANSLATIONS = {
     "js.sauvegardeImportee": "Sauvegarde {id} importée : clique sur Restaurer pour la mettre en place.",
     "outils.aucunRole": "Aucun rôle choisi.",
     "outils.tropDElements": "La liste est pleine.",
+    "dash.liensLegaux": "<a href=\"confidentialite.html\">Confidentialité</a> · <a href=\"conditions.html\">Conditions</a>",
   },
 };

@@ -11190,3 +11190,19 @@ body:not(.dashboard-page) .page-glow {
 .mass-progression.est-fini .mass-barre > span { background: var(--green, var(--accent)); }
 .mass-progression .field-help { margin: 0; }
 .mass-progression > button { justify-self: start; }
+
+/* ── Les liens legaux, au bas du menu du tableau de bord ─────────────
+   L'administrateur qui configure ModBot doit pouvoir lire, sans quitter
+   sa page, ce que le bot garde de ses membres. */
+.sidebar-legal {
+  margin: 14px 4px 2px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+.sidebar-legal a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.sidebar-legal a:hover { color: var(--text); }

@@ -2607,5 +2607,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "js.sauvegardeImportee": "تم استيراد النسخة {id}: انقر على استعادة لتطبيقها.",
     "outils.aucunRole": "لم يُختر أي دور.",
     "outils.tropDElements": "القائمة ممتلئة.",
+    "dash.liensLegaux": "<a href=\"confidentialite.html\">الخصوصية</a> · <a href=\"conditions.html\">الشروط</a>",
   },
 });

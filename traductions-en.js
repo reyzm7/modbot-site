@@ -2607,5 +2607,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "js.sauvegardeImportee": "Backup {id} imported: click Restore to apply it.",
     "outils.aucunRole": "No role chosen.",
     "outils.tropDElements": "The list is full.",
+    "dash.liensLegaux": "<a href=\"confidentialite.html\">Privacy</a> · <a href=\"conditions.html\">Terms</a>",
   },
 });

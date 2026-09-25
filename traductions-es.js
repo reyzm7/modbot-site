@@ -2546,5 +2546,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "js.sauvegardeImportee": "Copia {id} importada: haz clic en Restaurar para aplicarla.",
     "outils.aucunRole": "Ningún rol elegido.",
     "outils.tropDElements": "La lista está llena.",
+    "dash.liensLegaux": "<a href=\"confidentialite.html\">Privacidad</a> · <a href=\"conditions.html\">Condiciones</a>",
   },
 });
