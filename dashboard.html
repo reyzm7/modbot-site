@@ -1009,6 +1009,11 @@
             <label class="mini-form"><span data-i18n="prot.ajouter">Protéger un salon</span>
               <select data-prot-picker><option value="">— Chargement… —</option></select>
             </label>
+            <label class="toggle-line">
+              <input type="checkbox" data-prot-annoncer checked><span></span>
+              <strong data-i18n="prot.annoncer">Annoncer la règle dans le salon</strong>
+              <small data-i18n="prot.annoncerAide">ModBot poste un message épinglé qui dit ce qui est supprimé, la sanction, et qui peut écrire. Il se corrige quand tu changes la règle, et part quand tu retires le salon.</small>
+            </label>
             <p class="field-help" data-i18n-html="prot.modesAide"><strong>Tout supprimer</strong> : aucun message ne reste. <strong>Images seulement</strong> : une image, une vidéo ou un fichier reste, même avec une légende ; un texte seul part.</p>
           </div>
 
@@ -1147,7 +1152,9 @@
           <div class="channel-row"><strong data-i18n="dash.suggestions"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Suggestions</strong><select data-channel="suggestions"><option value="">— Chargement… —</option></select><span class="state inactive" data-i18n="dash.inactif3">Inactif</span></div>
           <div class="channel-row"><strong data-i18n="dash.reports"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-flag"/></svg> Reports</strong><select data-channel="reports"><option value="">— Chargement… —</option></select><span class="state inactive" data-i18n="dash.inactif4">Inactif</span></div>
           <div class="channel-row"><strong data-i18n="dash.staffAlert2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Staff alert</strong><select data-channel="staff_alert"><option value="">— Chargement… —</option></select><span class="state inactive" data-i18n="dash.inactif5">Inactif</span></div>
+          <div class="channel-row"><strong data-i18n="dash.contestations"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-scales"/></svg> Contestations</strong><select data-channel="contestations"><option value="">— Chargement… —</option></select><span class="state inactive" data-i18n="dash.inactif6">Inactif</span></div>
         </div>
+        <p class="field-help" data-i18n="dash.contestationsAide">Quand un membre sanctionné clique sur « Contester » dans son message privé, sa demande arrive ici, avec ce qu'il a écrit et son historique. Un bouton « Répondre » sous le message envoie ta réponse en privé. Sans salon choisi, tout part dans les logs.</p>
       </section>
 
       <section class="dash-panel" data-dashboard-panel="moderation">

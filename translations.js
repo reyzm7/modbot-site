@@ -2627,5 +2627,9 @@ window.MODBOT_TRANSLATIONS = {
     "outils.aucunRole": "Aucun rôle choisi.",
     "outils.tropDElements": "La liste est pleine.",
     "dash.liensLegaux": "<a href=\"confidentialite.html\">Confidentialité</a> · <a href=\"conditions.html\">Conditions</a>",
+    "dash.contestations": "Contestations",
+    "dash.contestationsAide": "Quand un membre sanctionné clique sur « Contester » dans son message privé, sa demande arrive ici, avec ce qu'il a écrit et son historique. Un bouton « Répondre » sous le message envoie ta réponse en privé. Sans salon choisi, tout part dans les logs.",
+    "prot.annoncer": "Annoncer la règle dans le salon",
+    "prot.annoncerAide": "ModBot poste un message épinglé qui dit ce qui est supprimé, la sanction, et qui peut écrire. Il se corrige quand tu changes la règle, et part quand tu retires le salon.",
   },
 };

@@ -2608,5 +2608,9 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "outils.aucunRole": "لم يُختر أي دور.",
     "outils.tropDElements": "القائمة ممتلئة.",
     "dash.liensLegaux": "<a href=\"confidentialite.html\">الخصوصية</a> · <a href=\"conditions.html\">الشروط</a>",
+    "dash.contestations": "الاعتراضات",
+    "dash.contestationsAide": "عندما ينقر عضو معاقَب على «اعتراض» في رسالته الخاصة، يصل طلبه إلى هنا مع ما كتبه وسجلّه. زر «الرد» أسفل الرسالة يرسل جوابك في الخاص. وبدون قناة مختارة، يذهب كل شيء إلى السجلات.",
+    "prot.annoncer": "الإعلان عن القاعدة في القناة",
+    "prot.annoncerAide": "ينشر ModBot رسالة مثبّتة تبيّن ما يُحذف والعقوبة ومن يمكنه الكتابة. تُصحَّح عند تغيير القاعدة، وتُزال عند حذف القناة.",
   },
 });

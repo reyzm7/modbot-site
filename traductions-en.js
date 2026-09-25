@@ -2608,5 +2608,9 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "outils.aucunRole": "No role chosen.",
     "outils.tropDElements": "The list is full.",
     "dash.liensLegaux": "<a href=\"confidentialite.html\">Privacy</a> · <a href=\"conditions.html\">Terms</a>",
+    "dash.contestations": "Appeals",
+    "dash.contestationsAide": "When a sanctioned member clicks “Appeal” in their direct message, the request lands here with what they wrote and their history. A “Reply” button under the message sends your answer privately. With no channel chosen, it all goes to the logs.",
+    "prot.annoncer": "Announce the rule in the channel",
+    "prot.annoncerAide": "ModBot posts a pinned message saying what gets deleted, the sanction, and who may write. It updates itself when you change the rule, and leaves when you remove the channel.",
   },
 });

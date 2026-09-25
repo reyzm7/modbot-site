@@ -4295,7 +4295,7 @@ function initDashboard() {
     // Les pastilles portent un nom de salon : il faut les redessiner une
     // fois les salons connus, sinon elles resteraient sur « #123456 ».
     redessinerSalonsIa();
-    ["tickets", "logs", "suggestions", "reports", "staff_alert"].forEach((clef) => {
+    ["tickets", "logs", "suggestions", "reports", "staff_alert", "contestations"].forEach((clef) => {
       const champ = remplirSelect(`[data-channel="${clef}"]`, optionsSalons, t("js.aucun"));
       if (champ) setInputState(champ);
     });
@@ -5245,7 +5245,7 @@ function initDashboard() {
     // Chaque salon est retrouve par sa clef, plus par son rang dans le
     // panneau : inserer une ligne ne deplace plus les reglages suivants.
     sansCasser("salons", () => {
-      ["tickets", "logs", "suggestions", "reports", "staff_alert"].forEach((clef) => {
+      ["tickets", "logs", "suggestions", "reports", "staff_alert", "contestations"].forEach((clef) => {
         const champ = document.querySelector(`[data-channel="${clef}"]`);
         if (!champ) return;
         champ.dataset.attendu = channels[clef] || "";
@@ -8561,6 +8561,7 @@ function initDashboard() {
     if (message) message.value = config.message || "";
     poserCase("[data-prot-infraction]", config.infraction);
     poserCase("[data-prot-staff]", config.staff_ecrit !== false);
+    poserCase("[data-prot-annoncer]", config.annoncer !== false);
     salonsProteges = (config.salons || [])
       .filter((s) => s && /^\d+$/.test(String(s.id)))
       .map((s) => ({ id: String(s.id), mode: s.mode === "medias" ? "medias" : "tout" }))
@@ -8581,6 +8582,7 @@ function initDashboard() {
       message: document.querySelector("[data-prot-message]")?.value || "",
       infraction: Boolean(document.querySelector("[data-prot-infraction]")?.checked),
       staff_ecrit: document.querySelector("[data-prot-staff]")?.checked !== false,
+      annoncer: document.querySelector("[data-prot-annoncer]")?.checked !== false,
       roles_autorises: rolesAutorisesProteges.slice(0, OUTILS_ROLES_MAX),
     };
   }
@@ -9633,6 +9635,7 @@ function initDashboard() {
         suggestions: salonSysteme("suggestions"),
         reports: salonSysteme("reports"),
         staff_alert: salonSysteme("staff_alert"),
+        contestations: salonSysteme("contestations"),
       },
       security: {
         antilink: coche("[data-security-antilink]"),

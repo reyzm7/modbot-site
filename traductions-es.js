@@ -2547,5 +2547,9 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "outils.aucunRole": "Ningún rol elegido.",
     "outils.tropDElements": "La lista está llena.",
     "dash.liensLegaux": "<a href=\"confidentialite.html\">Privacidad</a> · <a href=\"conditions.html\">Condiciones</a>",
+    "dash.contestations": "Apelaciones",
+    "dash.contestationsAide": "Cuando un miembro sancionado pulsa «Apelar» en su mensaje privado, su solicitud llega aquí con lo que escribió y su historial. Un botón «Responder» bajo el mensaje envía tu respuesta en privado. Sin canal elegido, todo va a los registros.",
+    "prot.annoncer": "Anunciar la regla en el canal",
+    "prot.annoncerAide": "ModBot publica un mensaje fijado que dice qué se borra, la sanción y quién puede escribir. Se corrige cuando cambias la regla y desaparece cuando quitas el canal.",
   },
 });

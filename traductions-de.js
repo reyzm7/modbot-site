@@ -2547,5 +2547,9 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "outils.aucunRole": "Keine Rolle gewählt.",
     "outils.tropDElements": "Die Liste ist voll.",
     "dash.liensLegaux": "<a href=\"confidentialite.html\">Datenschutz</a> · <a href=\"conditions.html\">Bedingungen</a>",
+    "dash.contestations": "Einsprüche",
+    "dash.contestationsAide": "Wenn ein sanktioniertes Mitglied in seiner Direktnachricht auf „Einspruch“ klickt, landet die Anfrage hier — mit dem, was es geschrieben hat, und seiner Historie. Ein „Antworten“-Knopf unter der Nachricht schickt deine Antwort privat. Ohne gewählten Kanal geht alles in die Logs.",
+    "prot.annoncer": "Die Regel im Kanal ankündigen",
+    "prot.annoncerAide": "ModBot postet eine angeheftete Nachricht: was gelöscht wird, die Strafe und wer schreiben darf. Sie passt sich an, wenn du die Regel änderst, und verschwindet, wenn du den Kanal entfernst.",
   },
 });
