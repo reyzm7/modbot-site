@@ -917,6 +917,34 @@ function escapeHtmlValue(value) {
   }[character]));
 }
 
+/**
+ * Un message passager, sur n'importe quelle page.
+ *
+ * `showToast` vit dans la portee du tableau de bord : l'appeler depuis la
+ * page Premium levait un ReferenceError. Le clic sur « Choisir » sans
+ * etre connecte ne disait donc rien du tout — ni le message, ni l'echec.
+ * La boite est creee au besoin ; elle porte la meme classe que celle du
+ * tableau de bord, donc le meme aspect.
+ */
+let _minuteurMessage;
+
+function messageDePassage(texte) {
+  let boite = document.querySelector("[data-message-site]");
+  if (!boite) {
+    boite = document.createElement("div");
+    boite.className = "dashboard-toast";
+    boite.setAttribute("data-message-site", "");
+    boite.setAttribute("aria-live", "polite");
+    document.body.appendChild(boite);
+  }
+  boite.textContent = texte;
+  // Le navigateur doit avoir vu la boite a son etat de depart avant la
+  // transition : sans ce temps mort, elle apparait sans fondu.
+  requestAnimationFrame(() => boite.classList.add("is-visible"));
+  window.clearTimeout(_minuteurMessage);
+  _minuteurMessage = window.setTimeout(() => boite.classList.remove("is-visible"), 2600);
+}
+
 function initialsFromName(value) {
   const words = String(value || "MB")
     .replace(/[^\p{L}\p{N}\s-]/gu, " ")
@@ -11451,7 +11479,11 @@ async function initStatutPage() {
       const debut = new Date(incident.debut);
       const quand = Number.isNaN(debut.getTime()) ? "—"
         : debut.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
-      return `<tr><td>${escapeHtml(quand)}</td><td>${escapeHtml(dureeLisible(incident.minutes))}</td></tr>`;
+      // `escapeHtmlValue`, et non `escapeHtml` : celle-ci vit dans la
+      // portee du tableau de bord. Ici, elle n'existe pas — et la ligne
+      // n'etait atteinte qu'une fois un incident enregistre. Le premier
+      // est arrive le 22/09/2026 : la page d'etat s'est arretee la.
+      return `<tr><td>${escapeHtmlValue(quand)}</td><td>${escapeHtmlValue(dureeLisible(incident.minutes))}</td></tr>`;
     }).join("");
   }
   if (aucune) aucune.hidden = incidents.length > 0;
@@ -11597,7 +11629,7 @@ function initPagePremium() {
     // connecte — c'est ce compte qui recevra la licence, et lui seul
     // decidera ensuite ou poser ses places.
     if (!getModbotSessionToken()) {
-      showToast(t("lic.connecteToi"));
+      messageDePassage(t("lic.connecteToi"));
       setTimeout(() => { location.href = "dashboard.html"; }, 1600);
       return;
     }
@@ -11607,9 +11639,9 @@ function initPagePremium() {
         body: JSON.stringify({ plan }),
       });
       if (data?.url) location.href = data.url;
-      else showToast(t("prem.paiementIndisponible"));
+      else messageDePassage(t("prem.paiementIndisponible"));
     } catch (erreur) {
-      showToast(erreur?.message || t("prem.paiementIndisponible"));
+      messageDePassage(erreur?.message || t("prem.paiementIndisponible"));
     }
   }
 
@@ -11716,12 +11748,12 @@ function initPagePremium() {
   // Retour de Stripe : on le dit, sinon la page semble n'avoir rien fait.
   const retour = new URLSearchParams(location.search).get("paiement");
   if (retour === "reussi") {
-    showToast(t("prem.merci"));
+    messageDePassage(t("prem.merci"));
     // Le webhook arrive parfois apres la redirection : on relit l'etat
     // une fois passe ce delai plutot que d'afficher « non abonne ».
     setTimeout(afficherEtat, 4000);
   } else if (retour === "annule") {
-    showToast(t("prem.annule"));
+    messageDePassage(t("prem.annule"));
   }
 }
 

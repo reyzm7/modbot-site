@@ -25,6 +25,22 @@ analyseur de portee : il ne cherche que les noms ABSENTS du fichier, ce
 qui suffit a attraper la faute de frappe et le nom disparu au fil d'un
 remaniement.
 
+Un second controle regarde les PORTEES, parce que « present dans le
+fichier » ne veut pas dire « visible d'ici ». Deux erreurs vivaient la,
+invisibles au premier controle :
+
+  * `escapeHtml` (declaree dans la portee du tableau de bord) appelee par
+    la page d'etat : la ligne n'etait atteinte qu'une fois un incident
+    enregistre. Le premier est arrive le 22/09/2026, et le tableau des
+    incidents ne s'est jamais affiche ;
+  * `showToast` (meme portee) appelee cinq fois par la page Premium :
+    un clic sur « Choisir » sans etre connecte ne disait rien du tout.
+
+Chaque fonction declaree au premier niveau est donc relue avec ce
+qu'elle peut vraiment voir : ses propres noms, ses parametres, et ceux
+du premier niveau. Un nom emprunte a la portee d'une autre fonction est
+un echec.
+
 Lancement, depuis le dossier du site :
     python test_declarations.py
 """
@@ -285,6 +301,96 @@ verifier("aucun nom lu sans etre declare", not inconnus,
 
 
 # ══════════════════════════════════════════════════════════════════════
+#  Les portees : un nom visible d'ici, pas seulement present dans le fichier
+# ══════════════════════════════════════════════════════════════════════
+print("\n--- Aucun nom emprunte a la portee d'une autre fonction ---")
+
+
+def profondeurs(code):
+    """La profondeur d'accolades a chaque caractere."""
+    niveau, sortie = 0, []
+    for c in code:
+        if c == "}":
+            niveau = max(0, niveau - 1)
+        sortie.append(niveau)
+        if c == "{":
+            niveau += 1
+    return sortie
+
+
+def premier_niveau(code, prof):
+    """Le code prive de tout ce qui vit dans une accolade."""
+    return "".join(c if (p == 0 or c == "\n") else " "
+                   for c, p in zip(code, prof))
+
+
+def fonctions_de_tete(code, prof):
+    """
+    (nom, debut, fin) de chaque fonction declaree au premier niveau.
+
+    `debut` est pose sur le mot `function` pour que la liste des
+    parametres fasse partie du corps releve : sans elle, une
+    destructuration — `function f({ produit })` — passerait pour un nom
+    emprunte ailleurs.
+    """
+    trouvees = []
+    for m in re.finditer(r"\b(?:async\s+)?function\s*\*?\s*([A-Za-z_$][\w$]*)\s*\(", code):
+        if prof[m.start()] != 0:
+            continue
+        # L'accolade du corps vient APRES la parenthese fermante des
+        # parametres. La chercher tout de suite tombait sur celle d'une
+        # destructuration — `function f({ produit })` — et le corps
+        # releve s'arretait au premier parametre.
+        niveau, j = 1, m.end()
+        while j < len(code) and niveau:
+            niveau += (code[j] == "(") - (code[j] == ")")
+            j += 1
+        ouvre = code.find("{", j)
+        if ouvre < 0 or niveau:
+            continue
+        niveau, i = 0, ouvre
+        while i < len(code):
+            if code[i] == "{":
+                niveau += 1
+            elif code[i] == "}":
+                niveau -= 1
+                if niveau == 0:
+                    break
+            i += 1
+        trouvees.append((m.group(1), m.start(), i))
+    return trouvees
+
+
+empruntes = []
+for fichier, code in codes.items():
+    prof = profondeurs(code)
+    declares_tete = noms_declares(premier_niveau(code, prof)) | MOTS_CLES | NAVIGATEUR
+    for nom, debut, fin in fonctions_de_tete(code, prof):
+        corps = code[debut:fin]
+        visibles = declares_tete | noms_declares(corps) | {nom}
+        vus = set()
+        for numero, ligne in enumerate(corps.split("\n")):
+            for lu in LECTURE.findall(ligne):
+                # Un nom declare ailleurs dans le projet, mais pas ici :
+                # c'est le cas qui leve un ReferenceError.
+                if lu not in visibles and lu in declares_partout and lu not in vus:
+                    vus.add(lu)
+                    empruntes.append((fichier, code[:debut].count("\n") + numero + 1, nom, lu))
+
+for fichier, ligne, ou, lu in empruntes:
+    verifier(f"{ou}() ne lit pas « {lu} », qui vit dans une autre portee",
+             False, f"{fichier}:{ligne}")
+verifier("aucun nom emprunte a la portee d'une autre fonction",
+         not empruntes, f"{len(empruntes)} emprunt(s)")
+
+# Le controle doit avoir vraiment regarde : une erreur de decoupage le
+# rendrait muet, et muet se lit comme vert.
+regardees = sum(len(fonctions_de_tete(code, profondeurs(code))) for code in codes.values())
+verifier("le controle a bien relu les fonctions du site", regardees >= 30,
+         f"{regardees} fonction(s) de premier niveau")
+
+
+# ══════════════════════════════════════════════════════════════════════
 #  Le cas precis, pour qu'il ne revienne pas sous un autre nom
 # ══════════════════════════════════════════════════════════════════════
 print("\n--- La bienvenue n'est posee qu'une fois ---")
@@ -302,6 +408,18 @@ verifier("et ne pose plus aucun champ de bienvenue lui-meme",
 verifier("plus aucun interrupteur vise par son rang",
          not re.search(r"Toggles\[\d\]", corps),
          str(re.findall(r"\w+Toggles\[\d\]", corps)[:3]))
+
+
+print("\n--- Les pages hors tableau de bord ont leurs propres outils ---")
+
+verifier("la page d'etat echappe son texte avec l'outil du premier niveau",
+         "escapeHtmlValue(quand)" in brut and "escapeHtml(quand)" not in brut)
+verifier("un message passager existe hors du tableau de bord",
+         "function messageDePassage(" in brut)
+apercu = brut[brut.index("function initPagePremium"):]
+apercu = apercu[:apercu.index(chr(10) + "}")]
+verifier("la page Premium ne l'appelle plus « showToast »",
+         "showToast(" not in apercu, str(re.findall(r"showToast\([^)]*\)", apercu)[:2]))
 
 
 # ══════════════════════════════════════════════════════════════════════
