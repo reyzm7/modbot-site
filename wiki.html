@@ -240,12 +240,18 @@
           <div class="command-doc-grid">
             <article><code>/panel</code><span data-i18n="wiki.ouvreLePanneauAdministration">Ouvre le panneau d’administration Discord.</span></article>
             <article><code>/aide</code><span data-i18n="wiki.afficheLeRecapitulatifDes">Affiche le récapitulatif des commandes et le lien du site.</span></article>
-            <article><code>/clear-message</code><span data-i18n="wiki.supprimeEntreEtMessages">Supprime entre 1 et 100 messages dans le salon courant.</span></article>
+            <article><code>/clear-message</code><span data-i18n="wiki.cmdClearMessage">Parcourt de 1 à 100 messages du salon et les supprime. Deux filtres facultatifs : ceux d'un membre, ou ceux qui contiennent un texte.</span></article>
             <article><code>/clear-all</code><span data-i18n="wiki.nettoieLesMessagesDu">Nettoie les messages du salon selon les limites Discord.</span></article>
             <article><code>/translate</code><span data-i18n="wiki.traduitUnMessageVia">Traduit un message via réponse ou ID de message.</span></article>
             <article><code>/suggest</code><span data-i18n="wiki.envoieUneSuggestionAu">Envoie une suggestion au salon configuré.</span></article>
             <article><code>/patchnotes</code><span data-i18n="wiki.publieDesPatchNotes">Publie des patch notes dans le salon où la commande est faite.</span></article>
             <article><code>/annonce</code><span data-i18n="wiki.publieUneAnnonceDans">Publie une annonce dans le salon choisi par ID.</span></article>
+            <article><code>/mute</code><span data-i18n="wiki.cmdMute">Rend un membre muet pour un temps : 10m, 2h, 1h30, 3j, jusqu'à 28 jours. Il est prévenu en privé, avec le bouton pour contester.</span></article>
+            <article><code>/unmute</code><span data-i18n="wiki.cmdUnmute">Rend la parole à un membre avant la fin de sa sanction.</span></article>
+            <article><code>/lock</code><span data-i18n="wiki.cmdLock">Ferme le salon : plus personne n'y écrit, le temps que ça se calme. Un message l'annonce dans le salon.</span></article>
+            <article><code>/unlock</code><span data-i18n="wiki.cmdUnlock">Rouvre le salon. La permission repart en « héritée » : le salon retrouve les droits de sa catégorie.</span></article>
+            <article><code>/role</code><span data-i18n="wiki.cmdRole">Donne ou retire un rôle à un membre. Un rôle au-dessus du tien, ou de celui de ModBot, est refusé.</span></article>
+            <article><code>/salon-acces</code><span data-i18n="wiki.cmdSalonAcces">Ouvre ou ferme un salon à un membre en particulier. À la fermeture, ses droits redeviennent ceux de ses rôles.</span></article>
             <article><code>/warn</code><span data-i18n="wiki.cmdWarn">Avertit un membre ; les seuils configurés peuvent sanctionner seuls.</span></article>
             <article><code>/reset-avert</code><span data-i18n="wiki.cmdResetAvert">Remet à zéro les avertissements d’un membre.</span></article>
             <article><code>/avert-count</code><span data-i18n="wiki.cmdAvertCount">Affiche le nombre d’avertissements d’un membre.</span></article>
@@ -259,17 +265,12 @@
             <article><code>/insultes</code><span data-i18n="wiki.cmdInsultes">Affiche la liste des mots filtrés et les sanctions associées.</span></article>
             <article><code>/info-bot</code><span data-i18n="wiki.cmdInfoBot">État du bot : version, latence, serveurs protégés.</span></article>
             <article><code>/voter</code><span data-i18n="wiki.cmdVoter">Le lien pour voter pour ModBot sur top.gg, et le nombre de tes votes.</span></article>
-            <article><code data-i18n="wiki.addchannel">!addchannel</code><span data-i18n="wiki.ajouteUnMembreUn">Ajoute un membre à un salon précis.</span></article>
-            <article><code data-i18n="wiki.deletechannel">!deletechannel</code><span data-i18n="wiki.retireAccesUnMembre">Retire l’accès d’un membre à un salon précis.</span></article>
             <article><code>/addticket</code><span data-i18n="wiki.cmdAddTicket">Ajoute un membre au ticket courant.</span></article>
             <article><code>/infractions-reset</code><span data-i18n="wiki.cmdInfractionsReset">Efface l’historique des sanctions d’un membre.</span></article>
             <article><code>/profilestats</code><span data-i18n="wiki.cmdProfileStats">Statistiques d’activité d’un membre.</span></article>
             <article><code>/massdm</code><span data-i18n="wiki.cmdMassDm">Envoie un message privé à un groupe de membres, réservé aux administrateurs.</span></article>
             <article><code>/massrole</code><span data-i18n="wiki.cmdMassRole">Donne un rôle à tous les membres qui ne l'ont pas — humains, bots ou tout le monde. Confirmation, suivi en direct, bouton pour arrêter.</span></article>
             <article><code>/demassrole</code><span data-i18n="wiki.cmdDemassRole">Retire un rôle à tous les membres qui l'ont. Un rôle de modération ou d'administration n'est jamais touché en masse.</span></article>
-            <article><code>!help</code><span data-i18n-html="wiki.cmdHelp">Aide intégrée de la bibliothèque Discord. Préfère <code>/aide</code>, plus complète.</span></article>
-            <article><code>!addroles</code><span data-i18n="wiki.cmdAddRoles">Donne un rôle à un membre depuis le salon.</span></article>
-            <article><code>!deleteroles</code><span data-i18n="wiki.cmdDeleteRoles">Retire un rôle à un membre depuis le salon.</span></article>
           </div>
           <h3 data-i18n="wiki.vieTitre">La vie du serveur</h3>
           <p data-i18n="wiki.vieTexte">Ces quatre commandes s'adressent à tous les membres, pas seulement au staff. Elles répondent en privé : personne n'encombre le salon pour voir son niveau.</p>
@@ -285,6 +286,8 @@
             <article><code>/securite</code><span data-i18n="wiki.grpSecurite">status, antiraid, antinuke, whitelist, alertes, lockdown, ia-test, reseau, doubles-comptes, garde-nuit, corriger, staff — les protections du serveur.</span></article>
             <article><code>/backup</code><span data-i18n="wiki.grpBackup">create, list, restore, delete, export, import — les sauvegardes de salons et de rôles, à remettre en place sur ce serveur ou sur n'importe quel autre.</span></article>
             <article><code>/giveaway</code><span data-i18n="wiki.grpGiveaway">create, list, end, reroll, delete — les tirages au sort.</span></article>
+            <article><code>/vocal</code><span data-i18n="wiki.grpVocal">deconnecter, deplacer — sortir quelqu'un d'un salon vocal, ou l'emmener ailleurs.</span></article>
+            <article><code>/note</code><span data-i18n="wiki.grpNote">ajouter, lister, retirer — ce que l'équipe sait d'un membre sans que ce soit une sanction. Les notes apparaissent dans /infractions.</span></article>
             <article><code>/premium</code><span data-i18n="wiki.grpPremium">statut, essai, parrainage, code — l’essai gratuit de 7 jours et le parrainage (20 jours offerts).</span></article>
           </div>
           <p class="field-help" data-i18n="wiki.commandesPermissions">Les commandes de modération sont réservées au staff : Discord n’affiche à chacun que celles qu’il a le droit d’utiliser.</p>
