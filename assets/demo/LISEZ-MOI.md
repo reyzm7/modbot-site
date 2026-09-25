@@ -16,5 +16,11 @@ pseudonymes, identifiants et avatars y sont masqués**.
   démonstration du Message Content Intent : la décision vient du texte du
   message, et le texte n'est conservé nulle part chez nous.
 
+- `arrivee-membre.png` — le message de bienvenue poste par ModBot quand
+  quelqu un rejoint le serveur, avec la carte generee et le numero du
+  membre. C est la demonstration du Server Members Intent : rien de tout
+  cela ne part sans l evenement GUILD_MEMBER_ADD. Pseudonyme et avatar
+  masques.
+
 Retirer une image d'ici, c'est casser la demande en cours : la remplacer
 plutôt que la supprimer.
