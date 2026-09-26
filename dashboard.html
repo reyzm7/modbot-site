@@ -1211,6 +1211,8 @@
           </div>
         </div>
 
+        <p class="dash-panel-off" data-modmail-coupe hidden data-i18n="mm.coupeAvis">Le module est coupé : ce qui suit est enregistré, mais rien ne s'appliquera tant que tu n'auras pas activé le modmail.</p>
+
         <p class="field-help" data-i18n="mm.intro">Un membre écrit à ModBot en message privé : ModBot ouvre un fil dans le salon de ton équipe. Ce que l'équipe répond dans ce fil repart en privé, sous le nom du serveur.</p>
 
         <div class="welcome-layout">
@@ -1254,6 +1256,18 @@
             <label class="mini-form"><span data-i18n="mm.pause">Pause entre deux messages (secondes)</span>
               <input type="number" min="0" max="300" step="1" value="5" data-modmail-pause>
             </label>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="mm.conditionsTitre">Qui peut écrire</h3>
+            <p class="field-help" data-i18n="mm.conditionsAide">Sans condition, tout membre du serveur peut joindre l'équipe. Les deux réglages ci-dessous ferment la porte aux comptes qui viennent d'arriver, le jour où un raid s'en sert.</p>
+            <label class="mini-form"><span data-i18n="mm.anciennete">Ancienneté demandée (jours)</span>
+              <input type="number" min="0" max="365" step="1" value="0" data-modmail-anciennete>
+            </label>
+            <label class="mini-form"><span data-i18n="mm.roleRequis">Rôle exigé</span>
+              <select data-modmail-role-requis><option value="">— Chargement… —</option></select>
+            </label>
+            <p class="field-help" data-i18n="mm.roleRequisAide">Laisse vide pour n'exiger aucun rôle. Le membre refusé sait pourquoi : ModBot le lui dit sans nommer le rôle.</p>
           </div>
 
           <div class="tool-panel">

@@ -1727,3 +1727,19 @@
 .server-select-heading p {
   background: rgba(var(--canal-fond), 0.55);
 }
+/* ── Un module coupe le dit, au lieu de laisser regler dans le vide ─ */
+
+.dash-panel-off {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent-line);
+  border-radius: 10px;
+  background: var(--panel-strong);
+  color: var(--soft);
+  font-size: 0.92rem;
+}
+
+/* Les reglages restent lisibles et modifiables : on les met en retrait,
+   on ne les desactive pas — un serveur regle souvent AVANT d'allumer. */
+.dash-panel.is-off .welcome-layout { opacity: 0.72; }

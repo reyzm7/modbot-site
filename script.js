@@ -8596,9 +8596,23 @@ function initDashboard() {
       : `<span class="field-help">${escapeHtml(t("mm.aucunBloque"))}</span>`;
   }
 
+  // Un module coupe garde ses reglages, mais il faut le dire : sans
+  // cela, on regle une rubrique qui ne s'applique pas.
+  function refletModmail() {
+    const actif = Boolean(document.querySelector("[data-modmail-actif]")?.checked);
+    const avis = document.querySelector("[data-modmail-coupe]");
+    if (avis) avis.hidden = actif;
+    document.querySelector('[data-dashboard-panel="modmail"]')
+      ?.classList.toggle("is-off", !actif);
+  }
+
   function applyModmail(config) {
     if (!config || typeof config !== "object") return;
     poserCase("[data-modmail-actif]", config.enabled);
+    poserChoix("[data-modmail-role-requis]", config.role_requis || "");
+    const anciennete = document.querySelector("[data-modmail-anciennete]");
+    if (anciennete) anciennete.value = config.anciennete ?? 0;
+    refletModmail();
     poserChoix("[data-modmail-salon]", config.salon || "");
     poserChoix("[data-modmail-role]", config.role || "");
     poserCase("[data-modmail-anonyme]", config.anonyme !== false);
@@ -8622,6 +8636,8 @@ function initDashboard() {
       anonyme: document.querySelector("[data-modmail-anonyme]")?.checked !== false,
       traduire: Boolean(document.querySelector("[data-modmail-traduire]")?.checked),
       ia: Boolean(document.querySelector("[data-modmail-ia]")?.checked),
+      anciennete: Number(document.querySelector("[data-modmail-anciennete]")?.value || 0),
+      role_requis: document.querySelector("[data-modmail-role-requis]")?.value || "",
       accueil: document.querySelector("[data-modmail-accueil]")?.value || "",
       pause: Number(document.querySelector("[data-modmail-pause]")?.value || 5),
       bloques: bloquesModmail.slice(0, MODMAIL_BLOQUES_MAX),
@@ -8972,6 +8988,7 @@ function initDashboard() {
     remplirSelect("[data-vie-comptage-salon]", optionsSalons, t("js.aucun"));
     remplirSelect("[data-modmail-salon]", optionsSalons, t("js.aucun"));
     remplirSelect("[data-modmail-role]", optionsRoles, t("js.aucun"));
+    remplirSelect("[data-modmail-role-requis]", optionsRoles, t("js.aucun"));
     redessinerSalonsProteges();
     pastillesDeRoles("[data-prot-roles]", rolesAutorisesProteges, "data-retirer-prot-role");
     pastillesDeRoles("[data-mass-interdits]", rolesInterditsMasse, "data-retirer-interdit");
@@ -9006,6 +9023,9 @@ function initDashboard() {
 
   function initOutilsServeur() {
     // Les salons proteges.
+    document.querySelector("[data-modmail-actif]")
+      ?.addEventListener("change", refletModmail);
+
     const hoteBloques = document.querySelector("[data-modmail-bloques]");
     hoteBloques?.addEventListener("click", (evenement) => {
       const puce = evenement.target.closest("[data-modmail-debloquer]");
