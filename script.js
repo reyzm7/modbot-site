@@ -8604,6 +8604,13 @@ function initDashboard() {
     if (avis) avis.hidden = actif;
     document.querySelector('[data-dashboard-panel="modmail"]')
       ?.classList.toggle("is-off", !actif);
+    // La pastille du menu : on doit voir que le module tourne sans
+    // ouvrir la rubrique.
+    const pastille = document.querySelector("[data-modmail-nav-etat]");
+    if (pastille) {
+      pastille.classList.toggle("is-on", actif);
+      pastille.classList.toggle("is-off", !actif);
+    }
   }
 
   function applyModmail(config) {
