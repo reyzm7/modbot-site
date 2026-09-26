@@ -1572,7 +1572,15 @@
             <label class="mini-form"><span data-i18n="vie.murSeuil">Étoiles nécessaires</span>
               <input type="number" min="2" max="50" step="1" value="5" data-vie-mur-seuil>
             </label>
-            <p class="field-help" data-i18n="vie.murAide">Ce sont les membres qui décident, avec la réaction ⭐. Au seuil atteint, le message est recopié sur le mur avec un lien vers l'original. Un message de bot n'y va jamais.</p>
+            <label class="mini-form"><span data-i18n="vie.murEmoji">Réaction qui compte</span>
+              <input type="text" maxlength="40" value="⭐" data-vie-mur-emoji data-i18n-placeholder="vie.murEmojiPlaceholder" placeholder="⭐">
+            </label>
+            <p class="field-help" data-i18n="vie.murEmojiAide">Un emoji, ou un emoji de ton serveur. Un mot ou une lettre ne compte pas : personne ne réagit avec « x ».</p>
+            <label class="mini-form"><span data-i18n="vie.murExclus">Salons qui n'alimentent pas le mur</span>
+              <select data-vie-mur-exclus-picker><option value="" data-i18n="dash.chargement2">— Chargement… —</option></select>
+            </label>
+            <div class="variable-chips" data-vie-mur-exclus></div>
+            <p class="field-help" data-i18n="vie.murAide">Ce sont les membres qui décident, avec leur réaction. Au seuil atteint, le message est recopié sur le mur avec un lien vers l'original. L'auteur ne vote pas pour lui-même, un message de bot n'y va jamais, et un message qui perd ses réactions quitte le mur.</p>
           </div>
 
           <div class="tool-panel">

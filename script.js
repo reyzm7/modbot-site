@@ -4288,6 +4288,7 @@ function initDashboard() {
     redessinerRecompenses();
     remplirSelect("[data-vie-anniv-salon]", optionsSalons, t("js.aucun"));
     remplirSelect("[data-vie-mur-salon]", optionsSalons, t("js.aucun"));
+    remplirSelect("[data-vie-mur-exclus-picker]", optionsSalons, t("js.vie.ajouterSalon"));
     remplirSelect("[data-voice-category]", optionsCategories, t("js.aucun"));
     document.querySelectorAll("[data-event-channel]").forEach((champ) => {
       remplirSelect(champ, optionsSalons, t("js.aucun"));
@@ -8163,6 +8164,7 @@ function initDashboard() {
   // Ce que la page tient entre deux enregistrements. Le bot reste seul
   // juge : ces listes ne servent qu'a dessiner.
   let salonsSansXp = [];
+  let salonsSansMur = [];
   let recompensesNiveau = [];
   const RECOMPENSES_MAX = 20;
   const SALONS_LISTE_MAX = 40;
@@ -8222,6 +8224,17 @@ function initDashboard() {
       : `<span class="field-help">${escapeHtml(t("js.vie.tousLesSalons"))}</span>`;
   }
 
+  function redessinerSalonsSansMur() {
+    const hote = document.querySelector("[data-vie-mur-exclus]");
+    if (!hote) return;
+    hote.innerHTML = salonsSansMur.length
+      ? salonsSansMur.map((id) => (
+          `<button type="button" class="variable-chip" data-retirer-sans-mur="${escapeHtml(id)}"
+                   title="${escapeHtml(t("js.vie.retirerSalon"))}">${escapeHtml(nomDuSalon(id))} &times;</button>`
+        )).join("")
+      : `<span class="field-help">${escapeHtml(t("js.vie.tousLesSalons"))}</span>`;
+  }
+
   function redessinerRecompenses() {
     const hote = document.querySelector("[data-vie-recompenses]");
     if (!hote) return;
@@ -8263,6 +8276,28 @@ function initDashboard() {
   }
 
   function initVieDuServeur() {
+    // Les salons qui n'alimentent pas le mur.
+    const pickerMur = document.querySelector("[data-vie-mur-exclus-picker]");
+    const hoteMur = document.querySelector("[data-vie-mur-exclus]");
+    if (pickerMur && hoteMur) {
+      pickerMur.addEventListener("change", () => {
+        const id = pickerMur.value;
+        pickerMur.value = "";
+        if (!id || salonsSansMur.includes(id)) return;
+        if (salonsSansMur.length >= SALONS_LISTE_MAX) return showToast(t("js.vie.tropDeSalons"));
+        salonsSansMur.push(id);
+        redessinerSalonsSansMur();
+        markPanelDirty("communaute");
+      });
+      hoteMur.addEventListener("click", (evenement) => {
+        const chip = evenement.target.closest("[data-retirer-sans-mur]");
+        if (!chip) return;
+        salonsSansMur = salonsSansMur.filter((x) => x !== chip.dataset.retirerSansMur);
+        redessinerSalonsSansMur();
+        markPanelDirty("communaute");
+      });
+    }
+
     // Les salons sans experience.
     const pickerXp = document.querySelector("[data-vie-xp-exclus-picker]");
     const hoteXp = document.querySelector("[data-vie-xp-exclus]");
@@ -8422,11 +8457,15 @@ function initDashboard() {
       cumul.closest(".toggle-line")?.classList.toggle("is-on", garde);
     }
     salonsSansXp = [...new Set((vie.xp_salons_exclus || []).map(String))].slice(0, SALONS_LISTE_MAX);
+    salonsSansMur = [...new Set((vie.mur_exclus || []).map(String))].slice(0, SALONS_LISTE_MAX);
+    const reaction = document.querySelector("[data-vie-mur-emoji]");
+    if (reaction) reaction.value = vie.mur_emoji || "⭐";
     recompensesNiveau = (vie.recompenses || [])
       .filter((l) => l && typeof l === "object")
       .map((l) => ({ niveau: Number(l.niveau) || 1, role: String(l.role || "") }))
       .slice(0, RECOMPENSES_MAX);
     redessinerSalonsSansXp();
+    redessinerSalonsSansMur();
     redessinerRecompenses();
     applyVieExtras(vie);
   }
@@ -8440,6 +8479,8 @@ function initDashboard() {
       anniv_salon: document.querySelector("[data-vie-anniv-salon]")?.value || "",
       mur_salon: document.querySelector("[data-vie-mur-salon]")?.value || "",
       mur_seuil: Number(document.querySelector("[data-vie-mur-seuil]")?.value || 5),
+      mur_emoji: document.querySelector("[data-vie-mur-emoji]")?.value || "",
+      mur_exclus: salonsSansMur.slice(0, SALONS_LISTE_MAX),
       xp_message: document.querySelector("[data-vie-xp-message]")?.value || "",
       xp_salons_exclus: salonsSansXp.slice(0, SALONS_LISTE_MAX),
       recompenses_cumul: document.querySelector("[data-vie-recompenses-cumul]")?.checked !== false,
