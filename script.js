@@ -8561,6 +8561,8 @@ function initDashboard() {
     poserChoix("[data-modmail-salon]", config.salon || "");
     poserChoix("[data-modmail-role]", config.role || "");
     poserCase("[data-modmail-anonyme]", config.anonyme !== false);
+    poserCase("[data-modmail-traduire]", config.traduire);
+    poserCase("[data-modmail-ia]", config.ia);
     const accueil = document.querySelector("[data-modmail-accueil]");
     if (accueil) accueil.value = config.accueil || "";
     const pause = document.querySelector("[data-modmail-pause]");
@@ -8577,6 +8579,8 @@ function initDashboard() {
       salon: document.querySelector("[data-modmail-salon]")?.value || "",
       role: document.querySelector("[data-modmail-role]")?.value || "",
       anonyme: document.querySelector("[data-modmail-anonyme]")?.checked !== false,
+      traduire: Boolean(document.querySelector("[data-modmail-traduire]")?.checked),
+      ia: Boolean(document.querySelector("[data-modmail-ia]")?.checked),
       accueil: document.querySelector("[data-modmail-accueil]")?.value || "",
       pause: Number(document.querySelector("[data-modmail-pause]")?.value || 5),
       bloques: bloquesModmail.slice(0, MODMAIL_BLOQUES_MAX),
