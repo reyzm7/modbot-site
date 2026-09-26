@@ -1188,6 +1188,11 @@
           <div class="tool-panel moderation-sanction-panel">
             <h3 data-i18n="dash.progressionSanctions"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg> Progression sanctions</h3>
             <div class="sanction-flow"><span data-i18n="dash.warn"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-alert"/></svg> 1 Warn</span><span data-i18n="dash.mute"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-mute"/></svg> 2 Mute 4h</span><span data-i18n="dash.mute2"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-timer"/></svg> 3 Mute 24h</span><span data-i18n="dash.ban"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg> 4 Ban</span></div>
+            <h3 data-i18n="dash.pointsQuiSeffacent"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-timer"/></svg> Les points s'effacent</h3>
+            <label class="mini-form" data-i18n="dash.dureeDeVieInfraction">Une infraction compte pendant (jours)
+              <input type="number" min="0" max="3650" step="1" value="180" data-expiration-infractions>
+            </label>
+            <p class="field-help" data-i18n="dash.dureeDeVieAide">Passé ce délai, l'infraction ne compte plus : ni dans les points, ni dans l'échelle des sanctions. Mets 0 pour ne jamais rien oublier.</p>
             <h3 data-i18n="dash.bannissementsDuBot"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg> Bannissements du bot</h3>
             <div class="sanction-list" data-sanction-list>
               <div class="dashboard-empty-state"><strong data-i18n="dash.aucunBannissementCharge">Aucun bannissement chargé</strong><span data-i18n="dash.laListeSeraSynchronisee">La liste sera synchronisée avec les logs du bot.</span></div>

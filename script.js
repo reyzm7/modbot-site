@@ -4330,6 +4330,14 @@ function initDashboard() {
       ? moderation.sanctions
       : (Array.isArray(moderation.bans) ? moderation.bans : []);
 
+    // Combien de temps une faute suit un membre. Zero veut dire que le
+    // serveur ne veut rien oublier : c'est une valeur, pas un champ vide.
+    const champOubli = document.querySelector("[data-expiration-infractions]");
+    if (champOubli) {
+      const jours = Number(moderation.expiration_infractions);
+      champOubli.value = String(Number.isFinite(jours) && jours >= 0 ? jours : 180);
+    }
+
     // Les mots livres avec le bot, retenus pour redessiner la liste sans
     // rien redemander quand on en ajoute un.
     motsParDefaut = filteredWords
@@ -9628,6 +9636,12 @@ function initDashboard() {
       .map((word) => word.trim().toLowerCase())
       .filter(Boolean)
       .filter((word, index, words) => words.indexOf(word) === index);
+    // Un champ vide n'est pas un zero : on n'envoie rien, plutot que de
+    // faire croire au bot que ce serveur ne veut plus rien oublier.
+    const champDeLOubli = document.querySelector("[data-expiration-infractions]");
+    const oubli = champDeLOubli && String(champDeLOubli.value).trim() !== ""
+      ? Math.max(0, Math.min(3650, Math.round(Number(champDeLOubli.value) || 0)))
+      : null;
     return {
       channels: {
         tickets: document.querySelector("[data-ticket-channel]")?.value || salonSysteme("tickets"),
@@ -9649,6 +9663,7 @@ function initDashboard() {
         staff_alert: coche("[data-security-staffalert]"),
         lockdown: coche("[data-security-lockdown]"),
         custom_words: customWords,
+        ...(oubli === null ? {} : { expiration_infractions: oubli }),
       },
       tickets: {
         author: document.querySelector("[data-preview-author]")?.value || "ModBot Ticket System",
