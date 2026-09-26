@@ -5397,6 +5397,7 @@ function initDashboard() {
     sansCasser("vocaux", () => applyVoiceState(config.voice));
     sansCasser("vie du serveur", () => applyCommunauteState(config.communaute));
     sansCasser("salons proteges", () => applySalonsProteges(config.salons_proteges));
+    sansCasser("modmail", () => applyModmail(config.modmail));
     sansCasser("roles en masse", () => applyRolesMasse(config.roles_masse));
     sansCasser("evenements", () => applyEventsState(config.events));
 
@@ -8498,6 +8499,7 @@ function initDashboard() {
      ══════════════════════════════════════════════════════════════ */
 
   let salonsProteges = [];
+  let bloquesModmail = [];
   let rolesAutorisesProteges = [];
   let rolesInterditsMasse = [];
   let rolesIgnoresMasse = [];
@@ -8505,6 +8507,7 @@ function initDashboard() {
   let reactionsAuto = [];
   let massroleSuivi = null;
   const PROTEGES_MAX = 25;
+  const MODMAIL_BLOQUES_MAX = 200;
   const OUTILS_ROLES_MAX = 25;
   const BONUS_MAX = 10;
   const REACTIONS_MAX = 10;
@@ -8536,6 +8539,48 @@ function initDashboard() {
                    title="${escapeHtml(t("js.retirerCeRole"))}">${escapeHtml(nomDuRole(id))} &times;</button>`
         )).join("")
       : `<span class="field-help">${escapeHtml(t("outils.aucunRole"))}</span>`;
+  }
+
+  // ── Le modmail ─────────────────────────────────────────────────────
+  // Les membres bloques sont des identifiants : le bot ne connait pas
+  // forcement leur pseudo — ils ont pu quitter le serveur.
+  function redessinerBloquesModmail() {
+    const hote = document.querySelector("[data-modmail-bloques]");
+    if (!hote) return;
+    hote.innerHTML = bloquesModmail.length
+      ? bloquesModmail.map((id) => (
+          `<button type="button" class="variable-chip" data-modmail-debloquer="${escapeHtml(id)}"
+                   title="${escapeHtml(t("mm.debloquer"))}">${escapeHtml(id)} &times;</button>`
+        )).join("")
+      : `<span class="field-help">${escapeHtml(t("mm.aucunBloque"))}</span>`;
+  }
+
+  function applyModmail(config) {
+    if (!config || typeof config !== "object") return;
+    poserCase("[data-modmail-actif]", config.enabled);
+    poserChoix("[data-modmail-salon]", config.salon || "");
+    poserChoix("[data-modmail-role]", config.role || "");
+    poserCase("[data-modmail-anonyme]", config.anonyme !== false);
+    const accueil = document.querySelector("[data-modmail-accueil]");
+    if (accueil) accueil.value = config.accueil || "";
+    const pause = document.querySelector("[data-modmail-pause]");
+    if (pause) pause.value = config.pause ?? 5;
+    bloquesModmail = lireIds(config.bloques, MODMAIL_BLOQUES_MAX);
+    redessinerBloquesModmail();
+  }
+
+  function collectModmail() {
+    const actif = document.querySelector("[data-modmail-actif]");
+    if (!actif) return undefined;
+    return {
+      enabled: Boolean(actif.checked),
+      salon: document.querySelector("[data-modmail-salon]")?.value || "",
+      role: document.querySelector("[data-modmail-role]")?.value || "",
+      anonyme: document.querySelector("[data-modmail-anonyme]")?.checked !== false,
+      accueil: document.querySelector("[data-modmail-accueil]")?.value || "",
+      pause: Number(document.querySelector("[data-modmail-pause]")?.value || 5),
+      bloques: bloquesModmail.slice(0, MODMAIL_BLOQUES_MAX),
+    };
   }
 
   // ── Les salons proteges ────────────────────────────────────────────
@@ -8880,6 +8925,8 @@ function initDashboard() {
     remplirSelect("[data-mass-ignorer-picker]", optionsRoles, t("js.ajouterCeRole"));
     remplirSelect("[data-vie-anniv-role]", optionsRoles, t("js.aucun"));
     remplirSelect("[data-vie-comptage-salon]", optionsSalons, t("js.aucun"));
+    remplirSelect("[data-modmail-salon]", optionsSalons, t("js.aucun"));
+    remplirSelect("[data-modmail-role]", optionsRoles, t("js.aucun"));
     redessinerSalonsProteges();
     pastillesDeRoles("[data-prot-roles]", rolesAutorisesProteges, "data-retirer-prot-role");
     pastillesDeRoles("[data-mass-interdits]", rolesInterditsMasse, "data-retirer-interdit");
@@ -8914,6 +8961,15 @@ function initDashboard() {
 
   function initOutilsServeur() {
     // Les salons proteges.
+    const hoteBloques = document.querySelector("[data-modmail-bloques]");
+    hoteBloques?.addEventListener("click", (evenement) => {
+      const puce = evenement.target.closest("[data-modmail-debloquer]");
+      if (!puce) return;
+      bloquesModmail = bloquesModmail.filter((id) => id !== puce.dataset.modmailDebloquer);
+      redessinerBloquesModmail();
+      markPanelDirty("modmail");
+    });
+
     const pickerSalon = document.querySelector("[data-prot-picker]");
     pickerSalon?.addEventListener("change", () => {
       const id = pickerSalon.value;
@@ -9696,6 +9752,7 @@ function initDashboard() {
       voice: collectVoiceConfig(),
       communaute: collectCommunauteConfig(),
       salons_proteges: collectSalonsProteges(),
+      modmail: collectModmail(),
       roles_masse: collectRolesMasse(),
       ...(document.querySelector("[data-event-list]")
         ? { events: lireEvenementsDuDom() } : {}),

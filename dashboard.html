@@ -314,6 +314,7 @@
 
       <p class="sidebar-label" data-i18n="dash.communaute">Communauté</p>
       <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg></span><span data-i18n="nav.tickets">Tickets</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="modmail"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-message"/></svg></span><span data-i18n="nav.modmail">Modmail</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="welcome"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg></span><span data-i18n="nav.welcome">Bienvenue</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="roles"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-mask"/></svg></span><span data-i18n="nav.roles">Rôles</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="voice"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-broadcast"/></svg></span><span data-i18n="nav.voice">Vocaux</span></button>
@@ -456,6 +457,7 @@
             <div class="guide-groupe">
               <p class="guide-groupe-titre" data-i18n="dash.communaute">Communauté</p>
               <button type="button" data-dashboard-jump="tickets"><strong data-i18n="nav.tickets">Tickets</strong><small data-i18n="guide.tickets">Le panneau de support et ses catégories.</small></button>
+              <button type="button" data-dashboard-jump="modmail"><strong data-i18n="nav.modmail">Modmail</strong><small data-i18n="guide.modmail">Les membres écrivent à l'équipe en privé, et l'équipe répond de même.</small></button>
               <button type="button" data-dashboard-jump="welcome"><strong data-i18n="nav.welcome">Bienvenue</strong><small data-i18n="guide.bienvenue">Messages d'arrivée et de départ.</small></button>
               <button type="button" data-dashboard-jump="roles"><strong data-i18n="nav.roles">Rôles</strong><small data-i18n="guide.roles">Rôles donnés à l'arrivée ou par réaction.</small></button>
               <button type="button" data-dashboard-jump="voice"><strong data-i18n="nav.voice">Vocaux</strong><small data-i18n="guide.vocaux">Un salon vocal créé pour chacun, à la demande.</small></button>
@@ -1197,6 +1199,57 @@
             <div class="sanction-list" data-sanction-list>
               <div class="dashboard-empty-state"><strong data-i18n="dash.aucunBannissementCharge">Aucun bannissement chargé</strong><span data-i18n="dash.laListeSeraSynchronisee">La liste sera synchronisée avec les logs du bot.</span></div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dash-panel" data-dashboard-panel="modmail">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-message"/></svg> <span data-i18n="nav.modmail">Modmail</span></p>
+            <h2 data-i18n="mm.titre">La messagerie privée de l'équipe</h2>
+          </div>
+        </div>
+
+        <p class="field-help" data-i18n="mm.intro">Un membre écrit à ModBot en message privé : ModBot ouvre un fil dans le salon de ton équipe. Ce que l'équipe répond dans ce fil repart en privé, sous le nom du serveur.</p>
+
+        <div class="welcome-layout">
+          <div class="tool-panel">
+            <h3 data-i18n="mm.moduleTitre">Le module</h3>
+            <label class="toggle-line">
+              <input type="checkbox" data-modmail-actif><span></span>
+              <strong data-i18n="mm.activer">Activer le modmail</strong>
+              <small data-i18n="mm.activerAide">Coupé, un message privé envoyé au bot reste sans réponse, comme avant.</small>
+            </label>
+            <label class="mini-form"><span data-i18n="mm.salon">Salon qui reçoit les fils</span>
+              <select data-modmail-salon><option value="">— Chargement… —</option></select>
+            </label>
+            <p class="field-help" data-i18n="mm.salonAide">Choisis un salon que seule ton équipe voit : chaque courrier y ouvre son propre fil.</p>
+            <label class="mini-form"><span data-i18n="mm.role">Prévenir ce rôle</span>
+              <select data-modmail-role><option value="">— Chargement… —</option></select>
+            </label>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="mm.reponsesTitre">Les réponses</h3>
+            <label class="toggle-line">
+              <input type="checkbox" data-modmail-anonyme checked><span></span>
+              <strong data-i18n="mm.anonyme">Répondre au nom de l'équipe</strong>
+              <small data-i18n="mm.anonymeAide">Le membre ne voit pas quel modérateur lui a répondu. Décoche pour signer chaque réponse.</small>
+            </label>
+            <label class="mini-form"><span data-i18n="mm.accueil">Message d'accueil</span>
+              <textarea rows="2" data-modmail-accueil data-i18n-placeholder="mm.accueilPlaceholder" placeholder="Ton message est bien arrivé : l'équipe te répondra ici."></textarea>
+            </label>
+            <p class="field-help" data-i18n-html="mm.notesAide">Dans le fil, un message qui commence par <code>//</code> reste entre modérateurs : il ne part pas au membre.</p>
+            <label class="mini-form"><span data-i18n="mm.pause">Pause entre deux messages (secondes)</span>
+              <input type="number" min="0" max="300" step="1" value="5" data-modmail-pause>
+            </label>
+          </div>
+
+          <div class="tool-panel">
+            <h3 data-i18n="mm.bloquesTitre">Membres bloqués</h3>
+            <p class="field-help" data-i18n="mm.bloquesAide">Leurs messages n'arrivent plus jusqu'à l'équipe. Clique sur un identifiant pour le débloquer.</p>
+            <div class="variable-chips" data-modmail-bloques></div>
           </div>
         </div>
       </section>
