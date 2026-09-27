@@ -346,6 +346,7 @@
            remettre un serveur debout. -->
       <p class="sidebar-label" data-i18n="dash.outils">Outils</p>
       <button class="dash-nav" type="button" data-dashboard-tab="massroles"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-user"/></svg></span><span data-i18n="nav.massroles">Rôles en masse</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="historique"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg></span><span data-i18n="nav.historique">Historique</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="backups" data-i18n="dash.navSauvegardes"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg></span>Sauvegardes</button>
 
       <!-- Ce que l'administrateur qui configure le bot doit pouvoir lire
@@ -489,6 +490,7 @@
             <div class="guide-groupe">
               <p class="guide-groupe-titre" data-i18n="dash.outils">Outils</p>
               <button type="button" data-dashboard-jump="massroles"><strong data-i18n="nav.massroles">Rôles en masse</strong><small data-i18n="guide.massroles">Donner ou retirer un rôle à tout le serveur.</small></button>
+              <button type="button" data-dashboard-jump="historique"><strong data-i18n="nav.historique">Historique</strong><small data-i18n="guide.historique">Qui a changé quoi dans les réglages, et comment le remettre.</small></button>
               <button type="button" data-dashboard-jump="backups"><strong data-i18n="dash.navSauvegardes">Sauvegardes</strong><small data-i18n="guide.sauvegardes">Sauvegarder le serveur, et le remettre en place ailleurs.</small></button>
             </div>
           </div>
@@ -949,6 +951,32 @@
       </section>
 
       <!-- SAUVEGARDES -->
+      <!-- Qui a change quoi, et comment le remettre. Deux questions
+           sans reponse sur tout serveur a plusieurs administrateurs :
+           la seconde est la pire, on sait qu on a casse quelque chose
+           mais plus quoi remettre. -->
+      <section class="dash-panel" data-dashboard-panel="historique">
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg> <span data-i18n="hist.eyebrow">Historique</span></p>
+            <h2 data-i18n="hist.titre">Les changements de configuration</h2>
+          </div>
+          <div class="panel-title-actions">
+            <button class="secondary-btn compact" type="button" data-historique-reload><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg> <span data-i18n="dash.actualiser2">Actualiser</span></button>
+          </div>
+        </div>
+
+        <div class="tool-panel">
+          <div class="table-head">
+            <h3 data-i18n="hist.liste">Ce qui a changé, et par qui</h3>
+            <span class="state is-count" data-historique-count>—</span>
+          </div>
+          <p class="field-help" data-i18n="hist.aide">Chaque enregistrement du tableau de bord garde la configuration telle qu’elle était juste avant. « Revenir » la repose : elle repasse par les mêmes vérifications qu’une sauvegarde ordinaire, et l’état d’avant le retour est gardé à son tour.</p>
+          <div class="backup-list" data-historique-list>
+            <div class="backup-empty" data-i18n="hist.vide">Aucun changement enregistré pour le moment.</div>
+          </div>
+        </div>
+      </section>
       <section class="dash-panel" data-dashboard-panel="backups">
         <div class="panel-title">
           <div>

@@ -7408,6 +7408,104 @@ function initDashboard() {
   }
 
   /* ══════════════════════════════════════════════════════════════════
+     HISTORIQUE DE CONFIGURATION
+
+     Le tableau de bord garde ce qu etait la configuration avant chaque
+     enregistrement. On n affiche ici que le resume : le contenu des
+     reglages reste cote bot, et ne traverse le reseau qu au moment ou
+     on repose une version.
+     ══════════════════════════════════════════════════════════════════ */
+
+  let historiqueVersions = [];
+
+  function renderHistorique() {
+    const host = document.querySelector("[data-historique-list]");
+    const count = document.querySelector("[data-historique-count]");
+    if (count) {
+      count.textContent = historiqueVersions.length
+        ? tp("hist.compte", { n: historiqueVersions.length })
+        : t("hist.compteVide");
+    }
+    if (!host) return;
+    if (!historiqueVersions.length) {
+      host.innerHTML = `<div class="backup-empty">${escapeHtml(t("hist.vide"))}</div>`;
+      return;
+    }
+    host.innerHTML = historiqueVersions
+      .map((version) => {
+        const lignes = (version.changements || [])
+          .map((ligne) => `<li>${escapeHtml(ligne)}</li>`)
+          .join("");
+        return `
+      <article class="backup-card">
+        <div class="backup-main">
+          <strong>${escapeHtml(formatIsoDateTimeFr(version.date))}</strong>
+          <small>${escapeHtml(tp("hist.par", { qui: version.auteur || "—" }))}</small>
+          ${version.motif ? `<em>${escapeHtml(version.motif)}</em>` : ""}
+          <ul class="info-list">${lignes}</ul>
+        </div>
+        <div class="backup-actions">
+          <button class="primary-btn compact" type="button" data-historique-restaurer="${escapeHtml(version.jeton)}">${escapeHtml(t("hist.revenir"))}</button>
+        </div>
+      </article>`;
+      })
+      .join("");
+  }
+
+  async function chargerHistorique(guildId) {
+    const cible = guildId || selectedServer.id;
+    if (!cible) return;
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${cible}/historique`, { cache: "no-store" });
+      if (!estEncoreLeServeur(cible)) return;
+      historiqueVersions = Array.isArray(data.versions) ? data.versions : [];
+      renderHistorique();
+    } catch (error) {
+      console.warn("Historique indisponible :", error?.message || error);
+    }
+  }
+
+  async function restaurerVersion(jeton) {
+    const guildId = selectedServer.id;
+    if (!guildId) return;
+    const version = historiqueVersions.find((item) => item.jeton === jeton);
+    if (!version) return;
+    // Reposer une version ecrase les reglages en place : cela se
+    // confirme, meme si le retour arriere est lui-meme rattrapable.
+    const confirme = window.confirm(
+      tp("hist.confirmer", { date: formatIsoDateTimeFr(version.date) }) + "\n\n"
+      + (version.changements || []).join("\n"));
+    if (!confirme) return;
+    try {
+      const data = await modbotApiFetch(`/api/guilds/${guildId}/historique/restaurer`, {
+        method: "POST",
+        body: JSON.stringify({ jeton })
+      });
+      historiqueVersions = Array.isArray(data.versions) ? data.versions : historiqueVersions;
+      renderHistorique();
+      if (data.config) {
+        applyDashboardConfig(data.config);
+        // Sans cette ligne, le bouton « Annuler » de la barre
+        // relirait la configuration d avant le retour arriere.
+        derniereConfigEnregistree = JSON.stringify(data.config);
+      }
+      clearUnsavedChanges();
+      showToast(t("hist.revenu"));
+      loadGuildLogs(guildId);
+    } catch (error) {
+      showToast(`${error?.message || t("hist.echec")}`);
+    }
+  }
+
+  document.querySelector("[data-historique-reload]")?.addEventListener("click", () => {
+    chargerHistorique();
+  });
+  document.querySelector("[data-historique-list]")?.addEventListener("click", (event) => {
+    const bouton = event.target.closest("[data-historique-restaurer]");
+    if (bouton) restaurerVersion(bouton.dataset.historiqueRestaurer);
+  });
+
+  /* ══════════════════════════════════════════════════════════════════
      SAUVEGARDES
      ══════════════════════════════════════════════════════════════════ */
 
@@ -10286,6 +10384,7 @@ function initDashboard() {
     if (panelName === "giveaways") loadGiveaways();
     if (panelName === "welcome") renderWelcomePreview();
     if (panelName === "score") chargerScoreSecurite();
+    if (panelName === "historique") chargerHistorique();
   }
 
   document.querySelector("[data-dashboard-login]")?.addEventListener("click", () => {
