@@ -5298,6 +5298,7 @@ function initDashboard() {
       // mis a jour) ne doit pas afficher une protection eteinte.
       ["[data-security-antiscam]", security.antiscam ?? true],
       ["[data-security-antiraid]", security.antiraid],
+      ["[data-security-repetition]", (security.repetition || {}).enabled],
       ["[data-security-staffalert]", security.staff_alert],
       ["[data-security-lockdown]", security.lockdown]
     ].forEach(([selecteur, value]) => {
@@ -5306,6 +5307,19 @@ function initDashboard() {
         bouton.checked = value;
         bouton.closest(".toggle-line")?.classList.toggle("is-on", value);
       }
+    });
+
+    // Les seuils du message repete. Un champ absent de la reponse garde
+    // le defaut du bot : afficher zero ferait croire a un filtre mort.
+    const repet = security.repetition || {};
+    [
+      ["[data-repetition-salons]", repet.salons, 3],
+      ["[data-repetition-fenetre]", repet.fenetre, 300],
+      ["[data-repetition-longueur]", repet.longueur, 12],
+    ].forEach(([selecteur, valeur, defaut]) => {
+      const champ = document.querySelector(selecteur);
+      if (champ) champ.value = Number.isFinite(Number(valeur)) && valeur !== null
+        && valeur !== undefined ? Number(valeur) : defaut;
     });
     });
 
@@ -9796,6 +9810,14 @@ function initDashboard() {
         antispam: coche("[data-security-antispam]"),
         antiscam: coche("[data-security-antiscam]"),
         antiraid: coche("[data-security-antiraid]"),
+        // Les trois seuils partent avec l'interrupteur : separes, on
+        // pourrait allumer le filtre sans jamais lui donner de seuil.
+        repetition: {
+          enabled: coche("[data-security-repetition]"),
+          salons: Number(document.querySelector("[data-repetition-salons]")?.value || 3),
+          fenetre: Number(document.querySelector("[data-repetition-fenetre]")?.value || 300),
+          longueur: Number(document.querySelector("[data-repetition-longueur]")?.value || 12),
+        },
         staff_alert: coche("[data-security-staffalert]"),
         lockdown: coche("[data-security-lockdown]"),
         custom_words: customWords,
