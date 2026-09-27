@@ -1159,6 +1159,8 @@ window.MODBOT_TRANSLATIONS = {
     "dash.detecteLesMessagesTrop": "Détecte les messages trop rapides.",
     "dash.suiviPseudos": "Anciens pseudos",
     "dash.suiviPseudosAide": "Garde les cinq derniers noms d'un membre : ils s'affichent dans son casier et dans son courrier.",
+    "rr.boutons": "Des boutons plutôt que des réactions",
+    "rr.boutonsAide": "Un bouton porte son libellé, ne casse pas quand un emoji du serveur disparaît, et ne se rate pas au doigt sur téléphone.",
     "dash.antiMentions": "Mentions de masse",
     "dash.antiMentionsAide": "Un message qui pingue trop de monde d'un coup est retiré : c'est la brimade la plus simple de Discord.",
     "dash.mentionsMax": "Mentions tolérées dans un message",

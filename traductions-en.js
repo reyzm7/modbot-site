@@ -1140,6 +1140,8 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "dash.detecteLesMessagesTrop": "Detects messages sent too quickly.",
     "dash.suiviPseudos": "Previous nicknames",
     "dash.suiviPseudosAide": "Keeps a member's last five abandoned names: they show in their record and in their mail thread.",
+    "rr.boutons": "Buttons instead of reactions",
+    "rr.boutonsAide": "A button carries its own label, does not break when a server emoji disappears, and is not mis-tapped on a phone.",
     "dash.antiMentions": "Mass mentions",
     "dash.antiMentionsAide": "A message pinging too many people at once is removed: it is the simplest form of harassment on Discord.",
     "dash.mentionsMax": "Mentions allowed in one message",

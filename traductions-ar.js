@@ -1140,6 +1140,8 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "dash.detecteLesMessagesTrop": "يكشف الرسائل المرسَلة بسرعة مفرطة.",
     "dash.suiviPseudos": "الأسماء السابقة",
     "dash.suiviPseudosAide": "يحتفظ بآخر خمسة أسماء للعضو: تظهر في سجله وفي رسائله.",
+    "rr.boutons": "أزرار بدل التفاعلات",
+    "rr.boutonsAide": "الزر يحمل تسميته، ولا ينكسر عند اختفاء رمز الخادم، ولا يُخطئه الإصبع على الهاتف.",
     "dash.antiMentions": "الإشارات الجماعية",
     "dash.antiMentionsAide": "تُحذف الرسالة التي تشير إلى عدد كبير دفعة واحدة: إنها أبسط أشكال المضايقة على ديسكورد.",
     "dash.mentionsMax": "عدد الإشارات المسموح بها في الرسالة",

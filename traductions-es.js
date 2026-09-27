@@ -1125,6 +1125,8 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "dash.detecteLesMessagesTrop": "Detecta los mensajes demasiado rápidos.",
     "dash.suiviPseudos": "Apodos anteriores",
     "dash.suiviPseudosAide": "Guarda los cinco últimos nombres de un miembro: aparecen en su expediente y en su correo.",
+    "rr.boutons": "Botones en lugar de reacciones",
+    "rr.boutonsAide": "Un botón lleva su etiqueta, no se rompe cuando desaparece un emoji del servidor y no se falla con el dedo en el móvil.",
     "dash.antiMentions": "Menciones masivas",
     "dash.antiMentionsAide": "Un mensaje que menciona a demasiada gente de golpe se retira: es el acoso más simple de Discord.",
     "dash.mentionsMax": "Menciones toleradas en un mensaje",

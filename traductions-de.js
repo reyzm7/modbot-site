@@ -1125,6 +1125,8 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "dash.detecteLesMessagesTrop": "Erkennt zu schnell gesendete Nachrichten.",
     "dash.suiviPseudos": "Frühere Spitznamen",
     "dash.suiviPseudosAide": "Behält die letzten fünf Namen eines Mitglieds: Sie erscheinen in seiner Akte und in seinem Brief.",
+    "rr.boutons": "Knöpfe statt Reaktionen",
+    "rr.boutonsAide": "Ein Knopf trägt seine Beschriftung, bricht nicht, wenn ein Server-Emoji verschwindet, und wird am Handy nicht danebengetippt.",
     "dash.antiMentions": "Massen-Erwähnungen",
     "dash.antiMentionsAide": "Eine Nachricht, die zu viele Leute auf einmal anpingt, wird entfernt: die einfachste Schikane auf Discord.",
     "dash.mentionsMax": "Erlaubte Erwähnungen pro Nachricht",

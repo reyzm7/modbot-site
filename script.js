@@ -5415,6 +5415,12 @@ function initDashboard() {
         reactionChannel.value = config.reaction_roles_channel_id;
       }
       if (reactionMode && config.reaction_roles_mode) reactionMode.value = config.reaction_roles_mode;
+      const reactionBoutons = document.querySelector("[data-reaction-boutons]");
+      if (reactionBoutons) {
+        const boutons = Boolean(config.reaction_roles_boutons);
+        reactionBoutons.checked = boutons;
+        reactionBoutons.closest(".toggle-line")?.classList.toggle("is-on", boutons);
+      }
     }
     });
 
@@ -9925,6 +9931,7 @@ function initDashboard() {
         reaction_description: document.querySelector("[data-reaction-description]")?.value || "",
         reaction_roles_channel_id: document.querySelector("[data-reaction-channel]")?.value || "",
         reaction_roles_mode: document.querySelector("[data-reaction-mode]")?.value || t("js.plusieursRolesPossibles"),
+        reaction_roles_boutons: Boolean(document.querySelector("[data-reaction-boutons]")?.checked),
         reaction_roles: reactionRoles,
       } : {}),
       auto_roles: collectAutoRoles(),
