@@ -297,6 +297,14 @@
     </button>
 
     <aside class="dashboard-sidebar" id="dashboard-menu" aria-label="Navigation dashboard" data-i18n-aria="dash.navigationDashboard">
+      <label class="sidebar-search">
+        <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-search"/></svg>
+        <input type="search" data-reglage-recherche autocomplete="off" spellcheck="false"
+               placeholder="Rechercher un réglage…" data-i18n-placeholder="dash.rechercheReglage"
+               aria-label="Rechercher un réglage" data-i18n-aria="dash.rechercheReglage">
+      </label>
+      <div class="sidebar-resultats" data-reglage-resultats hidden></div>
+
       <p class="sidebar-label" data-i18n="dash.pilotage">Pilotage</p>
       <button class="dash-nav is-active" type="button" data-dashboard-tab="overview" data-i18n="dash.navVueGlobale"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg></span>Vue globale</button>
 
@@ -2466,6 +2474,12 @@
       <button class="primary-btn compact" type="submit" data-ai-send aria-label="Envoyer" data-i18n-aria="dash.envoyer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-send"/></svg></button>
     </form>
   </section>
+
+    <div class="barre-enregistrer" data-barre-enregistrer hidden>
+      <span data-i18n="dash.modifsEnAttente">Des modifications ne sont pas enregistrées.</span>
+      <button class="secondary-btn compact" type="button" data-barre-annuler data-i18n="dash.annulerModifs">Annuler</button>
+      <button class="primary-btn compact" type="button" data-barre-enregistrer-action data-i18n="dash.enregistrerMaintenant">Enregistrer</button>
+    </div>
 
   <div class="dashboard-toast" id="dashboardToast" aria-live="polite" data-i18n="dash.configurationEnregistree">Configuration enregistrée</div>
   <input type="file" accept="image/*" data-option-image-file hidden>

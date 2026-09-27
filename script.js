@@ -10008,11 +10008,113 @@ function initDashboard() {
     return true;
   }
 
+  // ── La recherche des reglages ──────────────────────────────────────
+  //
+  // Vingt-sept rubriques. Retrouver « la pause entre deux messages »
+  // demandait de se souvenir qu'elle vit dans le Modmail, et de
+  // l'ouvrir pour verifier. On cherche donc le reglage, pas la
+  // rubrique — le menu n'a jamais su dire ce qu'il contient.
+  let indexDesReglages = null;
+
+  function indexerLesReglages() {
+    const index = [];
+    const vus = new Set();
+    document.querySelectorAll("[data-dashboard-panel]").forEach((panneau) => {
+      const nom = panneau.dataset.dashboardPanel;
+      const onglet = document.querySelector(`[data-dashboard-tab="${nom}"]`);
+      const rubrique = (onglet?.textContent || nom).trim();
+      panneau.querySelectorAll("h2, h3, label, .toggle-line strong").forEach((element) => {
+        const texte = (element.textContent || "").replace(/\s+/g, " ").trim();
+        if (texte.length < 3 || texte.length > 90) return;
+        const clef = nom + "|" + texte.toLowerCase();
+        if (vus.has(clef)) return;
+        vus.add(clef);
+        index.push({ nom, rubrique, texte, element });
+      });
+    });
+    return index;
+  }
+
+  function sansAccent(valeur) {
+    return String(valeur || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+
+  function montrerLeReglage(entree) {
+    openPanel(entree.nom);
+    entree.element.scrollIntoView({ behavior: "smooth", block: "center" });
+    entree.element.classList.add("est-trouve");
+    setTimeout(() => entree.element.classList.remove("est-trouve"), 2400);
+  }
+
+  function chercherUnReglage(saisie) {
+    const hote = document.querySelector("[data-reglage-resultats]");
+    if (!hote) return;
+    const terme = sansAccent(saisie).trim();
+    if (terme.length < 2) {
+      hote.hidden = true;
+      hote.innerHTML = "";
+      return;
+    }
+    if (indexDesReglages === null) indexDesReglages = indexerLesReglages();
+    const trouves = indexDesReglages
+      .filter((entree) => sansAccent(entree.texte).includes(terme)
+        || sansAccent(entree.rubrique).includes(terme))
+      .slice(0, 12);
+    hote.hidden = false;
+    hote.innerHTML = trouves.length
+      ? trouves.map((entree, rang) => (
+          `<button type="button" data-reglage-rang="${rang}">
+             <strong>${escapeHtml(entree.texte)}</strong>
+             <small>${escapeHtml(entree.rubrique)}</small>
+           </button>`
+        )).join("")
+      : `<p class="field-help">${escapeHtml(t("dash.aucunReglageTrouve"))}</p>`;
+    hote.dataset.trouves = trouves.length;
+    resultatsCourants = trouves;
+  }
+
+  let resultatsCourants = [];
+
+  function initRechercheReglages() {
+    const champ = document.querySelector("[data-reglage-recherche]");
+    const hote = document.querySelector("[data-reglage-resultats]");
+    if (!champ || !hote) return;
+    champ.addEventListener("input", () => chercherUnReglage(champ.value));
+    hote.addEventListener("click", (evenement) => {
+      const bouton = evenement.target.closest("[data-reglage-rang]");
+      if (!bouton) return;
+      const entree = resultatsCourants[Number(bouton.dataset.reglageRang)];
+      if (!entree) return;
+      champ.value = "";
+      hote.hidden = true;
+      hote.innerHTML = "";
+      runWithUnsavedGuard(() => montrerLeReglage(entree));
+    });
+  }
+
+  // ── La barre qui suit ──────────────────────────────────────────────
+  // Le bouton « Enregistrer » vit en haut de la rubrique : des qu'on
+  // descend, il sort de l'ecran, et on regle sans jamais le revoir.
+  function majBarreEnregistrer(enAttente) {
+    const barre = document.querySelector("[data-barre-enregistrer]");
+    if (barre) barre.hidden = !enAttente;
+  }
+
+  function initBarreEnregistrer() {
+    document.querySelector("[data-barre-enregistrer-action]")
+      ?.addEventListener("click", () => saveCurrentChanges());
+    document.querySelector("[data-barre-annuler]")?.addEventListener("click", () => {
+      clearUnsavedChanges();
+      if (selectedServer?.id) chargerConfigDuServeur(selectedServer.id);
+    });
+  }
+
   function markPanelDirty(panelName = activePanelName) {
     if (!panelName) return;
     hasUnsavedChanges = true;
     dirtyPanelName = panelName;
     dashboard.classList.add("has-unsaved");
+    majBarreEnregistrer(true);
     if (panelName === "tickets") {
       ticketNeedsPublish = true;
       setTicketPublishVisible(true);
@@ -10023,6 +10125,7 @@ function initDashboard() {
     hasUnsavedChanges = false;
     dirtyPanelName = null;
     dashboard.classList.remove("has-unsaved");
+    majBarreEnregistrer(false);
   }
 
   async function saveCurrentChanges(message = null) {
@@ -10326,6 +10429,8 @@ function initDashboard() {
     });
   });
 
+  initRechercheReglages();
+  initBarreEnregistrer();
   initSearchPanel();
   initCaptchaPanel();
   initWelcomePanel();

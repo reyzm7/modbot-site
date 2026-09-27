@@ -1744,3 +1744,91 @@
    on ne les desactive pas — un serveur regle souvent AVANT d'allumer. */
 .dash-panel.is-off .welcome-layout { opacity: 0.72; }
 
+
+/* ── Chercher un reglage, et la barre qui suit ──────────────────── */
+
+.sidebar-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+  color: var(--muted);
+}
+
+.sidebar-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  outline: none;
+}
+
+.sidebar-resultats {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 12px;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.sidebar-resultats button {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--soft);
+  text-align: left;
+  cursor: pointer;
+}
+
+.sidebar-resultats button:hover { border-color: var(--accent-line); color: var(--text); }
+.sidebar-resultats small { color: var(--muted); font-size: 0.78rem; }
+
+/* Le reglage qu'on vient d'atteindre se signale deux secondes : sans
+   cela on arrive au milieu d'une rubrique sans savoir ou regarder. */
+.est-trouve {
+  animation: reglageTrouve 2.4s ease;
+  border-radius: 10px;
+}
+
+@keyframes reglageTrouve {
+  0%, 60% { box-shadow: 0 0 0 3px var(--accent-line); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+.barre-enregistrer {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  transform: translateX(-50%);
+  border: 1px solid var(--accent-line);
+  border-radius: 999px;
+  background: var(--panel-strong);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 560px) {
+  .barre-enregistrer {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    transform: none;
+    justify-content: space-between;
+    border-radius: 14px;
+  }
+  .barre-enregistrer span { font-size: 0.85rem; }
+}
