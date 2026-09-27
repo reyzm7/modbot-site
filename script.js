@@ -8691,6 +8691,8 @@ function initDashboard() {
     if (accueil) accueil.value = config.accueil || "";
     const pause = document.querySelector("[data-modmail-pause]");
     if (pause) pause.value = config.pause ?? 5;
+    const fermeture = document.querySelector("[data-modmail-fermeture]");
+    if (fermeture) fermeture.value = config.fermeture ?? 7;
     bloquesModmail = lireIds(config.bloques, MODMAIL_BLOQUES_MAX);
     redessinerBloquesModmail();
   }
@@ -8709,6 +8711,7 @@ function initDashboard() {
       role_requis: document.querySelector("[data-modmail-role-requis]")?.value || "",
       accueil: document.querySelector("[data-modmail-accueil]")?.value || "",
       pause: Number(document.querySelector("[data-modmail-pause]")?.value || 5),
+      fermeture: Number(document.querySelector("[data-modmail-fermeture]")?.value ?? 7),
       bloques: bloquesModmail.slice(0, MODMAIL_BLOQUES_MAX),
     };
   }

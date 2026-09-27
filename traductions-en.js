@@ -1017,6 +1017,8 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "mm.ia": "Offer a draft reply",
     "mm.iaAide": "A « Draft » button in the thread: the AI assistant writes a proposal you send, edit, or ignore. Nothing leaves without your click.",
     "mm.notesAide": "Inside the thread, a message starting with <code>//</code> stays between moderators: it is never sent to the member.",
+    "mm.fermeture": "Close a silent mail thread after (days)",
+    "mm.fermetureAide": "The thread is archived and the member is told; writing again opens a fresh one. Set 0 to never close on its own.",
     "mm.pause": "Pause between two messages (seconds)",
     "mm.coupeAvis": "The module is off: what follows is saved, but nothing will apply until you enable modmail.",
     "mm.conditionsTitre": "Who may write",

@@ -1036,6 +1036,8 @@ window.MODBOT_TRANSLATIONS = {
     "mm.ia": "Proposer un brouillon de réponse",
     "mm.iaAide": "Un bouton « Brouillon » dans le fil : l'assistant IA écrit une proposition que tu envoies, corriges, ou ignores. Rien ne part sans ton clic.",
     "mm.notesAide": "Dans le fil, un message qui commence par <code>//</code> reste entre modérateurs : il ne part pas au membre.",
+    "mm.fermeture": "Fermer un courrier sans nouvelle après (jours)",
+    "mm.fermetureAide": "Le fil s'archive et le membre est prévenu ; il rouvre un courrier neuf s'il réécrit. Mets 0 pour ne jamais fermer tout seul.",
     "mm.pause": "Pause entre deux messages (secondes)",
     "mm.coupeAvis": "Le module est coupé : ce qui suit est enregistré, mais rien ne s'appliquera tant que tu n'auras pas activé le modmail.",
     "mm.conditionsTitre": "Qui peut écrire",

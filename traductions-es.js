@@ -1008,6 +1008,8 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "mm.ia": "Proponer un borrador de respuesta",
     "mm.iaAide": "Un botón « Borrador » en el hilo: el asistente de IA escribe una propuesta que envías, corriges o ignoras. Nada sale sin tu clic.",
     "mm.notesAide": "Dentro del hilo, un mensaje que empieza por <code>//</code> se queda entre moderadores: nunca llega al miembro.",
+    "mm.fermeture": "Cerrar un correo sin novedades tras (días)",
+    "mm.fermetureAide": "El hilo se archiva y se avisa al miembro; si vuelve a escribir se abre uno nuevo. Pon 0 para no cerrar nunca solo.",
     "mm.pause": "Pausa entre dos mensajes (segundos)",
     "mm.coupeAvis": "El módulo está apagado: lo siguiente se guarda, pero nada se aplicará hasta que actives el modmail.",
     "mm.conditionsTitre": "Quién puede escribir",

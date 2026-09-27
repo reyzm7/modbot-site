@@ -1008,6 +1008,8 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "mm.ia": "Einen Antwortentwurf vorschlagen",
     "mm.iaAide": "Ein Knopf « Entwurf » im Thread: Der KI-Assistent schreibt einen Vorschlag, den du sendest, änderst oder verwirfst. Ohne deinen Klick geht nichts raus.",
     "mm.notesAide": "Im Thread bleibt eine Nachricht, die mit <code>//</code> beginnt, unter Moderatoren: Sie erreicht das Mitglied nie.",
+    "mm.fermeture": "Stillen Brief schließen nach (Tagen)",
+    "mm.fermetureAide": "Der Thread wird archiviert und das Mitglied benachrichtigt; schreibt es erneut, öffnet sich ein neuer. 0 bedeutet: nie von selbst schließen.",
     "mm.pause": "Pause zwischen zwei Nachrichten (Sekunden)",
     "mm.coupeAvis": "Das Modul ist aus: Das Folgende wird gespeichert, gilt aber erst, wenn du Modmail aktivierst.",
     "mm.conditionsTitre": "Wer schreiben darf",

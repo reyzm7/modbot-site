@@ -1264,6 +1264,10 @@
               <strong data-i18n="mm.ia">Proposer un brouillon de réponse</strong>
               <small data-i18n="mm.iaAide">Un bouton « Brouillon » dans le fil : l'assistant IA écrit une proposition que tu envoies, corriges, ou ignores. Rien ne part sans ton clic.</small>
             </label>
+            <label class="mini-form"><span data-i18n="mm.fermeture">Fermer un courrier sans nouvelle après (jours)</span>
+              <input type="number" min="0" max="90" step="1" value="7" data-modmail-fermeture>
+            </label>
+            <p class="field-help" data-i18n="mm.fermetureAide">Le fil s'archive et le membre est prévenu ; il rouvre un courrier neuf s'il réécrit. Mets 0 pour ne jamais fermer tout seul.</p>
             <label class="mini-form"><span data-i18n="mm.pause">Pause entre deux messages (secondes)</span>
               <input type="number" min="0" max="300" step="1" value="5" data-modmail-pause>
             </label>
