@@ -5299,6 +5299,7 @@ function initDashboard() {
       ["[data-security-antiscam]", security.antiscam ?? true],
       ["[data-security-antiraid]", security.antiraid],
       ["[data-security-repetition]", (security.repetition || {}).enabled],
+      ["[data-security-pseudos]", security.pseudos_suivis !== false],
       ["[data-security-staffalert]", security.staff_alert],
       ["[data-security-lockdown]", security.lockdown]
     ].forEach(([selecteur, value]) => {
@@ -9886,6 +9887,7 @@ function initDashboard() {
         antiraid: coche("[data-security-antiraid]"),
         // Les trois seuils partent avec l'interrupteur : separes, on
         // pourrait allumer le filtre sans jamais lui donner de seuil.
+        pseudos_suivis: coche("[data-security-pseudos]"),
         repetition: {
           enabled: coche("[data-security-repetition]"),
           salons: Number(document.querySelector("[data-repetition-salons]")?.value || 3),
