@@ -1744,27 +1744,3 @@
    on ne les desactive pas — un serveur regle souvent AVANT d'allumer. */
 .dash-panel.is-off .welcome-layout { opacity: 0.72; }
 
-/* ── L'etat d'un module, sur son entree de menu ────────────────── */
-
-.dash-nav { position: relative; }
-
-/* L'entree de menu est une grille de DEUX colonnes : l'icone et le
-   libelle. Une pastille posee comme troisieme cellule tombait a la
-   ligne suivante et rallongeait le bouton. Elle se pose donc par
-   dessus, a droite, sans rien demander a la grille. */
-.dash-nav .nav-etat {
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--line);
-  transition: background 150ms ease, box-shadow 150ms ease;
-}
-
-.dash-nav .nav-etat.is-on {
-  background: var(--ok, #2ecc71);
-  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.18);
-}
