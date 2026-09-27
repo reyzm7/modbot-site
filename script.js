@@ -5421,6 +5421,7 @@ function initDashboard() {
     sansCasser("vie du serveur", () => applyCommunauteState(config.communaute));
     sansCasser("salons proteges", () => applySalonsProteges(config.salons_proteges));
     sansCasser("modmail", () => applyModmail(config.modmail));
+    sansCasser("assistance", () => applyAssistance(config));
     sansCasser("roles en masse", () => applyRolesMasse(config.roles_masse));
     sansCasser("evenements", () => applyEventsState(config.events));
 
@@ -8563,6 +8564,7 @@ function initDashboard() {
 
   let salonsProteges = [];
   let bloquesModmail = [];
+  let reponsesTypes = [];
   let rolesAutorisesProteges = [];
   let rolesInterditsMasse = [];
   let rolesIgnoresMasse = [];
@@ -8571,6 +8573,7 @@ function initDashboard() {
   let massroleSuivi = null;
   const PROTEGES_MAX = 25;
   const MODMAIL_BLOQUES_MAX = 200;
+  const REPONSES_MAX = 25;
   const OUTILS_ROLES_MAX = 25;
   const BONUS_MAX = 10;
   const REACTIONS_MAX = 10;
@@ -8633,6 +8636,49 @@ function initDashboard() {
       pastille.classList.toggle("is-on", actif);
       pastille.classList.toggle("is-off", !actif);
     }
+  }
+
+  // Les reponses toutes faites : un nom, un texte. La liste vit ici
+  // le temps de la page, et repart entiere avec la configuration.
+  function redessinerReponses() {
+    const hote = document.querySelector("[data-reponses-liste]");
+    if (!hote) return;
+    hote.innerHTML = reponsesTypes.length
+      ? reponsesTypes.map((reponse, rang) => (
+          `<div class="outil-ligne" data-reponse-rang="${rang}">
+             <strong>${escapeHtml(reponse.nom)}</strong>
+             <small>${escapeHtml(reponse.texte.slice(0, 90))}${reponse.texte.length > 90 ? "…" : ""}</small>
+             <button type="button" class="secondary-btn compact danger" data-reponse-retirer
+                     title="${escapeHtml(t("rep.retirer"))}">&times;</button>
+           </div>`
+        )).join("")
+      : `<span class="field-help">${escapeHtml(t("rep.aucune"))}</span>`;
+  }
+
+  function applyAssistance(config) {
+    reponsesTypes = (config?.reponses || [])
+      .filter((r) => r && typeof r === "object" && r.nom && r.texte)
+      .map((r) => ({ nom: String(r.nom), texte: String(r.texte) }))
+      .slice(0, REPONSES_MAX);
+    redessinerReponses();
+    const relance = config?.relance || {};
+    poserCase("[data-relance-actif]", relance.enabled);
+    poserChoix("[data-relance-role]", relance.role || "");
+    const heures = document.querySelector("[data-relance-heures]");
+    if (heures) heures.value = relance.heures ?? 12;
+  }
+
+  function collectAssistance() {
+    const actif = document.querySelector("[data-relance-actif]");
+    if (!actif) return undefined;
+    return {
+      reponses: reponsesTypes.slice(0, REPONSES_MAX),
+      relance: {
+        enabled: Boolean(actif.checked),
+        heures: Number(document.querySelector("[data-relance-heures]")?.value || 12),
+        role: document.querySelector("[data-relance-role]")?.value || "",
+      },
+    };
   }
 
   function applyModmail(config) {
@@ -9018,6 +9064,7 @@ function initDashboard() {
     remplirSelect("[data-modmail-salon]", optionsSalons, t("js.aucun"));
     remplirSelect("[data-modmail-role]", optionsRoles, t("js.aucun"));
     remplirSelect("[data-modmail-role-requis]", optionsRoles, t("js.aucun"));
+    remplirSelect("[data-relance-role]", optionsRoles, t("js.aucun"));
     redessinerSalonsProteges();
     pastillesDeRoles("[data-prot-roles]", rolesAutorisesProteges, "data-retirer-prot-role");
     pastillesDeRoles("[data-mass-interdits]", rolesInterditsMasse, "data-retirer-interdit");
@@ -9054,6 +9101,33 @@ function initDashboard() {
     // Les salons proteges.
     document.querySelector("[data-modmail-actif]")
       ?.addEventListener("change", refletModmail);
+
+    const ajoutReponse = document.querySelector("[data-reponse-ajouter]");
+    ajoutReponse?.addEventListener("click", () => {
+      const champNom = document.querySelector("[data-reponse-nom]");
+      const champTexte = document.querySelector("[data-reponse-texte]");
+      const nom = (champNom?.value || "").trim();
+      const texte = (champTexte?.value || "").trim();
+      if (!nom || !texte) return showToast(t("rep.incomplete"));
+      if (reponsesTypes.length >= REPONSES_MAX) return showToast(t("outils.tropDElements"));
+      reponsesTypes = reponsesTypes.filter((r) => r.nom.toLowerCase() !== nom.toLowerCase());
+      reponsesTypes.push({ nom, texte });
+      if (champNom) champNom.value = "";
+      if (champTexte) champTexte.value = "";
+      redessinerReponses();
+      markPanelDirty("modmail");
+    });
+
+    const hoteReponses = document.querySelector("[data-reponses-liste]");
+    hoteReponses?.addEventListener("click", (evenement) => {
+      const bouton = evenement.target.closest("[data-reponse-retirer]");
+      if (!bouton) return;
+      const rang = Number(bouton.closest("[data-reponse-rang]")?.dataset.reponseRang);
+      if (!Number.isInteger(rang)) return;
+      reponsesTypes.splice(rang, 1);
+      redessinerReponses();
+      markPanelDirty("modmail");
+    });
 
     const hoteBloques = document.querySelector("[data-modmail-bloques]");
     hoteBloques?.addEventListener("click", (evenement) => {
@@ -9855,6 +9929,7 @@ function initDashboard() {
       communaute: collectCommunauteConfig(),
       salons_proteges: collectSalonsProteges(),
       modmail: collectModmail(),
+      ...(collectAssistance() || {}),
       roles_masse: collectRolesMasse(),
       ...(document.querySelector("[data-event-list]")
         ? { events: lireEvenementsDuDom() } : {}),
