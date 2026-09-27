@@ -4951,7 +4951,15 @@ function initDashboard() {
       const nom = bloc.querySelector("[data-account-name]");
       if (nom) nom.textContent = utilisateur.username || utilisateur.user_id;
       const image = bloc.querySelector("[data-account-avatar]");
-      if (image && utilisateur.avatar_url) image.src = utilisateur.avatar_url;
+      if (!image) return;
+      // Une photo de profil change, et son ancienne adresse ne repond
+      // plus : le navigateur affichait alors une image cassee a la
+      // place du visage. On retombe sur le logo, jamais sur un trou.
+      image.onerror = () => {
+        image.onerror = null;
+        image.src = "assets/default_logo.svg";
+      };
+      image.src = utilisateur.avatar_url || "assets/default_logo.svg";
     });
   }
 
