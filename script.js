@@ -5299,6 +5299,7 @@ function initDashboard() {
       ["[data-security-antiscam]", security.antiscam ?? true],
       ["[data-security-antiraid]", security.antiraid],
       ["[data-security-repetition]", (security.repetition || {}).enabled],
+      ["[data-security-mentions]", (security.mentions || {}).enabled],
       ["[data-security-pseudos]", security.pseudos_suivis !== false],
       ["[data-security-staffalert]", security.staff_alert],
       ["[data-security-lockdown]", security.lockdown]
@@ -5314,6 +5315,7 @@ function initDashboard() {
     // le defaut du bot : afficher zero ferait croire a un filtre mort.
     const repet = security.repetition || {};
     [
+      ["[data-mentions-max]", (security.mentions || {}).max, 6],
       ["[data-repetition-salons]", repet.salons, 3],
       ["[data-repetition-fenetre]", repet.fenetre, 300],
       ["[data-repetition-longueur]", repet.longueur, 12],
@@ -9884,6 +9886,10 @@ function initDashboard() {
         // Les trois seuils partent avec l'interrupteur : separes, on
         // pourrait allumer le filtre sans jamais lui donner de seuil.
         pseudos_suivis: coche("[data-security-pseudos]"),
+        mentions: {
+          enabled: coche("[data-security-mentions]"),
+          max: Number(document.querySelector("[data-mentions-max]")?.value || 6),
+        },
         repetition: {
           enabled: coche("[data-security-repetition]"),
           salons: Number(document.querySelector("[data-repetition-salons]")?.value || 3),

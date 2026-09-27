@@ -726,6 +726,7 @@
                aucun interrupteur ici. -->
           <label class="toggle-line"><input type="checkbox" checked data-security-antiscam><span></span><strong data-i18n="dash.antiPub"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-alert"/></svg> Anti-pub</strong><small data-i18n="dash.antiPubAide">Supprime les publicités d'arnaque : faux cadeaux Nitro, faux support, services de nuke.</small></label>
           <label class="toggle-line"><input type="checkbox" checked data-security-pseudos><span></span><strong data-i18n="dash.suiviPseudos"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-user"/></svg> Anciens pseudos</strong><small data-i18n="dash.suiviPseudosAide">Garde les cinq derniers noms d'un membre : ils s'affichent dans son casier et dans son courrier.</small></label>
+          <label class="toggle-line"><input type="checkbox" data-security-mentions><span></span><strong data-i18n="dash.antiMentions"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Mentions de masse</strong><small data-i18n="dash.antiMentionsAide">Un message qui pingue trop de monde d'un coup est retiré : c'est la brimade la plus simple de Discord.</small></label>
           <label class="toggle-line"><input type="checkbox" data-security-repetition><span></span><strong data-i18n="dash.antiRepetition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Message répété</strong><small data-i18n="dash.antiRepetitionAide">Le même message copié dans plusieurs salons : tout est retiré d'un coup.</small></label>
           <label class="toggle-line"><input type="checkbox" data-security-antiraid><span></span><strong data-i18n="dash.antiRaid"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-siren"/></svg> Anti-raid</strong><small data-i18n="dash.surveilleLesVaguesArrivees">Surveille les vagues d'arrivées suspectes.</small></label>
           <label class="toggle-line"><input type="checkbox" data-security-staffalert><span></span><strong data-i18n="dash.staffAlert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Staff alert</strong><small data-i18n="dash.previensLeStaffDes">Préviens le staff des actions importantes.</small></label>
@@ -822,6 +823,9 @@
             </label>
             <label class="mini-form" data-i18n="dash.ageMinimumDuCompte">Âge minimum du compte (jours)
               <input type="number" min="0" max="365" value="7" data-antiraid-age>
+            </label>
+            <label class="mini-form" data-i18n="dash.mentionsMax">Mentions tolérées dans un message
+              <input type="number" min="3" max="50" step="1" value="6" data-mentions-max>
             </label>
             <label class="mini-form" data-i18n="dash.repetitionSalons">Salons avant de retirer
               <input type="number" min="2" max="10" step="1" value="3" data-repetition-salons>
