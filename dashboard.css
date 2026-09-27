@@ -1746,10 +1746,19 @@
 
 /* ── L'etat d'un module, sur son entree de menu ────────────────── */
 
+.dash-nav { position: relative; }
+
+/* L'entree de menu est une grille de DEUX colonnes : l'icone et le
+   libelle. Une pastille posee comme troisieme cellule tombait a la
+   ligne suivante et rallongeait le bouton. Elle se pose donc par
+   dessus, a droite, sans rien demander a la grille. */
 .dash-nav .nav-etat {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
   width: 7px;
   height: 7px;
-  margin-left: auto;
   border-radius: 50%;
   background: var(--line);
   transition: background 150ms ease, box-shadow 150ms ease;

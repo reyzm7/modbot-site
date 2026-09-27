@@ -8981,12 +8981,14 @@ body.boutique-fenetre-ouverte { overflow: hidden; }
 
 .dash-nav.is-locked::after {
   content: "";
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
   width: 6px;
   height: 6px;
-  margin-left: auto;
   border-radius: 50%;
   background: #f1c40f;
-  flex: none;
 }
 
 @media (max-width: 640px) {
@@ -11212,3 +11214,22 @@ body:not(.dashboard-page) .page-glow {
   text-underline-offset: 2px;
 }
 .sidebar-legal a:hover { color: var(--text); }
+
+/* ── La rubrique Modmail : quatre cartes tres inegales ──────────── */
+/*
+   Une grille les range en lignes, et une ligne est aussi haute que sa
+   plus grande carte : « Les reponses » mesure le double du « module »,
+   et la quatrieme carte tombait 460 px plus bas, apres un trou. Les
+   colonnes CSS font couler les cartes les unes sous les autres et
+   remplissent les creux.
+*/
+[data-dashboard-panel="modmail"] .welcome-layout {
+  display: block;
+  columns: 320px 3;
+  column-gap: 16px;
+}
+
+[data-dashboard-panel="modmail"] .welcome-layout > .tool-panel {
+  break-inside: avoid;
+  margin-bottom: 16px;
+}
