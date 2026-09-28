@@ -4063,11 +4063,20 @@ function initDashboard() {
     toastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 2200);
   }
 
+  // La rubrique demandee dans l adresse, une seule fois : ouvrir le
+  // tableau de bord ensuite ne doit pas y ramener sans arret.
+  let panneauDemande = dashboardUrlParams.get("panel") || "";
+
   function showDashboardStage(stage) {
     if (authScreen) authScreen.hidden = stage !== "auth";
     if (serverScreen) serverScreen.hidden = stage !== "servers";
     if (dashboardApp) dashboardApp.hidden = stage !== "dashboard";
     window.scrollTo({ top: 0, behavior: "smooth" });
+    if (stage === "dashboard" && panneauDemande) {
+      const voulu = panneauDemande;
+      panneauDemande = "";
+      if (document.querySelector(`[data-dashboard-panel="${voulu}"]`)) openPanel(voulu);
+    }
   }
 
   function setOfferInviteFallbackCopy() {
@@ -7437,6 +7446,55 @@ function initDashboard() {
   }
 
   /* ══════════════════════════════════════════════════════════════════
+     LES FAMILLES DU MENU
+
+     Vingt-sept entrees d affilee, c est une liste qu on parcourt du
+     regard sans rien y trouver. Chaque famille se replie, et son etat
+     tient jusqu a la prochaine visite.
+     ══════════════════════════════════════════════════════════════════ */
+
+  const CLEF_FAMILLES = "modbot-familles-repliees";
+
+  function famillesRepliees() {
+    try {
+      const brut = localStorage.getItem(CLEF_FAMILLES);
+      return new Set(brut ? JSON.parse(brut) : []);
+    } catch (erreur) {
+      // Navigation privee, stockage refuse : tout reste deplie.
+      return new Set();
+    }
+  }
+
+  function poserFamille(bouton, ouverte) {
+    const cible = document.getElementById(bouton.dataset.sidebarGroupe);
+    bouton.setAttribute("aria-expanded", ouverte ? "true" : "false");
+    if (cible) cible.hidden = !ouverte;
+  }
+
+  function initFamillesDuMenu() {
+    const boutons = document.querySelectorAll("[data-sidebar-groupe]");
+    if (!boutons.length) return;
+    const repliees = famillesRepliees();
+    boutons.forEach((bouton) => {
+      poserFamille(bouton, !repliees.has(bouton.dataset.sidebarGroupe));
+      bouton.addEventListener("click", () => {
+        const ouverte = bouton.getAttribute("aria-expanded") !== "true";
+        poserFamille(bouton, ouverte);
+        const etat = famillesRepliees();
+        if (ouverte) etat.delete(bouton.dataset.sidebarGroupe);
+        else etat.add(bouton.dataset.sidebarGroupe);
+        try {
+          localStorage.setItem(CLEF_FAMILLES, JSON.stringify([...etat]));
+        } catch (erreur) {
+          // Le repli vaudra pour cette visite seulement.
+        }
+      });
+    });
+  }
+
+  initFamillesDuMenu();
+
+  /* ══════════════════════════════════════════════════════════════════
      LES APERÇUS
 
      Un message qu on ecrit dans un champ ne ressemble a rien tant
@@ -7661,8 +7719,10 @@ function initDashboard() {
     sansCasser("vue globale", renderOverview);
     sansCasser("sauvegardes", renderBackups);
     clearUnsavedChanges();
-    showDashboardStage("dashboard");
+    // L accueil d abord, la scene ensuite : c est elle qui ouvre la
+    // rubrique demandee dans l adresse, et elle doit avoir le dernier mot.
     openPanel("overview");
+    showDashboardStage("dashboard");
     mesurerLeBandeau();
     // Les modeles se rendent depuis les traductions du site : le bot
     // n envoie rien ici, et les cinq cartes doivent quand meme se lire.
@@ -9730,14 +9790,11 @@ function initDashboard() {
 
     // Le guide des rubriques se souvient d'avoir ete ouvert. Une
     // commodite : sans stockage, il reste simplement replie.
-    const guide = document.querySelector("[data-guide-rubriques]");
     if (guide) {
       try {
-        if (localStorage.getItem("modbot-guide-rubriques") === "ouvert") guide.open = true;
       } catch (erreur) { /* stockage refuse */ }
       guide.addEventListener("toggle", () => {
         try {
-          localStorage.setItem("modbot-guide-rubriques", guide.open ? "ouvert" : "ferme");
         } catch (erreur) { /* stockage refuse */ }
       });
     }
@@ -10768,7 +10825,16 @@ function initDashboard() {
     if (!sidebarDeroulante()) ouvrirSidebar(false);
   });
 
+  function ouvrirLaFamilleDe(panelName) {
+    const entree = document.querySelector(`[data-dashboard-tab="${panelName}"]`);
+    const famille = entree?.closest(".sidebar-famille");
+    if (!famille || !famille.hidden) return;
+    const bouton = document.querySelector(`[data-sidebar-groupe="${famille.id}"]`);
+    if (bouton) bouton.click();
+  }
+
   function openPanel(panelName) {
+    ouvrirLaFamilleDe(panelName);
     activePanelName = panelName;
     tabs.forEach((tab) => tab.classList.toggle("is-active", tab.dataset.dashboardTab === panelName));
     panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.dashboardPanel === panelName));

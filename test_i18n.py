@@ -19,7 +19,7 @@ from html.parser import HTMLParser
 
 SITE = os.path.dirname(os.path.abspath(__file__))
 PAGES = ["index.html", "dashboard.html", "admin.html", "wiki.html",
-         "premium.html", "partenaires.html", "boutique.html",
+         "partenaires.html", "boutique.html",
          "confidentialite.html", "conditions.html", "mentions.html",
          "statut.html"]
 # Les pages d'articles ne sont PAS dans cette liste, et c'est voulu : un

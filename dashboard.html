@@ -323,13 +323,30 @@
       </label>
       <div class="sidebar-resultats" data-reglage-resultats hidden></div>
 
-      <p class="sidebar-label" data-i18n="dash.pilotage">Pilotage</p>
+      <button class="sidebar-groupe" type="button" data-sidebar-groupe="famille-1"
+              aria-expanded="true" aria-controls="famille-1">
+        <span data-i18n="dash.pilotage">Pilotage</span>
+        <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="sidebar-famille" id="famille-1">
       <button class="dash-nav is-active" type="button" data-dashboard-tab="overview" data-i18n="dash.navVueGlobale"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg></span>Vue globale</button>
 
-      <p class="sidebar-label" data-i18n="dash.premium">Premium</p>
+      </div>
+      <button class="sidebar-groupe" type="button" data-sidebar-groupe="famille-2"
+              aria-expanded="true" aria-controls="famille-2">
+        <span data-i18n="dash.premium">Premium</span>
+        <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="sidebar-famille" id="famille-2">
       <button class="dash-nav" type="button" data-dashboard-tab="premium" data-i18n="dash.navEssaiParrainage"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span>Essai et parrainage</button>
 
-      <p class="sidebar-label" data-i18n="dash.protection">Protection</p>
+      </div>
+      <button class="sidebar-groupe" type="button" data-sidebar-groupe="famille-3"
+              aria-expanded="true" aria-controls="famille-3">
+        <span data-i18n="dash.protection">Protection</span>
+        <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="sidebar-famille" id="famille-3">
       <button class="dash-nav" type="button" data-dashboard-tab="score" data-i18n="dash.navScore"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg></span>Score de sécurité</button>
       <button class="dash-nav" type="button" data-dashboard-tab="security" data-i18n="dash.navSecurite"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg></span>Sécurité</button>
       <button class="dash-nav" type="button" data-dashboard-tab="moderation" data-i18n="dash.navModeration"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg></span>Modération</button>
@@ -338,7 +355,13 @@
       <button class="dash-nav" type="button" data-dashboard-tab="proteges"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg></span><span data-i18n="nav.proteges">Salons protégés</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="logs" data-i18n="dash.navLogs"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg></span>Logs</button>
 
-      <p class="sidebar-label" data-i18n="dash.communaute">Communauté</p>
+      </div>
+      <button class="sidebar-groupe" type="button" data-sidebar-groupe="famille-4"
+              aria-expanded="true" aria-controls="famille-4">
+        <span data-i18n="dash.communaute">Communauté</span>
+        <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="sidebar-famille" id="famille-4">
       <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg></span><span data-i18n="nav.tickets">Tickets</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="modmail"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-message"/></svg></span><span data-i18n="nav.modmail">Modmail</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="welcome"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg></span><span data-i18n="nav.welcome">Bienvenue</span></button>
@@ -349,26 +372,45 @@
       <button class="dash-nav" type="button" data-dashboard-tab="giveaways"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg></span><span data-i18n="nav.giveaways">Giveaways</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="ratings" data-i18n="dash.navRatings"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span>Ratings</button>
 
-      <p class="sidebar-label" data-i18n="dash.contenus">Contenus</p>
+      </div>
+      <button class="sidebar-groupe" type="button" data-sidebar-groupe="famille-5"
+              aria-expanded="true" aria-controls="famille-5">
+        <span data-i18n="dash.contenus">Contenus</span>
+        <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="sidebar-famille" id="famille-5">
       <button class="dash-nav" type="button" data-dashboard-tab="channels" data-i18n="dash.navSalons"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-pin"/></svg></span>Salons</button>
       <button class="dash-nav" type="button" data-dashboard-tab="recurring" data-i18n="dash.navRecurrents"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-timer"/></svg></span>Messages récurrents</button>
       <button class="dash-nav" type="button" data-dashboard-tab="compteurs" data-i18n="dash.navCompteurs"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-trend"/></svg></span>Compteurs</button>
       <button class="dash-nav" type="button" data-dashboard-tab="socials" data-i18n="dash.navReseaux"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg></span>Réseaux</button>
 
-      <p class="sidebar-label" data-i18n="dash.apparence">Apparence</p>
+      </div>
+      <button class="sidebar-groupe" type="button" data-sidebar-groupe="famille-6"
+              aria-expanded="true" aria-controls="famille-6">
+        <span data-i18n="dash.apparence">Apparence</span>
+        <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="sidebar-famille" id="famille-6">
       <button class="dash-nav" type="button" data-dashboard-tab="ai"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg></span><span data-i18n="nav.ai">Assistant IA</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="language" data-i18n="dash.navLangue"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg></span>Langue du bot</button>
 
       <!-- Tout en bas : les outils qui agissent sur le serveur entier, et
            les sauvegardes, qu'on vient chercher le jour ou il faut
            remettre un serveur debout. -->
-      <p class="sidebar-label" data-i18n="dash.outils">Outils</p>
+      </div>
+      <button class="sidebar-groupe" type="button" data-sidebar-groupe="famille-7"
+              aria-expanded="true" aria-controls="famille-7">
+        <span data-i18n="dash.outils">Outils</span>
+        <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="sidebar-famille" id="famille-7">
       <button class="dash-nav" type="button" data-dashboard-tab="massroles"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-user"/></svg></span><span data-i18n="nav.massroles">Rôles en masse</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="historique"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg></span><span data-i18n="nav.historique">Historique</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="backups" data-i18n="dash.navSauvegardes"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg></span>Sauvegardes</button>
 
       <!-- Ce que l'administrateur qui configure le bot doit pouvoir lire
            sans quitter sa page : ce qu'on garde de ses membres. -->
+      </div>
       <p class="sidebar-legal" data-i18n-html="dash.liensLegaux"><a href="confidentialite.html">Confidentialité</a> · <a href="conditions.html">Conditions</a></p>
     </aside>
 
@@ -396,7 +438,7 @@
           <strong data-i18n="prem.verrouTitre">Réservé à ModBot Premium</strong>
           <small data-i18n="prem.verrouTexte">Ce panneau est en lecture seule tant que l'abonnement n'est pas actif. Vos réglages sont conservés : ils repartiront tels quels le jour où il l'est.</small>
         </span>
-        <a class="primary-btn compact" href="premium.html" data-i18n="prem.verrouBouton"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Voir les offres</a>
+        <a class="primary-btn compact" href="dashboard.html?panel=premium" data-i18n="prem.verrouBouton"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Voir les offres</a>
       </div>
 
       <!-- L'echeance du premium, en tete de toutes les rubriques : un
@@ -458,61 +500,171 @@
         </div>
 
 
-        <!-- Le guide des rubriques. Replie par defaut : il sert une fois,
-             puis on sait. Une ligne par rubrique, et un clic y mene. -->
-        <details class="guide-rubriques" data-guide-rubriques>
-          <summary>
-            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-compass"/></svg>
-            <span data-i18n="guide.titre">À quoi sert chaque rubrique ?</span>
-            <small data-i18n="guide.sousTitre">Une ligne par rubrique — clique pour y aller.</small>
-          </summary>
-          <div class="guide-grille">
-            <div class="guide-groupe">
-              <p class="guide-groupe-titre" data-i18n="dash.premium">Premium</p>
-              <button type="button" data-dashboard-jump="premium"><strong data-i18n="dash.navEssaiParrainage">Essai et parrainage</strong><small data-i18n="guide.premium">L'essai gratuit de 7 jours et le parrainage.</small></button>
-            </div>
-            <div class="guide-groupe">
-              <p class="guide-groupe-titre" data-i18n="dash.protection">Protection</p>
-              <button type="button" data-dashboard-jump="score"><strong data-i18n="dash.navScore">Score de sécurité</strong><small data-i18n="guide.score">Une note sur 100, et les réglages à corriger en premier.</small></button>
-              <button type="button" data-dashboard-jump="security"><strong data-i18n="dash.navSecurite">Sécurité</strong><small data-i18n="guide.securite">Anti-raid, anti-nuke, anti-pub, filtres, immunité du staff.</small></button>
-              <button type="button" data-dashboard-jump="moderation"><strong data-i18n="dash.navModeration">Modération</strong><small data-i18n="guide.moderation">Mots interdits et échelle des sanctions.</small></button>
-              <button type="button" data-dashboard-jump="proteges"><strong data-i18n="nav.proteges">Salons protégés</strong><small data-i18n="guide.proteges">Messages supprimés d'office dans un salon, auteur averti.</small></button>
-              <button type="button" data-dashboard-jump="verification"><strong data-i18n="nav.verification">Vérification</strong><small data-i18n="guide.verification">Un captcha à l'arrivée contre les robots.</small></button>
-              <button type="button" data-dashboard-jump="search"><strong data-i18n="dash.navRecherche">Recherche</strong><small data-i18n="guide.recherche">Trouver un membre ou un rôle, et agir dessus.</small></button>
-              <button type="button" data-dashboard-jump="logs"><strong data-i18n="dash.navLogs">Logs</strong><small data-i18n="guide.logs">Le journal de ce qui se passe sur le serveur.</small></button>
-            </div>
-            <div class="guide-groupe">
-              <p class="guide-groupe-titre" data-i18n="dash.communaute">Communauté</p>
-              <button type="button" data-dashboard-jump="tickets"><strong data-i18n="nav.tickets">Tickets</strong><small data-i18n="guide.tickets">Le panneau de support et ses catégories.</small></button>
-              <button type="button" data-dashboard-jump="modmail"><strong data-i18n="nav.modmail">Modmail</strong><small data-i18n="guide.modmail">Les membres écrivent à l'équipe en privé, et l'équipe répond de même.</small></button>
-              <button type="button" data-dashboard-jump="welcome"><strong data-i18n="nav.welcome">Bienvenue</strong><small data-i18n="guide.bienvenue">Messages d'arrivée et de départ.</small></button>
-              <button type="button" data-dashboard-jump="roles"><strong data-i18n="nav.roles">Rôles</strong><small data-i18n="guide.roles">Rôles donnés à l'arrivée ou par réaction.</small></button>
-              <button type="button" data-dashboard-jump="voice"><strong data-i18n="nav.voice">Vocaux</strong><small data-i18n="guide.vocaux">Un salon vocal créé pour chacun, à la demande.</small></button>
-              <button type="button" data-dashboard-jump="events"><strong data-i18n="nav.events">Événements</strong><small data-i18n="guide.evenements">Annoncer un événement et suivre les inscrits.</small></button>
-              <button type="button" data-dashboard-jump="communaute"><strong data-i18n="nav.communaute">Vie du serveur</strong><small data-i18n="guide.vie">Niveaux, anniversaires, comptage, réactions automatiques.</small></button>
-              <button type="button" data-dashboard-jump="giveaways"><strong data-i18n="nav.giveaways">Giveaways</strong><small data-i18n="guide.giveaways">Des tirages au sort, tirés par le bot.</small></button>
-              <button type="button" data-dashboard-jump="ratings"><strong data-i18n="dash.navRatings">Ratings</strong><small data-i18n="guide.ratings">Les notes laissées après les tickets.</small></button>
-            </div>
-            <div class="guide-groupe">
-              <p class="guide-groupe-titre" data-i18n="dash.contenus">Contenus</p>
-              <button type="button" data-dashboard-jump="channels"><strong data-i18n="dash.navSalons">Salons</strong><small data-i18n="guide.salons">Où ModBot publie : logs, suggestions, signalements.</small></button>
-              <button type="button" data-dashboard-jump="recurring"><strong data-i18n="dash.navRecurrents">Messages récurrents</strong><small data-i18n="guide.recurrents">Un message republié à intervalle régulier.</small></button>
-              <button type="button" data-dashboard-jump="compteurs"><strong data-i18n="dash.navCompteurs">Compteurs</strong><small data-i18n="guide.compteurs">Un salon qui affiche un chiffre en direct.</small></button>
-              <button type="button" data-dashboard-jump="socials"><strong data-i18n="dash.navReseaux">Réseaux</strong><small data-i18n="guide.reseaux">Annonces automatiques Twitch, TikTok, Instagram, X.</small></button>
-            </div>
-            <div class="guide-groupe">
-              <p class="guide-groupe-titre" data-i18n="dash.apparence">Apparence</p>
-              <button type="button" data-dashboard-jump="ai"><strong data-i18n="nav.ai">Assistant IA</strong><small data-i18n="guide.ia">L'IA qui répond quand on mentionne le bot.</small></button>
-              <button type="button" data-dashboard-jump="language"><strong data-i18n="dash.navLangue">Langue du bot</strong><small data-i18n="guide.langue">La langue de tout ce que le bot écrit.</small></button>
-            </div>
-            <div class="guide-groupe">
-              <p class="guide-groupe-titre" data-i18n="dash.outils">Outils</p>
-              <button type="button" data-dashboard-jump="massroles"><strong data-i18n="nav.massroles">Rôles en masse</strong><small data-i18n="guide.massroles">Donner ou retirer un rôle à tout le serveur.</small></button>
-              <button type="button" data-dashboard-jump="historique"><strong data-i18n="nav.historique">Historique</strong><small data-i18n="guide.historique">Qui a changé quoi dans les réglages, et comment le remettre.</small></button>
-              <button type="button" data-dashboard-jump="backups"><strong data-i18n="dash.navSauvegardes">Sauvegardes</strong><small data-i18n="guide.sauvegardes">Sauvegarder le serveur, et le remettre en place ailleurs.</small></button>
-            </div>
+        <!-- Chaque rubrique, a plat, par famille : on voit ce que le bot
+             sait faire sans derouler un menu. Le guide replie qui vivait
+             ici disait les memes choses, et personne ne l ouvrait. -->
+        <div class="rubriques">
+          <section class="rubriques-famille">
+            <h3 data-i18n="dash.premium">Premium</h3>
+          </section>
+          <div class="rubriques-grille">
+            <button class="rubrique-carte" type="button" data-dashboard-jump="premium">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-star"/></svg></span>
+              <strong data-i18n="dash.navEssaiParrainage">Essai et parrainage</strong>
+              <small data-i18n="guide.premium">L'essai gratuit de 7 jours et le parrainage.</small>
+            </button>
           </div>
-        </details>
+          <section class="rubriques-famille">
+            <h3 data-i18n="dash.protection">Protection</h3>
+          </section>
+          <div class="rubriques-grille">
+            <button class="rubrique-carte" type="button" data-dashboard-jump="score">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#i-shield"/></svg></span>
+              <strong data-i18n="dash.navScore">Score de sécurité</strong>
+              <small data-i18n="guide.score">Une note sur 100, et les réglages à corriger en premier.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="security">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#i-shield"/></svg></span>
+              <strong data-i18n="dash.navSecurite">Sécurité</strong>
+              <small data-i18n="guide.securite">Anti-raid, anti-nuke, anti-pub, filtres, immunité du staff.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="moderation">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-hammer"/></svg></span>
+              <strong data-i18n="dash.navModeration">Modération</strong>
+              <small data-i18n="guide.moderation">Mots interdits et échelle des sanctions.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="verification">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-key"/></svg></span>
+              <strong data-i18n="nav.verification">Vérification</strong>
+              <small data-i18n="guide.verification">Un captcha à l'arrivée contre les robots.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="search">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-search"/></svg></span>
+              <strong data-i18n="dash.navRecherche">Recherche</strong>
+              <small data-i18n="guide.recherche">Trouver un membre ou un rôle, et agir dessus.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="proteges">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-lock"/></svg></span>
+              <strong data-i18n="nav.proteges">Salons protégés</strong>
+              <small data-i18n="guide.proteges">Messages supprimés d'office dans un salon, auteur averti.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="logs">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-clipboard"/></svg></span>
+              <strong data-i18n="dash.navLogs">Logs</strong>
+              <small data-i18n="guide.logs">Le journal de ce qui se passe sur le serveur.</small>
+            </button>
+          </div>
+          <section class="rubriques-famille">
+            <h3 data-i18n="dash.communaute">Communauté</h3>
+          </section>
+          <div class="rubriques-grille">
+            <button class="rubrique-carte" type="button" data-dashboard-jump="tickets">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#i-ticket"/></svg></span>
+              <strong data-i18n="nav.tickets">Tickets</strong>
+              <small data-i18n="guide.tickets">Le panneau de support et ses catégories.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="modmail">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-message"/></svg></span>
+              <strong data-i18n="nav.modmail">Modmail</strong>
+              <small data-i18n="guide.modmail">Les membres écrivent à l'équipe en privé, et l'équipe répond de même.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="welcome">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-hand"/></svg></span>
+              <strong data-i18n="nav.welcome">Bienvenue</strong>
+              <small data-i18n="guide.bienvenue">Messages d'arrivée et de départ.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="roles">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-mask"/></svg></span>
+              <strong data-i18n="nav.roles">Rôles</strong>
+              <small data-i18n="guide.roles">Rôles donnés à l'arrivée ou par réaction.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="voice">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-broadcast"/></svg></span>
+              <strong data-i18n="nav.voice">Vocaux</strong>
+              <small data-i18n="guide.vocaux">Un salon vocal créé pour chacun, à la demande.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="events">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-star"/></svg></span>
+              <strong data-i18n="nav.events">Événements</strong>
+              <small data-i18n="guide.evenements">Annoncer un événement et suivre les inscrits.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="communaute">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-heart"/></svg></span>
+              <strong data-i18n="nav.communaute">Vie du serveur</strong>
+              <small data-i18n="guide.vie">Niveaux, anniversaires, comptage, réactions automatiques.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="giveaways">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-gift"/></svg></span>
+              <strong data-i18n="nav.giveaways">Giveaways</strong>
+              <small data-i18n="guide.giveaways">Des tirages au sort, tirés par le bot.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="ratings">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-star"/></svg></span>
+              <strong data-i18n="dash.navRatings">Ratings</strong>
+              <small data-i18n="guide.ratings">Les notes laissées après les tickets.</small>
+            </button>
+          </div>
+          <section class="rubriques-famille">
+            <h3 data-i18n="dash.contenus">Contenus</h3>
+          </section>
+          <div class="rubriques-grille">
+            <button class="rubrique-carte" type="button" data-dashboard-jump="channels">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-pin"/></svg></span>
+              <strong data-i18n="dash.navSalons">Salons</strong>
+              <small data-i18n="guide.salons">Où ModBot publie : logs, suggestions, signalements.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="recurring">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-timer"/></svg></span>
+              <strong data-i18n="dash.navRecurrents">Messages récurrents</strong>
+              <small data-i18n="guide.recurrents">Un message republié à intervalle régulier.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="compteurs">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-trend"/></svg></span>
+              <strong data-i18n="dash.navCompteurs">Compteurs</strong>
+              <small data-i18n="guide.compteurs">Un salon qui affiche un chiffre en direct.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="socials">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#i-megaphone"/></svg></span>
+              <strong data-i18n="dash.navReseaux">Réseaux</strong>
+              <small data-i18n="guide.reseaux">Annonces automatiques Twitch, TikTok, Instagram, X.</small>
+            </button>
+          </div>
+          <section class="rubriques-famille">
+            <h3 data-i18n="dash.apparence">Apparence</h3>
+          </section>
+          <div class="rubriques-grille">
+            <button class="rubrique-carte" type="button" data-dashboard-jump="ai">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-sparkles"/></svg></span>
+              <strong data-i18n="nav.ai">Assistant IA</strong>
+              <small data-i18n="guide.ia">L'IA qui répond quand on mentionne le bot.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="language">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-globe"/></svg></span>
+              <strong data-i18n="dash.navLangue">Langue du bot</strong>
+              <small data-i18n="guide.langue">La langue de tout ce que le bot écrit.</small>
+            </button>
+          </div>
+          <section class="rubriques-famille">
+            <h3 data-i18n="dash.outils">Outils</h3>
+          </section>
+          <div class="rubriques-grille">
+            <button class="rubrique-carte" type="button" data-dashboard-jump="massroles">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-user"/></svg></span>
+              <strong data-i18n="nav.massroles">Rôles en masse</strong>
+              <small data-i18n="guide.massroles">Donner ou retirer un rôle à tout le serveur.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="historique">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-refresh"/></svg></span>
+              <strong data-i18n="nav.historique">Historique</strong>
+              <small data-i18n="guide.historique">Qui a changé quoi dans les réglages, et comment le remettre.</small>
+            </button>
+            <button class="rubrique-carte" type="button" data-dashboard-jump="backups">
+              <span class="rubrique-icone" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-save"/></svg></span>
+              <strong data-i18n="dash.navSauvegardes">Sauvegardes</strong>
+              <small data-i18n="guide.sauvegardes">Sauvegarder le serveur, et le remettre en place ailleurs.</small>
+            </button>
+          </div>
+        </div>
 
         <!-- Vingt-sept rubriques, c est beaucoup pour qui vient
              d inviter le bot. Un modele pose des reglages de depart ;
@@ -578,6 +730,61 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="premium-state" data-premium-state hidden>
+          <strong data-premium-state-title></strong>
+          <span data-premium-state-detail></span>
+        </div>
+
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="prem.offresEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Abonnement</p>
+            <h2 data-i18n="prem.offresTitre">Passer au Premium</h2>
+          </div>
+        </div>
+        <p class="field-help" data-i18n="prem.offresChapo">L’abonnement vaut pour ce serveur. Les prix viennent du bot : ce qui est affiché ici est ce qui sera prélevé.</p>
+
+        <div class="premium-offers" data-premium-offers>
+          <p class="field-help" data-i18n="prem.chargementOffres">Chargement des offres…</p>
+        </div>
+
+        <p class="field-help premium-note" data-i18n-html="prem.note">
+          Paiement par <strong>Stripe</strong>. ModBot ne voit jamais votre numéro de carte.
+          Résiliable à tout moment : la période déjà payée reste due jusqu’à son terme.
+        </p>
+
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="prem.inclusEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-check"/></svg> Inclus</p>
+            <h2 data-i18n="prem.inclusTitre">Ce que le premium ouvre</h2>
+          </div>
+        </div>
+        <div class="premium-grid" data-premium-features></div>
+
+        <div class="panel-title">
+          <div>
+            <p class="eyebrow" data-i18n="prem.faqEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-question"/></svg> Questions</p>
+            <h2 data-i18n="prem.faqTitre">Ce qu'on nous demande</h2>
+          </div>
+        </div>
+        <div class="premium-faq-grid">
+          <article>
+            <h3 data-i18n="prem.q1">L'abonnement vaut pour un serveur ou pour mon compte ?</h3>
+            <p data-i18n="prem.r1">Pour un serveur. Vous choisissez lequel depuis son dashboard avant de payer.</p>
+          </article>
+          <article>
+            <h3 data-i18n="prem.q2">Que se passe-t-il si je résilie ?</h3>
+            <p data-i18n="prem.r2">Rien ne s'arrête le jour même : la période déjà payée est servie jusqu'à son terme, puis les fonctionnalités premium se referment. Vos réglages sont conservés.</p>
+          </article>
+          <article>
+            <h3 data-i18n="prem.q3">Et ce que j'ai configuré avant ?</h3>
+            <p data-i18n="prem.r3">Tout est conservé. Un relais réseaux configuré puis fermé reprend exactement où il s'était arrêté si vous vous réabonnez.</p>
+          </article>
+          <article>
+            <h3 data-i18n="prem.q4">Le bot reste-t-il gratuit ?</h3>
+            <p data-i18n="prem.r4">La modération, les tickets, l'anti-raid, le captcha et les sauvegardes le restent. Le premium ouvre ce qui coûte du temps machine, du stockage ou des appels à des services payants.</p>
+          </article>
         </div>
       </section>
 
@@ -2573,6 +2780,8 @@
       <button class="primary-btn compact" type="button" data-barre-enregistrer-action data-i18n="dash.enregistrerMaintenant">Enregistrer</button>
     </div>
 
+  <!-- Le retour de Stripe s ecrit ici : « merci », « annule ». -->
+  <div class="dashboard-toast" data-message-site aria-live="polite"></div>
   <div class="dashboard-toast" id="dashboardToast" aria-live="polite" data-i18n="dash.configurationEnregistree">Configuration enregistrée</div>
   <input type="file" accept="image/*" data-option-image-file hidden>
   <datalist id="dashboardChannelOptions"></datalist>

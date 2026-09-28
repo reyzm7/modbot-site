@@ -1,249 +1,34 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <!-- Le theme choisi, pose avant le premier pixel : sans cette ligne,
-       chaque page clignoterait en sombre avant de passer en clair. -->
-  <script>try{var t=localStorage.getItem("modbot-theme");if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Search Console : cette balise prouve que le site est a
-       nous, rien de plus. Elle ne suit personne et ne charge rien.
-       La retirer fait perdre la propriete du site dans la console. -->
-  <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>ModBot Premium</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="L'abonnement facultatif de ModBot : douze ensembles de fonctionnalités en plus, à partir de 3,99 € par mois, sans engagement.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/premium.html">
-  <meta property="og:site_name" content="ModBot">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/premium.html">
-  <meta property="og:title" content="ModBot Premium — douze modules de plus">
-  <meta property="og:description" content="L'abonnement facultatif de ModBot : douze ensembles de fonctionnalités en plus, à partir de 3,99 € par mois, sans engagement.">
-  <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ModBot — modération Discord">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ModBot Premium — douze modules de plus">
-  <meta name="twitter:description" content="L'abonnement facultatif de ModBot : douze ensembles de fonctionnalités en plus, à partir de 3,99 € par mois, sans engagement.">
-  <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
-  <link rel="stylesheet" href="style.css">
-  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
-       la connexion au dashboard est automatique, rien a saisir.
-       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
-  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
-  <meta name="modbot-discord-client-id" content="1510405235544424620">
-  <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
-  <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
-  <meta name="modbot-bot-permissions" content="3124257994829047">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Premium — ModBot</title>
+  <!-- Le Premium a rejoint le tableau de bord : on y choisit son
+       serveur avant de payer, ce que cette page ne savait pas faire.
+       Elle reste en place pour les liens qui pointent encore ici. -->
+  <link rel="canonical" href="https://modbot-website.vercel.app/dashboard.html">
+  <meta name="robots" content="noindex, follow">
+  <meta http-equiv="refresh" content="0; url=dashboard.html?panel=premium">
   <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="icon" href="assets/modbot-mark.webp" type="image/webp">
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      gap: 14px;
+      background: #05020d;
+      color: #d8ccff;
+      font-family: Inter, system-ui, sans-serif;
+      text-align: center;
+    }
+    a { color: #b15cff; }
+  </style>
 </head>
-<body class="premium-page">
-  <script src="icons.js"></script>
-  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
-  <div class="page-glow" aria-hidden="true"></div>
-  <!-- Le voile des transitions : noir a l'arrivee, il s'efface ; noir
-       au depart, il se pose. Ecrit ici et non cree par le script :
-       cree apres coup, la page apparaitrait avant de disparaitre. -->
-  <div class="voile-page" aria-hidden="true"></div>
-
-  <header class="site-header">
-    <nav class="navbar" aria-label="Navigation premium" data-i18n-aria="prem.navigation">
-      <a class="brand" href="index.html" aria-label="Accueil ModBot" data-i18n-aria="wiki.accueilModbot">
-        <span class="brand-mark">
-          <img src="assets/modbot-mark.webp" alt="" width="128" height="128" decoding="async" fetchpriority="high">
-        </span>
-        <span>ModBot</span>
-      </a>
-
-      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="wiki.ouvrirLeMenu">
-        <span></span>
-        <span></span>
-      </button>
-
-      <div class="nav-links" id="navLinks">
-        <a href="index.html#features" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg><span data-i18n="nav.features">Fonctionnalités</span></a>
-        <a href="wiki.html" data-teinte="ambre"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-compass"/></svg><span data-i18n="nav.wiki">Wiki</span></a>
-        <a href="partenaires.html" data-teinte="menthe"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg><span data-i18n="nav.partenaires">Partenaires</span></a>
-        <a href="index.html#faq" data-teinte="rouge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-question"/></svg><span data-i18n="home.faq">FAQ</span></a>
-
-        <a class="nav-boutique" href="boutique.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
-<a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n="wiki.supportDiscord">Support Discord</span></a>
-
-        <div class="nav-menu" data-nav-menu>
-          <button class="nav-menu-trigger" type="button" data-nav-menu-trigger
-                  aria-expanded="false" aria-haspopup="true">
-            <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-menu"/></svg></span>
-            <span data-i18n="nav.menu">Accès</span>
-            <svg class="nav-menu-chevron" viewBox="0 0 12 8" aria-hidden="true">
-              <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor"
-                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <div class="nav-menu-panel" data-nav-menu-panel hidden>
-            <a href="index.html" class="nav-menu-home" data-teinte="acier"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-home"/></svg><span data-i18n="nav.retourSite">Revenir au site</span></a>
-            <a href="dashboard.html" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
-            <a href="dashboard.html?flow=invite" data-discord-bot-invite data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg><span data-i18n="nav.ajouter">Ajouter ModBot</span></a>
-            <a href="premium.html" data-teinte="or"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="nav.premium">Premium</span></a><a href="boutique.html" data-teinte="cyan"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
-            <a href="admin.html" data-teinte="rouge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg><span data-i18n="nav.admin">Admin</span></a>
-            <label class="nav-menu-lang">
-              <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="nav.langue">Langue</span></span>
-              <select data-nav-language>
-                <option value="fr">Français</option>
-                <option value="en">English</option>
-                <option value="ar">العربية</option>
-                <option value="es">Español</option>
-                <option value="de">Deutsch</option>
-              </select>
-            </label>
-          </div>
-        </div>
-</div>
-    </nav>
-  </header>
-
-  <main class="premium-shell">
-
-    <!-- ── Le haut : ce qu'on paie ───────────────────────────────── -->
-    <section class="premium-hero section-shell">
-      <p class="eyebrow" data-i18n="prem.eyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> ModBot Premium</p>
-      <h1 data-i18n="prem.titre">Débloquez tout ModBot</h1>
-      <p class="premium-lead" data-i18n="prem.chapo">
-        ModBot reste utilisable gratuitement : modération, tickets, anti-raid, captcha,
-        sauvegardes. Le premium ouvre ce qui demande du temps machine et du stockage —
-        et fait vivre le projet.
-      </p>
-
-      <div class="premium-state" data-premium-state hidden>
-        <strong data-premium-state-title></strong>
-        <span data-premium-state-detail></span>
-      </div>
-
-      <!-- L'essai se presente avant les prix : sept jours offerts,
-           c'est ce qu'on veut savoir avant de sortir une carte. Il
-           reste hors de [data-premium-offers], qui est rempli depuis
-           les offres du bot et croise avec elles a chaque test. -->
-      <article class="premium-essai">
-        <div class="premium-essai-texte">
-          <p class="eyebrow" data-i18n="prem.essaiEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg> Avant de payer</p>
-          <h2 data-i18n="prem.essaiTitre">Sept jours de Premium, gratuits</h2>
-          <p data-i18n="prem.essaiTexte">Tout ce que la page décrit plus bas, ouvert sur votre serveur pendant sept jours : score de sécurité, journal complet, assistant IA, relais des réseaux. Sans carte bancaire, et sans reconduction — à la fin, le serveur revient simplement à la version gratuite.</p>
-          <p class="field-help" data-i18n="prem.essaiNote">Un essai par serveur, et un par propriétaire. Il s'active depuis le tableau de bord, ou avec la commande /premium essai sur Discord.</p>
-        </div>
-        <div class="premium-essai-prix">
-          <p class="premium-price">0 €</p>
-          <p class="premium-period" data-i18n="prem.essaiDuree">7 jours</p>
-          <a class="primary-btn" href="dashboard.html" data-i18n="prem.essaiBouton">Activer l'essai</a>
-        </div>
-      </article>
-
-      <div class="premium-offers" data-premium-offers>
-        <p class="field-help" data-i18n="prem.chargementOffres">Chargement des offres…</p>
-      </div>
-
-      <p class="field-help premium-note" data-i18n-html="prem.note">
-        Paiement par <strong>Stripe</strong>. ModBot ne voit jamais votre numéro de carte.
-        Résiliable à tout moment : la période déjà payée reste due jusqu'à son terme.
-      </p>
-
-    </section>
-
-    <!-- ── Le bas : ce que ca ouvre ──────────────────────────────── -->
-    <section class="premium-features section-shell">
-      <div class="section-heading">
-        <p class="eyebrow" data-i18n="prem.inclusEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-check"/></svg> Inclus</p>
-        <h2 data-i18n="prem.inclusTitre">Ce que le premium ouvre</h2>
-        <p data-i18n="prem.inclusChapo">
-          Douze ensembles de fonctionnalités, à activer sur les serveurs de votre choix.
-        </p>
-      </div>
-
-      <div class="premium-grid" data-premium-features></div>
-    </section>
-
-    <section class="premium-faq section-shell">
-      <div class="section-heading">
-        <p class="eyebrow" data-i18n="prem.faqEyebrow"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-question"/></svg> Questions</p>
-        <h2 data-i18n="prem.faqTitre">Ce qu'on nous demande</h2>
-      </div>
-      <div class="premium-faq-grid">
-        <article>
-          <h3 data-i18n="prem.q1">L'abonnement vaut pour un serveur ou pour mon compte ?</h3>
-          <p data-i18n="prem.r1">Pour un serveur. Vous choisissez lequel depuis son dashboard avant de payer.</p>
-        </article>
-        <article>
-          <h3 data-i18n="prem.q2">Que se passe-t-il si je résilie ?</h3>
-          <p data-i18n="prem.r2">Rien ne s'arrête le jour même : la période déjà payée est servie jusqu'à son terme, puis les fonctionnalités premium se referment. Vos réglages sont conservés.</p>
-        </article>
-        <article>
-          <h3 data-i18n="prem.q3">Et ce que j'ai configuré avant ?</h3>
-          <p data-i18n="prem.r3">Tout est conservé. Un relais réseaux configuré puis fermé reprend exactement où il s'était arrêté si vous vous réabonnez.</p>
-        </article>
-        <article>
-          <h3 data-i18n="prem.q4">Le bot reste-t-il gratuit ?</h3>
-          <p data-i18n="prem.r4">La modération, les tickets, l'anti-raid, le captcha et les sauvegardes le restent. Le premium ouvre ce qui coûte du temps machine, du stockage ou des appels à des services payants.</p>
-        </article>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Le message passager de la page : « connecte-toi », « paiement
-       indisponible ». Vide au depart ; script.js y ecrit. -->
-  <div class="dashboard-toast" data-message-site aria-live="polite"></div>
-  <footer class="footer">
-    <div class="footer-grille">
-      <a class="footer-marque" href="index.html" aria-label="ModBot">
-        <img src="assets/modbot-mark.webp" alt="ModBot" width="256" height="256" loading="lazy" decoding="async">
-      </a>
-
-      <nav class="footer-colonne" aria-label="Navigation" data-i18n-aria="pied.navigation">
-        <p class="footer-titre" data-i18n="pied.navigation">Navigation</p>
-        <a href="index.html" data-i18n="pied.accueil">Accueil</a>
-        <a href="index.html#features" data-i18n="nav.features">Fonctionnalités</a>
-        <a href="wiki.html" data-i18n="pied.commandes">Commandes</a>
-        <a href="boutique.html" data-i18n="nav.boutique">Boutique</a>
-        <a href="articles.html" data-i18n="pied.guides">Guides</a>
-      </nav>
-
-      <nav class="footer-colonne" aria-label="Communauté" data-i18n-aria="pied.communaute">
-        <p class="footer-titre" data-i18n="pied.communaute">Communauté</p>
-        <a href="wiki.html" data-i18n="pied.documentation">Documentation</a>
-        <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="pied.support">Support Discord</a>
-        <a href="partenaires.html" data-i18n="nav.partenaires">Partenaires</a>
-        <a href="statut.html" data-i18n="pied.statut">État du service</a>
-      </nav>
-
-      <nav class="footer-colonne" aria-label="Voir aussi" data-i18n-aria="pied.voirAussi">
-        <p class="footer-titre" data-i18n="pied.voirAussi">Voir aussi</p>
-        <a href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a>
-        <a href="dashboard.html?panel=premium" data-i18n="nav.premium">Premium</a>
-        <a href="dashboard.html?flow=invite" data-discord-bot-invite data-i18n="nav.ajouter">Ajouter ModBot</a>
-        <a href="index.html#faq" data-i18n="home.faq">FAQ</a>
-      </nav>
-    </div>
-
-    <div class="footer-bas">
-      <p class="footer-legal">
-        <a href="confidentialite.html" data-i18n="pied.confidentialite">Politique de confidentialité</a>
-        <a href="conditions.html" data-i18n="pied.cgu">Conditions d’utilisation</a>
-        <a href="mentions.html" data-i18n="pied.mentions">Mentions légales</a>
-      </p>
-      <p class="footer-copyright" data-i18n="pied.copyright">© 2026 ModBot — Tous droits réservés.</p>
-      <div class="footer-langue" role="group" aria-label="Langue" data-i18n-aria="pied.langue">
-        <button type="button" data-pied-langue="fr">FR</button>
-        <span aria-hidden="true">/</span>
-        <button type="button" data-pied-langue="en">EN</button>
-      </div>
-    </div>
-  </footer>
-
-  <script src="translations.js"></script>
-  <script src="script.js"></script>
+<body>
+  <p>Le Premium se règle maintenant depuis le tableau de bord.</p>
+  <p><a href="dashboard.html?panel=premium">Ouvrir le tableau de bord</a></p>
+  <script>location.replace("dashboard.html?panel=premium");</script>
 </body>
 </html>
