@@ -1325,6 +1325,13 @@
               <textarea rows="2" data-modmail-accueil data-i18n-placeholder="mm.accueilPlaceholder" placeholder="Ton message est bien arrivé : l'équipe te répondra ici."></textarea>
             </label>
             <p class="field-help" data-i18n-html="mm.notesAide">Dans le fil, un message qui commence par <code>//</code> reste entre modérateurs : il ne part pas au membre.</p>
+
+            <div class="tool-panel apercu-panel">
+              <h3 data-i18n="apercu.modmail"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-eye"/></svg> Aperçu de l’accueil</h3>
+              <p class="field-help" data-i18n="apercu.modmailAide">Ce que reçoit le membre en privé dès qu’il écrit à l’équipe.</p>
+              <div class="discord-preview" data-apercu="modmail"></div>
+            </div>
+
             <label class="toggle-line">
               <input type="checkbox" data-modmail-traduire><span></span>
               <strong data-i18n="mm.traduire">Traduire le courrier</strong>
@@ -1588,6 +1595,12 @@
               <textarea data-reaction-description rows="2" maxlength="600"></textarea>
             </label>
 
+          <div class="tool-panel apercu-panel">
+            <h3 data-i18n="apercu.roles"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-eye"/></svg> Aperçu du panneau</h3>
+            <p class="field-help" data-i18n="apercu.rolesAide">Le panneau tel qu’il paraîtra dans le salon choisi, avec les rôles proposés.</p>
+            <div class="discord-preview" data-apercu="roles"></div>
+          </div>
+
             <h4 data-i18n="roles.reactionRows">Emoji, rôle et libellé</h4>
             <div data-reaction-role-list>
               <div class="reaction-role-row">
@@ -1648,6 +1661,11 @@
             <div class="variable-chips" data-vie-variables aria-label="Variables disponibles" data-i18n-aria="dash.variablesDisponibles"></div>
             <p class="field-help" data-i18n="vie.xpMessageAide">Clique sur une étiquette pour la poser dans le message. Laisse vide pour la phrase par défaut.</p>
 
+            <div class="tool-panel apercu-panel">
+              <h3 data-i18n="apercu.niveau"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-eye"/></svg> Aperçu de l’annonce</h3>
+              <p class="field-help" data-i18n="apercu.niveauAide">L’annonce telle qu’elle paraîtra au passage de niveau.</p>
+              <div class="discord-preview" data-apercu="niveau"></div>
+            </div>
             <label class="mini-form"><span data-vie-xp-exclus-label data-i18n="vie.xpExclus">Salons sans expérience</span>
               <select data-vie-xp-exclus-picker><option value="" data-i18n="dash.chargement">— Chargement… —</option></select>
             </label>
@@ -1696,6 +1714,11 @@
             </label>
             <p class="field-help" data-i18n-html="vie.annivMessageAide"><code>{membres}</code> devient la liste des personnes fêtées. Laisse vide pour la phrase par défaut.</p>
 
+            <div class="tool-panel apercu-panel">
+              <h3 data-i18n="apercu.anniversaire"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-eye"/></svg> Aperçu du message</h3>
+              <p class="field-help" data-i18n="apercu.anniversaireAide">Le message tel qu’il paraîtra le jour venu.</p>
+              <div class="discord-preview" data-apercu="anniversaire"></div>
+            </div>
             <h3 data-i18n="vie.murTitre">Le mur des meilleurs messages</h3>
 
             <label class="mini-form"><span data-i18n="vie.murSalon">Salon du mur</span>

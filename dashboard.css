@@ -1900,3 +1900,34 @@
    lui passer dessus : les deux sont « sticky » a zero. La hauteur est
    mesuree par le script, le texte pouvant tenir sur deux lignes. */
 .dashboard-app.est-demo .dashboard-topbar { top: var(--demo-bandeau-h, 56px); }
+
+/* ── Les apercus ─────────────────────────────────────────────────────
+   Le meme cadre que l apercu de bienvenue : un message qu on ecrit
+   dans un champ ne ressemble a rien tant qu on ne l a pas vu dans
+   Discord. */
+.apercu-panel h3 { margin: 0 0 8px; font-size: 0.95rem; }
+
+.apercu-panel .discord-preview { margin-top: 10px; }
+
+/* Les lignes d une liste — les roles proposes, par exemple — se
+   serrent sous le texte, comme un champ d embed. */
+.discord-preview-embed .apercu-ligne {
+  margin-top: 6px;
+  font-size: 0.98rem;
+}
+
+.apercu-boutons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.apercu-bouton {
+  padding: 7px 14px;
+  border-radius: 4px;
+  background: #4e5058;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+}

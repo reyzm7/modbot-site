@@ -5433,6 +5433,7 @@ function initDashboard() {
     sansCasser("assistant IA", () => applyAiState(config.ai));
     sansCasser("vocaux", () => applyVoiceState(config.voice));
     sansCasser("vie du serveur", () => applyCommunauteState(config.communaute));
+    sansCasser("aperçus", rafraichirApercus);
     sansCasser("salons proteges", () => applySalonsProteges(config.salons_proteges));
     sansCasser("modmail", () => applyModmail(config.modmail));
     sansCasser("assistance", () => applyAssistance(config));
@@ -7412,6 +7413,155 @@ function initDashboard() {
     URL.revokeObjectURL(url);
     showToast(tp("js.logsExportes", { n: currentLogs.length }));
   }
+
+  /* ══════════════════════════════════════════════════════════════════
+     LES APERÇUS
+
+     Un message qu on ecrit dans un champ ne ressemble a rien tant
+     qu on ne l a pas vu dans Discord : on decouvrait l accueil du
+     courrier prive en ecrivant au bot depuis un autre compte, et
+     l annonce de niveau en attendant qu un membre monte de niveau.
+
+     La bienvenue et les tickets avaient deja leur apercu. Les quatre
+     autres messages que le bot ecrit ont maintenant le leur, dessines
+     par la meme fonction, a partir des memes champs.
+     ══════════════════════════════════════════════════════════════════ */
+
+  // Ce que le bot remplace vraiment, et ce qu on montre a la place.
+  // Les gabarits du bot ne parlent pas tous la meme langue :
+  // « {user} » pour la bienvenue, « {membre} » pour les niveaux.
+  function remplirVariables(texte) {
+    const serveur = selectedServer.name || t("js.monServeur");
+    const membres = Number(selectedServer.member_count || 0) || 1248;
+    return String(texte || "")
+      .replace(/\{user\}/g, "@Lucas")
+      .replace(/\{membre\}/g, "@Lucas")
+      .replace(/\{membres\}/g, "@Lucas, @Ana")
+      .replace(/\{username\}/g, "Lucas")
+      .replace(/\{tag\}/g, "Lucas#0001")
+      .replace(/\{server\}/g, serveur)
+      .replace(/\{niveau\}/g, "7")
+      .replace(/\{memberCount\}/gi, membres.toLocaleString(localeAffichage()))
+      .replace(/\{member_count\}/g, membres.toLocaleString(localeAffichage()));
+  }
+
+  // Une couleur venue d un champ ne va pas telle quelle dans un
+  // attribut « style » : on n accepte que six chiffres hexadecimaux.
+  function couleurSure(valeur, repli = "#8B5CF6") {
+    const propre = String(valeur || "").trim();
+    return /^#[0-9a-f]{6}$/i.test(propre) ? propre : repli;
+  }
+
+  /**
+   * Dessine un apercu. `contenu` decrit un message Discord :
+   * { titre, texte, couleur, lignes: [], pied, boutons: [] }.
+   */
+  function dessinerApercu(nom, contenu) {
+    const hote = document.querySelector(`[data-apercu="${nom}"]`);
+    if (!hote) return;
+    const c = contenu || {};
+    const corps = [];
+    if (c.titre) corps.push(`<strong>${escapeHtml(c.titre)}</strong>`);
+    corps.push(`<p>${escapeHtml(c.texte || t("apercu.vide"))}</p>`);
+    (c.lignes || []).forEach((ligne) => {
+      corps.push(`<p class="apercu-ligne">${escapeHtml(ligne)}</p>`);
+    });
+    if (c.pied) {
+      corps.push(`<span class="discord-preview-footer">${escapeHtml(c.pied)}</span>`);
+    }
+    const boutons = (c.boutons || []).slice(0, 5)
+      .map((libelle) => `<span class="apercu-bouton">${escapeHtml(libelle)}</span>`)
+      .join("");
+    const rangee = boutons ? `<div class="apercu-boutons">${boutons}</div>` : "";
+    hote.innerHTML = `
+      <div class="discord-preview-row">
+        <span class="discord-preview-avatar"></span>
+        <div class="discord-preview-body">
+          <p class="discord-preview-author">ModBot <span class="discord-preview-tag">${escapeHtml(t("dash.app"))}</span></p>
+          <div class="discord-preview-embed" style="border-left-color: ${couleurSure(c.couleur)}">${corps.join("")}</div>
+          ${rangee}
+        </div>
+      </div>`;
+  }
+
+  // Le nom d un salon ou d un role, tel qu il paraitra : un
+  // identifiant ne dit rien a personne.
+  function nomDuRole(id) {
+    const role = (dashboardResources.roles || [])
+      .find((r) => String(r.id) === String(id));
+    return role ? `@${role.name}` : "";
+  }
+
+  const APERCUS = {
+    roles() {
+      const lignes = [...document.querySelectorAll(".reaction-role-row")]
+        .map((ligne) => {
+          const emoji = ligne.querySelector("[data-rr-emoji]")?.value || "✨";
+          const role = ligne.querySelector("[data-rr-role]")?.value || "";
+          const libelle = ligne.querySelector("[data-rr-label]")?.value || "";
+          const nom = libelle || nomDuRole(role);
+          return nom ? `${emoji} ${nom}` : "";
+        })
+        .filter(Boolean);
+      return {
+        titre: readValue("[data-reaction-title]") || t("roles.reactionPanelTitlePlaceholder"),
+        texte: readValue("[data-reaction-description]"),
+        lignes: lignes.length ? lignes : [t("apercu.rolesAucun")],
+        boutons: readChecked("[data-reaction-boutons]") ? lignes : [],
+      };
+    },
+    modmail() {
+      return {
+        titre: t("apercu.modmailTitre"),
+        texte: readValue("[data-modmail-accueil]")
+          || t("mm.accueilPlaceholder"),
+        couleur: "#5865F2",
+      };
+    },
+    niveau() {
+      const gabarit = readValue("[data-vie-xp-message]");
+      // Le bot ne garde un gabarit que s il parle du membre ou du
+      // niveau : sinon il reprend sa phrase. On montre la meme chose.
+      const retenu = gabarit.includes("{membre}") || gabarit.includes("{niveau}");
+      return {
+        texte: remplirVariables(retenu ? gabarit : t("apercu.niveauDefaut")),
+        couleur: "#65F596",
+      };
+    },
+    anniversaire() {
+      const gabarit = readValue("[data-vie-anniv-message]");
+      return {
+        texte: remplirVariables(gabarit || t("apercu.anniversaireDefaut")),
+        couleur: "#FFC861",
+      };
+    },
+  };
+
+  let minuteurApercus = null;
+
+  function rafraichirApercus() {
+    Object.entries(APERCUS).forEach(([nom, fabriquer]) => {
+      if (!document.querySelector(`[data-apercu="${nom}"]`)) return;
+      try {
+        dessinerApercu(nom, fabriquer());
+      } catch (erreur) {
+        // Un apercu rate ne doit pas emporter les autres, ni la frappe
+        // en cours : c est une image, pas un reglage.
+        console.warn(`Apercu « ${nom} » :`, erreur);
+      }
+    });
+  }
+
+  // Une seule ecoute, posee sur le tableau de bord entier : lister les
+  // champs un par un, c etait oublier celui qu on ajoute six mois plus
+  // tard, et ne jamais s en apercevoir.
+  function planifierApercus() {
+    window.clearTimeout(minuteurApercus);
+    minuteurApercus = window.setTimeout(rafraichirApercus, 80);
+  }
+
+  dashboard?.addEventListener("input", planifierApercus);
+  dashboard?.addEventListener("change", planifierApercus);
 
   /* ══════════════════════════════════════════════════════════════════
      LE MODE DEMONSTRATION
@@ -10612,6 +10762,7 @@ function initDashboard() {
     if (panelName === "search") runSearch();
     if (panelName === "giveaways") loadGiveaways();
     if (panelName === "welcome") renderWelcomePreview();
+    rafraichirApercus();
     if (panelName === "score") chargerScoreSecurite();
     if (panelName === "historique") chargerHistorique();
   }
