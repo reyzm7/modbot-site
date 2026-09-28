@@ -576,9 +576,51 @@
     </section>
 
   </main>
-
   <footer class="footer">
-    <p data-i18n-html="bq.pied">© 2026 ModBot — <a href="conditions.html#boutique">Conditions de la boutique</a> · <a href="confidentialite.html#boutique">Confidentialité</a> · <a href="mentions.html">Mentions légales</a></p>
+    <div class="footer-grille">
+      <a class="footer-marque" href="index.html" aria-label="ModBot">
+        <img src="assets/modbot-mark.webp" alt="ModBot" width="256" height="256" loading="lazy" decoding="async">
+      </a>
+
+      <nav class="footer-colonne" aria-label="Navigation" data-i18n-aria="pied.navigation">
+        <p class="footer-titre" data-i18n="pied.navigation">Navigation</p>
+        <a href="index.html" data-i18n="pied.accueil">Accueil</a>
+        <a href="index.html#features" data-i18n="nav.features">Fonctionnalités</a>
+        <a href="wiki.html" data-i18n="pied.commandes">Commandes</a>
+        <a href="boutique.html" data-i18n="nav.boutique">Boutique</a>
+        <a href="articles.html" data-i18n="pied.guides">Guides</a>
+      </nav>
+
+      <nav class="footer-colonne" aria-label="Communauté" data-i18n-aria="pied.communaute">
+        <p class="footer-titre" data-i18n="pied.communaute">Communauté</p>
+        <a href="wiki.html" data-i18n="pied.documentation">Documentation</a>
+        <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="pied.support">Support Discord</a>
+        <a href="partenaires.html" data-i18n="nav.partenaires">Partenaires</a>
+        <a href="statut.html" data-i18n="pied.statut">État du service</a>
+      </nav>
+
+      <nav class="footer-colonne" aria-label="Voir aussi" data-i18n-aria="pied.voirAussi">
+        <p class="footer-titre" data-i18n="pied.voirAussi">Voir aussi</p>
+        <a href="dashboard.html" data-i18n="nav.dashboard">Tableau de bord</a>
+        <a href="dashboard.html?panel=premium" data-i18n="nav.premium">Premium</a>
+        <a href="dashboard.html?flow=invite" data-discord-bot-invite data-i18n="nav.ajouter">Ajouter ModBot</a>
+        <a href="index.html#faq" data-i18n="home.faq">FAQ</a>
+      </nav>
+    </div>
+
+    <div class="footer-bas">
+      <p class="footer-legal">
+        <a href="confidentialite.html" data-i18n="pied.confidentialite">Politique de confidentialité</a>
+        <a href="conditions.html" data-i18n="pied.cgu">Conditions d’utilisation</a>
+        <a href="mentions.html" data-i18n="pied.mentions">Mentions légales</a>
+      </p>
+      <p class="footer-copyright" data-i18n="pied.copyright">© 2026 ModBot — Tous droits réservés.</p>
+      <div class="footer-langue" role="group" aria-label="Langue" data-i18n-aria="pied.langue">
+        <button type="button" data-pied-langue="fr">FR</button>
+        <span aria-hidden="true">/</span>
+        <button type="button" data-pied-langue="en">EN</button>
+      </div>
+    </div>
   </footer>
 
   <!-- ── La fenetre de commande ─────────────────────────────────────── -->

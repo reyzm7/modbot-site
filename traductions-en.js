@@ -229,7 +229,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "bq.r2": "That's what the included revisions are for. Beyond them, we give you a price before doing anything.",
     "bq.q3": "Can I get a refund?",
     "bq.r3": "In full as long as work hasn't started. After that, the refund takes into account what has already been done. Everything is detailed in the terms.",
-    "bq.pied": "© 2026 ModBot — <a href=\"conditions.html#boutique\">Shop terms</a> · <a href=\"confidentialite.html#boutique\">Privacy</a> · <a href=\"mentions.html\">Legal notice</a>",
     "bq.fermer": "Close",
     "bq.fenetreTitre": "Your order",
     "bq.discordLabel": "Your Discord username or ID",
@@ -935,8 +934,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "home.commentDemanderUneFonctionnalite": "How do I request a feature?",
     "home.commentContacterLeSupport": "How do I contact support?",
     "home.ouVoirLesPatch": "Where can I see the patch notes?",
-    "home.modbotRespectNonToxicite": "© 2026 ModBot - Respect - No toxicity - Kindness",
-    "home.piedLiens": "<a href=\"confidentialite.html\">Privacy policy</a> · <a href=\"conditions.html\">Terms of use</a> · <a href=\"wiki.html\">Wiki</a> · <a href=\"articles.html\">Guides</a> · <a href=\"mentions.html\">Legal notice</a> · <a href=\"statut.html\">Service status</a>",
 
     // ── Dashboard serveur ─────────────────────────────────────────
     "dash.connexionDashboard": "Dashboard sign-in",
@@ -1564,6 +1561,20 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "home.rejoindre": "Join",
     "home.tousPartenaires": "All our partners",
     "nav.partenaires": "Partners",
+    "pied.navigation": "Navigation",
+    "pied.communaute": "Community",
+    "pied.voirAussi": "See also",
+    "pied.accueil": "Home",
+    "pied.commandes": "Commands",
+    "pied.guides": "Guides",
+    "pied.documentation": "Documentation",
+    "pied.support": "Discord support",
+    "pied.statut": "Service status",
+    "pied.confidentialite": "Privacy policy",
+    "pied.cgu": "Terms of use",
+    "pied.mentions": "Legal notice",
+    "pied.copyright": "© 2026 ModBot — All rights reserved.",
+    "pied.langue": "Language",
     "part.chapo": "These servers did not merely install ModBot: they put it through its paces, reported its faults and suggested half of what it can do today. A good deal of what follows is theirs.",
     "part.contact": "Write to us",
     "part.cpg": "A community demanding about moderation, and precise in its reports. Several settings of the language filter come straight from their remarks.",
@@ -2068,7 +2079,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "priv.mineursTexte": "ModBot follows Discord's terms: the platform requires users to be at least 13, or older in some countries. The bot is not aimed at children below that age and does not seek to know anyone's age.",
     "priv.majTitre": "Changes",
     "priv.majTexte": "This page follows the code. Any change to the bot that alters what is processed leads to an update here, with the date at the top of the page. The full history of changes is publicly viewable in the project repository.",
-    "priv.pied": "© 2026 ModBot — <a href=\"index.html\">Home</a> · <a href=\"conditions.html\">Terms of use</a> · <a href=\"mentions.html\">Legal notice</a>",
 
     // ── Conditions d'utilisation ──────────────────────────────────
     "cgu.navigation": "ModBot navigation",
@@ -2129,7 +2139,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "cgu.finTexte": "Removing ModBot from the server ends the service and all processing, immediately. For the erasure of data already recorded, the procedure is described in the privacy policy.",
     "cgu.modifTitre": "Changes",
     "cgu.modifTexte": "These terms may change along with the bot. The date at the top of the page marks the latest version, and the full history is public in the project repository. Continuing to use ModBot after a change means accepting the new version.",
-    "cgu.pied": "© 2026 ModBot — <a href=\"index.html\">Home</a> · <a href=\"confidentialite.html\">Privacy policy</a> · <a href=\"mentions.html\">Legal notice</a>",
     "ml.eyebrow": "Legal notice",
     "ml.titre": "Legal notice",
     "ml.chapo": "Who publishes this site, who hosts it, and how to reach us. It is all here, plainly.",
@@ -2175,7 +2184,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "ml.litigeTitre": "Complaints and disputes",
     "ml.litigeTexte": "Any complaint is settled directly first: write on the support server, with your order number. The vast majority of disagreements are sorted out in a few messages.",
     "ml.litigeDroit": "This site and the sales attached to it are governed by French law. Failing an amicable agreement, the French courts have jurisdiction.",
-    "ml.pied": "© 2026 ModBot — <a href=\"index.html\">Home</a> · <a href=\"conditions.html\">Terms</a> · <a href=\"confidentialite.html\">Privacy</a>",
 
     // ── Textes rendus par script.js ───────────────────────────────
     "js.reglages.preparation": "Preparing the file…",

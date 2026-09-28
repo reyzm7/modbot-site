@@ -248,7 +248,6 @@ window.MODBOT_TRANSLATIONS = {
     "bq.r2": "Les révisions incluses servent à ça. Au-delà, on te donne un prix avant de faire quoi que ce soit.",
     "bq.q3": "Puis-je être remboursé ?",
     "bq.r3": "Intégralement tant que le travail n'a pas commencé. Ensuite, le remboursement tient compte de ce qui a déjà été fait. Tout est détaillé dans les conditions.",
-    "bq.pied": "© 2026 ModBot — <a href=\"conditions.html#boutique\">Conditions de la boutique</a> · <a href=\"confidentialite.html#boutique\">Confidentialité</a> · <a href=\"mentions.html\">Mentions légales</a>",
     "bq.fermer": "Fermer",
     "bq.fenetreTitre": "Ta commande",
     "bq.discordLabel": "Ton pseudo ou ton identifiant Discord",
@@ -954,8 +953,6 @@ window.MODBOT_TRANSLATIONS = {
     "home.commentDemanderUneFonctionnalite": "Comment demander une fonctionnalité ?",
     "home.commentContacterLeSupport": "Comment contacter le support ?",
     "home.ouVoirLesPatch": "Où voir les patch notes ?",
-    "home.modbotRespectNonToxicite": "© 2026 ModBot - Respect - Non-toxicité - Bienveillance",
-    "home.piedLiens": "<a href=\"confidentialite.html\">Politique de confidentialité</a> · <a href=\"conditions.html\">Conditions d'utilisation</a> · <a href=\"wiki.html\">Wiki</a> · <a href=\"articles.html\">Guides</a> · <a href=\"mentions.html\">Mentions légales</a> · <a href=\"statut.html\">État du service</a>",
 
     // ── Dashboard serveur ─────────────────────────────────────────
     "dash.connexionDashboard": "Connexion dashboard",
@@ -1583,6 +1580,20 @@ window.MODBOT_TRANSLATIONS = {
     "home.rejoindre": "Rejoindre",
     "home.tousPartenaires": "Tous nos partenaires",
     "nav.partenaires": "Partenaires",
+    "pied.navigation": "Navigation",
+    "pied.communaute": "Communauté",
+    "pied.voirAussi": "Voir aussi",
+    "pied.accueil": "Accueil",
+    "pied.commandes": "Commandes",
+    "pied.guides": "Guides",
+    "pied.documentation": "Documentation",
+    "pied.support": "Support Discord",
+    "pied.statut": "État du service",
+    "pied.confidentialite": "Politique de confidentialité",
+    "pied.cgu": "Conditions d’utilisation",
+    "pied.mentions": "Mentions légales",
+    "pied.copyright": "© 2026 ModBot — Tous droits réservés.",
+    "pied.langue": "Langue",
     "part.chapo": "Ces serveurs n'ont pas seulement installé ModBot : ils l'ont éprouvé, signalé ses défauts et suggéré la moitié de ce qu'il sait faire aujourd'hui. Une bonne partie de ce qui suit leur revient.",
     "part.contact": "Nous écrire",
     "part.cpg": "Une communauté exigeante sur la modération, et précise dans ses signalements. Plusieurs réglages du filtre de langage viennent directement de leurs remarques.",
@@ -2087,7 +2098,6 @@ window.MODBOT_TRANSLATIONS = {
     "priv.mineursTexte": "ModBot suit les conditions de Discord : la plateforme exige au minimum 13 ans, ou davantage selon les pays. Le bot ne s'adresse pas aux enfants en dessous de cet âge et ne cherche pas à connaître l'âge de qui que ce soit.",
     "priv.majTitre": "Modifications",
     "priv.majTexte": "Cette page suit le code. Toute évolution du bot qui change ce qui est traité entraîne sa mise à jour, avec la date en tête de page. L'historique complet des modifications est consultable publiquement dans le dépôt du projet.",
-    "priv.pied": "© 2026 ModBot — <a href=\"index.html\">Accueil</a> · <a href=\"conditions.html\">Conditions d'utilisation</a> · <a href=\"mentions.html\">Mentions légales</a>",
 
     // ── Conditions d'utilisation ──────────────────────────────────
     "cgu.navigation": "Navigation ModBot",
@@ -2148,7 +2158,6 @@ window.MODBOT_TRANSLATIONS = {
     "cgu.finTexte": "Retirer ModBot du serveur met fin au service et à tout traitement, immédiatement. Pour l'effacement des données déjà enregistrées, la marche à suivre est décrite dans la politique de confidentialité.",
     "cgu.modifTitre": "Modifications",
     "cgu.modifTexte": "Ces conditions peuvent évoluer avec le bot. La date en tête de page indique la dernière version, et l'historique complet est public dans le dépôt du projet. Continuer à utiliser ModBot après une modification vaut acceptation de la nouvelle version.",
-    "cgu.pied": "© 2026 ModBot — <a href=\"index.html\">Accueil</a> · <a href=\"confidentialite.html\">Politique de confidentialité</a> · <a href=\"mentions.html\">Mentions légales</a>",
     "ml.eyebrow": "Mentions légales",
     "ml.titre": "Mentions légales",
     "ml.chapo": "Qui édite ce site, qui l'héberge, et comment nous joindre. Tout est ici, sans détour.",
@@ -2194,7 +2203,6 @@ window.MODBOT_TRANSLATIONS = {
     "ml.litigeTitre": "Réclamations et litiges",
     "ml.litigeTexte": "Toute réclamation se règle d'abord directement : écris sur le serveur de support, avec ton numéro de commande. La très grande majorité des différends se résout en quelques messages.",
     "ml.litigeDroit": "Le présent site et les ventes qui s'y rattachent sont soumis au droit français. À défaut d'accord amiable, les tribunaux français sont compétents.",
-    "ml.pied": "© 2026 ModBot — <a href=\"index.html\">Accueil</a> · <a href=\"conditions.html\">Conditions</a> · <a href=\"confidentialite.html\">Confidentialité</a>",
 
     // ── Textes rendus par script.js ───────────────────────────────
     "js.reglages.preparation": "Préparation du fichier…",

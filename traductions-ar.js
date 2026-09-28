@@ -229,7 +229,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "bq.r2": "لهذا وُجدت المراجعات المشمولة. وما زاد عنها نعطيك سعره قبل القيام بأي شيء.",
     "bq.q3": "هل يمكنني استرداد المبلغ؟",
     "bq.r3": "كاملًا ما دام العمل لم يبدأ. بعد ذلك يُراعى في الاسترداد ما أُنجز. التفاصيل كلها في الشروط.",
-    "bq.pied": "© 2026 ModBot — <a href=\"conditions.html#boutique\">شروط المتجر</a> · <a href=\"confidentialite.html#boutique\">الخصوصية</a> · <a href=\"mentions.html\">البيانات القانونية</a>",
     "bq.fermer": "إغلاق",
     "bq.fenetreTitre": "طلبك",
     "bq.discordLabel": "اسمك أو معرّفك على ديسكورد",
@@ -935,8 +934,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "home.commentDemanderUneFonctionnalite": "كيف أطلب ميزة؟",
     "home.commentContacterLeSupport": "كيف أتواصل مع الدعم؟",
     "home.ouVoirLesPatch": "أين أجد سجل التحديثات؟",
-    "home.modbotRespectNonToxicite": "© 2026 ModBot - احترام - بلا سُمّية - لُطف",
-    "home.piedLiens": "<a href=\"confidentialite.html\">سياسة الخصوصية</a> · <a href=\"conditions.html\">شروط الاستخدام</a> · <a href=\"wiki.html\">الويكي</a> · <a href=\"articles.html\">أدلة</a> · <a href=\"mentions.html\">البيانات القانونية</a> · <a href=\"statut.html\">حالة الخدمة</a>",
 
     // ── Dashboard serveur ─────────────────────────────────────────
     "dash.connexionDashboard": "تسجيل الدخول إلى لوحة التحكم",
@@ -1564,6 +1561,20 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "home.rejoindre": "انضمام",
     "home.tousPartenaires": "كل شركائنا",
     "nav.partenaires": "الشركاء",
+    "pied.navigation": "التنقّل",
+    "pied.communaute": "المجتمع",
+    "pied.voirAussi": "انظر أيضًا",
+    "pied.accueil": "الرئيسية",
+    "pied.commandes": "الأوامر",
+    "pied.guides": "الأدلّة",
+    "pied.documentation": "التوثيق",
+    "pied.support": "دعم ديسكورد",
+    "pied.statut": "حالة الخدمة",
+    "pied.confidentialite": "سياسة الخصوصية",
+    "pied.cgu": "شروط الاستخدام",
+    "pied.mentions": "البيانات القانونية",
+    "pied.copyright": "© 2026 ModBot — جميع الحقوق محفوظة.",
+    "pied.langue": "اللغة",
     "part.chapo": "لم تكتفِ هذه الخوادم بتثبيت ModBot: بل جرّبته، وأبلغت عن عيوبه، واقترحت نصف ما يجيده اليوم. وجزء كبير مما يلي يعود إليها.",
     "part.contact": "راسلنا",
     "part.cpg": "مجتمع صارم في الإشراف، دقيق في بلاغاته. عدة إعدادات في مرشّح اللغة جاءت مباشرة من ملاحظاتهم.",
@@ -2068,7 +2079,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "priv.mineursTexte": "يتبع ModBot شروط ديسكورد: تشترط المنصة سن 13 عامًا على الأقل، أو أكثر في بعض البلدان. والبوت غير موجّه إلى الأطفال دون هذه السن ولا يسعى لمعرفة عمر أحد.",
     "priv.majTitre": "التعديلات",
     "priv.majTexte": "تتبع هذه الصفحة الشيفرة. وأي تغيير في البوت يبدّل ما يُعالَج يؤدي إلى تحديثها، مع التاريخ في أعلى الصفحة. والسجل الكامل للتعديلات متاح للعموم في مستودع المشروع.",
-    "priv.pied": "© 2026 ModBot — <a href=\"index.html\">الرئيسية</a> · <a href=\"conditions.html\">شروط الاستخدام</a> · <a href=\"mentions.html\">البيانات القانونية</a>",
 
     // ── Conditions d'utilisation ──────────────────────────────────
     "cgu.navigation": "التنقّل في ModBot",
@@ -2129,7 +2139,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "cgu.finTexte": "إزالة ModBot من الخادم تنهي الخدمة وكل معالجة، فورًا. أما محو البيانات المسجّلة مسبقًا فإجراؤه موصوف في سياسة الخصوصية.",
     "cgu.modifTitre": "التعديلات",
     "cgu.modifTexte": "قد تتغير هذه الشروط مع تطور البوت. ويشير التاريخ أعلى الصفحة إلى آخر نسخة، والسجل الكامل علني في مستودع المشروع. ومواصلة استخدام ModBot بعد أي تعديل تعني قبول النسخة الجديدة.",
-    "cgu.pied": "© 2026 ModBot — <a href=\"index.html\">الرئيسية</a> · <a href=\"confidentialite.html\">سياسة الخصوصية</a> · <a href=\"mentions.html\">البيانات القانونية</a>",
     "ml.eyebrow": "البيانات القانونية",
     "ml.titre": "البيانات القانونية",
     "ml.chapo": "من ينشر هذا الموقع، ومن يستضيفه، وكيف تتواصل معنا. كل شيء هنا، بوضوح.",
@@ -2175,7 +2184,6 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "ml.litigeTitre": "الشكاوى والنزاعات",
     "ml.litigeTexte": "تُحلّ كل شكوى مباشرةً أولًا: اكتب في خادم الدعم مع رقم طلبك. والغالبية العظمى من الخلافات تُسوَّى في بضع رسائل.",
     "ml.litigeDroit": "يخضع هذا الموقع والمبيعات المرتبطة به للقانون الفرنسي. وفي غياب اتفاق ودّي، تختص المحاكم الفرنسية بالنظر في النزاع.",
-    "ml.pied": "© 2026 ModBot — <a href=\"index.html\">الرئيسية</a> · <a href=\"conditions.html\">الشروط</a> · <a href=\"confidentialite.html\">الخصوصية</a>",
 
     // ── Textes rendus par script.js ───────────────────────────────
     "js.reglages.preparation": "جارٍ تجهيز الملف…",

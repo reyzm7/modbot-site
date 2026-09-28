@@ -861,7 +861,29 @@ function initSiteLanguage() {
       document.querySelectorAll("#siteLanguage, [data-language-select]").forEach((autre) => {
         autre.value = choisie;
       });
+      majLangueDuPied(choisie);
     });
+  });
+
+  // Le raccourci du pied de page : deux boutons plutot qu une liste
+  // deroulante, parce qu au bas d une page on veut basculer, pas
+  // choisir parmi cinq langues — celles-la restent dans le menu.
+  document.querySelectorAll("[data-pied-langue]").forEach((bouton) => {
+    bouton.addEventListener("click", () => {
+      const choisie = bouton.dataset.piedLangue;
+      applySiteLanguage(choisie);
+      document.querySelectorAll("#siteLanguage, [data-language-select]").forEach((autre) => {
+        autre.value = choisie;
+      });
+      majLangueDuPied(choisie);
+    });
+  });
+  majLangueDuPied(langue);
+}
+
+function majLangueDuPied(langue) {
+  document.querySelectorAll("[data-pied-langue]").forEach((bouton) => {
+    bouton.classList.toggle("est-active", bouton.dataset.piedLangue === langue);
   });
 }
 
