@@ -133,8 +133,19 @@ def lire_pages():
 
 
 def lire_script():
-    """Clefs citees par t(), tp() et tn() dans script.js."""
-    src = io.open(f"{SITE}/script.js", encoding="utf-8", newline="").read()
+    """
+    Clefs citees par t(), tp() et tn() dans les scripts du site.
+
+    `demo-dashboard.js` en fait partie : il porte les textes du
+    tableau de bord de demonstration. Sans lui, ses clefs passeraient
+    pour inutilisees, et celles qui manquent vraiment ne se verraient
+    pas.
+    """
+    src = ""
+    for nom in ("script.js", "demo-dashboard.js"):
+        chemin = f"{SITE}/{nom}"
+        if os.path.exists(chemin):
+            src += io.open(chemin, encoding="utf-8", newline="").read()
     clefs = set(re.findall(r'\bt[pn]?\(\s*"([a-zA-Z][\w.]*)"', src))
     for un, plusieurs in re.findall(r'\btn\(\s*"([\w.]+)"\s*,\s*"([\w.]+)"', src):
         clefs.update((un, plusieurs))

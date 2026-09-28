@@ -1870,3 +1870,33 @@
 .modele-carte .modele-reste { margin: 0; color: var(--warn); font-size: 0.8rem; }
 
 .modele-carte button { margin-top: auto; align-self: flex-start; }
+
+/* ── Le mode demonstration ───────────────────────────────────────────
+   Le bandeau reste en haut, au-dessus de tout : un reglage change dans
+   une demo ne doit jamais passer pour un reglage enregistre. */
+.demo-bandeau {
+  position: sticky;
+  top: 0;
+  z-index: 70;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(var(--canal-clair), 0.08);
+  color: var(--soft);
+  font-size: 0.86rem;
+  backdrop-filter: blur(8px);
+}
+
+.demo-bandeau strong { color: var(--warn); }
+.demo-bandeau .ui-icon { vertical-align: -2px; }
+
+.auth-demo { margin-top: 10px; width: 100%; justify-content: center; }
+
+/* La barre du tableau de bord se colle sous le bandeau, au lieu de
+   lui passer dessus : les deux sont « sticky » a zero. La hauteur est
+   mesuree par le script, le texte pouvant tenir sur deux lignes. */
+.dashboard-app.est-demo .dashboard-topbar { top: var(--demo-bandeau-h, 56px); }

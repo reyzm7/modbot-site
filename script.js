@@ -1277,6 +1277,11 @@ function modbotAuthHeaders() {
 }
 
 async function modbotApiFetch(path, options = {}) {
+  if (window.MODBOT_DEMO) {
+    const refus = new Error(t("demo.rienEnregistre"));
+    refus.demo = true;
+    throw refus;
+  }
   const base = getModbotApiBase();
   if (!base) throw new Error("Connexion Discord ModBot non finalisee.");
   const headers = {
@@ -7409,6 +7414,102 @@ function initDashboard() {
   }
 
   /* ══════════════════════════════════════════════════════════════════
+     LE MODE DEMONSTRATION
+
+     « A quoi ca ressemble ? » est la question qu on se pose AVANT
+     d inviter un bot. On y repondait par des captures d ecran ; on y
+     repond maintenant par le vrai tableau de bord, rempli de donnees
+     inventees, sans connexion Discord et sans un seul appel au bot.
+
+     Les reglages se touchent — c est tout l interet — mais rien ne
+     part : le bandeau le dit sur chaque ecran, et enregistrer repond
+     par un message au lieu d appeler quoi que ce soit.
+     ══════════════════════════════════════════════════════════════════ */
+
+  const demoBandeau = document.querySelector("[data-demo-bandeau]");
+
+  function enDemo() {
+    return Boolean(window.MODBOT_DEMO);
+  }
+
+  function mesurerLeBandeau() {
+    if (!demoBandeau) return;
+    document.documentElement.style.setProperty(
+      "--demo-bandeau-h", `${demoBandeau.offsetHeight}px`);
+  }
+
+  function entrerEnDemo() {
+    const donnees = window.MODBOT_DEMO_DONNEES;
+    if (!donnees) {
+      showToast(t("demo.indisponible"));
+      return;
+    }
+    window.MODBOT_DEMO = true;
+    if (demoBandeau) {
+      demoBandeau.hidden = false;
+      // Les deux barres sont « sticky » a zero : sans cette mesure,
+      // celle du tableau de bord passerait par-dessus le bandeau.
+      dashboardApp?.classList.add("est-demo");
+      window.addEventListener("resize", mesurerLeBandeau);
+    }
+
+    setCurrentServer(t("demo.serveur"), modbotDefaultLogo,
+                     donnees.serveur.initials || "SD", donnees.serveur.id, true);
+    // Le serveur de demonstration n a rien a faire dans la memoire du
+    // navigateur : la page Premium le prendrait pour un vrai, et
+    // demanderait au bot un serveur qui n existe pas.
+    try {
+      localStorage.removeItem("modbot-selected-guild");
+      localStorage.removeItem("modbot-selected-guild-name");
+    } catch (erreur) {
+      // Stockage refuse : il n y a rien a nettoyer.
+    }
+    dashboardGuilds = [{
+      id: selectedServer.id,
+      name: selectedServer.name,
+      icon: "",
+      member_count: donnees.serveur.member_count,
+      installed: true,
+      can_manage: true,
+    }];
+
+    // Les ressources d abord : la configuration cite des salons et des
+    // roles, et une liste vide ferait retomber chaque champ sur sa
+    // premiere option.
+    sansCasser("ressources", () => renderDashboardResources(donnees.ressources));
+    const config = donnees.config(t);
+    dernierConfig = config;
+    derniereConfigEnregistree = JSON.stringify(config);
+    sansCasser("configuration", () => applyDashboardConfig(config));
+    // La securite et les sauvegardes ont leurs propres appels : sans
+    // elles, la vue globale resterait sur « Chargement… ».
+    sansCasser("securite", () => applySecurityState(donnees.securite));
+    backupList = [];
+    currentLogs = [];
+    sansCasser("vue globale", renderOverview);
+    sansCasser("sauvegardes", renderBackups);
+    clearUnsavedChanges();
+    showDashboardStage("dashboard");
+    openPanel("overview");
+    mesurerLeBandeau();
+    // Les modeles se rendent depuis les traductions du site : le bot
+    // n envoie rien ici, et les cinq cartes doivent quand meme se lire.
+    sansCasser("modeles", () => renderModeles(
+      Object.keys(CLEFS_MODELES).map((clef) => ({ clef, reste: [] }))));
+    showToast(t("demo.entree"));
+  }
+
+  function quitterLaDemo() {
+    // Un rechargement plutot qu un demontage : remettre a zero vingt
+    // rubriques a la main laisserait forcement un reste.
+    window.MODBOT_DEMO = false;
+    window.location.reload();
+  }
+
+  document.querySelector("[data-dashboard-demo]")?.addEventListener("click", entrerEnDemo);
+  document.querySelector("[data-demo-quitter]")?.addEventListener("click", quitterLaDemo);
+
+  /* ══════════════════════════════════════════════════════════════════
      LES MODELES DE SERVEUR
 
      Des reglages de depart, en un clic. Le bot dit lui-meme ce qu il
@@ -7487,6 +7588,7 @@ function initDashboard() {
   }
 
   async function appliquerModele(clef) {
+    if (enDemo()) return showToast(t("demo.rienEnregistre"));
     const guildId = selectedServer.id;
     if (!guildId) return;
     // Un modele ecrase des reglages en place : cela se confirme, meme
@@ -7576,6 +7678,7 @@ function initDashboard() {
   }
 
   async function restaurerVersion(jeton) {
+    if (enDemo()) return showToast(t("demo.rienEnregistre"));
     const guildId = selectedServer.id;
     if (!guildId) return;
     const version = historiqueVersions.find((item) => item.jeton === jeton);
@@ -10163,6 +10266,14 @@ function initDashboard() {
   }
 
   async function saveDashboardConfigToApi() {
+    // En demonstration, on laisse tout regler et on n envoie rien : le
+    // message est plus honnete qu un bouton grise, qui laisserait croire
+    // a une panne.
+    if (enDemo()) {
+      showToast(t("demo.rienEnregistre"));
+      clearUnsavedChanges();
+      return false;
+    }
     if (!selectedServer.id || !selectedServer.installed) return false;
     const data = await modbotApiFetch(`/api/guilds/${selectedServer.id}/config`, {
       method: "PUT",
@@ -10350,6 +10461,11 @@ function initDashboard() {
   }
 
   async function saveCurrentChanges(message = null) {
+    if (enDemo()) {
+      showToast(t("demo.rienEnregistre"));
+      clearUnsavedChanges();
+      return false;
+    }
     message = message || t("dash.configurationEnregistree");
     if (serveurEnChargement()) {
       showToast(t("js.chargementEnCours"));
@@ -10489,7 +10605,10 @@ function initDashboard() {
     // panneau qu'on vient d'ouvrir.
     if (sidebarDeroulante()) ouvrirSidebar(false);
     document.querySelector(".dashboard-content")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    // Ces panneaux interrogent Discord en direct : on ne charge qu'à l'ouverture.
+    // Ces panneaux interrogent Discord en direct : on ne charge qu'à
+    // l'ouverture — et jamais en demonstration, ou il n'y a personne au
+    // bout du fil.
+    if (enDemo()) return;
     if (panelName === "search") runSearch();
     if (panelName === "giveaways") loadGiveaways();
     if (panelName === "welcome") renderWelcomePreview();
