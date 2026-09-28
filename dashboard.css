@@ -1832,3 +1832,41 @@
   }
   .barre-enregistrer span { font-size: 0.85rem; }
 }
+
+/* ── Les modeles de serveur ──────────────────────────────────────────
+   Des cartes plutot qu une liste : on compare cinq propositions d un
+   coup d oeil, et chacune porte ce qu elle change. */
+.modele-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.modele-carte {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-1);
+}
+.modele-carte:hover { border-color: var(--line-strong); background: var(--surface-2); }
+
+.modele-carte h4 { margin: 0; color: var(--text); font-size: 0.98rem; }
+.modele-carte p { margin: 0; color: var(--soft); font-size: 0.85rem; }
+
+.modele-carte ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 3px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+/* Ce que le modele ne peut pas regler seul se lit avant le clic. */
+.modele-carte .modele-reste { margin: 0; color: var(--warn); font-size: 0.8rem; }
+
+.modele-carte button { margin-top: auto; align-self: flex-start; }
