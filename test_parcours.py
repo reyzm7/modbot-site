@@ -34,7 +34,8 @@ BASE = os.environ.get("SITE_BASE", "http://127.0.0.1:8000")
 # connexion sans jeton : c'est deja une page a ne pas casser.
 PAGES = [
     ("index.html", "l'accueil"),
-    ("premium.html", "la page Premium"),
+    # premium.html n est plus une page : elle redirige vers la rubrique
+    # Premium du tableau de bord, ou l on choisit son serveur avant de payer.
     ("boutique.html", "la boutique"),
     ("wiki.html", "le wiki"),
     ("statut.html", "l'etat du service"),
