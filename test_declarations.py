@@ -203,6 +203,9 @@ NAVIGATEUR = {
     "Image", "Audio", "Option", "Node", "Element", "HTMLElement", "Event",
     "CustomEvent", "AbortController", "IntersectionObserver", "MutationObserver",
     "ResizeObserver", "DOMParser", "XMLHttpRequest", "WebSocket", "Worker",
+    # L interface de la regle « @view-transition » : sa seule presence dit
+    # que le navigateur sait fondre d une page a l autre tout seul.
+    "CSSViewTransitionRule",
     "setTimeout", "clearTimeout", "setInterval", "clearInterval",
     "requestAnimationFrame", "cancelAnimationFrame", "queueMicrotask",
     "alert", "confirm", "prompt", "getComputedStyle", "matchMedia",

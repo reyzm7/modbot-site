@@ -11,6 +11,10 @@
 # UNE ETAPE PAR SUITE, deliberement : la liste des etapes se lit d'un
 # coup d'oeil, et `if: always()` les fait toutes tourner meme apres un
 # echec. Un premier rouge ne doit pas cacher les suivants.
+#
+# Chaque etape resume son echec en annotation : le journal complet
+# demande une authentification pour etre lu, et une CI rouge qui ne dit
+# que « exit code 1 » a deja coute trois lots de tatonnements.
 name: Tests du site
 
 on:
@@ -49,27 +53,82 @@ jobs:
       - name: Traductions (test_i18n)
         if: always()
         working-directory: modbot-site
-        run: python test_i18n.py
+        run: |
+          if python test_i18n.py > sortie.txt 2>&1; then
+            cat sortie.txt
+            rm -f sortie.txt
+          else
+            cat sortie.txt
+            resume=$(grep -E "ECHEC|❌|Traceback|Error" sortie.txt | tail -n 20 \
+                     | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+            echo "::error title=test_i18n::${resume}"
+            rm -f sortie.txt
+            exit 1
+          fi
 
       - name: Derives entre le site et le bot (test_derives)
         if: always()
         working-directory: modbot-site
-        run: python test_derives.py
+        run: |
+          if python test_derives.py > sortie.txt 2>&1; then
+            cat sortie.txt
+            rm -f sortie.txt
+          else
+            cat sortie.txt
+            resume=$(grep -E "ECHEC|❌|Traceback|Error" sortie.txt | tail -n 20 \
+                     | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+            echo "::error title=test_derives::${resume}"
+            rm -f sortie.txt
+            exit 1
+          fi
 
       - name: Noms declares (test_declarations)
         if: always()
         working-directory: modbot-site
-        run: python test_declarations.py
+        run: |
+          if python test_declarations.py > sortie.txt 2>&1; then
+            cat sortie.txt
+            rm -f sortie.txt
+          else
+            cat sortie.txt
+            resume=$(grep -E "ECHEC|❌|Traceback|Error" sortie.txt | tail -n 20 \
+                     | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+            echo "::error title=test_declarations::${resume}"
+            rm -f sortie.txt
+            exit 1
+          fi
 
       - name: Selecteurs (test_selecteurs)
         if: always()
         working-directory: modbot-site
-        run: python test_selecteurs.py
+        run: |
+          if python test_selecteurs.py > sortie.txt 2>&1; then
+            cat sortie.txt
+            rm -f sortie.txt
+          else
+            cat sortie.txt
+            resume=$(grep -E "ECHEC|❌|Traceback|Error" sortie.txt | tail -n 20 \
+                     | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+            echo "::error title=test_selecteurs::${resume}"
+            rm -f sortie.txt
+            exit 1
+          fi
 
       - name: Carte de bienvenue (test_bienvenue)
         if: always()
         working-directory: modbot-site
-        run: python test_bienvenue.py
+        run: |
+          if python test_bienvenue.py > sortie.txt 2>&1; then
+            cat sortie.txt
+            rm -f sortie.txt
+          else
+            cat sortie.txt
+            resume=$(grep -E "ECHEC|❌|Traceback|Error" sortie.txt | tail -n 20 \
+                     | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+            echo "::error title=test_bienvenue::${resume}"
+            rm -f sortie.txt
+            exit 1
+          fi
 
   # ══════════════════════════════════════════════════════════════════
   #  LE PARCOURS
