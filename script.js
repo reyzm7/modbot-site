@@ -13668,9 +13668,10 @@ initSommaireWiki();
 /* ══════════════════════════════════════════════════════════════════
    LE PASSAGE D'UNE PAGE A L'AUTRE
    ══════════════════════════════════════════════════════════════════
-   Le voile est deja dans la page (voile-page) : il s'y efface tout
-   seul a l'arrivee, sans une ligne de script. Ce qui suit ne gere que
-   le DEPART — poser le noir, puis partir.
+   L'arrivee ne demande rien : le contenu entre par « page-ouverture »,
+   pose en CSS. Ce qui suit ne gere que le DEPART — faire fondre le
+   contenu, puis partir. Une classe sur la racine suffit ; c'est la
+   feuille de style qui dit ce qui s'efface et en combien de temps.
 
    Les cent quatre-vingt-dix millisecondes d'attente sont un vrai
    retard ajoute a chaque clic. Elles ne valent que parce qu'elles
@@ -13716,7 +13717,7 @@ function initTransitionPage() {
     evenement.preventDefault();
     racine.classList.add("page-part");
     // Si la navigation n'arrive pas — elle a ete bloquee, l'adresse est
-    // morte —, l'ecran ne doit pas rester noir.
+    // morte —, la page ne doit pas rester effacee.
     const secours = window.setTimeout(() => racine.classList.remove("page-part"), 2500);
     window.setTimeout(() => {
       window.clearTimeout(secours);
