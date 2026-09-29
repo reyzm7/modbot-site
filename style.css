@@ -1535,14 +1535,18 @@ h1 {
   overflow: hidden;
 }
 
+/* La barre qui sépare la page de son bas de page. Épaisse et opaque :
+   à quatre pixels elle se lisait comme un liseré, pas comme une
+   séparation, et l'œil continuait tout droit. */
 .footer::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 4px;
+  height: 10px;
   background: var(--pied-trait, linear-gradient(90deg, #8b5cf6, #b15cff 45%, #62e6ff));
+  box-shadow: 0 6px 26px rgba(139, 92, 246, 0.42);
 }
 
 .footer::after {
@@ -4666,7 +4670,9 @@ label:has(> input[type="checkbox"] + span) {
   /* Fonds — gris-bleu neutre, pas de violet saturé */
   --bg: #0a0c11;
   --bg-soft: #10131a;
-  --pied-fond: #191d29;
+  /* Le bas de page monte franchement : à six points de gris du fond, il
+     se confondait encore avec la page. */
+  --pied-fond: #1e2432;
   --panel: #141821;
   --panel-strong: #1a1f2a;
 
@@ -10672,8 +10678,8 @@ body:not(.dashboard-page) .page-glow {
   /* Fonds — blanc casse, jamais blanc pur : moins fatigant a l'ecran */
   --bg: #f4f6fb;
   --bg-soft: #e9edf6;
-  /* En clair on descend au lieu de monter : l ecart se voit pareil. */
-  --pied-fond: #dde3f0;
+  /* En clair on descend au lieu de monter : l'écart se voit pareil. */
+  --pied-fond: #d3daea;
   --panel: #ffffff;
   --panel-strong: #f7f9fd;
 
