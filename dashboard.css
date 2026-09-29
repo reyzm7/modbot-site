@@ -1992,15 +1992,33 @@
 /* Replier CACHE : « hidden » suffit, et laisse le clavier tranquille. */
 .sidebar-famille[hidden] { display: none; }
 
-/* ── Le tableau de bord sur telephone ────────────────────────────────
-   Cette feuille est chargee apres `style.css` : ses regles sans media
-   query ecrasaient le responsive ecrit en face. Sur telephone, le menu
-   et son bouton etaient tous deux invisibles — on ne pouvait plus
-   changer de rubrique —, et le contenu tenait dans 260 px sur 375.
-   Tout ce qui suit remet les choses d aplomb, et vient en dernier. */
+/* ══════════════════════════════════════════════════════════════════
+   LE TABLEAU DE BORD SUR TELEPHONE
+
+   Cette feuille est chargee apres « style.css » : ses regles sans media
+   query ecrasaient le responsive ecrit en face, et le menu comme son
+   bouton etaient tous deux invisibles. Tout ce qui suit remet les
+   choses d aplomb, et vient en dernier.
+
+   Trois idees, et elles tiennent en une phrase chacune :
+     * on doit pouvoir changer de rubrique sans remonter la page ;
+     * ce qui se touche du doigt fait au moins 44 px ;
+     * rien de flottant ne se pose sur ce qu on est en train de lire.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* La tete de la feuille — son titre et sa croix — n existe que sur
+   telephone : sur un ecran large, la barre laterale est une colonne
+   qu on ne ferme pas. */
+.sidebar-feuille-tete { display: none; }
+
+/* Le defilement de la page se verrouille pendant que la feuille des
+   sections est ouverte : sans cela, on fait glisser le menu et c est la
+   page, derriere, qui bouge. */
+body.dash-menu-ouvert { overflow: hidden; }
+
 @media (max-width: 760px) {
-  /* Une seule colonne : la barre laterale devient un menu qu on
-     deroule, et le contenu prend enfin toute la largeur. */
+  /* Une seule colonne : la barre laterale devient une feuille qu on
+     ouvre, et le contenu prend enfin toute la largeur. */
   .dashboard-shell {
     width: min(100% - 20px, 1480px);
     grid-template-columns: minmax(0, 1fr);
@@ -2008,18 +2026,86 @@
     padding: 12px 0 36px;
   }
 
-  .sidebar-toggle { display: flex; }
+  /* ── Le bouton de section, toujours a portee ──────────────────────
+     Il vivait en haut de la page : passe le premier ecran de reglages,
+     il sortait du champ et plus rien ne permettait d aller ailleurs
+     qu en remontant tout en haut. Il colle desormais sous le bord
+     superieur, opaque, et suit la lecture. */
+  /* Le selecteur passe par la page : « .dashboard-page button »
+     (0-1-1) pose « position: relative » sur tous les boutons du
+     tableau de bord, et l emportait sur un simple « .sidebar-toggle ».
+     Le bouton restait donc en place au lieu de coller. */
+  .dashboard-page .sidebar-toggle {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    min-height: 52px;
+    margin: 0 0 10px;
+    background: var(--panel-strong);
+    box-shadow: 0 10px 22px rgba(var(--canal-sombre), 0.34);
+  }
 
+  /* ── Le menu en feuille ───────────────────────────────────────────
+     Ouvert dans le flux, il poussait le panneau hors de vue : vingt-six
+     rubriques en sept familles ne tiennent pas dans les 300 px qui
+     restent sous le bouton. Il couvre maintenant l ecran, on y defile
+     seul, et on en sort par la croix ou en choisissant. */
   .dashboard-sidebar {
     display: none;
-    position: static;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    width: auto;
     height: auto;
     min-height: 0;
-    max-height: min(68vh, 560px);
+    max-height: none;
+    margin: 0;
+    padding: 0 14px calc(20px + env(safe-area-inset-bottom, 0px));
+    border: 0;
+    border-radius: 0;
+    background: var(--bg);
+    box-shadow: none;
     overflow-y: auto;
-    padding: 12px;
+    overscroll-behavior: contain;
   }
   .dashboard-sidebar.is-open { display: block; }
+
+  .sidebar-feuille-tete {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 -14px 10px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+  }
+  .sidebar-feuille-tete strong { font-size: 1.02rem; }
+
+  .sidebar-fermer {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--panel);
+    color: var(--text);
+    cursor: pointer;
+  }
+  .sidebar-fermer .ui-icon { width: 20px; height: 20px; }
+
+  /* Du doigt, pas de la souris. */
+  .dashboard-sidebar .dash-nav { min-height: 48px; margin-bottom: 4px; padding-right: 10px; }
+  .dashboard-sidebar .sidebar-groupe { min-height: 46px; }
+  .dashboard-sidebar .sidebar-search input { min-height: 44px; }
 
   /* Deux colonnes, pas quatre : « Protections » tenait sur trois
      lignes coupees dans 54 px de large. */
@@ -2066,6 +2152,57 @@
 
   /* Les tableaux larges defilent plutot que de tout ecraser. */
   .channel-table, .admin-table { display: block; overflow-x: auto; }
+
+  /* ── Ce qui se touche ─────────────────────────────────────────────
+     Cent trente-six commandes faisaient moins de 44 px de haut, dont
+     les « compact » a 36 et les pastilles de variables a 30. Une cible
+     de 36 px se rate une fois sur cinq sur un ecran tenu d une main. */
+  .primary-btn.compact,
+  .secondary-btn.compact,
+  .log-filter { min-height: 44px; }
+
+  /* Les pastilles restent plus basses : il y en a quinze par panneau,
+     et a 44 px elles formeraient un mur. 38 suffit a les viser. */
+  .variable-chip { min-height: 38px; padding: 0 12px; }
+
+  /* La case a cocher native mesure 13 px de cote. On l agrandit, et la
+     ligne entiere devient une cible : le libelle est dans le <label>. */
+  .switch-inline { min-height: 44px; }
+  .switch-inline input[type="checkbox"] { width: 22px; height: 22px; flex: none; }
+
+  /* Un <summary> replie mesurait 20 px de haut, soit la hauteur de son
+     texte : on visait une ligne, pas un bouton. */
+  .dash-panel summary,
+  .tool-panel summary {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  /* Le champ de saisie sous 16 px declenche le zoom automatique de
+     Safari a la mise au point, et la page reste zoomee ensuite. */
+  input, select, textarea { font-size: 16px; }
+
+  /* ── Ce qui flotte ────────────────────────────────────────────────
+     La barre « Enregistrer » se pose en bas de l ecran et masquait le
+     dernier reglage de la rubrique ; le bouton de l assistant lui
+     passait dessus. Quand elle est la, le contenu se termine plus haut
+     et l assistant monte d un cran. */
+  body.a-barre-enregistrer .dashboard-content { padding-bottom: 96px; }
+
+  /* Le bouton de l assistant occupe exactement la meme place que la
+     barre : 22 px du bas, 52 de haut, contre 8 px du bas et 66 de haut.
+     Ils se recouvraient entierement, et le bouton « Enregistrer » se
+     trouvait sous une pastille violette. Les messages passagers montent
+     avec lui. */
+  body.a-barre-enregistrer .ai-launcher,
+  body.a-barre-enregistrer .assistant-launcher,
+  body.a-barre-enregistrer .dashboard-toast { bottom: 88px; }
+
+  /* Meme sans barre, le bouton de l assistant flotte au-dessus du coin
+     inferieur droit : 74 px de haut avec sa marge. Sans cette reserve,
+     il se pose sur le dernier bouton de la rubrique. */
+  .dashboard-content { padding-bottom: 76px; }
 }
 
 @media (max-width: 480px) {

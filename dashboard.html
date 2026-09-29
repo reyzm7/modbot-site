@@ -298,6 +298,16 @@
     </button>
 
     <aside class="dashboard-sidebar" id="dashboard-menu" aria-label="Navigation dashboard" data-i18n-aria="dash.navigationDashboard">
+      <!-- Visible seulement sur telephone, ou le menu s'ouvre en feuille
+           par-dessus la page : sans cette ligne, on ne pouvait en sortir
+           qu'en choisissant une rubrique. -->
+      <div class="sidebar-feuille-tete">
+        <strong data-i18n="dash.menuSection">Section</strong>
+        <button class="sidebar-fermer" type="button" data-sidebar-fermer
+                aria-label="Fermer le menu" data-i18n-aria="js.fermerLeMenu">
+          <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg>
+        </button>
+      </div>
       <label class="sidebar-search">
         <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-search"/></svg>
         <input type="search" data-reglage-recherche autocomplete="off" spellcheck="false"
@@ -2108,55 +2118,55 @@
           fermé ses messages privés.
         </p>
 
-        <!-- CAPTCHA -->
-        <div class="tool-panel security-block">
-          <div class="table-head">
-            <h3 data-i18n="dash.captchaEntree"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg> Captcha d'entrée</h3>
-            <label class="switch-inline">
-              <input type="checkbox" data-captcha-enabled>
-              <span data-i18n="dash.activer">Activer</span>
-            </label>
-          </div>
-          <p class="field-help" data-i18n="dash.lesNouveauxMembresCliquent">
-            Les nouveaux membres cliquent sur un bouton et recopient un code affiché en image.
-            Tout se passe dans une réponse privée : aucun message privé n'est nécessaire, donc
-            personne ne reste bloqué parce qu'il a fermé ses MP.
-          </p>
-          <div class="dashboard-grid three">
-            <label class="mini-form" data-i18n="dash.roleAccordeApresVerification">Rôle accordé après vérification
-              <select data-captcha-role><option value="">— Aucun —</option></select>
-            </label>
-            <label class="mini-form" data-i18n="dash.salonDuPanneau">Salon du panneau
-              <select data-captcha-channel><option value="">— Aucun —</option></select>
-            </label>
-            <div class="mini-form captcha-state">
-              <span data-i18n="dash.etat">État</span>
-              <p data-captcha-state class="captcha-state-value" data-i18n="dash.nonConfigure">Non configuré</p>
-            </div>
-          </div>
-          <div class="search-actions captcha-actions">
-            <button class="primary-btn compact" type="button" data-captcha-setup>
-              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg>
-              <span data-i18n="dash.captchaInstaller">Installer et publier</span>
-            </button>
-            <button class="secondary-btn compact" type="button" data-captcha-panel>
-              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg>
-              <span data-i18n="dash.captchaRepublier">Republier le panneau</span>
-            </button>
-            <button class="secondary-btn compact" type="button" data-captcha-lock>
-              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg>
-              <span data-i18n="dash.captchaVerrouiller">Masquer les salons</span>
-            </button>
-            <button class="secondary-btn compact danger" type="button" data-captcha-disable>
-              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg>
-              <span data-i18n="dash.captchaCouper">Désactiver</span>
-            </button>
-          </div>
-          <div class="inline-hint" data-i18n-html="dash.captchaAstuce">
-            <strong><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Bon à savoir :</strong> tout se règle ici : la commande Discord a été retirée pour qu'il n'y ait qu'un seul endroit où configurer la vérification.
-            ModBot crée le rôle, crée le salon, publie le panneau et propose de masquer les
-            salons aux membres non vérifiés — en une commande.
-          </div>
+        <!-- CAPTCHA -->
+        <div class="tool-panel security-block">
+          <div class="table-head">
+            <h3 data-i18n="dash.captchaEntree"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg> Captcha d'entrée</h3>
+            <label class="switch-inline">
+              <input type="checkbox" data-captcha-enabled>
+              <span data-i18n="dash.activer">Activer</span>
+            </label>
+          </div>
+          <p class="field-help" data-i18n="dash.lesNouveauxMembresCliquent">
+            Les nouveaux membres cliquent sur un bouton et recopient un code affiché en image.
+            Tout se passe dans une réponse privée : aucun message privé n'est nécessaire, donc
+            personne ne reste bloqué parce qu'il a fermé ses MP.
+          </p>
+          <div class="dashboard-grid three">
+            <label class="mini-form" data-i18n="dash.roleAccordeApresVerification">Rôle accordé après vérification
+              <select data-captcha-role><option value="">— Aucun —</option></select>
+            </label>
+            <label class="mini-form" data-i18n="dash.salonDuPanneau">Salon du panneau
+              <select data-captcha-channel><option value="">— Aucun —</option></select>
+            </label>
+            <div class="mini-form captcha-state">
+              <span data-i18n="dash.etat">État</span>
+              <p data-captcha-state class="captcha-state-value" data-i18n="dash.nonConfigure">Non configuré</p>
+            </div>
+          </div>
+          <div class="search-actions captcha-actions">
+            <button class="primary-btn compact" type="button" data-captcha-setup>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg>
+              <span data-i18n="dash.captchaInstaller">Installer et publier</span>
+            </button>
+            <button class="secondary-btn compact" type="button" data-captcha-panel>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg>
+              <span data-i18n="dash.captchaRepublier">Republier le panneau</span>
+            </button>
+            <button class="secondary-btn compact" type="button" data-captcha-lock>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg>
+              <span data-i18n="dash.captchaVerrouiller">Masquer les salons</span>
+            </button>
+            <button class="secondary-btn compact danger" type="button" data-captcha-disable>
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg>
+              <span data-i18n="dash.captchaCouper">Désactiver</span>
+            </button>
+          </div>
+          <div class="inline-hint" data-i18n-html="dash.captchaAstuce">
+            <strong><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bulb"/></svg> Bon à savoir :</strong> tout se règle ici : la commande Discord a été retirée pour qu'il n'y ait qu'un seul endroit où configurer la vérification.
+            ModBot crée le rôle, crée le salon, publie le panneau et propose de masquer les
+            salons aux membres non vérifiés — en une commande.
+          </div>
         </div>
       </section>
 

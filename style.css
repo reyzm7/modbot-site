@@ -42,7 +42,12 @@ html {
 
 body {
   min-height: 100vh;
-  overflow-x: hidden;
+  /* « clip » et non « hidden » : les deux coupent ce qui depasse sur les
+     cotes, mais « hidden » ferait du corps un conteneur de defilement.
+     Plus rien n y collait — le bouton de section du tableau de bord
+     defilait avec la page — et le verrou de defilement des tiroirs ne
+     verrouillait rien, la racine continuant de defiler dessous. */
+  overflow-x: clip;
   background:
     radial-gradient(circle at 12% 8%, rgba(113, 74, 255, 0.24), transparent 26rem),
     radial-gradient(circle at 88% 24%, rgba(177, 92, 255, 0.18), transparent 24rem),
@@ -2658,6 +2663,17 @@ body.assistant-open {
 body {
   animation: pageFadeClean 0.78s ease both;
   filter: none;
+}
+
+/* Le tiroir du site, l assistant et la feuille des sections du tableau
+   de bord posent leur classe sur le corps, et c est la racine qui
+   defile : « body.nav-open { overflow: hidden } » n arretait donc rien,
+   et la page glissait derriere le panneau ouvert. La regle remonte d un
+   cran, la ou le defilement a vraiment lieu. */
+html:has(> body.nav-open),
+html:has(> body.assistant-open),
+html:has(> body.dash-menu-ouvert) {
+  overflow: hidden;
 }
 
 @keyframes pageFadeClean {

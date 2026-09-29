@@ -10446,6 +10446,11 @@ function initDashboard() {
   function majBarreEnregistrer(enAttente) {
     const barre = document.querySelector("[data-barre-enregistrer]");
     if (barre) barre.hidden = !enAttente;
+    // Sur telephone, cette barre se pose en bas de l'ecran, sur toute la
+    // largeur : elle couvrait le dernier reglage de la rubrique, et le
+    // bouton de l'assistant lui passait dessus. La classe permet au CSS
+    // de faire de la place, mais seulement quand elle est la.
+    document.body.classList.toggle("a-barre-enregistrer", !!enAttente);
   }
 
   function initBarreEnregistrer() {
@@ -10544,27 +10549,48 @@ function initDashboard() {
     return !!sidebarToggle && getComputedStyle(sidebarToggle).display !== "none";
   }
 
+  // La feuille des sections est « position: fixed » sur telephone, et
+  // <main> porte une animation d'ouverture : un transform, meme reduit a
+  // la matrice identite, fait de l'element le conteneur de tout ce qui
+  // est fixe en dessous. La feuille se posait donc par rapport a <main>
+  // — a plus de mille pixels au-dessus du pli, hors de l'ecran.
+  //
+  // On ne peut pas attendre la fin de l'animation : un onglet ouvert en
+  // arriere-plan la garde en cours aussi longtemps qu'il n'est pas
+  // regarde. Le temps qu'elle est ouverte, la feuille vit donc a la
+  // racine, ou plus rien ne la contraint, et elle retrouve sa place
+  // ensuite — la barre laterale de l'ordinateur est une colonne de la
+  // grille, elle doit y revenir.
+  let placeDeLaFeuille = null;
+
+  function sortirLaFeuille(dehors) {
+    if (!sidebarMenu) return;
+    if (dehors) {
+      if (placeDeLaFeuille) return;
+      placeDeLaFeuille = document.createComment("place de la barre laterale");
+      sidebarMenu.before(placeDeLaFeuille);
+      document.body.appendChild(sidebarMenu);
+    } else if (placeDeLaFeuille) {
+      placeDeLaFeuille.replaceWith(sidebarMenu);
+      placeDeLaFeuille = null;
+    }
+  }
+
   function ouvrirSidebar(ouvrir) {
     if (!sidebarMenu || !sidebarToggle) return;
+    sortirLaFeuille(ouvrir && sidebarDeroulante());
     sidebarMenu.classList.toggle("is-open", ouvrir);
     sidebarToggle.setAttribute("aria-expanded", ouvrir ? "true" : "false");
-    if (!ouvrir) {
-      sidebarMenu.style.maxHeight = "";
-      return;
-    }
-    // Hauteur calculee sur la place reellement disponible sous le bouton.
-    // Une valeur en vh ne suffit pas : la barre du haut se replie sur trois
-    // lignes en petit ecran, et le bas du menu finissait sous le pli — les
-    // dernieres sections devenaient inatteignables sans faire defiler deux
-    // fois, la page puis le menu.
-    if (sidebarDeroulante()) {
-      // Mesure prise sur le menu lui-meme, pas sur le bouton : la grille
-      // insere un ecart entre les deux, et partir du bouton laissait
-      // depasser le bas du menu d'exactement cet ecart.
-      const haut = sidebarMenu.getBoundingClientRect().top;
-      const place = Math.max(220, window.innerHeight - haut - 16);
-      sidebarMenu.style.maxHeight = `${place}px`;
-    }
+    // Une hauteur calculee trainait ici : le menu s'ouvrait dans le flux,
+    // sous le bouton, et il fallait lui mesurer la place restante. Il
+    // couvre maintenant l'ecran — la feuille se place toute seule, et la
+    // valeur en ligne l'aurait ecrasee.
+    sidebarMenu.style.maxHeight = "";
+    // Le verrou de defilement : sans lui, le doigt qui parcourt les
+    // vingt-six rubriques fait glisser la page derriere la feuille, et on
+    // la retrouve ailleurs en refermant.
+    document.body.classList.toggle("dash-menu-ouvert", ouvrir && sidebarDeroulante());
+    if (ouvrir) sidebarMenu.scrollTop = 0;
   }
 
   function majLibelleSidebar(panelName) {
@@ -10586,6 +10612,29 @@ function initDashboard() {
   sidebarToggle?.addEventListener("click", () => {
     ouvrirSidebar(!sidebarMenu?.classList.contains("is-open"));
   });
+
+  // La croix de la feuille : sur telephone le menu couvre l'ecran, et
+  // sans elle on n'en sortait qu'en choisissant une rubrique — donc en
+  // quittant celle qu'on etait en train de regler.
+  document.querySelector("[data-sidebar-fermer]")?.addEventListener("click", () => {
+    ouvrirSidebar(false);
+    sidebarToggle?.focus();
+  });
+
+  // L'ecran s'elargit : la barre laterale redevient une colonne de la
+  // grille, et elle doit avoir regagne sa place avant d'etre affichee —
+  // sinon elle reste accrochee a la racine et tombe en bas de la page.
+  //
+  // Un ResizeObserver plutot qu'un matchMedia : il regarde la boite
+  // elle-meme changer de taille, la ou le franchissement d'un seuil de
+  // media query n'est pas toujours annonce. La garde evite de repasser
+  // sur un menu deja referme, et donc de boucler.
+  if (sidebarMenu && typeof ResizeObserver === "function") {
+    new ResizeObserver(() => {
+      const sortie = placeDeLaFeuille || sidebarMenu.classList.contains("is-open");
+      if (sortie && !sidebarDeroulante()) ouvrirSidebar(false);
+    }).observe(document.documentElement);
+  }
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && sidebarMenu?.classList.contains("is-open")) {

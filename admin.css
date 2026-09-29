@@ -524,3 +524,58 @@
   margin: 16px 0; padding: 10px 8px 0; border-radius: 14px;
   background: rgba(var(--canal-clair), 0.03); }
 .btq-top { display: grid; gap: 6px; }
+/* ══════════════════════════════════════════════════════════════════
+   LA PAGE D ADMINISTRATION SUR TELEPHONE
+
+   Cette feuille est chargee apres « style.css » et n avait aucune media
+   query : ses grilles a deux colonnes, ecrites sans condition,
+   ecrasaient le responsive pose en face. Sur un ecran de 390 px,
+   l espace de travail se partageait en « 260 px » pour le menu et
+   « 76 px » pour tout le reste — le contenu tenait dans la largeur d un
+   pouce, et le texte des cartes sortait de l ecran.
+
+   Meme lecon que pour le tableau de bord : ce qui est charge en dernier
+   doit aussi porter son propre responsive.
+   ══════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 760px) {
+  /* Une colonne partout ou deux etaient posees d office. */
+  .admin-grid,
+  .admin-gate-grid,
+  .admin-workspace,
+  .site-stat-grid { grid-template-columns: minmax(0, 1fr); }
+
+  /* Le menu de l administration passe au-dessus du contenu, en liste :
+     huit entrees empilees se lisent, une colonne de 260 px collee a un
+     contenu de 76 px, non. */
+  .admin-sidebar-panel {
+    position: static;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+  }
+  .admin-nav { min-height: 46px; }
+
+  /* Les lignes de journal et de serveur tiennent leurs colonnes de 74 et
+     54 px, mais plus la troisieme : le texte y passait a la ligne tous
+     les deux mots. Elles s empilent. */
+  .server-log-feed div,
+  .admin-server-list div { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+
+  /* Les cartes respirent moins : 24 px de marge de chaque cote sur
+     390 px, c est un huitieme de l ecran perdu. */
+  .admin-panel { padding: 16px 14px; }
+
+  /* Ce qui se touche : 36 px de haut se ratent une fois sur cinq. */
+  .admin-panel .primary-btn.compact,
+  .admin-panel .secondary-btn.compact { min-height: 44px; }
+
+  /* Le champ sous 16 px declenche le zoom automatique de Safari a la
+     mise au point, et la page reste zoomee ensuite. */
+  input, select, textarea { font-size: 16px; }
+}
+
+@media (max-width: 480px) {
+  /* Deux chiffres cote a cote restent lisibles ; leur libelle, non. */
+  .site-stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
