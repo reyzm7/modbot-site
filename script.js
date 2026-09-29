@@ -301,7 +301,9 @@ function tSiClef(valeur) {
 function getCommandMarkup(command) {
   const data = commandResponses[command] || commandResponses.panel;
   const inactif = t("js.demo.inactif");
-  const thumb = `<span class="embed-thumb"><img src="assets/default_logo.svg" alt="" onerror="this.onerror=null; this.src='logo.png';"></span>`;
+  // Le logo du bot, pas le blason par defaut : c'est ModBot qui repond.
+  const thumb = `<span class="embed-thumb"><img src="assets/modbot-mark.webp" alt="" width="128" height="128"
+    onerror="this.onerror=null; this.src='assets/modbot-mark.png';"></span>`;
   let embedContent = "";
 
   if (data.type === "generique") {
@@ -661,12 +663,6 @@ function initNavigation() {
   }
 
   function setMenuOpen(ouvert) {
-    // Ceinture : le menu « Acces » doit etre dans le tiroir avant qu'on
-    // ne l'ouvre. Il y descend au franchissement du seuil, mais un
-    // navigateur qui n'annonce pas ce franchissement — une rotation
-    // d'ecran mal signalee — laisserait le tiroir sans le dashboard,
-    // la boutique, l'admin ni la langue.
-    if (ouvert) rangerLeMenuAcces();
     links.classList.toggle("is-open", ouvert);
     backdrop.classList.toggle("is-open", ouvert);
     // Le verrou du défilement évite que la page glisse sous le panneau.
@@ -3038,9 +3034,21 @@ function mouvementReduit() {
  * delegation les couvre tous, y compris ceux qui n'existent pas encore.
  */
 function initOndeAuClic() {
+  // Sans cet ecouteur, Safari sur iPhone n'applique jamais « :active » :
+  // les boutons ne s'enfoncent pas sous le doigt, et rien ne dit que le
+  // toucher est passe.
+  document.addEventListener("touchstart", () => {}, { passive: true });
+
   const CIBLES = [
     ".primary-btn", ".secondary-btn", ".nav-action-btn",
-    ".dash-nav", ".admin-nav", ".demo-command", ".variable-chip"
+    ".dash-nav", ".admin-nav", ".demo-command", ".variable-chip",
+    // La barre du haut, ses deux pastilles et le tiroir : ce sont les
+    // premiers boutons qu'on touche, et c'etaient les seuls a ne rien
+    // repondre.
+    ".nav-links a", ".nav-menu-trigger", ".theme-bouton", ".nav-toggle",
+    ".nav-menu-panel a", ".sidebar-toggle", ".sidebar-groupe",
+    ".rubrique-carte", ".log-filter", ".boutique-rayons a",
+    ".boutique-cmp-onglet", ".footer-colonne a"
   ].join(",");
 
   document.addEventListener("click", (evenement) => {
@@ -3279,9 +3287,9 @@ function initFondVivant() {
     ".partner-card", ".main-partner-inner", ".price-card", ".premium-offer",
     ".premium-feature", ".faq-box", ".stat", ".stats-big", ".integration",
     ".wiki-toc", ".premium-note", ".discord-window", ".demo-controls",
-    ".boutique-carte", ".boutique-rayons a", ".boutique-atouts-grille article",
+    ".boutique-carte", ".boutique-rayons a",
     ".boutique-devis-inner", ".home-boutique-inner",
-    ".boutique-exemple", ".boutique-preuve", ".boutique-aide-grille article",
+    ".boutique-aide-grille article",
     ".boutique-aide-formulaire", ".boutique-ton-devis-boite", ".boutique-compte",
     // La rangee de boutons du hero, d'un seul tenant : entre deux boutons,
     // un glyphe n'est derriere rien, mais il colle aux controles. Les
@@ -4003,10 +4011,7 @@ function initRevealAnimations() {
     ".premium-feature",
     ".premium-essai",
     ".premium-faq-grid article",
-    ".boutique-exemple",
-    ".boutique-preuve",
     ".boutique-choix-option",
-    ".boutique-atouts-grille article",
     ".boutique-aide-grille article",
     ".boutique-avis-carte",
     ".wiki-section",
@@ -12636,8 +12641,7 @@ function boutiqueValeurDuPack(article) {
 
 /* « dès 39 € » : le prix d'appel de chaque rayon, calcule depuis le
    catalogue plutot qu'ecrit dans les traductions — il suit les prix tout
-   seul. Sert a l'accueil comme a la page Boutique. Les exemples, eux,
-   nomment la formule qui les rend possibles, avec son prix. */
+   tout seul. Sert a l'accueil comme a la page Boutique. */
 function remplirPrixDAppel() {
   document.querySelectorAll("[data-boutique-des]").forEach((element) => {
     const prix = BOUTIQUE_ARTICLES
@@ -12645,12 +12649,6 @@ function remplirPrixDAppel() {
       .map((article) => article.prix);
     element.textContent = prix.length
       ? tp("bq.aPartirDe", { prix: boutiquePrix(Math.min(...prix)) }) : "";
-  });
-  document.querySelectorAll("[data-exemple-formule]").forEach((element) => {
-    const article = BOUTIQUE_ARTICLES.find((a) => a.key === element.dataset.exempleFormule);
-    if (!article) return;
-    element.textContent = tp("bq.exAvec", {
-      formule: t(article.titreClef), prix: boutiquePrix(article.prix) });
   });
 }
 
@@ -12919,140 +12917,6 @@ function initGestionAbonnement() {
     }
     bouton.disabled = false;
   });
-}
-
-function initComparatif() {
-  const table = document.querySelector("[data-cmp-table]");
-  if (!table) return;
-  const onglets = document.querySelectorAll("[data-cmp-onglet]");
-  let famille = "bot";
-
-  function dessinerComparatif() {
-    const articles = BOUTIQUE_ARTICLES.filter((article) => article.categorie === famille);
-    if (!articles.length) {
-      table.innerHTML = "";
-      return;
-    }
-    const colonnes = articles.map((article) =>
-      `<th scope="col"><span class="boutique-cmp-nom">${escapeHtmlValue(t(article.titreClef))}</span>`
-      + (article.recommande
-        ? `<span class="boutique-badge">${escapeHtmlValue(t("bq.recommande"))}</span>` : "")
-      + "</th>").join("");
-    const ligne = (libelle, cellules) =>
-      `<tr><th scope="row">${escapeHtmlValue(libelle)}</th>`
-      + cellules.map((cellule) => `<td>${cellule}</td>`).join("") + "</tr>";
-    table.innerHTML = `<thead><tr><td></td>${colonnes}</tr></thead><tbody>`
-      + ligne(t("bq.cmpPrix"), articles.map((article) =>
-        `<strong class="boutique-cmp-prix">${escapeHtmlValue(boutiquePrix(article.prix))}</strong>`))
-      + ligne(t("bq.cmpDelai"), articles.map((article) =>
-        escapeHtmlValue(tp("bq.delai", { jours: article.delai }))))
-      + ligne(t("bq.cmpRevisions"), articles.map((article) =>
-        escapeHtmlValue(tn("bq.revisionUne", "bq.revisionsPlusieurs", article.revisions,
-                           { n: article.revisions }))))
-      + ligne(t("bq.cmpIdeal"), articles.map((article) => escapeHtmlValue(t(article.idealClef))))
-      + ligne(t("bq.cmpInclus"), articles.map((article) =>
-        `<ul class="boutique-cmp-points">${article.points
-          .map((point) => `<li>${escapeHtmlValue(t(point.texteClef))}</li>`).join("")}</ul>`))
-      + `</tbody><tfoot><tr><td></td>${articles.map((article) =>
-        `<td><button class="primary-btn compact" type="button" data-cmp-choisir="${escapeHtmlValue(article.key)}">${escapeHtmlValue(t("bq.cmpCommander"))}</button></td>`)
-        .join("")}</tr></tfoot>`;
-  }
-
-  onglets.forEach((onglet) => {
-    onglet.addEventListener("click", () => {
-      famille = onglet.dataset.cmpOnglet;
-      onglets.forEach((autre) => {
-        const actif = autre === onglet;
-        autre.classList.toggle("is-active", actif);
-        autre.setAttribute("aria-selected", String(actif));
-      });
-      dessinerComparatif();
-    });
-  });
-
-  // Commander depuis le tableau, c'est commander depuis la carte : un
-  // seul chemin de paiement, donc un seul endroit ou il peut casser.
-  table.addEventListener("click", (evenement) => {
-    const bouton = evenement.target.closest("[data-cmp-choisir]");
-    if (!bouton) return;
-    document.querySelector(
-      `[data-boutique-payer="carte"][data-article="${bouton.dataset.cmpChoisir}"]`)?.click();
-  });
-
-  document.addEventListener("modbot:language", dessinerComparatif);
-  dessinerComparatif();
-}
-
-
-// ── Le calculateur : deux questions, un prix exact ───────────────────
-//
-// Il ne devine rien et n'estime rien : il choisit dans le catalogue la
-// formule qui correspond, et affiche SON prix — celui qui sera debite.
-// Ce qui sort du catalogue part en devis, la description deja ecrite.
-const CALCUL_FORMULES = {
-  bot: ["bot_essentiel", "bot_avance", "bot_pro"],
-  site: ["site_vitrine", "site_complet", "site_dashboard"],
-  pack: ["pack_starter", "pack_serveur", "pack_pro"],
-};
-
-function initCalculateur() {
-  const formulaire = document.querySelector("[data-calcul]");
-  const sortie = document.querySelector("[data-calcul-resultat]");
-  if (!formulaire || !sortie) return;
-
-  const choix = (nom, defaut) =>
-    formulaire.querySelector(`[name="${nom}"]:checked`)?.value ?? defaut;
-
-  function formuleChoisie() {
-    const clef = (CALCUL_FORMULES[choix("calcType", "bot")] || [])[Number(choix("calcTaille", "0"))];
-    return BOUTIQUE_ARTICLES.find((article) => article.key === clef) || null;
-  }
-
-  function dessinerCalcul() {
-    const article = formuleChoisie();
-    if (!article) {
-      sortie.innerHTML = "";
-      return;
-    }
-    sortie.innerHTML = `
-      <p class="boutique-calcul-etiquette">${escapeHtmlValue(t("bq.calcResultat"))}</p>
-      <h3>${escapeHtmlValue(t(article.titreClef))}</h3>
-      <p class="boutique-calcul-montant">${escapeHtmlValue(boutiquePrix(article.prix))}</p>
-      <p class="boutique-calcul-detail">${escapeHtmlValue(tp("bq.delai", { jours: article.delai }))} · ${escapeHtmlValue(tn("bq.revisionUne", "bq.revisionsPlusieurs", article.revisions, { n: article.revisions }))}</p>
-      <p class="boutique-calcul-resume">${escapeHtmlValue(t(article.resumeClef))}</p>
-      <div class="boutique-calcul-actions">
-        <button class="primary-btn" type="button" data-calcul-commander>${escapeHtmlValue(t("bq.calcCommander"))}</button>
-        <button class="secondary-btn" type="button" data-calcul-devis>${escapeHtmlValue(t("bq.calcDevis"))}</button>
-      </div>
-      <p class="field-help">${escapeHtmlValue(t("bq.calcHorsFormule"))}</p>`;
-  }
-
-  sortie.addEventListener("click", (evenement) => {
-    const article = formuleChoisie();
-    if (!article) return;
-    if (evenement.target.closest("[data-calcul-commander]")) {
-      document.querySelector(
-        `[data-boutique-payer="carte"][data-article="${article.key}"]`)?.click();
-      return;
-    }
-    if (!evenement.target.closest("[data-calcul-devis]")) return;
-    // La demande part deja remplie : la categorie cochee, et une premiere
-    // phrase que le client n'a plus qu'a completer. On n'ecrase jamais ce
-    // qu'il a deja ecrit.
-    const categorie = { bot: "bot", site: "site", pack: "les_deux" }[choix("calcType", "bot")];
-    const radio = document.querySelector(`[data-devis-categorie] input[value="${categorie}"]`);
-    if (radio) radio.checked = true;
-    const description = document.querySelector("[data-devis-description]");
-    if (description && !description.value.trim()) {
-      description.value = tp("bq.calcDescription", { formule: t(article.titreClef) });
-    }
-    document.querySelector("#devis")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    if (description) description.focus();
-  });
-
-  formulaire.addEventListener("change", dessinerCalcul);
-  document.addEventListener("modbot:language", dessinerCalcul);
-  dessinerCalcul();
 }
 
 
@@ -13657,8 +13521,6 @@ function initTonDevis() {
 }
 
 initPageBoutique();
-initComparatif();
-initCalculateur();
 initAbonnement();
 initAvis();
 initDemandeDevis();
@@ -13681,47 +13543,27 @@ if (document.readyState === "loading") {
    regroupes : la barre ne porte plus que la navigation du site.
    ══════════════════════════════════════════════════════════════════ */
 
-/* Le menu « Acces » va rejoindre le bouton clair/sombre, a droite de la
+/* Le menu « Acces » rejoint le bouton clair/sombre, a droite de la
    barre : ni l'un ni l'autre ne mene quelque part, tous deux reglent la
    facon dont on lit le site, et ranges au bout des liens ils se
    faisaient passer pour une destination de plus.
 
-   Sur telephone il redescend dans le tiroir. C'est lui qui y porte le
-   dashboard, la boutique, l'admin et la langue : le laisser dans la
-   barre ferait un troisieme bouton a cote des trois traits, et vider le
-   tiroir de ses quatre entrees.
+   Sur telephone aussi. Il descendait d'abord dans le tiroir, ou il
+   formait une pastille doree seule sous les trois liens — un bouton
+   rond au milieu de pilules, sans rien qui dise ce qu'il ouvre. Les
+   deux reglages se tiennent donc cote a cote partout, et le tiroir ne
+   garde que la navigation du site.
 
    Appele depuis initTheme, une fois le bouton pose : le groupe n'existe
    pas avant. */
-let menuAccesSurveille = false;
-
 function rangerLeMenuAcces() {
   const menu = document.querySelector("[data-nav-menu]");
   const outils = document.querySelector(".site-header .navbar .nav-outils");
-  const liens = document.getElementById("navLinks");
-  if (!menu || !outils || !liens) return;
-
-  // Le seuil des trois traits : au-dessus la barre est entiere, en
-  // dessous elle se replie dans le tiroir.
-  const grandEcran = window.matchMedia("(min-width: 981px)");
-  const placer = () => {
-    if (grandEcran.matches) {
-      // En tete du groupe : le bouton de theme porte « order: 5 » et
-      // passe donc a droite. Le DOM suit l'oeil, et la tabulation
-      // traverse les deux pastilles dans l'ordre ou on les voit.
-      if (menu.parentElement !== outils) outils.prepend(menu);
-    } else if (menu.parentElement !== liens) {
-      liens.appendChild(menu);
-    }
-  };
-  placer();
-  // Une seule fois : la fonction est rappelee a chaque ouverture du
-  // tiroir, et autant d'ecouteurs empiles ne feraient que repeter le
-  // meme travail.
-  if (!menuAccesSurveille) {
-    menuAccesSurveille = true;
-    grandEcran.addEventListener("change", placer);
-  }
+  if (!menu || !outils) return;
+  // En tete du groupe : le bouton de theme porte « order: 5 » et passe
+  // donc a droite. Le DOM suit l'oeil, et la tabulation traverse les
+  // deux pastilles dans l'ordre ou on les voit.
+  if (menu.parentElement !== outils) outils.prepend(menu);
 }
 
 function initMenuAcces() {

@@ -1911,7 +1911,9 @@ h1 {
 }
 
 body {
-  animation: pageFade 0.78s ease both;
+  /* Court : au-dela d un tiers de seconde, le fondu ne se lit plus
+     comme une arrivee mais comme une attente. */
+  animation: pageFade 0.34s ease both;
 }
 
 body.assistant-open {
@@ -2661,7 +2663,7 @@ body.assistant-open {
 }
 
 body {
-  animation: pageFadeClean 0.78s ease both;
+  animation: pageFadeClean 0.34s ease both;
   filter: none;
 }
 
@@ -4259,8 +4261,9 @@ main,
               color var(--dur) var(--ease);
 }
 
-.primary-btn:active,
-.secondary-btn:active { transform: translateY(1px) scale(0.99); }
+/* L enfoncement des boutons est decrit en fin de feuille, pour tous
+   d un coup : un pixel de descente et un centieme de reduction ne se
+   voyaient pas. */
 
 /* ── Écran de connexion ────────────────────────────────────────────── */
 
@@ -6467,7 +6470,6 @@ label,
   .giveaway-list { grid-template-columns: minmax(0, 1fr); }
 }
 
-
 /* Le toast occupait le coin bas droit, exactement sous le lanceur de
    l'assistant. Il passe à gauche : les deux restent lisibles ensemble. */
 .dashboard-page .dashboard-toast {
@@ -8014,78 +8016,26 @@ select {
 
 .boutique-shell .premium-note { max-width: 62ch; margin: 30px auto 0; text-align: center; }
 
-/* ── Toujours compris ── */
-.boutique-atouts { margin-top: 64px; }
+/
 
-.boutique-atouts-grille {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
-  gap: 14px;
-  margin-top: 24px;
-}
+.
 
-.boutique-atouts-grille article {
-  display: grid;
-  align-content: start;
-  gap: 8px;
-  padding: 20px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--panel);
-}
+.
 
-.boutique-atout-icone {
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: rgba(67, 181, 129, 0.14);
-  color: var(--t6ee7a8);
-}
+.
 
-.boutique-atouts-grille h3 { margin: 0; font-size: 0.98rem; }
-.boutique-atouts-grille p { margin: 0; color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+.
+.
 
-/* ── Les etapes ── */
-.boutique-etapes { margin-top: 64px; }
+/
 
-.boutique-etapes-liste {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
-  gap: 14px;
-  margin: 22px 0 0;
-  padding: 0;
-  list-style: none;
-  counter-reset: etape;
-}
+.
 
-.boutique-etapes-liste li {
-  position: relative;
-  padding: 20px;
-  padding-inline-start: 64px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--panel);
-  counter-increment: etape;
-}
+.
 
-.boutique-etapes-liste li::before {
-  content: counter(etape);
-  position: absolute;
-  inset-inline-start: 20px;
-  top: 18px;
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: rgba(241, 196, 15, 0.14);
-  color: #f1c40f;
-  font-weight: 800;
-}
+.
 
-.boutique-etapes-liste p { margin: 6px 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+.
 
 .boutique-shell .premium-faq { margin-top: 64px; }
 
@@ -8187,8 +8137,7 @@ select {
 
 .boutique-ideal strong { color: hsl(var(--teinte, 45 93% 60%)); }
 
-/* ── Des exemples concrets ── */
-.boutique-exemples { margin-top: 64px; scroll-margin-top: 96px; }
+/
 
 /* Quatre, deux ou une colonne : jamais trois, qui laisserait la
    quatrieme carte seule sur sa ligne. */
@@ -8207,51 +8156,22 @@ select {
   .boutique-exemples-grille { grid-template-columns: 1fr; }
 }
 
-.boutique-exemple {
-  display: grid;
-  grid-template-rows: auto auto auto 1fr auto;
-  gap: 10px;
-  padding: 16px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--panel);
-}
+.
 
-.boutique-exemple h3 { margin: 4px 0 0; font-size: 1rem; }
-.boutique-exemple > p { margin: 0; color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+.
+.
 
-.boutique-exemple ul {
-  display: grid;
-  align-content: start;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.86rem;
-}
+.
 
-.boutique-exemple li { display: flex; align-items: flex-start; gap: 8px; }
-.boutique-exemple li::before { content: "✓"; color: #6ee7a8; font-weight: 800; }
+.
+.
 
-.boutique-exemple-formule {
-  margin: 0;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
-  color: var(--tf7d354);
-  font-size: 0.84rem;
-  font-weight: 700;
-}
+.
 
-.boutique-exemple-formule a { color: inherit; text-decoration: none; }
-.boutique-exemple-formule a:hover { text-decoration: underline; }
+.
+.
 
-.boutique-exemples-note {
-  margin: 14px auto 0;
-  max-width: 70ch;
-  color: var(--muted);
-  font-size: 0.82rem;
-  text-align: center;
-}
+.
 
 /* Les apercus : dessines en HTML, pas en image — ils suivent la langue
    de la page, et restent nets a toutes les tailles. */
@@ -8267,137 +8187,60 @@ select {
   line-height: 1.4;
 }
 
-.mk-message { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 10px; }
+.
 
-.mk-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #8b5cf6, #22d3ee);
-}
+.
 
-.mk-nom { color: #fff; font-weight: 700; }
+.
 
-.mk-nom::after {
-  content: "BOT";
-  margin-inline-start: 6px;
-  padding: 1px 4px;
-  border-radius: 3px;
-  background: #5865f2;
-  color: #fff;
-  font-size: 0.6rem;
-  vertical-align: middle;
-}
+.
 
-.mk-embed {
-  margin-top: 6px;
-  padding: 8px 10px;
-  border-inline-start: 4px solid #f1c40f;
-  border-radius: 4px;
-  background: #2b2d31;
-}
+.
 
 .mk-embed.is-vert { border-inline-start-color: #43b581; }
-.mk-embed strong { display: block; margin-bottom: 3px; color: #fff; }
+.
 
-.mk-boutons { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.
 
-.mk-bouton {
-  padding: 4px 10px;
-  border-radius: 4px;
-  background: #4e5058;
-  color: #fff;
-  font-size: 0.72rem;
-  font-weight: 600;
-}
+.
 
 .mk-bouton.is-rouge { background: #da373c; }
 .mk-bouton.is-bleu { background: #5865f2; }
 .mk-bouton.is-vert { background: #248046; }
 
-.mk-web { padding: 0; background: var(--bg-soft); }
+.
 
-.mk-barre { display: flex; gap: 5px; padding: 8px 10px; background: var(--panel-strong); }
-.mk-barre span { width: 8px; height: 8px; border-radius: 50%; background: #3a4152; }
+.
+.
 
-.mk-page {
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-  padding: 18px 12px;
-  background: radial-gradient(circle at 50% 0, rgba(139, 92, 246, 0.35), transparent 70%);
-  text-align: center;
-}
+.
 
-.mk-page strong { color: #fff; font-size: 1rem; }
-.mk-page small { color: #aab0c0; }
+.
+.
 
-.mk-dash { display: grid; grid-template-columns: 64px minmax(0, 1fr); min-height: 126px; }
+.
 
-.mk-dash-menu {
-  display: grid;
-  align-content: start;
-  gap: 7px;
-  padding: 12px 8px;
-  background: var(--bg);
-}
+.
 
-.mk-dash-menu span { height: 7px; border-radius: 4px; background: #2c3347; }
-.mk-dash-menu span:first-child { background: #8b5cf6; }
+.
+.
 
-.mk-dash-corps { display: grid; align-content: start; gap: 7px; padding: 10px; }
-.mk-dash-corps strong { color: #fff; }
+.
+.
 
-.mk-reglage {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 5px 8px;
-  border-radius: 6px;
-  background: var(--panel-strong);
-}
+.
 
-.mk-interrupteur {
-  position: relative;
-  flex: none;
-  width: 26px;
-  height: 14px;
-  border-radius: 999px;
-  background: #43b581;
-}
+.
 
-.mk-interrupteur::after {
-  content: "";
-  position: absolute;
-  top: 2px;
-  inset-inline-end: 2px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #fff;
-}
+.
 
 .mk-interrupteur.is-off { background: #4e5058; }
 .mk-interrupteur.is-off::after { inset-inline-end: auto; inset-inline-start: 2px; }
 
-.boutique-preuve {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  margin-top: 18px;
-  padding: 18px 22px;
-  border: 1px solid rgba(139, 92, 246, 0.4);
-  border-radius: var(--radius-lg);
-  background:
-    linear-gradient(120deg, rgba(139, 92, 246, 0.14), transparent 70%),
-    var(--panel);
-}
+.
 
-.boutique-preuve h3 { margin: 0 0 4px; font-size: 1.05rem; }
-.boutique-preuve p { max-width: 60ch; margin: 0; color: var(--muted); font-size: 0.9rem; }
+.
+.
 .boutique-preuve .secondary-btn { gap: 8px; white-space: nowrap; }
 
 /* ── La demande sur mesure : un vrai formulaire ── */
@@ -10277,22 +10120,16 @@ body:not(.dashboard-page) .page-glow {
    collee a gauche pour qu'on sache toujours quelle ligne on lit. */
 .boutique-cmp-onglets { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
   margin: 0 0 18px; }
-.boutique-cmp-onglet { border: 1px solid rgba(var(--canal-clair), 0.12); background: transparent;
-  color: var(--text-dim, #aab2c5); border-radius: 999px; padding: 8px 18px;
-  font: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer;
-  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease; }
-.boutique-cmp-onglet:hover { color: #fff; border-color: rgba(var(--canal-clair), 0.28); }
+.
+.
 .boutique-cmp-onglet.is-active { background: rgba(88, 101, 242, 0.18);
   border-color: rgba(88, 101, 242, 0.55); color: #fff; }
-.boutique-cmp-cadre { overflow-x: auto; border-radius: 16px;
-  border: 1px solid rgba(var(--canal-clair), 0.08); background: rgba(var(--canal-clair), 0.03); }
-.boutique-cmp { width: 100%; min-width: 620px; border-collapse: collapse; }
-.boutique-cmp th, .boutique-cmp td { padding: 14px 16px; text-align: left; vertical-align: top;
-  border-bottom: 1px solid rgba(var(--canal-clair), 0.06); font-size: 0.92rem; }
-.boutique-cmp tbody th { width: 150px; color: var(--text-dim, #aab2c5); font-weight: 600;
-  white-space: nowrap; background: rgba(var(--canal-clair), 0.02); }
-.boutique-cmp thead th { font-size: 1.02rem; color: #fff; }
-.boutique-cmp-nom { display: block; }
+.
+.
+.
+.
+.
+.
 .boutique-cmp thead .boutique-badge {
   position: static;
   display: inline-block;
@@ -10302,24 +10139,20 @@ body:not(.dashboard-page) .page-glow {
   background: var(--or, #f1c40f);
   color: #1a1300;
 }
-.boutique-cmp-prix { font-size: 1.25rem; color: var(--or, #f1c40f); }
-.boutique-cmp-points { margin: 0; padding-left: 18px; }
-.boutique-cmp-points li { margin: 0 0 4px; }
-.boutique-cmp tfoot td { border-bottom: 0; }
+.
+.
+.
+.
 
-.boutique-calcul-inner { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  gap: 22px; align-items: start; }
-.boutique-calcul-form { display: grid; gap: 16px; }
-.boutique-calcul-resultat { border: 1px solid rgba(var(--canal-clair), 0.1); border-radius: 18px;
-  padding: 22px; background: rgba(88, 101, 242, 0.08); }
-.boutique-calcul-resultat h3 { margin: 4px 0 2px; }
-.boutique-calcul-etiquette { margin: 0; font-size: 0.78rem; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--text-dim, #8a93a6); }
-.boutique-calcul-montant { margin: 6px 0 2px; font-size: 2rem; font-weight: 800;
-  color: var(--or, #f1c40f); }
-.boutique-calcul-detail { margin: 0 0 10px; color: var(--text-dim, #aab2c5); font-size: 0.88rem; }
-.boutique-calcul-resume { margin: 0 0 16px; }
-.boutique-calcul-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+.
+.
+.
+.
+.
+.
+.
+.
+.
 
 @media (max-width: 900px) {
   .boutique-calcul-inner { grid-template-columns: minmax(0, 1fr); }
@@ -10393,7 +10226,6 @@ body:not(.dashboard-page) .page-glow {
 .boutique-avis-pied { margin: 0; display: flex; flex-wrap: wrap; gap: 8px;
   font-size: 0.84rem; color: var(--text-dim, #8a93a6); }
 
-
 /* ── Les tout petits écrans (320 à 400 px) ─────────────────────────────
    Une case de grille ne descend pas sous la largeur de son contenu tant
    qu'on ne le lui permet pas : c'est ce qui faisait dépasser une section,
@@ -10454,9 +10286,8 @@ body:not(.dashboard-page) .page-glow {
     background: var(--panel);
     box-shadow: 1px 0 0 rgba(var(--canal-clair), 0.07);
   }
-  .boutique-cmp { min-width: 560px; }
-  .boutique-cmp th,
-  .boutique-cmp td { padding: 12px 12px; font-size: 0.86rem; }
+  .
+  .
 }
 
 /* ── Les options de la fenetre de commande ─────────────────────────── */
@@ -10568,26 +10399,21 @@ body:not(.dashboard-page) .page-glow {
   background: var(--bg);
 }
 
-@keyframes voile-arrivee {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-
 @keyframes voile-depart {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* L'arrivee : le noir s'efface. Un peu plus long que le depart —
-     on decouvre une page, on ne la quitte pas. */
-  .voile-page {
-    animation: voile-arrivee 420ms cubic-bezier(0.22, 0.7, 0.3, 1);
-  }
-
   /* Le depart : le noir se pose, et RESTE pose jusqu'a ce que la page
      suivante s'affiche (« forwards »). Sans cela, l'ecran se rallumerait
-     une fraction de seconde avant de changer. */
+     une fraction de seconde avant de changer.
+
+     Il n y a plus d arrivee. Le voile s effacait en 420 ms au chargement
+     de CHAQUE page — y compris sur un rafraichissement, ou il n y avait
+     aucun saut a cacher : juste un ecran noir avant le site, qui se
+     lisait comme un chargement. Le contenu a son propre fondu, il
+     suffit. */
   html.page-part .voile-page {
     animation: voile-depart 190ms cubic-bezier(0.4, 0, 1, 1) forwards;
   }
@@ -10744,10 +10570,7 @@ body:not(.dashboard-page) .page-glow {
     linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
 }
 
-/* Quelques endroits ou une teinte sombre etait supposee : on les
-   ramene a la palette plutot que de les laisser noirs sur blanc. */
-:root[data-theme="light"] .mk-fenetre,
-:root[data-theme="light"] .mk-corps { background: var(--panel); }
+/
 
 /* ── Le bouton de bascule, dans l'en-tete ────────────────────────────
    Deux pictogrammes empiles, un seul visible : le soleil quand on est
@@ -11476,7 +11299,6 @@ body:not(.dashboard-page) .page-glow {
   .hero-logo { width: 104px; }
 }
 
-
 /* ══════════════════════════════════════════════════════════════════
    LE MENU « ACCES » REJOINT LE BOUTON CLAIR/SOMBRE
 
@@ -11527,31 +11349,169 @@ body:not(.dashboard-page) .page-glow {
    clair la meme teinte descend, jusqu'a se lire. */
 :root[data-theme="light"] .nav-menu-trigger { --teinte: 40 92% 30%; }
 
+/* Le panneau reste suspendu sous le bouton, meme sur petit ecran. Une
+   regle ecrite pour le tiroir le remettait dans le flux (« position:
+   static; width: 100% ») : il depliait alors la barre du haut sur 500 px
+   de large, et le bouton de theme comme les trois traits sortaient de
+   l ecran. */
+.nav-outils .nav-menu-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  left: auto;
+  width: auto;
+  min-width: 232px;
+  /* Le menu n est pas colle au bord droit : il reste le thème apres
+     lui. Sans borne, un panneau plus large que la place a sa gauche
+     sortirait par le bord oppose. */
+  max-width: calc(100vw - 20px);
+  margin-top: 0;
+  box-shadow: 0 20px 46px rgba(var(--canal-sombre), 0.45);
+}
+
 /* ── Les trois barres, dessinees plutot qu'importees ─────────────────
    Un <svg> ne se plie pas ; trois traits, si. */
 .nav-menu-barres {
-  display: grid;
-  gap: 4px;
-  width: 18px;
-  transition: transform 380ms cubic-bezier(0.34, 1.4, 0.5, 1);
-}
-
-.nav-menu-barres i {
+  position: relative;
   display: block;
   width: 18px;
-  height: 2px;
-  border-radius: 2px;
-  background: currentColor;
-  transition: background-color 200ms ease;
+  height: 18px;
 }
 
-/* Ouvert : le quart de tour. Les barres se dressent, et l'etat du menu
-   se lit sur le bouton lui-meme, sans avoir a chercher si un panneau
-   pend en dessous. La couleur ne bouge pas — le fond dore du bouton
-   ouvert le dit deja, et deux signaux pour une seule information font
-   du bruit. */
-.nav-menu.is-open .nav-menu-barres { transform: rotate(90deg); }
+/* Les trois traits sont empiles au centre et ecartes par une
+   translation : c est ce qui permet de les faire tourner autour d un
+   meme point. Une grille les aurait fait pivoter chacun sur soi, et
+   trois traits qui tournent sur eux-memes ne forment rien. */
+.nav-menu-barres i {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 18px;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 420ms cubic-bezier(0.34, 1.35, 0.5, 1);
+}
+
+.nav-menu-barres i:nth-child(1) { transform: translateY(-6px); transition-delay: 120ms; }
+.nav-menu-barres i:nth-child(2) { transform: translateY(0); transition-delay: 60ms; }
+.nav-menu-barres i:nth-child(3) { transform: translateY(6px); transition-delay: 0ms; }
+
+/* Ouvert : le quart de tour. « rotate » AVANT « translateY » — la
+   translation se fait alors dans le repere tourne, et les trois traits
+   se dressent cote a cote au lieu de rester empiles.
+
+   La couleur ne bouge pas : le fond dore du bouton ouvert le dit deja,
+   et deux signaux pour une seule information font du bruit. */
+.nav-menu.is-open .nav-menu-barres i:nth-child(1) {
+  transform: rotate(90deg) translateY(-6px);
+  transition-delay: 0ms;
+}
+.nav-menu.is-open .nav-menu-barres i:nth-child(2) {
+  transform: rotate(90deg) translateY(0);
+  transition-delay: 60ms;
+}
+.nav-menu.is-open .nav-menu-barres i:nth-child(3) {
+  transform: rotate(90deg) translateY(6px);
+  transition-delay: 120ms;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .nav-menu-barres { transition-duration: 0.01s; }
+  .nav-menu-barres i { transition-duration: 0.01s; transition-delay: 0s; }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   QUAND ON APPUIE
+
+   Un bouton qui ne bouge pas sous le doigt laisse croire que le clic
+   n'est pas passe. Sur un ordinateur, le survol l'annonce deja ; sur un
+   telephone il n'y a pas de survol, et il ne restait qu'une onde — que
+   la moitie des boutons du site ne portaient pas.
+
+   Deux temps : l'enfoncement est court et sec (90 ms), le retour est
+   plus long et depasse legerement sa place (220 ms, avec rebond). C'est
+   ce decalage qui fait qu'on sent le bouton repondre au lieu de le voir
+   changer de taille.
+
+   La regle vient en dernier : plusieurs « :hover » ecrits plus haut
+   posent « transform: none », et gagneraient sinon a specificite egale.
+   ══════════════════════════════════════════════════════════════════ */
+
+.primary-btn,
+.secondary-btn,
+.nav-action-btn,
+.nav-links a,
+.nav-menu-trigger,
+.nav-menu-panel a,
+.theme-bouton,
+.nav-toggle,
+.sidebar-toggle,
+.sidebar-groupe,
+.dash-nav,
+.admin-nav,
+.demo-command,
+.variable-chip,
+.log-filter,
+.rubrique-carte,
+.boutique-rayons a,
+.footer-colonne a {
+  transition-property: transform, background-color, border-color, color, box-shadow, opacity;
+  transition-duration: 220ms;
+  transition-timing-function: cubic-bezier(0.34, 1.5, 0.5, 1);
+}
+
+.primary-btn:active,
+.secondary-btn:active,
+.nav-action-btn:active,
+.nav-links a:active,
+.nav-menu-trigger:active,
+.nav-menu-panel a:active,
+.theme-bouton:active,
+.nav-toggle:active,
+.sidebar-toggle:active,
+.sidebar-groupe:active,
+.dash-nav:active,
+.admin-nav:active,
+.demo-command:active,
+.variable-chip:active,
+.log-filter:active,
+.rubrique-carte:active,
+.boutique-rayons a:active,
+.footer-colonne a:active {
+  transform: scale(0.955);
+  transition-duration: 90ms;
+  transition-timing-function: ease-out;
+}
+
+/* Le carre gris que Safari peint sur ce qu'on touche double l'effet, en
+   moins joli : l'enfoncement le remplace. */
+.primary-btn,
+.secondary-btn,
+.nav-action-btn,
+.nav-links a,
+.nav-menu-trigger,
+.theme-bouton,
+.nav-toggle,
+.sidebar-toggle,
+.dash-nav,
+.rubrique-carte,
+.footer-colonne a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Un reglage qui demande moins de mouvement en garde le principe : le
+   bouton repond, sans elan. */
+@media (prefers-reduced-motion: reduce) {
+  .primary-btn:active,
+  .secondary-btn:active,
+  .nav-links a:active,
+  .nav-menu-trigger:active,
+  .theme-bouton:active,
+  .dash-nav:active,
+  .rubrique-carte:active {
+    transform: scale(0.985);
+    transition-duration: 0.01s;
+  }
 }
