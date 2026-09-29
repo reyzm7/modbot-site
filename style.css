@@ -11595,14 +11595,202 @@ body:not(.dashboard-page) .page-glow {
   pointer-events: none;
 }
 
-.vague-separation svg {
-  display: block;
-  width: 100%;
+.vague-separation {
   height: clamp(58px, 7vw, 104px);
+  overflow: hidden;
+}
+
+/* Deux fois la largeur de la page, pour deux periodes de vague : le
+   glissement d'une demi-largeur ramene le trace sur lui-meme. */
+.vague-separation svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 200%;
+  height: 100%;
+}
+
+.vague-devant { animation: vagueGlisse 19s linear infinite; }
+
+/* Celle du fond va moins vite et en sens inverse : deux vitesses
+   suffisent a faire croire a de l'eau, une seule donne un tapis qui
+   defile. */
+.vague-derriere {
+  opacity: 0.5;
+  animation: vagueGlisse 31s linear infinite reverse;
+}
+
+@keyframes vagueGlisse {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vague-devant,
+  .vague-derriere { animation: none; }
 }
 
 .vague-separation path {
   fill: var(--bg-soft);
   stroke: var(--accent-line);
   stroke-width: 2;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   CHAQUE SCENE JOUE CE QU'ELLE RACONTE
+
+   Un symbole immobile dans un cercle ne dit rien de plus que le mot
+   ecrit a cote. La moderation pare un coup, le ticket s'ouvre, les
+   chiffres montent, l'automatisation se declenche seule. Le mouvement
+   est lent et espace : il doit se remarquer quand on s'arrete, pas
+   tirer l'oeil pendant qu'on lit.
+   ══════════════════════════════════════════════════════════════════ */
+
+.scene-effet {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ── Moderation : un coup arrive, le bouclier le renvoie ───────────── */
+.scene[data-scene="moderation"] .scene-effet::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ff8a8a, rgba(255, 90, 90, 0) 70%);
+  animation: coupPorte 5.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* L'onde de choc part du centre, au moment ou le coup touche. */
+.scene[data-scene="moderation"] .scene-effet::after {
+  content: "";
+  position: absolute;
+  inset: 26%;
+  border: 2px solid rgba(139, 92, 246, 0.75);
+  border-radius: 50%;
+  opacity: 0;
+  animation: ondeDeChoc 5.5s ease-out infinite;
+}
+
+.scene[data-scene="moderation"] .scene-icone {
+  animation: bouclierEncaisse 5.5s ease-out infinite;
+}
+
+@keyframes coupPorte {
+  0%, 8%   { transform: translateY(-46px) scale(0.6); opacity: 0; }
+  20%      { transform: translateY(0) scale(1); opacity: 1; }
+  27%      { transform: translateY(8px) scale(1.1); opacity: 0.9; }
+  36%      { transform: translateY(-40px) scale(0.5); opacity: 0; }
+  100%     { transform: translateY(-46px) scale(0.6); opacity: 0; }
+}
+
+@keyframes ondeDeChoc {
+  0%, 25%  { transform: scale(0.72); opacity: 0; }
+  30%      { opacity: 0.9; }
+  48%      { transform: scale(1.55); opacity: 0; }
+  100%     { transform: scale(1.55); opacity: 0; }
+}
+
+@keyframes bouclierEncaisse {
+  0%, 23%  { transform: scale(1); }
+  30%      { transform: scale(1.13); }
+  40%      { transform: scale(0.97); }
+  52%, 100% { transform: scale(1); }
+}
+
+/* ── Tickets : une lueur balaie le billet, comme on l'ouvre ────────── */
+.scene[data-scene="tickets"] .scene-effet::before {
+  content: "";
+  position: absolute;
+  inset: 24%;
+  border-radius: 50%;
+  background: linear-gradient(115deg, transparent 38%, rgba(var(--canal-clair), 0.32) 50%, transparent 62%);
+  animation: ticketBalaye 6s ease-in-out infinite;
+}
+
+.scene[data-scene="tickets"] .scene-icone {
+  animation: ticketRespire 6s ease-in-out infinite;
+}
+
+@keyframes ticketBalaye {
+  0%, 52%  { transform: translateX(-130%); opacity: 0; }
+  60%      { opacity: 1; }
+  84%      { transform: translateX(130%); opacity: 0; }
+  100%     { transform: translateX(130%); opacity: 0; }
+}
+
+@keyframes ticketRespire {
+  0%, 100% { transform: rotate(-4deg); }
+  50%      { transform: rotate(4deg); }
+}
+
+/* ── Statistiques : deux barres montent derriere le symbole ────────── */
+.scene[data-scene="stats"] .scene-effet {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 58px;
+  padding-bottom: 26%;
+}
+
+.scene[data-scene="stats"] .scene-effet::before,
+.scene[data-scene="stats"] .scene-effet::after {
+  content: "";
+  width: 10px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--accent), rgba(139, 92, 246, 0.12));
+  animation: barreMonte 3.8s ease-in-out infinite;
+}
+
+.scene[data-scene="stats"] .scene-effet::after { animation-delay: 0.7s; }
+
+@keyframes barreMonte {
+  0%, 100% { height: 16px; opacity: 0.4; }
+  50%      { height: 58px; opacity: 0.85; }
+}
+
+/* ── Automatisations : l'eclair jaillit, l'anneau fait son tour ────── */
+.scene[data-scene="automatisations"] .scene-icone {
+  animation: eclairJaillit 4.6s ease-out infinite;
+}
+
+.scene[data-scene="automatisations"] .scene-effet::before {
+  content: "";
+  position: absolute;
+  inset: 13%;
+  border: 1px solid transparent;
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: rouageTourne 4.6s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+}
+
+@keyframes eclairJaillit {
+  0%, 58%   { filter: drop-shadow(0 16px 36px rgba(139, 92, 246, 0.5)); transform: scale(1); }
+  66%       { filter: drop-shadow(0 0 28px rgba(177, 92, 255, 0.95)); transform: scale(1.15); }
+  76%       { transform: scale(0.97); }
+  86%, 100% { filter: drop-shadow(0 16px 36px rgba(139, 92, 246, 0.5)); transform: scale(1); }
+}
+
+@keyframes rouageTourne {
+  0%, 52%  { transform: rotate(0); opacity: 0.3; }
+  68%      { opacity: 1; }
+  100%     { transform: rotate(360deg); opacity: 0.3; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Les selecteurs portent l attribut, comme ceux qu ils annulent : a
+     specificite egale, c est la derniere regle qui gagne, et celle-ci
+     est ecrite apres. Sans l attribut, « .scene-icone » (0-1-0) perdait
+     contre « .scene[data-scene=...] .scene-icone » (0-2-1). */
+  .scene[data-scene] .scene-effet::before,
+  .scene[data-scene] .scene-effet::after,
+  .scene[data-scene] .scene-icone,
+  .scene-anneau { animation: none; }
 }

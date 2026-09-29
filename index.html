@@ -197,45 +197,13 @@
     </section>
 
     <div class="vague-separation" aria-hidden="true">
-      <svg viewBox="0 0 1440 110" preserveAspectRatio="none" focusable="false">
-        <path d="M0,38 C220,104 430,4 720,46 C1010,88 1230,16 1440,52 L1440,110 L0,110 Z"/>
+      <svg class="vague-derriere" viewBox="0 0 2880 110" preserveAspectRatio="none" focusable="false">
+        <path d="M0,62 C240,26 480,26 720,62 C960,98 1200,98 1440,62 C1680,26 1920,26 2160,62 C2400,98 2640,98 2880,62 L2880,110 L0,110 Z"/>
+      </svg>
+      <svg class="vague-devant" viewBox="0 0 2880 110" preserveAspectRatio="none" focusable="false">
+        <path d="M0,55 C240,15 480,15 720,55 C960,95 1200,95 1440,55 C1680,15 1920,15 2160,55 C2400,95 2640,95 2880,55 L2880,110 L0,110 Z"/>
       </svg>
     </div>
-
-    <section class="main-partner section-shell" aria-labelledby="partenaire-principal">
-      <div class="main-partner-inner" data-partner="NTdDCVuR3k">
-        <span class="main-partner-banner" data-partner-banner aria-hidden="true"></span>
-        <span class="partner-logo main-partner-logo" data-partner-logo aria-hidden="true">TM</span>
-        <span class="main-partner-tag" data-i18n="home.partenairePrincipal"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Partenaire principal</span>
-        <h2 id="partenaire-principal">Twitch Memez94</h2>
-        <p class="partner-size" data-partner-size data-i18n="home.partenaireTaille">Communauté Twitch</p>
-        <p data-i18n="home.partenairePrincipalTexte">
-          C'est là que chaque nouveauté est essayée en premier, devant de vrais membres.
-        </p>
-        <div class="main-partner-actions">
-          <a class="primary-btn compact" href="https://discord.gg/NTdDCVuR3k"
-             target="_blank" rel="noreferrer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg> <span data-i18n="home.rejoindre">Rejoindre</span></a>
-          <a class="secondary-btn compact" href="partenaires.html" data-i18n="home.tousPartenaires">Tous nos partenaires</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── La boutique, juste apres le partenaire principal ────────── -->
-    <section class="home-boutique section-shell" aria-labelledby="accueil-boutique">
-      <div class="home-boutique-inner">
-        <div class="home-boutique-texte">
-          <span class="home-boutique-tag" data-i18n="home.boutiqueTag"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg> Nouveau : la boutique</span>
-          <h2 id="accueil-boutique" data-i18n="home.boutiqueTitre">Un bot et un site rien que pour ton serveur</h2>
-          <p data-i18n="home.boutiqueTexte">L'équipe de ModBot crée aussi des bots Discord et des sites web sur mesure pour ta communauté.</p>
-        </div>
-        <ul class="home-boutique-apercu">
-          <li><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-rocket"/></svg><span data-i18n="bq.botsEyebrow">Bots Discord</span><strong data-boutique-des="bot"></strong></li>
-          <li><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="bq.sitesEyebrow">Sites web</span><strong data-boutique-des="site"></strong></li>
-          <li><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg><span data-i18n="bq.packsEyebrow">Packs</span><strong data-boutique-des="pack"></strong></li>
-        </ul>
-        <a class="primary-btn home-boutique-bouton" href="boutique.html"><span data-i18n="home.boutiqueBouton">Aller à la boutique</span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-arrow-left"/></svg></a>
-      </div>
-    </section>
 
     <section class="stats section-shell" aria-label="Statistiques ModBot" data-live-stats data-i18n-aria="home.statistiquesModbot">
       <div class="stats-headline">
@@ -302,16 +270,12 @@
     </section>
 
     <section id="features" class="features section-shell">
-      <div class="section-heading">
-        <p class="eyebrow" data-i18n="features.eyebrow">Fonctionnalités</p>
-        <h2 data-i18n="features.title">Tout ce qu’il faut pour tenir un serveur propre.</h2>
-      </div>
-
       <div class="scenes">
-        <article class="scene">
+        <article class="scene" data-scene="moderation">
           <div class="scene-visuel" aria-hidden="true">
             <span class="scene-halo"></span>
             <span class="scene-anneau"></span>
+            <span class="scene-effet"></span>
             <svg class="scene-icone" viewBox="0 0 24 24"><use href="#i-shield"/></svg>
           </div>
           <div class="scene-texte">
@@ -319,10 +283,11 @@
             <p data-i18n="features.moderation.copy">Warn, ban, deban, sanctions graduées et historique complet des actions.</p>
           </div>
         </article>
-        <article class="scene">
+        <article class="scene" data-scene="tickets">
           <div class="scene-visuel" aria-hidden="true">
             <span class="scene-halo"></span>
             <span class="scene-anneau"></span>
+            <span class="scene-effet"></span>
             <svg class="scene-icone" viewBox="0 0 24 24"><use href="#i-ticket"/></svg>
           </div>
           <div class="scene-texte">
@@ -330,10 +295,11 @@
             <p data-i18n="features.tickets.copy">Support intégré avec ouverture, suivi et fermeture de tickets depuis Discord.</p>
           </div>
         </article>
-        <article class="scene">
+        <article class="scene" data-scene="stats">
           <div class="scene-visuel" aria-hidden="true">
             <span class="scene-halo"></span>
             <span class="scene-anneau"></span>
+            <span class="scene-effet"></span>
             <svg class="scene-icone" viewBox="0 0 24 24"><use href="#i-chart"/></svg>
           </div>
           <div class="scene-texte">
@@ -341,10 +307,11 @@
             <p data-i18n="features.stats.copy">Analyse des membres, activité modération et indicateurs serveur utiles.</p>
           </div>
         </article>
-        <article class="scene">
+        <article class="scene" data-scene="automatisations">
           <div class="scene-visuel" aria-hidden="true">
             <span class="scene-halo"></span>
             <span class="scene-anneau"></span>
+            <span class="scene-effet"></span>
             <svg class="scene-icone" viewBox="0 0 24 24"><use href="#i-bolt"/></svg>
           </div>
           <div class="scene-texte">
@@ -353,28 +320,23 @@
           </div>
         </article>
       </div>
+    </section>
 
-      <div class="feature-grid">
-        <article class="feature-card">
-          <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-megaphone"/></svg></span>
-          <h3 data-i18n="features.announcements.title">Annonces</h3>
-          <p data-i18n="features.announcements.copy">Publication d’annonces, changelogs, patch notes et messages propres.</p>
-        </article>
-        <article class="feature-card">
-          <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-translate"/></svg></span>
-          <h3 data-i18n="features.translation.title">Traduction</h3>
-          <p data-i18n="features.translation.copy">Traduction rapide pour aider les membres à communiquer sans friction.</p>
-        </article>
-        <article class="feature-card">
-          <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-bulb"/></svg></span>
-          <h3 data-i18n="features.suggestions.title">Suggestions</h3>
-          <p data-i18n="features.suggestions.copy">Collecte et suivi des idées proposées par votre communauté.</p>
-        </article>
-        <article class="feature-card">
-          <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-sliders"/></svg></span>
-          <h3 data-i18n="features.panel.title">Panel Admin</h3>
-          <p data-i18n="features.panel.copy">Gestion rapide des réglages et des outils importants du serveur.</p>
-        </article>
+    <section class="main-partner section-shell" aria-labelledby="partenaire-principal">
+      <div class="main-partner-inner" data-partner="NTdDCVuR3k">
+        <span class="main-partner-banner" data-partner-banner aria-hidden="true"></span>
+        <span class="partner-logo main-partner-logo" data-partner-logo aria-hidden="true">TM</span>
+        <span class="main-partner-tag" data-i18n="home.partenairePrincipal"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg> Partenaire principal</span>
+        <h2 id="partenaire-principal">Twitch Memez94</h2>
+        <p class="partner-size" data-partner-size data-i18n="home.partenaireTaille">Communauté Twitch</p>
+        <p data-i18n="home.partenairePrincipalTexte">
+          C'est là que chaque nouveauté est essayée en premier, devant de vrais membres.
+        </p>
+        <div class="main-partner-actions">
+          <a class="primary-btn compact" href="https://discord.gg/NTdDCVuR3k"
+             target="_blank" rel="noreferrer"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg> <span data-i18n="home.rejoindre">Rejoindre</span></a>
+          <a class="secondary-btn compact" href="partenaires.html" data-i18n="home.tousPartenaires">Tous nos partenaires</a>
+        </div>
       </div>
     </section>
 
