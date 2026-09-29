@@ -113,4 +113,15 @@ jobs:
         working-directory: modbot-site
         env:
           SITE_BASE: http://127.0.0.1:8000
-        run: python test_parcours.py
+        run: |
+          if python test_parcours.py > sortie.txt 2>&1; then
+            cat sortie.txt
+            rm -f sortie.txt
+          else
+            cat sortie.txt
+            resume=$(grep -E "ECHEC|Traceback|Error" sortie.txt | tail -n 20 \
+                     | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+            echo "::error title=test_parcours::${resume}"
+            rm -f sortie.txt
+            exit 1
+          fi
