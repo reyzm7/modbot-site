@@ -11461,28 +11461,35 @@ body:not(.dashboard-page) .page-glow {
 
 .scenes {
   display: grid;
-  gap: clamp(52px, 9vw, 108px);
-  margin-top: clamp(40px, 6vw, 72px);
+  gap: clamp(34px, 5vw, 58px);
+  margin-top: clamp(26px, 4vw, 46px);
 }
 
 .scene {
   display: grid;
-  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  grid-template-columns: 220px minmax(0, 1fr);
   align-items: center;
-  gap: clamp(22px, 5vw, 64px);
+  gap: clamp(20px, 3.5vw, 46px);
+  /* Centree et bornee : etalee sur 1 200 px, la scene separait le
+     visuel de son texte par le vide au lieu de les lier. */
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
 }
 
 /* Une scene sur deux se retourne : le visuel passe a droite. C'est ce
    balancement qui donne le rythme — quatre blocs identiques se
    liraient comme un tableau. */
-.scene:nth-child(even) { grid-template-columns: minmax(0, 1fr) minmax(0, 300px); }
+.scene:nth-child(even) { grid-template-columns: minmax(0, 1fr) 220px; }
 .scene:nth-child(even) .scene-visuel { order: 2; }
 
 .scene-visuel {
   position: relative;
   display: grid;
   place-items: center;
-  width: min(268px, 68vw);
+  /* Un cercle plus petit que le paragraphe qu'il accompagne : a 268 px
+     il ecrasait un texte de deux lignes. */
+  width: min(208px, 62vw);
   aspect-ratio: 1;
   margin: 0 auto;
 }
@@ -11527,7 +11534,7 @@ body:not(.dashboard-page) .page-glow {
 
 .scene-texte p {
   margin: 0;
-  max-width: 52ch;
+  max-width: 44ch;
   color: var(--soft);
   font-size: clamp(0.98rem, 1.6vw, 1.08rem);
   line-height: 1.7;
@@ -11538,11 +11545,11 @@ body:not(.dashboard-page) .page-glow {
    et un texte qui precede son image se lit moins bien. */
 @media (max-width: 720px) {
   .scene,
-  .scene:nth-child(even) { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .scene:nth-child(even) { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .scene:nth-child(even) .scene-visuel { order: 0; }
   .scene-texte { text-align: center; }
   .scene-texte p { margin: 0 auto; }
-  .scene-visuel { width: min(200px, 56vw); }
+  .scene-visuel { width: min(176px, 52vw); }
 }
 
 /* ── La vague, sous la tete d'affiche ────────────────────────────────
@@ -11661,8 +11668,8 @@ body:not(.dashboard-page) .page-glow {
 .scene-avatar {
   display: grid;
   place-items: center;
-  width: 84px;
-  height: 84px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   border: 3px solid var(--bg);
   overflow: hidden;
@@ -11677,7 +11684,7 @@ body:not(.dashboard-page) .page-glow {
 .scene-avatar.est-membre .ui-icon { width: 44%; height: 44%; }
 
 .scene-avatar.est-bot {
-  margin-left: -16px;
+  margin-left: -13px;
   background: radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.42), rgba(var(--canal-sombre), 0.6));
   box-shadow: 0 0 0 1px var(--accent-line), 0 14px 32px rgba(139, 92, 246, 0.42);
   animation: avatarRespire 6s ease-in-out 0.8s infinite;
@@ -11759,8 +11766,8 @@ body:not(.dashboard-page) .page-glow {
   z-index: 3;
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 1px solid var(--line-strong);
   background: var(--panel-strong);
@@ -11770,7 +11777,7 @@ body:not(.dashboard-page) .page-glow {
   animation: jetonParait 6s ease-in-out infinite;
 }
 
-.scene-jeton .ui-icon { width: 19px; height: 19px; }
+.scene-jeton .ui-icon { width: 17px; height: 17px; }
 
 /* Trois places autour du duo, et trois entrees regulierement
    espacees : un tiers de cycle entre chacune. Un jeton reste visible
@@ -11810,8 +11817,8 @@ body:not(.dashboard-page) .page-glow {
 .scene[data-scene="automatisations"] .scene-jeton.est-3 { animation-delay: 5.5s; }
 
 @media (max-width: 720px) {
-  .scene-avatar { width: 68px; height: 68px; }
-  .scene-avatar.est-bot { margin-left: -13px; }
-  .scene-jeton { width: 32px; height: 32px; }
-  .scene-jeton .ui-icon { width: 16px; height: 16px; }
+  .scene-avatar { width: 60px; height: 60px; }
+  .scene-avatar.est-bot { margin-left: -11px; }
+  .scene-jeton { width: 30px; height: 30px; }
+  .scene-jeton .ui-icon { width: 15px; height: 15px; }
 }
