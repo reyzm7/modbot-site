@@ -188,7 +188,6 @@
         <div class="hero-actions">
           <a class="primary-btn has-logo" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-discord-bot-invite><svg class="btn-logo" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n="hero.primary">Ajouter ModBot à mon serveur</span></a>
           <a class="secondary-btn" href="dashboard.html" data-i18n="hero.dashboard">Accéder au dashboard</a>
-          <a class="secondary-btn" href="#demo" data-i18n="hero.demo">Essayer les commandes</a>
           <!-- La sante du service se voit avant de descendre : la pastille
                est verte des que le bot a repondu aux chiffres publics. -->
           <a class="secondary-btn etat-bouton" href="statut.html" data-i18n="home.etatBouton"><span class="etat-puce" data-etat-puce aria-hidden="true"></span> État du service</a>
@@ -196,6 +195,12 @@
       </div>
 
     </section>
+
+    <div class="vague-separation" aria-hidden="true">
+      <svg viewBox="0 0 1440 110" preserveAspectRatio="none" focusable="false">
+        <path d="M0,38 C220,104 430,4 720,46 C1010,88 1230,16 1440,52 L1440,110 L0,110 Z"/>
+      </svg>
+    </div>
 
     <section class="main-partner section-shell" aria-labelledby="partenaire-principal">
       <div class="main-partner-inner" data-partner="NTdDCVuR3k">
@@ -302,22 +307,54 @@
         <h2 data-i18n="features.title">Tout ce qu’il faut pour tenir un serveur propre.</h2>
       </div>
 
+      <div class="scenes">
+        <article class="scene">
+          <div class="scene-visuel" aria-hidden="true">
+            <span class="scene-halo"></span>
+            <span class="scene-anneau"></span>
+            <svg class="scene-icone" viewBox="0 0 24 24"><use href="#i-shield"/></svg>
+          </div>
+          <div class="scene-texte">
+            <h3 data-i18n="features.moderation.title">Modération</h3>
+            <p data-i18n="features.moderation.copy">Warn, ban, deban, sanctions graduées et historique complet des actions.</p>
+          </div>
+        </article>
+        <article class="scene">
+          <div class="scene-visuel" aria-hidden="true">
+            <span class="scene-halo"></span>
+            <span class="scene-anneau"></span>
+            <svg class="scene-icone" viewBox="0 0 24 24"><use href="#i-ticket"/></svg>
+          </div>
+          <div class="scene-texte">
+            <h3 data-i18n="features.tickets.title">Tickets</h3>
+            <p data-i18n="features.tickets.copy">Support intégré avec ouverture, suivi et fermeture de tickets depuis Discord.</p>
+          </div>
+        </article>
+        <article class="scene">
+          <div class="scene-visuel" aria-hidden="true">
+            <span class="scene-halo"></span>
+            <span class="scene-anneau"></span>
+            <svg class="scene-icone" viewBox="0 0 24 24"><use href="#i-chart"/></svg>
+          </div>
+          <div class="scene-texte">
+            <h3 data-i18n="features.stats.title">Statistiques</h3>
+            <p data-i18n="features.stats.copy">Analyse des membres, activité modération et indicateurs serveur utiles.</p>
+          </div>
+        </article>
+        <article class="scene">
+          <div class="scene-visuel" aria-hidden="true">
+            <span class="scene-halo"></span>
+            <span class="scene-anneau"></span>
+            <svg class="scene-icone" viewBox="0 0 24 24"><use href="#i-bolt"/></svg>
+          </div>
+          <div class="scene-texte">
+            <h3 data-i18n="features.development.title">Automatisations</h3>
+            <p data-i18n="features.development.copy">Messages récurrents, rôles réactions, arrivées et départs configurables.</p>
+          </div>
+        </article>
+      </div>
+
       <div class="feature-grid">
-        <article class="feature-card">
-          <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg></span>
-          <h3 data-i18n="features.moderation.title">Modération</h3>
-          <p data-i18n="features.moderation.copy">Warn, ban, deban, sanctions graduées et historique complet des actions.</p>
-        </article>
-        <article class="feature-card">
-          <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-ticket"/></svg></span>
-          <h3 data-i18n="features.tickets.title">Tickets</h3>
-          <p data-i18n="features.tickets.copy">Support intégré avec ouverture, suivi et fermeture de tickets depuis Discord.</p>
-        </article>
-        <article class="feature-card">
-          <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-chart"/></svg></span>
-          <h3 data-i18n="features.stats.title">Statistiques</h3>
-          <p data-i18n="features.stats.copy">Analyse des membres, activité modération et indicateurs serveur utiles.</p>
-        </article>
         <article class="feature-card">
           <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-megaphone"/></svg></span>
           <h3 data-i18n="features.announcements.title">Annonces</h3>
@@ -338,33 +375,6 @@
           <h3 data-i18n="features.panel.title">Panel Admin</h3>
           <p data-i18n="features.panel.copy">Gestion rapide des réglages et des outils importants du serveur.</p>
         </article>
-        <article class="feature-card">
-          <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-bolt"/></svg></span>
-          <h3 data-i18n="features.development.title">Automatisations</h3>
-          <p data-i18n="features.development.copy">Messages récurrents, rôles réactions, arrivées et départs configurables.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="demo" class="demo section-shell">
-      <div class="section-heading">
-        <p class="eyebrow" data-i18n="home.demo">Démo</p>
-        <h2 data-i18n="home.essayezLesCommandes">Essayez les commandes</h2>
-        <p data-i18n="home.cliquezSurUneCommande">Cliquez sur une commande pour voir la réponse de ModBot en direct.</p>
-      </div>
-
-      <div class="demo-duo">
-        <div class="discord-window" data-demo-screen="salon">
-          <div class="panel-top">
-            <span class="dot red"></span>
-            <span class="dot yellow"></span>
-            <span class="dot green"></span>
-            <span class="channel-name" data-i18n="home.salonTest"># salon-test</span>
-          </div>
-          <div class="chat-feed" id="demoFeed" aria-live="polite"></div>
-        </div>
-
-        <div class="demo-controls" id="demoControls"></div>
       </div>
     </section>
 

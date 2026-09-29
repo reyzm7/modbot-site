@@ -21,7 +21,7 @@
 
 @keyframes page-sen-va {
   from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(7vh); }
+  to   { opacity: 0; transform: translateY(9vh); }
 }
 
 @keyframes page-arrive {
@@ -29,17 +29,26 @@
   to   { opacity: 1; }
 }
 
-/* Celle qu'on quitte part la premiere, vers le bas. L'acceleration
-   (« ease-in ») la fait tomber plutot que glisser. */
+/* ── La barre du haut ne tombe pas ────────────────────────────────
+   Sans elle, TOUT descendait ensemble : un mouvement d'ensemble n'a
+   aucun repere, et ne se voit donc pas. Un nom la sort du plan qui
+   bouge ; comme elle est identique des deux cotes, elle ne bouge pas
+   du tout et devient ce repere. C'est ce qui rend la chute lisible. */
+.site-header,
+.dashboard-topbar { view-transition-name: entete; }
+
+/* Le reste de la page — « root », tout ce qui n'est pas nomme — part
+   vers le bas en s'effacant. L'acceleration le fait tomber plutot que
+   glisser. */
 ::view-transition-old(root) {
-  animation: page-sen-va 300ms cubic-bezier(0.4, 0, 0.9, 0.4) both;
+  animation: page-sen-va 440ms cubic-bezier(0.4, 0, 0.9, 0.4) both;
 }
 
-/* Celle qui arrive attend un souffle, le temps qu'on voie l'autre
-   partir, puis se pose. Elle ne monte pas : deux mouvements contraires
-   donneraient un tourniquet. */
+/* Celle qui arrive attend que l'autre soit partie — a mi-chemin, on ne
+   verrait qu'une bouillie des deux — puis se pose. Elle ne monte pas :
+   deux mouvements contraires donneraient un tourniquet. */
 ::view-transition-new(root) {
-  animation: page-arrive 300ms cubic-bezier(0.22, 0.7, 0.3, 1) 90ms both;
+  animation: page-arrive 340ms cubic-bezier(0.22, 0.7, 0.3, 1) 220ms both;
 }
 
 /* Sous « animations reduites », le mouvement disparait mais le blanc
@@ -8067,27 +8076,6 @@ select {
 
 .boutique-shell .premium-note { max-width: 62ch; margin: 30px auto 0; text-align: center; }
 
-/
-
-.
-
-.
-
-.
-
-.
-.
-
-/
-
-.
-
-.
-
-.
-
-.
-
 .boutique-shell .premium-faq { margin-top: 64px; }
 
 /* ── Sur devis ── */
@@ -8188,8 +8176,6 @@ select {
 
 .boutique-ideal strong { color: hsl(var(--teinte, 45 93% 60%)); }
 
-/
-
 /* Quatre, deux ou une colonne : jamais trois, qui laisserait la
    quatrieme carte seule sur sa ligne. */
 .boutique-exemples-grille {
@@ -8207,23 +8193,6 @@ select {
   .boutique-exemples-grille { grid-template-columns: 1fr; }
 }
 
-.
-
-.
-.
-
-.
-
-.
-.
-
-.
-
-.
-.
-
-.
-
 /* Les apercus : dessines en HTML, pas en image — ils suivent la langue
    de la page, et restent nets a toutes les tailles. */
 .mk {
@@ -8238,60 +8207,15 @@ select {
   line-height: 1.4;
 }
 
-.
-
-.
-
-.
-
-.
-
-.
-
 .mk-embed.is-vert { border-inline-start-color: #43b581; }
-.
-
-.
-
-.
 
 .mk-bouton.is-rouge { background: #da373c; }
 .mk-bouton.is-bleu { background: #5865f2; }
 .mk-bouton.is-vert { background: #248046; }
 
-.
-
-.
-.
-
-.
-
-.
-.
-
-.
-
-.
-
-.
-.
-
-.
-.
-
-.
-
-.
-
-.
-
 .mk-interrupteur.is-off { background: #4e5058; }
 .mk-interrupteur.is-off::after { inset-inline-end: auto; inset-inline-start: 2px; }
 
-.
-
-.
-.
 .boutique-preuve .secondary-btn { gap: 8px; white-space: nowrap; }
 
 /* ── La demande sur mesure : un vrai formulaire ── */
@@ -10171,16 +10095,8 @@ body:not(.dashboard-page) .page-glow {
    collee a gauche pour qu'on sache toujours quelle ligne on lit. */
 .boutique-cmp-onglets { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
   margin: 0 0 18px; }
-.
-.
 .boutique-cmp-onglet.is-active { background: rgba(88, 101, 242, 0.18);
   border-color: rgba(88, 101, 242, 0.55); color: #fff; }
-.
-.
-.
-.
-.
-.
 .boutique-cmp thead .boutique-badge {
   position: static;
   display: inline-block;
@@ -10190,20 +10106,6 @@ body:not(.dashboard-page) .page-glow {
   background: var(--or, #f1c40f);
   color: #1a1300;
 }
-.
-.
-.
-.
-
-.
-.
-.
-.
-.
-.
-.
-.
-.
 
 @media (max-width: 900px) {
   .boutique-calcul-inner { grid-template-columns: minmax(0, 1fr); }
@@ -10337,8 +10239,6 @@ body:not(.dashboard-page) .page-glow {
     background: var(--panel);
     box-shadow: 1px 0 0 rgba(var(--canal-clair), 0.07);
   }
-  .
-  .
 }
 
 /* ── Les options de la fenetre de commande ─────────────────────────── */
@@ -10614,8 +10514,6 @@ body:not(.dashboard-page) .page-glow {
     radial-gradient(900px 500px at 50% -10%, rgba(68, 80, 230, 0.07), transparent 70%),
     linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
 }
-
-/
 
 /* ── Le bouton de bascule, dans l'en-tete ────────────────────────────
    Deux pictogrammes empiles, un seul visible : le soleil quand on est
@@ -11363,7 +11261,14 @@ body:not(.dashboard-page) .page-glow {
   display: flex;
   align-items: center;
   gap: 10px;
+  /* Ni le groupe ni ses deux pastilles ne se compriment. Sur un ecran
+     de 390 px, la barre manquait de place et le bouton de theme, seul a
+     ne pas avoir de largeur minimale, passait de 34 px a 20 : un
+     rectangle de la hauteur d une icone, sans son rond. */
+  flex: none;
 }
+
+.site-header .navbar .nav-outils > * { flex: none; }
 
 /* La boite du menu doit coller a son bouton : laissee en bloc, elle
    gardait le talon de ligne sous le declencheur et les deux pastilles
@@ -11372,6 +11277,10 @@ body:not(.dashboard-page) .page-glow {
   position: relative;
   display: flex;
   align-items: center;
+  /* « width: 100% » lui est pose sous 640 px, du temps ou il vivait
+     dans le tiroir : il prenait alors tout le groupe a lui seul, et le
+     bouton de theme se retrouvait dehors, sous les trois traits. */
+  width: auto;
 }
 
 /* La meme pastille que le theme — meme diametre, meme rond — mais pas
@@ -11466,7 +11375,6 @@ body:not(.dashboard-page) .page-glow {
   .nav-menu-barres i { transition-duration: 0.01s; transition-delay: 0s; }
 }
 
-
 /* ══════════════════════════════════════════════════════════════════
    QUAND ON APPUIE
 
@@ -11559,4 +11467,142 @@ body:not(.dashboard-page) .page-glow {
     transform: scale(0.985);
     transition-duration: 0.01s;
   }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   LES SCENES DE L'ACCUEIL
+
+   Une carte de deux lignes ne montre rien : elle nomme. Les quatre
+   fonctionnalites qui portent le bot ont maintenant chacune leur
+   scene — le visuel d'un cote, le texte de l'autre, en alternance. On
+   descend la page et chaque idee a sa place, au lieu de huit tuiles
+   qu'on survole sans en lire une seule.
+
+   Le visuel n'est pas une image : un anneau en pointilles qui tourne
+   lentement, un halo, et le symbole de la rubrique. Rien a telecharger,
+   rien qui vieillisse, et la teinte suit le theme.
+   ══════════════════════════════════════════════════════════════════ */
+
+.scenes {
+  display: grid;
+  gap: clamp(52px, 9vw, 108px);
+  margin-top: clamp(40px, 6vw, 72px);
+}
+
+.scene {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(22px, 5vw, 64px);
+}
+
+/* Une scene sur deux se retourne : le visuel passe a droite. C'est ce
+   balancement qui donne le rythme — quatre blocs identiques se
+   liraient comme un tableau. */
+.scene:nth-child(even) { grid-template-columns: minmax(0, 1fr) minmax(0, 300px); }
+.scene:nth-child(even) .scene-visuel { order: 2; }
+
+.scene-visuel {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(268px, 68vw);
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+
+.scene-halo {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(139, 92, 246, 0.34), transparent 68%);
+  filter: blur(2px);
+}
+
+.scene-anneau {
+  position: absolute;
+  inset: 0;
+  border: 2px dashed rgba(var(--canal-clair), 0.26);
+  border-radius: 50%;
+  animation: sceneAnneau 44s linear infinite;
+}
+
+/* Un second anneau, plein et plus court, pris dans le premier : deux
+   cercles concentriques se lisent comme un objet, un seul comme un
+   cadre vide. */
+.scene-visuel::after {
+  content: "";
+  position: absolute;
+  inset: 13%;
+  border: 1px solid var(--accent-line);
+  border-radius: 50%;
+}
+
+.scene-icone {
+  position: relative;
+  width: 38%;
+  height: 38%;
+  color: var(--accent);
+  filter: drop-shadow(0 16px 36px rgba(139, 92, 246, 0.5));
+}
+
+@keyframes sceneAnneau {
+  to { transform: rotate(360deg); }
+}
+
+.scene-texte h3 {
+  margin: 0 0 12px;
+  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  letter-spacing: -0.01em;
+}
+
+.scene-texte p {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--soft);
+  font-size: clamp(0.98rem, 1.6vw, 1.08rem);
+  line-height: 1.7;
+}
+
+/* Sous 720 px, les deux colonnes se mettent a la file et le visuel
+   passe devant : l'alternance n'a plus de sens sur une seule colonne,
+   et un texte qui precede son image se lit moins bien. */
+@media (max-width: 720px) {
+  .scene,
+  .scene:nth-child(even) { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .scene:nth-child(even) .scene-visuel { order: 0; }
+  .scene-texte { text-align: center; }
+  .scene-texte p { margin: 0 auto; }
+  .scene-visuel { width: min(200px, 56vw); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-anneau { animation: none; }
+}
+
+/* ── La vague, sous la tete d'affiche ────────────────────────────────
+   Le meme fond du haut en bas donnait une page sans etages : rien ne
+   disait qu'on avait quitte l'accueil pour la suite. La vague coupe, et
+   ce qui est dessous s'annonce comme un autre chapitre. */
+.vague-separation {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin-top: clamp(-40px, -4vw, -16px);
+  line-height: 0;
+  pointer-events: none;
+}
+
+.vague-separation svg {
+  display: block;
+  width: 100%;
+  height: clamp(58px, 7vw, 104px);
+}
+
+.vague-separation path {
+  fill: var(--bg-soft);
+  stroke: var(--accent-line);
+  stroke-width: 2;
 }
