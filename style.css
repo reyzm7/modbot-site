@@ -1,3 +1,31 @@
+/* ═══════════════════════════════════════════════════════════════════
+   LE FONDU ENTRE DEUX PAGES
+
+   Un site qui charge un vrai document a chaque lien montre forcement un
+   blanc entre les deux : le navigateur peint la page suivante a partir
+   de rien, et ce moment n'appartient a aucune des deux pages. Aucune
+   animation ecrite ici ne pouvait le couvrir.
+
+   « @view-transition » le lui confie : il garde une image de la page
+   qu'on quitte et la fond vers la suivante. Les deux pages doivent
+   l'accepter, et elles partagent cette feuille — c'est le cas partout.
+   ═══════════════════════════════════════════════════════════════════ */
+
+@view-transition { navigation: auto; }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 240ms;
+  animation-timing-function: cubic-bezier(0.22, 0.7, 0.3, 1);
+}
+
+/* Le mouvement n'est pas le sujet : c'est le blanc qu'on supprime. Sous
+   « animations reduites », le fondu s'efface, le blanc reste couvert. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
+
 :root {
   --bg: #05020d;
   --bg-soft: #0c0719;

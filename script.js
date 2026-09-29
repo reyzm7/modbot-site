@@ -583,6 +583,11 @@ function poserTheme(theme) {
   const clair = theme === "light";
   if (clair) document.documentElement.dataset.theme = "light";
   else delete document.documentElement.dataset.theme;
+  // Le <head> pose cette couleur en dur, avant la feuille de style, pour
+  // qu'un changement de page ne montre pas le blanc du navigateur. Un
+  // style en ligne l'emporte sur tout : sans cette ligne, le fond
+  // resterait celui du theme qu'on vient de quitter.
+  document.documentElement.style.backgroundColor = clair ? "#f4f6fb" : "#0a0c11";
   try {
     localStorage.setItem(THEME_MEMOIRE, clair ? "light" : "dark");
   } catch (erreur) {
@@ -13682,8 +13687,55 @@ initSommaireWiki();
    domaine, ancre de la meme page. Rien de ce qui marchait avant ne doit
    commencer a dependre de ce code.
    ══════════════════════════════════════════════════════════════════ */
+/* Le document suivant, demande au survol.
+
+   Le fondu du navigateur couvre le passage d'une page a l'autre, mais
+   il ne le raccourcit pas : tant que la page suivante n'est pas
+   arrivee, l'ecran reste sur l'ancienne. La demander des que le
+   pointeur touche le lien fait gagner l'aller-retour reseau — souvent
+   tout ce qu'il y avait a attendre.
+
+   « prefetch » ne fait que remplir le cache : le document n'est ni
+   execute ni affiche, et rien ne part vers le bot. */
+function initPrechargementDesPages() {
+  // Un forfait compte au megaoctet ne doit pas payer des pages qu'on
+  // n'ouvrira peut-etre jamais.
+  if (navigator.connection?.saveData) return;
+
+  const demandes = new Set();
+  const viser = (evenement) => {
+    const lien = evenement.target?.closest?.("a[href]");
+    if (!lien || lien.hasAttribute("download")) return;
+    if (lien.target && lien.target !== "_self") return;
+    let url;
+    try {
+      url = new URL(lien.getAttribute("href"), location.href);
+    } catch (erreur) {
+      return;
+    }
+    if (url.origin !== location.origin) return;
+    if (url.pathname === location.pathname) return;
+    if (demandes.has(url.href)) return;
+    demandes.add(url.href);
+    const balise = document.createElement("link");
+    balise.rel = "prefetch";
+    balise.href = url.href;
+    document.head.appendChild(balise);
+  };
+
+  document.addEventListener("pointerover", viser, { passive: true });
+  document.addEventListener("touchstart", viser, { passive: true });
+}
+
 function initTransitionPage() {
   if (mouvementReduit()) return;
+  // Quand le navigateur sait fondre d'une page a l'autre tout seul
+  // (« @view-transition », pose en tete de feuille), il le fait mieux
+  // que nous : il garde une image de la page qu'on quitte, la notre
+  // s'effacait avant que la suivante n'arrive. Deux effets l'un sur
+  // l'autre feraient un double fondu, et les 190 ms d'attente seraient
+  // un retard pour rien.
+  if (typeof CSSViewTransitionRule !== "undefined") return;
   const racine = document.documentElement;
 
   // Un retour par le bouton « precedent » ressort parfois de la memoire
@@ -13727,6 +13779,7 @@ function initTransitionPage() {
 }
 
 initTransitionPage();
+initPrechargementDesPages();
 
 /* ══════════════════════════════════════════════════════════════════
    LOGOS DES PARTENAIRES
