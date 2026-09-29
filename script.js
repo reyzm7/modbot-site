@@ -616,9 +616,23 @@ function initTheme() {
   const barre = document.querySelector(".site-header .navbar");
   const bascule = document.querySelector(".nav-toggle");
   const langue = document.querySelector(".language-switch");
-  if (barre && bascule) barre.insertBefore(bouton, bascule);
-  else if (langue?.parentElement) langue.parentElement.insertBefore(bouton, langue);
-  else (barre || document.querySelector(".dashboard-topbar"))?.appendChild(bouton);
+  if (barre && bascule) {
+    // Le theme et le menu « Acces » partagent une boite. Sans elle, la
+    // barre les repartit un a un (« space-between ») et les deux
+    // pastilles se retrouvent a deux cents pixels l'une de l'autre.
+    let outils = barre.querySelector(".nav-outils");
+    if (!outils) {
+      outils = document.createElement("div");
+      outils.className = "nav-outils";
+      barre.insertBefore(outils, bascule);
+    }
+    outils.appendChild(bouton);
+    rangerLeMenuAcces();
+  } else if (langue?.parentElement) {
+    langue.parentElement.insertBefore(bouton, langue);
+  } else {
+    (barre || document.querySelector(".dashboard-topbar"))?.appendChild(bouton);
+  }
 
   bouton.addEventListener("click", () => {
     poserTheme(themeActuel() === "light" ? "dark" : "light");
@@ -647,6 +661,12 @@ function initNavigation() {
   }
 
   function setMenuOpen(ouvert) {
+    // Ceinture : le menu « Acces » doit etre dans le tiroir avant qu'on
+    // ne l'ouvre. Il y descend au franchissement du seuil, mais un
+    // navigateur qui n'annonce pas ce franchissement — une rotation
+    // d'ecran mal signalee — laisserait le tiroir sans le dashboard,
+    // la boutique, l'admin ni la langue.
+    if (ouvert) rangerLeMenuAcces();
     links.classList.toggle("is-open", ouvert);
     backdrop.classList.toggle("is-open", ouvert);
     // Le verrou du défilement évite que la page glisse sous le panneau.
@@ -13611,6 +13631,49 @@ if (document.readyState === "loading") {
    cinq places dans la barre, melanges aux ancres de la page. Ils sont
    regroupes : la barre ne porte plus que la navigation du site.
    ══════════════════════════════════════════════════════════════════ */
+
+/* Le menu « Acces » va rejoindre le bouton clair/sombre, a droite de la
+   barre : ni l'un ni l'autre ne mene quelque part, tous deux reglent la
+   facon dont on lit le site, et ranges au bout des liens ils se
+   faisaient passer pour une destination de plus.
+
+   Sur telephone il redescend dans le tiroir. C'est lui qui y porte le
+   dashboard, la boutique, l'admin et la langue : le laisser dans la
+   barre ferait un troisieme bouton a cote des trois traits, et vider le
+   tiroir de ses quatre entrees.
+
+   Appele depuis initTheme, une fois le bouton pose : le groupe n'existe
+   pas avant. */
+let menuAccesSurveille = false;
+
+function rangerLeMenuAcces() {
+  const menu = document.querySelector("[data-nav-menu]");
+  const outils = document.querySelector(".site-header .navbar .nav-outils");
+  const liens = document.getElementById("navLinks");
+  if (!menu || !outils || !liens) return;
+
+  // Le seuil des trois traits : au-dessus la barre est entiere, en
+  // dessous elle se replie dans le tiroir.
+  const grandEcran = window.matchMedia("(min-width: 981px)");
+  const placer = () => {
+    if (grandEcran.matches) {
+      // En tete du groupe : le bouton de theme porte « order: 5 » et
+      // passe donc a droite. Le DOM suit l'oeil, et la tabulation
+      // traverse les deux pastilles dans l'ordre ou on les voit.
+      if (menu.parentElement !== outils) outils.prepend(menu);
+    } else if (menu.parentElement !== liens) {
+      liens.appendChild(menu);
+    }
+  };
+  placer();
+  // Une seule fois : la fonction est rappelee a chaque ouverture du
+  // tiroir, et autant d'ecouteurs empiles ne feraient que repeter le
+  // meme travail.
+  if (!menuAccesSurveille) {
+    menuAccesSurveille = true;
+    grandEcran.addEventListener("change", placer);
+  }
+}
 
 function initMenuAcces() {
   const menu = document.querySelector("[data-nav-menu]");
