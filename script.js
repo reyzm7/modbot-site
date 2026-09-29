@@ -9573,16 +9573,6 @@ function initDashboard() {
       evenement.target.value = "";
     });
 
-    // Le guide des rubriques se souvient d'avoir ete ouvert. Une
-    // commodite : sans stockage, il reste simplement replie.
-    if (guide) {
-      try {
-      } catch (erreur) { /* stockage refuse */ }
-      guide.addEventListener("toggle", () => {
-        try {
-        } catch (erreur) { /* stockage refuse */ }
-      });
-    }
 
     redessinerSalonsProteges();
     pastillesDeRoles("[data-prot-roles]", rolesAutorisesProteges, "data-retirer-prot-role");
