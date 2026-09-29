@@ -2703,7 +2703,9 @@ function initOndeAuClic() {
   ].join(",");
 
   document.addEventListener("click", (evenement) => {
-    if (mouvementReduit()) return;
+    // Pas de garde sur « animations reduites » : l'onde part du doigt,
+    // dure six dixiemes de seconde et ne deplace rien. Ce reglage vise
+    // ce qui bouge sans qu'on l'ait demande.
     const hote = evenement.target.closest?.(CIBLES);
     // La pastille de couleur EST sa couleur : une onde blanche par
     // dessus la ferait passer pour une autre.

@@ -51,13 +51,6 @@
   animation: page-arrive 340ms cubic-bezier(0.22, 0.7, 0.3, 1) 220ms both;
 }
 
-/* Sous « animations reduites », le mouvement disparait mais le blanc
-   reste couvert : c'est la transition elle-meme qui le cachait. */
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) { animation: none; }
-}
-
 :root {
   --bg: #05020d;
   --bg-soft: #0c0719;
@@ -11371,10 +11364,6 @@ body:not(.dashboard-page) .page-glow {
   transition-delay: 120ms;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .nav-menu-barres i { transition-duration: 0.01s; transition-delay: 0s; }
-}
-
 /* ══════════════════════════════════════════════════════════════════
    QUAND ON APPUIE
 
@@ -11454,20 +11443,6 @@ body:not(.dashboard-page) .page-glow {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Un reglage qui demande moins de mouvement en garde le principe : le
-   bouton repond, sans elan. */
-@media (prefers-reduced-motion: reduce) {
-  .primary-btn:active,
-  .secondary-btn:active,
-  .nav-links a:active,
-  .nav-menu-trigger:active,
-  .theme-bouton:active,
-  .dash-nav:active,
-  .rubrique-carte:active {
-    transform: scale(0.985);
-    transition-duration: 0.01s;
-  }
-}
 
 
 /* ══════════════════════════════════════════════════════════════════
@@ -11578,10 +11553,6 @@ body:not(.dashboard-page) .page-glow {
   .scene-visuel { width: min(200px, 56vw); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .scene-anneau { animation: none; }
-}
-
 /* ── La vague, sous la tete d'affiche ────────────────────────────────
    Le meme fond du haut en bas donnait une page sans etages : rien ne
    disait qu'on avait quitte l'accueil pour la suite. La vague coupe, et
@@ -11623,11 +11594,6 @@ body:not(.dashboard-page) .page-glow {
 @keyframes vagueGlisse {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .vague-devant,
-  .vague-derriere { animation: none; }
 }
 
 .vague-separation path {
@@ -11784,13 +11750,38 @@ body:not(.dashboard-page) .page-glow {
   100%     { transform: rotate(360deg); opacity: 0.3; }
 }
 
+
+
+/* ══════════════════════════════════════════════════════════════════
+   CE QUI CONTINUE DE BOUGER, MEME EN MODE CALME
+
+   « Animations reduites » est un reglage du systeme, et le site l'a
+   longtemps pris au pied de la lettre : tout s'arretait. Sur une
+   machine ou ce reglage est actif — c'est le cas de celle du
+   proprietaire — il ne restait pas un mouvement, pas meme la vague.
+
+   La preference vise ce qui remue l'ecran : le parallaxe, les
+   deplacements amples, ce qui part tout seul pendant qu'on lit. Elle ne
+   vise pas une onde lente au bas d'une section, ni un pictogramme qui
+   respire dans son cercle. Ceux-la continuent.
+
+   Ce qui reste coupe, plus bas dans cette feuille : le fond qui suit le
+   curseur, les entrees de page qui deplacent des blocs entiers, les
+   boucles decoratives du decor.
+
+   « animation-iteration-count » doit etre repose en « !important » :
+   une regle universelle, dans la meme media query, le force a 1 — une
+   boucle jouee une fois passe inapercue, ce qui revient a l'avoir
+   coupee.
+   ══════════════════════════════════════════════════════════════════ */
+
 @media (prefers-reduced-motion: reduce) {
-  /* Les selecteurs portent l attribut, comme ceux qu ils annulent : a
-     specificite egale, c est la derniere regle qui gagne, et celle-ci
-     est ecrite apres. Sans l attribut, « .scene-icone » (0-1-0) perdait
-     contre « .scene[data-scene=...] .scene-icone » (0-2-1). */
-  .scene[data-scene] .scene-effet::before,
-  .scene[data-scene] .scene-effet::after,
+  .vague-devant,
+  .vague-derriere,
+  .scene-anneau,
   .scene[data-scene] .scene-icone,
-  .scene-anneau { animation: none; }
+  .scene[data-scene] .scene-effet::before,
+  .scene[data-scene] .scene-effet::after {
+    animation-iteration-count: infinite !important;
+  }
 }
