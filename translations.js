@@ -887,6 +887,7 @@ window.MODBOT_TRANSLATIONS = {
     "nav.cta": "Ajouter ModBot",
     "hero.eyebrow": "Protection Discord 24/7",
     "hero.lead": "La modération intelligente qui protège votre communauté, automatise les sanctions, gère les tickets et garde votre serveur clair, sain et réactif.",
+    "hero.signature": "Votre bot discord tout-en-un.",
     "hero.primary": "Ajouter ModBot à mon serveur",
     "hero.dashboard": "Accéder au dashboard",
     "hero.demo": "Essayer les commandes",

@@ -11388,28 +11388,47 @@ body:not(.dashboard-page) .page-glow {
 .nav-menu-trigger.est-icone .nav-menu-chevron { display: none; }
 
 /* ── La tete d affiche ───────────────────────────────────────────────
-   La banniere remplace le nom ecrit en lettres : elle porte le logo,
-   le nom et la signature d un seul tenant. Le <h1> reste, avec l image
-   dedans et le nom dans son « alt » — les moteurs et les lecteurs
-   d ecran lisent la meme chose qu avant. */
+   Le logo et le nom, rien d autre. La banniere entiere posait un
+   rectangle et sa fumee au milieu de la page : elle reste pour les
+   apercus de reseaux sociaux, ou un visuel plein a sa place. Le nom est
+   ECRIT, pas dessine — il se lit, se traduit et se cherche. */
 .hero-marque {
   margin: 0 auto;
-  width: min(980px, 94vw);
-  line-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 3vw, 34px);
+  line-height: 1;
   text-shadow: none;
   animation: heroMarqueFlotte 7s ease-in-out infinite;
 }
 
-.hero-marque img {
-  display: block;
-  width: 100%;
+.hero-logo {
+  flex: none;
+  width: clamp(92px, 13vw, 168px);
   height: auto;
-  border-radius: 26px;
-  /* Les bords se fondent dans la page : un rectangle noir pose sur le
-     fond anime se voyait comme une vignette collee. */
-  -webkit-mask-image: radial-gradient(120% 120% at 50% 50%, #000 58%, transparent 100%);
-  mask-image: radial-gradient(120% 120% at 50% 50%, #000 58%, transparent 100%);
-  filter: drop-shadow(0 26px 70px rgba(139, 92, 246, 0.42));
+  filter: drop-shadow(0 18px 48px rgba(139, 92, 246, 0.48));
+}
+
+/* Le degrade du nom, decoupe au texte : c'est celui de la banniere,
+   du blanc vers le violet. */
+.hero-nom {
+  background: linear-gradient(104deg, #ffffff 18%, #d9c7ff 46%, #b15cff 82%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: clamp(3.4rem, 9.4vw, 7.6rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.hero-signature {
+  margin: 14px 0 0;
+  color: var(--soft);
+  font-size: clamp(0.82rem, 1.7vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
 
 @keyframes heroMarqueFlotte {
@@ -11422,14 +11441,19 @@ body:not(.dashboard-page) .page-glow {
   .hero-marque { animation: none; }
 }
 
-/* La tete d affiche respire : la banniere prend la place que les
-   lettres prenaient, et le texte descend d autant. */
-.hero { min-height: 820px; padding: 112px 0 76px; gap: 46px; }
+.hero { min-height: 760px; padding: 112px 0 76px; gap: 46px; }
 .hero-copy { max-width: 1040px; }
-.hero-lead { margin-top: 34px; }
+.hero-lead { margin-top: 30px; }
 
 @media (max-width: 760px) {
   .hero { min-height: 0; padding: 84px 0 56px; gap: 34px; }
-  .hero-marque { width: min(560px, 96vw); }
-  .hero-lead { margin-top: 24px; }
+  .hero-lead { margin-top: 22px; }
+  .hero-signature { letter-spacing: 0.16em; }
+}
+
+/* Sous 520 px le logo passe au-dessus du nom : cote a cote, il ne
+   resterait que deux ou trois lettres de large a chacun. */
+@media (max-width: 520px) {
+  .hero-marque { flex-direction: column; gap: 12px; }
+  .hero-logo { width: 104px; }
 }

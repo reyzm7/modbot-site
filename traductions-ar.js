@@ -868,6 +868,7 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "nav.cta": "إضافة ModBot",
     "hero.eyebrow": "حماية ديسكورد 24/7",
     "hero.lead": "إشراف ذكي يحمي مجتمعك، يدير التذاكر، وينظم الخادم بطريقة واضحة وسريعة.",
+    "hero.signature": "بوت ديسكورد الشامل الخاص بك.",
     "hero.primary": "الحصول على ModBot",
     "hero.dashboard": "فتح لوحة التحكم",
     "hero.demo": "تجربة الأوامر",

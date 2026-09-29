@@ -868,6 +868,7 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "nav.cta": "Add ModBot",
     "hero.eyebrow": "Discord protection 24/7",
     "hero.lead": "Smart moderation that protects your community, automates sanctions, manages tickets, and keeps your server clear, healthy, and responsive.",
+    "hero.signature": "Your all-in-one Discord bot.",
     "hero.primary": "Add ModBot to my server",
     "hero.dashboard": "Open dashboard",
     "hero.demo": "Try commands",
