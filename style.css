@@ -1,6 +1,9 @@
 :root {
   --bg: #05020d;
   --bg-soft: #0c0719;
+  /* Le bas de page : une teinte a lui, franchement detachee du fond. */
+  --pied-fond: #150e2b;
+  --pied-trait: linear-gradient(90deg, #8b5cf6, #b15cff 45%, #62e6ff);
   --panel: rgba(18, 12, 34, 0.76);
   --panel-strong: rgba(24, 17, 44, 0.9);
   --line: rgba(158, 110, 255, 0.28);
@@ -1521,12 +1524,14 @@ h1 {
   padding: 54px 20px 90px;
   color: var(--muted);
   text-align: left;
-  /* Opaque, et d'un ton au-dessus de la page : transparent, le pied se
-     lisait comme la suite du contenu, et les traits du fond animé le
-     traversaient. « --bg-soft » suit les deux thèmes. */
-  background: var(--bg-soft);
+  /* Opaque, et d'une teinte à lui : transparent, le pied se lisait
+     comme la suite du contenu et les traits du fond animé le
+     traversaient. « --pied-fond » est posé par thème — plus clair dans
+     le sombre, plus foncé dans le clair : l'écart se voit des deux
+     côtés. */
+  background: var(--pied-fond);
   background-image:
-    radial-gradient(circle at 50% 100%, rgba(139, 92, 246, 0.20), transparent 20rem);
+    radial-gradient(circle at 50% 100%, rgba(139, 92, 246, 0.18), transparent 20rem);
   overflow: hidden;
 }
 
@@ -1534,11 +1539,10 @@ h1 {
   content: "";
   position: absolute;
   top: 0;
-  left: 50%;
-  width: min(740px, calc(100% - 56px));
-  height: 1px;
-  transform: translateX(-50%);
-  background: linear-gradient(90deg, transparent, rgba(177, 92, 255, 0.62), transparent);
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--pied-trait, linear-gradient(90deg, #8b5cf6, #b15cff 45%, #62e6ff));
 }
 
 .footer::after {
@@ -4662,6 +4666,7 @@ label:has(> input[type="checkbox"] + span) {
   /* Fonds — gris-bleu neutre, pas de violet saturé */
   --bg: #0a0c11;
   --bg-soft: #10131a;
+  --pied-fond: #191d29;
   --panel: #141821;
   --panel-strong: #1a1f2a;
 
@@ -5224,10 +5229,11 @@ label,
 
 .footer,
 .site-footer {
-  border-top: 1px solid var(--line);
-  /* Opaque, et d'un ton au-dessus de la page. « --bg-soft » suit les
-     deux themes : clair comme sombre, le bas de page se detache. */
-  background: var(--bg-soft);
+  border-top: 0;
+  /* Sa propre teinte, posee par theme : « --bg-soft » ne s'ecartait du
+     fond que de quelques points de gris, et le pied se confondait
+     encore avec la page. */
+  background: var(--pied-fond);
 }
 
 @media (max-width: 760px) {
@@ -10666,6 +10672,8 @@ body:not(.dashboard-page) .page-glow {
   /* Fonds — blanc casse, jamais blanc pur : moins fatigant a l'ecran */
   --bg: #f4f6fb;
   --bg-soft: #e9edf6;
+  /* En clair on descend au lieu de monter : l ecart se voit pareil. */
+  --pied-fond: #dde3f0;
   --panel: #ffffff;
   --panel-strong: #f7f9fd;
 

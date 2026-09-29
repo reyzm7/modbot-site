@@ -1991,3 +1991,89 @@
 
 /* Replier CACHE : « hidden » suffit, et laisse le clavier tranquille. */
 .sidebar-famille[hidden] { display: none; }
+
+/* ── Le tableau de bord sur telephone ────────────────────────────────
+   Cette feuille est chargee apres `style.css` : ses regles sans media
+   query ecrasaient le responsive ecrit en face. Sur telephone, le menu
+   et son bouton etaient tous deux invisibles — on ne pouvait plus
+   changer de rubrique —, et le contenu tenait dans 260 px sur 375.
+   Tout ce qui suit remet les choses d aplomb, et vient en dernier. */
+@media (max-width: 760px) {
+  /* Une seule colonne : la barre laterale devient un menu qu on
+     deroule, et le contenu prend enfin toute la largeur. */
+  .dashboard-shell {
+    width: min(100% - 20px, 1480px);
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px 0 36px;
+  }
+
+  .sidebar-toggle { display: flex; }
+
+  .dashboard-sidebar {
+    display: none;
+    position: static;
+    height: auto;
+    min-height: 0;
+    max-height: min(68vh, 560px);
+    overflow-y: auto;
+    padding: 12px;
+  }
+  .dashboard-sidebar.is-open { display: block; }
+
+  /* Deux colonnes, pas quatre : « Protections » tenait sur trois
+     lignes coupees dans 54 px de large. */
+  .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .metric-card { padding: 14px; }
+  .metric-card strong { font-size: 1.5rem; }
+
+  /* Tout ce qui se range en colonnes se met a la file. */
+  .welcome-layout,
+  .roles-layout,
+  .search-layout,
+  .social-grid,
+  .premium-grid,
+  .premium-faq-grid,
+  .score-familles,
+  .score-tete,
+  .sanction-flow,
+  .log-toggle-grid,
+  .exempt-grille,
+  .giveaway-list,
+  .form-row,
+  .dashboard-grid,
+  .dashboard-grid.two,
+  .dashboard-grid.three { grid-template-columns: minmax(0, 1fr); }
+
+  /* Une ligne d option de ticket : cinq champs cote a cote ne tiennent
+     pas. Ils s empilent, et le bouton passe en pleine largeur. */
+  .option-row { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .option-row button { width: 100%; }
+
+  .quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* Les panneaux respirent moins : 24 px de marge de chaque cote sur
+     375 px, c est un sixieme de l ecran perdu. */
+  .dash-panel { padding: 16px 14px; }
+  .tool-panel { padding: 16px 14px; }
+  .panel-title { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .panel-title-actions { width: 100%; flex-wrap: wrap; }
+  .panel-title-actions .primary-btn,
+  .panel-title-actions .secondary-btn { flex: 1 1 auto; justify-content: center; }
+
+  /* Le titre du panneau ne doit pas deborder en une seule ligne. */
+  .dashboard-banner h2, .panel-title h2 { font-size: 1.36rem; line-height: 1.2; }
+
+  /* Les tableaux larges defilent plutot que de tout ecraser. */
+  .channel-table, .admin-table { display: block; overflow-x: auto; }
+}
+
+@media (max-width: 480px) {
+  /* Les cartes de rubrique passent a deux par ligne, sans leur phrase :
+     a cette largeur, elle prend plus de place que le nom. */
+  .rubriques-grille { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .rubrique-carte { min-height: 118px; padding: 14px 10px; }
+  .rubrique-carte small { display: none; }
+  .rubrique-icone { width: 38px; height: 38px; }
+  .quick-grid { grid-template-columns: minmax(0, 1fr); }
+}
