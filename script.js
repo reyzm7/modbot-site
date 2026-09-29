@@ -1299,11 +1299,6 @@ function modbotAuthHeaders() {
 }
 
 async function modbotApiFetch(path, options = {}) {
-  if (window.MODBOT_DEMO) {
-    const refus = new Error(t("demo.rienEnregistre"));
-    refus.demo = true;
-    throw refus;
-  }
   const base = getModbotApiBase();
   if (!base) throw new Error("Connexion Discord ModBot non finalisee.");
   const headers = {
@@ -5645,7 +5640,6 @@ function initDashboard() {
       loadGuildSecurity(guildId),
       loadGuildLogs(guildId),
       loadGuildBackups(guildId),
-      chargerModeles(guildId),
       loadGiveaways()
     ]);
     // L'assistant repart de zéro : son contexte parlait de l'autre serveur.
@@ -7644,214 +7638,6 @@ function initDashboard() {
   dashboard?.addEventListener("change", planifierApercus);
 
   /* ══════════════════════════════════════════════════════════════════
-     LE MODE DEMONSTRATION
-
-     « A quoi ca ressemble ? » est la question qu on se pose AVANT
-     d inviter un bot. On y repondait par des captures d ecran ; on y
-     repond maintenant par le vrai tableau de bord, rempli de donnees
-     inventees, sans connexion Discord et sans un seul appel au bot.
-
-     Les reglages se touchent — c est tout l interet — mais rien ne
-     part : le bandeau le dit sur chaque ecran, et enregistrer repond
-     par un message au lieu d appeler quoi que ce soit.
-     ══════════════════════════════════════════════════════════════════ */
-
-  const demoBandeau = document.querySelector("[data-demo-bandeau]");
-
-  function enDemo() {
-    return Boolean(window.MODBOT_DEMO);
-  }
-
-  function mesurerLeBandeau() {
-    if (!demoBandeau) return;
-    document.documentElement.style.setProperty(
-      "--demo-bandeau-h", `${demoBandeau.offsetHeight}px`);
-  }
-
-  function entrerEnDemo() {
-    const donnees = window.MODBOT_DEMO_DONNEES;
-    if (!donnees) {
-      showToast(t("demo.indisponible"));
-      return;
-    }
-    window.MODBOT_DEMO = true;
-    if (demoBandeau) {
-      demoBandeau.hidden = false;
-      // Les deux barres sont « sticky » a zero : sans cette mesure,
-      // celle du tableau de bord passerait par-dessus le bandeau.
-      dashboardApp?.classList.add("est-demo");
-      window.addEventListener("resize", mesurerLeBandeau);
-    }
-
-    setCurrentServer(t("demo.serveur"), modbotDefaultLogo,
-                     donnees.serveur.initials || "SD", donnees.serveur.id, true);
-    // Le serveur de demonstration n a rien a faire dans la memoire du
-    // navigateur : la page Premium le prendrait pour un vrai, et
-    // demanderait au bot un serveur qui n existe pas.
-    try {
-      localStorage.removeItem("modbot-selected-guild");
-      localStorage.removeItem("modbot-selected-guild-name");
-    } catch (erreur) {
-      // Stockage refuse : il n y a rien a nettoyer.
-    }
-    dashboardGuilds = [{
-      id: selectedServer.id,
-      name: selectedServer.name,
-      icon: "",
-      member_count: donnees.serveur.member_count,
-      installed: true,
-      can_manage: true,
-    }];
-
-    // Les ressources d abord : la configuration cite des salons et des
-    // roles, et une liste vide ferait retomber chaque champ sur sa
-    // premiere option.
-    sansCasser("ressources", () => renderDashboardResources(donnees.ressources));
-    const config = donnees.config(t);
-    dernierConfig = config;
-    derniereConfigEnregistree = JSON.stringify(config);
-    sansCasser("configuration", () => applyDashboardConfig(config));
-    // La securite et les sauvegardes ont leurs propres appels : sans
-    // elles, la vue globale resterait sur « Chargement… ».
-    sansCasser("securite", () => applySecurityState(donnees.securite));
-    backupList = [];
-    currentLogs = [];
-    sansCasser("vue globale", renderOverview);
-    sansCasser("sauvegardes", renderBackups);
-    clearUnsavedChanges();
-    // L accueil d abord, la scene ensuite : c est elle qui ouvre la
-    // rubrique demandee dans l adresse, et elle doit avoir le dernier mot.
-    openPanel("overview");
-    showDashboardStage("dashboard");
-    mesurerLeBandeau();
-    // Les modeles se rendent depuis les traductions du site : le bot
-    // n envoie rien ici, et les cinq cartes doivent quand meme se lire.
-    sansCasser("modeles", () => renderModeles(
-      Object.keys(CLEFS_MODELES).map((clef) => ({ clef, reste: [] }))));
-    showToast(t("demo.entree"));
-  }
-
-  function quitterLaDemo() {
-    // Un rechargement plutot qu un demontage : remettre a zero vingt
-    // rubriques a la main laisserait forcement un reste.
-    window.MODBOT_DEMO = false;
-    window.location.reload();
-  }
-
-  document.querySelector("[data-dashboard-demo]")?.addEventListener("click", entrerEnDemo);
-  document.querySelector("[data-demo-quitter]")?.addEventListener("click", quitterLaDemo);
-
-  /* ══════════════════════════════════════════════════════════════════
-     LES MODELES DE SERVEUR
-
-     Des reglages de depart, en un clic. Le bot dit lui-meme ce qu il
-     reste a faire pour chacun : un courrier prive sans salon ou le
-     poser ne s allume pas, et mieux vaut le lire avant le clic.
-     ══════════════════════════════════════════════════════════════════ */
-
-  // Les clefs sont ecrites en toutes lettres, et non fabriquees a la
-  // volee : c'est ce qui permet a test_i18n.py de verifier qu'elles
-  // existent dans les cinq langues. Une clef construite avec un
-  // gabarit passerait au travers, et le texte manquerait en silence.
-  const CLEFS_MODELES = {
-    communaute: { nomClef: "mod.communaute.nom", resumeClef: "mod.communaute.resume",
-                  pointsClef: "mod.communaute.points" },
-    gaming: { nomClef: "mod.gaming.nom", resumeClef: "mod.gaming.resume",
-              pointsClef: "mod.gaming.points" },
-    entraide: { nomClef: "mod.entraide.nom", resumeClef: "mod.entraide.resume",
-                pointsClef: "mod.entraide.points" },
-    creation: { nomClef: "mod.creation.nom", resumeClef: "mod.creation.resume",
-                pointsClef: "mod.creation.points" },
-    jeune_public: { nomClef: "mod.jeune_public.nom",
-                    resumeClef: "mod.jeune_public.resume",
-                    pointsClef: "mod.jeune_public.points" },
-  };
-
-  const CLEFS_RESTE = {
-    modmail_salon: { texteClef: "mod.reste.modmail_salon" },
-    journal: { texteClef: "mod.reste.journal" },
-  };
-
-  let modelesCharges = false;
-
-  function renderModeles(modeles) {
-    const host = document.querySelector("[data-modeles-liste]");
-    if (!host) return;
-    if (!modeles.length) {
-      host.innerHTML = `<p class="field-help">${escapeHtml(t("mod.aucun"))}</p>`;
-      return;
-    }
-    host.innerHTML = modeles
-      .map((modele) => {
-        // Le bot envoie ses textes en francais ; le tableau de bord
-        // parle cinq langues. La traduction gagne quand elle existe,
-        // et ce que le bot a ecrit sert de repli.
-        const cles = CLEFS_MODELES[modele.clef] || {};
-        const brutes = cles.pointsClef ? t(cles.pointsClef, "") : "";
-        const points = (brutes && brutes !== cles.pointsClef
-          ? brutes.split("\n") : (modele.points || []))
-          .map((ligne) => `<li>${escapeHtml(ligne)}</li>`).join("");
-        const reste = (modele.reste || [])
-          .map((ligne) => `<p class="modele-reste">${escapeHtml(t(
-            CLEFS_RESTE[ligne.clef]?.texteClef || "", ligne.texte))}</p>`).join("");
-        return `
-      <article class="modele-carte">
-        <h4>${escapeHtml(t(cles.nomClef || "", modele.nom))}</h4>
-        <p>${escapeHtml(t(cles.resumeClef || "", modele.resume))}</p>
-        <ul>${points}</ul>
-        ${reste}
-        <button class="secondary-btn compact" type="button" data-modele-appliquer="${escapeHtml(modele.clef)}">${escapeHtml(t("mod.appliquer"))}</button>
-      </article>`;
-      })
-      .join("");
-  }
-
-  async function chargerModeles(guildId) {
-    const cible = guildId || selectedServer.id;
-    if (!cible) return;
-    try {
-      const data = await modbotApiFetch(`/api/guilds/${cible}/modeles`, { cache: "no-store" });
-      if (!estEncoreLeServeur(cible)) return;
-      modelesCharges = true;
-      renderModeles(Array.isArray(data.modeles) ? data.modeles : []);
-    } catch (error) {
-      console.warn("Modeles indisponibles :", error?.message || error);
-    }
-  }
-
-  async function appliquerModele(clef) {
-    if (enDemo()) return showToast(t("demo.rienEnregistre"));
-    const guildId = selectedServer.id;
-    if (!guildId) return;
-    // Un modele ecrase des reglages en place : cela se confirme, meme
-    // si l historique le defait ensuite d un bouton.
-    if (!window.confirm(t("mod.confirmer"))) return;
-    try {
-      const data = await modbotApiFetch(`/api/guilds/${guildId}/modeles/appliquer`, {
-        method: "POST",
-        body: JSON.stringify({ modele: clef })
-      });
-      if (data.config) {
-        applyDashboardConfig(data.config);
-        derniereConfigEnregistree = JSON.stringify(data.config);
-      }
-      clearUnsavedChanges();
-      showToast(tp("mod.pose", { nom: data.nom || "" }));
-      (data.reste || []).forEach((ligne) =>
-        showToast(t(CLEFS_RESTE[ligne.clef]?.texteClef || "", ligne.texte)));
-      chargerModeles(guildId);
-      loadGuildLogs(guildId);
-    } catch (error) {
-      showToast(`${error?.message || t("mod.echec")}`);
-    }
-  }
-
-  document.querySelector("[data-modeles-liste]")?.addEventListener("click", (event) => {
-    const bouton = event.target.closest("[data-modele-appliquer]");
-    if (bouton) appliquerModele(bouton.dataset.modeleAppliquer);
-  });
-
-  /* ══════════════════════════════════════════════════════════════════
      HISTORIQUE DE CONFIGURATION
 
      Le tableau de bord garde ce qu etait la configuration avant chaque
@@ -7910,7 +7696,6 @@ function initDashboard() {
   }
 
   async function restaurerVersion(jeton) {
-    if (enDemo()) return showToast(t("demo.rienEnregistre"));
     const guildId = selectedServer.id;
     if (!guildId) return;
     const version = historiqueVersions.find((item) => item.jeton === jeton);
@@ -10495,14 +10280,6 @@ function initDashboard() {
   }
 
   async function saveDashboardConfigToApi() {
-    // En demonstration, on laisse tout regler et on n envoie rien : le
-    // message est plus honnete qu un bouton grise, qui laisserait croire
-    // a une panne.
-    if (enDemo()) {
-      showToast(t("demo.rienEnregistre"));
-      clearUnsavedChanges();
-      return false;
-    }
     if (!selectedServer.id || !selectedServer.installed) return false;
     const data = await modbotApiFetch(`/api/guilds/${selectedServer.id}/config`, {
       method: "PUT",
@@ -10690,11 +10467,6 @@ function initDashboard() {
   }
 
   async function saveCurrentChanges(message = null) {
-    if (enDemo()) {
-      showToast(t("demo.rienEnregistre"));
-      clearUnsavedChanges();
-      return false;
-    }
     message = message || t("dash.configurationEnregistree");
     if (serveurEnChargement()) {
       showToast(t("js.chargementEnCours"));
@@ -10843,10 +10615,7 @@ function initDashboard() {
     // panneau qu'on vient d'ouvrir.
     if (sidebarDeroulante()) ouvrirSidebar(false);
     document.querySelector(".dashboard-content")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    // Ces panneaux interrogent Discord en direct : on ne charge qu'à
-    // l'ouverture — et jamais en demonstration, ou il n'y a personne au
-    // bout du fil.
-    if (enDemo()) return;
+    // Ces panneaux interrogent Discord en direct : on ne charge qu'à l'ouverture.
     if (panelName === "search") runSearch();
     if (panelName === "giveaways") loadGiveaways();
     if (panelName === "welcome") renderWelcomePreview();

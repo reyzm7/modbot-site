@@ -53,12 +53,12 @@
   <div class="voile-page" aria-hidden="true"></div>
   <header class="site-header">
     <nav class="navbar" aria-label="Navigation ModBot" data-i18n-aria="cgu.navigation">
-      <a class="brand" href="index.html" aria-label="Accueil ModBot" data-i18n-aria="cgu.accueilModbot">
+      <span class="brand" aria-label="Accueil ModBot" data-i18n-aria="cgu.accueilModbot">
         <span class="brand-mark">
           <img src="assets/modbot-mark.webp" alt="" width="128" height="128" decoding="async" fetchpriority="high">
         </span>
         <span>ModBot</span>
-      </a>
+      </span>
 
       <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="cgu.ouvrirLeMenu">
         <span></span>
@@ -74,10 +74,10 @@
 <a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n="cgu.supportDiscord">Support Discord</span></a>
 
         <div class="nav-menu" data-nav-menu>
-          <button class="nav-menu-trigger" type="button" data-nav-menu-trigger
+          <button class="nav-menu-trigger est-icone" type="button" data-nav-menu-trigger
+                  aria-label="Accès" data-i18n-aria="nav.menu"
                   aria-expanded="false" aria-haspopup="true">
             <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-menu"/></svg></span>
-            <span data-i18n="nav.menu">Accès</span>
             <svg class="nav-menu-chevron" viewBox="0 0 12 8" aria-hidden="true">
               <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor"
                     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -86,8 +86,8 @@
           <div class="nav-menu-panel" data-nav-menu-panel hidden>
             <a href="index.html" class="nav-menu-home" data-teinte="acier"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-home"/></svg><span data-i18n="nav.retourSite">Revenir au site</span></a>
             <a href="dashboard.html" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
-            <a href="dashboard.html?flow=invite" data-discord-bot-invite data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-plus"/></svg><span data-i18n="nav.ajouter">Ajouter ModBot</span></a>
-            <a href="dashboard.html?panel=premium" data-teinte="or"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="nav.premium">Premium</span></a><a href="boutique.html" data-teinte="cyan"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
+            
+            <a href="boutique.html" data-teinte="cyan"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
             <a href="admin.html" data-teinte="rouge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg><span data-i18n="nav.admin">Admin</span></a>
             <label class="nav-menu-lang">
               <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="nav.langue">Langue</span></span>
@@ -206,9 +206,9 @@ Date : .............................................................</pre>
   </main>
   <footer class="footer">
     <div class="footer-grille">
-      <a class="footer-marque" href="index.html" aria-label="ModBot">
+      <span class="footer-marque">
         <img src="assets/modbot-mark.webp" alt="ModBot" width="256" height="256" loading="lazy" decoding="async">
-      </a>
+      </span>
 
       <nav class="footer-colonne" aria-label="Navigation" data-i18n-aria="pied.navigation">
         <p class="footer-titre" data-i18n="pied.navigation">Navigation</p>

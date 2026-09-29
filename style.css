@@ -1521,9 +1521,12 @@ h1 {
   padding: 54px 20px 90px;
   color: var(--muted);
   text-align: left;
-  background:
-    radial-gradient(circle at 50% 100%, rgba(139, 92, 246, 0.24), transparent 18rem),
-    linear-gradient(180deg, rgba(var(--canal-fond), 0), rgba(var(--canal-fond), 0.96));
+  /* Opaque, et d'un ton au-dessus de la page : transparent, le pied se
+     lisait comme la suite du contenu, et les traits du fond animé le
+     traversaient. « --bg-soft » suit les deux thèmes. */
+  background: var(--bg-soft);
+  background-image:
+    radial-gradient(circle at 50% 100%, rgba(139, 92, 246, 0.20), transparent 20rem);
   overflow: hidden;
 }
 
@@ -5222,7 +5225,9 @@ label,
 .footer,
 .site-footer {
   border-top: 1px solid var(--line);
-  background: transparent;
+  /* Opaque, et d'un ton au-dessus de la page. « --bg-soft » suit les
+     deux themes : clair comme sombre, le bas de page se detache. */
+  background: var(--bg-soft);
 }
 
 @media (max-width: 760px) {
@@ -11355,4 +11360,62 @@ body:not(.dashboard-page) .page-glow {
   .footer-grille { grid-template-columns: 1fr; }
   .footer-bas { grid-template-columns: 1fr; }
   .footer-langue { grid-column: 1; grid-row: auto; }
+}
+
+/* ── Le menu « Accès », reduit a ses trois barres ────────────────────
+   Le mot doublait ce que l icone dit deja, et mangeait la place sur
+   telephone. Le nom reste, pour les lecteurs d ecran. */
+.nav-menu-trigger.est-icone {
+  width: 42px;
+  padding: 0;
+  justify-content: center;
+}
+
+.nav-menu-trigger.est-icone .nav-menu-chevron { display: none; }
+
+/* ── La tete d affiche ───────────────────────────────────────────────
+   La banniere remplace le nom ecrit en lettres : elle porte le logo,
+   le nom et la signature d un seul tenant. Le <h1> reste, avec l image
+   dedans et le nom dans son « alt » — les moteurs et les lecteurs
+   d ecran lisent la meme chose qu avant. */
+.hero-marque {
+  margin: 0 auto;
+  width: min(980px, 94vw);
+  line-height: 0;
+  text-shadow: none;
+  animation: heroMarqueFlotte 7s ease-in-out infinite;
+}
+
+.hero-marque img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 26px;
+  /* Les bords se fondent dans la page : un rectangle noir pose sur le
+     fond anime se voyait comme une vignette collee. */
+  -webkit-mask-image: radial-gradient(120% 120% at 50% 50%, #000 58%, transparent 100%);
+  mask-image: radial-gradient(120% 120% at 50% 50%, #000 58%, transparent 100%);
+  filter: drop-shadow(0 26px 70px rgba(139, 92, 246, 0.42));
+}
+
+@keyframes heroMarqueFlotte {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Le flottement s arrete pour qui demande moins d animations. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-marque { animation: none; }
+}
+
+/* La tete d affiche respire : la banniere prend la place que les
+   lettres prenaient, et le texte descend d autant. */
+.hero { min-height: 820px; padding: 112px 0 76px; gap: 46px; }
+.hero-copy { max-width: 1040px; }
+.hero-lead { margin-top: 34px; }
+
+@media (max-width: 760px) {
+  .hero { min-height: 0; padding: 84px 0 56px; gap: 34px; }
+  .hero-marque { width: min(560px, 96vw); }
+  .hero-lead { margin-top: 24px; }
 }
