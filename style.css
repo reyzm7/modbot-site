@@ -11515,14 +11515,6 @@ body:not(.dashboard-page) .page-glow {
   border-radius: 50%;
 }
 
-.scene-icone {
-  position: relative;
-  width: 38%;
-  height: 38%;
-  color: var(--accent);
-  filter: drop-shadow(0 16px 36px rgba(139, 92, 246, 0.5));
-}
-
 @keyframes sceneAnneau {
   to { transform: rotate(360deg); }
 }
@@ -11604,155 +11596,6 @@ body:not(.dashboard-page) .page-glow {
 
 
 /* ══════════════════════════════════════════════════════════════════
-   CHAQUE SCENE JOUE CE QU'ELLE RACONTE
-
-   Un symbole immobile dans un cercle ne dit rien de plus que le mot
-   ecrit a cote. La moderation pare un coup, le ticket s'ouvre, les
-   chiffres montent, l'automatisation se declenche seule. Le mouvement
-   est lent et espace : il doit se remarquer quand on s'arrete, pas
-   tirer l'oeil pendant qu'on lit.
-   ══════════════════════════════════════════════════════════════════ */
-
-.scene-effet {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-/* ── Moderation : un coup arrive, le bouclier le renvoie ───────────── */
-.scene[data-scene="moderation"] .scene-effet::before {
-  content: "";
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  width: 16px;
-  height: 16px;
-  margin-left: -8px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #ff8a8a, rgba(255, 90, 90, 0) 70%);
-  animation: coupPorte 5.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* L'onde de choc part du centre, au moment ou le coup touche. */
-.scene[data-scene="moderation"] .scene-effet::after {
-  content: "";
-  position: absolute;
-  inset: 26%;
-  border: 2px solid rgba(139, 92, 246, 0.75);
-  border-radius: 50%;
-  opacity: 0;
-  animation: ondeDeChoc 5.5s ease-out infinite;
-}
-
-.scene[data-scene="moderation"] .scene-icone {
-  animation: bouclierEncaisse 5.5s ease-out infinite;
-}
-
-@keyframes coupPorte {
-  0%, 8%   { transform: translateY(-46px) scale(0.6); opacity: 0; }
-  20%      { transform: translateY(0) scale(1); opacity: 1; }
-  27%      { transform: translateY(8px) scale(1.1); opacity: 0.9; }
-  36%      { transform: translateY(-40px) scale(0.5); opacity: 0; }
-  100%     { transform: translateY(-46px) scale(0.6); opacity: 0; }
-}
-
-@keyframes ondeDeChoc {
-  0%, 25%  { transform: scale(0.72); opacity: 0; }
-  30%      { opacity: 0.9; }
-  48%      { transform: scale(1.55); opacity: 0; }
-  100%     { transform: scale(1.55); opacity: 0; }
-}
-
-@keyframes bouclierEncaisse {
-  0%, 23%  { transform: scale(1); }
-  30%      { transform: scale(1.13); }
-  40%      { transform: scale(0.97); }
-  52%, 100% { transform: scale(1); }
-}
-
-/* ── Tickets : une lueur balaie le billet, comme on l'ouvre ────────── */
-.scene[data-scene="tickets"] .scene-effet::before {
-  content: "";
-  position: absolute;
-  inset: 24%;
-  border-radius: 50%;
-  background: linear-gradient(115deg, transparent 38%, rgba(var(--canal-clair), 0.32) 50%, transparent 62%);
-  animation: ticketBalaye 6s ease-in-out infinite;
-}
-
-.scene[data-scene="tickets"] .scene-icone {
-  animation: ticketRespire 6s ease-in-out infinite;
-}
-
-@keyframes ticketBalaye {
-  0%, 52%  { transform: translateX(-130%); opacity: 0; }
-  60%      { opacity: 1; }
-  84%      { transform: translateX(130%); opacity: 0; }
-  100%     { transform: translateX(130%); opacity: 0; }
-}
-
-@keyframes ticketRespire {
-  0%, 100% { transform: rotate(-4deg); }
-  50%      { transform: rotate(4deg); }
-}
-
-/* ── Statistiques : deux barres montent derriere le symbole ────────── */
-.scene[data-scene="stats"] .scene-effet {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 58px;
-  padding-bottom: 26%;
-}
-
-.scene[data-scene="stats"] .scene-effet::before,
-.scene[data-scene="stats"] .scene-effet::after {
-  content: "";
-  width: 10px;
-  border-radius: 3px;
-  background: linear-gradient(180deg, var(--accent), rgba(139, 92, 246, 0.12));
-  animation: barreMonte 3.8s ease-in-out infinite;
-}
-
-.scene[data-scene="stats"] .scene-effet::after { animation-delay: 0.7s; }
-
-@keyframes barreMonte {
-  0%, 100% { height: 16px; opacity: 0.4; }
-  50%      { height: 58px; opacity: 0.85; }
-}
-
-/* ── Automatisations : l'eclair jaillit, l'anneau fait son tour ────── */
-.scene[data-scene="automatisations"] .scene-icone {
-  animation: eclairJaillit 4.6s ease-out infinite;
-}
-
-.scene[data-scene="automatisations"] .scene-effet::before {
-  content: "";
-  position: absolute;
-  inset: 13%;
-  border: 1px solid transparent;
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: rouageTourne 4.6s cubic-bezier(0.7, 0, 0.3, 1) infinite;
-}
-
-@keyframes eclairJaillit {
-  0%, 58%   { filter: drop-shadow(0 16px 36px rgba(139, 92, 246, 0.5)); transform: scale(1); }
-  66%       { filter: drop-shadow(0 0 28px rgba(177, 92, 255, 0.95)); transform: scale(1.15); }
-  76%       { transform: scale(0.97); }
-  86%, 100% { filter: drop-shadow(0 16px 36px rgba(139, 92, 246, 0.5)); transform: scale(1); }
-}
-
-@keyframes rouageTourne {
-  0%, 52%  { transform: rotate(0); opacity: 0.3; }
-  68%      { opacity: 1; }
-  100%     { transform: rotate(360deg); opacity: 0.3; }
-}
-
-
-
-/* ══════════════════════════════════════════════════════════════════
    CE QUI CONTINUE DE BOUGER, MEME EN MODE CALME
 
    « Animations reduites » est un reglage du systeme, et le site l'a
@@ -11779,9 +11622,196 @@ body:not(.dashboard-page) .page-glow {
   .vague-devant,
   .vague-derriere,
   .scene-anneau,
-  .scene[data-scene] .scene-icone,
-  .scene[data-scene] .scene-effet::before,
-  .scene[data-scene] .scene-effet::after {
+  .scene-avatar,
+  .scene-decor,
+  .scene-jeton {
     animation-iteration-count: infinite !important;
   }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   LES SCENES SONT HABITEES
+
+   Un symbole qui respire au centre d'un cercle ne dit rien de plus que
+   le mot ecrit a cote. Chaque scene montre donc la meme chose : un
+   membre et le bot, face a face, comme dans un salon. Ce sont les
+   jetons qui tournent autour d'eux qui disent la rubrique — une alerte
+   et un marteau pour la moderation, un message et une coche pour les
+   tickets, une courbe qui monte pour les chiffres, un eclair pour ce
+   qui se fait tout seul.
+
+   Trois jetons par scene, qui entrent l'un apres l'autre, tiennent un
+   instant et s'effacent : un cycle de six secondes, decale d'une scene
+   a l'autre pour qu'elles ne battent pas ensemble.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── Les deux personnages ─────────────────────────────────────────── */
+
+.scene-duo {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  /* Ils se chevauchent un peu : deux ronds separes sont deux objets,
+     deux ronds qui se touchent sont une conversation. */
+  gap: -10px;
+}
+
+.scene-avatar {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 3px solid var(--bg);
+  overflow: hidden;
+}
+
+.scene-avatar.est-membre {
+  background: linear-gradient(160deg, rgba(var(--canal-clair), 0.16), rgba(var(--canal-clair), 0.06));
+  color: var(--soft);
+  animation: avatarRespire 6s ease-in-out infinite;
+}
+
+.scene-avatar.est-membre .ui-icon { width: 44%; height: 44%; }
+
+.scene-avatar.est-bot {
+  margin-left: -16px;
+  background: radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.42), rgba(var(--canal-sombre), 0.6));
+  box-shadow: 0 0 0 1px var(--accent-line), 0 14px 32px rgba(139, 92, 246, 0.42);
+  animation: avatarRespire 6s ease-in-out 0.8s infinite;
+}
+
+.scene-avatar.est-bot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6px;
+}
+
+@keyframes avatarRespire {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-5px) scale(1.03); }
+}
+
+/* ── Le decor du fond, propre a chaque scene ──────────────────────── */
+
+.scene-decor {
+  position: absolute;
+  z-index: 1;
+  inset: 18%;
+  border-radius: 28%;
+  opacity: 0;
+}
+
+/* Moderation : le panneau d'alerte monte derriere les deux, puis
+   s'efface. C'est l'incident qui arrive, pas le bouclier qui pose. */
+.scene[data-scene="moderation"] .scene-decor {
+  inset: 14% 20% 22%;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 96, 96, 0.28), rgba(255, 96, 96, 0));
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  animation: decorMonte 6s ease-in-out infinite;
+}
+
+/* Tickets : le fil de discussion s'ouvre derriere eux. */
+.scene[data-scene="tickets"] .scene-decor {
+  inset: 22% 16%;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(98, 230, 255, 0.2), rgba(98, 230, 255, 0));
+  animation: decorMonte 6s ease-in-out 0.4s infinite;
+}
+
+/* Chiffres : la courbe, dessinee par un degrade en biais. */
+.scene[data-scene="stats"] .scene-decor {
+  inset: 26% 14%;
+  border-radius: 12px;
+  background: linear-gradient(58deg, transparent 42%, rgba(139, 92, 246, 0.5) 46%, transparent 52%);
+  animation: decorMonte 6s ease-in-out 0.8s infinite;
+}
+
+/* Ce qui se fait tout seul : une onde qui repart du centre. */
+.scene[data-scene="automatisations"] .scene-decor {
+  inset: 20%;
+  border-radius: 50%;
+  border: 2px solid rgba(139, 92, 246, 0.55);
+  background: none;
+  animation: decorOnde 6s ease-out 1.2s infinite;
+}
+
+@keyframes decorMonte {
+  0%, 12%   { opacity: 0; transform: translateY(14px) scale(0.92); }
+  26%, 62%  { opacity: 1; transform: translateY(0) scale(1); }
+  78%, 100% { opacity: 0; transform: translateY(-10px) scale(0.96); }
+}
+
+@keyframes decorOnde {
+  0%, 20%   { opacity: 0; transform: scale(0.6); }
+  34%       { opacity: 0.9; }
+  70%, 100% { opacity: 0; transform: scale(1.35); }
+}
+
+/* ── Les jetons ───────────────────────────────────────────────────── */
+
+.scene-jeton {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--panel-strong);
+  color: var(--accent);
+  box-shadow: 0 10px 26px rgba(var(--canal-sombre), 0.5);
+  opacity: 0;
+  animation: jetonParait 6s ease-in-out infinite;
+}
+
+.scene-jeton .ui-icon { width: 19px; height: 19px; }
+
+/* Trois places autour du duo, et trois entrees regulierement
+   espacees : un tiers de cycle entre chacune. Un jeton reste visible
+   pres de la moitie du cycle, donc il y en a toujours un a l'ecran —
+   avec des ecarts inegaux, la scene retombait dans le vide deux fois
+   par tour. */
+.scene-jeton.est-1 { top: 8%; left: 14%; animation-delay: 0s; }
+.scene-jeton.est-2 { top: 16%; right: 8%; animation-delay: 2s; }
+.scene-jeton.est-3 { bottom: 10%; left: 26%; animation-delay: 4s; }
+
+@keyframes jetonParait {
+  0%       { opacity: 0; transform: translateY(12px) scale(0.5); }
+  10%      { opacity: 1; transform: translateY(0) scale(1.12); }
+  16%      { transform: translateY(0) scale(1); }
+  34%      { opacity: 1; transform: translateY(-4px) scale(1); }
+  44%, 100% { opacity: 0; transform: translateY(-14px) scale(0.72); }
+}
+
+/* Chaque scene a sa couleur de jeton : c'est elle qui distingue une
+   sanction d'un message ou d'un chiffre. */
+.scene[data-scene="moderation"] .scene-jeton { color: #ff8585; border-color: rgba(255, 133, 133, 0.42); }
+.scene[data-scene="tickets"] .scene-jeton { color: var(--cyan, #62e6ff); border-color: rgba(98, 230, 255, 0.42); }
+.scene[data-scene="stats"] .scene-jeton { color: #7ce6a9; border-color: rgba(124, 230, 169, 0.42); }
+.scene[data-scene="automatisations"] .scene-jeton { color: #d7b4ff; border-color: rgba(215, 180, 255, 0.45); }
+
+/* Les quatre scenes ne battent pas ensemble : un demi-second les
+   separe, sinon la page entiere pulse au meme rythme. Chaque scene
+   garde ses trois jetons a un tiers de cycle l'un de l'autre. */
+.scene[data-scene="tickets"] .scene-jeton.est-1 { animation-delay: 0.5s; }
+.scene[data-scene="tickets"] .scene-jeton.est-2 { animation-delay: 2.5s; }
+.scene[data-scene="tickets"] .scene-jeton.est-3 { animation-delay: 4.5s; }
+.scene[data-scene="stats"] .scene-jeton.est-1 { animation-delay: 1s; }
+.scene[data-scene="stats"] .scene-jeton.est-2 { animation-delay: 3s; }
+.scene[data-scene="stats"] .scene-jeton.est-3 { animation-delay: 5s; }
+.scene[data-scene="automatisations"] .scene-jeton.est-1 { animation-delay: 1.5s; }
+.scene[data-scene="automatisations"] .scene-jeton.est-2 { animation-delay: 3.5s; }
+.scene[data-scene="automatisations"] .scene-jeton.est-3 { animation-delay: 5.5s; }
+
+@media (max-width: 720px) {
+  .scene-avatar { width: 68px; height: 68px; }
+  .scene-avatar.est-bot { margin-left: -13px; }
+  .scene-jeton { width: 32px; height: 32px; }
+  .scene-jeton .ui-icon { width: 16px; height: 16px; }
 }
