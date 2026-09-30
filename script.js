@@ -13526,11 +13526,12 @@ function initTransitionPage() {
     window.setTimeout(() => {
       window.clearTimeout(secours);
       location.href = url.href;
-      // Trois cent soixante millisecondes : la duree de la chute,
-      // ecrite en face dans la feuille de style. Moins, on part avant
-      // la fin du mouvement — c'est ce qui donnait l'impression d'un
-      // simple effacement ; plus, on attend le site.
-    }, 360);
+      // Quatre cent quatre-vingts millisecondes : la duree de
+      // « page-tombe », ecrite en face dans la feuille de style. Le
+      // mouvement y tient en deux temps — la chute, puis l'effacement
+      // — et partir plus tot couperait le second, donc rendrait le
+      // premier invisible.
+    }, 480);
   });
 }
 
