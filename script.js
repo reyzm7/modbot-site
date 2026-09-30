@@ -259,8 +259,8 @@ function poserTheme(theme) {
    style, sur « voileTraverse » : la duree totale, et le moment ou le
    voile couvre tout. Les changer ici sans les changer la-bas ferait
    basculer le theme devant les yeux du visiteur. */
-const BASCULE_DUREE = 900;
-const BASCULE_COUVERT = 468;  // 52 % de 900 : la cle du milieu
+const BASCULE_DUREE = 1050;
+const BASCULE_COUVERT = 651;  // 62 % de 1050 : la cle ou tout est couvert
 
 /* Une bascule a la fois : deux clics rapides poseraient deux voiles,
    dont le second partirait de la couleur que le premier vient d'amener
