@@ -10,24 +10,24 @@
        nous, rien de plus. Elle ne suit personne et ne charge rien.
        La retirer fait perdre la propriete du site dans la console. -->
   <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>Guides ModBot — protéger, configurer et faire vivre un serveur Discord</title>
+  <title>Vérifier les nouveaux membres d'un serveur Discord — ModBot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/articles.html">
+  <meta name="description" content="Captcha, questions, délai d'attente : les trois façons de filtrer les arrivées sur Discord, ce que chacune arrête réellement, et ce qu'elle coûte aux vrais membres.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/article-verifier-nouveaux-membres.html">
   <meta property="og:site_name" content="ModBot">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/articles.html">
-  <meta property="og:title" content="Guides ModBot — protéger, configurer et faire vivre un serveur Discord">
-  <meta property="og:description" content="Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.">
+  <meta property="og:url" content="https://modbot-website.vercel.app/article-verifier-nouveaux-membres.html">
+  <meta property="og:title" content="Vérifier les nouveaux membres d'un serveur Discord">
+  <meta property="og:description" content="Captcha, questions, délai d'attente : les trois façons de filtrer les arrivées sur Discord, ce que chacune arrête réellement, et ce qu'elle coûte aux vrais membres.">
   <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Guides ModBot — protéger, configurer et faire vivre un serveur Discord">
-  <meta name="twitter:description" content="Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.">
+  <meta name="twitter:title" content="Vérifier les nouveaux membres d'un serveur Discord">
+  <meta name="twitter:description" content="Captcha, questions, délai d'attente : les trois façons de filtrer les arrivées sur Discord, ce que chacune arrête réellement, et ce qu'elle coûte aux vrais membres.">
   <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
@@ -44,16 +44,25 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "headline": "Guides ModBot — protéger, configurer et faire vivre un serveur Discord",
-    "description": "Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.",
+    "@type": "Article",
+    "headline": "Vérifier les nouveaux membres d'un serveur Discord",
+    "description": "Captcha, questions, délai d'attente : les trois façons de filtrer les arrivées sur Discord, ce que chacune arrête réellement, et ce qu'elle coûte aux vrais membres.",
     "inLanguage": "fr-FR",
-    "datePublished": "2026-09-12",
-    "dateModified": "2026-09-12",
-    "mainEntityOfPage": "https://modbot-website.vercel.app/articles.html",
-    "author": { "@type": "Organization", "name": "ModBot" },
-    "publisher": { "@type": "Organization", "name": "ModBot",
-                    "logo": { "@type": "ImageObject", "url": "https://modbot-website.vercel.app/logo.png" } }
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-01",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/article-verifier-nouveaux-membres.html",
+    "author": {
+      "@type": "Organization",
+      "name": "ModBot"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ModBot",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://modbot-website.vercel.app/logo.png"
+      }
+    }
   }
   </script>
 </head>
@@ -121,53 +130,74 @@
 
   <main class="wiki-shell section-shell">
     <article class="wiki-hero">
-      <p class="eyebrow">Articles</p>
-      <h1>Des guides, pas des articles de remplissage</h1>
-      <p>Trois textes écrits pour être utiles à quelqu'un qui tient un serveur Discord. Chacun règle un problème concret, du début à la fin, et ne dit rien qu'on ne puisse vérifier.</p>
+      <p class="eyebrow">Guide</p>
+      <h1>Vérifier les nouveaux membres d'un serveur Discord</h1>
+      <p>Toute vérification est un compromis : ce qu'elle arrête d'un côté, elle le fait payer de l'autre à des gens qui n'ont rien fait. Voici ce que chaque méthode arrête vraiment, et ce qu'elle coûte.</p>
+      <p class="field-help">Mis à jour le 1er octobre 2026 · 7 minutes de lecture</p>
     </article>
 
-    <div class="boutique-avis-grille">
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 7 min</p>
-        <h2><a href="article-verifier-nouveaux-membres.html">Vérifier les nouveaux membres d'un serveur Discord</a></h2>
-        <p>Captcha, question piège, délai d'attente : ce que chaque méthode arrête réellement, ce qu'elle coûte aux vrais membres, et laquelle choisir selon ce que vous subissez.</p>
-      </article>
+    <div class="wiki-layout">
+      <aside class="wiki-toc" aria-label="Sommaire de l'article">
+        <a href="#menaces">De quoi se protéger</a>
+        <a href="#natif">Les outils de Discord</a>
+        <a href="#captcha">Le captcha</a>
+        <a href="#delai">Le délai d'attente</a>
+        <a href="#questions">La question piège</a>
+        <a href="#choisir">Que choisir</a>
+        <a href="#modbot">Avec ModBot</a>
+      </aside>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-tickets-discord.html">Créer un système de tickets sur Discord</a></h2>
-        <p>Combien de catégories, quelles questions poser à l'ouverture, qui voit quoi — et les trois erreurs qui rendent un système de tickets inutilisable.</p>
-      </article>
+      <div class="wiki-content">
+        <section id="menaces" class="wiki-section">
+          <h2>De quoi cherche-t-on à se protéger ?</h2>
+          <p>Trois choses très différentes, qu'on confond souvent. Le <strong>raid</strong> : cinquante comptes qui arrivent en une minute pour inonder les salons. Le <strong>spam publicitaire</strong> : un compte qui rejoint, poste son lien et part. Et le <strong>membre indésirable</strong> : quelqu'un de banni qui revient sous un autre compte.</p>
+          <p>Aucune méthode ne traite les trois. Un captcha arrête le raid automatisé mais pas le spammeur humain. Un délai d'attente arrête le spammeur pressé mais pas celui qui patiente. Choisir suppose de savoir ce qu'on subit réellement — regardez votre journal avant de régler quoi que ce soit.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 5 min</p>
-        <h2><a href="article-roles-reaction-discord.html">Les rôles par réaction sur Discord</a></h2>
-        <p>Laisser les membres choisir leurs rôles : réactions ou boutons, pourquoi la hiérarchie décide de tout, et ce qui casse un panneau sans prévenir.</p>
-      </article>
+        <section id="natif" class="wiki-section">
+          <h2>Ce que Discord fait déjà</h2>
+          <p>Avant d'ajouter quoi que ce soit, Discord propose un niveau de vérification par serveur, dans les paramètres de modération. Le niveau « moyen » exige un compte de plus de cinq minutes, « élevé » un membre présent depuis dix minutes, et le plus strict un numéro de téléphone vérifié.</p>
+          <p>Ces réglages sont gratuits, immédiats, et arrêtent déjà une bonne part des comptes jetables. Le niveau téléphone est très efficace et très brutal : beaucoup de gens n'ont pas de numéro sur leur compte Discord, et vous les perdez tous.</p>
+          <p>Il y a aussi le « filtre de contenu explicite » et la règle d'écran d'accueil avec les règles à accepter. Commencez par là : c'est souvent suffisant pour un serveur de taille moyenne.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-moderer-seul.html">Modérer un serveur Discord quand on est seul</a></h2>
-        <p>Dans quel ordre automatiser, ce qu'il ne faut jamais confier à un bot, et comment tenir sans y passer ses soirées.</p>
-      </article>
+        <section id="captcha" class="wiki-section">
+          <h2>Le captcha</h2>
+          <p>Le principe : le nouveau arrive sans aucun accès, et doit prouver qu'il est humain — cliquer un bouton, recopier un code, résoudre une image — pour recevoir le rôle qui ouvre le serveur.</p>
+          <p><strong>Ce qu'il arrête :</strong> les vagues de comptes automatisés, très efficacement. Un raid scripté s'arrête net devant un captcha.</p>
+          <p><strong>Ce qu'il coûte :</strong> une étape de plus pour tout le monde, et une part de vos arrivées qui ne la franchira pas — par distraction, par méfiance, ou parce qu'elle ne comprend pas. Comptez que vous perdrez des membres honnêtes ; c'est le prix, et il se justifie surtout si vous subissez réellement des raids.</p>
+          <p>Si vous en mettez un, rendez-le court. Un captcha en trois étapes n'arrête pas trois fois plus de robots, il décourage trois fois plus d'humains.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-proteger-serveur-discord.html">Protéger un serveur Discord d'un raid : ce qui marche vraiment</a></h2>
-        <p>Reconnaître un raid, la porte d'entrée qui l'arrête, le niveau de vérification de Discord, les permissions à couper, et pourquoi la seule réaction qui aille assez vite est automatique.</p>
-      </article>
+        <section id="delai" class="wiki-section">
+          <h2>Le délai d'attente</h2>
+          <p>Une approche différente : le nouveau entre normalement, mais ne peut pas tout faire tout de suite. Pas de lien, pas de fichier, pas d'invitation pendant les premières heures.</p>
+          <p><strong>Ce qu'il arrête :</strong> le spam publicitaire, qui est pressé par nature. Le compte qui vient déposer une arnaque ne reviendra pas vingt-quatre heures plus tard — son modèle économique repose sur le volume, pas sur la patience.</p>
+          <p><strong>Ce qu'il coûte :</strong> presque rien. Un vrai nouveau membre commence par lire et par dire bonjour ; il remarque rarement qu'il ne pouvait pas poster d'image pendant la première journée. C'est le meilleur rapport entre ce qu'on arrête et ce qu'on gêne.</p>
+          <p>À condition d'une chose : dire au membre combien de temps il reste. Un message supprimé sans explication se vit comme une sanction ; « tu pourras dans trois heures » se vit comme une règle.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 7 min</p>
-        <h2><a href="article-permissions-discord.html">Les permissions Discord, expliquées simplement</a></h2>
-        <p>Trois règles suffisent : elles s'additionnent, le refus l'emporte dans un salon, et « Administrateur » ignore tout le reste. Plus la hiérarchie des rôles, le piège d'@everyone, et un contrôle en cinq minutes.</p>
-      </article>
+        <section id="questions" class="wiki-section">
+          <h2>La question dont la réponse est dans les règles</h2>
+          <p>Peu répandue et pourtant redoutable : plutôt qu'un captcha, une question dont la réponse se trouve dans votre salon de règles. « Quel est le mot de passe écrit au point 4 ? »</p>
+          <p><strong>Ce qu'elle arrête :</strong> les robots, qui ne lisent pas vos règles, et les gens qui rejoignent sans avoir la moindre intention de les lire. C'est le seul filtre qui trie sur l'intention plutôt que sur la technique.</p>
+          <p><strong>Ce qu'elle coûte :</strong> il faut changer la réponse de temps en temps, car elle finit par circuler. Et elle ajoute une friction réelle pour quelqu'un qui voulait juste poser une question rapide.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-bot-ou-site.html">Bot ou site web pour sa communauté : comment choisir</a></h2>
-        <p>La bonne question n'est pas « lequel est le mieux » mais « qu'est-ce qui me fait perdre du temps ». Ce que chacun fait mieux, quand il faut les deux, et ce que ça coûte vraiment.</p>
-      </article>
+        <section id="choisir" class="wiki-section">
+          <h2>Que choisir</h2>
+          <p>Pour un serveur qui démarre : les réglages natifs de Discord, et rien d'autre. Ajouter un captcha à un serveur de trente membres coûte plus de membres qu'il n'en protège.</p>
+          <p>Pour un serveur qui subit du spam publicitaire : un délai d'attente sur les liens et les fichiers. C'est presque invisible pour les vrais membres.</p>
+          <p>Pour un serveur déjà visé par des raids : captcha, et niveau de vérification élevé. Vous perdrez des arrivées ; c'est assumé, parce que l'alternative est pire.</p>
+          <p>Dans tous les cas, gardez un journal. Sans trace de ce qui arrive, on règle au ressenti — et le ressenti pousse toujours à trop verrouiller après un incident, puis à tout rouvrir quand on a oublié.</p>
+        </section>
+
+        <section id="modbot" class="wiki-section">
+          <h2>Avec ModBot</h2>
+          <p>ModBot propose le captcha à l'entrée et le délai d'attente des arrivants, réglables séparément depuis le tableau de bord. Le délai se règle de une heure à sept jours, et on choisit ce qui est retenu : liens, fichiers, invitations, ou seulement certains.</p>
+          <p>Par défaut, aucun point d'infraction n'est compté pendant ce délai : un nouveau qui poste une image n'a rien fait de mal, il est arrivé trop tôt. Le détail est dans <a href="wiki.html#verification">la documentation de la vérification</a>.</p>
+        </section>
+      </div>
     </div>
   </main>
   <footer class="footer">

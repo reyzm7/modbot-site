@@ -10,24 +10,24 @@
        nous, rien de plus. Elle ne suit personne et ne charge rien.
        La retirer fait perdre la propriete du site dans la console. -->
   <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>Guides ModBot — protéger, configurer et faire vivre un serveur Discord</title>
+  <title>Créer un système de tickets sur Discord — ModBot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/articles.html">
+  <meta name="description" content="Un salon d'aide encombré, des demandes qui se croisent : comment passer aux tickets, ce qu'il faut régler, et les trois erreurs qui les rendent inutilisables.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/article-tickets-discord.html">
   <meta property="og:site_name" content="ModBot">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/articles.html">
-  <meta property="og:title" content="Guides ModBot — protéger, configurer et faire vivre un serveur Discord">
-  <meta property="og:description" content="Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.">
+  <meta property="og:url" content="https://modbot-website.vercel.app/article-tickets-discord.html">
+  <meta property="og:title" content="Créer un système de tickets sur Discord">
+  <meta property="og:description" content="Un salon d'aide encombré, des demandes qui se croisent : comment passer aux tickets, ce qu'il faut régler, et les trois erreurs qui les rendent inutilisables.">
   <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Guides ModBot — protéger, configurer et faire vivre un serveur Discord">
-  <meta name="twitter:description" content="Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.">
+  <meta name="twitter:title" content="Créer un système de tickets sur Discord">
+  <meta name="twitter:description" content="Un salon d'aide encombré, des demandes qui se croisent : comment passer aux tickets, ce qu'il faut régler, et les trois erreurs qui les rendent inutilisables.">
   <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
@@ -44,16 +44,25 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "headline": "Guides ModBot — protéger, configurer et faire vivre un serveur Discord",
-    "description": "Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.",
+    "@type": "Article",
+    "headline": "Créer un système de tickets sur Discord",
+    "description": "Un salon d'aide encombré, des demandes qui se croisent : comment passer aux tickets, ce qu'il faut régler, et les trois erreurs qui les rendent inutilisables.",
     "inLanguage": "fr-FR",
-    "datePublished": "2026-09-12",
-    "dateModified": "2026-09-12",
-    "mainEntityOfPage": "https://modbot-website.vercel.app/articles.html",
-    "author": { "@type": "Organization", "name": "ModBot" },
-    "publisher": { "@type": "Organization", "name": "ModBot",
-                    "logo": { "@type": "ImageObject", "url": "https://modbot-website.vercel.app/logo.png" } }
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-01",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/article-tickets-discord.html",
+    "author": {
+      "@type": "Organization",
+      "name": "ModBot"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ModBot",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://modbot-website.vercel.app/logo.png"
+      }
+    }
   }
   </script>
 </head>
@@ -121,53 +130,72 @@
 
   <main class="wiki-shell section-shell">
     <article class="wiki-hero">
-      <p class="eyebrow">Articles</p>
-      <h1>Des guides, pas des articles de remplissage</h1>
-      <p>Trois textes écrits pour être utiles à quelqu'un qui tient un serveur Discord. Chacun règle un problème concret, du début à la fin, et ne dit rien qu'on ne puisse vérifier.</p>
+      <p class="eyebrow">Guide</p>
+      <h1>Créer un système de tickets sur Discord</h1>
+      <p>Un salon « support » où tout le monde écrit en même temps finit toujours pareil : les demandes se croisent, on répond deux fois à la même, et celles du bas ne sont jamais lues. Les tickets règlent ça — à condition de ne pas les régler contre soi.</p>
+      <p class="field-help">Mis à jour le 1er octobre 2026 · 6 minutes de lecture</p>
     </article>
 
-    <div class="boutique-avis-grille">
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 7 min</p>
-        <h2><a href="article-verifier-nouveaux-membres.html">Vérifier les nouveaux membres d'un serveur Discord</a></h2>
-        <p>Captcha, question piège, délai d'attente : ce que chaque méthode arrête réellement, ce qu'elle coûte aux vrais membres, et laquelle choisir selon ce que vous subissez.</p>
-      </article>
+    <div class="wiki-layout">
+      <aside class="wiki-toc" aria-label="Sommaire de l'article">
+        <a href="#pourquoi">Pourquoi les tickets</a>
+        <a href="#categories">Les catégories</a>
+        <a href="#questions">Les questions</a>
+        <a href="#permissions">Les permissions</a>
+        <a href="#fermeture">Fermer un ticket</a>
+        <a href="#erreurs">Les erreurs courantes</a>
+        <a href="#modbot">Avec ModBot</a>
+      </aside>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-tickets-discord.html">Créer un système de tickets sur Discord</a></h2>
-        <p>Combien de catégories, quelles questions poser à l'ouverture, qui voit quoi — et les trois erreurs qui rendent un système de tickets inutilisable.</p>
-      </article>
+      <div class="wiki-content">
+        <section id="pourquoi" class="wiki-section">
+          <h2>Pourquoi un salon d'aide ne suffit pas</h2>
+          <p>Dans un salon partagé, trois personnes qui demandent de l'aide en même temps écrivent dans le même fil. Leurs messages s'entremêlent, et il devient impossible de savoir à qui s'adresse une réponse. Le membre qui a posé sa question il y a dix minutes voit passer trois conversations avant la sienne, et part.</p>
+          <p>Il y a aussi ce que personne ne dit : dans un salon public, on ne raconte pas qu'on s'est fait arnaquer, ni qu'on a un problème avec un autre membre. Les demandes délicates n'arrivent jamais.</p>
+          <p>Un ticket crée un salon privé entre le demandeur et l'équipe. Une demande, un endroit, une conversation. C'est tout le principe, et c'est suffisant.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 5 min</p>
-        <h2><a href="article-roles-reaction-discord.html">Les rôles par réaction sur Discord</a></h2>
-        <p>Laisser les membres choisir leurs rôles : réactions ou boutons, pourquoi la hiérarchie décide de tout, et ce qui casse un panneau sans prévenir.</p>
-      </article>
+        <section id="categories" class="wiki-section">
+          <h2>Combien de catégories ?</h2>
+          <p>C'est la première décision, et la plus souvent ratée. On est tenté d'en créer huit : support, signalement, partenariat, candidature, remboursement, bug, suggestion, autre. Résultat : le membre hésite, choisit « autre », et l'équipe reçoit tout au même endroit — ce qu'on voulait éviter.</p>
+          <p>Trois ou quatre suffisent presque toujours. Une catégorie ne se justifie que si elle est traitée par des gens différents, ou avec des questions différentes. Si deux catégories finissent chez les mêmes modérateurs avec les mêmes questions, elles n'en font qu'une.</p>
+          <p>Un repère simple : si vous ne pouvez pas nommer qui s'occupe d'une catégorie, elle n'a pas lieu d'être.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-moderer-seul.html">Modérer un serveur Discord quand on est seul</a></h2>
-        <p>Dans quel ordre automatiser, ce qu'il ne faut jamais confier à un bot, et comment tenir sans y passer ses soirées.</p>
-      </article>
+        <section id="questions" class="wiki-section">
+          <h2>Les questions posées à l'ouverture</h2>
+          <p>Un ticket qui s'ouvre sur « Bonjour » fait perdre deux allers-retours : il faut demander de quoi il s'agit, puis les détails. Poser deux ou trois questions au moment de l'ouverture change complètement le rythme.</p>
+          <p>Les bonnes questions sont celles dont vous auriez besoin de toute façon : de quel serveur ou de quel achat il s'agit, ce qui s'est passé, et depuis quand. Évitez celles auxquelles on répond « oui » — elles n'apprennent rien.</p>
+          <p>Trois questions est un maximum. Au-delà, le membre abandonne le formulaire, et vous aurez moins de demandes — ce qui ressemble à un succès sur un tableau de bord, et n'en est pas un.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-proteger-serveur-discord.html">Protéger un serveur Discord d'un raid : ce qui marche vraiment</a></h2>
-        <p>Reconnaître un raid, la porte d'entrée qui l'arrête, le niveau de vérification de Discord, les permissions à couper, et pourquoi la seule réaction qui aille assez vite est automatique.</p>
-      </article>
+        <section id="permissions" class="wiki-section">
+          <h2>Qui voit quoi</h2>
+          <p>Un ticket doit être visible par son auteur et par l'équipe, par personne d'autre. Cela paraît évident, et c'est pourtant l'erreur la plus fréquente : la catégorie qui accueille les tickets hérite des permissions du serveur, et si <code>@everyone</code> peut y lire les messages, tous les tickets sont publics.</p>
+          <p>La vérification prend dix secondes : ouvrez un ticket de test, puis regardez-le depuis un compte sans rôle. S'il apparaît, la catégorie est mal réglée.</p>
+          <p>Pensez aussi au rôle qui donne accès aux tickets : donner « Gérer les salons » à toute l'équipe pour qu'elle puisse fermer un ticket revient à lui donner le droit de supprimer n'importe quel salon du serveur. Un rôle dédié, avec le strict nécessaire, vaut mieux.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 7 min</p>
-        <h2><a href="article-permissions-discord.html">Les permissions Discord, expliquées simplement</a></h2>
-        <p>Trois règles suffisent : elles s'additionnent, le refus l'emporte dans un salon, et « Administrateur » ignore tout le reste. Plus la hiérarchie des rôles, le piège d'@everyone, et un contrôle en cinq minutes.</p>
-      </article>
+        <section id="fermeture" class="wiki-section">
+          <h2>La fermeture, et ce qu'on en garde</h2>
+          <p>Supprimer le salon à la fermeture efface la conversation. C'est parfois voulu, mais souvent regretté : six mois plus tard, personne ne peut vérifier ce qui avait été convenu avec un membre.</p>
+          <p>Garder une transcription — un fichier ou un message récapitulatif envoyé dans un salon d'archives — coûte peu et sauve les litiges. C'est aussi ce qui permet de voir qu'une même question revient dix fois, et mérite donc une réponse écrite quelque part.</p>
+          <p>Prévenez le membre avant de fermer. Un ticket qui disparaît pendant qu'on écrit donne le sentiment d'avoir été congédié.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-bot-ou-site.html">Bot ou site web pour sa communauté : comment choisir</a></h2>
-        <p>La bonne question n'est pas « lequel est le mieux » mais « qu'est-ce qui me fait perdre du temps ». Ce que chacun fait mieux, quand il faut les deux, et ce que ça coûte vraiment.</p>
-      </article>
+        <section id="erreurs" class="wiki-section">
+          <h2>Les trois erreurs qui rendent les tickets inutiles</h2>
+          <p><strong>Ne jamais répondre.</strong> Un système de tickets sans personne derrière est pire qu'un salon d'aide : au moins, dans un salon, un autre membre pouvait dépanner. Si l'équipe ne peut pas tenir un délai, mieux vaut l'annoncer que le laisser deviner.</p>
+          <p><strong>Laisser les tickets s'accumuler.</strong> Cinquante salons ouverts dans une catégorie et plus personne ne sait lesquels sont traités. Fermez, même sans réponse parfaite.</p>
+          <p><strong>Faire du ticket une punition.</strong> Si le seul usage est « ouvre un ticket pour contester ta sanction », l'outil prend une couleur qu'il ne perdra plus, et les demandes ordinaires n'arriveront jamais.</p>
+        </section>
+
+        <section id="modbot" class="wiki-section">
+          <h2>Avec ModBot</h2>
+          <p>ModBot crée le panneau, les catégories et les questions depuis le tableau de bord, et publie le message d'ouverture dans le salon choisi. Les permissions du salon privé sont posées à la création, donc sans risque d'hériter de celles du serveur.</p>
+          <p>Le détail des réglages est dans <a href="wiki.html#tickets">la documentation</a>, et l'aperçu du tableau de bord montre le panneau tel que vos membres le verront avant publication.</p>
+        </section>
+      </div>
     </div>
   </main>
   <footer class="footer">

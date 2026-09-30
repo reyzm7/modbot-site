@@ -10,24 +10,24 @@
        nous, rien de plus. Elle ne suit personne et ne charge rien.
        La retirer fait perdre la propriete du site dans la console. -->
   <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>Guides ModBot — protéger, configurer et faire vivre un serveur Discord</title>
+  <title>Les rôles par réaction sur Discord — ModBot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/articles.html">
+  <meta name="description" content="Laisser les membres choisir leurs rôles eux-mêmes : comment monter un panneau de rôles-réactions, ce qu'il faut éviter, et pourquoi la hiérarchie décide de tout.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/article-roles-reaction-discord.html">
   <meta property="og:site_name" content="ModBot">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/articles.html">
-  <meta property="og:title" content="Guides ModBot — protéger, configurer et faire vivre un serveur Discord">
-  <meta property="og:description" content="Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.">
+  <meta property="og:url" content="https://modbot-website.vercel.app/article-roles-reaction-discord.html">
+  <meta property="og:title" content="Les rôles par réaction sur Discord">
+  <meta property="og:description" content="Laisser les membres choisir leurs rôles eux-mêmes : comment monter un panneau de rôles-réactions, ce qu'il faut éviter, et pourquoi la hiérarchie décide de tout.">
   <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Guides ModBot — protéger, configurer et faire vivre un serveur Discord">
-  <meta name="twitter:description" content="Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.">
+  <meta name="twitter:title" content="Les rôles par réaction sur Discord">
+  <meta name="twitter:description" content="Laisser les membres choisir leurs rôles eux-mêmes : comment monter un panneau de rôles-réactions, ce qu'il faut éviter, et pourquoi la hiérarchie décide de tout.">
   <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
@@ -44,16 +44,25 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "headline": "Guides ModBot — protéger, configurer et faire vivre un serveur Discord",
-    "description": "Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.",
+    "@type": "Article",
+    "headline": "Les rôles par réaction sur Discord",
+    "description": "Laisser les membres choisir leurs rôles eux-mêmes : comment monter un panneau de rôles-réactions, ce qu'il faut éviter, et pourquoi la hiérarchie décide de tout.",
     "inLanguage": "fr-FR",
-    "datePublished": "2026-09-12",
-    "dateModified": "2026-09-12",
-    "mainEntityOfPage": "https://modbot-website.vercel.app/articles.html",
-    "author": { "@type": "Organization", "name": "ModBot" },
-    "publisher": { "@type": "Organization", "name": "ModBot",
-                    "logo": { "@type": "ImageObject", "url": "https://modbot-website.vercel.app/logo.png" } }
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-01",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/article-roles-reaction-discord.html",
+    "author": {
+      "@type": "Organization",
+      "name": "ModBot"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ModBot",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://modbot-website.vercel.app/logo.png"
+      }
+    }
   }
   </script>
 </head>
@@ -121,53 +130,63 @@
 
   <main class="wiki-shell section-shell">
     <article class="wiki-hero">
-      <p class="eyebrow">Articles</p>
-      <h1>Des guides, pas des articles de remplissage</h1>
-      <p>Trois textes écrits pour être utiles à quelqu'un qui tient un serveur Discord. Chacun règle un problème concret, du début à la fin, et ne dit rien qu'on ne puisse vérifier.</p>
+      <p class="eyebrow">Guide</p>
+      <h1>Les rôles par réaction sur Discord</h1>
+      <p>Distribuer les rôles à la main fonctionne jusqu'à une trentaine de membres. Au-delà, personne ne suit. Un panneau où chacun se sert règle le problème en une fois — et pose deux ou trois pièges qu'il vaut mieux connaître avant.</p>
+      <p class="field-help">Mis à jour le 1er octobre 2026 · 5 minutes de lecture</p>
     </article>
 
-    <div class="boutique-avis-grille">
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 7 min</p>
-        <h2><a href="article-verifier-nouveaux-membres.html">Vérifier les nouveaux membres d'un serveur Discord</a></h2>
-        <p>Captcha, question piège, délai d'attente : ce que chaque méthode arrête réellement, ce qu'elle coûte aux vrais membres, et laquelle choisir selon ce que vous subissez.</p>
-      </article>
+    <div class="wiki-layout">
+      <aside class="wiki-toc" aria-label="Sommaire de l'article">
+        <a href="#usages">À quoi ça sert</a>
+        <a href="#hierarchie">La hiérarchie</a>
+        <a href="#emoji">Réactions ou boutons</a>
+        <a href="#panneau">Écrire le panneau</a>
+        <a href="#pieges">Ce qui le casse</a>
+        <a href="#modbot">Avec ModBot</a>
+      </aside>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-tickets-discord.html">Créer un système de tickets sur Discord</a></h2>
-        <p>Combien de catégories, quelles questions poser à l'ouverture, qui voit quoi — et les trois erreurs qui rendent un système de tickets inutilisable.</p>
-      </article>
+      <div class="wiki-content">
+        <section id="usages" class="wiki-section">
+          <h2>À quoi ça sert vraiment</h2>
+          <p>Trois usages couvrent presque tous les cas. Les <strong>centres d'intérêt</strong> : un rôle par jeu, par sujet, par plateforme, qui donne accès aux salons correspondants. Les <strong>notifications</strong> : un rôle qu'on prend pour être mentionné lors des annonces, et qu'on retire quand c'est trop. Et la <strong>présentation</strong> : région, langue, fuseau horaire.</p>
+          <p>Le point commun des trois : ce sont des choix qui n'engagent que celui qui les fait. Un rôle qui donne un pouvoir — modérer, voir un salon privé, mentionner tout le monde — ne se distribue jamais par réaction.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 5 min</p>
-        <h2><a href="article-roles-reaction-discord.html">Les rôles par réaction sur Discord</a></h2>
-        <p>Laisser les membres choisir leurs rôles : réactions ou boutons, pourquoi la hiérarchie décide de tout, et ce qui casse un panneau sans prévenir.</p>
-      </article>
+        <section id="hierarchie" class="wiki-section">
+          <h2>La hiérarchie décide de tout</h2>
+          <p>C'est la cause de neuf pannes sur dix. Un bot ne peut donner que les rôles situés <strong>en dessous du sien</strong> dans la liste des rôles du serveur. Si le rôle à distribuer est au-dessus, rien ne se passe — et souvent sans message d'erreur visible.</p>
+          <p>La correction prend cinq secondes : dans les paramètres du serveur, onglet Rôles, remontez le rôle du bot au-dessus de tous ceux qu'il doit distribuer. Pas tout en haut nécessairement ; juste au-dessus.</p>
+          <p>Le même piège existe entre humains : un modérateur ne peut pas retirer un rôle placé au-dessus du sien. C'est pour cela qu'un membre de l'équipe peut se retrouver incapable de sanctionner quelqu'un qu'il devrait pouvoir sanctionner.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-moderer-seul.html">Modérer un serveur Discord quand on est seul</a></h2>
-        <p>Dans quel ordre automatiser, ce qu'il ne faut jamais confier à un bot, et comment tenir sans y passer ses soirées.</p>
-      </article>
+        <section id="emoji" class="wiki-section">
+          <h2>Réactions ou boutons ?</h2>
+          <p>Les réactions sont le système historique : on clique sur un emoji sous un message. Elles marchent partout, y compris sur les vieux clients, mais elles ont un défaut — un membre peut retirer sa réaction, ou en ajouter une autre, et l'affichage devient vite sale.</p>
+          <p>Les boutons et les menus déroulants sont plus récents et plus propres : rien ne s'accumule sous le message, et le libellé peut être une phrase plutôt qu'un emoji à deviner. Sur un serveur de plus de vingt rôles, le menu déroulant est nettement plus lisible.</p>
+          <p>Si vous utilisez des emoji personnalisés, souvenez-vous qu'ils disparaissent quand ils sont supprimés du serveur : le panneau devient alors une liste de carrés vides.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-proteger-serveur-discord.html">Protéger un serveur Discord d'un raid : ce qui marche vraiment</a></h2>
-        <p>Reconnaître un raid, la porte d'entrée qui l'arrête, le niveau de vérification de Discord, les permissions à couper, et pourquoi la seule réaction qui aille assez vite est automatique.</p>
-      </article>
+        <section id="panneau" class="wiki-section">
+          <h2>Écrire un panneau qu'on comprend</h2>
+          <p>Un panneau réussi tient en une phrase d'explication et une ligne par rôle. Dites ce que le rôle <em>donne</em>, pas seulement son nom : « Minecraft — accès aux salons du serveur Minecraft » se comprend, « 🟩 Minecraft » se devine.</p>
+          <p>Regroupez par thème si vous dépassez huit rôles, avec un panneau par thème plutôt qu'un seul interminable. Un membre qui doit faire défiler pour trouver son rôle ne le prendra pas.</p>
+          <p>Mettez le panneau dans un salon en lecture seule, et rappelez qu'on peut se retirer un rôle aussi facilement qu'on l'a pris — beaucoup ne le savent pas et n'osent pas essayer.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 7 min</p>
-        <h2><a href="article-permissions-discord.html">Les permissions Discord, expliquées simplement</a></h2>
-        <p>Trois règles suffisent : elles s'additionnent, le refus l'emporte dans un salon, et « Administrateur » ignore tout le reste. Plus la hiérarchie des rôles, le piège d'@everyone, et un contrôle en cinq minutes.</p>
-      </article>
+        <section id="pieges" class="wiki-section">
+          <h2>Ce qui casse un panneau</h2>
+          <p><strong>Supprimer le message.</strong> Le panneau est attaché à un message précis ; s'il disparaît, les réactions ne mènent plus nulle part. Republier en crée un nouveau, et les anciens liens partagés ne fonctionnent plus.</p>
+          <p><strong>Renommer ou recréer un rôle.</strong> Le lien se fait sur l'identifiant du rôle, pas sur son nom. Renommer ne casse rien ; supprimer puis recréer un rôle du même nom casse tout, car l'identifiant change.</p>
+          <p><strong>Retirer les permissions du bot.</strong> Un nettoyage de rôles bien intentionné, et le bot perd « Gérer les rôles ». Le panneau reste affiché, mais ne fait plus rien.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-bot-ou-site.html">Bot ou site web pour sa communauté : comment choisir</a></h2>
-        <p>La bonne question n'est pas « lequel est le mieux » mais « qu'est-ce qui me fait perdre du temps ». Ce que chacun fait mieux, quand il faut les deux, et ce que ça coûte vraiment.</p>
-      </article>
+        <section id="modbot" class="wiki-section">
+          <h2>Avec ModBot</h2>
+          <p>ModBot gère les deux formes — réactions et boutons — depuis le tableau de bord, et publie le panneau dans le salon choisi. L'aperçu montre le rendu avant publication, ce qui évite de republier trois fois pour corriger une faute.</p>
+          <p>Le détail est dans <a href="wiki.html#roles">la documentation des rôles automatiques</a>.</p>
+        </section>
+      </div>
     </div>
   </main>
   <footer class="footer">

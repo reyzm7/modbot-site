@@ -10,24 +10,24 @@
        nous, rien de plus. Elle ne suit personne et ne charge rien.
        La retirer fait perdre la propriete du site dans la console. -->
   <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>Guides ModBot — protéger, configurer et faire vivre un serveur Discord</title>
+  <title>Modérer un serveur Discord quand on est seul — ModBot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/articles.html">
+  <meta name="description" content="Pas d'équipe, pas de temps : ce qu'il faut automatiser en premier, ce qu'il ne faut jamais déléguer à un bot, et comment tenir sans y passer ses soirées.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/article-moderer-seul.html">
   <meta property="og:site_name" content="ModBot">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/articles.html">
-  <meta property="og:title" content="Guides ModBot — protéger, configurer et faire vivre un serveur Discord">
-  <meta property="og:description" content="Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.">
+  <meta property="og:url" content="https://modbot-website.vercel.app/article-moderer-seul.html">
+  <meta property="og:title" content="Modérer un serveur Discord quand on est seul">
+  <meta property="og:description" content="Pas d'équipe, pas de temps : ce qu'il faut automatiser en premier, ce qu'il ne faut jamais déléguer à un bot, et comment tenir sans y passer ses soirées.">
   <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Guides ModBot — protéger, configurer et faire vivre un serveur Discord">
-  <meta name="twitter:description" content="Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.">
+  <meta name="twitter:title" content="Modérer un serveur Discord quand on est seul">
+  <meta name="twitter:description" content="Pas d'équipe, pas de temps : ce qu'il faut automatiser en premier, ce qu'il ne faut jamais déléguer à un bot, et comment tenir sans y passer ses soirées.">
   <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
@@ -44,16 +44,25 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "headline": "Guides ModBot — protéger, configurer et faire vivre un serveur Discord",
-    "description": "Trois guides écrits pour être utiles : arrêter un raid, comprendre les permissions Discord, et choisir entre un bot et un site.",
+    "@type": "Article",
+    "headline": "Modérer un serveur Discord quand on est seul",
+    "description": "Pas d'équipe, pas de temps : ce qu'il faut automatiser en premier, ce qu'il ne faut jamais déléguer à un bot, et comment tenir sans y passer ses soirées.",
     "inLanguage": "fr-FR",
-    "datePublished": "2026-09-12",
-    "dateModified": "2026-09-12",
-    "mainEntityOfPage": "https://modbot-website.vercel.app/articles.html",
-    "author": { "@type": "Organization", "name": "ModBot" },
-    "publisher": { "@type": "Organization", "name": "ModBot",
-                    "logo": { "@type": "ImageObject", "url": "https://modbot-website.vercel.app/logo.png" } }
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-01",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/article-moderer-seul.html",
+    "author": {
+      "@type": "Organization",
+      "name": "ModBot"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ModBot",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://modbot-website.vercel.app/logo.png"
+      }
+    }
   }
   </script>
 </head>
@@ -121,53 +130,71 @@
 
   <main class="wiki-shell section-shell">
     <article class="wiki-hero">
-      <p class="eyebrow">Articles</p>
-      <h1>Des guides, pas des articles de remplissage</h1>
-      <p>Trois textes écrits pour être utiles à quelqu'un qui tient un serveur Discord. Chacun règle un problème concret, du début à la fin, et ne dit rien qu'on ne puisse vérifier.</p>
+      <p class="eyebrow">Guide</p>
+      <h1>Modérer un serveur Discord quand on est seul</h1>
+      <p>La plupart des conseils de modération supposent une équipe. Quand il n'y a que vous, la question n'est pas « comment bien modérer » mais « qu'est-ce que je peux lâcher sans que le serveur s'écroule ». Voici l'ordre dans lequel s'y prendre.</p>
+      <p class="field-help">Mis à jour le 1er octobre 2026 · 6 minutes de lecture</p>
     </article>
 
-    <div class="boutique-avis-grille">
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 7 min</p>
-        <h2><a href="article-verifier-nouveaux-membres.html">Vérifier les nouveaux membres d'un serveur Discord</a></h2>
-        <p>Captcha, question piège, délai d'attente : ce que chaque méthode arrête réellement, ce qu'elle coûte aux vrais membres, et laquelle choisir selon ce que vous subissez.</p>
-      </article>
+    <div class="wiki-layout">
+      <aside class="wiki-toc" aria-label="Sommaire de l'article">
+        <a href="#verite">Vous ne lirez pas tout</a>
+        <a href="#ordre">L'ordre des priorités</a>
+        <a href="#jamais">Ce qu'on ne délègue pas</a>
+        <a href="#sanctions">L'échelle de sanctions</a>
+        <a href="#membres">S'appuyer sur les membres</a>
+        <a href="#tenir">Tenir dans la durée</a>
+        <a href="#modbot">Avec ModBot</a>
+      </aside>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-tickets-discord.html">Créer un système de tickets sur Discord</a></h2>
-        <p>Combien de catégories, quelles questions poser à l'ouverture, qui voit quoi — et les trois erreurs qui rendent un système de tickets inutilisable.</p>
-      </article>
+      <div class="wiki-content">
+        <section id="verite" class="wiki-section">
+          <h2>Vous ne lirez pas tout</h2>
+          <p>Autant le dire tout de suite : à partir de quelques centaines de membres actifs, personne ne lit tous les messages. Essayer mène à un seul endroit — l'épuisement, puis l'abandon du serveur, ce qui est la pire issue pour tout le monde.</p>
+          <p>La bonne question n'est donc pas « comment tout surveiller » mais « qu'est-ce qui doit absolument me remonter ». Tout le reste doit se régler sans vous, ou attendre.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 5 min</p>
-        <h2><a href="article-roles-reaction-discord.html">Les rôles par réaction sur Discord</a></h2>
-        <p>Laisser les membres choisir leurs rôles : réactions ou boutons, pourquoi la hiérarchie décide de tout, et ce qui casse un panneau sans prévenir.</p>
-      </article>
+        <section id="ordre" class="wiki-section">
+          <h2>Dans quel ordre automatiser</h2>
+          <p><strong>D'abord ce qui est irréversible.</strong> Un salon supprimé, un rôle donné à quelqu'un qui ne devrait pas l'avoir, une invitation permanente créée par un inconnu : ce sont les seules choses qu'on ne peut pas réparer après coup. Une alerte sur les changements de permissions vaut dix filtres de langage.</p>
+          <p><strong>Ensuite ce qui part vite.</strong> Le spam et les liens d'arnaque doivent partir sans vous, parce que leur nuisance se mesure en minutes. Un lien de phishing supprimé deux heures plus tard a déjà fait son travail.</p>
+          <p><strong>Enfin ce qui est pénible mais lent.</strong> Les insultes, les disputes, les règles non respectées : c'est désagréable, mais ça attend le soir. Automatiser cela en premier est l'erreur classique — c'est le plus visible, pas le plus urgent.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-moderer-seul.html">Modérer un serveur Discord quand on est seul</a></h2>
-        <p>Dans quel ordre automatiser, ce qu'il ne faut jamais confier à un bot, et comment tenir sans y passer ses soirées.</p>
-      </article>
+        <section id="jamais" class="wiki-section">
+          <h2>Ce qu'il ne faut pas confier à un bot</h2>
+          <p><strong>Le bannissement définitif.</strong> Un bot se trompe, et un bannissement automatique sur un faux positif fait perdre un membre honnête qui ne reviendra pas. Laissez l'exclusion temporaire aux automatismes, et gardez le bannissement pour vous.</p>
+          <p><strong>Les conflits entre personnes.</strong> Aucun filtre ne comprend qu'une dispute entre deux habitués n'a rien à voir avec une insulte d'un inconnu. Ces cas-là demandent un humain, toujours.</p>
+          <p><strong>Le premier contact avec un nouveau.</strong> Un message de bienvenue automatique est utile, mais si la seule chose que vit un arrivant est une succession de messages de robot, il n'aura aucune raison de rester.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-proteger-serveur-discord.html">Protéger un serveur Discord d'un raid : ce qui marche vraiment</a></h2>
-        <p>Reconnaître un raid, la porte d'entrée qui l'arrête, le niveau de vérification de Discord, les permissions à couper, et pourquoi la seule réaction qui aille assez vite est automatique.</p>
-      </article>
+        <section id="sanctions" class="wiki-section">
+          <h2>Une échelle plutôt qu'une décision</h2>
+          <p>Quand on est seul, la fatigue vient moins des sanctions que du fait de <em>décider</em> à chaque fois. Une échelle écrite à l'avance — premier avertissement, puis exclusion d'une heure, puis d'un jour, puis renvoi — supprime cette charge.</p>
+          <p>Elle a un autre avantage : elle est défendable. « C'est la règle, tu en es au troisième » se conteste mal, alors qu'une décision prise au cas par cas donne toujours l'impression d'être arbitraire, même quand elle ne l'est pas.</p>
+          <p>Prévoyez aussi l'oubli : des points d'infraction qui ne s'effacent jamais finissent par bannir des gens pour trois broutilles étalées sur deux ans.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 7 min</p>
-        <h2><a href="article-permissions-discord.html">Les permissions Discord, expliquées simplement</a></h2>
-        <p>Trois règles suffisent : elles s'additionnent, le refus l'emporte dans un salon, et « Administrateur » ignore tout le reste. Plus la hiérarchie des rôles, le piège d'@everyone, et un contrôle en cinq minutes.</p>
-      </article>
+        <section id="membres" class="wiki-section">
+          <h2>Faire porter une partie aux membres</h2>
+          <p>Vous êtes seul dans l'équipe, pas seul sur le serveur. Un système de signalement simple — un bouton, une commande — transforme chaque membre en paire d'yeux, et c'est de loin le meilleur rapport entre effort et résultat.</p>
+          <p>Deux conditions pour que ça marche. Il faut que le signalement soit <strong>discret</strong> : personne ne dénoncera publiquement quelqu'un avec qui il va continuer à parler. Et il faut <strong>répondre</strong>, au moins par un accusé de réception : trois signalements ignorés et plus personne n'en fait.</p>
+          <p>Quand quelqu'un se révèle fiable sur plusieurs mois, donnez-lui un rôle avec très peu de pouvoir — supprimer un message, exclure une heure. La plupart des gens ne veulent pas administrer un serveur ; ils veulent pouvoir arrêter une bêtise sans attendre que vous vous réveilliez.</p>
+        </section>
 
-      <article class="boutique-avis-carte">
-        <p class="boutique-avis-note">Guide · 6 min</p>
-        <h2><a href="article-bot-ou-site.html">Bot ou site web pour sa communauté : comment choisir</a></h2>
-        <p>La bonne question n'est pas « lequel est le mieux » mais « qu'est-ce qui me fait perdre du temps ». Ce que chacun fait mieux, quand il faut les deux, et ce que ça coûte vraiment.</p>
-      </article>
+        <section id="tenir" class="wiki-section">
+          <h2>Tenir dans la durée</h2>
+          <p>Fixez-vous un rendez-vous plutôt qu'une veille permanente : un quart d'heure par jour à heure fixe pour lire le journal et traiter ce qui attend. Le reste du temps, coupez les notifications. Un serveur ne s'écroule pas en six heures ; un administrateur, si.</p>
+          <p>Écrivez vos règles, même trois lignes. Sans texte, chaque décision se discute, et c'est cette discussion qui use, pas la décision.</p>
+          <p>Enfin, acceptez que certaines choses passeront. Un serveur parfaitement modéré n'existe pas, et viser cela quand on est seul garantit d'arrêter dans l'année.</p>
+        </section>
+
+        <section id="modbot" class="wiki-section">
+          <h2>Avec ModBot</h2>
+          <p>ModBot a été construit pour ce cas précis : l'anti-nuke surveille ce qui est irréversible, les filtres s'occupent de ce qui part vite, et l'échelle de sanctions applique une règle écrite d'avance plutôt qu'une décision à chaque incident. Les points d'infraction peuvent expirer, pour que rien ne s'accumule indéfiniment.</p>
+          <p>Le journal rassemble ce qui s'est passé pendant votre absence, et le rapport hebdomadaire le résume. Tout est détaillé dans <a href="wiki.html">la documentation</a>.</p>
+        </section>
+      </div>
     </div>
   </main>
   <footer class="footer">
