@@ -2807,3 +2807,25 @@ body.dash-menu-ouvert { overflow: hidden; }
    ne verrouillerait rien. Le piege est decrit plus longuement dans la
    feuille principale. */
 html:has(> body.apercu-ouvert) { overflow: hidden; }
+
+/* Les trois motifs de la quarantaine : trois cases sur une ligne, dans
+   une case de grille prevue pour un seul champ. Elles se replient si la
+   place manque plutot que de deborder de leur colonne. */
+.premieres-heures-motifs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 6px;
+}
+
+.premieres-heures-motifs label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--soft);
+  font-size: 0.86rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.premieres-heures-motifs input { width: auto; margin: 0; cursor: pointer; }

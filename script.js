@@ -5360,6 +5360,7 @@ function initDashboard() {
       ["[data-security-antiscam]", security.antiscam ?? true],
       ["[data-security-antiraid]", security.antiraid],
       ["[data-security-repetition]", (security.repetition || {}).enabled],
+      ["[data-security-premieres-heures]", (security.quarantaine || {}).enabled],
       ["[data-security-mentions]", (security.mentions || {}).enabled],
       ["[data-security-pseudos]", security.pseudos_suivis !== false],
       ["[data-security-staffalert]", security.staff_alert],
@@ -5372,6 +5373,21 @@ function initDashboard() {
       }
     });
 
+    // Ce que la quarantaine retient. Les trois valent « oui » quand le
+    // bot ne dit rien : c'est son defaut, et afficher trois cases vides
+    // ferait croire a une protection qui ne protege de rien.
+    const quar = security.quarantaine || {};
+    [
+      ["[data-premieres-heures-liens]", quar.liens],
+      ["[data-premieres-heures-fichiers]", quar.fichiers],
+      ["[data-premieres-heures-invitations]", quar.invitations],
+    ].forEach(([selecteur, valeur]) => {
+      const champ = document.querySelector(selecteur);
+      if (champ) champ.checked = valeur !== false;
+    });
+    const infraction = document.querySelector("[data-premieres-heures-infraction]");
+    if (infraction) infraction.value = quar.infraction ? "oui" : "non";
+
     // Les seuils du message repete. Un champ absent de la reponse garde
     // le defaut du bot : afficher zero ferait croire a un filtre mort.
     const repet = security.repetition || {};
@@ -5380,6 +5396,7 @@ function initDashboard() {
       ["[data-repetition-salons]", repet.salons, 3],
       ["[data-repetition-fenetre]", repet.fenetre, 300],
       ["[data-repetition-longueur]", repet.longueur, 12],
+      ["[data-premieres-heures-duree]", (security.quarantaine || {}).heures, 24],
     ].forEach(([selecteur, valeur, defaut]) => {
       const champ = document.querySelector(selecteur);
       if (champ) champ.value = Number.isFinite(Number(valeur)) && valeur !== null
@@ -10249,6 +10266,14 @@ function initDashboard() {
           salons: Number(document.querySelector("[data-repetition-salons]")?.value || 3),
           fenetre: Number(document.querySelector("[data-repetition-fenetre]")?.value || 300),
           longueur: Number(document.querySelector("[data-repetition-longueur]")?.value || 12),
+        },
+        quarantaine: {
+          enabled: coche("[data-security-premieres-heures]"),
+          heures: Number(document.querySelector("[data-premieres-heures-duree]")?.value || 24),
+          liens: coche("[data-premieres-heures-liens]"),
+          fichiers: coche("[data-premieres-heures-fichiers]"),
+          invitations: coche("[data-premieres-heures-invitations]"),
+          infraction: document.querySelector("[data-premieres-heures-infraction]")?.value === "oui",
         },
         staff_alert: coche("[data-security-staffalert]"),
         lockdown: coche("[data-security-lockdown]"),

@@ -996,6 +996,7 @@
           <label class="toggle-line"><input type="checkbox" checked data-security-pseudos><span></span><strong data-i18n="dash.suiviPseudos"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-user"/></svg> Anciens pseudos</strong><small data-i18n="dash.suiviPseudosAide">Garde les cinq derniers noms d'un membre : ils s'affichent dans son casier et dans son courrier.</small></label>
           <label class="toggle-line"><input type="checkbox" data-security-mentions><span></span><strong data-i18n="dash.antiMentions"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Mentions de masse</strong><small data-i18n="dash.antiMentionsAide">Un message qui pingue trop de monde d'un coup est retiré : c'est la brimade la plus simple de Discord.</small></label>
           <label class="toggle-line"><input type="checkbox" data-security-repetition><span></span><strong data-i18n="dash.antiRepetition"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-clipboard"/></svg> Message répété</strong><small data-i18n="dash.antiRepetitionAide">Le même message copié dans plusieurs salons : tout est retiré d'un coup.</small></label>
+          <label class="toggle-line"><input type="checkbox" data-security-premieres-heures><span></span><strong data-i18n="dash.premieresHeures"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-timer"/></svg> Les premières heures</strong><small data-i18n="dash.premieresHeuresAide">Les nouveaux venus ne peuvent ni poster de liens, ni de fichiers, ni d'invitations pendant les premières heures.</small></label>
           <label class="toggle-line"><input type="checkbox" data-security-antiraid><span></span><strong data-i18n="dash.antiRaid"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-siren"/></svg> Anti-raid</strong><small data-i18n="dash.surveilleLesVaguesArrivees">Surveille les vagues d'arrivées suspectes.</small></label>
           <label class="toggle-line"><input type="checkbox" data-security-staffalert><span></span><strong data-i18n="dash.staffAlert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-megaphone"/></svg> Staff alert</strong><small data-i18n="dash.previensLeStaffDes">Préviens le staff des actions importantes.</small></label>
           <label class="toggle-line danger"><input type="checkbox" data-security-lockdown><span></span><strong data-i18n="dash.lockdown"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-lock"/></svg> Lockdown</strong><small data-i18n="dash.masqueLesSalonsEn">Masque les salons en urgence.</small></label>
@@ -1103,6 +1104,22 @@
             </label>
             <label class="mini-form" data-i18n="dash.repetitionLongueur">Longueur minimale du message
               <input type="number" min="5" max="200" step="1" value="12" data-repetition-longueur>
+            </label>
+            <label class="mini-form" data-i18n="dash.premieresHeuresDuree">Durée du bridage (heures)
+              <input type="number" min="1" max="168" step="1" value="24" data-premieres-heures-duree>
+            </label>
+            <label class="mini-form" data-i18n="dash.premieresHeuresRetenir">Ce qui est retenu
+              <span class="premieres-heures-motifs">
+                <label><input type="checkbox" data-premieres-heures-liens checked><span data-i18n="dash.premieresHeuresLiens">Liens</span></label>
+                <label><input type="checkbox" data-premieres-heures-fichiers checked><span data-i18n="dash.premieresHeuresFichiers">Fichiers</span></label>
+                <label><input type="checkbox" data-premieres-heures-invitations checked><span data-i18n="dash.premieresHeuresInvitations">Invitations</span></label>
+              </span>
+            </label>
+            <label class="mini-form" data-i18n="dash.premieresHeuresInfraction">Compter une infraction
+              <select data-premieres-heures-infraction>
+                <option value="non">Non : effacer seulement (recommandé)</option>
+                <option value="oui">Oui : compter une infraction</option>
+              </select>
             </label>
             <label class="mini-form" data-i18n="dash.actionSurCompteSuspect">Action sur compte suspect
               <select data-antiraid-action>
