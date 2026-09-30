@@ -11583,10 +11583,34 @@ body:not(.dashboard-page) .page-glow {
 .scene:nth-child(even) { grid-template-columns: minmax(0, 1fr) 220px; }
 .scene:nth-child(even) .scene-visuel { order: 2; }
 
+/* Chaque scene a une couleur, declaree une fois ici et reprise par
+   tout ce qui bouge dedans — l'arc, l'onde, les jetons, le decor.
+   Avant, chacun portait la sienne en dur et il fallait les changer a
+   cinq endroits. */
+.scene[data-scene="moderation"]      { --teinte-scene: 255, 133, 133; }
+.scene[data-scene="tickets"]         { --teinte-scene: 98, 230, 255; }
+.scene[data-scene="stats"]           { --teinte-scene: 124, 230, 169; }
+.scene[data-scene="automatisations"] { --teinte-scene: 215, 180, 255; }
+
+/* Les memes quatre, en plus sombre pour le fond clair. Ces teintes sont
+   faites pour du noir : posees sur du blanc elles tombent sous deux de
+   contraste, et le decor d'une scene devenait un souvenir de couleur.
+   Elles descendent donc, sans changer de famille — on reconnait la
+   scene a sa couleur d'un theme a l'autre. */
+:root[data-theme="light"] .scene[data-scene="moderation"]      { --teinte-scene: 206, 48, 48; }
+:root[data-theme="light"] .scene[data-scene="tickets"]         { --teinte-scene: 10, 138, 176; }
+:root[data-theme="light"] .scene[data-scene="stats"]           { --teinte-scene: 20, 142, 86; }
+:root[data-theme="light"] .scene[data-scene="automatisations"] { --teinte-scene: 118, 62, 196; }
+
 .scene-visuel {
   position: relative;
   display: grid;
   place-items: center;
+  /* Rien ne sort du cercle : l'onde grandit jusqu'au bord et s'y
+     arrete, au lieu de mordre sur le texte d'a cote. « clip » plutot
+     que « hidden » — il coupe sans faire de la boite un conteneur de
+     defilement. */
+  overflow: clip;
   /* Un cercle plus petit que le paragraphe qu'il accompagne : a 268 px
      il ecrasait un texte de deux lignes. */
   width: min(208px, 62vw);
@@ -11608,7 +11632,56 @@ body:not(.dashboard-page) .page-glow {
   inset: 0;
   border: 2px dashed rgba(var(--canal-clair), 0.26);
   border-radius: 50%;
-  animation: sceneAnneau 44s linear infinite;
+  /* Quarante-quatre secondes pour un tour : un pointille avance alors
+     d'un demi-pixel par image, ce qui ne se distingue pas d'un cercle
+     fixe. A vingt-quatre, on voit qu'il tourne sans que cela agite la
+     page. */
+  animation: sceneAnneau 24s linear infinite;
+}
+
+/* ── L'arc qui court sur l'anneau ─────────────────────────────────────
+   Un cone de couleur tourne derriere, et un masque ne laisse voir que
+   l'epaisseur de l'anneau : il ne reste qu'un arc lumineux qui fait le
+   tour. C'est lui qui dit que la scene travaille — un anneau pointille
+   pouvait etre un cadre, celui-ci ne peut etre qu'en marche. */
+.scene-fil {
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,
+              rgba(var(--teinte-scene), 0) 0deg,
+              rgba(var(--teinte-scene), 0) 300deg,
+              rgba(var(--teinte-scene), 0.85) 348deg,
+              rgba(var(--teinte-scene), 0) 360deg);
+  /* « closest-side » n'est pas un detail : sans lui, un degrade
+     circulaire mesure ses pourcentages jusqu'au COIN de la boite, a
+     cent-quarante pour cent du rayon du cercle. La bande visible
+     tombait alors a mi-chemin du centre, loin derriere l'anneau, et
+     l'arc restait invisible. Avec, cent pour cent vaut le bord. */
+  -webkit-mask: radial-gradient(circle closest-side, transparent 0 95%, #000 96.5% 100%);
+          mask: radial-gradient(circle closest-side, transparent 0 95%, #000 96.5% 100%);
+  animation: sceneAnneau 3.8s linear infinite;
+}
+
+/* ── L'onde, a chaque action ──────────────────────────────────────────
+   Elle part du centre et meurt au bord, une fois par cycle de six
+   secondes — le meme cycle que les jetons et le decor, si bien que tout
+   ce qui se passe dans la scene se passe au meme instant. */
+.scene-onde {
+  position: absolute;
+  z-index: 1;
+  width: 46%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(var(--teinte-scene), 0.7);
+  opacity: 0;
+  animation: sceneOnde 6s ease-out infinite;
+}
+
+@keyframes sceneOnde {
+  0%       { opacity: 0;    transform: scale(0.25); }
+  12%      { opacity: 0.85; }
+  46%, 100% { opacity: 0;   transform: scale(2.15); }
 }
 
 /* Un second anneau, plein et plus court, pris dans le premier : deux
@@ -11666,13 +11739,43 @@ body:not(.dashboard-page) .page-glow {
 }
 
 .vague-separation {
-  height: clamp(58px, 7vw, 104px);
+  height: clamp(86px, 10vw, 152px);
   overflow: hidden;
+  /* Le pied se fond dans la suite.
+
+     Teintee, la vague est devenue une masse — et une masse qui s'arrete
+     a la derniere ligne de sa boite fait un bandeau, pas une
+     separation : on voyait un trait horizontal net la ou la section
+     suivante commence. Le degrade efface ce bord. Il ne touche pas au
+     haut, ou la crete doit rester franche : c'est elle le dessin. */
+  -webkit-mask-image: linear-gradient(180deg, #000 0 52%, rgba(0, 0, 0, 0.45) 82%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 0 52%, rgba(0, 0, 0, 0.45) 82%, transparent 100%);
+}
+
+/* ── Pourquoi deux elements par couche ────────────────────────────────
+   Elle glissait, elle n'ondulait pas : un dessin fige qui defile de
+   cote reste un tapis, si lent soit-il. Une vraie onde change de forme
+   pendant qu'elle avance — sa crete monte, s'aplatit, remonte.
+
+   Une propriete ne peut porter qu'une animation a la fois, et les deux
+   mouvements sont des « transform ». Chaque couche est donc faite de
+   deux elements emboites : le <svg> glisse de cote, le <span> qui le
+   tient monte et s'ecrase. Vues ensemble, les deux donnent l'ondulation
+   — et comme leurs durees n'ont pas de diviseur commun, la silhouette
+   ne repasse jamais deux fois par le meme etat. */
+.vague-couche {
+  position: absolute;
+  inset: 0;
+  display: block;
+  /* L'ecrasement part du bas : sans cela, la crete monterait en
+     decollant aussi le pied de la vague, et une bande de fond
+     apparaitrait sous elle. */
+  transform-origin: 50% 100%;
 }
 
 /* Deux fois la largeur de la page, pour deux periodes de vague : le
    glissement d'une demi-largeur ramene le trace sur lui-meme. */
-.vague-separation svg {
+.vague-couche svg {
   position: absolute;
   inset: 0;
   display: block;
@@ -11680,26 +11783,64 @@ body:not(.dashboard-page) .page-glow {
   height: 100%;
 }
 
-.vague-devant { animation: vagueGlisse 19s linear infinite; }
-
-/* Celle du fond va moins vite et en sens inverse : deux vitesses
-   suffisent a faire croire a de l'eau, une seule donne un tapis qui
-   defile. */
-.vague-derriere {
-  opacity: 0.5;
-  animation: vagueGlisse 31s linear infinite reverse;
-}
-
 @keyframes vagueGlisse {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
 
-.vague-separation path {
-  fill: var(--bg-soft);
+/* Les trois etages. La premiere passe devant, opaque et bordee ; les
+   deux autres sont derriere, plus sombres et sans trait — c'est ce qui
+   creuse la profondeur. Aucune des six durees n'est un multiple d'une
+   autre : la scene ne se remet jamais en phase. */
+.vague-c1 svg { animation: vagueGlisse 17s linear infinite; }
+.vague-c2 svg { animation: vagueGlisse 26s linear infinite reverse; }
+.vague-c3 svg { animation: vagueGlisse 41s linear infinite; }
+
+.vague-c1 { animation: vagueHoule1 7s ease-in-out infinite; }
+.vague-c2 { animation: vagueHoule2 11s ease-in-out infinite; }
+.vague-c3 { animation: vagueHoule3 13s ease-in-out infinite; }
+
+/* Trois houles differentes, et pas la meme a trois vitesses : deux
+   sommets dans le cycle de la premiere contre un seul dans les autres,
+   ce qui suffit a rompre le balancement de metronome. */
+@keyframes vagueHoule1 {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  30%      { transform: translateY(-6px) scaleY(1.1); }
+  55%      { transform: translateY(2px) scaleY(0.95); }
+  78%      { transform: translateY(-4px) scaleY(1.06); }
+}
+
+@keyframes vagueHoule2 {
+  0%, 100% { transform: translateY(3px) scaleY(0.96); }
+  45%      { transform: translateY(-8px) scaleY(1.14); }
+}
+
+@keyframes vagueHoule3 {
+  0%, 100% { transform: translateY(-5px) scaleY(1.08); }
+  50%      { transform: translateY(4px) scaleY(0.93); }
+}
+
+/* ── Pourquoi les couches sont teintees ───────────────────────────────
+   Remplies du fond doux du site, les trois etages se confondaient avec
+   la page : il ne restait qu'un trait qui ondule au-dessus de rien. La
+   vague ne se voyait pas parce qu'elle n'avait pas de corps.
+
+   Chacune tire donc vers l'accent, de plus en plus a mesure qu'elle
+   avance vers nous. Le degrade se lit comme une epaisseur d'eau, et
+   les trois silhouettes se distinguent enfin l'une de l'autre. */
+.vague-c3 path { fill: color-mix(in srgb, var(--accent) 7%,  var(--bg-soft)); }
+.vague-c2 path { fill: color-mix(in srgb, var(--accent) 14%, var(--bg-soft)); }
+.vague-c1 path { fill: color-mix(in srgb, var(--accent) 22%, var(--bg-soft)); }
+
+/* Seule celle de devant porte le trait : trois lisereses superposes
+   feraient une hachure, pas une vague. La lueur tient a l'element et
+   non au trace — un filtre sur un <path> coute un rendu par image. */
+.vague-c1 path {
   stroke: var(--accent-line);
   stroke-width: 2;
 }
+
+.vague-c1 { filter: drop-shadow(0 -2px 10px rgba(139, 92, 246, 0.34)); }
 
 
 /* ══════════════════════════════════════════════════════════════════
@@ -11726,11 +11867,21 @@ body:not(.dashboard-page) .page-glow {
    ══════════════════════════════════════════════════════════════════ */
 
 @media (prefers-reduced-motion: reduce) {
-  .vague-devant,
-  .vague-derriere,
+  .vague-couche,
+  .vague-couche svg,
   .scene-anneau,
+  .scene-fil,
+  .scene-onde,
   .scene-avatar,
   .scene-decor,
+  /* Les pseudo-elements doivent etre nommes un a un : la regle
+     universelle qui force le compte a 1 vise « *::before » et
+     « *::after » autant que « * », et ce qui n'est pas repris ici
+     s'arreterait apres un seul tour. C'est la moitie du decor des
+     scenes qui y passe — la troisieme barre, la bulle de reponse, le
+     bouclier, deux des trois ondes. */
+  .scene-decor::before,
+  .scene-decor::after,
   .scene-jeton {
     animation-iteration-count: infinite !important;
   }
@@ -11781,13 +11932,55 @@ body:not(.dashboard-page) .page-glow {
   animation: avatarRespire 6s ease-in-out infinite;
 }
 
+/* Sous la sanction, il recule d'un pas ; devant un ticket, il se penche
+   vers le bot. Le meme couple d'avatars raconte deux choses opposees
+   selon le sens du mouvement — c'est moins cher qu'un dessin par
+   rubrique, et cela se lit mieux. */
+.scene[data-scene="moderation"] .scene-avatar.est-membre {
+  animation: membreRecule 6s ease-out infinite;
+}
+.scene[data-scene="tickets"] .scene-avatar.est-membre {
+  animation: membreAvance 6s ease-in-out infinite;
+}
+
+@keyframes membreRecule {
+  0%, 100% { transform: translateX(0) scale(1); }
+  8%       { transform: translateX(-9px) scale(0.93); }
+  30%      { transform: translateX(0) scale(1); }
+}
+
+@keyframes membreAvance {
+  0%, 100% { transform: translateX(0); }
+  16%      { transform: translateX(7px); }
+  40%      { transform: translateX(0); }
+}
+
 .scene-avatar.est-membre .ui-icon { width: 44%; height: 44%; }
 
+/* Le bot ne se contente plus de respirer : il s'allume a l'instant ou
+   l'onde part, et c'est lui qu'on lit alors comme la cause. Une scene
+   ou tout bouge en continu n'a pas d'evenement ; il en faut un. */
 .scene-avatar.est-bot {
   margin-left: -13px;
   background: radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.42), rgba(var(--canal-sombre), 0.6));
-  box-shadow: 0 0 0 1px var(--accent-line), 0 14px 32px rgba(139, 92, 246, 0.42);
-  animation: avatarRespire 6s ease-in-out 0.8s infinite;
+  animation: avatarAgit 6s ease-out infinite;
+}
+
+@keyframes avatarAgit {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 1px var(--accent-line), 0 14px 32px rgba(139, 92, 246, 0.36);
+  }
+  6% {
+    transform: scale(1.09);
+    box-shadow: 0 0 0 2px rgba(var(--teinte-scene), 0.75),
+                0 0 26px 6px rgba(var(--teinte-scene), 0.4),
+                0 14px 32px rgba(139, 92, 246, 0.5);
+  }
+  22% {
+    transform: scale(1);
+    box-shadow: 0 0 0 1px var(--accent-line), 0 14px 32px rgba(139, 92, 246, 0.42);
+  }
 }
 
 .scene-avatar.est-bot img {
@@ -11812,40 +12005,159 @@ body:not(.dashboard-page) .page-glow {
   opacity: 0;
 }
 
-/* Moderation : le panneau d'alerte monte derriere les deux, puis
-   s'efface. C'est l'incident qui arrive, pas le bouclier qui pose. */
+/* Moderation : l'alerte monte, puis le bouclier se ferme dessus.
+   Deux temps, et dans cet ordre : d'abord l'incident, ensuite la
+   reponse. L'inverse — un bouclier qui pose en permanence — ne montrait
+   rien d'autre qu'un logo. */
 .scene[data-scene="moderation"] .scene-decor {
-  inset: 14% 20% 22%;
+  inset: 12% 22% 26%;
   border-radius: 14px;
-  background: linear-gradient(180deg, rgba(255, 96, 96, 0.28), rgba(255, 96, 96, 0));
+  background: linear-gradient(180deg, rgba(var(--teinte-scene), 0.52), rgba(var(--teinte-scene), 0));
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
-  animation: decorMonte 6s ease-in-out infinite;
+  animation: alerteMonte 6s ease-out infinite;
 }
 
-/* Tickets : le fil de discussion s'ouvre derriere eux. */
+/* Le bouclier se referme sur l'alerte, une demi-seconde apres elle. */
+.scene[data-scene="moderation"] .scene-decor::after {
+  content: "";
+  position: absolute;
+  inset: 2% 12% 6%;
+  border-radius: 46% 46% 50% 50% / 38% 38% 62% 62%;
+  border: 2px solid rgba(var(--teinte-scene), 0.78);
+  background: rgba(var(--teinte-scene), 0.12);
+  opacity: 0;
+  animation: bouclierFerme 6s cubic-bezier(0.3, 1.4, 0.5, 1) 0.5s infinite;
+}
+
+@keyframes alerteMonte {
+  0%        { opacity: 0; transform: translateY(16px) scale(0.86); }
+  10%       { opacity: 1; transform: translateY(0) scale(1); }
+  34%       { opacity: 1; transform: translateY(0) scale(1); }
+  52%, 100% { opacity: 0; transform: translateY(-8px) scale(0.94); }
+}
+
+@keyframes bouclierFerme {
+  0%, 8%    { opacity: 0; transform: scale(1.7); }
+  22%       { opacity: 1; transform: scale(1); }
+  46%       { opacity: 1; transform: scale(1); }
+  64%, 100% { opacity: 0; transform: scale(0.82); }
+}
+
+/* Tickets : une bulle monte vers le bot, et la reponse revient.
+   Un rectangle en degrade derriere les avatars ne disait rien ; une
+   bulle qui part d'un cote et une autre qui repond disent une
+   conversation — ce qu'est un ticket. */
 .scene[data-scene="tickets"] .scene-decor {
-  inset: 22% 16%;
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(98, 230, 255, 0.2), rgba(98, 230, 255, 0));
-  animation: decorMonte 6s ease-in-out 0.4s infinite;
+  inset: auto auto 20% 22%;
+  width: 34px;
+  height: 22px;
+  border-radius: 11px 11px 11px 3px;
+  background: rgba(var(--teinte-scene), 0.34);
+  border: 1px solid rgba(var(--teinte-scene), 0.5);
+  clip-path: none;
+  animation: bulleMonte 6s ease-out infinite;
 }
 
-/* Chiffres : la courbe, dessinee par un degrade en biais. */
+/* Celle du bot repond : de l'autre cote, la pointe a droite, et une
+   demi-seconde plus tard. */
+.scene[data-scene="tickets"] .scene-decor::after {
+  content: "";
+  position: absolute;
+  bottom: 30px;
+  left: 42px;
+  width: 30px;
+  height: 20px;
+  border-radius: 10px 10px 3px 10px;
+  background: rgba(139, 92, 246, 0.42);
+  border: 1px solid var(--accent-line);
+  animation: bulleMonte 6s ease-out 0.55s infinite;
+}
+
+@keyframes bulleMonte {
+  0%        { opacity: 0; transform: translateY(16px) scale(0.7); }
+  14%       { opacity: 1; transform: translateY(0) scale(1); }
+  52%       { opacity: 1; transform: translateY(-10px) scale(1); }
+  74%, 100% { opacity: 0; transform: translateY(-26px) scale(0.92); }
+}
+
+/* Chiffres : trois barres qui montent l'une apres l'autre.
+   Un degrade en biais faisait office de courbe, mais une diagonale
+   floue dans un cercle ne se lit pas comme un graphique. Trois barres,
+   si — et elles montent, ce que la diagonale ne faisait pas.
+
+   Le span n'en porte qu'une ; ses deux pseudo-elements donnent les deux
+   autres, sans rien ajouter au document. */
 .scene[data-scene="stats"] .scene-decor {
-  inset: 26% 14%;
-  border-radius: 12px;
-  background: linear-gradient(58deg, transparent 42%, rgba(139, 92, 246, 0.5) 46%, transparent 52%);
-  animation: decorMonte 6s ease-in-out 0.8s infinite;
+  inset: auto auto 26% 50%;
+  width: 14px;
+  height: 30%;
+  margin-left: -34px;
+  border-radius: 4px 4px 2px 2px;
+  background: linear-gradient(180deg, rgba(var(--teinte-scene), 0.85), rgba(var(--teinte-scene), 0.25));
+  transform-origin: 50% 100%;
+  clip-path: none;
+  animation: barreMonte 6s cubic-bezier(0.3, 0.8, 0.4, 1) infinite;
 }
 
-/* Ce qui se fait tout seul : une onde qui repart du centre. */
-.scene[data-scene="automatisations"] .scene-decor {
-  inset: 20%;
-  border-radius: 50%;
-  border: 2px solid rgba(139, 92, 246, 0.55);
-  background: none;
-  animation: decorOnde 6s ease-out 1.2s infinite;
+.scene[data-scene="stats"] .scene-decor::before,
+.scene[data-scene="stats"] .scene-decor::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 14px;
+  border-radius: 4px 4px 2px 2px;
+  background: inherit;
+  transform-origin: 50% 100%;
+  animation: barreMonte 6s cubic-bezier(0.3, 0.8, 0.4, 1) infinite;
 }
+
+/* Hauteurs inegales et departs decales : trois barres identiques qui
+   montent ensemble font un ascenseur, pas une mesure. */
+.scene[data-scene="stats"] .scene-decor::before {
+  left: 21px;
+  height: 152%;
+  animation-delay: 0.16s;
+}
+.scene[data-scene="stats"] .scene-decor::after {
+  left: 42px;
+  height: 114%;
+  animation-delay: 0.32s;
+}
+
+@keyframes barreMonte {
+  0%        { opacity: 0; transform: scaleY(0.05); }
+  10%       { opacity: 1; }
+  30%, 62%  { opacity: 1; transform: scaleY(1); }
+  82%, 100% { opacity: 0; transform: scaleY(0.3); }
+}
+
+/* Ce qui se fait tout seul : trois ondes qui repartent du centre, en
+   file. Une seule pouvait passer pour un accident ; trois qui se
+   suivent disent que cela recommence sans qu'on demande — c'est la
+   definition meme d'une automatisation. */
+.scene[data-scene="automatisations"] .scene-decor,
+.scene[data-scene="automatisations"] .scene-decor::before,
+.scene[data-scene="automatisations"] .scene-decor::after {
+  border-radius: 50%;
+  border: 2px solid rgba(var(--teinte-scene), 0.5);
+  background: none;
+  animation: decorOnde 6s ease-out infinite;
+}
+
+.scene[data-scene="automatisations"] .scene-decor {
+  inset: 26%;
+  clip-path: none;
+  animation-delay: 0.9s;
+}
+
+.scene[data-scene="automatisations"] .scene-decor::before,
+.scene[data-scene="automatisations"] .scene-decor::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+}
+.scene[data-scene="automatisations"] .scene-decor::before { animation-delay: 1.4s; }
+.scene[data-scene="automatisations"] .scene-decor::after  { animation-delay: 1.9s; }
 
 @keyframes decorMonte {
   0%, 12%   { opacity: 0; transform: translateY(14px) scale(0.92); }
@@ -11898,10 +12210,10 @@ body:not(.dashboard-page) .page-glow {
 
 /* Chaque scene a sa couleur de jeton : c'est elle qui distingue une
    sanction d'un message ou d'un chiffre. */
-.scene[data-scene="moderation"] .scene-jeton { color: #ff8585; border-color: rgba(255, 133, 133, 0.42); }
-.scene[data-scene="tickets"] .scene-jeton { color: var(--cyan, #62e6ff); border-color: rgba(98, 230, 255, 0.42); }
-.scene[data-scene="stats"] .scene-jeton { color: #7ce6a9; border-color: rgba(124, 230, 169, 0.42); }
-.scene[data-scene="automatisations"] .scene-jeton { color: #d7b4ff; border-color: rgba(215, 180, 255, 0.45); }
+.scene-jeton {
+  color: rgb(var(--teinte-scene));
+  border-color: rgba(var(--teinte-scene), 0.42);
+}
 
 /* Les quatre scenes ne battent pas ensemble : un demi-second les
    separe, sinon la page entiere pulse au meme rythme. Chaque scene
