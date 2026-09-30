@@ -11900,6 +11900,83 @@ body:not(.dashboard-page) .page-glow {
   background: linear-gradient(115deg, #0c0719, #05020d 54%, #02010a);
 }
 
+/* ── Le ciel qui accompagne l'astre ───────────────────────────────────
+   Cinq etoiles collees a la lune ne font pas une nuit : elles la
+   suivaient comme une decoration au lieu de meubler ce qu'elle
+   traverse. Le champ couvre maintenant tout le voile.
+
+   Deux couches, parce qu'un ciel a de la profondeur : des petites
+   denses au fond, des plus grosses et plus rares devant, chacune avec
+   sa propre taille de motif — les deux trames ne se superposent donc
+   jamais deux fois de la meme facon — et son propre scintillement.
+
+   Le motif se repete : ce n'est pas une liste d'etoiles mais une trame,
+   ce qui permet d'en couvrir deux cent dix pour cent de largeur sans
+   ecrire deux cents degrades. */
+.bascule-voile::before,
+.bascule-voile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.bascule-voile::before {
+  background-image:
+    radial-gradient(circle 1.5px at 18% 24%, var(--etoile-vive), transparent),
+    radial-gradient(circle 1.1px at 62% 12%, var(--etoile-pale), transparent),
+    radial-gradient(circle 1.4px at 84% 46%, var(--etoile-vive), transparent),
+    radial-gradient(circle 1px   at 34% 68%, var(--etoile-pale), transparent),
+    radial-gradient(circle 1.3px at 8%  82%, var(--etoile-vive), transparent),
+    radial-gradient(circle 1.1px at 72% 88%, var(--etoile-pale), transparent),
+    radial-gradient(circle 1px   at 48% 40%, var(--etoile-pale), transparent);
+  /* Une trame de deux cent quarante pixels ne posait que sept etoiles
+     par ecran : on les comptait. Resserree a cent soixante-dix, la meme
+     liste en donne plus du double, et cela devient un ciel. */
+  background-size: 168px 142px;
+  animation: cielScintille 2.6s ease-in-out infinite;
+}
+
+.bascule-voile::after {
+  background-image:
+    radial-gradient(circle 3px   at 28% 38%, var(--etoile-vive), transparent),
+    radial-gradient(circle 2.4px at 76% 70%, var(--etoile-vive), transparent),
+    radial-gradient(circle 3.6px at 54% 16%, var(--etoile-vive), transparent),
+    radial-gradient(circle 2.6px at 12% 60%, var(--etoile-pale), transparent),
+    radial-gradient(circle 2.2px at 92% 28%, var(--etoile-pale), transparent),
+    radial-gradient(circle 3.2px at 38% 86%, var(--etoile-vive), transparent);
+  /* Une trame bien plus large que l'autre, et sans diviseur commun :
+     les deux ne retombent jamais en phase, donc on ne lit pas le
+     carrelage. */
+  background-size: 283px 239px;
+  animation: cielScintille 1.9s ease-in-out 0.4s infinite;
+}
+
+/* Les deux teintes du ciel. Blanches sur la nuit ; dorees sur le jour,
+   ou des etoiles blanches seraient invisibles — ce sont les memes
+   points de lumiere, a la couleur de l'astre qui les amene. */
+.bascule-theme.vers-sombre {
+  --etoile-vive: rgba(255, 255, 255, 0.92);
+  --etoile-pale: rgba(200, 212, 255, 0.6);
+}
+
+/* Sur le jour, il faut descendre beaucoup plus bas en clarte : un
+   point a soixante-dix pour cent d'un orange deja pale se perd dans le
+   blanc, alors que le meme sur la nuit creve l'ecran. Ces deux-la sont
+   presque opaques et franchement ambres — a l'oeil, ils pesent le meme
+   poids que les blanches d'en face. */
+.bascule-theme.vers-clair {
+  --etoile-vive: rgba(243, 146, 18, 0.9);
+  --etoile-pale: rgba(255, 178, 60, 0.62);
+}
+
+@keyframes cielScintille {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
 /* La cle du milieu n'est pas au milieu, et c'est tout l'interet : elle
    place l'astre au centre de l'ecran a trente-huit pour cent du temps.
    Sans elle, le voile filait d'un bout a l'autre a vitesse constante et
@@ -11940,10 +12017,16 @@ body:not(.dashboard-page) .page-glow {
   position: absolute;
   top: 50%;
   right: 13vw;
-  width: clamp(76px, 11vw, 148px);
+  /* Il occupait onze pour cent de la largeur : a la vitesse ou il
+     traverse, cela faisait une pastille qu'on devinait. Seize pour
+     cent, et c'est un astre. */
+  width: clamp(112px, 16vw, 236px);
   aspect-ratio: 1;
-  margin-top: clamp(-74px, -5.5vw, -38px);
+  margin-top: clamp(-118px, -8vw, -56px);
   border-radius: 50%;
+  /* Devant le ciel : les deux champs d'etoiles sont poses sur le voile,
+     et celui qui vient apres dans le document passerait devant lui. */
+  z-index: 2;
   animation: astreArc 1050ms ease-in-out forwards;
 }
 
@@ -12005,28 +12088,8 @@ body:not(.dashboard-page) .page-glow {
   background: #05020d;
 }
 
-/* Quelques etoiles autour d'elle, taillees dans un degrade a points. */
-.bascule-astre.est-lune::after {
-  content: "";
-  position: absolute;
-  inset: -120%;
-  background:
-    radial-gradient(circle 2.5px at 22% 30%, rgba(255, 255, 255, 0.9), transparent),
-    radial-gradient(circle 2px   at 78% 18%, rgba(255, 255, 255, 0.7), transparent),
-    radial-gradient(circle 3px   at 64% 76%, rgba(255, 255, 255, 0.8), transparent),
-    radial-gradient(circle 2px   at 14% 68%, rgba(255, 255, 255, 0.6), transparent),
-    radial-gradient(circle 2.5px at 88% 54%, rgba(255, 255, 255, 0.75), transparent);
-  animation: astreEtoiles 900ms ease-out forwards;
-}
-
 @keyframes astreTourne {
   to { transform: rotate(360deg); }
-}
-
-@keyframes astreEtoiles {
-  0%       { opacity: 0; transform: scale(0.86); }
-  26%, 70% { opacity: 1; transform: scale(1); }
-  100%     { opacity: 0; transform: scale(1.1); }
 }
 
 /* Le bouton lui-meme accuse le coup : il s'enfonce et rebondit pendant
