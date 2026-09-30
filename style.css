@@ -10555,22 +10555,37 @@ body:not(.dashboard-page) .page-glow {
 :root[data-theme="light"] {
   color-scheme: light;
 
-  /* Fonds — blanc casse, jamais blanc pur : moins fatigant a l'ecran */
-  --bg: #f4f6fb;
-  --bg-soft: #e9edf6;
-  /* En clair on descend au lieu de monter : l'écart se voit pareil. */
-  --pied-fond: #d3daea;
-  --panel: #ffffff;
-  --panel-strong: #f7f9fd;
+  /* Fonds — un gris bleute, pas un blanc.
 
-  /* Bordures */
-  --line: rgba(19, 26, 43, 0.11);
-  --line-strong: rgba(19, 26, 43, 0.22);
+     Le commentaire disait deja « jamais blanc pur », et pourtant les
+     cartes etaient en #ffffff et la page a quatre-vingt-dix-sept pour
+     cent de clarte : un mur de blanc, fatigant a lire longtemps.
+
+     Tout descend d'un cran. Les CARTES gardent en revanche la clarte
+     qu'avait la page : ce n'est donc pas un aplatissement, l'ecart
+     entre le fond et ce qui s'y pose grandit au contraire — seize
+     points contre onze — et les panneaux se detachent mieux
+     qu'auparavant. */
+  --bg: #e4e8f2;
+  --bg-soft: #d9dee9;
+  /* En clair on descend au lieu de monter : l'écart se voit pareil. */
+  --pied-fond: #c5ccdf;
+  --panel: #f2f4fa;
+  --panel-strong: #e9edf6;
+
+  /* Bordures — un peu plus marquees qu'avant. Un filet a onze pour cent
+     de noir se lisait sur du presque-blanc ; sur ce gris il
+     s'effacerait. */
+  --line: rgba(19, 26, 43, 0.14);
+  --line-strong: rgba(19, 26, 43, 0.26);
 
   /* Texte — la meme hierarchie a trois niveaux, retournee */
   --text: #131a2b;
   --soft: #3a4457;
-  --muted: #5d6779;
+  /* Assombri avec le fond. Sur l'ancien presque-blanc il tenait a 4,85
+     contre 1 ; sur le nouveau gris, le meme gris serait tombe a 4,3 —
+     sous le minimum exige pour du petit texte. Celui-ci rend 5,5. */
+  --muted: #525c6e;
 
   /* Accent — le blurple s'assombrit un peu : sur blanc, le bleu de
      Discord passe tout juste le contraste du texte. */
@@ -10647,11 +10662,20 @@ body:not(.dashboard-page) .page-glow {
 
 /* Le presque-noir des barres et des voiles : clair en mode clair. */
 :root { --canal-fond: 10, 12, 17; }
-:root[data-theme="light"] { --canal-fond: 244, 246, 251; }
+:root[data-theme="light"] { --canal-fond: 228, 232, 242; }
 
 /* Le titre de l'accueil est peint dans un degrade decoupe au texte :
-   blanc avec un reflet lavande. Sur fond clair il disparaissait. */
-:root[data-theme="light"] .hero-copy h1 {
+   blanc avec un reflet lavande. Sur fond clair il disparaissait.
+
+   Cette regle visait le <h1>. Or ce n'est pas lui qui porte le
+   degrade : le nom vit dans un <span class="hero-nom"> qui a le sien,
+   du blanc vers le violet, et un enfant qui peint son propre texte se
+   moque de ce que fait son parent. Le titre du site restait donc blanc
+   sur fond clair — pratiquement illisible, et ce depuis que le theme
+   clair existe. Les deux selecteurs sont nommes ici, le fils apres le
+   pere. */
+:root[data-theme="light"] .hero-copy h1,
+:root[data-theme="light"] .hero-nom {
   background:
     linear-gradient(100deg,
       #131a2b 0%, #131a2b 38%,
@@ -10660,6 +10684,10 @@ body:not(.dashboard-page) .page-glow {
     100% 0 / 260% 100% no-repeat;
   -webkit-background-clip: text;
   background-clip: text;
+  /* « color » et non « -webkit-text-fill-color » : c'est « color:
+     transparent » que pose .hero-nom, et il faut le meme levier pour
+     etre sur de le reprendre. */
+  color: transparent;
   filter: none;
 }
 
@@ -10710,17 +10738,17 @@ body:not(.dashboard-page) .page-glow {
 }
 
 :root[data-theme="light"] {
-  --t4ade80: #1e8042;
+  --t4ade80: #19703a;
   --t67e8f9: #1e7580;
-  --t6ee7a8: #1e804d;
-  --t8ff0bd: #1e804d;
+  --t6ee7a8: #1a7345;
+  --t8ff0bd: #1a7345;
   --t9499a3: #4b5058;
   --t949ba4: #374c67;
   --t9f95b8: #453767;
   --tb5bac1: #374b67;
   --tb6bdff: #1e2780;
   --tb9c7ff: #1e3280;
-  --tbaffcf: #1e803c;
+  --tbaffcf: #197035;
   --tc7c9d1: #374167;
   --tc8c0ff: #2a1e80;
   --tc9b8ff: #361e80;
@@ -11892,8 +11920,11 @@ body:not(.dashboard-page) .page-glow {
   animation: voileTraverse 1050ms linear forwards;
 }
 
+/* Ces trois-la sont les fonds du theme clair, recopies : le voile
+   decouvre la page a la fin de sa course, et s'il etait plus blanc
+   qu'elle on verrait un ressaut au moment ou il sort. */
 .bascule-theme.vers-clair .bascule-voile {
-  background: linear-gradient(115deg, #ffffff, #f4f6fb 46%, #e9edf6);
+  background: linear-gradient(115deg, #f2f4fa, #e4e8f2 46%, #d9dee9);
 }
 
 .bascule-theme.vers-sombre .bascule-voile {
