@@ -135,6 +135,34 @@
         </div>
       </div>
 
+      <!-- La frise.
+
+           Les quatre chiffres au-dessus disent l'etat d'aujourd'hui et
+           la moyenne de la periode ; ni l'un ni l'autre ne dit QUAND.
+           Une panne de quatre heures il y a trois semaines et une
+           panne de quatre heures hier donnent la meme moyenne, et ne
+           se valent pas du tout pour qui hesite a payer.
+
+           Une barre par jour, du plus ancien a hier : on voit d'un
+           coup d'oeil si les ennuis sont derriere ou devant. Rien de
+           nouveau n'est demande au bot — tout se deduit des incidents
+           qu'il rend deja, avec leur debut et leur fin. -->
+      <section class="wiki-section">
+        <h2 data-i18n="etat.friseTitre">Jour par jour</h2>
+        <p class="field-help" data-i18n="etat.friseAide">Chaque barre est une journée. Survolez-en une pour voir le détail.</p>
+        <div class="etat-frise" data-statut-frise role="img"
+             aria-label="Disponibilité jour par jour" data-i18n-aria="etat.friseTitre"></div>
+        <div class="etat-frise-legende">
+          <span data-statut-frise-debut>—</span>
+          <span class="etat-frise-cles">
+            <i class="est-plein" aria-hidden="true"></i><small data-i18n="etat.frisePlein">Aucune coupure</small>
+            <i class="est-partiel" aria-hidden="true"></i><small data-i18n="etat.frisePartiel">Coupure</small>
+            <i class="est-vide" aria-hidden="true"></i><small data-i18n="etat.friseVide">Non observé</small>
+          </span>
+          <span data-statut-frise-fin>—</span>
+        </div>
+      </section>
+
       <section class="wiki-section">
         <h2 data-i18n="etat.incidentsTitre">Les coupures observées</h2>
         <div class="table-scroll">

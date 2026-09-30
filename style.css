@@ -12527,3 +12527,98 @@ body:not(.dashboard-page) .page-glow {
   .scene-jeton { width: 30px; height: 30px; }
   .scene-jeton .ui-icon { width: 15px; height: 15px; }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   LA FRISE DE DISPONIBILITE
+
+   Une barre par jour, du plus ancien a aujourd'hui. Les barres se
+   partagent la largeur au lieu d'avoir une taille fixe : sur trente
+   jours et sur huit, la frise occupe la meme place et reste lisible
+   des deux cotes.
+
+   La couleur ne dit pas « vert ou rouge » mais « quelle part de la
+   journee » : une minute perdue laisse une barre presque entierement
+   verte avec un pied rouge. Une barre rouge pleine pour une minute
+   d'arret serait un mensonge plus grave que pas de frise du tout.
+   ══════════════════════════════════════════════════════════════════ */
+
+.etat-frise {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 58px;
+  margin-top: 14px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+.etat-jour {
+  position: relative;
+  flex: 1 1 0;
+  /* Assez large pour qu'on puisse la viser du doigt, meme a trente. */
+  min-width: 5px;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--ok);
+  overflow: hidden;
+  transition: transform 140ms var(--ease), filter 140ms var(--ease);
+}
+
+.etat-jour:hover {
+  transform: scaleY(1.06);
+  filter: brightness(1.2);
+}
+
+/* Le pied rouge : la part de la journee reellement perdue, posee par
+   le script en pourcentage. */
+.etat-jour.est-partiel::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--part-coupee, 20%);
+  background: var(--err);
+}
+
+.etat-jour.est-vide {
+  background: rgba(var(--canal-clair), 0.12);
+}
+
+.etat-frise-legende {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 14px;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.etat-frise-cles {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.etat-frise-cles i {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.etat-frise-cles i.est-plein { background: var(--ok); }
+.etat-frise-cles i.est-partiel { background: var(--err); }
+.etat-frise-cles i.est-vide { background: rgba(var(--canal-clair), 0.12); }
+
+.etat-frise-cles small { margin-right: 6px; }
+
+/* Sur telephone, les bornes de dates passent sous la legende : les
+   trois cote a cote reduisaient chaque mot a deux caracteres. */
+@media (max-width: 560px) {
+  .etat-frise { height: 46px; gap: 2px; }
+  .etat-frise-legende { justify-content: center; text-align: center; }
+}

@@ -12068,6 +12068,106 @@ function dureeLisible(minutes) {
   return reste ? `${heures} h ${String(reste).padStart(2, "0")}` : `${heures} h`;
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   LA FRISE DE DISPONIBILITE
+
+   Les chiffres du haut disent l'etat d'aujourd'hui et la moyenne de la
+   periode. Ni l'un ni l'autre ne dit QUAND : quatre heures de panne il
+   y a trois semaines et quatre heures hier donnent la meme moyenne, et
+   ne se valent pas du tout pour qui hesite a payer.
+
+   Une barre par jour, du plus ancien a aujourd'hui. Le bot ne rend rien
+   de plus qu'avant : tout se deduit des incidents, qui portent leur
+   debut et leur fin.
+
+   Le point delicat est qu'un incident PEUT CHEVAUCHER plusieurs jours —
+   une panne de nuit commence la veille et finit le lendemain. On ne
+   peut donc pas ranger un incident dans « son » jour : il faut decouper
+   chaque incident aux frontieres des journees qu'il traverse, et
+   n'ajouter a chacune que la part qui la concerne.
+   ══════════════════════════════════════════════════════════════════ */
+
+const FRISE_JOURS_MAX = 30;
+const MINUTES_PAR_JOUR = 1440;
+
+/* Minuit local du jour d'une date. Local et non UTC : le visiteur lit
+   « mardi » selon sa propre journee, pas celle de Greenwich. */
+function debutDuJour(date) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function dessinerLaFrise(statut) {
+  const frise = document.querySelector("[data-statut-frise]");
+  if (!frise) return;
+
+  const observeDepuis = new Date(statut.observe_depuis || statut.en_ligne_depuis || Date.now());
+  if (Number.isNaN(observeDepuis.getTime())) return;
+
+  const aujourdHui = debutDuJour(new Date());
+  const premierPossible = debutDuJour(
+    new Date(aujourdHui.getTime() - (FRISE_JOURS_MAX - 1) * 86400000));
+  // On ne dessine pas de jours qu'on n'a pas vus : une barre grise
+  // avant la mise en service vaudrait mieux qu'une verte mensongere,
+  // mais une frise qui commence a l'observation est encore plus
+  // honnete.
+  const premierObserve = debutDuJour(observeDepuis);
+  const debut = premierObserve > premierPossible ? premierObserve : premierPossible;
+
+  const jours = [];
+  for (let t = debut.getTime(); t <= aujourdHui.getTime(); t += 86400000) {
+    jours.push({ debut: t, fin: t + 86400000, minutes: 0 });
+  }
+  if (!jours.length) return;
+
+  // Chaque incident est decoupe aux frontieres des journees qu'il
+  // traverse. Une panne en cours n'a pas de fin : elle court jusqu'a
+  // maintenant.
+  const maintenant = Date.now();
+  for (const incident of (statut.incidents || [])) {
+    const d = new Date(incident.debut).getTime();
+    const f = incident.fin ? new Date(incident.fin).getTime() : maintenant;
+    if (!Number.isFinite(d) || !Number.isFinite(f) || f <= d) continue;
+    for (const jour of jours) {
+      const haut = Math.max(d, jour.debut);
+      const bas = Math.min(f, jour.fin);
+      if (bas > haut) jour.minutes += (bas - haut) / 60000;
+    }
+  }
+
+  const formatJour = (t) => new Date(t).toLocaleDateString(undefined,
+    { day: "numeric", month: "short" });
+
+  frise.innerHTML = "";
+  for (const jour of jours) {
+    // Le jour en cours n'est pas fini : sa disponibilite se calcule sur
+    // les minutes ecoulees, sinon il parait toujours parfait le matin
+    // et se degrade jusqu'au soir sans qu'il soit rien arrive.
+    const ecoulees = Math.min(MINUTES_PAR_JOUR,
+      Math.max(1, (Math.min(maintenant, jour.fin) - jour.debut) / 60000));
+    const perdues = Math.min(jour.minutes, ecoulees);
+    const taux = Math.max(0, 100 - (perdues / ecoulees) * 100);
+
+    const barre = document.createElement("span");
+    barre.className = "etat-jour " + (perdues < 1 ? "est-plein" : "est-partiel");
+    // La hauteur de la part coupee, en bas de la barre : une barre
+    // entierement rouge pour une minute perdue ferait croire a une
+    // journee perdue.
+    barre.style.setProperty("--part-coupee", Math.min(100, Math.max(6, (perdues / ecoulees) * 100)) + "%");
+    barre.title = formatJour(jour.debut) + " — "
+      + (perdues < 1
+          ? t("etat.frisePlein")
+          : Math.round(perdues) + " min · " + taux.toFixed(1) + " %");
+    frise.appendChild(barre);
+  }
+
+  const bornes = document.querySelector("[data-statut-frise-debut]");
+  const bornesFin = document.querySelector("[data-statut-frise-fin]");
+  if (bornes) bornes.textContent = formatJour(jours[0].debut);
+  if (bornesFin) bornesFin.textContent = formatJour(jours[jours.length - 1].debut);
+}
+
 async function initStatutPage() {
   const hote = document.querySelector("[data-statut]");
   const pastille = document.querySelector("[data-statut-etat]");
@@ -12120,6 +12220,8 @@ async function initStatutPage() {
   const depuis = new Date(statut.en_ligne_depuis || statut.observe_depuis);
   ecrire("[data-statut-depuis]", Number.isNaN(depuis.getTime()) ? "—"
     : depuis.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }));
+
+  dessinerLaFrise(statut);
 
   const corps = document.querySelector("[data-statut-incidents]");
   const aucune = document.querySelector("[data-statut-aucune]");
