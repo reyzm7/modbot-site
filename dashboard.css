@@ -2684,3 +2684,126 @@ body.dash-menu-ouvert { overflow: hidden; }
               background-color var(--dur) var(--ease),
               color var(--dur) var(--ease);
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   TOUS LES MESSAGES DU BOT, SUR UN ECRAN
+
+   Une feuille par-dessus la page, en deux colonnes sur grand ecran :
+   c'est la COMPARAISON qui fait tout l'interet — cote a cote, on voit
+   qu'un message tutoie quand les autres vouvoient. Empiles, on les
+   relit un par un, ce qu'on pouvait deja faire rubrique par rubrique.
+   ══════════════════════════════════════════════════════════════════ */
+
+.apercu-tout {
+  position: fixed;
+  inset: 0;
+  /* Au-dessus de l'en-tete collant (60) et de l'assistant, sous le
+     voile de bascule de theme (3000), qui doit tout couvrir. */
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.apercu-tout[hidden] { display: none; }
+
+.apercu-tout-voile {
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--canal-fond), 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.apercu-tout-feuille {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(1040px, 100%);
+  max-height: 100%;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: apercuToutEntre 260ms cubic-bezier(0.22, 0.85, 0.3, 1) both;
+}
+
+@keyframes apercuToutEntre {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+.apercu-tout-tete {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex: none;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.apercu-tout-tete strong {
+  display: block;
+  color: var(--text);
+  font-size: 1.04rem;
+}
+
+.apercu-tout-tete small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.apercu-tout-fermer {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.apercu-tout-fermer:hover {
+  background: rgba(var(--canal-clair), 0.08);
+  color: var(--text);
+}
+
+.apercu-tout-corps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  align-content: start;
+  gap: 16px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.apercu-tout-carte h4 {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Sur telephone, une colonne et une feuille qui prend tout : a deux
+   cent quarante pixels de large, un embed Discord n'est plus lisible. */
+@media (max-width: 720px) {
+  .apercu-tout { padding: 0; }
+  .apercu-tout-feuille { width: 100%; height: 100%; max-height: none; border-radius: 0; }
+  .apercu-tout-corps { grid-template-columns: minmax(0, 1fr); padding: 16px; }
+}
+
+/* Le verrou de defilement se pose sur la RACINE : « body » n'est pas
+   le bloc qui defile sur ce site, un « overflow: hidden » pose sur lui
+   ne verrouillerait rien. Le piege est decrit plus longuement dans la
+   feuille principale. */
+html:has(> body.apercu-ouvert) { overflow: hidden; }

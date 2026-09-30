@@ -275,6 +275,8 @@
           <option value="de">Deutsch</option>
           </select>
       </label>
+      <button class="secondary-btn compact" type="button" data-apercu-tout
+              data-i18n="dash.apercuTout"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-eye"/></svg> Tout voir</button>
       <button class="secondary-btn compact" type="button" data-dashboard-save data-i18n="dash.save"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg> Enregistrer</button>
       <a class="primary-btn compact" href="index.html" data-i18n="dash.backToSite"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-home"/></svg> Retour au site</a>
     </div>
@@ -2827,5 +2829,36 @@
 
   <script src="translations.js"></script>
   <script src="script.js"></script>
+
+  <!-- Tous les messages du bot, sur un seul ecran.
+
+       Les apercus existaient deja, un par rubrique : pour verifier ce
+       que le serveur verra, il fallait ouvrir sept rubriques l'une
+       apres l'autre, et on ne les voyait jamais ensemble. Or c'est
+       ensemble qu'on remarque qu'un message tutoie quand les autres
+       vouvoient, ou qu'une couleur jure.
+
+       Le contenu n'est pas refabrique ici : il est CLONE des apercus
+       de la page au moment de l'ouverture. Rien ne peut donc diverger,
+       et un apercu ajoute plus tard apparaitra sans qu'on ait rien a
+       faire. -->
+  <div class="apercu-tout" data-apercu-feuille hidden>
+    <div class="apercu-tout-voile" data-apercu-fermer></div>
+    <div class="apercu-tout-feuille" role="dialog" aria-modal="true"
+         aria-label="Tous les messages du bot" data-i18n-aria="dash.apercuToutTitre">
+      <header class="apercu-tout-tete">
+        <div>
+          <strong data-i18n="dash.apercuToutTitre">Tous les messages du bot</strong>
+          <small data-i18n="dash.apercuToutAide">Tels que vos membres les verront. Fermez pour revenir à vos réglages.</small>
+        </div>
+        <button class="apercu-tout-fermer" type="button" data-apercu-fermer
+                aria-label="Fermer" data-i18n-aria="js.fermerLeMenu">
+          <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg>
+        </button>
+      </header>
+      <div class="apercu-tout-corps" data-apercu-liste></div>
+    </div>
+  </div>
+
 </body>
 </html>

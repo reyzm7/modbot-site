@@ -3909,6 +3909,132 @@ function rangerLeSelecteurDeServeur() {
   }
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   TOUS LES MESSAGES DU BOT, SUR UN ECRAN
+
+   Chaque rubrique montrait deja son apercu. Mais pour verifier ce que
+   le serveur verra, il fallait ouvrir sept rubriques l'une apres
+   l'autre — et on ne les voyait jamais ensemble. Or c'est ensemble
+   qu'on remarque qu'un message tutoie quand les autres vouvoient, ou
+   qu'une couleur d'embed jure avec les autres.
+
+   Rien n'est refabrique ici : les apercus sont CLONES au moment de
+   l'ouverture. Deux consequences, toutes deux voulues : aucune
+   divergence possible entre ce qu'on voit ici et la, et un apercu
+   ajoute dans six mois apparaitra sans qu'on ait rien a faire.
+
+   Ils sont clonables meme depuis une rubrique fermee : le script les
+   remplit tous, qu'ils soient a l'ecran ou non.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Renseignee par initDashboard. La feuille globale ne peut pas appeler
+   « rafraichirApercus » directement : celle-ci lit « APERCUS », qui vit
+   dans la portee du dashboard. */
+let rafraichirLesApercus = null;
+
+function titreDeLApercu(apercu) {
+  // La RUBRIQUE d'abord, le titre du panneau ensuite. Seuls, les
+  // seconds ne disent rien : « Apercu du panneau » et « Apercu du
+  // message » pourraient venir de n'importe ou, et c'est justement
+  // ce qu'on a besoin de savoir quand on les compare tous.
+  const section = apercu.closest("[data-dashboard-panel]");
+  const onglet = section
+    ? document.querySelector(
+        '[data-dashboard-tab="' + section.dataset.dashboardPanel + '"]')
+    : null;
+  let rubrique = (onglet?.textContent || "").replace(/\s+/g, " ").trim();
+  // Le badge « NOUVEAU » fait partie du texte de l'entree de menu :
+  // sans cela, « Modmail NOUVEAU · Apercu de l'accueil ».
+  const neuf = onglet?.querySelector(".dash-nav-neuf")?.textContent?.trim();
+  if (neuf && rubrique.endsWith(neuf)) {
+    rubrique = rubrique.slice(0, -neuf.length).trim();
+  }
+
+  // « .tool-panel » seulement, et non « .dash-panel » : le second est
+  // la rubrique entiere, dont le titre ferait doublon avec le nom de
+  // l'onglet qu'on vient de lire.
+  const panneau = apercu.closest(".tool-panel");
+  const detail = (panneau?.querySelector("h3, h2")?.textContent || "")
+    .replace(/\s+/g, " ").trim();
+
+  if (rubrique && detail) return rubrique + " · " + detail;
+  return rubrique || detail;
+}
+
+
+function remplirLApercuGlobal() {
+  const liste = document.querySelector("[data-apercu-liste]");
+  if (!liste) return 0;
+  // On les remet a jour avant de cloner : certains ne sont dessines
+  // qu'au premier changement d'un champ, et seraient donc vides pour
+  // qui ouvre la feuille sans avoir rien touche.
+  try {
+    rafraichirLesApercus?.();
+  } catch (erreur) {
+    // Un apercu rate ne doit pas empecher de montrer les autres.
+    console.warn("Rafraichissement des apercus :", erreur);
+  }
+  liste.innerHTML = "";
+
+  // Ceux de la feuille elle-meme sont exclus : sans cela, rouvrir la
+  // feuille clonerait ses propres clones.
+  const apercus = [...document.querySelectorAll(".discord-preview")]
+    .filter((e) => !e.closest("[data-apercu-feuille]"));
+
+  let poses = 0;
+  for (const apercu of apercus) {
+    // Un apercu vide ne vaut pas une carte : la rubrique n'est pas
+    // reglee, et une carte vide donnerait a croire a un message vide.
+    if (!apercu.textContent.trim()) continue;
+    const carte = document.createElement("article");
+    carte.className = "apercu-tout-carte";
+    const titre = document.createElement("h4");
+    titre.textContent = titreDeLApercu(apercu) || t("dash.apercuSansNom");
+    carte.appendChild(titre);
+    const copie = apercu.cloneNode(true);
+    // Les attributs de pilotage ne suivent pas : deux elements portant
+    // le meme « data-apercu » feraient que le moteur remplirait la
+    // copie au lieu de l'original.
+    copie.removeAttribute("data-apercu");
+    copie.removeAttribute("data-welcome-preview");
+    carte.appendChild(copie);
+    liste.appendChild(carte);
+    poses += 1;
+  }
+
+  if (!poses) {
+    const vide = document.createElement("p");
+    vide.className = "field-help";
+    vide.textContent = t("dash.apercuToutVide");
+    liste.appendChild(vide);
+  }
+  return poses;
+}
+
+function initApercuGlobal() {
+  const feuille = document.querySelector("[data-apercu-feuille]");
+  const bouton = document.querySelector("[data-apercu-tout]");
+  if (!feuille || !bouton) return;
+
+  const ouvrir = (etat) => {
+    if (etat) remplirLApercuGlobal();
+    feuille.hidden = !etat;
+    // Le meme verrou que les autres feuilles du site : il se pose sur
+    // la racine, jamais sur le corps, qui n'est pas le bloc qui defile.
+    document.body.classList.toggle("apercu-ouvert", etat);
+    if (etat) feuille.querySelector("[data-apercu-fermer]")?.focus();
+    else bouton.focus();
+  };
+
+  bouton.addEventListener("click", () => ouvrir(true));
+  feuille.querySelectorAll("[data-apercu-fermer]").forEach((f) => {
+    f.addEventListener("click", () => ouvrir(false));
+  });
+  document.addEventListener("keydown", (evenement) => {
+    if (evenement.key === "Escape" && !feuille.hidden) ouvrir(false);
+  });
+}
+
 function initDashboard() {
   const dashboard = document.querySelector(".dashboard-page");
   if (!dashboard) return;
@@ -7529,6 +7655,9 @@ function initDashboard() {
       }
     });
   }
+
+  // La feuille « Tout voir » s'en sert avant de cloner.
+  rafraichirLesApercus = rafraichirApercus;
 
   // Une seule ecoute, posee sur le tableau de bord entier : lister les
   // champs un par un, c etait oublier celui qu on ajoute six mois plus
@@ -12271,6 +12400,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // les references.
   marquerLesRubriquesNeuves();
   initRaccourcisAccueil();
+  initApercuGlobal();
   initDemarrage();
   rangerLeSelecteurDeServeur();
   if (MENU_LARGE.addEventListener) MENU_LARGE.addEventListener("change", rangerLeSelecteurDeServeur);
