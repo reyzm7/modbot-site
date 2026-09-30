@@ -299,6 +299,19 @@ function initTheme() {
   poserTheme(themeActuel());
 }
 
+/* Sous ce seuil, il n'y a plus qu'un bouton de menu.
+
+   Le nombre suit celui du CSS au pixel pres. Desaccordes, on obtenait
+   une bande de largeurs ou le bouton ouvre un panneau que la feuille
+   dessine deja comme un tiroir. */
+const ECRAN_TIROIR = window.matchMedia("(max-width: 980px)");
+
+/* Le bouton dore et le tiroir sont installes par deux fonctions
+   differentes, dans cet ordre-ci : le second a besoin d'appeler le
+   premier. Une variable les relie plutot qu'un appel direct, car le
+   bouton peut etre installe avant que le tiroir ne le soit. */
+let basculerLeTiroir = null;
+
 function initNavigation() {
   const toggle = document.querySelector(".nav-toggle");
   const links = document.getElementById("navLinks");
@@ -320,7 +333,19 @@ function initNavigation() {
     document.body.classList.toggle("nav-open", ouvert);
     toggle.setAttribute("aria-expanded", String(ouvert));
     toggle.setAttribute("aria-label", ouvert ? t("js.fermerLeMenu") : t("js.ouvrirLeMenu"));
+
+    // C'est le bouton dore qu'on voit sur telephone : sans « is-open »
+    // sur son menu, ses trois traits ne pivoteraient pas, et le seul
+    // bouton de la barre resterait muet une fois le tiroir ouvert.
+    if (ECRAN_TIROIR.matches) {
+      const menu = document.querySelector("[data-nav-menu]");
+      menu?.classList.toggle("is-open", ouvert);
+      menu?.querySelector("[data-nav-menu-trigger]")
+        ?.setAttribute("aria-expanded", String(ouvert));
+    }
   }
+
+  basculerLeTiroir = () => setMenuOpen(!links.classList.contains("is-open"));
 
   toggle.addEventListener("click", () => {
     setMenuOpen(!links.classList.contains("is-open"));
@@ -328,8 +353,12 @@ function initNavigation() {
 
   backdrop.addEventListener("click", () => setMenuOpen(false));
 
-  links.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => setMenuOpen(false));
+  // Par delegation, et non lien par lien : le menu « Acces » descend
+  // dans le tiroir apres cette installation, et ses entrees doivent le
+  // fermer comme les autres. Seuls les liens — le choix de la langue
+  // vit dans le tiroir, le refermer sous les doigts serait absurde.
+  links.addEventListener("click", (evenement) => {
+    if (evenement.target.closest("a")) setMenuOpen(false);
   });
 
   document.addEventListener("keydown", (event) => {
@@ -13217,6 +13246,65 @@ function rangerLeMenuAcces() {
   // donc a droite. Le DOM suit l'oeil, et la tabulation traverse les
   // deux pastilles dans l'ordre ou on les voit.
   if (menu.parentElement !== outils) outils.prepend(menu);
+  // Les deux vont ensemble : le bouton monte dans la barre, le panneau
+  // descend dans le tiroir. Appele ici aussi car l'ordre d'installation
+  // n'est pas garanti d'une page a l'autre.
+  rangerLePanneauAcces();
+}
+
+/* Le menu « Acces » descend dans le tiroir, ou remonte sous son bouton.
+
+   Sur grand ecran il reste ce qu'il etait : un panneau suspendu qui
+   s'ouvre au clic. Sur telephone ce clic est pris — le bouton dore
+   ouvre le tiroir, puisqu'il est le seul. Ses entrees se rangent donc
+   dans le tiroir, a plat et visibles d'emblee, sous les liens du site.
+
+   Le panneau est cherche a deux endroits : une fois descendu, il n'est
+   plus un descendant de son menu. */
+function rangerLePanneauAcces() {
+  const menu = document.querySelector("[data-nav-menu]");
+  const panneau = document.querySelector("[data-nav-menu-panel]");
+  const tiroir = document.getElementById("navLinks");
+  if (!menu || !panneau || !tiroir) return;
+
+  if (ECRAN_TIROIR.matches) {
+    if (panneau.parentElement !== tiroir) tiroir.appendChild(panneau);
+    panneau.classList.add("est-deplie");
+    panneau.hidden = false;
+
+    // Les deux listes n'en font plus qu'une : ce qui menait au meme
+    // endroit des deux cotes ne doit s'y lire qu'une fois. On compare
+    // les adresses, pas les libelles — « Boutique » ici et « La
+    // boutique » la seraient la meme page.
+    const dejaLa = new Set(
+      [...tiroir.querySelectorAll("a")]
+        .filter((lien) => !panneau.contains(lien))
+        .map((lien) => lien.getAttribute("href"))
+    );
+    panneau.querySelectorAll("a").forEach((lien) => {
+      lien.classList.toggle("est-double", dejaLa.has(lien.getAttribute("href")));
+    });
+
+    // En arrivant de l'autre cote — le telephone qu'on tourne —,
+    // « is-open » pouvait dire un panneau ouvert. Ici il dit le tiroir,
+    // et le tiroir est ferme : sans cela les trois traits resteraient
+    // dresses devant un tiroir qui n'est pas la.
+    const ouvert = tiroir.classList.contains("is-open");
+    menu.classList.toggle("is-open", ouvert);
+    menu.querySelector("[data-nav-menu-trigger]")
+      ?.setAttribute("aria-expanded", String(ouvert));
+  } else {
+    if (panneau.parentElement !== menu) menu.appendChild(panneau);
+    panneau.classList.remove("est-deplie");
+    panneau.querySelectorAll("a.est-double")
+      .forEach((lien) => lien.classList.remove("est-double"));
+    panneau.hidden = true;
+    // Le menu remonte ferme : « is-open » y disait l'etat du tiroir,
+    // il ferait un panneau ouvert sans qu'on l'ait demande.
+    menu.classList.remove("is-open");
+    menu.querySelector("[data-nav-menu-trigger]")
+      ?.setAttribute("aria-expanded", "false");
+  }
 }
 
 function initMenuAcces() {
@@ -13231,18 +13319,36 @@ function initMenuAcces() {
     declencheur.setAttribute("aria-expanded", etat ? "true" : "false");
   };
 
+  rangerLePanneauAcces();
+  ECRAN_TIROIR.addEventListener
+    ? ECRAN_TIROIR.addEventListener("change", rangerLePanneauAcces)
+    : ECRAN_TIROIR.addListener(rangerLePanneauAcces);
+
   declencheur.addEventListener("click", (evenement) => {
     evenement.stopPropagation();
+    // Sur telephone ce bouton est le seul de la barre : il ouvre le
+    // tiroir, ou le panneau se trouve deja, deplie. Il n'y a plus rien
+    // a ouvrir ici.
+    if (ECRAN_TIROIR.matches) {
+      basculerLeTiroir?.();
+      return;
+    }
     ouvrir(panneau.hidden);
   });
 
   // Un clic dehors ferme. Un clic DANS le menu ne doit pas fermer avant
   // que le lien n'ait eu le temps de partir.
+  //
+  // Rien de tout cela sur telephone : le panneau y est deplie en
+  // permanence, et le cacher au premier clic ailleurs le ferait
+  // disparaitre du tiroir pour de bon. C'est le voile du tiroir qui
+  // ferme, et la touche d'echappement passe par lui.
   document.addEventListener("click", (evenement) => {
+    if (ECRAN_TIROIR.matches) return;
     if (!menu.contains(evenement.target)) ouvrir(false);
   });
   document.addEventListener("keydown", (evenement) => {
-    if (evenement.key === "Escape") ouvrir(false);
+    if (evenement.key === "Escape" && !ECRAN_TIROIR.matches) ouvrir(false);
   });
 
   // La langue du menu et celle du site sont la meme chose : les deux
@@ -13420,10 +13526,11 @@ function initTransitionPage() {
     window.setTimeout(() => {
       window.clearTimeout(secours);
       location.href = url.href;
-      // Trois cents millisecondes : la duree de la chute, ecrite en
-      // face dans la feuille de style. Moins, on part avant la fin du
-      // mouvement ; plus, on attend le site.
-    }, 300);
+      // Trois cent soixante millisecondes : la duree de la chute,
+      // ecrite en face dans la feuille de style. Moins, on part avant
+      // la fin du mouvement — c'est ce qui donnait l'impression d'un
+      // simple effacement ; plus, on attend le site.
+    }, 360);
   });
 }
 

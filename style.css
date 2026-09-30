@@ -34,9 +34,21 @@ html.page-part .site-footer {
      ce soit. */
   animation: none;
   opacity: 0;
-  transform: translateY(9vh);
-  transition: opacity 300ms cubic-bezier(0.4, 0, 0.9, 0.4),
-              transform 300ms cubic-bezier(0.4, 0, 0.9, 0.4);
+  transform: translateY(14vh);
+  /* Deux courbes, et non une seule : c'est ce qui fait qu'on voit
+     d'abord partir la page, et seulement ensuite disparaitre.
+
+     Le deplacement suit une chute — lent au depart, de plus en plus
+     vite : a mi-parcours il n'a fait que le tiers du chemin. Avec la
+     meme courbe, l'opacite aurait suivi le meme retard et la page
+     serait restee nette jusqu'au bout avant de s'eteindre d'un coup.
+
+     L'effacement part donc quatre-vingts millisecondes plus tard, mais
+     sur une courbe reguliere : le temps que la page prenne de la
+     vitesse, elle est encore entiere ; elle s'efface pendant qu'elle
+     tombe, et les deux finissent ensemble. */
+  transition: opacity 280ms linear 80ms,
+              transform 360ms cubic-bezier(0.4, 0, 0.7, 0.6);
 }
 
 :root {
@@ -2738,15 +2750,34 @@ html.site-is-loading body {
   overflow-anchor: none;
 }
 
-html.site-is-loading main,
-html.site-is-loading .site-header {
+html.site-is-loading main {
   opacity: 0;
   transform: translateY(14px);
 }
 
-main,
-.site-header {
+main {
   transition: opacity 0.62s ease, transform 0.62s cubic-bezier(.2,.8,.2,1);
+}
+
+/* L'en-tete arrive en fondu, et sans bouger d'un pixel.
+
+   Il descendait de quatorze pixels comme le reste. Or un element qui
+   porte un « transform » devient le bloc conteneur de tout ce qui est
+   « fixed » a l'interieur — et le tiroir de navigation est a
+   l'interieur. Pendant les six cent vingt millisecondes de cette
+   arrivee, « bottom: 0 » ne valait donc pas le bas de l'ecran mais le
+   bas de la barre : ouvrir le menu dans cette seconde-la donnait un
+   tiroir de cent douze pixels de haut.
+
+   Le meme piege est deja decrit plus bas pour « backdrop-filter », qui
+   fait exactement la meme chose. Sur une barre de soixante pixels,
+   quatorze pixels de descente ne se voyaient de toute facon pas. */
+html.site-is-loading .site-header {
+  opacity: 0;
+}
+
+.site-header {
+  transition: opacity 0.62s ease;
 }
 
 /* Dashboard ModBot */
@@ -6355,7 +6386,32 @@ label,
 }
 
 @media (max-width: 980px) {
-  .nav-toggle { display: block; }
+  /* Les deux pastilles restent devant le tiroir.
+
+     Le tiroir est un enfant de la barre du haut : sans rang superieur,
+     il passe devant les boutons qui le bordent. Le seul bouton de la
+     page disparaissait donc sous ce qu'il venait d'ouvrir, et il ne
+     restait que le voile pour refermer. Les trois traits gris
+     portaient deja ce rang — cent deux, juste au-dessus du tiroir —
+     pour exactement cette raison. */
+  .site-header .navbar .nav-outils {
+    position: relative;
+    z-index: 102;
+  }
+
+  /* Les trois traits gris ne servent plus.
+
+     La barre en portait deux jeux cote a cote : ceux-ci, qui ouvraient
+     le tiroir de navigation, et les trois traits dores du menu
+     « Acces ». Le meme dessin, deux fois, pour deux listes differentes
+     — rien ne disait laquelle menait ou, et il fallait ouvrir pour
+     savoir. Les dores restent, et prennent les deux roles : ils ouvrent
+     le tiroir, ou le menu « Acces » descend deplie.
+
+     Le bouton reste dans le DOM : c'est lui qui porte l'etat du tiroir
+     pour les lecteurs d'ecran, et la feuille ne le montre simplement
+     plus. */
+  .nav-toggle { display: none; }
 
   /*
    * L'en-tete doit cesser d'etre un piege pour le tiroir qu'il contient.
@@ -6447,6 +6503,65 @@ label,
   .nav-links .nav-action-btn { justify-content: center; margin-top: 6px; }
 
   .nav-links .language-switch { margin-top: 12px; justify-content: center; }
+
+  /* Le menu « Acces » descendu dans le tiroir.
+
+     Suspendu sous son bouton, il etait une boite : un cadre, une ombre,
+     un fond a lui. Dans le tiroir il n'a plus rien a delimiter — le
+     tiroir est deja la boite — et toutes ces regles se voyaient comme
+     une carte posee sur une carte. Il ne garde qu'un filet, qui dit que
+     ces entrees-la ne sont pas des pages du site.
+
+     « animation: none » : le panneau et ses entrees arrivaient en
+     cascade a l'ouverture du menu deroulant. Ici c'est le tiroir qui
+     fait entrer ses enfants un par un, et deux cascades l'une sur
+     l'autre ne se lisent pas. La sienne, posee avec « both », resterait
+     en plus attachee et figerait l'opacite. */
+  .nav-links .nav-menu-panel.est-deplie,
+  .nav-links .nav-menu-panel.est-deplie > * {
+    animation: none;
+  }
+
+  .nav-links .nav-menu-panel.est-deplie {
+    position: static;
+    z-index: auto;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    margin: 10px 0 0;
+    padding: 12px 0 0;
+    border: none;
+    border-top: 1px solid var(--line);
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    gap: 4px;
+  }
+
+  /* Le tiroir donne deja aux liens leur taille de doigt ; le panneau
+     les avait dessines pour une souris. */
+  .nav-links .nav-menu-panel.est-deplie a {
+    padding: 13px 14px;
+    border-radius: 10px;
+    font-size: 0.98rem;
+  }
+
+  /* « Revenir au site » ne veut rien dire dans le tiroir du site : le
+     lien du haut y mene deja, et le trait qui l'isolait coupait la
+     liste en deux pour rien. */
+  .nav-links .nav-menu-panel.est-deplie .nav-menu-home { display: none; }
+
+  /* Une meme destination ne s'ecrit pas deux fois dans une liste.
+     Separes, les liens du site et le menu « Acces » pouvaient tous deux
+     mener a la boutique ; bout a bout dans le tiroir, le doublon se lit
+     comme une erreur. C'est le script qui marque laquelle des deux se
+     tait : il compare les adresses, la feuille ne saurait pas le faire. */
+  .nav-links .nav-menu-panel.est-deplie a.est-double { display: none; }
+
+  .nav-links .nav-menu-panel.est-deplie .nav-menu-lang {
+    padding: 13px 14px;
+    margin-top: 6px;
+  }
 
   /* Voile derriÃ¨re le panneau */
   .nav-backdrop {
@@ -10305,44 +10420,6 @@ body:not(.dashboard-page) .page-glow {
 .server-picker .dashboard-empty-state {
   border-color: var(--line);
   background: var(--panel);
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   LA TRANSITION D'UNE PAGE A L'AUTRE
-   ═══════════════════════════════════════════════════════════════════
-   Un clic dans la barre du haut remplacait l'ecran d'un coup : le fond
-   sautait, le decor repartait de zero, et l'oeil devait retrouver ou il
-   en etait.
-
-   Un voile noir a d'abord tenu cette seconde-la, mais il eteignait tout
-   l'ecran, barre du haut comprise. C'est le CONTENU qui s'efface
-   maintenant : l'en-tete et le fond restent, et la page suivante arrive
-   dans le meme mouvement. Rien ne noircit, donc rien ne ressemble a un
-   chargement.
-   ═══════════════════════════════════════════════════════════════════ */
-
-@media (prefers-reduced-motion: no-preference) {
-  /* Le depart : le contenu s'efface, et lui seul. L'en-tete ne bouge
-     pas, le fond reste allume — on ne quitte pas la page, on la voit
-     ceder la place. Elle revient par « page-ouverture », qui fait le
-     meme chemin en sens inverse.
-
-     « animation: none » d'abord : « page-ouverture » est posee avec
-     « both », donc elle reste attachee une fois jouee et impose son
-     opacite d'arrivee. Une transition ne peut rien contre une animation
-     active — il faut la relacher avant de pouvoir faire fondre quoi que
-     ce soit. */
-  html.page-part main,
-  html.page-part .footer,
-  html.page-part .site-footer {
-    animation: none;
-    transition: opacity 180ms ease, transform 180ms ease;
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  /* L'en-tete ne bouge pas d'un cheveu : c'est lui qui dit qu'on est
-     reste sur le meme site pendant que le reste change. */
 }
 
 /* ═══════════════════════════════════════════════════════════════════
