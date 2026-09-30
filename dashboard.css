@@ -1218,12 +1218,24 @@
 
 .discord-preview-row { display: flex; gap: 12px; }
 
+/* L'apercu montre ce que le membre verra dans son salon : c'est donc
+   la vraie tete du bot qu'il faut y mettre, pas une pastille de
+   couleur. Un degre violet-cyan ne ressemblait a rien de ce qui
+   apparait sur Discord, et l'apercu perdait la moitie de son interet —
+   se reconnaitre.
+
+   En fond plutot qu'en <img> : l'avatar est un <span> vide, pose a
+   deux endroits, l'un dans la page et l'autre fabrique par le script.
+   Une regle les sert tous les deux, sans toucher au balisage. Le
+   degrade reste dessous, le temps que l'image arrive. */
 .discord-preview-avatar {
   flex: none;
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--purple), var(--cyan));
+  background:
+    url("assets/modbot-mark.webp") center / cover no-repeat,
+    linear-gradient(135deg, var(--purple), var(--cyan));
 }
 
 .discord-preview-body { min-width: 0; flex: 1; }
@@ -2308,35 +2320,50 @@ body.dash-menu-ouvert { overflow: hidden; }
    date portee par la rubrique, et cesse de le poser passe un mois. Un
    « NOUVEAU » qui reste deux ans ne signale plus rien, et personne ne
    pense a aller le retirer a la main. */
-.dash-nav-neuf {
+/* Il prenait quarante-cinq pixels de large avec son fond et ses
+   marges : sur une colonne de deux cent quarante, « Vie du serveur »
+   n'avait plus la place de tenir sur une ligne et se coupait en deux.
+
+   Il perd son fond et ses marges interieures pour ne plus etre qu'un
+   mot : de l'or sur le noir, ce qui suffit a le distinguer d'un libelle
+   de rubrique. Un badge qui pousse le texte qu'il annonce a passer a la
+   ligne coute plus qu'il ne rapporte. */
+.dashboard-page .dash-nav > .dash-nav-neuf {
   flex: none;
   margin-left: auto;
-  padding: 2px 6px;
-  border-radius: 5px;
-  background: rgba(255, 168, 60, 0.18);
-  color: #ffb347;
-  font-size: 0.6rem;
+  padding: 0;
+  background: none;
+  color: #e8b44a;
+  font-size: 0.55rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   line-height: 1.4;
 }
 
-/* Le fond du badge est translucide : ce n'est donc pas contre lui que
-   le texte se detache, mais contre le melange du badge et du menu qui
-   est dessous. Ce melange donne un beige clair, et l'ambre d'origine
-   n'y rendait que 4,23 contre 1 — sous la norme pour un texte de dix
-   pixels. Celui-ci rend 5,75. */
-:root[data-theme="light"] .dash-nav-neuf {
-  background: rgba(168, 106, 10, 0.16);
-  color: #6f480a;
+/* Sur le clair, l'or ne tient pas : pose sur un gris pale il tombe
+   sous deux de contraste. Il descend jusqu'a un brun dore, qui reste
+   de la meme famille et se lit. */
+:root[data-theme="light"] .dashboard-page .dash-nav > .dash-nav-neuf {
+  color: #8a6210;
 }
 
 /* L'entree qui le porte passe en ligne : sa grille a deux colonnes n'a
-   pas de place pour un troisieme element. */
+   pas de place pour un troisieme element.
+
+   Et c'est le NOM qui a le droit de prendre la place, pas le badge :
+   sans « min-width: 0 » le libelle refuserait de se reduire, et sans
+   « nowrap » sur le badge c'est lui qui se couperait en deux. */
 .dashboard-page .dash-nav:has(.dash-nav-neuf) {
   display: flex;
   align-items: center;
+  gap: 8px;
 }
+
+.dashboard-page .dash-nav:has(.dash-nav-neuf) > span:not([aria-hidden]) {
+  min-width: 0;
+}
+
+.dashboard-page .dash-nav > .dash-nav-neuf { white-space: nowrap; }
 
 /* ══════════════════════════════════════════════════════════════════
    LE DEMARRAGE RAPIDE
@@ -2504,4 +2531,156 @@ body.dash-menu-ouvert { overflow: hidden; }
   width: auto;
   min-width: 0;
   transform-origin: top center;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LES BOUTONS DE LA BARRE DU HAUT NE S'ECRASENT PLUS
+
+   Ils etaient poses en « flex: 0 1 auto » sur une ligne qui ne revient
+   jamais a la ligne : des que la place manquait, chacun cedait un peu
+   de sa largeur plutot que de descendre. Un bouton qui retrecit ne
+   disparait pas, il se casse — « Retour au site » passait sur deux
+   lignes dans une boite prevue pour une, « Enregistrer » se faisait
+   rogner sa derniere lettre, et le choix de la langue tombait a la
+   largeur d'un « F ».
+
+   Trois regles, et le probleme disparait : plus personne ne retrecit,
+   les libelles ne se coupent pas, et la barre s'autorise une seconde
+   ligne quand il le faut. Descendre est toujours plus lisible que
+   comprimer.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* La barre est une GRILLE a trois colonnes, et non une rangee
+   souple : « auto », puis « minmax(240px, 420px) » taillee pour le
+   selecteur de serveur, puis « auto ».
+
+   Descendre ce selecteur dans le menu lui a retire son deuxieme
+   enfant. Les boutons ont glisse dans la colonne du milieu — bornee a
+   quatre cent vingt pixels — pendant qu'une colonne vide de trois cent
+   cinquante-huit restait a droite. Ils n'avaient donc pas la place,
+   alors qu'il y en avait : d'ou « Retour au site » sur deux lignes et
+   la langue reduite a un « F ».
+
+   Deux colonnes des que le selecteur n'est plus la, et la seconde
+   prend tout ce qui reste. « :has() » plutot qu'une classe posee par
+   le script : la feuille suit d'elle-meme, y compris pendant le
+   deplacement, sans qu'on ait a se souvenir de prevenir. */
+.dashboard-topbar:not(:has(> .server-switcher)) {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+/* Ce qui suit reste un filet : sur un ecran etroit, il vaut toujours
+   mieux descendre que comprimer. */
+.dashboard-topbar .dashboard-actions {
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 8px;
+}
+
+/* Aucun ne cede sa largeur. « auto » et non « 0 » pour la base : leur
+   taille reste celle de leur contenu, on retire seulement le droit de
+   la reduire. */
+.dashboard-topbar .dashboard-actions > * {
+  flex: 0 0 auto;
+}
+
+/* Et aucun libelle ne se coupe en deux. La regle vise les boutons,
+   pas leur contenu : un <span> traduit a l'interieur heriterait sinon
+   d'un « nowrap » qui deborderait ailleurs. */
+.dashboard-topbar .dashboard-actions > .primary-btn,
+.dashboard-topbar .dashboard-actions > .secondary-btn {
+  white-space: nowrap;
+}
+
+/* Le choix de la langue garde de quoi montrer un nom de langue.
+   « Francais » tient en sept caracteres, « Deutsch » aussi : sept rems
+   suffisent, et la borne haute d'origine reste. */
+.dashboard-topbar .language-switch select {
+  min-width: 7rem;
+}
+
+/* Le nom du compte s'arrete a une ligne et se coupe proprement s'il
+   est long : sans cela, un pseudo a rallonge poussait la barre a
+   trois lignes de haut a lui seul. */
+.dashboard-topbar .account-label strong {
+  display: block;
+  overflow: hidden;
+  max-width: 16ch;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LE CHANGEMENT DE RUBRIQUE SE VOIT
+
+   Il y avait bien une cascade : les blocs du panneau arrivaient l'un
+   apres l'autre, de trente-cinq millisecondes en trente-cinq. Mais sa
+   distance passait par « --entree-bloc », une variable que le site met
+   a ZERO quand le systeme demande des animations reduites — c'est le
+   cas de la machine du proprietaire. Il ne restait donc qu'un fondu
+   sur place : quelque chose changeait, sans qu'on voie quoi.
+
+   Un ecran qu'on ouvre en cliquant n'est pas une boucle decorative :
+   c'est la reponse a un geste, et elle doit se voir. La distance est
+   donc ecrite en dur ici. Les blocs viennent du bas ET de la droite :
+   le sens du menu vers le contenu, celui du clic vers son resultat.
+
+   « animation-name » et non « animation » : la forme courte remettrait
+   « animation-delay » a zero, et c'est justement lui qui porte la
+   cascade, declaree plus haut, rubrique par rubrique.
+   ══════════════════════════════════════════════════════════════════ */
+
+.dashboard-page .dash-panel.is-active > * {
+  animation-name: rubriqueEntre;
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.22, 0.85, 0.3, 1);
+  animation-fill-mode: both;
+}
+
+@keyframes rubriqueEntre {
+  from {
+    opacity: 0;
+    transform: translate3d(18px, 14px, 0) scale(0.988);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Le titre de la rubrique se souligne d'un trait qui se deploie. C'est
+   le seul repere FIXE du panneau — tout le reste glisse —, donc le
+   seul endroit ou l'oeil peut lire « c'est une autre rubrique » plutot
+   que « quelque chose a bouge ». */
+.dashboard-page .dash-panel.is-active .panel-title {
+  position: relative;
+}
+
+.dashboard-page .dash-panel.is-active .panel-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  animation: titreSouligne 560ms cubic-bezier(0.22, 0.85, 0.3, 1) 120ms both;
+}
+
+@keyframes titreSouligne {
+  from { width: 0; opacity: 0; }
+  40%  { opacity: 1; }
+  to   { width: 84px; opacity: 1; }
+}
+
+/* L'entree du menu accuse le clic. Sans cela, le geste et son resultat
+   sont a deux endroits de l'ecran sans rien qui les relie. */
+.dashboard-page .dash-nav:active {
+  transform: scale(0.975);
+}
+
+.dashboard-page .dash-nav {
+  transition: transform 90ms ease-out,
+              background-color var(--dur) var(--ease),
+              color var(--dur) var(--ease);
 }
