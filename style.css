@@ -3,52 +3,40 @@
 
    Un site qui charge un vrai document a chaque lien montre forcement un
    blanc entre les deux : le navigateur peint la page suivante a partir
-   de rien, et ce moment n'appartient a aucune des deux pages. Aucune
-   animation ecrite ici ne pouvait le couvrir.
+   de rien, et ce moment n'appartient a aucune des deux pages.
 
-   « @view-transition » le lui confie : il garde une image de la page
-   qu'on quitte, et nous disons ce qu'il en fait. Les deux pages doivent
-   l'accepter, et elles partagent cette feuille — c'est le cas partout.
+   Deux choses le couvrent, et aucune n'est une animation. Le fond du
+   site est pose dans le <head>, avant la feuille de style : l'entre-deux
+   est noir comme le site, pas blanc comme un navigateur vide. Et le
+   document suivant est demande des que le pointeur touche le lien, ce
+   qui supprime le plus souvent l'attente elle-meme.
 
-   Le mouvement : celle qu'on quitte descend et s'efface, celle qui
-   arrive prend sa place en fondu, un souffle plus tard. L'ordre compte
-   autant que la duree — les deux ensemble donnent un fondu croise, qui
-   ne raconte rien ; l'une apres l'autre, on voit une page ceder la
-   place a la suivante.
+   Le mouvement, lui, est ecrit ici. « @view-transition » aurait ete
+   plus elegant — le navigateur garde une image de la page qu'on quitte
+   et la fond vers la suivante — mais la mesure est sans appel : sur la
+   machine du proprietaire, « pageswap » rend un « viewTransition » vide
+   dans les deux sens. Un navigateur a qui l'on demande des animations
+   reduites saute cette transition, et aucune regle n'y peut rien.
+
+   On la fait donc soi-meme : le contenu descend et s'efface pendant
+   trois cents millisecondes, puis on change d'adresse. La barre du haut
+   ne bouge ni ne s'efface — c'est elle le repere qui rend la chute
+   lisible ; sans repere fixe, un mouvement d'ensemble ne se voit pas.
    ═══════════════════════════════════════════════════════════════════ */
 
-@view-transition { navigation: auto; }
-
-@keyframes page-sen-va {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(9vh); }
-}
-
-@keyframes page-arrive {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* ── La barre du haut ne tombe pas ────────────────────────────────
-   Sans elle, TOUT descendait ensemble : un mouvement d'ensemble n'a
-   aucun repere, et ne se voit donc pas. Un nom la sort du plan qui
-   bouge ; comme elle est identique des deux cotes, elle ne bouge pas
-   du tout et devient ce repere. C'est ce qui rend la chute lisible. */
-.site-header,
-.dashboard-topbar { view-transition-name: entete; }
-
-/* Le reste de la page — « root », tout ce qui n'est pas nomme — part
-   vers le bas en s'effacant. L'acceleration le fait tomber plutot que
-   glisser. */
-::view-transition-old(root) {
-  animation: page-sen-va 440ms cubic-bezier(0.4, 0, 0.9, 0.4) both;
-}
-
-/* Celle qui arrive attend que l'autre soit partie — a mi-chemin, on ne
-   verrait qu'une bouillie des deux — puis se pose. Elle ne monte pas :
-   deux mouvements contraires donneraient un tourniquet. */
-::view-transition-new(root) {
-  animation: page-arrive 340ms cubic-bezier(0.22, 0.7, 0.3, 1) 220ms both;
+html.page-part main,
+html.page-part .footer,
+html.page-part .site-footer {
+  /* « animation: none » d'abord : « page-ouverture » est posee avec
+     « both », donc elle reste attachee une fois jouee et impose son
+     opacite d'arrivee. Une transition ne peut rien contre une animation
+     active — il faut la relacher avant de pouvoir faire fondre quoi que
+     ce soit. */
+  animation: none;
+  opacity: 0;
+  transform: translateY(9vh);
+  transition: opacity 300ms cubic-bezier(0.4, 0, 0.9, 0.4),
+              transform 300ms cubic-bezier(0.4, 0, 0.9, 0.4);
 }
 
 :root {

@@ -13376,14 +13376,12 @@ function initPrechargementDesPages() {
 }
 
 function initTransitionPage() {
-  if (mouvementReduit()) return;
-  // Quand le navigateur sait fondre d'une page a l'autre tout seul
-  // (« @view-transition », pose en tete de feuille), il le fait mieux
-  // que nous : il garde une image de la page qu'on quitte, la notre
-  // s'effacait avant que la suivante n'arrive. Deux effets l'un sur
-  // l'autre feraient un double fondu, et les 190 ms d'attente seraient
-  // un retard pour rien.
-  if (typeof CSSViewTransitionRule !== "undefined") return;
+  // Aucune garde ici, ni sur « animations reduites », ni sur le support
+  // du navigateur. La premiere privait de transition les machines qui
+  // demandent du calme — c'est le cas de celle du proprietaire. La
+  // seconde faisait confiance a « @view-transition » : la regle est
+  // bien reconnue, mais le navigateur n'ouvre jamais la transition, et
+  // on se retrouvait sans rien du tout.
   const racine = document.documentElement;
 
   // Un retour par le bouton « precedent » ressort parfois de la memoire
@@ -13422,7 +13420,10 @@ function initTransitionPage() {
     window.setTimeout(() => {
       window.clearTimeout(secours);
       location.href = url.href;
-    }, 190);
+      // Trois cents millisecondes : la duree de la chute, ecrite en
+      // face dans la feuille de style. Moins, on part avant la fin du
+      // mouvement ; plus, on attend le site.
+    }, 300);
   });
 }
 
