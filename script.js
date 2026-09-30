@@ -246,6 +246,64 @@ function poserTheme(theme) {
   document.dispatchEvent(new CustomEvent("modbot:theme"));
 }
 
+/* Le passage d'un theme a l'autre, en trois temps.
+
+   Un astre traverse l'ecran de gauche a droite et la nouvelle couleur
+   le suit. Ce qu'on voit est un balayage ; ce qui se passe vraiment,
+   c'est qu'un voile aux couleurs du theme D'ARRIVEE entre par la
+   gauche, que le theme bascule une fois l'ecran entierement couvert —
+   donc sans que personne le voie — et que le voile ressort par la
+   droite en decouvrant la page deja changee.
+
+   Les deux nombres ci-dessous sont ecrits en face dans la feuille de
+   style, sur « voileTraverse » : la duree totale, et le moment ou le
+   voile couvre tout. Les changer ici sans les changer la-bas ferait
+   basculer le theme devant les yeux du visiteur. */
+const BASCULE_DUREE = 900;
+const BASCULE_COUVERT = 468;  // 52 % de 900 : la cle du milieu
+
+/* Une bascule a la fois : deux clics rapides poseraient deux voiles,
+   dont le second partirait de la couleur que le premier vient d'amener
+   — on verrait le theme changer a decouvert. */
+let basculeEnCours = false;
+
+function basculerLeTheme(bouton) {
+  const cible = themeActuel() === "light" ? "dark" : "light";
+
+  // Sans le rendu — un vieux navigateur, un theme force par un test —
+  // il reste l'essentiel : le theme change.
+  if (basculeEnCours || typeof document.body?.append !== "function") {
+    if (!basculeEnCours) poserTheme(cible);
+    return;
+  }
+  basculeEnCours = true;
+
+  const couche = document.createElement("div");
+  couche.className = "bascule-theme " + (cible === "light" ? "vers-clair" : "vers-sombre");
+  couche.setAttribute("aria-hidden", "true");
+
+  const voile = document.createElement("span");
+  voile.className = "bascule-voile";
+
+  const astre = document.createElement("span");
+  astre.className = "bascule-astre " + (cible === "light" ? "est-soleil" : "est-lune");
+
+  // L'astre est DANS le voile : il avance avec lui, et il n'y a pas
+  // deux trajectoires a accorder.
+  voile.appendChild(astre);
+  couche.appendChild(voile);
+  document.body.appendChild(couche);
+
+  bouton?.classList.add("est-en-bascule");
+
+  window.setTimeout(() => poserTheme(cible), BASCULE_COUVERT);
+  window.setTimeout(() => {
+    couche.remove();
+    bouton?.classList.remove("est-en-bascule");
+    basculeEnCours = false;
+  }, BASCULE_DUREE + 80);
+}
+
 function initTheme() {
   // Le bouton est pose ici plutot que dans les quinze pages : une seule
   // source, et il ne peut pas manquer a l'une d'elles.
@@ -288,7 +346,7 @@ function initTheme() {
   }
 
   bouton.addEventListener("click", () => {
-    poserTheme(themeActuel() === "light" ? "dark" : "light");
+    basculerLeTheme(bouton);
   });
 
   // Le meme navigateur, un autre onglet : les deux suivent.

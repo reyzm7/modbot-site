@@ -11844,6 +11844,179 @@ body:not(.dashboard-page) .page-glow {
 
 
 /* ══════════════════════════════════════════════════════════════════
+   LE PASSAGE D'UN THEME A L'AUTRE
+
+   Le site changeait de couleur d'un coup. Sur un ecran entier, un blanc
+   qui remplace un noir en une image pique les yeux, et surtout il ne
+   raconte rien : on a vu un clignotement, pas un lever de jour.
+
+   Un astre traverse donc l'ecran de gauche a droite, et la nouvelle
+   couleur le suit comme son ombre portee. Le soleil amene le clair, la
+   lune amene le sombre.
+
+   La mecanique tient en trois temps. Un voile aux couleurs du theme
+   D'ARRIVEE entre par la gauche ; quand il couvre tout, le theme change
+   pour de bon, invisible puisque cache ; puis le voile sort par la
+   droite et decouvre la page deja changee. L'oeil ne voit qu'un
+   balayage.
+
+   Les couleurs des deux fonds sont ecrites ici plutot que prises dans
+   les variables : celles-ci ne donnent que le theme COURANT, et c'est
+   justement l'autre qu'il faut peindre.
+   ══════════════════════════════════════════════════════════════════ */
+
+.bascule-theme {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  /* Au-dessus de tout — l'en-tete est a 120, le tiroir a 101 — et
+     traversant : un voile qui avalerait les clics pendant presque une
+     seconde se ferait passer pour un site fige. */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Le voile depasse tres largement l'ecran des deux cotes : son bord
+   avant est arrondi, et il faut que la partie PLEINE couvre encore
+   toute la largeur au moment ou le theme bascule. */
+.bascule-voile {
+  position: absolute;
+  top: -10vh;
+  bottom: -10vh;
+  right: 100%;
+  width: 210vw;
+  /* Un bord avant courbe, et non droit : une ligne verticale qui
+     traverse se lit comme un rideau, une courbe comme une lumiere qui
+     gagne du terrain. */
+  border-radius: 0 44vw 44vw 0 / 0 50% 50% 0;
+  animation: voileTraverse 900ms cubic-bezier(0.58, 0.02, 0.4, 1) forwards;
+}
+
+.bascule-theme.vers-clair .bascule-voile {
+  background: linear-gradient(115deg, #ffffff, #f4f6fb 46%, #e9edf6);
+}
+
+.bascule-theme.vers-sombre .bascule-voile {
+  background: linear-gradient(115deg, #0c0719, #05020d 54%, #02010a);
+}
+
+@keyframes voileTraverse {
+  0%   { transform: translateX(0); }
+  /* A cet instant le bord plein a depasse le bord droit de l'ecran :
+     tout est couvert, et c'est la que le theme change. Le chiffre est
+     repris tel quel par le script — les deux doivent bouger ensemble. */
+  52%  { transform: translateX(152vw); }
+  100% { transform: translateX(322vw); }
+}
+
+/* ── L'astre ──────────────────────────────────────────────────────────
+   Il vit DANS le voile, accroche pres de son bord avant : il avance
+   donc avec lui sans qu'on ait a accorder deux trajectoires. Il ne
+   garde pour lui que son arc — il monte, passe au plus haut au milieu
+   de l'ecran, et redescend. */
+.bascule-astre {
+  position: absolute;
+  top: 50%;
+  right: 13vw;
+  width: clamp(76px, 11vw, 148px);
+  aspect-ratio: 1;
+  margin-top: clamp(-74px, -5.5vw, -38px);
+  border-radius: 50%;
+  animation: astreArc 900ms cubic-bezier(0.58, 0.02, 0.4, 1) forwards;
+}
+
+@keyframes astreArc {
+  0%   { transform: translateY(9vh) scale(0.72); }
+  30%  { transform: translateY(-4vh) scale(1); }
+  58%  { transform: translateY(-1vh) scale(1); }
+  100% { transform: translateY(8vh) scale(0.8); }
+}
+
+/* Le soleil : un disque chaud, un halo qui deborde tres loin, et une
+   couronne de rayons qui tourne lentement sur elle-meme. */
+.bascule-astre.est-soleil {
+  background: radial-gradient(circle at 42% 38%, #fff6d8, #ffd166 52%, #ffab3d);
+  box-shadow: 0 0 40px 10px rgba(255, 196, 92, 0.75),
+              0 0 130px 46px rgba(255, 178, 66, 0.42),
+              0 0 260px 110px rgba(255, 168, 60, 0.22);
+}
+
+.bascule-astre.est-soleil::before {
+  content: "";
+  position: absolute;
+  inset: -46%;
+  border-radius: 50%;
+  /* Douze rayons, tailles dans un cone repete : c'est le degrade qui
+     les dessine, il n'y a pas douze elements. */
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(255, 196, 92, 0.5) 0deg 4deg,
+    transparent 4deg 30deg);
+  -webkit-mask: radial-gradient(circle closest-side, transparent 0 52%, #000 62%, transparent 100%);
+          mask: radial-gradient(circle closest-side, transparent 0 52%, #000 62%, transparent 100%);
+  animation: astreTourne 9s linear infinite;
+}
+
+/* La lune : le meme disque, creuse par un second que l'on decale.
+   C'est le decalage qui fait le croissant, pas un dessin. */
+.bascule-astre.est-lune {
+  background: radial-gradient(circle at 38% 34%, #ffffff, #d8dcf0 54%, #a9b0d4);
+  box-shadow: 0 0 34px 8px rgba(190, 200, 255, 0.5),
+              0 0 120px 40px rgba(150, 165, 240, 0.3),
+              0 0 240px 96px rgba(120, 135, 220, 0.16);
+}
+
+.bascule-astre.est-lune::before {
+  content: "";
+  position: absolute;
+  /* Le disque qui creuse mord de vingt-six pour cent seulement : plus
+     a gauche, il ne restait de la lune qu'un fil, et un fil ne se lit
+     pas a la vitesse ou l'astre passe. */
+  inset: -8% -10% -8% 38%;
+  border-radius: 50%;
+  /* La couleur du voile, pas du noir : le creux doit se confondre avec
+     ce qu'il y a derriere, sinon la lune porte une tache. */
+  background: #05020d;
+}
+
+/* Quelques etoiles autour d'elle, taillees dans un degrade a points. */
+.bascule-astre.est-lune::after {
+  content: "";
+  position: absolute;
+  inset: -120%;
+  background:
+    radial-gradient(circle 2.5px at 22% 30%, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(circle 2px   at 78% 18%, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(circle 3px   at 64% 76%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(circle 2px   at 14% 68%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(circle 2.5px at 88% 54%, rgba(255, 255, 255, 0.75), transparent);
+  animation: astreEtoiles 900ms ease-out forwards;
+}
+
+@keyframes astreTourne {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes astreEtoiles {
+  0%       { opacity: 0; transform: scale(0.86); }
+  26%, 70% { opacity: 1; transform: scale(1); }
+  100%     { opacity: 0; transform: scale(1.1); }
+}
+
+/* Le bouton lui-meme accuse le coup : il s'enfonce et rebondit pendant
+   que l'astre part. Sans cela, on ne saurait pas d'ou vient le
+   balayage. */
+.theme-bouton.est-en-bascule {
+  animation: boutonLance 620ms cubic-bezier(0.34, 1.5, 0.5, 1);
+}
+
+@keyframes boutonLance {
+  0%   { transform: scale(1) rotate(0deg); }
+  18%  { transform: scale(0.82) rotate(-18deg); }
+  100% { transform: scale(1) rotate(360deg); }
+}
+
+/* ══════════════════════════════════════════════════════════════════
    CE QUI CONTINUE DE BOUGER, MEME EN MODE CALME
 
    « Animations reduites » est un reglage du systeme, et le site l'a
