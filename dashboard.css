@@ -2214,3 +2214,294 @@ body.dash-menu-ouvert { overflow: hidden; }
   .rubrique-icone { width: 38px; height: 38px; }
   .quick-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   LE MENU SE RESSERRE
+
+   Vingt-sept rubriques a quarante-deux pixels de haut, avec six pixels
+   entre chacune et un carre colore par icone : la liste faisait plus
+   de treize cents pixels, on ne voyait jamais qu'un tiers du menu et
+   chaque entree criait aussi fort que sa voisine.
+
+   Trois changements, et rien d'autre. L'entree descend a trente-quatre
+   pixels et l'ecart a un seul. L'icone perd son carre : c'est un trait
+   dans le texte, pas une vignette — vingt-sept vignettes font un
+   damier, et l'oeil n'y accroche plus rien. Et ce qui marque la
+   rubrique ouverte n'est plus un aplat violet mais un fond discret
+   double d'un trait vertical : sur un menu resserre, un aplat de
+   couleur par entree survolee fait clignoter toute la colonne.
+
+   Place gagnee : pres de quatre cents pixels, soit dix rubriques de
+   plus a l'ecran sans defiler.
+   ══════════════════════════════════════════════════════════════════ */
+
+.dashboard-page .dash-nav {
+  position: relative;
+  min-height: 34px;
+  margin-bottom: 1px;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 10px;
+  padding: 0 10px 0 8px;
+  border-radius: 7px;
+  font-size: 0.875rem;
+}
+
+/* L'icone, nue. Le carre et son fond sautent — « background: none » ne
+   suffisait pas, la regle d'origine pose aussi une couleur et un
+   rayon. */
+.dashboard-page .dash-nav > span[aria-hidden="true"] {
+  width: 20px;
+  height: 20px;
+  margin-left: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--muted);
+}
+
+.dashboard-page .dash-nav .ui-icon { width: 17px; height: 17px; }
+
+.dashboard-page .dash-nav:hover {
+  background: rgba(var(--canal-clair), 0.055);
+  color: var(--text);
+}
+
+.dashboard-page .dash-nav:hover > span[aria-hidden="true"] { color: var(--soft); }
+
+/* La rubrique ouverte : un fond sobre, et un trait a gauche. C'est le
+   trait qui dit « ici », pas la couleur — il se lit d'un coup d'oeil
+   sur une colonne de vingt-sept lignes. */
+.dashboard-page .dash-nav.is-active {
+  background: rgba(var(--canal-clair), 0.085);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.dashboard-page .dash-nav.is-active::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  bottom: 7px;
+  left: 0;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--accent);
+}
+
+.dashboard-page .dash-nav.is-active > span[aria-hidden="true"] {
+  background: none;
+  color: var(--accent);
+}
+
+/* Les titres de famille se resserrent avec le reste : seize pixels
+   au-dessus de chacun, sur huit familles, faisaient a eux seuls la
+   hauteur de trois rubriques. */
+.dashboard-page .sidebar-groupe {
+  margin: 13px 0 3px;
+  padding: 3px 8px;
+  font-size: 0.68rem;
+}
+
+.dashboard-page .sidebar-groupe:first-of-type { margin-top: 4px; }
+
+/* ── « NOUVEAU », et qui s'efface tout seul ───────────────────────────
+   Le badge n'est pas ecrit dans la page : le script le pose d'apres une
+   date portee par la rubrique, et cesse de le poser passe un mois. Un
+   « NOUVEAU » qui reste deux ans ne signale plus rien, et personne ne
+   pense a aller le retirer a la main. */
+.dash-nav-neuf {
+  flex: none;
+  margin-left: auto;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: rgba(255, 168, 60, 0.18);
+  color: #ffb347;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+}
+
+/* Le fond du badge est translucide : ce n'est donc pas contre lui que
+   le texte se detache, mais contre le melange du badge et du menu qui
+   est dessous. Ce melange donne un beige clair, et l'ambre d'origine
+   n'y rendait que 4,23 contre 1 — sous la norme pour un texte de dix
+   pixels. Celui-ci rend 5,75. */
+:root[data-theme="light"] .dash-nav-neuf {
+  background: rgba(168, 106, 10, 0.16);
+  color: #6f480a;
+}
+
+/* L'entree qui le porte passe en ligne : sa grille a deux colonnes n'a
+   pas de place pour un troisieme element. */
+.dashboard-page .dash-nav:has(.dash-nav-neuf) {
+  display: flex;
+  align-items: center;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LE DEMARRAGE RAPIDE
+
+   L'accueil s'ouvrait sur des chiffres : utile pour savoir ou l'on en
+   est, inutile pour savoir quoi faire. Quatre raccourcis vers les
+   reglages qui se voient le plus vite sur un serveur, et une croix
+   pour ne plus les revoir.
+   ══════════════════════════════════════════════════════════════════ */
+
+.dash-demarrage {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 4px 16px;
+  margin-bottom: 22px;
+  padding: 18px 46px 18px 18px;
+  border: 1px solid rgba(255, 168, 60, 0.3);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(135deg, rgba(255, 168, 60, 0.1), rgba(255, 168, 60, 0.02) 46%),
+    var(--panel);
+}
+
+.dash-demarrage[hidden] { display: none; }
+
+.dash-demarrage-icone {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(255, 168, 60, 0.16);
+  color: #ffb347;
+}
+
+.dash-demarrage-icone .ui-icon { width: 20px; height: 20px; }
+
+.dash-demarrage-texte strong {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--text);
+  font-size: 1.04rem;
+}
+
+.dash-demarrage-texte p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+/* Les raccourcis passent sous le texte, dans la colonne du texte : sous
+   l'icone aussi, ils auraient commence trente pixels plus a gauche que
+   la phrase qui les annonce. */
+.dash-demarrage-actions {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.dash-demarrage-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  background: var(--panel-strong);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color var(--dur) var(--ease),
+              background-color var(--dur) var(--ease),
+              transform var(--dur) var(--ease);
+}
+
+.dash-demarrage-actions button .ui-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+}
+
+.dash-demarrage-actions button:hover {
+  border-color: rgba(255, 168, 60, 0.5);
+  background: rgba(255, 168, 60, 0.1);
+  transform: translateY(-1px);
+}
+
+.dash-demarrage-actions button:hover .ui-icon { color: #ffb347; }
+
+.dash-demarrage-fermer {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.dash-demarrage-fermer:hover {
+  background: rgba(var(--canal-clair), 0.08);
+  color: var(--text);
+}
+
+.dash-demarrage-fermer .ui-icon { width: 16px; height: 16px; }
+
+/* Sur telephone, l'icone quitte sa colonne : a cote d'un titre de deux
+   lignes et de quatre boutons empiles, elle ne laissait au texte que la
+   moitie de la largeur. */
+@media (max-width: 720px) {
+  .dash-demarrage {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 16px 44px 16px 16px;
+  }
+  .dash-demarrage-actions { grid-column: 1; margin-top: 4px; }
+  .dash-demarrage-actions button { width: 100%; justify-content: flex-start; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LE SERVEUR ACTIF, EN TETE DU MENU
+
+   Il vivait dans la barre du haut, a l'autre bout de l'ecran des
+   rubriques qu'il commande : on reglait la moderation sans plus voir
+   pour quel serveur. Descendu ici, il est dans le meme regard que ce
+   qu'il gouverne.
+
+   Sa boite d'origine est faite pour une barre horizontale : ces regles
+   l'etalent sur la largeur du menu et lui donnent le filet qui l'en
+   separe.
+   ══════════════════════════════════════════════════════════════════ */
+
+.server-switcher.est-dans-le-menu {
+  width: 100%;
+  margin: 0 0 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.server-switcher.est-dans-le-menu .server-switcher-trigger {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+/* Le panneau se cale sur le menu et non sur le bouton : ancre a droite
+   comme dans la barre du haut, il sortait par le bord gauche de la
+   colonne, qui est bien plus etroite. */
+.server-switcher.est-dans-le-menu .server-switcher-menu {
+  left: 0;
+  right: 0;
+  width: auto;
+  min-width: 0;
+  transform-origin: top center;
+}

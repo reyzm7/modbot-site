@@ -355,14 +355,14 @@
       </button>
       <div class="sidebar-famille" id="famille-4">
       <button class="dash-nav" type="button" data-dashboard-tab="tickets"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg></span><span data-i18n="nav.tickets">Tickets</span></button>
-      <button class="dash-nav" type="button" data-dashboard-tab="modmail"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-message"/></svg></span><span data-i18n="nav.modmail">Modmail</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="modmail" data-nouveau="2026-09-26"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-message"/></svg></span><span data-i18n="nav.modmail">Modmail</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="welcome"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg></span><span data-i18n="nav.welcome">Bienvenue</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="roles"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-mask"/></svg></span><span data-i18n="nav.roles">Rôles</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="voice"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-broadcast"/></svg></span><span data-i18n="nav.voice">Vocaux</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="events"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span><span data-i18n="nav.events">Événements</span></button>
-      <button class="dash-nav" type="button" data-dashboard-tab="communaute"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-heart"/></svg></span><span data-i18n="nav.communaute">Vie du serveur</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="communaute" data-nouveau="2026-09-22"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-heart"/></svg></span><span data-i18n="nav.communaute">Vie du serveur</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="giveaways"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-gift"/></svg></span><span data-i18n="nav.giveaways">Giveaways</span></button>
-      <button class="dash-nav" type="button" data-dashboard-tab="ratings" data-i18n="dash.navRatings"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span>Ratings</button>
+      <button class="dash-nav" type="button" data-dashboard-tab="ratings" data-nouveau="2026-09-27" data-i18n="dash.navRatings"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg></span>Ratings</button>
 
       </div>
       <button class="sidebar-groupe" type="button" data-sidebar-groupe="famille-5"
@@ -397,7 +397,7 @@
       </button>
       <div class="sidebar-famille" id="famille-7">
       <button class="dash-nav" type="button" data-dashboard-tab="massroles"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-user"/></svg></span><span data-i18n="nav.massroles">Rôles en masse</span></button>
-      <button class="dash-nav" type="button" data-dashboard-tab="historique"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg></span><span data-i18n="nav.historique">Historique</span></button>
+      <button class="dash-nav" type="button" data-dashboard-tab="historique" data-nouveau="2026-09-26"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-refresh"/></svg></span><span data-i18n="nav.historique">Historique</span></button>
       <button class="dash-nav" type="button" data-dashboard-tab="backups" data-i18n="dash.navSauvegardes"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-save"/></svg></span>Sauvegardes</button>
 
       <!-- Ce que l'administrateur qui configure le bot doit pouvoir lire
@@ -446,6 +446,54 @@
       </div>
 
       <section class="dash-panel is-active" data-dashboard-panel="overview">
+        <!-- Le demarrage rapide.
+
+             Vingt-sept rubriques au menu, et rien qui dise par laquelle
+             commencer : on ouvrait le dashboard sur des chiffres, ce
+             qui ne demande aucune action. Ces quatre raccourcis mènent
+             aux réglages qui changent tout de suite quelque chose sur
+             le serveur.
+
+             « data-aller-onglet » et non « data-dashboard-tab » : ce
+             dernier designe les entrees du menu, et le script les
+             traite comme telles — un bouton d'accueil se serait
+             retrouve marque « actif » et indexe comme une rubrique.
+             Celui-ci se contente de cliquer la vraie entree.
+
+             Ferme, il ne revient plus : le choix tient dans le
+             navigateur du visiteur, par serveur. -->
+        <div class="dash-demarrage" data-demarrage hidden>
+          <span class="dash-demarrage-icone" aria-hidden="true">
+            <svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-sparkles"/></svg>
+          </span>
+          <div class="dash-demarrage-texte">
+            <strong data-i18n="dash.demarrageTitre">Merci d’avoir ajouté ModBot !</strong>
+            <p data-i18n="dash.demarrageSous">Quatre réglages pour commencer, ceux qui se voient le plus vite sur un serveur.</p>
+          </div>
+          <div class="dash-demarrage-actions">
+            <button type="button" data-aller-onglet="welcome">
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg>
+              <span data-i18n="dash.demarrageBienvenue">Accueillir les arrivants</span>
+            </button>
+            <button type="button" data-aller-onglet="moderation">
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hammer"/></svg>
+              <span data-i18n="dash.demarrageModeration">Régler la modération</span>
+            </button>
+            <button type="button" data-aller-onglet="roles">
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg>
+              <span data-i18n="dash.demarrageRoles">Créer un rôle-réaction</span>
+            </button>
+            <button type="button" data-aller-onglet="score">
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg>
+              <span data-i18n="dash.demarrageScore">Voir le score de sécurité</span>
+            </button>
+          </div>
+          <button class="dash-demarrage-fermer" type="button" data-demarrage-fermer
+                  aria-label="Fermer" data-i18n-aria="dash.demarrageFermer">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-close"/></svg>
+          </button>
+        </div>
+
         <div class="panel-title">
           <div>
             <p class="eyebrow" data-i18n="dash.resume"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg> Résumé</p>

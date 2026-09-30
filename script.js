@@ -3772,6 +3772,143 @@ function initRevealAnimations() {
   observeReveals();
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   LE DASHBOARD, AU PREMIER COUP D'OEIL
+
+   Trois choses qui n'ont rien a voir entre elles, sinon qu'elles
+   repondent a la meme question : « je viens d'arriver, et alors ? »
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Un mois, apres quoi une rubrique n'est plus neuve. Le badge n'est
+   ecrit nulle part dans la page : la rubrique porte une DATE, et c'est
+   ce calcul qui decide. Un « NOUVEAU » pose a la main reste deux ans,
+   parce que personne ne pense a revenir l'enlever. */
+const NOUVEAU_JOURS = 30;
+
+function marquerLesRubriquesNeuves() {
+  const maintenant = Date.now();
+  document.querySelectorAll("[data-dashboard-tab][data-nouveau]").forEach((entree) => {
+    const pose = Date.parse(entree.dataset.nouveau);
+    if (!Number.isFinite(pose)) return;
+    const jours = (maintenant - pose) / 86400000;
+    const ancien = entree.querySelector(".dash-nav-neuf");
+    if (jours < 0 || jours > NOUVEAU_JOURS) {
+      ancien?.remove();
+      return;
+    }
+    if (ancien) return;
+    const badge = document.createElement("span");
+    badge.className = "dash-nav-neuf";
+    badge.dataset.i18n = "dash.nouveau";
+    badge.textContent = t("dash.nouveau");
+    entree.appendChild(badge);
+  });
+}
+
+/* Les raccourcis de l'accueil cliquent la vraie entree du menu plutot
+   que de basculer l'onglet eux-memes : tout ce qui accompagne un
+   changement de rubrique — l'adresse, le titre, le repli du menu sur
+   telephone — est deja accroche la. */
+function initRaccourcisAccueil() {
+  document.querySelectorAll("[data-aller-onglet]").forEach((bouton) => {
+    bouton.addEventListener("click", () => {
+      const cible = document.querySelector(
+        `[data-dashboard-tab="${bouton.dataset.allerOnglet}"]`);
+      cible?.click();
+      cible?.scrollIntoView({ block: "nearest" });
+    });
+  });
+}
+
+/* Le demarrage rapide : visible tant qu'on ne l'a pas ferme.
+
+   Le choix est garde par serveur — on peut connaitre ModBot de longue
+   date sur l'un et l'installer sur un autre le lendemain. Et il est
+   garde dans le navigateur, pas chez nous : ce n'est pas un reglage du
+   bot, c'est une preference d'affichage. */
+const DEMARRAGE_MEMOIRE = "modbot-demarrage-masque";
+
+function clefsMasquees() {
+  try {
+    const brut = localStorage.getItem(DEMARRAGE_MEMOIRE);
+    const liste = brut ? JSON.parse(brut) : [];
+    return Array.isArray(liste) ? liste : [];
+  } catch (erreur) {
+    // Navigation privee, stockage refuse, valeur abimee : on montre.
+    return [];
+  }
+}
+
+function majDemarrage(serveurId) {
+  const bloc = document.querySelector("[data-demarrage]");
+  if (!bloc) return;
+  // Sans serveur choisi, l'accueil ne montre rien d'utile de toute
+  // facon : le bandeau attend qu'on en ait un.
+  if (!serveurId) {
+    bloc.hidden = true;
+    return;
+  }
+  bloc.dataset.serveur = serveurId;
+  bloc.hidden = clefsMasquees().includes(String(serveurId));
+}
+
+function initDemarrage() {
+  const bloc = document.querySelector("[data-demarrage]");
+  const fermer = bloc?.querySelector("[data-demarrage-fermer]");
+  if (!bloc || !fermer) return;
+
+  fermer.addEventListener("click", () => {
+    bloc.hidden = true;
+    const id = String(bloc.dataset.serveur || "");
+    if (!id) return;
+    try {
+      const liste = clefsMasquees();
+      if (!liste.includes(id)) liste.push(id);
+      // Borne : cinquante serveurs suffisent, et une liste sans fin
+      // finirait par remplir le stockage du visiteur.
+      localStorage.setItem(DEMARRAGE_MEMOIRE, JSON.stringify(liste.slice(-50)));
+    } catch (erreur) {
+      // Le bandeau reste masque pour cette visite, c'est deja cela.
+    }
+  });
+}
+
+/* Le serveur actif descend dans le menu.
+
+   Il vivait dans la barre du haut, a l'autre bout de l'ecran des
+   rubriques qu'il commande : on reglait une rubrique sans plus voir
+   pour quel serveur. Range en tete du menu, juste sous la recherche,
+   il est dans le meme regard que ce qu'il gouverne.
+
+   Sur telephone, il reste en haut : le menu y est une feuille qu'on
+   ouvre, et le serveur actif doit se lire sans avoir a l'ouvrir. */
+const MENU_LARGE = window.matchMedia("(min-width: 981px)");
+
+function rangerLeSelecteurDeServeur() {
+  const selecteur = document.querySelector("[data-server-switcher]");
+  const menu = document.querySelector(".dashboard-sidebar");
+  const barre = document.querySelector(".dashboard-topbar");
+  const recherche = menu?.querySelector(".sidebar-search");
+  if (!selecteur || !menu || !barre) return;
+
+  if (MENU_LARGE.matches) {
+    if (selecteur.parentElement !== menu) {
+      // Avant la recherche : c'est le serveur qui cadre tout le reste,
+      // y compris ce que la recherche trouvera.
+      menu.insertBefore(selecteur, recherche || menu.firstChild);
+    }
+    selecteur.classList.add("est-dans-le-menu");
+  } else {
+    if (selecteur.parentElement !== barre) {
+      // A sa place d'origine : juste apres la marque.
+      const marque = barre.querySelector(".brand");
+      if (marque && marque.parentElement === barre) marque.after(selecteur);
+      else barre.prepend(selecteur);
+    }
+    selecteur.classList.remove("est-dans-le-menu");
+  }
+}
+
 function initDashboard() {
   const dashboard = document.querySelector(".dashboard-page");
   if (!dashboard) return;
@@ -10082,6 +10219,10 @@ function initDashboard() {
       logo.src = safeLogo;
       logo.alt = serverName;
     });
+    // Le demarrage rapide se montre ou se tait selon le serveur : on
+    // peut l'avoir masque sur l'un et decouvrir le dashboard sur un
+    // autre le lendemain.
+    majDemarrage(serverId);
   }
 
   function setTicketPublishVisible(isVisible) {
@@ -12023,6 +12164,15 @@ document.addEventListener("DOMContentLoaded", () => {
   initPublicStats();
   initStatutPage();
   initDashboard();
+  // Apres initDashboard : les deux premieres lisent des elements que
+  // lui seul remplit, et la troisieme deplace un bloc dont il tient
+  // les references.
+  marquerLesRubriquesNeuves();
+  initRaccourcisAccueil();
+  initDemarrage();
+  rangerLeSelecteurDeServeur();
+  if (MENU_LARGE.addEventListener) MENU_LARGE.addEventListener("change", rangerLeSelecteurDeServeur);
+  else MENU_LARGE.addListener(rangerLeSelecteurDeServeur);
   remplirSelecteurPays();
 });
 
