@@ -12622,3 +12622,97 @@ body:not(.dashboard-page) .page-glow {
   .etat-frise { height: 46px; gap: 2px; }
   .etat-frise-legende { justify-content: center; text-align: center; }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   LES PORTES DU WIKI
+
+   La documentation tenait sur une seule page de quatre cents lignes,
+   avec un sommaire lateral. Ce sommaire suppose qu'on sache deja le nom
+   de ce qu'on cherche — c'est justement ce qu'on ignore quand on ouvre
+   une documentation pour la premiere fois.
+
+   Chaque carte dit donc DEUX choses : le sujet, et la situation dans
+   laquelle on est quand on en a besoin. C'est la seconde qu'on lit en
+   premier — « vous subissez du spam » se reconnait, « Verification a
+   l'arrivee » se devine.
+   ══════════════════════════════════════════════════════════════════ */
+
+.wiki-portes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+  margin-top: clamp(24px, 4vw, 40px);
+}
+
+.wiki-porte {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color var(--dur) var(--ease),
+              background-color var(--dur) var(--ease),
+              transform var(--dur) var(--ease);
+}
+
+.wiki-porte:hover {
+  border-color: var(--accent-line);
+  background: var(--panel-strong);
+  transform: translateY(var(--levee-survol, -2px));
+}
+
+.wiki-porte-icone {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.wiki-porte-icone .ui-icon { width: 20px; height: 20px; }
+
+.wiki-porte-texte { display: block; min-width: 0; }
+
+/* La situation d'abord, en petit : c'est elle qui fait reconnaitre la
+   page dont on a besoin. */
+.wiki-porte-texte small {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.wiki-porte-texte strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--text);
+  font-size: 1.02rem;
+}
+
+.wiki-porte-texte > span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.wiki-shell-note { margin-top: clamp(22px, 3.5vw, 34px); }
+
+/* Le retour au sommaire, au bas de chaque page du wiki : sans lui, on
+   revient par le bouton du navigateur, ou on ne revient pas. */
+.wiki-toc-retour {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-weight: 600;
+}

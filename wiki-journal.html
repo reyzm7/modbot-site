@@ -10,24 +10,24 @@
        nous, rien de plus. Elle ne suit personne et ne charge rien.
        La retirer fait perdre la propriete du site dans la console. -->
   <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>Créer un système de tickets sur Discord — ModBot</title>
+  <title>Le journal et les annonces — Wiki ModBot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="Un salon d'aide encombré, des demandes qui se croisent : comment passer aux tickets, ce qu'il faut régler, et les trois erreurs qui les rendent inutilisables.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/article-tickets-discord.html">
+  <meta name="description" content="Ce que ModBot enregistre dans le journal de votre serveur Discord, et comment relayer automatiquement vos publications Twitch, YouTube ou X.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/wiki-journal.html">
   <meta property="og:site_name" content="ModBot">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/article-tickets-discord.html">
-  <meta property="og:title" content="Créer un système de tickets sur Discord">
-  <meta property="og:description" content="Un salon d'aide encombré, des demandes qui se croisent : comment passer aux tickets, ce qu'il faut régler, et les trois erreurs qui les rendent inutilisables.">
+  <meta property="og:url" content="https://modbot-website.vercel.app/wiki-journal.html">
+  <meta property="og:title" content="Le journal et les annonces">
+  <meta property="og:description" content="Ce que ModBot enregistre dans le journal de votre serveur Discord, et comment relayer automatiquement vos publications Twitch, YouTube ou X.">
   <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Créer un système de tickets sur Discord">
-  <meta name="twitter:description" content="Un salon d'aide encombré, des demandes qui se croisent : comment passer aux tickets, ce qu'il faut régler, et les trois erreurs qui les rendent inutilisables.">
+  <meta name="twitter:title" content="Le journal et les annonces">
+  <meta name="twitter:description" content="Ce que ModBot enregistre dans le journal de votre serveur Discord, et comment relayer automatiquement vos publications Twitch, YouTube ou X.">
   <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
@@ -44,13 +44,13 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "Créer un système de tickets sur Discord",
-    "description": "Un salon d'aide encombré, des demandes qui se croisent : comment passer aux tickets, ce qu'il faut régler, et les trois erreurs qui les rendent inutilisables.",
+    "@type": "TechArticle",
+    "headline": "Le journal et les annonces",
+    "description": "Ce que ModBot enregistre dans le journal de votre serveur Discord, et comment relayer automatiquement vos publications Twitch, YouTube ou X.",
     "inLanguage": "fr-FR",
     "datePublished": "2026-10-01",
     "dateModified": "2026-10-01",
-    "mainEntityOfPage": "https://modbot-website.vercel.app/article-tickets-discord.html",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/wiki-journal.html",
     "author": {
       "@type": "Organization",
       "name": "ModBot"
@@ -130,70 +130,81 @@
 
   <main class="wiki-shell section-shell">
     <article class="wiki-hero">
-      <p class="eyebrow">Guide</p>
-      <h1>Créer un système de tickets sur Discord</h1>
-      <p>Un salon « support » où tout le monde écrit en même temps finit toujours pareil : les demandes se croisent, on répond deux fois à la même, et celles du bas ne sont jamais lues. Les tickets règlent ça — à condition de ne pas les régler contre soi.</p>
-      <p class="field-help">Mis à jour le 1er octobre 2026 · 6 minutes de lecture</p>
+      <p class="eyebrow" data-i18n-html="wiki.wiki"><a href="wiki.html">Retour au wiki</a></p>
+      <h1 data-i18n="wiki.leJournalEtLes">Le journal et les annonces</h1>
+      <p data-i18n="wiki.ceQueLeBot2">Ce que le bot consigne de ce qui se passe, et ce qu'il annonce de ce qui se passe ailleurs.</p>
     </article>
 
     <div class="wiki-layout">
-      <aside class="wiki-toc" aria-label="Sommaire de l'article">
-        <a href="#pourquoi">Pourquoi les tickets</a>
-        <a href="#categories">Les catégories</a>
-        <a href="#questions">Les questions</a>
-        <a href="#permissions">Les permissions</a>
-        <a href="#fermeture">Fermer un ticket</a>
-        <a href="#erreurs">Les erreurs courantes</a>
-        <a href="#modbot">Avec ModBot</a>
+      <aside class="wiki-toc" aria-label="Sommaire">
+        <a href="#journal" data-i18n="wiki.leJournal">Le journal</a>
+        <a href="#reseaux" data-i18n="wiki.lesAnnoncesReseaux">Les annonces réseaux</a>
+        <a href="#offres" data-i18n="wiki.offresEtPremium">Offres et premium</a>
+        <a href="#admin" data-i18n="adm.administration">Administration</a>
+        <a href="#compte" data-i18n="wiki.compteSommaire">Compte et langue</a>
+        <a href="wiki.html" class="wiki-toc-retour" data-i18n="wiki.toutLeWiki">↑ Tout le wiki</a>
       </aside>
 
       <div class="wiki-content">
-        <section id="pourquoi" class="wiki-section">
-          <h2>Pourquoi un salon d'aide ne suffit pas</h2>
-          <p>Dans un salon partagé, trois personnes qui demandent de l'aide en même temps écrivent dans le même fil. Leurs messages s'entremêlent, et il devient impossible de savoir à qui s'adresse une réponse. Le membre qui a posé sa question il y a dix minutes voit passer trois conversations avant la sienne, et part.</p>
-          <p>Il y a aussi ce que personne ne dit : dans un salon public, on ne raconte pas qu'on s'est fait arnaquer, ni qu'on a un problème avec un autre membre. Les demandes délicates n'arrivent jamais.</p>
-          <p>Un ticket crée un salon privé entre le demandeur et l'équipe. Une demande, un endroit, une conversation. C'est tout le principe, et c'est suffisant.</p>
+        <section id="journal" class="wiki-section">
+          <h2 data-i18n="wiki.journalTitre">Ce que le journal enregistre</h2>
+          <p data-i18n="wiki.journalTexte">Quinze catégories, chacune avec son salon et son interrupteur. Les cinq premières sont actives d’origine ; les autres se coupent par défaut, parce qu’un serveur actif y produit un flot que personne ne lit.</p>
+          <ul class="wiki-check-list">
+          <li data-i18n="wiki.journalActives">Actives d’origine : tickets, modération, alertes sécurité, arrivées et départs, actions admin, réglages du serveur, automod Discord.</li>
+          <li data-i18n="wiki.journalCoupees">Coupées d’origine : messages, rôles, salons, permissions, invitations, fils, vocal, événements planifiés.</li>
+          <li data-i18n="wiki.journalMasse">Une purge de messages laisse une seule ligne, avec le compte par auteur — Discord n’émet pas d’événement par message supprimé lors d’une suppression groupée.</li>
+          <li data-i18n="wiki.journalRolesCoupee">La catégorie « Rôles » est coupée d’origine : ces événements arrivent toujours dans les logs du dashboard, mais leur copie dans un salon Discord demande d’activer la catégorie.</li>
+          <li data-i18n="wiki.journalRoles">La catégorie « Rôles » enregistre aussi les rôles pris ou rendus par réaction, et les auto-rôles donnés à l’arrivée — avec, en cas d’échec, la raison.</li>
+          <li data-i18n="wiki.journalTimeout">L’exclusion temporaire d’un membre est enregistrée à la pose et à la levée, avec la durée restante.</li>
+          <li data-i18n="wiki.journalAuteur">Quand Discord le permet, l’auteur de l’action est retrouvé dans le journal d’audit et affiché.</li>
+          </ul>
         </section>
 
-        <section id="categories" class="wiki-section">
-          <h2>Combien de catégories ?</h2>
-          <p>C'est la première décision, et la plus souvent ratée. On est tenté d'en créer huit : support, signalement, partenariat, candidature, remboursement, bug, suggestion, autre. Résultat : le membre hésite, choisit « autre », et l'équipe reçoit tout au même endroit — ce qu'on voulait éviter.</p>
-          <p>Trois ou quatre suffisent presque toujours. Une catégorie ne se justifie que si elle est traitée par des gens différents, ou avec des questions différentes. Si deux catégories finissent chez les mêmes modérateurs avec les mêmes questions, elles n'en font qu'une.</p>
-          <p>Un repère simple : si vous ne pouvez pas nommer qui s'occupe d'une catégorie, elle n'a pas lieu d'être.</p>
+        <section id="reseaux" class="wiki-section">
+          <h2 data-i18n="wiki.lesAnnoncesReseaux">Les annonces réseaux</h2>
+          <p data-i18n="wiki.reseauxTexte">ModBot surveille un compte Twitch, TikTok, Instagram ou X, et publie un message dès qu’une nouvelle activité apparaît. Un relais par plateforme, chacun avec son salon.</p>
+          <ul class="wiki-check-list">
+          <li data-i18n="wiki.reseauxPing">Chaque relais peut prévenir un ou plusieurs rôles, et @everyone si le bot en a le droit.</li>
+          <li data-i18n="wiki.reseauxPingContenu">La mention part dans le message, jamais dans l’encadré : Discord ne notifie personne pour une mention placée dans un embed.</li>
+          <li data-i18n="wiki.reseauxPingId">Rôles et salons se choisissent dans des listes déroulantes : le dashboard connaît déjà le serveur. Plus aucun identifiant à copier, donc plus de faute de frappe qui ne se voit pas.</li>
+          <li data-i18n="wiki.reseauxPingRefus">Un rôle non mentionnable est ignoré si ModBot n’a pas la permission « Mentionner @everyone » : mieux vaut ne rien envoyer qu’un texte bleu qui ne prévient personne.</li>
+          <li data-i18n-html="wiki.reseauxMessage">Chaque relais porte son propre texte d’annonce, par exemple <code>{account} est en live, venez le voir !</code>. Il part avec la mention, dans le message.</li>
+          <li data-i18n-html="wiki.reseauxVariables">Quatre variables : <code>{account}</code> le compte suivi, <code>{platform}</code> le réseau, <code>{title}</code> le titre de la publication et <code>{link}</code> son lien direct.</li>
+          <li data-i18n="wiki.reseauxYoutube">YouTube passe par son flux public officiel : ModBot voit la vraie dernière vidéo, son titre et sa miniature, et n’annonce qu’une fois par vidéo.</li>
+          <li data-i18n="wiki.reseauxTwitch">Twitch expose de quoi détecter un passage en direct.</li>
+          <li data-i18n="wiki.reseauxLimite">TikTok, Instagram et X servent aux robots une page vide, sans clef d’API. ModBot n’y annonce donc rien plutôt que d’annoncer n’importe quoi : c’est une limite de ces plateformes, pas un réglage.</li>
+          <li data-i18n="wiki.reseauxTest">Le bouton « Tester » publie un exemple immédiatement, sans attendre une vraie publication.</li>
+          </ul>
         </section>
 
-        <section id="questions" class="wiki-section">
-          <h2>Les questions posées à l'ouverture</h2>
-          <p>Un ticket qui s'ouvre sur « Bonjour » fait perdre deux allers-retours : il faut demander de quoi il s'agit, puis les détails. Poser deux ou trois questions au moment de l'ouverture change complètement le rythme.</p>
-          <p>Les bonnes questions sont celles dont vous auriez besoin de toute façon : de quel serveur ou de quel achat il s'agit, ce qui s'est passé, et depuis quand. Évitez celles auxquelles on répond « oui » — elles n'apprennent rien.</p>
-          <p>Trois questions est un maximum. Au-delà, le membre abandonne le formulaire, et vous aurez moins de demandes — ce qui ressemble à un succès sur un tableau de bord, et n'en est pas un.</p>
+        <section id="offres" class="wiki-section">
+          <h2 data-i18n="wiki.offresEtPremium">Offres et premium</h2>
+          <div class="wiki-plan-grid">
+          <article><strong data-i18n="wiki.gratuit">Gratuit</strong><span data-i18n="wiki.toutesLesFonctionnalitesSur">Modération, sanctions, anti-raid, anti-spam, captcha, tickets, sauvegardes, notes et le journal de base : sur tous les serveurs, sans limite de durée.</span></article>
+          <article><strong data-i18n="wiki.premium">Premium</strong><span data-i18n="wiki.premiumTexte">3,99 € par mois (1 serveur), 19,99 € les six mois (3 serveurs) ou 45 € l'année (5 serveurs). Douze ensembles ouverts : couleurs, images, journal complet, relais réseaux, vocaux à la demande, événements, rôles automatiques, messages récurrents, score de sécurité, messages privés, rôle premium et assistant IA.</span></article>
+          <article><strong data-i18n="wiki.dons">Dons</strong><span data-i18n="wiki.leProjetVitDe">Les dons libres via PayPal restent les bienvenus et servent à l'hébergement. Un don ne débloque rien : ce n'est pas un abonnement.</span></article>
+          </div>
+          <p class="wiki-note" data-i18n="wiki.premiumVerrou">L'abonnement appartient à celui qui l'achète, pas à un serveur : il reçoit une licence avec ses places, et choisit lui-même où les poser depuis son dashboard. Une place posée vaut jusqu'à l'échéance et ne se déplace pas. Un réglage premium reste visible mais ne se modifie que si l'abonnement est actif ; ce qui avait été enregistré est conservé et repart tel quel le jour où il l'est.</p>
         </section>
 
-        <section id="permissions" class="wiki-section">
-          <h2>Qui voit quoi</h2>
-          <p>Un ticket doit être visible par son auteur et par l'équipe, par personne d'autre. Cela paraît évident, et c'est pourtant l'erreur la plus fréquente : la catégorie qui accueille les tickets hérite des permissions du serveur, et si <code>@everyone</code> peut y lire les messages, tous les tickets sont publics.</p>
-          <p>La vérification prend dix secondes : ouvrez un ticket de test, puis regardez-le depuis un compte sans rôle. S'il apparaît, la catégorie est mal réglée.</p>
-          <p>Pensez aussi au rôle qui donne accès aux tickets : donner « Gérer les salons » à toute l'équipe pour qu'elle puisse fermer un ticket revient à lui donner le droit de supprimer n'importe quel salon du serveur. Un rôle dédié, avec le strict nécessaire, vaut mieux.</p>
+        <section id="admin" class="wiki-section">
+          <h2 data-i18n="wiki.administrationDuSite">Administration du site</h2>
+          <p data-i18n="wiki.espaceAdministrateurEstSepare">L’espace administrateur est séparé du dashboard serveur. Il sert à gérer les accès admin, la blacklist des membres du bot, les serveurs détectés et les logs globaux d’utilisation.</p>
         </section>
 
-        <section id="fermeture" class="wiki-section">
-          <h2>La fermeture, et ce qu'on en garde</h2>
-          <p>Supprimer le salon à la fermeture efface la conversation. C'est parfois voulu, mais souvent regretté : six mois plus tard, personne ne peut vérifier ce qui avait été convenu avec un membre.</p>
-          <p>Garder une transcription — un fichier ou un message récapitulatif envoyé dans un salon d'archives — coûte peu et sauve les litiges. C'est aussi ce qui permet de voir qu'une même question revient dix fois, et mérite donc une réponse écrite quelque part.</p>
-          <p>Prévenez le membre avant de fermer. Un ticket qui disparaît pendant qu'on écrit donne le sentiment d'avoir été congédié.</p>
+        <section id="compte" class="wiki-section">
+          <h2 data-i18n="wiki.compteTitre">Compte Discord et langue</h2>
+          <p data-i18n="wiki.compteTexte">La pastille en haut du dashboard indique avec quel compte Discord tu es connecté. Son menu permet de changer de compte sans fermer la page — utile quand on gère des serveurs depuis deux comptes différents — ou de se déconnecter.</p>
+          <ul class="wiki-check-list">
+          <li data-i18n="wiki.compteChangement">« Changer de compte » prévient le bot, efface la session locale, puis rouvre l’écran de connexion Discord avec le sélecteur de comptes.</li>
+          <li data-i18n="wiki.langueSite">Le site et le dashboard existent en français, anglais et arabe. Le choix est retenu d’une visite à l’autre.</li>
+          <li data-i18n="wiki.languePays">La section Langue règle aussi la langue des messages du bot et le pays du serveur, affiché sur la carte publique de l’accueil.</li>
+          </ul>
         </section>
 
-        <section id="erreurs" class="wiki-section">
-          <h2>Les trois erreurs qui rendent les tickets inutiles</h2>
-          <p><strong>Ne jamais répondre.</strong> Un système de tickets sans personne derrière est pire qu'un salon d'aide : au moins, dans un salon, un autre membre pouvait dépanner. Si l'équipe ne peut pas tenir un délai, mieux vaut l'annoncer que le laisser deviner.</p>
-          <p><strong>Laisser les tickets s'accumuler.</strong> Cinquante salons ouverts dans une catégorie et plus personne ne sait lesquels sont traités. Fermez, même sans réponse parfaite.</p>
-          <p><strong>Faire du ticket une punition.</strong> Si le seul usage est « ouvre un ticket pour contester ta sanction », l'outil prend une couleur qu'il ne perdra plus, et les demandes ordinaires n'arriveront jamais.</p>
-        </section>
-
-        <section id="modbot" class="wiki-section">
-          <h2>Avec ModBot</h2>
-          <p>ModBot crée le panneau, les catégories et les questions depuis le tableau de bord, et publie le message d'ouverture dans le salon choisi. Les permissions du salon privé sont posées à la création, donc sans risque d'hériter de celles du serveur.</p>
-          <p>Le détail des réglages est dans <a href="wiki-tickets.html">la documentation</a>, et l'aperçu du tableau de bord montre le panneau tel que vos membres le verront avant publication.</p>
+        <section class="wiki-section">
+          <h2 data-i18n="wiki.pourAllerPlusLoin">Pour aller plus loin</h2>
+          <p data-i18n-html="wiki.pourLeResteDes">Pour le reste des réglages, voir <a href="wiki-dashboard.html">le tableau de bord</a>.</p>
         </section>
       </div>
     </div>

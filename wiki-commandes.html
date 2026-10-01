@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <!-- Le theme choisi, pose avant le premier pixel : sans cette ligne,
+       chaque page clignoterait en sombre avant de passer en clair. -->
+  <script>try{var t=localStorage.getItem("modbot-theme");if(t)document.documentElement.dataset.theme=t;document.documentElement.style.backgroundColor=t==="light"?"#f4f6fb":"#0a0c11";}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Search Console : cette balise prouve que le site est a
+       nous, rien de plus. Elle ne suit personne et ne charge rien.
+       La retirer fait perdre la propriete du site dans la console. -->
+  <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
+  <title>Les commandes ModBot — Wiki ModBot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
+  <meta name="description" content="Toutes les commandes de ModBot : modération, sanctions, information, outils du serveur. Qui peut les utiliser et ce qu'elles font exactement.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/wiki-commandes.html">
+  <meta property="og:site_name" content="ModBot">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:url" content="https://modbot-website.vercel.app/wiki-commandes.html">
+  <meta property="og:title" content="Les commandes ModBot">
+  <meta property="og:description" content="Toutes les commandes de ModBot : modération, sanctions, information, outils du serveur. Qui peut les utiliser et ce qu'elles font exactement.">
+  <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Les commandes ModBot">
+  <meta name="twitter:description" content="Toutes les commandes de ModBot : modération, sanctions, information, outils du serveur. Qui peut les utiliser et ce qu'elles font exactement.">
+  <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
+  <link rel="stylesheet" href="style.css">
+  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
+       la connexion au dashboard est automatique, rien a saisir.
+       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
+  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
+  <meta name="modbot-discord-client-id" content="1510405235544424620">
+  <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
+  <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
+  <meta name="modbot-bot-permissions" content="3124257994829047">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="assets/modbot-mark.webp" type="image/webp">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Les commandes ModBot",
+    "description": "Toutes les commandes de ModBot : modération, sanctions, information, outils du serveur. Qui peut les utiliser et ce qu'elles font exactement.",
+    "inLanguage": "fr-FR",
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-01",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/wiki-commandes.html",
+    "author": {
+      "@type": "Organization",
+      "name": "ModBot"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ModBot",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://modbot-website.vercel.app/logo.png"
+      }
+    }
+  }
+  </script>
+</head>
+<body class="wiki-page">
+  <script src="icons.js"></script>
+  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
+  <div class="page-glow" aria-hidden="true"></div>
+  <!-- Le voile des transitions : noir a l'arrivee, il s'efface ; noir
+       au depart, il se pose. Ecrit ici et non cree par le script :
+       cree apres coup, la page apparaitrait avant de disparaitre. -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navigation ModBot" data-i18n-aria="cgu.navigation">
+      <span class="brand" aria-label="Accueil ModBot" data-i18n-aria="cgu.accueilModbot">
+        <span class="brand-mark">
+          <img src="assets/modbot-mark.webp" alt="" width="128" height="128" decoding="async" fetchpriority="high">
+        </span>
+        <span>ModBot</span>
+      </span>
+
+      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="cgu.ouvrirLeMenu">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#features" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg><span data-i18n="cgu.fonctionnalites">Fonctionnalités</span></a>
+        <a href="index.html#pricing"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="cgu.tarifs">Tarifs</span></a>
+
+
+<a class="nav-boutique" href="boutique.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
+<a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n="cgu.supportDiscord">Support Discord</span></a>
+
+        <div class="nav-menu" data-nav-menu>
+          <button class="nav-menu-trigger est-icone" type="button" data-nav-menu-trigger
+                  aria-label="Accès" data-i18n-aria="nav.menu"
+                  aria-expanded="false" aria-haspopup="true">
+            <span class="nav-menu-barres" aria-hidden="true"><i></i><i></i><i></i></span>
+            <svg class="nav-menu-chevron" viewBox="0 0 12 8" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav-menu-panel" data-nav-menu-panel hidden>
+            <a href="index.html" class="nav-menu-home" data-teinte="acier"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-home"/></svg><span data-i18n="nav.retourSite">Revenir au site</span></a>
+            <a href="dashboard.html" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
+            
+            <a href="boutique.html" data-teinte="cyan"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
+            <a href="admin.html" data-teinte="rouge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg><span data-i18n="nav.admin">Admin</span></a>
+            <label class="nav-menu-lang">
+              <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="nav.langue">Langue</span></span>
+              <select data-nav-language>
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+                <option value="es">Español</option>
+                <option value="de">Deutsch</option>
+              </select>
+            </label>
+          </div>
+        </div>
+</div>
+    </nav>
+  </header>
+
+
+  <main class="wiki-shell section-shell">
+    <article class="wiki-hero">
+      <p class="eyebrow" data-i18n-html="wiki.wiki"><a href="wiki.html">Retour au wiki</a></p>
+      <h1 data-i18n="wiki.lesCommandesModbot">Les commandes ModBot</h1>
+      <p data-i18n="wiki.ceQuiSeFait2">Ce qui se fait depuis Discord, sans passer par le site. Les commandes slash s'écrivent en tapant « / » dans n'importe quel salon.</p>
+    </article>
+
+    <div class="wiki-layout">
+      <aside class="wiki-toc" aria-label="Sommaire">
+        <a href="#liste" data-i18n="wiki.lesCommandes">Les commandes</a>
+        <a href="#qui" data-i18n="wiki.quiPeutLesUtiliser">Qui peut les utiliser</a>
+        <a href="wiki.html" class="wiki-toc-retour" data-i18n="wiki.toutLeWiki">↑ Tout le wiki</a>
+      </aside>
+
+      <div class="wiki-content">
+        <section id="liste" class="wiki-section">
+          <h2 data-i18n="wiki.lesCommandes">Les commandes</h2>
+          <div class="command-doc-grid">
+          <article><code>/installer</code><span data-i18n="wiki.cmdInstaller">Règle ModBot en trois questions : où écrire le journal, où souhaiter la bienvenue, quel rôle donner à l’arrivée. Rien n’est enregistré avant de confirmer.</span></article>
+          <article><code>/panel</code><span data-i18n="wiki.ouvreLePanneauAdministration">Ouvre le panneau d’administration Discord.</span></article>
+          <article><code>/aide</code><span data-i18n="wiki.afficheLeRecapitulatifDes">Affiche le récapitulatif des commandes et le lien du site.</span></article>
+          <article><code>/clear-message</code><span data-i18n="wiki.cmdClearMessage">Parcourt de 1 à 100 messages du salon et les supprime. Deux filtres facultatifs : ceux d'un membre, ou ceux qui contiennent un texte.</span></article>
+          <article><code>/clear-all</code><span data-i18n="wiki.nettoieLesMessagesDu">Nettoie les messages du salon selon les limites Discord.</span></article>
+          <article><code>/translate</code><span data-i18n="wiki.traduitUnMessageVia">Traduit un message via réponse ou ID de message.</span></article>
+          <article><code>/suggest</code><span data-i18n="wiki.envoieUneSuggestionAu">Envoie une suggestion au salon configuré.</span></article>
+          <article><code>/patchnotes</code><span data-i18n="wiki.publieDesPatchNotes">Publie des patch notes dans le salon où la commande est faite.</span></article>
+          <article><code>/annonce</code><span data-i18n="wiki.publieUneAnnonceDans">Publie une annonce dans le salon choisi par ID.</span></article>
+          <article><code>/mute</code><span data-i18n="wiki.cmdMute">Rend un membre muet pour un temps : 10m, 2h, 1h30, 3j, jusqu'à 28 jours. Il est prévenu en privé, avec le bouton pour contester.</span></article>
+          <article><code>/unmute</code><span data-i18n="wiki.cmdUnmute">Rend la parole à un membre avant la fin de sa sanction.</span></article>
+          <article><code>/lock</code><span data-i18n="wiki.cmdLock">Ferme le salon : plus personne n'y écrit, le temps que ça se calme. Un message l'annonce dans le salon.</span></article>
+          <article><code>/unlock</code><span data-i18n="wiki.cmdUnlock">Rouvre le salon. La permission repart en « héritée » : le salon retrouve les droits de sa catégorie.</span></article>
+          <article><code>/role</code><span data-i18n="wiki.cmdRole">Donne ou retire un rôle à un membre. Un rôle au-dessus du tien, ou de celui de ModBot, est refusé.</span></article>
+          <article><code>/salon-acces</code><span data-i18n="wiki.cmdSalonAcces">Ouvre ou ferme un salon à un membre en particulier. À la fermeture, ses droits redeviennent ceux de ses rôles.</span></article>
+          <article><code>/warn</code><span data-i18n="wiki.cmdWarn">Avertit un membre ; les seuils configurés peuvent sanctionner seuls.</span></article>
+          <article><code>/reset-avert</code><span data-i18n="wiki.cmdResetAvert">Remet à zéro les avertissements d’un membre.</span></article>
+          <article><code>/avert-count</code><span data-i18n="wiki.cmdAvertCount">Affiche le nombre d’avertissements d’un membre.</span></article>
+          <article><code>/ban</code><span data-i18n="wiki.cmdBan">Bannit un membre, avec motif enregistré dans les logs. Un motif réseau (arnaque, raid, piratage) prévient les autres serveurs du réseau de confiance.</span></article>
+          <article><code>/deban</code><span data-i18n="wiki.cmdDeban">Lève un bannissement.</span></article>
+          <article><code>/ban-list</code><span data-i18n="wiki.cmdBanList">Liste les membres bannis du serveur.</span></article>
+          <article><code>/infractions</code><span data-i18n="wiki.cmdInfractions">Historique des sanctions d’un membre, avec la date où chaque point cesse de compter.</span></article>
+          <article><code>/report</code><span data-i18n="wiki.cmdReport">Permet à un membre de signaler un abus au staff.</span></article>
+          <article><code>/serverstats</code><span data-i18n="wiki.cmdServerStats">Statistiques du serveur : membres, activité, sanctions.</span></article>
+          <article><code>/modstats</code><span data-i18n="wiki.cmdModStats">Activité de modération, par modérateur.</span></article>
+          <article><code>/insultes</code><span data-i18n="wiki.cmdInsultes">Affiche la liste des mots filtrés et les sanctions associées.</span></article>
+          <article><code>/info-bot</code><span data-i18n="wiki.cmdInfoBot">État du bot : version, latence, serveurs protégés.</span></article>
+          <article><code>/voter</code><span data-i18n="wiki.cmdVoter">Le lien pour voter pour ModBot sur top.gg, et le nombre de tes votes.</span></article>
+          <article><code>/addticket</code><span data-i18n="wiki.cmdAddTicket">Ajoute un membre au ticket courant.</span></article>
+          <article><code>/infractions-reset</code><span data-i18n="wiki.cmdInfractionsReset">Efface l’historique des sanctions d’un membre.</span></article>
+          <article><code>/profilestats</code><span data-i18n="wiki.cmdProfileStats">Statistiques d’activité d’un membre.</span></article>
+          <article><code>/massdm</code><span data-i18n="wiki.cmdMassDm">Envoie un message privé à un groupe de membres, réservé aux administrateurs.</span></article>
+          <article><code>/massrole</code><span data-i18n="wiki.cmdMassRole">Donne un rôle à tous les membres qui ne l'ont pas — humains, bots ou tout le monde. Confirmation, suivi en direct, bouton pour arrêter.</span></article>
+          <article><code>/demassrole</code><span data-i18n="wiki.cmdDemassRole">Retire un rôle à tous les membres qui l'ont. Un rôle de modération ou d'administration n'est jamais touché en masse.</span></article>
+          </div>
+          <h3 data-i18n="wiki.vieTitre">La vie du serveur</h3>
+          <p data-i18n="wiki.vieTexte">Ces quatre commandes s'adressent à tous les membres, pas seulement au staff. Elles répondent en privé : personne n'encombre le salon pour voir son niveau.</p>
+          <div class="command-doc-grid">
+          <article><code>/niveau</code><span data-i18n="wiki.cmdNiveau">Affiche son niveau, ses points et son rang — ou ceux de quelqu'un d'autre.</span></article>
+          <article><code>/classement</code><span data-i18n="wiki.cmdClassement">Les dix premiers du serveur, par expérience gagnée.</span></article>
+          <article><code>/anniversaire</code><span data-i18n="wiki.cmdAnniversaire">Donne son jour et son mois de naissance ; laisser vide le retire. L'année n'est jamais demandée.</span></article>
+          <article><code>/rappel</code><span data-i18n="wiki.cmdRappel">Se faire rappeler quelque chose plus tard : 10m, 2h, 1h30, 3j.</span></article>
+          </div>
+          <h3 data-i18n="wiki.groupesTitre">Commandes groupées</h3>
+          <p data-i18n="wiki.groupesTexte">Ces ensembles regroupent leurs sous-commandes sous un même mot. Discord les propose à la suite dès que tu tapes le nom du groupe.</p>
+          <div class="command-doc-grid">
+          <article><code>/securite</code><span data-i18n="wiki.grpSecurite">status, antiraid, antinuke, whitelist, alertes, lockdown, ia-test, reseau, doubles-comptes, garde-nuit, corriger, staff — les protections du serveur.</span></article>
+          <article><code>/backup</code><span data-i18n="wiki.grpBackup">create, list, restore, delete, export, import — les sauvegardes de salons et de rôles, à remettre en place sur ce serveur ou sur n'importe quel autre.</span></article>
+          <article><code>/giveaway</code><span data-i18n="wiki.grpGiveaway">create, list, end, reroll, delete — les tirages au sort.</span></article>
+          <article><code>/vocal</code><span data-i18n="wiki.grpVocal">deconnecter, deplacer — sortir quelqu'un d'un salon vocal, ou l'emmener ailleurs.</span></article>
+          <article><code>/note</code><span data-i18n="wiki.grpNote">ajouter, lister, retirer — ce que l'équipe sait d'un membre sans que ce soit une sanction. Les notes apparaissent dans /infractions.</span></article>
+          <article><code>/sondage</code><span data-i18n="wiki.cmdSondage">Pose une question au serveur avec le sondage natif de Discord : deux à dix réponses, durée réglable.</span></article>
+          <article><code>/mur</code><span data-i18n="wiki.cmdMur">Les cinq messages les plus étoilés du serveur, et où les lire.</span></article>
+          <article><code>/inactifs</code><span data-i18n="wiki.cmdInactifs">Liste les membres sans rôle qui n'ont rien écrit depuis longtemps, et les expulse après confirmation.</span></article>
+          <article><code>/mesdonnees</code><span data-i18n="wiki.cmdMesdonnees">Ce que ModBot garde sur toi pour ce serveur, envoyé en message privé.</span></article>
+          <article><code>/reponse</code><span data-i18n="wiki.cmdReponse">Envoie une réponse enregistrée : dans un courrier elle part en privé, ailleurs elle s'affiche dans le salon.</span></article>
+          <article><code>/modmail</code><span data-i18n="wiki.grpModmail">fermer, bloquer, debloquer — la messagerie privée de l'équipe : les membres écrivent au bot, l'équipe répond depuis un fil.</span></article>
+          <article><code>/premium</code><span data-i18n="wiki.grpPremium">statut, essai, parrainage, code — l’essai gratuit de 7 jours et le parrainage (20 jours offerts).</span></article>
+          </div>
+          <p class="field-help" data-i18n="wiki.commandesPermissions">Les commandes de modération sont réservées au staff : Discord n’affiche à chacun que celles qu’il a le droit d’utiliser.</p>
+        </section>
+
+        <section id="qui" class="wiki-section">
+          <h2 data-i18n="wiki.quiPeutLesUtiliser">Qui peut les utiliser</h2>
+          <p data-i18n="wiki.discordFiltreLuiMeme">Discord filtre lui-même : une commande de modération n'apparaît pas dans la liste de quelqu'un qui n'a pas la permission correspondante. Inutile donc de cacher les commandes, c'est déjà fait.</p>
+          <p data-i18n-html="wiki.modbotVerifieEnPlus">ModBot vérifie en plus la <strong>hiérarchie</strong> : un modérateur ne peut pas sanctionner quelqu'un dont le rôle est au-dessus du sien, même si la commande lui est accessible. C'est ce qui empêche une équipe de se retourner contre elle-même.</p>
+          <p data-i18n="wiki.siUneCommandeRefuse">Si une commande refuse de s'exécuter sans message clair, la cause est presque toujours l'une des deux : permission Discord manquante, ou rôle du bot trop bas dans la liste.</p>
+        </section>
+
+        <section class="wiki-section">
+          <h2 data-i18n="wiki.pourAllerPlusLoin">Pour aller plus loin</h2>
+          <p data-i18n-html="wiki.lesReglagesQuiN">Les réglages qui n'ont pas de commande se trouvent dans <a href="wiki-dashboard.html">le tableau de bord</a>.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="footer-grille">
+      <span class="footer-marque">
+        <img src="assets/modbot-mark.webp" alt="ModBot" width="256" height="256" loading="lazy" decoding="async">
+      </span>
+
+      <nav class="footer-colonne" aria-label="Navigation" data-i18n-aria="pied.navigation">
+        <p class="footer-titre" data-i18n="pied.navigation">Navigation</p>
+        <a href="index.html" data-i18n="pied.accueil">Accueil</a>
+        <a href="index.html#features" data-i18n="nav.features">Fonctionnalités</a>
+        <a href="wiki.html" data-i18n="pied.commandes">Commandes</a>
+        <a href="boutique.html" data-i18n="nav.boutique">Boutique</a>
+        <a href="articles.html" data-i18n="pied.guides">Guides</a>
+      </nav>
+
+      <nav class="footer-colonne" aria-label="Communauté" data-i18n-aria="pied.communaute">
+        <p class="footer-titre" data-i18n="pied.communaute">Communauté</p>
+        <a href="wiki.html" data-i18n="pied.documentation">Documentation</a>
+        <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="pied.support">Support Discord</a>
+        <a href="partenaires.html" data-i18n="nav.partenaires">Partenaires</a>
+        <a href="statut.html" data-i18n="pied.statut">État du service</a>
+      </nav>
+
+      <nav class="footer-colonne" aria-label="Voir aussi" data-i18n-aria="pied.voirAussi">
+        <p class="footer-titre" data-i18n="pied.voirAussi">Voir aussi</p>
+        <a href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a>
+        <a href="dashboard.html?panel=premium" data-i18n="nav.premium">Premium</a>
+        <a href="dashboard.html?flow=invite" data-discord-bot-invite data-i18n="nav.ajouter">Ajouter ModBot</a>
+        <a href="index.html#faq" data-i18n="home.faq">FAQ</a>
+      </nav>
+    </div>
+
+    <div class="footer-bas">
+      <p class="footer-legal">
+        <a href="confidentialite.html" data-i18n="pied.confidentialite">Politique de confidentialité</a>
+        <a href="conditions.html" data-i18n="pied.cgu">Conditions d’utilisation</a>
+        <a href="mentions.html" data-i18n="pied.mentions">Mentions légales</a>
+      </p>
+      <p class="footer-copyright" data-i18n="pied.copyright">© 2026 ModBot — Tous droits réservés.</p>
+      <div class="footer-langue" role="group" aria-label="Langue" data-i18n-aria="pied.langue">
+        <button type="button" data-pied-langue="fr">FR</button>
+        <span aria-hidden="true">/</span>
+        <button type="button" data-pied-langue="en">EN</button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="translations.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -10,24 +10,24 @@
        nous, rien de plus. Elle ne suit personne et ne charge rien.
        La retirer fait perdre la propriete du site dans la console. -->
   <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>Créer un système de tickets sur Discord — ModBot</title>
+  <title>Le tableau de bord — Wiki ModBot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="Un salon d'aide encombré, des demandes qui se croisent : comment passer aux tickets, ce qu'il faut régler, et les trois erreurs qui les rendent inutilisables.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/article-tickets-discord.html">
+  <meta name="description" content="Les modules du tableau de bord ModBot, à quoi sert chacun, et comment revenir en arrière après une mauvaise manipulation.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/wiki-dashboard.html">
   <meta property="og:site_name" content="ModBot">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/article-tickets-discord.html">
-  <meta property="og:title" content="Créer un système de tickets sur Discord">
-  <meta property="og:description" content="Un salon d'aide encombré, des demandes qui se croisent : comment passer aux tickets, ce qu'il faut régler, et les trois erreurs qui les rendent inutilisables.">
+  <meta property="og:url" content="https://modbot-website.vercel.app/wiki-dashboard.html">
+  <meta property="og:title" content="Le tableau de bord">
+  <meta property="og:description" content="Les modules du tableau de bord ModBot, à quoi sert chacun, et comment revenir en arrière après une mauvaise manipulation.">
   <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Créer un système de tickets sur Discord">
-  <meta name="twitter:description" content="Un salon d'aide encombré, des demandes qui se croisent : comment passer aux tickets, ce qu'il faut régler, et les trois erreurs qui les rendent inutilisables.">
+  <meta name="twitter:title" content="Le tableau de bord">
+  <meta name="twitter:description" content="Les modules du tableau de bord ModBot, à quoi sert chacun, et comment revenir en arrière après une mauvaise manipulation.">
   <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
@@ -44,13 +44,13 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "Créer un système de tickets sur Discord",
-    "description": "Un salon d'aide encombré, des demandes qui se croisent : comment passer aux tickets, ce qu'il faut régler, et les trois erreurs qui les rendent inutilisables.",
+    "@type": "TechArticle",
+    "headline": "Le tableau de bord",
+    "description": "Les modules du tableau de bord ModBot, à quoi sert chacun, et comment revenir en arrière après une mauvaise manipulation.",
     "inLanguage": "fr-FR",
     "datePublished": "2026-10-01",
     "dateModified": "2026-10-01",
-    "mainEntityOfPage": "https://modbot-website.vercel.app/article-tickets-discord.html",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/wiki-dashboard.html",
     "author": {
       "@type": "Organization",
       "name": "ModBot"
@@ -130,70 +130,68 @@
 
   <main class="wiki-shell section-shell">
     <article class="wiki-hero">
-      <p class="eyebrow">Guide</p>
-      <h1>Créer un système de tickets sur Discord</h1>
-      <p>Un salon « support » où tout le monde écrit en même temps finit toujours pareil : les demandes se croisent, on répond deux fois à la même, et celles du bas ne sont jamais lues. Les tickets règlent ça — à condition de ne pas les régler contre soi.</p>
-      <p class="field-help">Mis à jour le 1er octobre 2026 · 6 minutes de lecture</p>
+      <p class="eyebrow" data-i18n-html="wiki.wiki"><a href="wiki.html">Retour au wiki</a></p>
+      <h1 data-i18n="wiki.leTableauDeBord">Le tableau de bord</h1>
+      <p data-i18n="wiki.toutCeQuiSe">Tout ce qui se règle depuis le site plutôt que depuis Discord — c'est-à-dire presque tout.</p>
     </article>
 
     <div class="wiki-layout">
-      <aside class="wiki-toc" aria-label="Sommaire de l'article">
-        <a href="#pourquoi">Pourquoi les tickets</a>
-        <a href="#categories">Les catégories</a>
-        <a href="#questions">Les questions</a>
-        <a href="#permissions">Les permissions</a>
-        <a href="#fermeture">Fermer un ticket</a>
-        <a href="#erreurs">Les erreurs courantes</a>
-        <a href="#modbot">Avec ModBot</a>
+      <aside class="wiki-toc" aria-label="Sommaire">
+        <a href="#modules" data-i18n="wiki.lesModules">Les modules</a>
+        <a href="#enregistrer" data-i18n="wiki.enregistrerEtRevenir">Enregistrer et revenir</a>
+        <a href="#plusieurs" data-i18n="wiki.plusieursServeurs">Plusieurs serveurs</a>
+        <a href="wiki.html" class="wiki-toc-retour" data-i18n="wiki.toutLeWiki">↑ Tout le wiki</a>
       </aside>
 
       <div class="wiki-content">
-        <section id="pourquoi" class="wiki-section">
-          <h2>Pourquoi un salon d'aide ne suffit pas</h2>
-          <p>Dans un salon partagé, trois personnes qui demandent de l'aide en même temps écrivent dans le même fil. Leurs messages s'entremêlent, et il devient impossible de savoir à qui s'adresse une réponse. Le membre qui a posé sa question il y a dix minutes voit passer trois conversations avant la sienne, et part.</p>
-          <p>Il y a aussi ce que personne ne dit : dans un salon public, on ne raconte pas qu'on s'est fait arnaquer, ni qu'on a un problème avec un autre membre. Les demandes délicates n'arrivent jamais.</p>
-          <p>Un ticket crée un salon privé entre le demandeur et l'équipe. Une demande, un endroit, une conversation. C'est tout le principe, et c'est suffisant.</p>
+        <section id="modules" class="wiki-section">
+          <h2 data-i18n="wiki.lesModules">Les modules</h2>
+          <p data-i18n="wiki.dashboardTreizeSections">Le dashboard compte vingt et une sections, regroupées par thème dans le menu de gauche. Sur téléphone, ce menu devient une liste déroulante qui affiche les vingt et une entrées avec leurs intitulés de groupe.</p>
+          <ul class="wiki-check-list">
+          <li data-i18n="wiki.vueGlobaleEtatDu">Vue globale : état du serveur, membres, sanctions récentes et raccourcis.</li>
+          <li data-i18n="wiki.scoreModule">Score de sécurité : une note sur cent calculée sur vos réglages réels, et les actions à mener en premier.</li>
+          <li data-i18n="wiki.securiteProtectionsAntiSpam">Sécurité : anti-spam, anti-lien, anti-raid, anti-nuke, captcha et alertes staff.</li>
+          <li data-i18n="wiki.liensLibresModule">L'anti-lien peut laisser passer les liens dans les salons choisis — #partage, #clips : une catégorie vaut pour tous ses salons, et un fil suit le salon qui le porte.</li>
+          <li data-i18n="wiki.moderationSanctions">Modération : sanctions, avertissements, seuils automatiques et immunités.</li>
+          <li data-i18n="wiki.rechercheMembresRoles">Recherche : retrouver un membre ou un rôle, et agir dessus sans quitter la page.</li>
+          <li data-i18n="wiki.sauvegardesRestauration">Sauvegardes : copie des salons et rôles, puis restauration additive.</li>
+          <li data-i18n="wiki.logsHistorique">Logs : historique des actions du bot et du staff, filtrable.</li>
+          <li data-i18n="wiki.ticketsMessagePublicOptions">Tickets : message public, options, emojis, salon, rôle support et publication.</li>
+          <li data-i18n="wiki.ticketImage">Une option peut porter une image à la place d'un emoji : le bot en fait un emoji de l'application au moment de publier le panneau, sans permission à demander. Au-delà de 256 Ko, Discord refuse l'emoji — l'image s'affiche alors dans son propre embed, sous le panneau.</li>
+          <li data-i18n="wiki.ticketLibelle">Le libellé est facultatif. Une option qui n’a qu’une image ou qu’un emoji fait basculer le panneau en boutons — un menu déroulant Discord refuse une entrée sans texte.</li>
+          <li data-i18n="wiki.bienvenueModule">Bienvenue : messages d’arrivée et de départ, message privé et carte illustrée.</li>
+          <li data-i18n="wiki.verificationModule">Vérification : captcha d'entrée, rôle vérifié, salon du panneau et masquage des salons.</li>
+          <li data-i18n="wiki.iaModule">Assistant IA : réponses aux mentions, salons autorisés, ton des réponses et état du service.</li>
+          <li data-i18n="wiki.rolesModule">Rôles : rôles donnés automatiquement à l’arrivée, et panneau de rôles par réaction.</li>
+          <li data-i18n="wiki.vocauxModule">Vocaux : un salon d'entrée qui crée à chacun son propre salon, dont il devient maître, et qui disparaît dès qu'il se vide.</li>
+          <li data-i18n="wiki.evenementsModule">Événements : une affiche avec son image, un compte à rebours dans le fuseau de chaque lecteur, et deux boutons pour s'inscrire ou se désister.</li>
+          <li data-i18n="wiki.giveawaysModule">Giveaways : création, durée, nombre de gagnants, relance et tirage.</li>
+          <li data-i18n="wiki.vieModule">Vie du serveur : niveaux et expérience, salons qui n'en rapportent pas, rôles donnés par palier, anniversaires et mur des meilleurs messages.</li>
+          <li data-i18n="wiki.ratingsModule">Ratings : notes laissées par les membres après un ticket.</li>
+          <li data-i18n="wiki.salonsIdsDesSalons">Salons : salons utilisés par les systèmes du bot.</li>
+          <li data-i18n="wiki.recurrentsModule">Messages récurrents : un message publié tout seul, à intervalle régulier ou à heure fixe, dans le salon de votre choix.</li>
+          <li data-i18n="wiki.compteursModule">Compteurs : un salon dont le nom porte un chiffre tenu à jour — membres, boosts, membres en ligne.</li>
+          <li data-i18n="wiki.reseauxRelaisAutomatiqueTwitter">Réseaux : relais automatique Twitch, YouTube, Twitter/X, TikTok et Instagram.</li>
+          <li data-i18n="wiki.langueModule">Langue : langue des messages du bot et pays du serveur.</li>
+          </ul>
         </section>
 
-        <section id="categories" class="wiki-section">
-          <h2>Combien de catégories ?</h2>
-          <p>C'est la première décision, et la plus souvent ratée. On est tenté d'en créer huit : support, signalement, partenariat, candidature, remboursement, bug, suggestion, autre. Résultat : le membre hésite, choisit « autre », et l'équipe reçoit tout au même endroit — ce qu'on voulait éviter.</p>
-          <p>Trois ou quatre suffisent presque toujours. Une catégorie ne se justifie que si elle est traitée par des gens différents, ou avec des questions différentes. Si deux catégories finissent chez les mêmes modérateurs avec les mêmes questions, elles n'en font qu'une.</p>
-          <p>Un repère simple : si vous ne pouvez pas nommer qui s'occupe d'une catégorie, elle n'a pas lieu d'être.</p>
+        <section id="enregistrer" class="wiki-section">
+          <h2 data-i18n="wiki.enregistrerEtRevenirEn">Enregistrer, et revenir en arrière</h2>
+          <p data-i18n="wiki.rienNEstApplique">Rien n'est appliqué tant que vous n'avez pas enregistré. Le bouton reste en haut de la page, et le tableau de bord prévient si vous changez de rubrique avec des modifications en attente.</p>
+          <p data-i18n-html="wiki.chaqueEnregistrementCreeUne">Chaque enregistrement crée une version. Douze sont conservées par serveur, et la rubrique <strong>Historique</strong> permet de revenir à l'une d'elles — utile après une manipulation malheureuse, ou pour comparer ce qui a changé depuis la semaine dernière.</p>
+          <p data-i18n-html="wiki.ceRetourEnArriere">Ce retour en arrière ne concerne que les <em>réglages</em>. Il ne ressuscite pas un salon supprimé ni un membre banni : pour cela, il faut les sauvegardes du serveur, qui sont une autre rubrique.</p>
         </section>
 
-        <section id="questions" class="wiki-section">
-          <h2>Les questions posées à l'ouverture</h2>
-          <p>Un ticket qui s'ouvre sur « Bonjour » fait perdre deux allers-retours : il faut demander de quoi il s'agit, puis les détails. Poser deux ou trois questions au moment de l'ouverture change complètement le rythme.</p>
-          <p>Les bonnes questions sont celles dont vous auriez besoin de toute façon : de quel serveur ou de quel achat il s'agit, ce qui s'est passé, et depuis quand. Évitez celles auxquelles on répond « oui » — elles n'apprennent rien.</p>
-          <p>Trois questions est un maximum. Au-delà, le membre abandonne le formulaire, et vous aurez moins de demandes — ce qui ressemble à un succès sur un tableau de bord, et n'en est pas un.</p>
+        <section id="plusieurs" class="wiki-section">
+          <h2 data-i18n="wiki.plusieursServeurs">Plusieurs serveurs</h2>
+          <p data-i18n="wiki.leSelecteurEnHaut">Le sélecteur en haut du menu change de serveur sans se déconnecter. Les réglages sont propres à chacun : rien ne se recopie d'un serveur à l'autre par accident.</p>
+          <p data-i18n-html="wiki.siVousGerezPlusieurs">Si vous gérez plusieurs communautés semblables, la rubrique <strong>Modèles</strong> permet de poser une configuration type en une fois, plutôt que de refaire trente réglages à la main.</p>
         </section>
 
-        <section id="permissions" class="wiki-section">
-          <h2>Qui voit quoi</h2>
-          <p>Un ticket doit être visible par son auteur et par l'équipe, par personne d'autre. Cela paraît évident, et c'est pourtant l'erreur la plus fréquente : la catégorie qui accueille les tickets hérite des permissions du serveur, et si <code>@everyone</code> peut y lire les messages, tous les tickets sont publics.</p>
-          <p>La vérification prend dix secondes : ouvrez un ticket de test, puis regardez-le depuis un compte sans rôle. S'il apparaît, la catégorie est mal réglée.</p>
-          <p>Pensez aussi au rôle qui donne accès aux tickets : donner « Gérer les salons » à toute l'équipe pour qu'elle puisse fermer un ticket revient à lui donner le droit de supprimer n'importe quel salon du serveur. Un rôle dédié, avec le strict nécessaire, vaut mieux.</p>
-        </section>
-
-        <section id="fermeture" class="wiki-section">
-          <h2>La fermeture, et ce qu'on en garde</h2>
-          <p>Supprimer le salon à la fermeture efface la conversation. C'est parfois voulu, mais souvent regretté : six mois plus tard, personne ne peut vérifier ce qui avait été convenu avec un membre.</p>
-          <p>Garder une transcription — un fichier ou un message récapitulatif envoyé dans un salon d'archives — coûte peu et sauve les litiges. C'est aussi ce qui permet de voir qu'une même question revient dix fois, et mérite donc une réponse écrite quelque part.</p>
-          <p>Prévenez le membre avant de fermer. Un ticket qui disparaît pendant qu'on écrit donne le sentiment d'avoir été congédié.</p>
-        </section>
-
-        <section id="erreurs" class="wiki-section">
-          <h2>Les trois erreurs qui rendent les tickets inutiles</h2>
-          <p><strong>Ne jamais répondre.</strong> Un système de tickets sans personne derrière est pire qu'un salon d'aide : au moins, dans un salon, un autre membre pouvait dépanner. Si l'équipe ne peut pas tenir un délai, mieux vaut l'annoncer que le laisser deviner.</p>
-          <p><strong>Laisser les tickets s'accumuler.</strong> Cinquante salons ouverts dans une catégorie et plus personne ne sait lesquels sont traités. Fermez, même sans réponse parfaite.</p>
-          <p><strong>Faire du ticket une punition.</strong> Si le seul usage est « ouvre un ticket pour contester ta sanction », l'outil prend une couleur qu'il ne perdra plus, et les demandes ordinaires n'arriveront jamais.</p>
-        </section>
-
-        <section id="modbot" class="wiki-section">
-          <h2>Avec ModBot</h2>
-          <p>ModBot crée le panneau, les catégories et les questions depuis le tableau de bord, et publie le message d'ouverture dans le salon choisi. Les permissions du salon privé sont posées à la création, donc sans risque d'hériter de celles du serveur.</p>
-          <p>Le détail des réglages est dans <a href="wiki-tickets.html">la documentation</a>, et l'aperçu du tableau de bord montre le panneau tel que vos membres le verront avant publication.</p>
+        <section class="wiki-section">
+          <h2 data-i18n="wiki.pourAllerPlusLoin">Pour aller plus loin</h2>
+          <p data-i18n-html="wiki.leDetailDesProtections">Le détail des protections est dans <a href="wiki-verification.html">la vérification à l'arrivée</a>, et ce que le bot consigne dans <a href="wiki-journal.html">le journal</a>.</p>
         </section>
       </div>
     </div>

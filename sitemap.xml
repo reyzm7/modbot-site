@@ -16,6 +16,46 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://modbot-website.vercel.app/wiki-demarrer.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/wiki-dashboard.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/wiki-commandes.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/wiki-verification.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/wiki-bienvenue.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/wiki-roles.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/wiki-tickets.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/wiki-journal.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://modbot-website.vercel.app/partenaires.html</loc>
     <lastmod>2026-09-29</lastmod>
     <priority>0.5</priority>

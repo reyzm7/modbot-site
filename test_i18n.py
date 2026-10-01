@@ -21,7 +21,14 @@ SITE = os.path.dirname(os.path.abspath(__file__))
 PAGES = ["index.html", "dashboard.html", "admin.html", "wiki.html",
          "partenaires.html", "boutique.html",
          "confidentialite.html", "conditions.html", "mentions.html",
-         "statut.html"]
+         "statut.html",
+         # Le wiki tenait sur une page ; il en occupe huit depuis le
+         # 01/10/2026. Elles sont de la DOCUMENTATION, pas des articles
+         # de fond : le wiki a toujours ete traduit, et le decouper ne
+         # doit pas le faire sortir des cinq langues par la bande.
+         "wiki-demarrer.html", "wiki-dashboard.html", "wiki-commandes.html",
+         "wiki-verification.html", "wiki-bienvenue.html", "wiki-roles.html",
+         "wiki-tickets.html", "wiki-journal.html"]
 # Les pages d'articles ne sont PAS dans cette liste, et c'est voulu : un
 # article de fond est ecrit pour les recherches d'une langue, pas traduit
 # mot a mot dans cinq. Elles portent lang="fr" et aucun data-i18n ; les

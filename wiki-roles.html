@@ -10,25 +10,24 @@
        nous, rien de plus. Elle ne suit personne et ne charge rien.
        La retirer fait perdre la propriete du site dans la console. -->
   <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>Wiki ModBot — la documentation, rangée par sujet</title>
+  <title>Rôles automatiques et rôles-réactions — Wiki ModBot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="La documentation de ModBot en huit pages : démarrer, le tableau de bord, les commandes, la vérification, les rôles, les tickets et le journal.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/wiki.html">
+  <meta name="description" content="Donner un rôle à l'arrivée, laisser les membres choisir les leurs : comment configurer les rôles sur Discord avec ModBot.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/wiki-roles.html">
   <meta property="og:site_name" content="ModBot">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/wiki.html">
-  <meta property="og:title" content="Wiki ModBot — commandes, modules et réglages du bot Discord">
-  <meta property="og:description" content="La documentation de ModBot en huit pages : démarrer, le tableau de bord, les commandes, la vérification, les rôles, les tickets et le journal.">
+  <meta property="og:url" content="https://modbot-website.vercel.app/wiki-roles.html">
+  <meta property="og:title" content="Rôles automatiques et rôles-réactions">
+  <meta property="og:description" content="Donner un rôle à l'arrivée, laisser les membres choisir les leurs : comment configurer les rôles sur Discord avec ModBot.">
   <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ModBot — modération Discord">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Wiki ModBot — toutes les commandes et tous les réglages">
-  <meta name="twitter:description" content="La documentation de ModBot en huit pages : démarrer, le tableau de bord, les commandes, la vérification, les rôles, les tickets et le journal.">
+  <meta name="twitter:title" content="Rôles automatiques et rôles-réactions">
+  <meta name="twitter:description" content="Donner un rôle à l'arrivée, laisser les membres choisir les leurs : comment configurer les rôles sur Discord avec ModBot.">
   <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
@@ -42,6 +41,30 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="assets/modbot-mark.webp" type="image/webp">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Rôles automatiques et rôles-réactions",
+    "description": "Donner un rôle à l'arrivée, laisser les membres choisir les leurs : comment configurer les rôles sur Discord avec ModBot.",
+    "inLanguage": "fr-FR",
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-01",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/wiki-roles.html",
+    "author": {
+      "@type": "Organization",
+      "name": "ModBot"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ModBot",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://modbot-website.vercel.app/logo.png"
+      }
+    }
+  }
+  </script>
 </head>
 <body class="wiki-page">
   <script src="icons.js"></script>
@@ -50,26 +73,27 @@
   <!-- Le voile des transitions : noir a l'arrivee, il s'efface ; noir
        au depart, il se pose. Ecrit ici et non cree par le script :
        cree apres coup, la page apparaitrait avant de disparaitre. -->
-
   <header class="site-header">
-    <nav class="navbar" aria-label="Navigation wiki" data-i18n-aria="wiki.navigationWiki">
-      <span class="brand" aria-label="Accueil ModBot" data-i18n-aria="wiki.accueilModbot">
+    <nav class="navbar" aria-label="Navigation ModBot" data-i18n-aria="cgu.navigation">
+      <span class="brand" aria-label="Accueil ModBot" data-i18n-aria="cgu.accueilModbot">
         <span class="brand-mark">
           <img src="assets/modbot-mark.webp" alt="" width="128" height="128" decoding="async" fetchpriority="high">
         </span>
         <span>ModBot</span>
       </span>
 
-      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="wiki.ouvrirLeMenu">
+      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="cgu.ouvrirLeMenu">
         <span></span>
         <span></span>
       </button>
 
       <div class="nav-links" id="navLinks">
-        <a href="partenaires.html" data-teinte="menthe"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-hand"/></svg><span data-i18n="nav.partenaires">Partenaires</span></a>
+        <a href="index.html#features" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg><span data-i18n="cgu.fonctionnalites">Fonctionnalités</span></a>
+        <a href="index.html#pricing"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="cgu.tarifs">Tarifs</span></a>
 
-        <a class="nav-boutique" href="boutique.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
-<a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n="wiki.supportDiscord">Support Discord</span></a>
+
+<a class="nav-boutique" href="boutique.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
+<a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n="cgu.supportDiscord">Support Discord</span></a>
 
         <div class="nav-menu" data-nav-menu>
           <button class="nav-menu-trigger est-icone" type="button" data-nav-menu-trigger
@@ -103,99 +127,55 @@
     </nav>
   </header>
 
+
   <main class="wiki-shell section-shell">
-    <section class="wiki-hero">
-      <p class="eyebrow" data-i18n="pied.documentation">Documentation</p>
-      <h1 data-i18n="wiki.leWikiModbot">Le wiki ModBot</h1>
-      <p data-i18n="wiki.huitPagesRangeesDans">Huit pages, rangées dans l'ordre où l'on rencontre les questions. Si vous ne savez pas par où commencer, la première est faite pour ça.</p>
-    </section>
+    <article class="wiki-hero">
+      <p class="eyebrow" data-i18n-html="wiki.wiki"><a href="wiki.html">Retour au wiki</a></p>
+      <h1 data-i18n="wiki.rolesAutomatiquesEtRoles">Rôles automatiques et rôles-réactions</h1>
+      <p data-i18n="wiki.deuxMecanismesDifferentsL">Deux mécanismes différents : l'un pose un rôle sans rien demander, l'autre laisse chacun se servir.</p>
+    </article>
 
-    <div class="wiki-portes">
-        <a class="wiki-porte" href="wiki-demarrer.html">
-          <span class="wiki-porte-icone" aria-hidden="true">
-            <svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-rocket"/></svg>
-          </span>
-          <span class="wiki-porte-texte">
-            <small data-i18n="wiki.vousVenezDArriver">Vous venez d'arriver</small>
-            <strong data-i18n="wiki.demarrer">Démarrer</strong>
-            <span data-i18n="wiki.aQuoiSertModbot">À quoi sert ModBot, comment l'inviter, et les quatre réglages à faire dans le premier quart d'heure.</span>
-          </span>
-        </a>
-        <a class="wiki-porte" href="wiki-dashboard.html">
-          <span class="wiki-porte-icone" aria-hidden="true">
-            <svg class="ui-icon" viewBox="0 0 24 24"><use href="#i-sliders"/></svg>
-          </span>
-          <span class="wiki-porte-texte">
-            <small data-i18n="wiki.vousReglezDepuisLe">Vous réglez depuis le site</small>
-            <strong data-i18n="wiki.leTableauDeBord">Le tableau de bord</strong>
-            <span data-i18n="wiki.lesModulesCommentEnregistrer">Les modules, comment enregistrer, et comment revenir en arrière après une mauvaise manipulation.</span>
-          </span>
-        </a>
-        <a class="wiki-porte" href="wiki-commandes.html">
-          <span class="wiki-porte-icone" aria-hidden="true">
-            <svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-tools"/></svg>
-          </span>
-          <span class="wiki-porte-texte">
-            <small data-i18n="wiki.vousCherchezUneCommande">Vous cherchez une commande</small>
-            <strong data-i18n="wiki.lesCommandes">Les commandes</strong>
-            <span data-i18n="wiki.ceQuiSeFait">Ce qui se fait depuis Discord : modération, sanctions, information, outils du serveur.</span>
-          </span>
-        </a>
-        <a class="wiki-porte" href="wiki-verification.html">
-          <span class="wiki-porte-icone" aria-hidden="true">
-            <svg class="ui-icon" viewBox="0 0 24 24"><use href="#i-shield"/></svg>
-          </span>
-          <span class="wiki-porte-texte">
-            <small data-i18n="wiki.vousSubissezDuSpam">Vous subissez du spam</small>
-            <strong data-i18n="wiki.verificationALArrivee">Vérification à l'arrivée</strong>
-            <span data-i18n="wiki.captchaDEntreeEt">Captcha d'entrée et bridage des nouveaux venus : ce que chacun arrête, et ce qu'il coûte.</span>
-          </span>
-        </a>
-        <a class="wiki-porte" href="wiki-bienvenue.html">
-          <span class="wiki-porte-icone" aria-hidden="true">
-            <svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-hand"/></svg>
-          </span>
-          <span class="wiki-porte-texte">
-            <small data-i18n="wiki.vousAccueillezDesMembres">Vous accueillez des membres</small>
-            <strong data-i18n="welcome.eyebrow">Arrivées et départs</strong>
-            <span data-i18n="wiki.leMessageDeBienvenue">Le message de bienvenue, le message privé, et faut-il annoncer les départs.</span>
-          </span>
-        </a>
-        <a class="wiki-porte" href="wiki-roles.html">
-          <span class="wiki-porte-icone" aria-hidden="true">
-            <svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-star"/></svg>
-          </span>
-          <span class="wiki-porte-texte">
-            <small data-i18n="wiki.vousDistribuezDesRoles">Vous distribuez des rôles</small>
-            <strong data-i18n="wiki.lesRoles">Les rôles</strong>
-            <span data-i18n="wiki.rolesAutomatiquesAL">Rôles automatiques à l'arrivée, rôles par réaction, et pourquoi la hiérarchie décide de tout.</span>
-          </span>
-        </a>
-        <a class="wiki-porte" href="wiki-tickets.html">
-          <span class="wiki-porte-icone" aria-hidden="true">
-            <svg class="ui-icon" viewBox="0 0 24 24"><use href="#i-ticket"/></svg>
-          </span>
-          <span class="wiki-porte-texte">
-            <small data-i18n="wiki.vosMembresVeulentVous">Vos membres veulent vous écrire</small>
-            <strong data-i18n="wiki.ticketsEtModmail">Tickets et modmail</strong>
-            <span data-i18n="wiki.deuxPortesVersL">Deux portes vers l'équipe : le ticket qui se catégorise, et le message privé qui ne se voit pas.</span>
-          </span>
-        </a>
-        <a class="wiki-porte" href="wiki-journal.html">
-          <span class="wiki-porte-icone" aria-hidden="true">
-            <svg class="ui-icon" viewBox="0 0 24 24"><use href="#u-clipboard"/></svg>
-          </span>
-          <span class="wiki-porte-texte">
-            <small data-i18n="wiki.vousCherchezLeReste">Vous cherchez le reste</small>
-            <strong data-i18n="wiki.journalReseauxEtPremium">Journal, réseaux et premium</strong>
-            <span data-i18n="wiki.ceQueLeBot">Ce que le bot consigne, les annonces Twitch et YouTube, les offres et le compte.</span>
-          </span>
-        </a>
+    <div class="wiki-layout">
+      <aside class="wiki-toc" aria-label="Sommaire">
+        <a href="#automatiques" data-i18n="wiki.lesRolesAutomatiques">Les rôles automatiques</a>
+        <a href="#reactions" data-i18n="wiki.lesRolesParReaction">Les rôles par réaction</a>
+        <a href="#hierarchie" data-i18n="wiki.laHierarchie">La hiérarchie</a>
+        <a href="wiki.html" class="wiki-toc-retour" data-i18n="wiki.toutLeWiki">↑ Tout le wiki</a>
+      </aside>
+
+      <div class="wiki-content">
+        <section id="automatiques" class="wiki-section">
+          <h2 data-i18n="wiki.lesRolesAutomatiques">Les rôles automatiques</h2>
+          <p data-i18n="wiki.rolesTexte">Deux façons de distribuer un rôle sans que personne ait à lever le petit doigt : à l’arrivée, ou au choix du membre depuis un panneau. Les deux écrivent dans le journal, catégorie « Rôles ».</p>
+          <ul class="wiki-check-list">
+          <li data-i18n="wiki.rolesAuto">À l’arrivée : jusqu’à dix rôles, donnés dès que quelqu’un rejoint le serveur.</li>
+          <li data-i18n="wiki.rolesCaptcha">Quand le captcha est actif, les auto-rôles attendent qu’il soit passé. Sans cela, le rôle ouvrirait l’accès avant la vérification, qui ne servirait plus à rien.</li>
+          <li data-i18n="wiki.rolesHierarchie">Un rôle placé au-dessus de ModBot dans la hiérarchie ne peut pas être attribué : Discord le refuse. Le journal nomme les rôles écartés et la raison.</li>
+          <li data-i18n="wiki.rolesBots">Les bots qui rejoignent le serveur ne reçoivent jamais d’auto-rôle : ils arrivent déjà avec les permissions de leur invitation.</li>
+          <li data-i18n="wiki.rolesReaction">Par réaction : un panneau à publier dans un salon, une ligne par rôle avec son emoji et son libellé.</li>
+          <li data-i18n="wiki.rolesMode">Deux modes : plusieurs rôles à la fois, ou un seul — auquel cas prendre un rôle retire le précédent.</li>
+          <li data-i18n="wiki.rolesRepublier">Republier le panneau crée un nouveau message. L’ancien cesse alors de distribuer des rôles : il peut être supprimé.</li>
+          </ul>
+        </section>
+
+        <section id="reactions" class="wiki-section">
+          <h2 data-i18n="wiki.lesRolesParReaction">Les rôles par réaction</h2>
+          <p data-i18n="wiki.unPanneauPublieDans">Un panneau publié dans un salon, et chacun prend les rôles qui l'intéressent — centres d'intérêt, notifications, présentation. ModBot gère les deux formes : les réactions sous un message, et les boutons ou menus déroulants, plus lisibles au-delà d'une dizaine de rôles.</p>
+          <p data-i18n-html="wiki.unRoleQuiDonne">Un rôle qui donne un <em>pouvoir</em> — modérer, voir un salon privé, mentionner tout le monde — ne se distribue jamais ainsi. Les rôles-réactions sont faits pour des choix qui n'engagent que celui qui les fait.</p>
+        </section>
+
+        <section id="hierarchie" class="wiki-section">
+          <h2 data-i18n="wiki.laHierarchieEncore">La hiérarchie, encore</h2>
+          <p data-i18n="wiki.leBotNePeut">Le bot ne peut donner que les rôles situés en dessous du sien. Si un rôle du panneau est au-dessus, le clic ne fait rien — souvent sans message d'erreur visible.</p>
+          <p data-i18n="wiki.leLienSeFait">Le lien se fait sur l'identifiant du rôle, pas sur son nom : renommer un rôle ne casse rien, mais le supprimer puis le recréer à l'identique casse tout.</p>
+        </section>
+
+        <section class="wiki-section">
+          <h2 data-i18n="wiki.pourAllerPlusLoin">Pour aller plus loin</h2>
+          <p data-i18n-html="wiki.leGuideLesRoles">Le guide <a href="article-roles-reaction-discord.html">Les rôles par réaction sur Discord</a> détaille la mise en place.</p>
+        </section>
+      </div>
     </div>
-
-    <section class="wiki-shell-note">
-      <p class="field-help" data-i18n-html="wiki.vousCherchezPlutotUn">Vous cherchez plutôt un sujet que ModBot ne traite pas seul — protéger d'un raid, comprendre les permissions, modérer sans équipe ? Les <a href="articles.html">guides</a> vont plus loin, et valent aussi pour un serveur qui n'utilise pas ModBot.</p>
-    </section>
   </main>
   <footer class="footer">
     <div class="footer-grille">
