@@ -126,6 +126,17 @@
             "Tests"
           ],
           "fichiers": 4
+        },
+        {
+          "depot": "site",
+          "sha": "c915069",
+          "titre": "Une page de nouveautes, ecrite chaque nuit",
+          "detail": "Le journal des modifications se construit a partir de ce qui a ete livre : l'historique des deux depots, le site et le bot. Personne n'a a penser a le remplir, et rien n'y entre qui n'ait ete pousse.",
+          "etiquettes": [
+            "Guides",
+            "Traductions"
+          ],
+          "fichiers": 52
         }
       ]
     },
@@ -1408,5 +1419,5 @@
       ]
     }
   ],
-  "genere": "2026-10-01T15:38:14.265Z"
+  "genere": "2026-10-01T15:46:51.524Z"
 }

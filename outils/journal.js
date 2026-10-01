@@ -231,6 +231,31 @@ const resume = montres.length
   ? `${vus} modification${vus > 1 ? "s" : ""} depuis le ${enFrancais(montres[montres.length - 1].date)}`
   : "aucune modification enregistrée";
 
+// Le gabarit porte une copie figee de l'en-tete et du pied. C'est ce qui
+// permet de les retoucher a la main sans toucher au generateur — mais
+// c'est aussi ce qui les laisse diverger du reste du site en silence :
+// le lien « Nouveautés » ajoute aux trente-neuf autres pages avait
+// manque celle-ci, parce que le gabarit avait ete fige la veille.
+//
+// On ne repare pas automatiquement : recopier le pied d'une autre page
+// ecraserait les retouches voulues. On avertit, bruyamment.
+const REFERENCE = path.join(SITE, "articles.html");
+if (fs.existsSync(REFERENCE)) {
+  const pied = (s) => {
+    const i = s.indexOf('<footer class="footer"');
+    return i < 0 ? "" : s.slice(i, s.indexOf("</footer>", i));
+  };
+  const liens = (s) => [...pied(s).matchAll(/href="([^"]+)"/g)].map((m) => m[1]).sort().join(" ");
+  const attendu = liens(fs.readFileSync(REFERENCE, "utf8"));
+  const trouve = liens(fs.readFileSync(GABARIT, "utf8"));
+  if (attendu && attendu !== trouve) {
+    const manquants = attendu.split(" ").filter((l) => !trouve.split(" ").includes(l));
+    console.log("\n  !!! Le pied du gabarit a derive de celui du site.");
+    if (manquants.length) console.log("      Lien(s) absent(s) : " + manquants.join(", "));
+    console.log("      A corriger dans outils/journal-gabarit.html.\n");
+  }
+}
+
 let page = fs.readFileSync(GABARIT, "utf8").replace(/\r\n/g, "\n")
   .replace("@@JOURNAL@@", html || '      <p class="field-help">Rien pour le moment.</p>')
   .replace("@@RESUME@@", echapper(resume))
