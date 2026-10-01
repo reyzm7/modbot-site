@@ -10,24 +10,24 @@
        nous, rien de plus. Elle ne suit personne et ne charge rien.
        La retirer fait perdre la propriete du site dans la console. -->
   <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>Bot ou site web pour sa communauté : comment choisir — ModBot</title>
+  <title>Comment arrêter le spam sur un serveur Discord — ModBot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/article-bot-ou-site.html">
+  <meta name="description" content="Spam de messages, publicité en messages privés, raids publicitaires : les trois formes de spam sur Discord n'ont pas la même parade. Ce qui marche pour chacune.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/article-spam-discord.html">
   <meta property="og:site_name" content="ModBot">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/article-bot-ou-site.html">
-  <meta property="og:title" content="Bot ou site web pour sa communauté : comment choisir">
-  <meta property="og:description" content="Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.">
+  <meta property="og:url" content="https://modbot-website.vercel.app/article-spam-discord.html">
+  <meta property="og:title" content="Comment arrêter le spam sur un serveur Discord">
+  <meta property="og:description" content="Spam de messages, publicité en messages privés, raids publicitaires : les trois formes de spam sur Discord n'ont pas la même parade. Ce qui marche pour chacune.">
   <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Bot ou site web pour sa communauté : comment choisir">
-  <meta name="twitter:description" content="Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.">
+  <meta name="twitter:title" content="Comment arrêter le spam sur un serveur Discord">
+  <meta name="twitter:description" content="Spam de messages, publicité en messages privés, raids publicitaires : les trois formes de spam sur Discord n'ont pas la même parade. Ce qui marche pour chacune.">
   <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
@@ -45,15 +45,24 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Bot ou site web pour sa communauté : comment choisir",
-    "description": "Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.",
+    "headline": "Comment arrêter le spam sur un serveur Discord",
+    "description": "Spam de messages, publicité en messages privés, raids publicitaires : les trois formes de spam sur Discord n'ont pas la même parade. Ce qui marche pour chacune.",
     "inLanguage": "fr-FR",
-    "datePublished": "2026-09-12",
-    "dateModified": "2026-09-12",
-    "mainEntityOfPage": "https://modbot-website.vercel.app/article-bot-ou-site.html",
-    "author": { "@type": "Organization", "name": "ModBot" },
-    "publisher": { "@type": "Organization", "name": "ModBot",
-                    "logo": { "@type": "ImageObject", "url": "https://modbot-website.vercel.app/logo.png" } }
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-01",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/article-spam-discord.html",
+    "author": {
+      "@type": "Organization",
+      "name": "ModBot"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ModBot",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://modbot-website.vercel.app/logo.png"
+      }
+    }
   }
   </script>
 </head>
@@ -122,96 +131,70 @@
   <main class="wiki-shell section-shell">
     <article class="wiki-hero">
       <p class="eyebrow">Guide</p>
-      <h1>Bot ou site web pour sa communauté : comment choisir</h1>
-      <p>Les deux coûtent du temps et de l'argent, et ils ne servent pas à la même chose. La question n'est pas « lequel est le mieux » mais « quel problème j'ai en ce moment ». Voici comment trancher en dix minutes.</p>
-      <p class="field-help">Mis à jour le 12 septembre 2026 · 6 minutes de lecture</p>
+      <h1>Comment arrêter le spam sur un serveur Discord</h1>
+      <p>On appelle « spam » trois choses très différentes, et c'est pourquoi les conseils qu'on trouve ne marchent qu'une fois sur trois. Voici la parade propre à chacune.</p>
+      <p class="field-help">Mis à jour le 1er octobre 2026 · 6 minutes de lecture</p>
     </article>
 
     <div class="wiki-layout">
       <aside class="wiki-toc" aria-label="Sommaire de l'article">
-        <a href="#question">La bonne question</a>
-        <a href="#bot">Ce qu'un bot fait mieux</a>
-        <a href="#site">Ce qu'un site fait mieux</a>
-        <a href="#deux">Quand il faut les deux</a>
-        <a href="#budget">Ce que ça coûte vraiment</a>
-        <a href="#eviter">Ce qu'il vaut mieux éviter</a>
+        <a href="#formes">Les trois formes</a>
+        <a href="#vitesse">Le spam de vitesse</a>
+        <a href="#publicite">La publicité discrète</a>
+        <a href="#prives">Les messages privés</a>
+        <a href="#erreurs">Ce qu'il ne faut pas faire</a>
+        <a href="#modbot">Avec ModBot</a>
       </aside>
 
       <div class="wiki-content">
-        <section id="question" class="wiki-section">
-          <h2>La bonne question n'est pas celle qu'on croit</h2>
-          <p>« Est-ce que j'ai besoin d'un bot ou d'un site ? » n'a pas de réponse. Remplace-la par celle-ci : <strong>qu'est-ce qui me fait perdre du temps, ou qui me fait perdre des gens ?</strong></p>
-          <ul class="wiki-check-list">
-            <li>Tu répètes la même chose dix fois par jour dans le serveur → <strong>bot</strong>.</li>
-            <li>Les gens ne te trouvent pas, ou ne comprennent pas ce que tu proposes → <strong>site</strong>.</li>
-            <li>Ton serveur est vivant mais tu n'as aucune idée de ce qui s'y passe → <strong>bot</strong> (journal et statistiques).</li>
-            <li>Tu veux vendre, inscrire, ou recevoir des candidatures → <strong>site</strong>.</li>
-            <li>Tu passes tes soirées à modérer → <strong>bot</strong>, sans hésiter.</li>
-          </ul>
-          <p>Dans la grande majorité des cas, un serveur qui commence a besoin d'un bot. Un projet qui existe déjà et veut grandir a besoin d'un site.</p>
+        <section id="formes" class="wiki-section">
+          <h2>Trois spams, trois parades</h2>
+          <p><strong>Le spam de vitesse</strong> : quinze messages en dix secondes dans le même salon. C'est le plus visible et le plus facile à arrêter, parce qu'il se mesure.</p>
+          <p><strong>La publicité discrète</strong> : un message par salon, espacés, chacun irréprochable pris isolément. L'anti-spam classique ne le voit jamais, puisqu'il ne mesure qu'une vitesse.</p>
+          <p><strong>Le message privé</strong> : votre serveur sert d'annuaire, et quelqu'un écrit à vos membres un par un. Vous ne voyez rien, vous l'apprenez par une plainte.</p>
+          <p>Confondre les trois mène à tout verrouiller sans rien régler. Regardez d'abord ce que vous subissez réellement.</p>
         </section>
 
-        <section id="bot" class="wiki-section">
-          <h2>Ce qu'un bot fait mieux qu'un site</h2>
-          <p>Un bot vit là où sont déjà tes membres. Il n'a rien à aller chercher, et personne n'a besoin d'ouvrir un onglet.</p>
-          <ul class="wiki-check-list">
-            <li><strong>Répéter sans fatigue.</strong> Accueillir, expliquer les règles, donner un rôle, répondre aux mêmes cinq questions.</li>
-            <li><strong>Agir vite.</strong> Supprimer un lien d'arnaque en une seconde, fermer le serveur pendant un raid. Aucune personne ne va aussi vite.</li>
-            <li><strong>Garder une trace.</strong> Qui a fait quoi, quand, et pourquoi. Sans journal, une équipe de modération se dispute sur des souvenirs.</li>
-            <li><strong>Animer.</strong> Niveaux, anniversaires, suggestions, tirages au sort : des raisons de revenir.</li>
-          </ul>
-          <p>Un bot ne convainc personne de venir, en revanche. Il retient ceux qui sont là.</p>
+        <section id="vitesse" class="wiki-section">
+          <h2>Le spam de vitesse</h2>
+          <p>Discord propose lui-même un <strong>mode lent</strong> par salon : un message toutes les N secondes, et c'est gratuit. Sur un salon de discussion générale, dix secondes passent inaperçues pour un humain et rendent le spam inopérant.</p>
+          <p>Un bot fait mieux : il compte les messages sur une fenêtre, supprime la rafale et sanctionne. L'avantage n'est pas la détection, c'est que la rafale <em>disparaît</em> — avec le mode lent, elle est seulement ralentie.</p>
+          <p>Attention au réglage : trop sensible, il attrape celui qui écrit vite en trois messages courts, ce que font les gens normaux quand ils s'enthousiasment.</p>
         </section>
 
-        <section id="site" class="wiki-section">
-          <h2>Ce qu'un site fait mieux qu'un bot</h2>
-          <p>Un site existe en dehors de Discord — et c'est précisément son intérêt.</p>
-          <ul class="wiki-check-list">
-            <li><strong>Se faire trouver.</strong> Un serveur Discord n'apparaît pas dans les moteurs de recherche. Une page, oui.</li>
-            <li><strong>Expliquer en grand.</strong> Une capture, trois paragraphes et un bouton convainquent mieux qu'un salon #informations que personne ne lit.</li>
-            <li><strong>Inspirer confiance.</strong> Pour une inscription, une commande ou une candidature, une page propre change le taux de réponse.</li>
-            <li><strong>Durer.</strong> Un serveur peut être supprimé, un compte peut être perdu. Une adresse à toi reste.</li>
-          </ul>
-          <p>Un site ne modère rien et ne parle à personne. Il présente.</p>
+        <section id="publicite" class="wiki-section">
+          <h2>La publicité discrète</h2>
+          <p>C'est celle qui rapporte, donc celle qui revient. Elle se reconnaît à une chose : le <em>même</em> texte apparaît dans plusieurs salons, espacé de quelques minutes.</p>
+          <p>Aucune mesure de vitesse ne l'attrape. Ce qu'il faut regarder, c'est la répétition d'un message identique à travers les salons — trois salons en cinq minutes suffit à caractériser une tournée, alors que deux peut arriver honnêtement quand quelqu'un s'est trompé d'endroit.</p>
+          <p>L'autre angle est l'ancienneté : ces comptes arrivent, écrivent, repartent. Empêcher les arrivants de poster des liens pendant leurs premières heures coûte presque rien aux vrais membres et casse complètement ce modèle.</p>
         </section>
 
-        <section id="deux" class="wiki-section">
-          <h2>Quand il faut vraiment les deux</h2>
-          <p>Trois cas où l'un sans l'autre ne suffit pas :</p>
-          <ol class="boutique-demande-etapes">
-            <li><strong>Tu vends quelque chose.</strong> Le site montre et encaisse, le bot livre et suit. L'un sans l'autre laisse la moitié du travail à faire à la main.</li>
-            <li><strong>Tu recrutes.</strong> Le formulaire vit sur le site, la candidature arrive dans un salon privé, et le bot prévient l'équipe.</li>
-            <li><strong>Tu organises.</strong> Le calendrier public est sur le site ; les inscriptions et les rappels sont sur Discord.</li>
-          </ol>
-          <p>C'est pour ces cas-là que les formules qui réunissent les deux existent : un bot et un site faits ensemble parlent la même langue, et il n'y a personne au milieu pour recopier.</p>
+        <section id="prives" class="wiki-section">
+          <h2>Le spam en messages privés</h2>
+          <p>C'est le plus difficile, parce qu'il échappe par nature à votre serveur : vous n'avez aucun droit sur les conversations privées de vos membres, et aucun bot n'y a accès.</p>
+          <p>Ce que vous pouvez faire, et qui marche : <strong>bloquer la source</strong>. Ces comptes trouvent vos membres en les voyant dans la liste. Un serveur dont le contenu n'est visible qu'après vérification devient beaucoup moins rentable à moissonner.</p>
+          <p>Dites aussi à vos membres de signaler, et rappelez une règle simple : votre équipe n'écrit jamais en privé en premier pour demander quoi que ce soit. La moitié des arnaques Discord repose exactement là-dessus.</p>
+          <p>Enfin, Discord permet à chacun de refuser les messages privés des gens qui ne sont pas ses amis. C'est dans ses propres paramètres, pas dans les vôtres — mais le dire une fois dans votre salon d'annonces aide plus que n'importe quel réglage de serveur.</p>
         </section>
 
-        <section id="budget" class="wiki-section">
-          <h2>Ce que ça coûte vraiment</h2>
-          <p>Le prix de départ n'est pas le prix total. Trois lignes à regarder avant de se décider :</p>
-          <ul class="wiki-check-list">
-            <li><strong>L'hébergement.</strong> Un bot doit tourner en permanence ; un site doit rester en ligne. Compte quelques euros par mois, ou une offre gratuite avec ses limites.</li>
-            <li><strong>Les évolutions.</strong> Discord change, les hébergeurs changent, tes besoins changent. Un projet figé se casse en six mois.</li>
-            <li><strong>Le temps.</strong> Le tien. Un bot fait maison coûte des soirées ; un bot commandé coûte de l'argent. Aucun des deux n'est gratuit.</li>
-          </ul>
-          <p>Un repère honnête : un bot simple mais fini vaut mieux qu'un bot ambitieux jamais terminé. Commence petit, ajoute ce qui manque quand ça manque.</p>
+        <section id="erreurs" class="wiki-section">
+          <h2>Les réglages qui font plus de mal que de bien</h2>
+          <p><strong>Interdire tous les liens.</strong> Cela gêne vos habitués cent fois par jour pour arrêter un spammeur par semaine. Si vous le faites, exemptez au moins les salons où partager un lien est normal.</p>
+          <p><strong>Bannir au premier message.</strong> Un faux positif sur un vrai membre, et vous le perdez. L'exclusion temporaire laisse le temps de vérifier.</p>
+          <p><strong>Tout activer d'un coup.</strong> Quand quelque chose coince, vous ne saurez pas quelle protection en est la cause, et vous finirez par tout éteindre.</p>
         </section>
 
-        <section id="eviter" class="wiki-section">
-          <h2>Ce qu'il vaut mieux éviter</h2>
-          <ul class="wiki-check-list">
-            <li><strong>Vingt bots pour vingt fonctions.</strong> Chacun demande des permissions, chacun peut tomber, et aucun ne parle aux autres. Deux ou trois bien choisis suffisent.</li>
-            <li><strong>Un site sans but.</strong> Une belle page qui ne demande rien au visiteur ne sert à rien. Une page utile se termine par une action : rejoindre, commander, écrire.</li>
-            <li><strong>Payer pour ce qui est gratuit.</strong> La modération, l'anti-raid, le captcha, les tickets et les sauvegardes existent gratuitement — ModBot les donne sans limite de durée. Paie pour ce qui est fait sur mesure, pas pour ce qui existe déjà.</li>
-          </ul>
-          <p>Si tu hésites encore, la <a href="boutique.html#estimer">page Boutique</a> pose deux questions et donne le prix exact de la formule qui correspond, sans engagement. Et si ton projet en sort, un devis gratuit répond avec un prix ferme.</p>
+        <section id="modbot" class="wiki-section">
+          <h2>Avec ModBot</h2>
+          <p>ModBot traite les deux premières formes séparément : l'anti-spam mesure la vitesse dans un salon, et un filtre distinct repère le même message à travers plusieurs salons — trois en cinq minutes par défaut, réglable.</p>
+          <p>Pour la troisième, le bridage des arrivants retire liens, fichiers et invitations pendant les premières heures. Le guide <a href="article-verifier-nouveaux-membres.html">Vérifier les nouveaux membres</a> compare les approches.</p>
         </section>
         <nav class="guides-suite" aria-label="À lire ensuite">
           <h2>À lire ensuite</h2>
           <ul>
-            <li><a href="article-choisir-bot-moderation.html">Comment choisir un bot de modération Discord</a></li>
-            <li><a href="article-tickets-discord.html">Créer un système de tickets sur Discord</a></li>
-            <li><a href="article-ajouter-bot-discord.html">Comment ajouter un bot sur un serveur Discord</a></li>
+            <li><a href="article-arnaques-discord.html">Reconnaître les arnaques sur Discord</a></li>
+            <li><a href="article-automod-discord.html">AutoMod et niveau de vérification : ce que Discord fait tout seul</a></li>
+            <li><a href="article-verifier-nouveaux-membres.html">Vérifier les nouveaux membres d'un serveur Discord</a></li>
           </ul>
         </nav>
       </div>

@@ -10,24 +10,24 @@
        nous, rien de plus. Elle ne suit personne et ne charge rien.
        La retirer fait perdre la propriete du site dans la console. -->
   <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>Bot ou site web pour sa communauté : comment choisir — ModBot</title>
+  <title>Que faire quand un serveur Discord est piraté — ModBot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/article-bot-ou-site.html">
+  <meta name="description" content="Salons supprimés, membres bannis en masse, rôles détruits : les gestes à faire dans l'ordre, ce qui se récupère vraiment, et comment l'empêcher de recommencer.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/article-serveur-discord-pirate.html">
   <meta property="og:site_name" content="ModBot">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/article-bot-ou-site.html">
-  <meta property="og:title" content="Bot ou site web pour sa communauté : comment choisir">
-  <meta property="og:description" content="Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.">
+  <meta property="og:url" content="https://modbot-website.vercel.app/article-serveur-discord-pirate.html">
+  <meta property="og:title" content="Que faire quand un serveur Discord est piraté">
+  <meta property="og:description" content="Salons supprimés, membres bannis en masse, rôles détruits : les gestes à faire dans l'ordre, ce qui se récupère vraiment, et comment l'empêcher de recommencer.">
   <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Bot ou site web pour sa communauté : comment choisir">
-  <meta name="twitter:description" content="Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.">
+  <meta name="twitter:title" content="Que faire quand un serveur Discord est piraté">
+  <meta name="twitter:description" content="Salons supprimés, membres bannis en masse, rôles détruits : les gestes à faire dans l'ordre, ce qui se récupère vraiment, et comment l'empêcher de recommencer.">
   <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
@@ -45,15 +45,24 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Bot ou site web pour sa communauté : comment choisir",
-    "description": "Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.",
+    "headline": "Que faire quand un serveur Discord est piraté",
+    "description": "Salons supprimés, membres bannis en masse, rôles détruits : les gestes à faire dans l'ordre, ce qui se récupère vraiment, et comment l'empêcher de recommencer.",
     "inLanguage": "fr-FR",
-    "datePublished": "2026-09-12",
-    "dateModified": "2026-09-12",
-    "mainEntityOfPage": "https://modbot-website.vercel.app/article-bot-ou-site.html",
-    "author": { "@type": "Organization", "name": "ModBot" },
-    "publisher": { "@type": "Organization", "name": "ModBot",
-                    "logo": { "@type": "ImageObject", "url": "https://modbot-website.vercel.app/logo.png" } }
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-01",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/article-serveur-discord-pirate.html",
+    "author": {
+      "@type": "Organization",
+      "name": "ModBot"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ModBot",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://modbot-website.vercel.app/logo.png"
+      }
+    }
   }
   </script>
 </head>
@@ -122,96 +131,65 @@
   <main class="wiki-shell section-shell">
     <article class="wiki-hero">
       <p class="eyebrow">Guide</p>
-      <h1>Bot ou site web pour sa communauté : comment choisir</h1>
-      <p>Les deux coûtent du temps et de l'argent, et ils ne servent pas à la même chose. La question n'est pas « lequel est le mieux » mais « quel problème j'ai en ce moment ». Voici comment trancher en dix minutes.</p>
-      <p class="field-help">Mis à jour le 12 septembre 2026 · 6 minutes de lecture</p>
+      <h1>Que faire quand un serveur Discord est piraté</h1>
+      <p>Un compte d'administrateur compromis, et en deux minutes un serveur de trois ans n'existe plus. Voici l'ordre dans lequel agir — il compte plus que la vitesse.</p>
+      <p class="field-help">Mis à jour le 1er octobre 2026 · 7 minutes de lecture</p>
     </article>
 
     <div class="wiki-layout">
       <aside class="wiki-toc" aria-label="Sommaire de l'article">
-        <a href="#question">La bonne question</a>
-        <a href="#bot">Ce qu'un bot fait mieux</a>
-        <a href="#site">Ce qu'un site fait mieux</a>
-        <a href="#deux">Quand il faut les deux</a>
-        <a href="#budget">Ce que ça coûte vraiment</a>
-        <a href="#eviter">Ce qu'il vaut mieux éviter</a>
+        <a href="#arreter">Arrêter l'hémorragie</a>
+        <a href="#compte">Reprendre le compte</a>
+        <a href="#recuperer">Ce qui se récupère</a>
+        <a href="#prevenir">Empêcher la suite</a>
+        <a href="#modbot">Avec ModBot</a>
       </aside>
 
       <div class="wiki-content">
-        <section id="question" class="wiki-section">
-          <h2>La bonne question n'est pas celle qu'on croit</h2>
-          <p>« Est-ce que j'ai besoin d'un bot ou d'un site ? » n'a pas de réponse. Remplace-la par celle-ci : <strong>qu'est-ce qui me fait perdre du temps, ou qui me fait perdre des gens ?</strong></p>
-          <ul class="wiki-check-list">
-            <li>Tu répètes la même chose dix fois par jour dans le serveur → <strong>bot</strong>.</li>
-            <li>Les gens ne te trouvent pas, ou ne comprennent pas ce que tu proposes → <strong>site</strong>.</li>
-            <li>Ton serveur est vivant mais tu n'as aucune idée de ce qui s'y passe → <strong>bot</strong> (journal et statistiques).</li>
-            <li>Tu veux vendre, inscrire, ou recevoir des candidatures → <strong>site</strong>.</li>
-            <li>Tu passes tes soirées à modérer → <strong>bot</strong>, sans hésiter.</li>
-          </ul>
-          <p>Dans la grande majorité des cas, un serveur qui commence a besoin d'un bot. Un projet qui existe déjà et veut grandir a besoin d'un site.</p>
+        <section id="arreter" class="wiki-section">
+          <h2>D'abord arrêter l'hémorragie</h2>
+          <p>Avant de réparer quoi que ce soit, il faut que ça s'arrête. Tant que l'accès est ouvert, tout ce que vous reconstruisez sera redétruit.</p>
+          <p><strong>Retirez les permissions, pas le membre.</strong> Bannir le compte compromis est tentant, mais si c'est le vôtre ou celui du propriétaire, vous perdez le serveur. Commencez par retirer ses rôles à pouvoir : c'est réversible, immédiat, et ça suffit.</p>
+          <p><strong>Révoquez les invitations.</strong> Paramètres du serveur, Invitations : supprimez-les toutes. Beaucoup d'attaques s'accompagnent d'un lien permanent créé pour revenir plus tard.</p>
+          <p><strong>Passez le niveau de vérification au maximum</strong> le temps de la crise. C'est brutal et c'est voulu : vous pourrez le redescendre dans une heure.</p>
         </section>
 
-        <section id="bot" class="wiki-section">
-          <h2>Ce qu'un bot fait mieux qu'un site</h2>
-          <p>Un bot vit là où sont déjà tes membres. Il n'a rien à aller chercher, et personne n'a besoin d'ouvrir un onglet.</p>
-          <ul class="wiki-check-list">
-            <li><strong>Répéter sans fatigue.</strong> Accueillir, expliquer les règles, donner un rôle, répondre aux mêmes cinq questions.</li>
-            <li><strong>Agir vite.</strong> Supprimer un lien d'arnaque en une seconde, fermer le serveur pendant un raid. Aucune personne ne va aussi vite.</li>
-            <li><strong>Garder une trace.</strong> Qui a fait quoi, quand, et pourquoi. Sans journal, une équipe de modération se dispute sur des souvenirs.</li>
-            <li><strong>Animer.</strong> Niveaux, anniversaires, suggestions, tirages au sort : des raisons de revenir.</li>
-          </ul>
-          <p>Un bot ne convainc personne de venir, en revanche. Il retient ceux qui sont là.</p>
+        <section id="compte" class="wiki-section">
+          <h2>Reprendre le compte</h2>
+          <p>Le serveur n'a presque jamais été « piraté » : c'est un compte qui l'a été. Tant qu'il reste accessible à quelqu'un d'autre, rien n'est réglé.</p>
+          <p>Changez le mot de passe du compte concerné, et activez l'authentification à deux facteurs si ce n'est pas fait. Dans les paramètres Discord, déconnectez toutes les sessions actives — c'est ce qui coupe réellement l'accès à quelqu'un qui aurait un jeton.</p>
+          <p>Regardez aussi les applications autorisées : une attaque passe souvent par une application à laquelle on a donné accès sans y penser, après un faux lien « Nitro gratuit ».</p>
         </section>
 
-        <section id="site" class="wiki-section">
-          <h2>Ce qu'un site fait mieux qu'un bot</h2>
-          <p>Un site existe en dehors de Discord — et c'est précisément son intérêt.</p>
-          <ul class="wiki-check-list">
-            <li><strong>Se faire trouver.</strong> Un serveur Discord n'apparaît pas dans les moteurs de recherche. Une page, oui.</li>
-            <li><strong>Expliquer en grand.</strong> Une capture, trois paragraphes et un bouton convainquent mieux qu'un salon #informations que personne ne lit.</li>
-            <li><strong>Inspirer confiance.</strong> Pour une inscription, une commande ou une candidature, une page propre change le taux de réponse.</li>
-            <li><strong>Durer.</strong> Un serveur peut être supprimé, un compte peut être perdu. Une adresse à toi reste.</li>
-          </ul>
-          <p>Un site ne modère rien et ne parle à personne. Il présente.</p>
+        <section id="recuperer" class="wiki-section">
+          <h2>Ce qui se récupère, et ce qui ne se récupère pas</h2>
+          <p>Il faut le dire franchement : Discord ne restaure pas les serveurs. Il n'existe aucun bouton « annuler » et le support ne le fera pas pour vous.</p>
+          <p><strong>Les salons supprimés sont perdus</strong>, avec leurs messages. On peut recréer un salon du même nom ; son contenu ne revient pas.</p>
+          <p><strong>Les bannissements se défont.</strong> La liste des bannis est consultable, et chaque membre peut être débanni un par un. C'est long mais faisable.</p>
+          <p><strong>Les rôles se recréent</strong>, mais leur attribution est perdue : savoir qui avait quel rôle demande de l'avoir noté quelque part avant.</p>
+          <p>C'est pour cette raison que les sauvegardes faites par un bot ont de la valeur. Elles ne sauvent pas les messages — personne ne le peut — mais elles rendent la structure : salons, catégories, rôles, permissions.</p>
         </section>
 
-        <section id="deux" class="wiki-section">
-          <h2>Quand il faut vraiment les deux</h2>
-          <p>Trois cas où l'un sans l'autre ne suffit pas :</p>
-          <ol class="boutique-demande-etapes">
-            <li><strong>Tu vends quelque chose.</strong> Le site montre et encaisse, le bot livre et suit. L'un sans l'autre laisse la moitié du travail à faire à la main.</li>
-            <li><strong>Tu recrutes.</strong> Le formulaire vit sur le site, la candidature arrive dans un salon privé, et le bot prévient l'équipe.</li>
-            <li><strong>Tu organises.</strong> Le calendrier public est sur le site ; les inscriptions et les rappels sont sur Discord.</li>
-          </ol>
-          <p>C'est pour ces cas-là que les formules qui réunissent les deux existent : un bot et un site faits ensemble parlent la même langue, et il n'y a personne au milieu pour recopier.</p>
+        <section id="prevenir" class="wiki-section">
+          <h2>Empêcher que ça recommence</h2>
+          <p>Une attaque réussie révèle presque toujours la même chose : trop de gens avaient trop de droits.</p>
+          <p><strong>Comptez les administrateurs.</strong> Un serveur de mille membres n'a pas besoin de huit administrateurs. Chacun est une porte, et la sécurité du serveur vaut celle du plus négligent d'entre eux.</p>
+          <p><strong>Exigez la double authentification pour les modérateurs.</strong> Discord permet de l'imposer à tous ceux qui ont des permissions de modération : paramètres du serveur, Modération.</p>
+          <p><strong>Limitez ce qui est irréversible.</strong> Supprimer un salon, bannir en masse, modifier les rôles : ces droits n'ont pas à être donnés à tout le staff. Un modérateur a besoin d'exclure et de supprimer des messages, pas de refaire l'architecture.</p>
+          <p><strong>Surveillez les changements de permissions.</strong> Un rôle qui gagne « Administrateur » à trois heures du matin est le signal le plus fiable qu'il existe, et il arrive toujours avant les dégâts.</p>
         </section>
 
-        <section id="budget" class="wiki-section">
-          <h2>Ce que ça coûte vraiment</h2>
-          <p>Le prix de départ n'est pas le prix total. Trois lignes à regarder avant de se décider :</p>
-          <ul class="wiki-check-list">
-            <li><strong>L'hébergement.</strong> Un bot doit tourner en permanence ; un site doit rester en ligne. Compte quelques euros par mois, ou une offre gratuite avec ses limites.</li>
-            <li><strong>Les évolutions.</strong> Discord change, les hébergeurs changent, tes besoins changent. Un projet figé se casse en six mois.</li>
-            <li><strong>Le temps.</strong> Le tien. Un bot fait maison coûte des soirées ; un bot commandé coûte de l'argent. Aucun des deux n'est gratuit.</li>
-          </ul>
-          <p>Un repère honnête : un bot simple mais fini vaut mieux qu'un bot ambitieux jamais terminé. Commence petit, ajoute ce qui manque quand ça manque.</p>
-        </section>
-
-        <section id="eviter" class="wiki-section">
-          <h2>Ce qu'il vaut mieux éviter</h2>
-          <ul class="wiki-check-list">
-            <li><strong>Vingt bots pour vingt fonctions.</strong> Chacun demande des permissions, chacun peut tomber, et aucun ne parle aux autres. Deux ou trois bien choisis suffisent.</li>
-            <li><strong>Un site sans but.</strong> Une belle page qui ne demande rien au visiteur ne sert à rien. Une page utile se termine par une action : rejoindre, commander, écrire.</li>
-            <li><strong>Payer pour ce qui est gratuit.</strong> La modération, l'anti-raid, le captcha, les tickets et les sauvegardes existent gratuitement — ModBot les donne sans limite de durée. Paie pour ce qui est fait sur mesure, pas pour ce qui existe déjà.</li>
-          </ul>
-          <p>Si tu hésites encore, la <a href="boutique.html#estimer">page Boutique</a> pose deux questions et donne le prix exact de la formule qui correspond, sans engagement. Et si ton projet en sort, un devis gratuit répond avec un prix ferme.</p>
+        <section id="modbot" class="wiki-section">
+          <h2>Avec ModBot</h2>
+          <p>L'anti-nuke de ModBot surveille précisément ce qui est irréversible : suppressions de salons, créations de rôles à pouvoir, bannissements en rafale. Il peut retirer les permissions de l'auteur avant qu'il ait fini, ce qu'aucun humain prévenu par notification ne peut faire à temps.</p>
+          <p>Les sauvegardes du serveur se réimportent depuis le tableau de bord, et restituent la structure. Le détail est dans <a href="wiki-dashboard.html">la documentation du tableau de bord</a>.</p>
         </section>
         <nav class="guides-suite" aria-label="À lire ensuite">
           <h2>À lire ensuite</h2>
           <ul>
-            <li><a href="article-choisir-bot-moderation.html">Comment choisir un bot de modération Discord</a></li>
-            <li><a href="article-tickets-discord.html">Créer un système de tickets sur Discord</a></li>
-            <li><a href="article-ajouter-bot-discord.html">Comment ajouter un bot sur un serveur Discord</a></li>
+            <li><a href="article-recruter-moderateurs.html">Recruter une équipe de modération sur Discord</a></li>
+            <li><a href="article-permissions-discord.html">Les permissions Discord, expliquées simplement</a></li>
+            <li><a href="article-journal-audit-discord.html">Savoir qui a supprimé un salon : le journal d'audit Discord</a></li>
           </ul>
         </nav>
       </div>

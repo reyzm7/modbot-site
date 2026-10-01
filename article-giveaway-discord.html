@@ -10,24 +10,24 @@
        nous, rien de plus. Elle ne suit personne et ne charge rien.
        La retirer fait perdre la propriete du site dans la console. -->
   <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>Bot ou site web pour sa communauté : comment choisir — ModBot</title>
+  <title>Organiser un giveaway sur Discord sans se faire avoir — ModBot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/article-bot-ou-site.html">
+  <meta name="description" content="Un concours attire des faux comptes avant d'attirer des membres. Comment tirer au sort honnêtement, quelles conditions poser, et ce que Discord encadre.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/article-giveaway-discord.html">
   <meta property="og:site_name" content="ModBot">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/article-bot-ou-site.html">
-  <meta property="og:title" content="Bot ou site web pour sa communauté : comment choisir">
-  <meta property="og:description" content="Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.">
+  <meta property="og:url" content="https://modbot-website.vercel.app/article-giveaway-discord.html">
+  <meta property="og:title" content="Organiser un giveaway sur Discord sans se faire avoir">
+  <meta property="og:description" content="Un concours attire des faux comptes avant d'attirer des membres. Comment tirer au sort honnêtement, quelles conditions poser, et ce que Discord encadre.">
   <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Bot ou site web pour sa communauté : comment choisir">
-  <meta name="twitter:description" content="Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.">
+  <meta name="twitter:title" content="Organiser un giveaway sur Discord sans se faire avoir">
+  <meta name="twitter:description" content="Un concours attire des faux comptes avant d'attirer des membres. Comment tirer au sort honnêtement, quelles conditions poser, et ce que Discord encadre.">
   <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
@@ -45,15 +45,24 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Bot ou site web pour sa communauté : comment choisir",
-    "description": "Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.",
+    "headline": "Organiser un giveaway sur Discord sans se faire avoir",
+    "description": "Un concours attire des faux comptes avant d'attirer des membres. Comment tirer au sort honnêtement, quelles conditions poser, et ce que Discord encadre.",
     "inLanguage": "fr-FR",
-    "datePublished": "2026-09-12",
-    "dateModified": "2026-09-12",
-    "mainEntityOfPage": "https://modbot-website.vercel.app/article-bot-ou-site.html",
-    "author": { "@type": "Organization", "name": "ModBot" },
-    "publisher": { "@type": "Organization", "name": "ModBot",
-                    "logo": { "@type": "ImageObject", "url": "https://modbot-website.vercel.app/logo.png" } }
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-01",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/article-giveaway-discord.html",
+    "author": {
+      "@type": "Organization",
+      "name": "ModBot"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ModBot",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://modbot-website.vercel.app/logo.png"
+      }
+    }
   }
   </script>
 </head>
@@ -122,96 +131,71 @@
   <main class="wiki-shell section-shell">
     <article class="wiki-hero">
       <p class="eyebrow">Guide</p>
-      <h1>Bot ou site web pour sa communauté : comment choisir</h1>
-      <p>Les deux coûtent du temps et de l'argent, et ils ne servent pas à la même chose. La question n'est pas « lequel est le mieux » mais « quel problème j'ai en ce moment ». Voici comment trancher en dix minutes.</p>
-      <p class="field-help">Mis à jour le 12 septembre 2026 · 6 minutes de lecture</p>
+      <h1>Organiser un giveaway sur Discord sans se faire avoir</h1>
+      <p>Un concours mal cadré fait gagner un multicompte et gonfler votre serveur de gens partis le lendemain. Les conditions qu'on pose avant comptent plus que le lot.</p>
+      <p class="field-help">Mis à jour le 1er octobre 2026 · 6 minutes de lecture</p>
     </article>
 
     <div class="wiki-layout">
       <aside class="wiki-toc" aria-label="Sommaire de l'article">
-        <a href="#question">La bonne question</a>
-        <a href="#bot">Ce qu'un bot fait mieux</a>
-        <a href="#site">Ce qu'un site fait mieux</a>
-        <a href="#deux">Quand il faut les deux</a>
-        <a href="#budget">Ce que ça coûte vraiment</a>
-        <a href="#eviter">Ce qu'il vaut mieux éviter</a>
+        <a href="#attentes">Ce que ça apporte</a>
+        <a href="#conditions">Les conditions</a>
+        <a href="#tirage">Le tirage</a>
+        <a href="#triche">La triche</a>
+        <a href="#regles">Le cadre</a>
+        <a href="#modbot">Avec ModBot</a>
       </aside>
 
       <div class="wiki-content">
-        <section id="question" class="wiki-section">
-          <h2>La bonne question n'est pas celle qu'on croit</h2>
-          <p>« Est-ce que j'ai besoin d'un bot ou d'un site ? » n'a pas de réponse. Remplace-la par celle-ci : <strong>qu'est-ce qui me fait perdre du temps, ou qui me fait perdre des gens ?</strong></p>
-          <ul class="wiki-check-list">
-            <li>Tu répètes la même chose dix fois par jour dans le serveur → <strong>bot</strong>.</li>
-            <li>Les gens ne te trouvent pas, ou ne comprennent pas ce que tu proposes → <strong>site</strong>.</li>
-            <li>Ton serveur est vivant mais tu n'as aucune idée de ce qui s'y passe → <strong>bot</strong> (journal et statistiques).</li>
-            <li>Tu veux vendre, inscrire, ou recevoir des candidatures → <strong>site</strong>.</li>
-            <li>Tu passes tes soirées à modérer → <strong>bot</strong>, sans hésiter.</li>
-          </ul>
-          <p>Dans la grande majorité des cas, un serveur qui commence a besoin d'un bot. Un projet qui existe déjà et veut grandir a besoin d'un site.</p>
+        <section id="attentes" class="wiki-section">
+          <h2>Ce qu'un giveaway apporte vraiment</h2>
+          <p>Disons-le sans détour : un concours amène des participants, pas des membres. Dans les jours qui suivent, la majorité des arrivants repart, et c'est normal — ils sont venus pour le lot.</p>
+          <p>Ce qui reste dépend entièrement de ce qu'ils trouvent en arrivant. Un serveur vivant garde une partie des curieux ; un serveur vide n'en garde aucun. Organiser un concours avant d'avoir quelque chose à montrer, c'est payer pour un pic de statistique.</p>
+          <p>Le bon moment est l'inverse de l'intuition : quand le serveur tourne déjà.</p>
         </section>
 
-        <section id="bot" class="wiki-section">
-          <h2>Ce qu'un bot fait mieux qu'un site</h2>
-          <p>Un bot vit là où sont déjà tes membres. Il n'a rien à aller chercher, et personne n'a besoin d'ouvrir un onglet.</p>
-          <ul class="wiki-check-list">
-            <li><strong>Répéter sans fatigue.</strong> Accueillir, expliquer les règles, donner un rôle, répondre aux mêmes cinq questions.</li>
-            <li><strong>Agir vite.</strong> Supprimer un lien d'arnaque en une seconde, fermer le serveur pendant un raid. Aucune personne ne va aussi vite.</li>
-            <li><strong>Garder une trace.</strong> Qui a fait quoi, quand, et pourquoi. Sans journal, une équipe de modération se dispute sur des souvenirs.</li>
-            <li><strong>Animer.</strong> Niveaux, anniversaires, suggestions, tirages au sort : des raisons de revenir.</li>
-          </ul>
-          <p>Un bot ne convainc personne de venir, en revanche. Il retient ceux qui sont là.</p>
+        <section id="conditions" class="wiki-section">
+          <h2>Les conditions de participation</h2>
+          <p>C'est ici que tout se décide. Trois conditions font le travail :</p>
+          <p><strong>Une ancienneté de compte.</strong> Exiger que le compte Discord ait plus de trente jours élimine l'essentiel des comptes créés pour l'occasion. C'est la condition la plus efficace et la moins contestée.</p>
+          <p><strong>Une ancienneté sur le serveur.</strong> Demander d'être arrivé depuis quelques jours empêche de rejoindre, participer et partir dans la même minute.</p>
+          <p><strong>Un rôle.</strong> Réserver le concours à ceux qui ont franchi la vérification suffit souvent, et cela donne une raison de la franchir.</p>
+          <p>Annoncez-les <em>avant</em> le tirage. Une condition découverte au moment où l'on retire un lot est une accusation de triche, même quand elle est justifiée.</p>
         </section>
 
-        <section id="site" class="wiki-section">
-          <h2>Ce qu'un site fait mieux qu'un bot</h2>
-          <p>Un site existe en dehors de Discord — et c'est précisément son intérêt.</p>
-          <ul class="wiki-check-list">
-            <li><strong>Se faire trouver.</strong> Un serveur Discord n'apparaît pas dans les moteurs de recherche. Une page, oui.</li>
-            <li><strong>Expliquer en grand.</strong> Une capture, trois paragraphes et un bouton convainquent mieux qu'un salon #informations que personne ne lit.</li>
-            <li><strong>Inspirer confiance.</strong> Pour une inscription, une commande ou une candidature, une page propre change le taux de réponse.</li>
-            <li><strong>Durer.</strong> Un serveur peut être supprimé, un compte peut être perdu. Une adresse à toi reste.</li>
-          </ul>
-          <p>Un site ne modère rien et ne parle à personne. Il présente.</p>
+        <section id="tirage" class="wiki-section">
+          <h2>Tirer au sort honnêtement</h2>
+          <p>La réaction à un message est la méthode la plus simple : chacun clique, un bot tire. Elle a un défaut — n'importe qui peut réagir, y compris quelqu'un qui n'a lu aucune condition — mais elle est lisible par tous.</p>
+          <p>Ce qui compte, c'est la <strong>vérifiabilité</strong>. Annoncez le gagnant publiquement, dans le même salon, avec le nombre de participants. Un gagnant annoncé en privé, ou choisi par un membre du staff « au hasard », fait naître un soupçon qui ne s'éteint plus.</p>
+          <p>Prévoyez aussi le cas du gagnant absent : « réponse sous 48 h, sinon on retire au sort » doit être écrit avant, pas improvisé.</p>
         </section>
 
-        <section id="deux" class="wiki-section">
-          <h2>Quand il faut vraiment les deux</h2>
-          <p>Trois cas où l'un sans l'autre ne suffit pas :</p>
-          <ol class="boutique-demande-etapes">
-            <li><strong>Tu vends quelque chose.</strong> Le site montre et encaisse, le bot livre et suit. L'un sans l'autre laisse la moitié du travail à faire à la main.</li>
-            <li><strong>Tu recrutes.</strong> Le formulaire vit sur le site, la candidature arrive dans un salon privé, et le bot prévient l'équipe.</li>
-            <li><strong>Tu organises.</strong> Le calendrier public est sur le site ; les inscriptions et les rappels sont sur Discord.</li>
-          </ol>
-          <p>C'est pour ces cas-là que les formules qui réunissent les deux existent : un bot et un site faits ensemble parlent la même langue, et il n'y a personne au milieu pour recopier.</p>
+        <section id="triche" class="wiki-section">
+          <h2>Les tentatives de triche</h2>
+          <p><strong>Les multicomptes.</strong> La parade est l'ancienneté de compte, pas la surveillance : vérifier à la main cent participants est impossible, et les comptes jetables se repèrent à leur date de création.</p>
+          <p><strong>Les comptes recyclés.</strong> Un compte ancien mais inactif, acheté ou récupéré. Plus difficile à voir ; une ancienneté sur le serveur le gêne davantage que l'ancienneté du compte.</p>
+          <p><strong>La promesse d'invitation.</strong> « Invite trois amis pour participer » produit des invitations de comptes vides. Si vous comptez les parrainages, ne comptez que les invités encore présents une semaine plus tard.</p>
         </section>
 
-        <section id="budget" class="wiki-section">
-          <h2>Ce que ça coûte vraiment</h2>
-          <p>Le prix de départ n'est pas le prix total. Trois lignes à regarder avant de se décider :</p>
-          <ul class="wiki-check-list">
-            <li><strong>L'hébergement.</strong> Un bot doit tourner en permanence ; un site doit rester en ligne. Compte quelques euros par mois, ou une offre gratuite avec ses limites.</li>
-            <li><strong>Les évolutions.</strong> Discord change, les hébergeurs changent, tes besoins changent. Un projet figé se casse en six mois.</li>
-            <li><strong>Le temps.</strong> Le tien. Un bot fait maison coûte des soirées ; un bot commandé coûte de l'argent. Aucun des deux n'est gratuit.</li>
-          </ul>
-          <p>Un repère honnête : un bot simple mais fini vaut mieux qu'un bot ambitieux jamais terminé. Commence petit, ajoute ce qui manque quand ça manque.</p>
+        <section id="regles" class="wiki-section">
+          <h2>Ce que Discord et la loi encadrent</h2>
+          <p>Deux points à connaître, sans dramatiser.</p>
+          <p>Discord interdit de <strong>vendre ou monnayer</strong> l'accès à des éléments de la plateforme, et les loteries payantes n'ont rien à faire sur un serveur. Un concours gratuit avec un lot offert ne pose aucun problème.</p>
+          <p>Si vous distribuez des clés de jeu ou des codes, vérifiez d'où ils viennent : revendre ou redistribuer une clé obtenue dans un lot n'est pas toujours permis par l'éditeur, et un gagnant avec une clé morte vaut une mauvaise réputation.</p>
+          <p>Pour un lot en argent ou de valeur réelle, dites qui l'offre et dans quel délai il est envoyé. L'absence de ces deux lignes est ce qui fait ressembler un concours honnête à une arnaque.</p>
         </section>
 
-        <section id="eviter" class="wiki-section">
-          <h2>Ce qu'il vaut mieux éviter</h2>
-          <ul class="wiki-check-list">
-            <li><strong>Vingt bots pour vingt fonctions.</strong> Chacun demande des permissions, chacun peut tomber, et aucun ne parle aux autres. Deux ou trois bien choisis suffisent.</li>
-            <li><strong>Un site sans but.</strong> Une belle page qui ne demande rien au visiteur ne sert à rien. Une page utile se termine par une action : rejoindre, commander, écrire.</li>
-            <li><strong>Payer pour ce qui est gratuit.</strong> La modération, l'anti-raid, le captcha, les tickets et les sauvegardes existent gratuitement — ModBot les donne sans limite de durée. Paie pour ce qui est fait sur mesure, pas pour ce qui existe déjà.</li>
-          </ul>
-          <p>Si tu hésites encore, la <a href="boutique.html#estimer">page Boutique</a> pose deux questions et donne le prix exact de la formule qui correspond, sans engagement. Et si ton projet en sort, un devis gratuit répond avec un prix ferme.</p>
+        <section id="modbot" class="wiki-section">
+          <h2>Avec ModBot</h2>
+          <p>Le réseau de confiance de ModBot mesure l'ancienneté de compte et l'ancienneté sur le serveur, et le repérage de doubles comptes signale les arrivées suspectes — les deux signaux dont un concours a besoin.</p>
+          <p>Son parrainage ne compte un invité qu'au bout de vingt jours de présence, pour la raison expliquée plus haut. Voir <a href="wiki-verification.html">la vérification à l'arrivée</a>.</p>
         </section>
         <nav class="guides-suite" aria-label="À lire ensuite">
           <h2>À lire ensuite</h2>
           <ul>
-            <li><a href="article-choisir-bot-moderation.html">Comment choisir un bot de modération Discord</a></li>
-            <li><a href="article-tickets-discord.html">Créer un système de tickets sur Discord</a></li>
-            <li><a href="article-ajouter-bot-discord.html">Comment ajouter un bot sur un serveur Discord</a></li>
+            <li><a href="article-verifier-nouveaux-membres.html">Vérifier les nouveaux membres d'un serveur Discord</a></li>
+            <li><a href="article-arnaques-discord.html">Reconnaître les arnaques sur Discord</a></li>
+            <li><a href="article-accueillir-nouveaux-membres.html">Accueillir les nouveaux membres sur Discord</a></li>
           </ul>
         </nav>
       </div>

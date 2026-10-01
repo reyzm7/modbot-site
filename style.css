@@ -4804,6 +4804,7 @@ label:has(> input[type="checkbox"] + span) {
   --accent-hover: #4854e0;
   --accent-soft: rgba(88, 101, 242, 0.13);
   --accent-line: rgba(88, 101, 242, 0.38);
+  --lien-texte: #7c86ff;   /* 6,1 sur le fond sombre */
 
   /* Les anciens noms restent définis : tout l'existant suit la nouvelle palette */
   --purple: #5865f2;
@@ -10306,6 +10307,51 @@ body:not(.dashboard-page) .page-glow {
 .boutique-avis-carte { border: 1px solid rgba(var(--canal-clair), 0.08); border-radius: 16px;
   padding: 18px 20px; background: rgba(var(--canal-clair), 0.03); }
 .boutique-avis-note { margin: 0 0 8px; color: var(--or, #f1c40f); letter-spacing: 2px; }
+/* ── Les liens dans le corps d'une page de contenu ─────────────────────
+   « a:not([class]) » ne vise que les liens ecrits dans le texte : les
+   boutons, les cartes et le sommaire portent tous une classe et gardent
+   leur propre apparence.
+
+   Le soulignement compte autant que la couleur : il reste visible pour
+   qui ne distingue pas les teintes, et c'est la seule marque qu'un
+   lecteur reconnait sans avoir a comparer deux mots voisins. */
+.wiki-content a:not([class]) {
+  color: var(--lien-texte, #7c86ff);
+  text-decoration: underline;
+  text-decoration-color: var(--accent-line, rgba(124, 134, 255, 0.4));
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+.wiki-content a:not([class]):hover,
+.wiki-content a:not([class]):focus-visible {
+  text-decoration-color: currentColor;
+}
+
+/* ── « À lire ensuite » ────────────────────────────────────────────────
+   Un bloc discret : il ferme la page sans concurrencer sa derniere
+   section. Les couleurs passent par les canaux, comme partout. */
+.guides-suite { margin: 28px 0 0; padding: 18px 20px; border-radius: 16px;
+  border: 1px solid rgba(var(--canal-clair), 0.08);
+  background: rgba(var(--canal-clair), 0.03); }
+.guides-suite > h2 { margin: 0 0 10px; font-size: 1rem; letter-spacing: 0.4px;
+  color: var(--muted, #8a93a6); text-transform: uppercase; }
+.guides-suite ul { margin: 0; padding: 0 0 0 18px; display: grid; gap: 7px; }
+.guides-suite li { line-height: 1.45; }
+
+/* ── Les familles de guides ────────────────────────────────────────────
+   Les cartes portaient un <h2> quand elles etaient sept. A vingt-et-un
+   le titre de famille prend le <h2>, et la carte descend en <h3> : sans
+   cela un lecteur d'ecran annonce vingt-et-un titres de meme niveau sans
+   jamais dire a quelle famille ils appartiennent. */
+.guides-famille { margin: 0 0 34px; }
+.guides-famille > h2 { margin: 0 0 4px; font-size: 1.22rem; }
+.guides-famille > .field-help { margin: 0 0 16px; }
+.boutique-avis-carte h3 { margin: 0 0 8px; font-size: 1.02rem; line-height: 1.35; }
+.boutique-avis-carte h3 a { color: var(--text, #eef1f7); text-decoration: none; }
+.boutique-avis-carte h3 a:hover,
+.boutique-avis-carte h3 a:focus-visible { text-decoration: underline; }
+
 .boutique-avis-texte { margin: 0 0 12px; }
 .boutique-avis-pied { margin: 0; display: flex; flex-wrap: wrap; gap: 8px;
   font-size: 0.84rem; color: var(--text-dim, #8a93a6); }
@@ -10593,6 +10639,7 @@ body:not(.dashboard-page) .page-glow {
   --accent-hover: #3540d0;
   --accent-soft: rgba(68, 80, 230, 0.10);
   --accent-line: rgba(68, 80, 230, 0.32);
+  --lien-texte: #3540d0;   /* 6,1 sur le fond clair */
   --purple: #4450e6;
   --purple-2: #6b76ff;
   --cyan: #1d7fd4;

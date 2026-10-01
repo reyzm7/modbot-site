@@ -10,24 +10,24 @@
        nous, rien de plus. Elle ne suit personne et ne charge rien.
        La retirer fait perdre la propriete du site dans la console. -->
   <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>Bot ou site web pour sa communauté : comment choisir — ModBot</title>
+  <title>Les commandes de modération Discord expliquées — ModBot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/article-bot-ou-site.html">
+  <meta name="description" content="Exclure, bannir, rendre muet, purger : ce que fait chaque commande de modération, laquelle choisir selon la situation, et les pièges de chacune.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/article-commandes-moderation-discord.html">
   <meta property="og:site_name" content="ModBot">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/article-bot-ou-site.html">
-  <meta property="og:title" content="Bot ou site web pour sa communauté : comment choisir">
-  <meta property="og:description" content="Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.">
+  <meta property="og:url" content="https://modbot-website.vercel.app/article-commandes-moderation-discord.html">
+  <meta property="og:title" content="Les commandes de modération Discord expliquées">
+  <meta property="og:description" content="Exclure, bannir, rendre muet, purger : ce que fait chaque commande de modération, laquelle choisir selon la situation, et les pièges de chacune.">
   <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Bot ou site web pour sa communauté : comment choisir">
-  <meta name="twitter:description" content="Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.">
+  <meta name="twitter:title" content="Les commandes de modération Discord expliquées">
+  <meta name="twitter:description" content="Exclure, bannir, rendre muet, purger : ce que fait chaque commande de modération, laquelle choisir selon la situation, et les pièges de chacune.">
   <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
@@ -45,15 +45,24 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Bot ou site web pour sa communauté : comment choisir",
-    "description": "Ce qu'un bot fait mieux, ce qu'un site fait mieux, quand il faut les deux, et ce que ça coûte vraiment.",
+    "headline": "Les commandes de modération Discord expliquées",
+    "description": "Exclure, bannir, rendre muet, purger : ce que fait chaque commande de modération, laquelle choisir selon la situation, et les pièges de chacune.",
     "inLanguage": "fr-FR",
-    "datePublished": "2026-09-12",
-    "dateModified": "2026-09-12",
-    "mainEntityOfPage": "https://modbot-website.vercel.app/article-bot-ou-site.html",
-    "author": { "@type": "Organization", "name": "ModBot" },
-    "publisher": { "@type": "Organization", "name": "ModBot",
-                    "logo": { "@type": "ImageObject", "url": "https://modbot-website.vercel.app/logo.png" } }
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-01",
+    "mainEntityOfPage": "https://modbot-website.vercel.app/article-commandes-moderation-discord.html",
+    "author": {
+      "@type": "Organization",
+      "name": "ModBot"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ModBot",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://modbot-website.vercel.app/logo.png"
+      }
+    }
   }
   </script>
 </head>
@@ -122,96 +131,79 @@
   <main class="wiki-shell section-shell">
     <article class="wiki-hero">
       <p class="eyebrow">Guide</p>
-      <h1>Bot ou site web pour sa communauté : comment choisir</h1>
-      <p>Les deux coûtent du temps et de l'argent, et ils ne servent pas à la même chose. La question n'est pas « lequel est le mieux » mais « quel problème j'ai en ce moment ». Voici comment trancher en dix minutes.</p>
-      <p class="field-help">Mis à jour le 12 septembre 2026 · 6 minutes de lecture</p>
+      <h1>Les commandes de modération Discord expliquées</h1>
+      <p>Quatre commandes couvrent 95 % des situations. Le reste du travail consiste à savoir laquelle employer — et c'est là que les équipes se trompent, presque toujours dans le même sens.</p>
+      <p class="field-help">Mis à jour le 1er octobre 2026 · 7 minutes de lecture</p>
     </article>
 
     <div class="wiki-layout">
       <aside class="wiki-toc" aria-label="Sommaire de l'article">
-        <a href="#question">La bonne question</a>
-        <a href="#bot">Ce qu'un bot fait mieux</a>
-        <a href="#site">Ce qu'un site fait mieux</a>
-        <a href="#deux">Quand il faut les deux</a>
-        <a href="#budget">Ce que ça coûte vraiment</a>
-        <a href="#eviter">Ce qu'il vaut mieux éviter</a>
+        <a href="#exclusion">L'exclusion temporaire</a>
+        <a href="#expulsion">L'expulsion</a>
+        <a href="#bannissement">Le bannissement</a>
+        <a href="#purge">La purge</a>
+        <a href="#avertissement">L'avertissement</a>
+        <a href="#choisir">Laquelle choisir</a>
+        <a href="#modbot">Avec ModBot</a>
       </aside>
 
       <div class="wiki-content">
-        <section id="question" class="wiki-section">
-          <h2>La bonne question n'est pas celle qu'on croit</h2>
-          <p>« Est-ce que j'ai besoin d'un bot ou d'un site ? » n'a pas de réponse. Remplace-la par celle-ci : <strong>qu'est-ce qui me fait perdre du temps, ou qui me fait perdre des gens ?</strong></p>
-          <ul class="wiki-check-list">
-            <li>Tu répètes la même chose dix fois par jour dans le serveur → <strong>bot</strong>.</li>
-            <li>Les gens ne te trouvent pas, ou ne comprennent pas ce que tu proposes → <strong>site</strong>.</li>
-            <li>Ton serveur est vivant mais tu n'as aucune idée de ce qui s'y passe → <strong>bot</strong> (journal et statistiques).</li>
-            <li>Tu veux vendre, inscrire, ou recevoir des candidatures → <strong>site</strong>.</li>
-            <li>Tu passes tes soirées à modérer → <strong>bot</strong>, sans hésiter.</li>
-          </ul>
-          <p>Dans la grande majorité des cas, un serveur qui commence a besoin d'un bot. Un projet qui existe déjà et veut grandir a besoin d'un site.</p>
+        <section id="exclusion" class="wiki-section">
+          <h2>L'exclusion temporaire : la commande la plus utile</h2>
+          <p>Discord l'appelle « timeout ». Le membre reste sur le serveur, voit tout, et ne peut plus rien écrire ni rejoindre un salon vocal, pendant une durée que vous fixez — jusqu'à 28 jours.</p>
+          <p>C'est la bonne réponse à presque tout : une dispute qui s'envenime, quelqu'un qui écrit vite et mal, une provocation. Elle coupe l'incident net sans rien détruire, et elle expire toute seule, ce qui évite la liste de sanctions qu'on oublie de lever.</p>
+          <p>Son seul défaut est d'être silencieuse : le membre découvre qu'il est muet en essayant d'écrire. Dites-lui pourquoi, en privé ou dans le salon — une exclusion non expliquée produit un rancunier, une exclusion expliquée produit souvent des excuses.</p>
         </section>
 
-        <section id="bot" class="wiki-section">
-          <h2>Ce qu'un bot fait mieux qu'un site</h2>
-          <p>Un bot vit là où sont déjà tes membres. Il n'a rien à aller chercher, et personne n'a besoin d'ouvrir un onglet.</p>
-          <ul class="wiki-check-list">
-            <li><strong>Répéter sans fatigue.</strong> Accueillir, expliquer les règles, donner un rôle, répondre aux mêmes cinq questions.</li>
-            <li><strong>Agir vite.</strong> Supprimer un lien d'arnaque en une seconde, fermer le serveur pendant un raid. Aucune personne ne va aussi vite.</li>
-            <li><strong>Garder une trace.</strong> Qui a fait quoi, quand, et pourquoi. Sans journal, une équipe de modération se dispute sur des souvenirs.</li>
-            <li><strong>Animer.</strong> Niveaux, anniversaires, suggestions, tirages au sort : des raisons de revenir.</li>
-          </ul>
-          <p>Un bot ne convainc personne de venir, en revanche. Il retient ceux qui sont là.</p>
+        <section id="expulsion" class="wiki-section">
+          <h2>L'expulsion : rarement le bon choix</h2>
+          <p>Expulser (« kick ») retire le membre du serveur. Il peut revenir immédiatement avec n'importe quelle invitation.</p>
+          <p>Cela en fait une commande étrange : trop brutale pour un incident ordinaire, trop faible contre quelqu'un de déterminé. Elle a un usage réel et un seul — signifier clairement « pas ici » à quelqu'un qui s'est trompé d'endroit, un compte de publicité, un curieux qui n'a rien à faire là.</p>
+          <p>Contre un membre problématique qui veut rester, elle ne fait que gagner trente secondes.</p>
         </section>
 
-        <section id="site" class="wiki-section">
-          <h2>Ce qu'un site fait mieux qu'un bot</h2>
-          <p>Un site existe en dehors de Discord — et c'est précisément son intérêt.</p>
-          <ul class="wiki-check-list">
-            <li><strong>Se faire trouver.</strong> Un serveur Discord n'apparaît pas dans les moteurs de recherche. Une page, oui.</li>
-            <li><strong>Expliquer en grand.</strong> Une capture, trois paragraphes et un bouton convainquent mieux qu'un salon #informations que personne ne lit.</li>
-            <li><strong>Inspirer confiance.</strong> Pour une inscription, une commande ou une candidature, une page propre change le taux de réponse.</li>
-            <li><strong>Durer.</strong> Un serveur peut être supprimé, un compte peut être perdu. Une adresse à toi reste.</li>
-          </ul>
-          <p>Un site ne modère rien et ne parle à personne. Il présente.</p>
+        <section id="bannissement" class="wiki-section">
+          <h2>Le bannissement : ce qu'il faut savoir avant</h2>
+          <p>Le bannissement est définitif jusqu'à ce que quelqu'un le lève, et il bloque le retour. C'est la seule sanction qui règle vraiment un cas.</p>
+          <p>Deux détails comptent. <strong>La suppression des messages récents</strong> : Discord propose d'effacer en même temps les messages du membre, jusqu'à sept jours en arrière. Pour un spammeur c'est exactement ce qu'il faut ; pour un membre de longue date, cela efface aussi trois ans de conversations auxquelles d'autres répondaient, et c'est irréversible. Regardez cette case avant de valider.</p>
+          <p><strong>Le ban par identifiant</strong> : on peut bannir un compte qui n'est pas sur le serveur, en donnant son ID. C'est utile quand un harceleur annonce qu'il va venir — on le bannit avant son arrivée.</p>
+          <p>Un bannissement ne barre que le compte, pas la personne. Quelqu'un de motivé revient sous un autre pseudo dans la minute. C'est pourquoi un filtre à l'entrée vaut mieux qu'une longue liste de bannis : voir <a href="article-verifier-nouveaux-membres.html">Vérifier les nouveaux membres</a>.</p>
         </section>
 
-        <section id="deux" class="wiki-section">
-          <h2>Quand il faut vraiment les deux</h2>
-          <p>Trois cas où l'un sans l'autre ne suffit pas :</p>
-          <ol class="boutique-demande-etapes">
-            <li><strong>Tu vends quelque chose.</strong> Le site montre et encaisse, le bot livre et suit. L'un sans l'autre laisse la moitié du travail à faire à la main.</li>
-            <li><strong>Tu recrutes.</strong> Le formulaire vit sur le site, la candidature arrive dans un salon privé, et le bot prévient l'équipe.</li>
-            <li><strong>Tu organises.</strong> Le calendrier public est sur le site ; les inscriptions et les rappels sont sur Discord.</li>
-          </ol>
-          <p>C'est pour ces cas-là que les formules qui réunissent les deux existent : un bot et un site faits ensemble parlent la même langue, et il n'y a personne au milieu pour recopier.</p>
+        <section id="purge" class="wiki-section">
+          <h2>La purge de messages</h2>
+          <p>Supprimer d'un coup les N derniers messages d'un salon. Indispensable après un spam, et la commande avec laquelle on fait le plus de dégâts par accident.</p>
+          <p>Deux limites imposées par Discord, qu'aucun bot ne contourne : la suppression groupée ne fonctionne que sur les messages de <strong>moins de quatorze jours</strong>, et par lots de cent au maximum. Au-delà, il faut supprimer un par un, très lentement.</p>
+          <p>Le piège est de purger 50 messages pour en effacer 3. Préférez cibler : la plupart des bots permettent de ne supprimer que les messages d'un auteur donné, ou ceux qui contiennent un lien. Une purge large efface aussi les réponses des gens qui signalaient le problème.</p>
         </section>
 
-        <section id="budget" class="wiki-section">
-          <h2>Ce que ça coûte vraiment</h2>
-          <p>Le prix de départ n'est pas le prix total. Trois lignes à regarder avant de se décider :</p>
-          <ul class="wiki-check-list">
-            <li><strong>L'hébergement.</strong> Un bot doit tourner en permanence ; un site doit rester en ligne. Compte quelques euros par mois, ou une offre gratuite avec ses limites.</li>
-            <li><strong>Les évolutions.</strong> Discord change, les hébergeurs changent, tes besoins changent. Un projet figé se casse en six mois.</li>
-            <li><strong>Le temps.</strong> Le tien. Un bot fait maison coûte des soirées ; un bot commandé coûte de l'argent. Aucun des deux n'est gratuit.</li>
-          </ul>
-          <p>Un repère honnête : un bot simple mais fini vaut mieux qu'un bot ambitieux jamais terminé. Commence petit, ajoute ce qui manque quand ça manque.</p>
+        <section id="avertissement" class="wiki-section">
+          <h2>L'avertissement : la commande qui n'existe pas chez Discord</h2>
+          <p>Discord n'a pas de commande d'avertissement. Elle vient toujours d'un bot, et c'est pourtant la plus importante sur la durée.</p>
+          <p>Son intérêt n'est pas de prévenir le membre — un message suffirait. Il est de <strong>laisser une trace</strong>. Sans historique, chaque modérateur repart de zéro, et la même personne reçoit un premier avertissement pour la cinquième fois parce que ce n'est jamais le même qui la croise.</p>
+          <p>Un avertissement n'a de valeur que s'il est lisible par toute l'équipe, et s'il mène quelque part : trois avertissements doivent produire quelque chose, sinon ils ne sont que des messages polis.</p>
         </section>
 
-        <section id="eviter" class="wiki-section">
-          <h2>Ce qu'il vaut mieux éviter</h2>
-          <ul class="wiki-check-list">
-            <li><strong>Vingt bots pour vingt fonctions.</strong> Chacun demande des permissions, chacun peut tomber, et aucun ne parle aux autres. Deux ou trois bien choisis suffisent.</li>
-            <li><strong>Un site sans but.</strong> Une belle page qui ne demande rien au visiteur ne sert à rien. Une page utile se termine par une action : rejoindre, commander, écrire.</li>
-            <li><strong>Payer pour ce qui est gratuit.</strong> La modération, l'anti-raid, le captcha, les tickets et les sauvegardes existent gratuitement — ModBot les donne sans limite de durée. Paie pour ce qui est fait sur mesure, pas pour ce qui existe déjà.</li>
-          </ul>
-          <p>Si tu hésites encore, la <a href="boutique.html#estimer">page Boutique</a> pose deux questions et donne le prix exact de la formule qui correspond, sans engagement. Et si ton projet en sort, un devis gratuit répond avec un prix ferme.</p>
+        <section id="choisir" class="wiki-section">
+          <h2>Quelle commande pour quelle situation</h2>
+          <p><strong>Un membre énervé qui dérape</strong> : exclusion de dix minutes. Neuf fois sur dix, l'affaire est close.</p>
+          <p><strong>Un spam publicitaire</strong> : purge ciblée, puis bannissement avec suppression des messages. Ce compte n'a rien à négocier.</p>
+          <p><strong>Une récidive</strong> : avertissement, en vérifiant d'abord l'historique. C'est le nombre de lignes déjà présentes qui décide de la suite, pas l'incident du jour.</p>
+          <p><strong>Un harcèlement</strong> : bannissement immédiat, sans étape intermédiaire. L'échelle de sanctions est faite pour les maladresses, pas pour l'intention de nuire.</p>
+          <p>Le travers le plus répandu est l'inverse de ce qu'on croit : les équipes ne sanctionnent pas trop fort, elles hésitent trop longtemps. Une exclusion de dix minutes posée tôt coûte infiniment moins cher qu'une discussion de deux heures dans le salon général.</p>
+        </section>
+
+        <section id="modbot" class="wiki-section">
+          <h2>Avec ModBot</h2>
+          <p>ModBot expose ces commandes en slash, avec l'historique attaché : au moment de sanctionner, le modérateur voit ce que la personne a déjà. Les exclusions temporaires et les bans à durée se lèvent tout seuls.</p>
+          <p>La liste complète est dans <a href="wiki-commandes.html">la page des commandes</a>, et <a href="wiki-journal.html">le journal</a> conserve qui a fait quoi.</p>
         </section>
         <nav class="guides-suite" aria-label="À lire ensuite">
           <h2>À lire ensuite</h2>
           <ul>
-            <li><a href="article-choisir-bot-moderation.html">Comment choisir un bot de modération Discord</a></li>
-            <li><a href="article-tickets-discord.html">Créer un système de tickets sur Discord</a></li>
-            <li><a href="article-ajouter-bot-discord.html">Comment ajouter un bot sur un serveur Discord</a></li>
+            <li><a href="article-journal-audit-discord.html">Savoir qui a supprimé un salon : le journal d'audit Discord</a></li>
+            <li><a href="article-reglement-serveur-discord.html">Écrire le règlement d'un serveur Discord</a></li>
+            <li><a href="article-recruter-moderateurs.html">Recruter une équipe de modération sur Discord</a></li>
           </ul>
         </nav>
       </div>

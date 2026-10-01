@@ -178,7 +178,7 @@
   </url>
   <url>
     <loc>https://modbot-website.vercel.app/articles.html</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://modbot-website.vercel.app/articles.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://modbot-website.vercel.app/articles.html?lang=en"/>
@@ -191,77 +191,105 @@
     <loc>https://modbot-website.vercel.app/article-verifier-nouveaux-membres.html</loc>
     <lastmod>2026-10-01</lastmod>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://modbot-website.vercel.app/article-verifier-nouveaux-membres.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://modbot-website.vercel.app/article-verifier-nouveaux-membres.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://modbot-website.vercel.app/article-verifier-nouveaux-membres.html?lang=es"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://modbot-website.vercel.app/article-verifier-nouveaux-membres.html?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://modbot-website.vercel.app/article-verifier-nouveaux-membres.html?lang=ar"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://modbot-website.vercel.app/article-verifier-nouveaux-membres.html"/>
   </url>
   <url>
     <loc>https://modbot-website.vercel.app/article-tickets-discord.html</loc>
     <lastmod>2026-10-01</lastmod>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://modbot-website.vercel.app/article-tickets-discord.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://modbot-website.vercel.app/article-tickets-discord.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://modbot-website.vercel.app/article-tickets-discord.html?lang=es"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://modbot-website.vercel.app/article-tickets-discord.html?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://modbot-website.vercel.app/article-tickets-discord.html?lang=ar"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://modbot-website.vercel.app/article-tickets-discord.html"/>
   </url>
   <url>
     <loc>https://modbot-website.vercel.app/article-roles-reaction-discord.html</loc>
     <lastmod>2026-10-01</lastmod>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://modbot-website.vercel.app/article-roles-reaction-discord.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://modbot-website.vercel.app/article-roles-reaction-discord.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://modbot-website.vercel.app/article-roles-reaction-discord.html?lang=es"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://modbot-website.vercel.app/article-roles-reaction-discord.html?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://modbot-website.vercel.app/article-roles-reaction-discord.html?lang=ar"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://modbot-website.vercel.app/article-roles-reaction-discord.html"/>
   </url>
   <url>
     <loc>https://modbot-website.vercel.app/article-moderer-seul.html</loc>
     <lastmod>2026-10-01</lastmod>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://modbot-website.vercel.app/article-moderer-seul.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://modbot-website.vercel.app/article-moderer-seul.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://modbot-website.vercel.app/article-moderer-seul.html?lang=es"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://modbot-website.vercel.app/article-moderer-seul.html?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://modbot-website.vercel.app/article-moderer-seul.html?lang=ar"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://modbot-website.vercel.app/article-moderer-seul.html"/>
   </url>
   <url>
     <loc>https://modbot-website.vercel.app/article-proteger-serveur-discord.html</loc>
     <lastmod>2026-09-29</lastmod>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://modbot-website.vercel.app/article-proteger-serveur-discord.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://modbot-website.vercel.app/article-proteger-serveur-discord.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://modbot-website.vercel.app/article-proteger-serveur-discord.html?lang=es"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://modbot-website.vercel.app/article-proteger-serveur-discord.html?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://modbot-website.vercel.app/article-proteger-serveur-discord.html?lang=ar"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://modbot-website.vercel.app/article-proteger-serveur-discord.html"/>
   </url>
   <url>
     <loc>https://modbot-website.vercel.app/article-permissions-discord.html</loc>
     <lastmod>2026-09-29</lastmod>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://modbot-website.vercel.app/article-permissions-discord.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://modbot-website.vercel.app/article-permissions-discord.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://modbot-website.vercel.app/article-permissions-discord.html?lang=es"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://modbot-website.vercel.app/article-permissions-discord.html?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://modbot-website.vercel.app/article-permissions-discord.html?lang=ar"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://modbot-website.vercel.app/article-permissions-discord.html"/>
   </url>
   <url>
     <loc>https://modbot-website.vercel.app/article-bot-ou-site.html</loc>
     <lastmod>2026-09-29</lastmod>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://modbot-website.vercel.app/article-bot-ou-site.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://modbot-website.vercel.app/article-bot-ou-site.html?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://modbot-website.vercel.app/article-bot-ou-site.html?lang=es"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://modbot-website.vercel.app/article-bot-ou-site.html?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://modbot-website.vercel.app/article-bot-ou-site.html?lang=ar"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://modbot-website.vercel.app/article-bot-ou-site.html"/>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-ajouter-bot-discord.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-serveur-discord-pirate.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-reglement-serveur-discord.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-spam-discord.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-commandes-moderation-discord.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-organiser-salons-discord.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-accueillir-nouveaux-membres.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-giveaway-discord.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-recruter-moderateurs.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-arreter-raid-discord.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-arnaques-discord.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-choisir-bot-moderation.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-journal-audit-discord.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://modbot-website.vercel.app/article-automod-discord.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.6</priority>
   </url>
 </urlset>
