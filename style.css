@@ -11727,6 +11727,7 @@ body:not(.dashboard-page) .page-glow {
   to { transform: rotate(360deg); }
 }
 
+.scene-texte h2,
 .scene-texte h3 {
   margin: 0 0 12px;
   font-size: clamp(1.5rem, 3.4vw, 2.1rem);
@@ -12716,3 +12717,90 @@ body:not(.dashboard-page) .page-glow {
   border-top: 1px solid var(--line);
   font-weight: 600;
 }
+
+/* Le sous-titre, entre dans le <h1> ───────────────────────────────────
+   Il vivait dans un <p> juste en dessous. Le <h1> ne contenait donc que
+   « ModBot », et un nom propre seul ne dit rien a qui ne le connait pas
+   — c'est-a-dire exactement ceux qu'on cherche a atteindre. Il est
+   maintenant dans le titre, sans que rien ne bouge a l'ecran : le
+   <h1> est deja une colonne. */
+.hero-sous-titre {
+  display: block;
+  width: 100%;
+  margin: 14px 0 0;
+  color: var(--soft);
+  font-size: clamp(0.82rem, 1.7vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 520px) {
+  .hero-sous-titre { letter-spacing: 0.16em; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   TROIS QUESTIONS AVANT D'INSTALLER
+
+   L'accueil montrait ce que ModBot sait faire ; il ne disait rien a
+   quelqu'un qui ne sait pas encore s'il lui faut un bot. Ces trois
+   cartes repondent a ce qu'on se demande AVANT de choisir, et chacune
+   mene a la page qui traite le sujet pour de bon.
+
+   Elles ne vendent pas : la premiere dit meme ce qu'un bot ne sait pas
+   faire. Une page qui ne reconnait aucune limite ne se croit pas.
+   ══════════════════════════════════════════════════════════════════ */
+
+.comprendre-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 18px;
+  margin-top: clamp(22px, 3.5vw, 36px);
+}
+
+.comprendre-carte {
+  display: flex;
+  flex-direction: column;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+.comprendre-carte h3 {
+  margin: 0 0 12px;
+  color: var(--text);
+  font-size: 1.04rem;
+  line-height: 1.4;
+}
+
+.comprendre-carte p {
+  margin: 0 0 12px;
+  color: var(--soft);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+/* Le lien se cale en bas : trois cartes de hauteurs differentes
+   alignent ainsi leurs liens, et la colonne se lit comme une rangee. */
+.comprendre-lien {
+  margin-top: auto;
+  padding-top: 8px;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.comprendre-lien:hover { text-decoration: underline; }
+
+.comprendre-note {
+  margin: clamp(18px, 3vw, 28px) auto 0;
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  text-align: center;
+}
+
+.comprendre-note a { color: var(--accent); }
