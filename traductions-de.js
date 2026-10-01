@@ -1510,6 +1510,7 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "pied.accueil": "Startseite",
     "pied.commandes": "Befehle",
     "pied.guides": "Ratgeber",
+    "pied.nouveautes": "Neuerungen",
     "pied.documentation": "Dokumentation",
     "pied.support": "Discord-Support",
     "pied.statut": "Dienststatus",

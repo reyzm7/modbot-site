@@ -1531,6 +1531,7 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "pied.accueil": "الرئيسية",
     "pied.commandes": "الأوامر",
     "pied.guides": "الأدلّة",
+    "pied.nouveautes": "الجديد",
     "pied.documentation": "التوثيق",
     "pied.support": "دعم ديسكورد",
     "pied.statut": "حالة الخدمة",

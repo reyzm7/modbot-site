@@ -1531,6 +1531,7 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "pied.accueil": "Home",
     "pied.commandes": "Commands",
     "pied.guides": "Guides",
+    "pied.nouveautes": "Changelog",
     "pied.documentation": "Documentation",
     "pied.support": "Discord support",
     "pied.statut": "Service status",

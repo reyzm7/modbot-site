@@ -10,24 +10,24 @@
        nous, rien de plus. Elle ne suit personne et ne charge rien.
        La retirer fait perdre la propriete du site dans la console. -->
   <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>Accueillir les nouveaux membres sur Discord — ModBot</title>
+  <title>Nouveautés de ModBot — le journal des modifications</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="La plupart des arrivants partent dans les cinq minutes. Ce qui se joue pendant ce temps, et comment écrire un accueil qui donne envie de rester.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/article-accueillir-nouveaux-membres.html">
+  <meta name="description" content="Ce qui a changé sur ModBot et sur ce site, jour par jour. Chaque entrée vient d'une modification réellement livrée, pas d'une annonce.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/nouveautes.html">
   <meta property="og:site_name" content="ModBot">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/article-accueillir-nouveaux-membres.html">
-  <meta property="og:title" content="Accueillir les nouveaux membres sur Discord">
-  <meta property="og:description" content="La plupart des arrivants partent dans les cinq minutes. Ce qui se joue pendant ce temps, et comment écrire un accueil qui donne envie de rester.">
+  <meta property="og:url" content="https://modbot-website.vercel.app/nouveautes.html">
+  <meta property="og:title" content="Nouveautés de ModBot — le journal des modifications">
+  <meta property="og:description" content="Ce qui a changé sur ModBot et sur ce site, jour par jour. Chaque entrée vient d'une modification réellement livrée, pas d'une annonce.">
   <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Accueillir les nouveaux membres sur Discord">
-  <meta name="twitter:description" content="La plupart des arrivants partent dans les cinq minutes. Ce qui se joue pendant ce temps, et comment écrire un accueil qui donne envie de rester.">
+  <meta name="twitter:title" content="Nouveautés de ModBot — le journal des modifications">
+  <meta name="twitter:description" content="Ce qui a changé sur ModBot et sur ce site, jour par jour. Chaque entrée vient d'une modification réellement livrée, pas d'une annonce.">
   <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
@@ -44,24 +44,16 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "Accueillir les nouveaux membres sur Discord",
-    "description": "La plupart des arrivants partent dans les cinq minutes. Ce qui se joue pendant ce temps, et comment écrire un accueil qui donne envie de rester.",
-    "inLanguage": "fr-FR",
-    "datePublished": "2026-10-01",
-    "dateModified": "2026-10-01",
-    "mainEntityOfPage": "https://modbot-website.vercel.app/article-accueillir-nouveaux-membres.html",
-    "author": {
-      "@type": "Organization",
-      "name": "ModBot"
-    },
-    "publisher": {
-      "@type": "Organization",
+    "@type": "CollectionPage",
+    "name": "Nouveautés de ModBot — le journal des modifications",
+    "description": "Ce qui a changé sur ModBot et sur ce site, jour par jour. Chaque entrée vient d'une modification réellement livrée, pas d'une annonce.",
+    "url": "https://modbot-website.vercel.app/nouveautes.html",
+    "inLanguage": "fr",
+    "dateModified": "@@DATE@@",
+    "isPartOf": {
+      "@type": "WebSite",
       "name": "ModBot",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://modbot-website.vercel.app/logo.png"
-      }
+      "url": "https://modbot-website.vercel.app/"
     }
   }
   </script>
@@ -130,75 +122,14 @@
 
   <main class="wiki-shell section-shell">
     <article class="wiki-hero">
-      <p class="eyebrow">Guide</p>
-      <h1>Accueillir les nouveaux membres sur Discord</h1>
-      <p>Un arrivant décide en moins de cinq minutes s'il reste. Pendant ce temps, il cherche une seule chose : où écrire sans se tromper.</p>
-      <p class="field-help">Mis à jour le 1er octobre 2026 · 6 minutes de lecture</p>
+      <p class="eyebrow">Nouveautés</p>
+      <h1>Le journal des modifications</h1>
+      <p>Ce qui a changé sur le bot et sur ce site, jour par jour. Chaque ligne vient d'une modification réellement livrée : rien n'est annoncé ici avant d'exister.</p>
+      <p class="field-help">Mis à jour chaque nuit · @@RESUME@@</p>
     </article>
 
-    <div class="wiki-layout">
-      <aside class="wiki-toc" aria-label="Sommaire de l'article">
-        <a href="#cinq-minutes">Les cinq minutes</a>
-        <a href="#message">Le message</a>
-        <a href="#role">Le rôle d'arrivée</a>
-        <a href="#presentations">Les présentations</a>
-        <a href="#erreurs">Ce qui fait fuir</a>
-        <a href="#modbot">Avec ModBot</a>
-      </aside>
-
-      <div class="wiki-content">
-        <section id="cinq-minutes" class="wiki-section">
-          <h2>Ce qui se joue dans les cinq premières minutes</h2>
-          <p>Il arrive, voit une liste de salons, et doit comprendre seul trois choses : de quoi on parle ici, où il a le droit d'écrire, et si quelqu'un remarquera sa présence.</p>
-          <p>Si l'une des trois reste floue, il ferme l'onglet. Il ne pose pas la question — poser une question quand on vient d'arriver demande un courage que personne n'a pour un serveur qu'il ne connaît pas.</p>
-          <p>Tout l'accueil consiste donc à répondre à ces trois questions avant qu'elles soient posées.</p>
-        </section>
-
-        <section id="message" class="wiki-section">
-          <h2>Le message de bienvenue : ce qu'il doit dire</h2>
-          <p>Le message automatique le plus répandu est aussi le plus inutile : « Bienvenue @membre, nous sommes 1 247 ! » Il ne dit rien à faire.</p>
-          <p>Un bon message de bienvenue contient <strong>une action</strong>, une seule : « Présente-toi dans #présentations », ou « Choisis tes rôles dans #rôles ». Deux instructions valent mieux que zéro, cinq équivalent à zéro.</p>
-          <p>Mentionnez l'arrivant : cela crée une notification, et donc une seconde chance que le message soit lu. Mais mettez-le dans le salon général, pas dans un salon d'arrivées dédié que personne ne regarde — l'intérêt est que les autres membres voient qu'il y a quelqu'un de nouveau.</p>
-          <p>Et évitez le pavé. Un message de bienvenue de dix lignes n'est pas lu ; trois lignes le sont.</p>
-        </section>
-
-        <section id="role" class="wiki-section">
-          <h2>Donner un rôle à l'arrivée</h2>
-          <p>Un rôle attribué automatiquement règle deux problèmes d'un coup.</p>
-          <p>D'abord, il permet de <strong>cacher le serveur aux non-membres</strong> : si seuls les porteurs du rôle voient les salons, un compte qui n'a pas franchi l'accueil ne peut pas moissonner votre liste de membres.</p>
-          <p>Ensuite, il donne une couleur dans la liste, et une couleur rend visible. Un serveur où tout le monde est gris paraît impersonnel.</p>
-          <p>Attention à l'ordre des rôles : le bot ne peut attribuer que des rôles situés sous le sien. C'est la panne numéro un des rôles automatiques, et elle ne produit aucun message d'erreur.</p>
-        </section>
-
-        <section id="presentations" class="wiki-section">
-          <h2>Le salon de présentations : utile ou pas</h2>
-          <p>Il n'a d'intérêt que si quelqu'un répond. Un salon de présentations où trente messages se suivent sans une seule réponse fait exactement le contraire de ce qu'on voulait : il prouve à l'arrivant que personne ne l'a vu.</p>
-          <p>Si votre équipe ne peut pas garantir une réponse à chaque présentation, n'ouvrez pas ce salon. Dirigez les arrivants vers le général, où ils ont une chance réelle qu'on leur parle.</p>
-          <p>Si vous l'ouvrez, donnez un format : trois questions suffisent. « Présente-toi » laisse les gens devant une page blanche, et beaucoup renoncent.</p>
-        </section>
-
-        <section id="erreurs" class="wiki-section">
-          <h2>Les accueils qui font fuir</h2>
-          <p><strong>Le mur de règles.</strong> Quarante lignes à valider avant de pouvoir dire bonjour : seuls les plus motivés passent, et vous ne gardez pas que des motivés, vous gardez surtout les patients.</p>
-          <p><strong>Le message privé automatique.</strong> Il ressemble trait pour trait aux messages privés qu'on reçoit des spammeurs. Beaucoup les ont désactivés, et ceux qui les reçoivent s'en méfient.</p>
-          <p><strong>Le serveur illisible.</strong> Vingt salons, aucun indice sur celui où écrire. L'arrivant choisit mal, se fait corriger, et n'écrit plus.</p>
-          <p><strong>Le silence.</strong> Le pire de tous, et le plus facile à corriger : il suffit qu'un membre de l'équipe dise bonjour.</p>
-        </section>
-
-        <section id="modbot" class="wiki-section">
-          <h2>Avec ModBot</h2>
-          <p>ModBot envoie le message de bienvenue avec le pseudo et le compte des membres, attribue un ou plusieurs rôles à l'arrivée, et peut brider les arrivants le temps de leurs premières heures — ce qui laisse l'accueil ouvert sans l'exposer.</p>
-          <p>Les réglages sont décrits dans <a href="wiki-bienvenue.html">la page Bienvenue</a>, et <a href="wiki-roles.html">les rôles</a> expliquent l'attribution automatique.</p>
-        </section>
-        <nav class="guides-suite" aria-label="À lire ensuite">
-          <h2>À lire ensuite</h2>
-          <ul>
-            <li><a href="article-verifier-nouveaux-membres.html">Vérifier les nouveaux membres d'un serveur Discord</a></li>
-            <li><a href="article-reglement-serveur-discord.html">Écrire le règlement d'un serveur Discord</a></li>
-            <li><a href="article-giveaway-discord.html">Organiser un giveaway sur Discord sans se faire avoir</a></li>
-          </ul>
-        </nav>
-      </div>
+    <div class="journal">
+@@JOURNAL@@
     </div>
   </main>
   <footer class="footer">
@@ -214,7 +145,6 @@
         <a href="wiki.html" data-i18n="pied.commandes">Commandes</a>
         <a href="boutique.html" data-i18n="nav.boutique">Boutique</a>
         <a href="articles.html" data-i18n="pied.guides">Guides</a>
-        <a href="nouveautes.html" data-i18n="pied.nouveautes">Nouveautés</a>
       </nav>
 
       <nav class="footer-colonne" aria-label="Communauté" data-i18n-aria="pied.communaute">

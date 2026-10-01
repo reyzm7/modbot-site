@@ -1550,6 +1550,7 @@ window.MODBOT_TRANSLATIONS = {
     "pied.accueil": "Accueil",
     "pied.commandes": "Commandes",
     "pied.guides": "Guides",
+    "pied.nouveautes": "Nouveautés",
     "pied.documentation": "Documentation",
     "pied.support": "Support Discord",
     "pied.statut": "État du service",

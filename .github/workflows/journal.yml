@@ -1,0 +1,101 @@
+# Le journal des modifications, chaque nuit.
+#
+# La page « Nouveautés » se construit a partir de ce qui a ete livre :
+# l'historique des deux depots, le site et le bot. Personne n'a a penser
+# a la remplir, et rien n'y entre qui n'ait ete pousse.
+#
+# Deux crons, une garde. GitHub fait tourner ses crons en UTC et ne
+# connait pas les fuseaux : minuit a Paris tombe a 23 h UTC en hiver et
+# a 22 h UTC en ete. On declenche donc aux deux heures, et l'etape de
+# garde arrete l'execution qui n'est pas la bonne. Un seul cron aurait
+# decale la page d'une heure la moitie de l'annee — et date ses entrees
+# de la veille pendant deux heures chaque soir d'ete.
+name: Journal des modifications
+
+on:
+  schedule:
+    - cron: "10 22 * * *"
+    - cron: "10 23 * * *"
+  workflow_dispatch:
+    inputs:
+      jours:
+        description: "Combien de jours relire (defaut 2)"
+        required: false
+        default: "2"
+
+permissions:
+  contents: write
+
+concurrency:
+  # Deux executions qui se croisent ecriraient la meme page en meme
+  # temps, et la seconde pousserait sur un depot qui a bouge.
+  group: journal
+  cancel-in-progress: false
+
+jobs:
+  journal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Est-il minuit a Paris ?
+        id: heure
+        run: |
+          # Lance a la main, on ne verifie rien : c'est voulu.
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "ok=oui" >> "$GITHUB_OUTPUT"
+            echo "Lance a la main."
+            exit 0
+          fi
+          heure=$(TZ=Europe/Paris date +%H)
+          if [ "$heure" = "00" ]; then
+            echo "ok=oui" >> "$GITHUB_OUTPUT"
+            echo "Il est 00 h a Paris : on ecrit."
+          else
+            echo "ok=non" >> "$GITHUB_OUTPUT"
+            echo "Il est ${heure} h a Paris : ce n'est pas le bon cron, on s'arrete."
+          fi
+
+      - name: Le site
+        if: steps.heure.outputs.ok == 'oui'
+        uses: actions/checkout@v4
+        with:
+          path: modbot-site
+          # Le generateur lit « git log » : sans profondeur, il ne verrait
+          # qu'un seul commit et la page serait vide tous les jours.
+          fetch-depth: 0
+
+      # Les nouveautes du bot interessent plus les lecteurs que celles du
+      # site. Il est pose a cote, comme le fait deja la suite de tests.
+      - name: Le bot, a cote
+        if: steps.heure.outputs.ok == 'oui'
+        uses: actions/checkout@v4
+        with:
+          repository: reyzm7/modbot
+          path: modbot
+          fetch-depth: 0
+
+      - name: Ecrire la page
+        if: steps.heure.outputs.ok == 'oui'
+        working-directory: modbot-site
+        run: |
+          jours="${{ github.event.inputs.jours }}"
+          [ -z "$jours" ] && jours=2
+          node outils/journal.js --jours "$jours"
+
+      - name: Pousser si quelque chose a change
+        if: steps.heure.outputs.ok == 'oui'
+        working-directory: modbot-site
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Rien de neuf : aucune modification depuis hier."
+            exit 0
+          fi
+          git config user.name "journal ModBot"
+          git config user.email "noreply@github.com"
+          git add nouveautes.html outils/journal.json sitemap.xml
+          # « [journal] » en tete : le generateur ecarte ses propres
+          # commits, sans quoi la page parlerait d'elle-meme chaque jour.
+          git commit -m "[journal] Les nouveautes du $(TZ=Europe/Paris date +%d/%m/%Y)"
+          # Le site a pu bouger entre le checkout et maintenant.
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "Pousse."

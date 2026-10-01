@@ -1,0 +1,1412 @@
+{
+  "jours": [
+    {
+      "date": "2026-10-01",
+      "entrees": [
+        {
+          "depot": "site",
+          "sha": "12c1bb4",
+          "titre": "Quatorze guides, et des liens qu'on voit enfin",
+          "detail": "Quatorze pages ecrites sur des questions que les gens tapent : ajouter un bot, recuperer un serveur pirate, ecrire un reglement, arreter le spam, les commandes de moderation, organiser les salons, accueillir les arrivants, tenir un giveaway, recruter une equipe, arreter un raid, reconnaitre les…",
+          "etiquettes": [
+            "Guides",
+            "Référencement"
+          ],
+          "fichiers": 24
+        },
+        {
+          "depot": "site",
+          "sha": "84c6026",
+          "titre": "Les cinq langues existent enfin pour les moteurs",
+          "detail": "Le site se traduisait dans le navigateur sans changer d'adresse. Une seule URL existait donc, et quatre langues sur cinq n'existaient pour personne d'autre que leurs lecteurs : ni Google, ni un lien partage, ni un historique. Quatre marches entiers invisibles.",
+          "etiquettes": [
+            "Guides",
+            "Traductions"
+          ],
+          "fichiers": 32
+        },
+        {
+          "depot": "site",
+          "sha": "eb669f4",
+          "titre": "L'accueil repond a des questions, au lieu de se presenter",
+          "detail": "Mesure avant d'y toucher : deux cent soixante-huit mots dans le HTML servi, deux titres de section, trois liens vers le reste du site. C'est la page qui vise « bot de protection Discord ».",
+          "etiquettes": [
+            "Traductions",
+            "Affichage"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "site",
+          "sha": "459d2ea",
+          "titre": "Le wiki se decoupe en huit pages, et s'ouvre sur une affiche",
+          "detail": "La documentation tenait sur une page de quatre cents lignes, avec un sommaire lateral. Ce sommaire suppose qu'on sache deja le nom de ce qu'on cherche — c'est justement ce qu'on ignore en ouvrant une documentation pour la premiere fois.",
+          "etiquettes": [
+            "Guides",
+            "Traductions"
+          ],
+          "fichiers": 23
+        },
+        {
+          "depot": "site",
+          "sha": "c291dc8",
+          "titre": "Quatre guides de plus, sur des questions qu'on tape vraiment",
+          "detail": "« ModBot » ne se cherche que par ceux qui connaissent deja le nom. « Comment creer un systeme de tickets sur Discord » se cherche par des gens qui ne nous connaissent pas — et c'est la seule facon d'etre trouve par quelqu'un de nouveau.",
+          "etiquettes": [
+            "Guides",
+            "Référencement"
+          ],
+          "fichiers": 6
+        },
+        {
+          "depot": "site",
+          "sha": "99603c1",
+          "titre": "Quatre pages avaient un nom pour titre, pas un titre",
+          "detail": "« Wiki ModBot » : onze caracteres la ou Google en affiche soixante, et aucun mot de ce que les gens tapent. « Boutique ModBot », quinze. « Partenaires ModBot », dix-huit.",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "site",
+          "sha": "f48e109",
+          "titre": "Le sitemap dit les vraies dates",
+          "detail": "Les douze pages portaient une date ecrite a la main, et toutes mentaient : le 12 septembre pour des pages remaniees depuis, le 20 pour la page d'etat modifiee ce matin.",
+          "etiquettes": [
+            "Référencement"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "site",
+          "sha": "4db7485",
+          "titre": "La FAQ parle aux moteurs, et le titre dit ce qu'on cherche",
+          "detail": "Le titre etait « ModBot - Protection Discord ». Il ne contenait pas l'expression qu'on vise — « bot de protection Discord » — et un titre se lit d'abord par un humain dans une liste de dix resultats. Celui-ci dit ce que c'est, pour quoi, et pour qui.",
+          "etiquettes": [],
+          "fichiers": 1
+        },
+        {
+          "depot": "site",
+          "sha": "d0d283c",
+          "titre": "Le reglage des premieres heures, dans le dashboard (n°18)",
+          "detail": "Le bot sait retenir les arrivants depuis le redemarrage de ce soir ; il lui manquait de quoi le regler. Une case, une duree, trois motifs qu'on peut decocher separement — un serveur de graphistes veut les fichiers des le premier jour mais pas les liens, un serveur de jeu l'inverse — et le choix de…",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "site",
+          "sha": "16e1c58",
+          "titre": "Tous les messages du bot sur un ecran (n°24)",
+          "detail": "Chaque rubrique montrait deja son apercu. Mais pour verifier ce que le serveur verra, il fallait ouvrir sept rubriques l'une apres l'autre, et on ne les voyait jamais ensemble.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "site",
+          "sha": "64e2ead",
+          "titre": "La page d'etat montre la disponibilite jour par jour (n°30)",
+          "detail": "Les quatre chiffres du haut disent l'etat d'aujourd'hui et la moyenne de la periode. Ni l'un ni l'autre ne dit QUAND : quatre heures de panne il y a trois semaines et quatre heures hier donnent la meme moyenne, et ne se valent pas du tout pour qui hesite a payer.",
+          "etiquettes": [
+            "Traductions",
+            "Affichage"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "bot",
+          "sha": "ca742e9",
+          "titre": "La quarantaine des arrivants : ni lien ni fichier les premieres heures",
+          "detail": "Le compte qui vient poster son arnaque n'attend pas. Il rejoint, il ecrit, il part — souvent en moins d'une minute. Les filtres du serveur le voient passer comme n'importe quel membre ",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 4
+        }
+      ]
+    },
+    {
+      "date": "2026-09-30",
+      "entrees": [
+        {
+          "depot": "site",
+          "sha": "fb75258",
+          "titre": "La barre du haut reparee, le badge discret, le logo dans les apercus",
+          "detail": "La barre du haut etait cassee, et c'est moi qui l'avais cassee. Ce n'est pas une rangee souple mais une GRILLE a trois colonnes : « auto » pour la marque, « minmax(240px, 420px) » taillee pour le selecteur de serveur, « auto » pour les boutons.",
+          "etiquettes": [
+            "Tableau de bord"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "site",
+          "sha": "52e8ff3",
+          "titre": "Le menu se resserre, et l'accueil dit par ou commencer",
+          "detail": "Le menu : vingt-sept rubriques a quarante-deux pixels de haut, six pixels entre chacune, un carre colore par icone. Mille sept cent quatre-vingts pixels de liste pour sept cent quarante d'ecran, et chaque entree criait aussi fort que sa voisine.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 9
+        },
+        {
+          "depot": "site",
+          "sha": "7397c91",
+          "titre": "Le mode clair est un gris, plus un mur de blanc",
+          "detail": "Le commentaire disait deja « blanc casse, jamais blanc pur », et pourtant les cartes etaient en #ffffff et la page a quatre-vingt-dix- sept pour cent de clarte. Tout descend d'un cran.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "site",
+          "sha": "1cbc291",
+          "titre": "Un astre plus grand, et un ciel entier derriere lui",
+          "detail": "L'astre occupait onze pour cent de la largeur : a la vitesse ou il traverse, cela faisait une pastille qu'on devinait. Seize pour cent, et c'est un astre — cent douze pixels au minimum, meme sur un telephone.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "site",
+          "sha": "321dfa1",
+          "titre": "L'astre prend le temps de traverser",
+          "detail": "Il filait : deux cent trente millisecondes d'un bord a l'autre, le temps de comprendre qu'il se passait quelque chose, pas celui de le regarder. Le voile allait a vitesse constante et l'astre avec lui.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "site",
+          "sha": "229647f",
+          "titre": "Un astre traverse l'ecran quand on change de theme",
+          "detail": "Le site basculait d'une couleur a l'autre en une image. Sur un ecran entier, un blanc qui remplace un noir pique les yeux, et surtout il ne raconte rien : on voyait un clignotement, pas un lever de jour.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "site",
+          "sha": "c74c57c",
+          "titre": "La vague ondule, et les scenes montrent ce qu'elles racontent",
+          "detail": "La vague glissait : un dessin fige qui defile de cote, si lent soit-il, reste un tapis. Une onde change de forme pendant qu'elle avance. Trois couches la composent maintenant, et chacune tient en deux elements — le trace glisse, le cadre qui le porte monte et s'ecrase.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "site",
+          "sha": "b569d58",
+          "titre": "La chute d'abord, l'effacement ensuite : une animation, plus deux transitions",
+          "detail": "Deux transitions ne savent pas faire « d'abord ceci, ensuite cela ». On peut retarder la seconde, elles se chevauchent quand meme : la chute met le gros de son deplacement a la fin, justement la ou l'effacement a commence.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "site",
+          "sha": "c5db1b1",
+          "titre": "Un seul bouton de menu sur telephone, et la chute se voit",
+          "detail": "La barre du haut portait deux jeux de trois traits cote a cote : les gris ouvraient le tiroir de navigation, les dores le menu « Acces ». Le meme dessin deux fois, pour deux listes differentes.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "site",
+          "sha": "3cc4ae8",
+          "titre": "La chute revient au site, le navigateur n en voulait pas",
+          "detail": "« Les animations de fondu marchent quand on revient au site, pas quand on va sur une autre page. » La video, lue image par image, montre autre chose : l accueil disparait d un coup, une image entierement noire, puis la page suivante arrive. Ce n etait pas une transition mais un saut.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "site",
+          "sha": "d8321f7",
+          "titre": "Les scenes se resserrent",
+          "detail": "La video le montrait sans discussion : etalee sur toute la largeur, une scene laissait trois cents pixels de vide au bout. Un cercle de 268 px d un cote, deux lignes de texte de l autre, et rien entre les deux qui dise qu ils vont ensemble.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "site",
+          "sha": "83966f1",
+          "titre": "Les scenes sont habitees",
+          "detail": "Un pictogramme qui grossit et retrecit au milieu d un cercle : ca bouge, mais ca ne raconte rien. Le site pris en modele ne montre pas des symboles, il montre une scene — un membre et le bot, face a face, et de petites choses qui arrivent autour d eux.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "site",
+          "sha": "227ada5",
+          "titre": "Le mouvement lent survit au mode calme",
+          "detail": "« L animation de la vague ne marche pas et les autres aussi. » Elles marchaient : le systeme demandait des animations reduites, et le site le prenait au pied de la lettre. Sur cette machine — la mesure vient de son propre navigateur — il ne restait pas un mouvement, pas meme la vague.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "site",
+          "sha": "659ced9",
+          "titre": "L accueil va a l essentiel, et ce qui bouge raconte",
+          "detail": "Trois blocs s en vont. Les quatre cartes restantes redisaient en deux lignes ce que les scenes montrent. Le titre « Tout ce qu il faut pour tenir un serveur propre » annoncait une liste, et il n y a plus de liste.",
+          "etiquettes": [
+            "Traductions",
+            "Affichage"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "site",
+          "sha": "40fedc5",
+          "titre": "L accueil par scenes, et un bouton qui avait disparu",
+          "detail": "Le bouton clair/sombre n etait plus qu un rectangle de vingt pixels. Deux causes, toutes deux de mon fait. Le nettoyage automatique du style, au lot precedent, avait laisse quatre « / » orphelins la ou il coupait un commentaire ",
+          "etiquettes": [
+            "Traductions",
+            "Affichage"
+          ],
+          "fichiers": 9
+        }
+      ]
+    },
+    {
+      "date": "2026-09-29",
+      "entrees": [
+        {
+          "depot": "site",
+          "sha": "724d8ba",
+          "titre": "La page qu on quitte s en va par le bas",
+          "detail": "Le fondu croise ne racontait rien : les deux pages se melangeaient au meme instant, et l oeil ne savait pas laquelle partait. Celle qu on quitte descend maintenant de sept centiemes de hauteur d ecran en s effacant, avec une courbe qui accelere — elle tombe plutot qu elle ne glisse.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "site",
+          "sha": "3d14c0e",
+          "titre": "Une CI qui dit ce qui a casse",
+          "detail": "« Process completed with exit code 1 » : c est tout ce que l onglet Actions montrait, le journal complet demandant une authentification pour etre lu.",
+          "etiquettes": [
+            "Outillage",
+            "Tests"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "site",
+          "sha": "a3899e5",
+          "titre": "Le blanc entre deux pages",
+          "detail": "« L animation n est pas pareille » : elle ne pouvait pas l etre. Le site pris en modele est une application d une seule page — le document ne se recharge jamais, donc rien ne peut clignoter entre deux ecrans.",
+          "etiquettes": [
+            "Guides",
+            "Tableau de bord"
+          ],
+          "fichiers": 16
+        },
+        {
+          "depot": "site",
+          "sha": "49f8f78",
+          "titre": "On quitte une page sans eteindre l ecran",
+          "detail": "La video montrait ce qu il fallait faire : chez le site pris en modele, un clic dans la barre du haut fait fondre le CONTENU, et lui seul. L en-tete ne bouge pas d un cheveu, le fond reste allume, et la page suivante arrive dans le meme mouvement.",
+          "etiquettes": [
+            "Guides",
+            "Tableau de bord"
+          ],
+          "fichiers": 16
+        },
+        {
+          "depot": "site",
+          "sha": "565bccf",
+          "titre": "La boutique va droit au but, et les boutons repondent au doigt",
+          "detail": "Six sections de la boutique disaient la meme chose que les cartes : le tableau comparatif reprenait leurs prix, les exemples les reprenaient encore, les atouts repetaient ce que chaque carte annonce, et le calculateur refaisait l addition que la fenetre de commande affiche de toute facon.",
+          "etiquettes": [
+            "Traductions",
+            "Affichage"
+          ],
+          "fichiers": 9
+        },
+        {
+          "depot": "site",
+          "sha": "49185ab",
+          "titre": "Le tableau de bord se tient sur un telephone",
+          "detail": "« Y a meme pas de bouton pour changer de rubrique. » Il y en avait un, mais il restait en haut de la page : passe le premier ecran de reglages, il sortait du champ et plus rien ne permettait d aller ailleurs qu en remontant tout en haut. Il colle maintenant sous le bord superieur et suit la lecture.",
+          "etiquettes": [
+            "Tableau de bord",
+            "Affichage"
+          ],
+          "fichiers": 5
+        },
+        {
+          "depot": "site",
+          "sha": "6b3075d",
+          "titre": "Le menu d acces rejoint le bouton clair/sombre",
+          "detail": "Ni l un ni l autre ne mene quelque part : tous deux reglent la facon dont on lit le site. Au bout des liens, le menu se faisait passer pour une destination de plus. Les deux pastilles sont desormais rangees ensemble a droite de la barre, memes diametre et forme ronde.",
+          "etiquettes": [
+            "Guides",
+            "Affichage"
+          ],
+          "fichiers": 15
+        },
+        {
+          "depot": "site",
+          "sha": "1e15b2c",
+          "titre": "La tete d affiche garde le logo et le nom, sans le decor",
+          "detail": "La banniere entiere posait un rectangle et sa fumee au milieu de la page. Il ne reste que le logo rond et le nom, avec la signature en",
+          "etiquettes": [
+            "Traductions",
+            "Affichage"
+          ],
+          "fichiers": 9
+        },
+        {
+          "depot": "site",
+          "sha": "790a749",
+          "titre": "Une vraie barre entre la page et son bas de page",
+          "detail": "Quatre pixels se lisaient comme un lisere, pas comme une separation : l oeil continuait tout droit. La barre passe a dix pixels, opaque, avec la lueur violette qui la detache du fond.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "site",
+          "sha": "22f4360",
+          "titre": "Le tableau de bord tient sur un telephone, et le pied a sa couleur",
+          "detail": "LE TELEPHONE. `dashboard.css` est charge APRES `style.css` : ses regles sans media query ecrasaient tout le responsive ecrit en face. Resultat, sous 760 px ",
+          "etiquettes": [
+            "Tableau de bord",
+            "Affichage"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "site",
+          "sha": "29421e2",
+          "titre": "Le guide replie ne laisse plus de reste dans le tableau de bord",
+          "detail": "« pageerror: guide is not defined » : le bloc qui memorisait son ouverture visait un element retire de la page. C est ce qui faisait rougir test_parcours depuis deux lots — et l annotation ajoutee juste avant a permis de le lire.",
+          "etiquettes": [],
+          "fichiers": 1
+        },
+        {
+          "depot": "site",
+          "sha": "21a5678",
+          "titre": "L echec du parcours laisse une annotation",
+          "detail": "Le journal d un run demande une authentification : un echec de test_parcours ne disait donc rien de ce qui avait casse. Le workflow du bot fait deja ainsi.",
+          "etiquettes": [
+            "Outillage"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "site",
+          "sha": "de731f0",
+          "titre": "La banniere en tete, une barre plus courte, un pied opaque",
+          "detail": "LA TETE D AFFICHE. Le nom etait ecrit en lettres : la banniere le dit mieux, avec le logo et la signature d un seul tenant. Le <h1> reste — c est lui que lisent les moteurs et les lecteurs d ecran — mais il porte l image, dont les bords se fondent dans le fond anime plutot que d y coller un…",
+          "etiquettes": [
+            "Traductions",
+            "Guides"
+          ],
+          "fichiers": 28
+        }
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "entrees": [
+        {
+          "depot": "site",
+          "sha": "4889829",
+          "titre": "Le parcours ne visite plus une page qui redirige",
+          "detail": "premium.html mene desormais a la rubrique Premium du tableau de bord : le parcours l ouvrait comme une page, et n y trouvait plus de contenu.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "site",
+          "sha": "b1b38cc",
+          "titre": "Le tableau de bord en cartes, et le Premium avec lui",
+          "detail": "L ACCUEIL. Vingt-six rubriques, par famille, a plat : on voit ce que le bot sait faire sans derouler un menu. Les cartes reprennent l icone du menu et la phrase que le guide portait deja — un guide replie par defaut, que personne n ouvrait.",
+          "etiquettes": [
+            "Traductions",
+            "Guides"
+          ],
+          "fichiers": 23
+        },
+        {
+          "depot": "site",
+          "sha": "102f331",
+          "titre": "Le pied de page dit « Dashboard », comme sa traduction",
+          "detail": "test_derives croise chaque texte ecrit en dur avec la valeur francaise de sa clef : « Tableau de bord » n etait pas « Dashboard ».",
+          "etiquettes": [
+            "Guides"
+          ],
+          "fichiers": 14
+        },
+        {
+          "depot": "site",
+          "sha": "94488d4",
+          "titre": "Le nouveau logo, et un vrai pied de page sur chaque page",
+          "detail": "LE LOGO. Le cercle violet remplace l ancienne marque partout : en-tete, favicon (trois tailles dans le .ico), icone iOS, apercu des reseaux sociaux. Il est DECOUPE en rond a la source — l image d origine a un fond noir opaque, qui faisait un carre noir sur le fond sombre du site.",
+          "etiquettes": [
+            "Traductions",
+            "Guides"
+          ],
+          "fichiers": 31
+        },
+        {
+          "depot": "site",
+          "sha": "4f2eb3a",
+          "titre": "Un apercu partout ou le bot ecrit un message",
+          "detail": "Un message qu on ecrit dans un champ ne ressemble a rien tant qu on ne l a pas vu dans Discord. On decouvrait l accueil du courrier prive en ecrivant au bot depuis un autre compte, et l annonce de niveau en attendant qu un membre monte de niveau — c est-a-dire qu on ne le relisait jamais.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 9
+        },
+        {
+          "depot": "site",
+          "sha": "8a60dd0",
+          "titre": "Voir le tableau de bord avant d inviter le bot",
+          "detail": "« A quoi ca ressemble ? » est la question qu on se pose AVANT d inviter un bot sur son serveur, et la seule reponse qu on avait etait des captures d ecran. Un bouton sur l ecran de connexion ouvre desormais le VRAI tableau de bord, rempli de donnees inventees ",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 12
+        },
+        {
+          "depot": "site",
+          "sha": "ad42ae0",
+          "titre": "Partir d un modele : les reglages de depart, en un clic",
+          "detail": "Vingt-sept rubriques, c est beaucoup pour qui vient d inviter le bot. La plupart n en ouvrent aucune : le bot reste muet, et on le retire en croyant qu il ne sert a rien.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "bot",
+          "sha": "46743bc",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "e914a23",
+          "titre": "Cinq modeles de serveur, poses en un clic",
+          "detail": "Vingt-sept rubriques de reglages, c est beaucoup pour quelqu un qui vient d inviter le bot. La plupart n en ouvrent aucune : le bot reste muet, et on le retire en croyant qu il ne sert a rien.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        }
+      ]
+    },
+    {
+      "date": "2026-09-27",
+      "entrees": [
+        {
+          "depot": "site",
+          "sha": "d8dbec1",
+          "titre": "Une rubrique Historique : qui a change quoi, et comment le remettre",
+          "detail": "Deux questions reviennent sur tout serveur a plusieurs administrateurs : « qui a coupe l anti-spam ? » et « c etait quoi, avant ? ». La seconde est la pire — on sait qu on a casse quelque chose, on ne sait plus quoi",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "site",
+          "sha": "1f8012d",
+          "titre": "Des boutons plutot que des reactions, au choix du serveur",
+          "detail": "Une reaction-role casse sans bruit le jour ou l emoji du serveur est retire, et se rate au doigt sur telephone. Un interrupteur dans la rubrique Roles publie le panneau avec des boutons : chacun porte son libelle, et un clic donne ou reprend le role.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 7
+        },
+        {
+          "depot": "site",
+          "sha": "d92d8e2",
+          "titre": "Les mentions de masse se reglent, et le wiki cite /sondage",
+          "detail": "Un interrupteur avec les autres protections, et le nombre de mentions tolerees a cote des seuils du message repete.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "site",
+          "sha": "7678977",
+          "titre": "Chercher un reglage, et un bouton Enregistrer qui ne fuit plus",
+          "detail": "LA RECHERCHE. Vingt-sept rubriques : retrouver « la pause entre deux messages » demandait de se souvenir qu elle vit dans le Modmail, et de l ouvrir pour verifier.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "site",
+          "sha": "709e128",
+          "titre": "Un courrier sans nouvelle se ferme tout seul, et ca se regle",
+          "detail": "Sept jours par defaut, zero pour ne jamais fermer. Le fil s archive, le membre est prevenu, et il rouvre un courrier neuf s il reecrit.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 7
+        },
+        {
+          "depot": "site",
+          "sha": "77b5245",
+          "titre": "La pastille du menu s en va",
+          "detail": "Elle disait si le modmail tournait sans ouvrir la rubrique. Retiree a la demande : l entree de menu retrouve sa forme d origine.",
+          "etiquettes": [
+            "Tableau de bord"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "site",
+          "sha": "bfa49f2",
+          "titre": "Le suivi des pseudos se coupe, et la confidentialite le dit",
+          "detail": "Un interrupteur dans la rubrique Securite — actif par defaut, comme le reste de la protection. La page de confidentialite gagne sa phrase : cinq noms abandonnes, avec leur date, pour que l equipe reconnaisse quelqu un qui s est rebaptise.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 9
+        },
+        {
+          "depot": "site",
+          "sha": "4f22935",
+          "titre": "Les reponses toutes faites, et le rappel de ce qui traine",
+          "detail": "Deux cartes dans la rubrique Modmail. Les reponses : un nom, un texte, et elles s envoient ensuite avec /reponse — dans un courrier, dans un ticket, ou ailleurs. Le meme nom ecrit autrement remplace l ancienne plutot que d en faire deux.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "site",
+          "sha": "8f03659",
+          "titre": "Le message repete se regle depuis la rubrique Securite",
+          "detail": "Un interrupteur avec les autres protections, et trois seuils a cote de ceux de l anti-raid : combien de salons avant de retirer, sur quelle fenetre, et la longueur en dessous de laquelle on ne compte pas — « ok » se dit dans tous les salons sans etre une publicite.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 7
+        },
+        {
+          "depot": "site",
+          "sha": "d43e4bd",
+          "titre": "La photo de profil, ou le logo — jamais une image cassee",
+          "detail": "L avatar du compte etait pose sans filet : une photo de profil changee depuis la connexion laisse son ancienne adresse sans reponse, et le navigateur dessine alors sa petite image dechiree a la place du visage. On retombe desormais sur le logo.",
+          "etiquettes": [],
+          "fichiers": 1
+        },
+        {
+          "depot": "site",
+          "sha": "49ed61a",
+          "titre": "Trois reglages d affichage, mesures dans le navigateur",
+          "detail": "L ENTREE DE MENU. Une entree est une grille de DEUX colonnes, l icone et le libelle. La pastille d etat, posee comme troisieme cellule, tombait a la ligne suivante et rallongeait le bouton : « Modmail » mesurait plus haut que ses voisins. Elle se pose maintenant par dessus, a droite.",
+          "etiquettes": [
+            "Tableau de bord",
+            "Affichage"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "site",
+          "sha": "bd67f8e",
+          "titre": "L etat du modmail se voit depuis le menu",
+          "detail": "Une pastille sur l entree « Modmail » : verte quand le module tourne, eteinte quand il dort. On sait si le courrier est ouvert sans entrer dans la rubrique — et le clic mene a l interrupteur.",
+          "etiquettes": [
+            "Tableau de bord"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "site",
+          "sha": "a1d8afd",
+          "titre": "Les logos suivent leur coque, et le modmail pose ses conditions",
+          "detail": "LE BUG D AFFICHAGE. Une vignette de serveur mesure 72 px sur une carte, 32 px dans la barre, 30 px dans le selecteur, 22 px dans le resume — mais l image restait figee a 72 px partout. La coque n en laissait voir qu un morceau agrandi, et les initiales du fond transparaissaient autour ",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 9
+        },
+        {
+          "depot": "site",
+          "sha": "2b607a3",
+          "titre": "Le mur se regle, et le wiki cite /mur et /mesdonnees",
+          "detail": "La reaction qui compte se choisit : un emoji, ou un emoji du serveur. Un mot ou une lettre ne compte pas — personne ne reagit avec « x ». Des salons peuvent etre mis de cote : un salon de tests n a pas a remplir la vitrine.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "bot",
+          "sha": "3b026e8",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "15737ea",
+          "titre": "L historique des changements de configuration, et le retour arriere",
+          "detail": "Deux questions reviennent sur tout serveur a plusieurs administrateurs : « qui a coupe l anti-spam ? » et « c etait quoi, avant ? ». La seconde est la pire — on sait qu on a casse quelque chose, on ne sait plus quoi",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 5
+        },
+        {
+          "depot": "bot",
+          "sha": "b5ffc35",
+          "titre": "L echelle n a plus de duree a elle, et le test le dit",
+          "detail": "Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "bot",
+          "sha": "9da9ca5",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "e478bdd",
+          "titre": "Un seul compteur de sanctions, la ou il y en avait deux",
+          "detail": "L echelle — celle qui decide entre un avertissement, une exclusion et un bannissement — comptait dans data.json. Le casier, celui que lisent /infractions, /mesdonnees et le tableau de bord, comptait dans le sien. Deux magasins pour une seule question, et deux reponses des qu on en touchait un seul :",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "4905020",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "d7babc7",
+          "titre": "Le niveau sort en carte, et les roles se prennent au bouton",
+          "detail": "LA CARTE. /niveau rendait un embed : ca se lit et ca s oublie. Une carte se partage — c est tout l interet d un systeme de niveaux, et elle manquait. Avatar rond, barre de progression, rang.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "bot",
+          "sha": "630fd04",
+          "titre": "Une huitieme sanction porte le bouton d annulation",
+          "detail": "Les mentions de masse rejoignent les sept autres. La suite qui garde ce compte l a vu tout de suite.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "bot",
+          "sha": "168de35",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "7cba69b",
+          "titre": "Les mentions de masse, les roles qui expirent, et le sondage",
+          "detail": "LES MENTIONS. Le bot voyait @everyone ; il ne COMPTAIT pas les mentions. Pinguer vingt-cinq personnes d un coup passait entierement — c est la brimade la plus simple de Discord, celle qui fait quitter un serveur sans qu aucune regle n ait ete enfreinte.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "7927194",
+          "titre": "Une sixieme issue passe par la porte du choix",
+          "detail": "Le bouton « C est regle » du membre repond comme les cinq autres : en remplacant le message, jamais en ephemere. La suite comptait encore",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "bot",
+          "sha": "0fc3e63",
+          "titre": "Trois suites comptaient encore quatre rubriques au rapport",
+          "detail": "Le rapport en a sept depuis le courrier, le mur et les departs. Les deux suites qui gardent cette liste la relisent maintenant depuis le module, et verifient que chacun des trois nouveaux est bien incremente quelque part — un compteur que personne n incremente affiche zero a",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "09617c6",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "3c56b3a",
+          "titre": "Les images du courrier ne meurent plus, et un fil fini se ferme",
+          "detail": "LES PIECES JOINTES. Une adresse de piece jointe Discord est signee et expire : le moderateur qui rouvrait le fil de la veille voyait une image morte, dans les deux sens. Elles sont desormais RECOPIEES — le fichier voyage, pas son adresse.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 6
+        },
+        {
+          "depot": "bot",
+          "sha": "3f4a553",
+          "titre": "Un message d abord, le fil dessus — et la coche tout de suite",
+          "detail": "LE FIL. Il naissait tout seul, detache : dans le salon, un fil sans message n est qu une ligne grise que personne ne voit passer. L equipe recoit maintenant un vrai message — qui ecrit, depuis quand il est la, ses points, ses anciens pseudos, et les boutons — et le fil s ouvre SUR ce message, d un…",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "bot",
+          "sha": "7e6206d",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "cb354ce",
+          "titre": "Choisir son serveur ne repondait rien : une ephemere en message prive",
+          "detail": "Le membre ecrit au bot, choisit son serveur dans la liste… et il ne se passe rien. Le menu reste affiche, aucune reponse n arrive, et il croit son message perdu.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "bot",
+          "sha": "bbd1b27",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "0c4df58",
+          "titre": "Les anciens pseudos, et le menage des membres silencieux",
+          "detail": "LES PSEUDOS. « Ce n est pas le meme pseudo qu hier » : changer de nom trois fois en deux jours se fait rarement par gout, c est la maniere la plus simple d echapper a la reconnaissance apres un esclandre. Discord garde l identifiant, mais personne ne lit les identifiants.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "bot",
+          "sha": "5e6f932",
+          "titre": "La boucle des relances manquait a la liste des globales",
+          "detail": "Assignee dans on_ready sans etre declaree, Python la tenait pour une variable LOCALE de toute la fonction : la lire aurait leve UnboundLocalError et arrete le demarrage — la panne exacte du 12 au 16 septembre. La suite qui garde cette regle l a vue tout de suite.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "bot",
+          "sha": "787d248",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "54f9018",
+          "titre": "Des reponses pretes, et plus rien qui dort sans reponse",
+          "detail": "LES REPONSES TOUTES FAITES. Trois questions sur quatre sont les memes — « comment devenir modo », « pourquoi j ai ete mute », « ou est le salon des annonces ». Les retaper chaque fois use ceux qui repondent, et la qualite tombe avec la patience.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "bot",
+          "sha": "cc697e6",
+          "titre": "Le filtre ne demande plus de quel TYPE est l auteur",
+          "detail": "La sanction etait posee sous condition d un `isinstance` sur discord.Member. Le meme motif a deja fait sauter un garde-fou de hierarchie dans ce fichier ",
+          "etiquettes": [],
+          "fichiers": 1
+        },
+        {
+          "depot": "bot",
+          "sha": "3055223",
+          "titre": "Deux suites remises d aplomb apres la CI",
+          "detail": "`test_annulation` comptait six sanctions annulables : la tournee de salons en fait une septieme.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "bot",
+          "sha": "7a5d4e8",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "0898f01",
+          "titre": "La meme phrase dans dix salons : on retire la tournee entiere",
+          "detail": "L anti-spam mesure une VITESSE : trop de messages dans le meme salon, en peu de temps. Celui qui vend ses services ne fait pas ca. Il ecrit une fois — une seule — dans chacun de tes dix salons, en prenant son temps. Chaque message pris a part est irreprochable ",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "bot",
+          "sha": "ea43b2a",
+          "titre": "Le dashboard voit la vraie photo de profil, et non le jeton OAuth",
+          "detail": "LA PHOTO. L adresse d un avatar Discord porte son empreinte : changer de photo de profil rend l ancienne introuvable. La session gardait celle du jour de la connexion, et le navigateur affichait une image cassee a la place du visage — pendant les vingt-quatre heures de la session.",
+          "etiquettes": [],
+          "fichiers": 1
+        },
+        {
+          "depot": "bot",
+          "sha": "004d55c",
+          "titre": "Le courrier peut demander de l anciennete, ou un role",
+          "detail": "Deux conditions posees aux membres, coupees par defaut : un nombre de jours sur le serveur, et un role exige. Elles regardent QUI ecrit, la ou les refus existants regardent le message et le module.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "bot",
+          "sha": "3e5962d",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "7e380a2",
+          "titre": "Le mur compte juste, et chacun peut lire ce que le bot sait de lui",
+          "detail": "LE MUR. Il existait ; il comptait mal. S etoiler soi-meme suffisait a monter au mur sur un serveur au seuil de deux : l etoile de l auteur ne compte plus. Un message qui perd ses etoiles y restait pour toujours : il en descend.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        }
+      ]
+    },
+    {
+      "date": "2026-09-26",
+      "entrees": [
+        {
+          "depot": "site",
+          "sha": "46f57e4",
+          "titre": "Le courrier se traduit, et l equipe peut demander un brouillon",
+          "detail": "Deux interrupteurs de plus dans la rubrique Modmail, coupes par defaut. La traduction fait arriver le message du membre dans la langue du bot, et repartir la reponse dans la sienne, l original dessous.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 7
+        },
+        {
+          "depot": "site",
+          "sha": "b150c77",
+          "titre": "La rubrique Modmail, et ce qu elle deplace",
+          "detail": "Un module a activer : salon qui recoit les fils, role a prevenir, message d accueil, reponses signees ou au nom de l equipe, pause entre deux messages, et la liste des membres bloques.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 9
+        },
+        {
+          "depot": "site",
+          "sha": "c1e637d",
+          "titre": "Le delai d oubli des infractions se regle depuis le tableau de bord",
+          "detail": "Un casier a vie n existe nulle part ailleurs : au bout d un moment, une betise cesse de compter. La carte des sanctions porte desormais le delai, en jours ; zero pour un serveur qui ne veut rien oublier, et c est son droit.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "bot",
+          "sha": "3ef7625",
+          "titre": "Le tirage des numeros de commande se verifie comme il s utilise",
+          "detail": "La CI a rougi sur `test_boutique`, sans rapport avec le courrier : le test tirait deux cents numeros A L AVEUGLE et exigeait qu ils soient tous differents.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "bot",
+          "sha": "5d91409",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "00ffbad",
+          "titre": "Le membre choisit son serveur dans TOUTE sa liste, et sait quand il est ferme",
+          "detail": "Le menu ne proposait que les serveurs ayant active le module, et un membre dont aucun serveur ne l avait active n obtenait rien : ni reponse, ni explication. Il croyait le bot casse.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "bot",
+          "sha": "4d66e0b",
+          "titre": "Le courrier passe la cloison, et se range dans l aide",
+          "detail": "Trois reprises apres la CI.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "bot",
+          "sha": "4da0114",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "a6e4d3d",
+          "titre": "Le modmail : ecrire a l equipe en prive, et recevoir une reponse",
+          "detail": "Un message prive au bot tombait dans le vide : `on_message` rendait la main des qu il n y avait pas de serveur. Un membre qui voulait signaler quelqu un sans se faire voir, demander une permission ou poser une question genante avait le choix entre le dire devant tout le monde et ecrire a un…",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "bot",
+          "sha": "0e6a130",
+          "titre": "L echelle comptait encore a l ancien delai quand elle lisait",
+          "detail": "`add_avert` purgeait au rythme du serveur, mais `get_hist` gardait ses cent cinquante jours en dur : un serveur qui raccourcissait le delai voyait son casier se vider a l ecriture et rester plein a la lecture.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "02dff7a",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "33c10e8",
+          "titre": "Les points d infraction s effacent, et une sanction se defait d un clic",
+          "detail": "Deux choses qui manquaient a une moderation lisible.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 4
+        }
+      ]
+    },
+    {
+      "date": "2026-09-25",
+      "entrees": [
+        {
+          "depot": "site",
+          "sha": "fc998f4",
+          "titre": "Le wiki cite /installer",
+          "detail": "Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>",
+          "etiquettes": [
+            "Traductions"
+          ],
+          "fichiers": 6
+        },
+        {
+          "depot": "site",
+          "sha": "a64f16a",
+          "titre": "Le wiki suit : huit commandes de plus, cinq lignes a prefixe en moins",
+          "detail": "/mute, /unmute, /lock, /unlock, /role, /salon-acces, /vocal et /note entrent ; !addroles, !deleteroles, !addchannel, !deletechannel et !help sortent — le bot n'a plus aucune commande a prefixe. Le nettoyage dit maintenant ce qu'il fait vraiment ",
+          "etiquettes": [
+            "Traductions"
+          ],
+          "fichiers": 6
+        },
+        {
+          "depot": "site",
+          "sha": "b413642",
+          "titre": "Le salon des contestations, et l annonce des salons proteges",
+          "detail": "Rubrique Salons : une ligne « Contestations ». Quand un membre sanctionne clique sur « Contester », sa demande arrive la, avec ce qu il a ecrit et son historique, et un bouton « Repondre » lui repond en prive. Sans salon choisi, tout part dans les logs.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 7
+        },
+        {
+          "depot": "site",
+          "sha": "19162e7",
+          "titre": "La capture du Server Members Intent, masquee et publiee",
+          "detail": "Le message de bienvenue poste a l arrivee d un membre : la preuve que Discord demande pour cet intent. Pseudonyme masque aux trois endroits, avatar floute. Publiee avec l accord du proprietaire.",
+          "etiquettes": [],
+          "fichiers": 2
+        },
+        {
+          "depot": "site",
+          "sha": "0ba9e68",
+          "titre": "La politique de confidentialite se lit depuis partout",
+          "detail": "Elle n'etait atteignable que depuis l'accueil et la boutique. Le wiki et la page Premium n'avaient aucun pied de page, et le tableau de bord — la ou travaille l'administrateur qui installe le bot et decide ce qu'on garde de ses membres — ne la citait nulle part.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 9
+        },
+        {
+          "depot": "site",
+          "sha": "c4611fa",
+          "titre": "Les captures de la demande d'intents, a une adresse stable",
+          "detail": "Discord exige un lien public vers une capture montrant le cas d'utilisation dans un vrai serveur. Un lien de fichier Discord expire : l'image vit donc avec le site. Pseudonymes, identifiants et avatars masques, publiee avec l'accord du proprietaire.",
+          "etiquettes": [],
+          "fichiers": 2
+        },
+        {
+          "depot": "site",
+          "sha": "45a54e5",
+          "titre": "L'invitation du partenaire principal, et deux noms hors de leur portee",
+          "detail": "L'URL personnalisee de Twitch Memez94 etait morte (« Unknown Invite ») : une vanity URL disparait quand le serveur perd son niveau de boost. Le bouton menait au vide sur l'accueil et sur la page partenaires, et comme ce code sert aussi a lire le logo et l'effectif, la carte restait figee.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 5
+        },
+        {
+          "depot": "bot",
+          "sha": "25a9a8f",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "6510d7c",
+          "titre": "L installation en trois questions",
+          "detail": "Un serveur qui invitait ModBot recevait des liens, et devait ensuite ouvrir un tableau de bord que la plupart n ouvrent jamais : le bot restait muet, et on le retirait en croyant qu il ne servait a rien.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "bot",
+          "sha": "4d9aea3",
+          "titre": "L anti-nuke avalait sa premiere alerte sur une machine fraiche",
+          "detail": "Le delai de garde comparait `time.monotonic()` — les secondes depuis le demarrage de la MACHINE — a zero. Tant que l hote avait moins de trente secondes de vie, la toute premiere alerte d un acteur etait prise pour un doublon et jetee : pas d alerte, pas de sanction, pas de restauration.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "bot",
+          "sha": "7b169f9",
+          "titre": "Le scenario du test : l auteur au-dessus du membre",
+          "detail": "Un membre au-dessus de ModBot est presque toujours au-dessus du moderateur aussi : c est l autre refus qui sortait, a juste titre.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "bot",
+          "sha": "a99537f",
+          "titre": "La hierarchie se lit sur le role, pas sur le type",
+          "detail": "`isinstance(auteur, discord.Member)` sautait la verification des que l objet n en etait pas exactement un, et le garde-fou ne gardait plus rien. La vraie question est : cette personne a-t-elle un role plus haut ?",
+          "etiquettes": [],
+          "fichiers": 1
+        },
+        {
+          "depot": "bot",
+          "sha": "35c1b31",
+          "titre": "Le groupe /note manquait a l arbre des commandes",
+          "detail": "Trois sous-commandes ecrites, jamais enregistrees : le wiki citait /note, Discord ne l a jamais vue. Et le test regardait les menus contextuels comme des commandes, puis tentait d ecrire sur bot.user, qui n a pas de setter.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "bot",
+          "sha": "49a0b65",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "cd5b8d1",
+          "titre": "Les gestes quotidiens : mute, lock, vocal, role, acces, notes — et plus de prefixe",
+          "detail": "Le bot savait rendre muet, verrouiller, deplacer, donner un role : tout seul, ou depuis le tableau de bord. Personne ne pouvait le lui demander depuis Discord. Huit commandes comblent ce trou :",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "bot",
+          "sha": "0d1d0ad",
+          "titre": "Le test lit aussi la description de l annonce",
+          "detail": "La phrase « chaque message y est supprime » vit dans la description de l embed, pas dans un champ : le test regardait a cote.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "bot",
+          "sha": "d104e9b",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "96ed282",
+          "titre": "Le salon protege annonce sa regle, la contestation trouve un salon et une reponse",
+          "detail": "Trois demandes, et trois defauts qu'elles corrigent.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "bot",
+          "sha": "7c5391e",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "db45268",
+          "titre": "Un bouton « Confidentialite » sous /aide et /info-bot",
+          "detail": "La politique n'etait atteignable que par un lien dans l'embed de /info-bot. Discord demande ou un membre peut la lire ; elle prend donc sa place parmi les liens du bot, a cote des conditions.",
+          "etiquettes": [],
+          "fichiers": 1
+        }
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "entrees": [
+        {
+          "depot": "site",
+          "sha": "6bdf1cb",
+          "titre": "Salons proteges, roles en masse, guide des rubriques, sauvegardes transportables",
+          "detail": "- Deux rubriques : « Salons proteges » (messages supprimes d'office, auteur averti, mode « images seulement », exceptions) et « Roles en masse » (reglages de /massrole et /demassrole, lancement depuis le tableau de bord avec apercu, suivi et arret).",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 9
+        },
+        {
+          "depot": "bot",
+          "sha": "70ca78c",
+          "titre": "Les roles en masse gardent leur tache",
+          "detail": "asyncio ne retient qu'une reference faible : une tache que plus rien ne tient peut etre ramassee en plein travail.",
+          "etiquettes": [],
+          "fichiers": 1
+        },
+        {
+          "depot": "bot",
+          "sha": "9c51d48",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "f527c7e",
+          "titre": "Salons proteges, /massrole et /demassrole, plus de vie du serveur, sauvegardes transportables",
+          "detail": "- Salons proteges : un message poste dans un salon choisi est supprime aussitot, son auteur averti une fois par rafale (dans le salon, en MP ou pas du tout), avec un avertissement officiel en option. Le staff et des roles choisis y ecrivent librement ; un mode « images seulement ».",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 7
+        }
+      ]
+    },
+    {
+      "date": "2026-09-21",
+      "entrees": [
+        {
+          "depot": "site",
+          "sha": "8159fc5",
+          "titre": "La politique de confidentialite suit le code, a nouveau",
+          "detail": "Elle disait « le contenu des messages n'est pas conserve » : c'est desormais vrai, le bot n'en gardant plus aucune copie. Elle precise ce qu'il advient d'un message supprime ou modifie — republie dans le salon de logs, sur Discord, sans copie chez ModBot.",
+          "etiquettes": [
+            "Traductions"
+          ],
+          "fichiers": 6
+        },
+        {
+          "depot": "site",
+          "sha": "51be509",
+          "titre": "Les resultats de la recherche ne s'ecrasent plus",
+          "detail": "La liste est une colonne limitee a 520 pixels. Ses lignes avaient le droit de retrecir : avec vingt roles, le navigateur les ecrasait a vingt-deux pixels chacune au lieu de faire defiler la liste, et le nom du role debordait sur son nombre de membres.",
+          "etiquettes": [
+            "Affichage"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "site",
+          "sha": "8059669",
+          "titre": "La grille des protections : l'anti-pub, et chaque carte par son nom",
+          "detail": "Trois changements dans la rubrique Securite du tableau de bord.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 9
+        },
+        {
+          "depot": "site",
+          "sha": "1fa8d03",
+          "titre": "L'immunite du staff au tableau de bord",
+          "detail": "Un bloc dans la rubrique Securite, avec les deux interrupteurs que le bot vient de recevoir : le staff immunise contre toutes les sanctions automatiques (actif par defaut), et le staff hors de la surveillance de l'anti-nuke (inactif, deconseille). Le wiki cite /securite staff.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "bot",
+          "sha": "85dba1b",
+          "titre": "Le bot ne garde plus aucun texte de message sur son disque",
+          "detail": "La politique de confidentialite le promettait et c'etait faux. Chaque evenement du journal enregistrait ses champs en base : le texte des messages supprimes (900 caracteres), l'avant et l'apres des messages modifies, le message original d'une insulte, l'extrait d'une arnaque.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "bot",
+          "sha": "bb5dfc5",
+          "titre": "La carte Anti-raid du tableau de bord dit la verite",
+          "detail": "La grille « Protections serveur » lisait le booleen historique « antiraid », qui vaut « non » sur un serveur qui n'y a jamais touche — alors que l'anti-raid y est ACTIF, sa vraie config etant active par defaut. Le tableau de bord montrait une protection eteinte qui tournait.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "bot",
+          "sha": "475c3ef",
+          "titre": "Un administrateur suit son propre reglage d'immunite",
+          "detail": "Un administrateur fait partie du staff. Si un serveur avait coupe « administrateurs immunises », l'immunite du staff la lui rendait en douce : un choix explicite annule par un autre, sans un mot.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "bot",
+          "sha": "0daf693",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "6ec7e4b",
+          "titre": "Le staff n'est plus sanctionne par ses propres protections",
+          "detail": "Le 21/09, sur un serveur de production, l'anti-arnaque a supprime l'annonce d'un membre du staff dans #annonces-staff et lui a inscrit trois points d'infraction. L'annonce portait le lien du serveur et un @everyone — exactement ce que contient une publicite d'arnaque.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 4
+        }
+      ]
+    }
+  ],
+  "genere": "2026-10-01T15:38:14.265Z"
+}

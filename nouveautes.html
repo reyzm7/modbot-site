@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <!-- Le theme choisi, pose avant le premier pixel : sans cette ligne,
+       chaque page clignoterait en sombre avant de passer en clair. -->
+  <script>try{var t=localStorage.getItem("modbot-theme");if(t)document.documentElement.dataset.theme=t;document.documentElement.style.backgroundColor=t==="light"?"#f4f6fb":"#0a0c11";}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Search Console : cette balise prouve que le site est a
+       nous, rien de plus. Elle ne suit personne et ne charge rien.
+       La retirer fait perdre la propriete du site dans la console. -->
+  <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
+  <title>Nouveautés de ModBot — le journal des modifications</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
+  <meta name="description" content="Ce qui a changé sur ModBot et sur ce site, jour par jour. Chaque entrée vient d'une modification réellement livrée, pas d'une annonce.">
+  <link rel="canonical" href="https://modbot-website.vercel.app/nouveautes.html">
+  <meta property="og:site_name" content="ModBot">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:url" content="https://modbot-website.vercel.app/nouveautes.html">
+  <meta property="og:title" content="Nouveautés de ModBot — le journal des modifications">
+  <meta property="og:description" content="Ce qui a changé sur ModBot et sur ce site, jour par jour. Chaque entrée vient d'une modification réellement livrée, pas d'une annonce.">
+  <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nouveautés de ModBot — le journal des modifications">
+  <meta name="twitter:description" content="Ce qui a changé sur ModBot et sur ce site, jour par jour. Chaque entrée vient d'une modification réellement livrée, pas d'une annonce.">
+  <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
+  <link rel="stylesheet" href="style.css">
+  <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
+       la connexion au dashboard est automatique, rien a saisir.
+       A changer uniquement si le bot est deplace vers un autre hebergeur. -->
+  <meta name="modbot-api-url" content="https://web-production-6ad2d.up.railway.app">
+  <meta name="modbot-discord-client-id" content="1510405235544424620">
+  <meta name="modbot-login-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html">
+  <meta name="modbot-invite-redirect-uri" content="https://modbot-website.vercel.app/dashboard.html?flow=invite">
+  <meta name="modbot-bot-permissions" content="3124257994829047">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="assets/modbot-mark.webp" type="image/webp">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Nouveautés de ModBot — le journal des modifications",
+    "description": "Ce qui a changé sur ModBot et sur ce site, jour par jour. Chaque entrée vient d'une modification réellement livrée, pas d'une annonce.",
+    "url": "https://modbot-website.vercel.app/nouveautes.html",
+    "inLanguage": "fr",
+    "dateModified": "2026-10-01",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "ModBot",
+      "url": "https://modbot-website.vercel.app/"
+    }
+  }
+  </script>
+</head>
+<body class="wiki-page">
+  <script src="icons.js"></script>
+  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
+  <div class="page-glow" aria-hidden="true"></div>
+  <!-- Le voile des transitions : noir a l'arrivee, il s'efface ; noir
+       au depart, il se pose. Ecrit ici et non cree par le script :
+       cree apres coup, la page apparaitrait avant de disparaitre. -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navigation ModBot" data-i18n-aria="cgu.navigation">
+      <span class="brand" aria-label="Accueil ModBot" data-i18n-aria="cgu.accueilModbot">
+        <span class="brand-mark">
+          <img src="assets/modbot-mark.webp" alt="" width="128" height="128" decoding="async" fetchpriority="high">
+        </span>
+        <span>ModBot</span>
+      </span>
+
+      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-i18n-aria="cgu.ouvrirLeMenu">
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#features" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-sparkles"/></svg><span data-i18n="cgu.fonctionnalites">Fonctionnalités</span></a>
+        <a href="index.html#pricing"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-star"/></svg><span data-i18n="cgu.tarifs">Tarifs</span></a>
+
+
+<a class="nav-boutique" href="boutique.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
+<a class="nav-cta" href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-teinte="vert"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n="cgu.supportDiscord">Support Discord</span></a>
+
+        <div class="nav-menu" data-nav-menu>
+          <button class="nav-menu-trigger est-icone" type="button" data-nav-menu-trigger
+                  aria-label="Accès" data-i18n-aria="nav.menu"
+                  aria-expanded="false" aria-haspopup="true">
+            <span class="nav-menu-barres" aria-hidden="true"><i></i><i></i><i></i></span>
+            <svg class="nav-menu-chevron" viewBox="0 0 12 8" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav-menu-panel" data-nav-menu-panel hidden>
+            <a href="index.html" class="nav-menu-home" data-teinte="acier"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-home"/></svg><span data-i18n="nav.retourSite">Revenir au site</span></a>
+            <a href="dashboard.html" data-teinte="violet"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
+            
+            <a href="boutique.html" data-teinte="cyan"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-box"/></svg><span data-i18n="nav.boutique">Boutique</span></a>
+            <a href="admin.html" data-teinte="rouge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-key"/></svg><span data-i18n="nav.admin">Admin</span></a>
+            <label class="nav-menu-lang">
+              <span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#u-globe"/></svg><span data-i18n="nav.langue">Langue</span></span>
+              <select data-nav-language>
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+                <option value="es">Español</option>
+                <option value="de">Deutsch</option>
+              </select>
+            </label>
+          </div>
+        </div>
+</div>
+    </nav>
+  </header>
+
+
+  <main class="wiki-shell section-shell">
+    <article class="wiki-hero">
+      <p class="eyebrow">Nouveautés</p>
+      <h1>Le journal des modifications</h1>
+      <p>Ce qui a changé sur le bot et sur ce site, jour par jour. Chaque ligne vient d'une modification réellement livrée : rien n'est annoncé ici avant d'exister.</p>
+      <p class="field-help">Mis à jour chaque nuit · 138 modifications depuis le 21 septembre 2026</p>
+    </article>
+
+    <div class="journal">
+      <section class="journal-jour">
+        <h2><time datetime="2026-10-01">1er octobre 2026</time></h2>
+        <ul class="journal-liste">
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Guides</span><span class="journal-etiquette">Référencement</span></p>
+            <h3>Quatorze guides, et des liens qu'on voit enfin</h3>
+            <p>Quatorze pages ecrites sur des questions que les gens tapent : ajouter un bot, recuperer un serveur pirate, ecrire un reglement, arreter le spam, les commandes de moderation, organiser les salons, accueillir les arrivants, tenir un giveaway, recruter une equipe, arreter un raid, reconnaitre les…</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Guides</span><span class="journal-etiquette">Traductions</span></p>
+            <h3>Les cinq langues existent enfin pour les moteurs</h3>
+            <p>Le site se traduisait dans le navigateur sans changer d'adresse. Une seule URL existait donc, et quatre langues sur cinq n'existaient pour personne d'autre que leurs lecteurs : ni Google, ni un lien partage, ni un historique. Quatre marches entiers invisibles.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>L'accueil repond a des questions, au lieu de se presenter</h3>
+            <p>Mesure avant d'y toucher : deux cent soixante-huit mots dans le HTML servi, deux titres de section, trois liens vers le reste du site. C'est la page qui vise « bot de protection Discord ».</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Guides</span><span class="journal-etiquette">Traductions</span></p>
+            <h3>Le wiki se decoupe en huit pages, et s'ouvre sur une affiche</h3>
+            <p>La documentation tenait sur une page de quatre cents lignes, avec un sommaire lateral. Ce sommaire suppose qu'on sache deja le nom de ce qu'on cherche — c'est justement ce qu'on ignore en ouvrant une documentation pour la premiere fois.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Guides</span><span class="journal-etiquette">Référencement</span></p>
+            <h3>Quatre guides de plus, sur des questions qu'on tape vraiment</h3>
+            <p>« ModBot » ne se cherche que par ceux qui connaissent deja le nom. « Comment creer un systeme de tickets sur Discord » se cherche par des gens qui ne nous connaissent pas — et c'est la seule facon d'etre trouve par quelqu'un de nouveau.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span></p>
+            <h3>Quatre pages avaient un nom pour titre, pas un titre</h3>
+            <p>« Wiki ModBot » : onze caracteres la ou Google en affiche soixante, et aucun mot de ce que les gens tapent. « Boutique ModBot », quinze. « Partenaires ModBot », dix-huit.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Référencement</span></p>
+            <h3>Le sitemap dit les vraies dates</h3>
+            <p>Les douze pages portaient une date ecrite a la main, et toutes mentaient : le 12 septembre pour des pages remaniees depuis, le 20 pour la page d'etat modifiee ce matin.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span></p>
+            <h3>La FAQ parle aux moteurs, et le titre dit ce qu'on cherche</h3>
+            <p>Le titre etait « ModBot - Protection Discord ». Il ne contenait pas l'expression qu'on vise — « bot de protection Discord » — et un titre se lit d'abord par un humain dans une liste de dix resultats. Celui-ci dit ce que c'est, pour quoi, et pour qui.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Le reglage des premieres heures, dans le dashboard (n°18)</h3>
+            <p>Le bot sait retenir les arrivants depuis le redemarrage de ce soir ; il lui manquait de quoi le regler. Une case, une duree, trois motifs qu'on peut decocher separement — un serveur de graphistes veut les fichiers des le premier jour mais pas les liens, un serveur de jeu l'inverse — et le choix de…</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Tous les messages du bot sur un ecran (n°24)</h3>
+            <p>Chaque rubrique montrait deja son apercu. Mais pour verifier ce que le serveur verra, il fallait ouvrir sept rubriques l'une apres l'autre, et on ne les voyait jamais ensemble.</p>
+          </li>
+          <li class="journal-reste">et 2 autres modifications ce jour-là</li>
+        </ul>
+      </section>
+
+      <section class="journal-jour">
+        <h2><time datetime="2026-09-30">30 septembre 2026</time></h2>
+        <ul class="journal-liste">
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>La barre du haut reparee, le badge discret, le logo dans les apercus</h3>
+            <p>La barre du haut etait cassee, et c'est moi qui l'avais cassee. Ce n'est pas une rangee souple mais une GRILLE a trois colonnes : « auto » pour la marque, « minmax(240px, 420px) » taillee pour le selecteur de serveur, « auto » pour les boutons.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Le menu se resserre, et l'accueil dit par ou commencer</h3>
+            <p>Le menu : vingt-sept rubriques a quarante-deux pixels de haut, six pixels entre chacune, un carre colore par icone. Mille sept cent quatre-vingts pixels de liste pour sept cent quarante d'ecran, et chaque entree criait aussi fort que sa voisine.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>Le mode clair est un gris, plus un mur de blanc</h3>
+            <p>Le commentaire disait deja « blanc casse, jamais blanc pur », et pourtant les cartes etaient en #ffffff et la page a quatre-vingt-dix- sept pour cent de clarte. Tout descend d'un cran.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>Un astre plus grand, et un ciel entier derriere lui</h3>
+            <p>L'astre occupait onze pour cent de la largeur : a la vitesse ou il traverse, cela faisait une pastille qu'on devinait. Seize pour cent, et c'est un astre — cent douze pixels au minimum, meme sur un telephone.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>L'astre prend le temps de traverser</h3>
+            <p>Il filait : deux cent trente millisecondes d'un bord a l'autre, le temps de comprendre qu'il se passait quelque chose, pas celui de le regarder. Le voile allait a vitesse constante et l'astre avec lui.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>Un astre traverse l'ecran quand on change de theme</h3>
+            <p>Le site basculait d'une couleur a l'autre en une image. Sur un ecran entier, un blanc qui remplace un noir pique les yeux, et surtout il ne raconte rien : on voyait un clignotement, pas un lever de jour.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>La vague ondule, et les scenes montrent ce qu'elles racontent</h3>
+            <p>La vague glissait : un dessin fige qui defile de cote, si lent soit-il, reste un tapis. Une onde change de forme pendant qu'elle avance. Trois couches la composent maintenant, et chacune tient en deux elements — le trace glisse, le cadre qui le porte monte et s'ecrase.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>La chute d'abord, l'effacement ensuite : une animation, plus deux transitions</h3>
+            <p>Deux transitions ne savent pas faire « d'abord ceci, ensuite cela ». On peut retarder la seconde, elles se chevauchent quand meme : la chute met le gros de son deplacement a la fin, justement la ou l'effacement a commence.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>Un seul bouton de menu sur telephone, et la chute se voit</h3>
+            <p>La barre du haut portait deux jeux de trois traits cote a cote : les gris ouvraient le tiroir de navigation, les dores le menu « Acces ». Le meme dessin deux fois, pour deux listes differentes.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>La chute revient au site, le navigateur n’en voulait pas</h3>
+            <p>« Les animations de fondu marchent quand on revient au site, pas quand on va sur une autre page. » La video, lue image par image, montre autre chose : l’accueil disparait d’un coup, une image entierement noire, puis la page suivante arrive. Ce n’etait pas une transition mais un saut.</p>
+          </li>
+          <li class="journal-reste">et 5 autres modifications ce jour-là</li>
+        </ul>
+      </section>
+
+      <section class="journal-jour">
+        <h2><time datetime="2026-09-29">29 septembre 2026</time></h2>
+        <ul class="journal-liste">
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>La page qu’on quitte s’en va par le bas</h3>
+            <p>Le fondu croise ne racontait rien : les deux pages se melangeaient au meme instant, et l’oeil ne savait pas laquelle partait. Celle qu’on quitte descend maintenant de sept centiemes de hauteur d’ecran en s’effacant, avec une courbe qui accelere — elle tombe plutot qu’elle ne glisse.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Outillage</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Une CI qui dit ce qui a casse</h3>
+            <p>« Process completed with exit code 1 » : c’est tout ce que l’onglet Actions montrait, le journal complet demandant une authentification pour etre lu.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Guides</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Le blanc entre deux pages</h3>
+            <p>« L’animation n’est pas pareille » : elle ne pouvait pas l’etre. Le site pris en modele est une application d’une seule page — le document ne se recharge jamais, donc rien ne peut clignoter entre deux ecrans.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Guides</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>On quitte une page sans eteindre l’ecran</h3>
+            <p>La video montrait ce qu’il fallait faire : chez le site pris en modele, un clic dans la barre du haut fait fondre le CONTENU, et lui seul. L’en-tete ne bouge pas d’un cheveu, le fond reste allume, et la page suivante arrive dans le meme mouvement.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>La boutique va droit au but, et les boutons repondent au doigt</h3>
+            <p>Six sections de la boutique disaient la meme chose que les cartes : le tableau comparatif reprenait leurs prix, les exemples les reprenaient encore, les atouts repetaient ce que chaque carte annonce, et le calculateur refaisait l’addition que la fenetre de commande affiche de toute facon.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Tableau de bord</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>Le tableau de bord se tient sur un telephone</h3>
+            <p>« Y a meme pas de bouton pour changer de rubrique. » Il y en avait un, mais il restait en haut de la page : passe le premier ecran de reglages, il sortait du champ et plus rien ne permettait d’aller ailleurs qu’en remontant tout en haut. Il colle maintenant sous le bord superieur et suit la lecture.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Guides</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>Le menu d’acces rejoint le bouton clair/sombre</h3>
+            <p>Ni l’un ni l’autre ne mene quelque part : tous deux reglent la facon dont on lit le site. Au bout des liens, le menu se faisait passer pour une destination de plus. Les deux pastilles sont desormais rangees ensemble a droite de la barre, memes diametre et forme ronde.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>La tete d’affiche garde le logo et le nom, sans le decor</h3>
+            <p>La banniere entiere posait un rectangle et sa fumee au milieu de la page. Il ne reste que le logo rond et le nom, avec la signature en</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>Une vraie barre entre la page et son bas de page</h3>
+            <p>Quatre pixels se lisaient comme un lisere, pas comme une separation : l’oeil continuait tout droit. La barre passe a dix pixels, opaque, avec la lueur violette qui la detache du fond.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Tableau de bord</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>Le tableau de bord tient sur un telephone, et le pied a sa couleur</h3>
+            <p>LE TELEPHONE. `dashboard.css` est charge APRES `style.css` : ses regles sans media query ecrasaient tout le responsive ecrit en face. Resultat, sous 760 px </p>
+          </li>
+          <li class="journal-reste">et 3 autres modifications ce jour-là</li>
+        </ul>
+      </section>
+
+      <section class="journal-jour">
+        <h2><time datetime="2026-09-28">28 septembre 2026</time></h2>
+        <ul class="journal-liste">
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Le parcours ne visite plus une page qui redirige</h3>
+            <p>premium.html mene desormais a la rubrique Premium du tableau de bord : le parcours l’ouvrait comme une page, et n’y trouvait plus de contenu.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Guides</span></p>
+            <h3>Le tableau de bord en cartes, et le Premium avec lui</h3>
+            <p>L’ACCUEIL. Vingt-six rubriques, par famille, a plat : on voit ce que le bot sait faire sans derouler un menu. Les cartes reprennent l’icone du menu et la phrase que le guide portait deja — un guide replie par defaut, que personne n’ouvrait.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Guides</span></p>
+            <h3>Le pied de page dit « Dashboard », comme sa traduction</h3>
+            <p>test_derives croise chaque texte ecrit en dur avec la valeur francaise de sa clef : « Tableau de bord » n’etait pas « Dashboard ».</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Guides</span></p>
+            <h3>Le nouveau logo, et un vrai pied de page sur chaque page</h3>
+            <p>LE LOGO. Le cercle violet remplace l’ancienne marque partout : en-tete, favicon (trois tailles dans le .ico), icone iOS, apercu des reseaux sociaux. Il est DECOUPE en rond a la source — l’image d’origine a un fond noir opaque, qui faisait un carre noir sur le fond sombre du site.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Un apercu partout ou le bot ecrit un message</h3>
+            <p>Un message qu’on ecrit dans un champ ne ressemble a rien tant qu’on ne l’a pas vu dans Discord. On decouvrait l’accueil du courrier prive en ecrivant au bot depuis un autre compte, et l’annonce de niveau en attendant qu’un membre monte de niveau — c’est-a-dire qu’on ne le relisait jamais.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Voir le tableau de bord avant d’inviter le bot</h3>
+            <p>« A quoi ca ressemble ? » est la question qu’on se pose AVANT d’inviter un bot sur son serveur, et la seule reponse qu’on avait etait des captures d’ecran. Un bouton sur l’ecran de connexion ouvre desormais le VRAI tableau de bord, rempli de donnees inventees </p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Partir d’un modele : les reglages de depart, en un clic</h3>
+            <p>Vingt-sept rubriques, c’est beaucoup pour qui vient d’inviter le bot. La plupart n’en ouvrent aucune : le bot reste muet, et on le retire en croyant qu’il ne sert a rien.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span></p>
+            <h3>Dictionnaire du bot : phrases nouvelles traduites</h3>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Cinq modeles de serveur, poses en un clic</h3>
+            <p>Vingt-sept rubriques de reglages, c’est beaucoup pour quelqu’un qui vient d’inviter le bot. La plupart n’en ouvrent aucune : le bot reste muet, et on le retire en croyant qu’il ne sert a rien.</p>
+          </li>
+        </ul>
+      </section>
+
+      <section class="journal-jour">
+        <h2><time datetime="2026-09-27">27 septembre 2026</time></h2>
+        <ul class="journal-liste">
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Une rubrique Historique : qui a change quoi, et comment le remettre</h3>
+            <p>Deux questions reviennent sur tout serveur a plusieurs administrateurs : « qui a coupe l’anti-spam ? » et « c’etait quoi, avant ? ». La seconde est la pire — on sait qu’on a casse quelque chose, on ne sait plus quoi</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Des boutons plutot que des reactions, au choix du serveur</h3>
+            <p>Une reaction-role casse sans bruit le jour ou l’emoji du serveur est retire, et se rate au doigt sur telephone. Un interrupteur dans la rubrique Roles publie le panneau avec des boutons : chacun porte son libelle, et un clic donne ou reprend le role.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Les mentions de masse se reglent, et le wiki cite /sondage</h3>
+            <p>Un interrupteur avec les autres protections, et le nombre de mentions tolerees a cote des seuils du message repete.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Chercher un reglage, et un bouton Enregistrer qui ne fuit plus</h3>
+            <p>LA RECHERCHE. Vingt-sept rubriques : retrouver « la pause entre deux messages » demandait de se souvenir qu’elle vit dans le Modmail, et de l’ouvrir pour verifier.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Un courrier sans nouvelle se ferme tout seul, et ca se regle</h3>
+            <p>Sept jours par defaut, zero pour ne jamais fermer. Le fil s’archive, le membre est prevenu, et il rouvre un courrier neuf s’il reecrit.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>La pastille du menu s’en va</h3>
+            <p>Elle disait si le modmail tournait sans ouvrir la rubrique. Retiree a la demande : l’entree de menu retrouve sa forme d’origine.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Le suivi des pseudos se coupe, et la confidentialite le dit</h3>
+            <p>Un interrupteur dans la rubrique Securite — actif par defaut, comme le reste de la protection. La page de confidentialite gagne sa phrase : cinq noms abandonnes, avec leur date, pour que l’equipe reconnaisse quelqu’un qui s’est rebaptise.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Les reponses toutes faites, et le rappel de ce qui traine</h3>
+            <p>Deux cartes dans la rubrique Modmail. Les reponses : un nom, un texte, et elles s’envoient ensuite avec /reponse — dans un courrier, dans un ticket, ou ailleurs. Le meme nom ecrit autrement remplace l’ancienne plutot que d’en faire deux.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Le message repete se regle depuis la rubrique Securite</h3>
+            <p>Un interrupteur avec les autres protections, et trois seuils a cote de ceux de l’anti-raid : combien de salons avant de retirer, sur quelle fenetre, et la longueur en dessous de laquelle on ne compte pas — « ok » se dit dans tous les salons sans etre une publicite.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span></p>
+            <h3>La photo de profil, ou le logo — jamais une image cassee</h3>
+            <p>L’avatar du compte etait pose sans filet : une photo de profil changee depuis la connexion laisse son ancienne adresse sans reponse, et le navigateur dessine alors sa petite image dechiree a la place du visage. On retombe desormais sur le logo.</p>
+          </li>
+          <li class="journal-reste">et 34 autres modifications ce jour-là</li>
+        </ul>
+      </section>
+
+      <section class="journal-jour">
+        <h2><time datetime="2026-09-26">26 septembre 2026</time></h2>
+        <ul class="journal-liste">
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Le courrier se traduit, et l’equipe peut demander un brouillon</h3>
+            <p>Deux interrupteurs de plus dans la rubrique Modmail, coupes par defaut. La traduction fait arriver le message du membre dans la langue du bot, et repartir la reponse dans la sienne, l’original dessous.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>La rubrique Modmail, et ce qu’elle deplace</h3>
+            <p>Un module a activer : salon qui recoit les fils, role a prevenir, message d’accueil, reponses signees ou au nom de l’equipe, pause entre deux messages, et la liste des membres bloques.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Le delai d’oubli des infractions se regle depuis le tableau de bord</h3>
+            <p>Un casier a vie n’existe nulle part ailleurs : au bout d’un moment, une betise cesse de compter. La carte des sanctions porte desormais le delai, en jours ; zero pour un serveur qui ne veut rien oublier, et c’est son droit.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Le tirage des numeros de commande se verifie comme il s’utilise</h3>
+            <p>La CI a rougi sur `test_boutique`, sans rapport avec le courrier : le test tirait deux cents numeros A L’AVEUGLE et exigeait qu’ils soient tous differents.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span></p>
+            <h3>Dictionnaire du bot : phrases nouvelles traduites</h3>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Le membre choisit son serveur dans TOUTE sa liste, et sait quand il est ferme</h3>
+            <p>Le menu ne proposait que les serveurs ayant active le module, et un membre dont aucun serveur ne l’avait active n’obtenait rien : ni reponse, ni explication. Il croyait le bot casse.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Le courrier passe la cloison, et se range dans l’aide</h3>
+            <p>Trois reprises apres la CI.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span></p>
+            <h3>Dictionnaire du bot : phrases nouvelles traduites</h3>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Le modmail : ecrire a l’equipe en prive, et recevoir une reponse</h3>
+            <p>Un message prive au bot tombait dans le vide : `on_message` rendait la main des qu’il n’y avait pas de serveur. Un membre qui voulait signaler quelqu’un sans se faire voir, demander une permission ou poser une question genante avait le choix entre le dire devant tout le monde et ecrire a un…</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>L’echelle comptait encore a l’ancien delai quand elle lisait</h3>
+            <p>`add_avert` purgeait au rythme du serveur, mais `get_hist` gardait ses cent cinquante jours en dur : un serveur qui raccourcissait le delai voyait son casier se vider a l’ecriture et rester plein a la lecture.</p>
+          </li>
+          <li class="journal-reste">et 2 autres modifications ce jour-là</li>
+        </ul>
+      </section>
+
+      <section class="journal-jour">
+        <h2><time datetime="2026-09-25">25 septembre 2026</time></h2>
+        <ul class="journal-liste">
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span></p>
+            <h3>Le wiki cite /installer</h3>
+            <p>Co-Authored-By: Claude Opus 5 &lt;noreply@anthropic.com&gt;</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span></p>
+            <h3>Le wiki suit : huit commandes de plus, cinq lignes a prefixe en moins</h3>
+            <p>/mute, /unmute, /lock, /unlock, /role, /salon-acces, /vocal et /note entrent ; !addroles, !deleteroles, !addchannel, !deletechannel et !help sortent — le bot n'a plus aucune commande a prefixe. Le nettoyage dit maintenant ce qu'il fait vraiment </p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Le salon des contestations, et l’annonce des salons proteges</h3>
+            <p>Rubrique Salons : une ligne « Contestations ». Quand un membre sanctionne clique sur « Contester », sa demande arrive la, avec ce qu’il a ecrit et son historique, et un bouton « Repondre » lui repond en prive. Sans salon choisi, tout part dans les logs.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span></p>
+            <h3>La capture du Server Members Intent, masquee et publiee</h3>
+            <p>Le message de bienvenue poste a l’arrivee d’un membre : la preuve que Discord demande pour cet intent. Pseudonyme masque aux trois endroits, avatar floute. Publiee avec l’accord du proprietaire.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>La politique de confidentialite se lit depuis partout</h3>
+            <p>Elle n'etait atteignable que depuis l'accueil et la boutique. Le wiki et la page Premium n'avaient aucun pied de page, et le tableau de bord — la ou travaille l'administrateur qui installe le bot et decide ce qu'on garde de ses membres — ne la citait nulle part.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span></p>
+            <h3>Les captures de la demande d'intents, a une adresse stable</h3>
+            <p>Discord exige un lien public vers une capture montrant le cas d'utilisation dans un vrai serveur. Un lien de fichier Discord expire : l'image vit donc avec le site. Pseudonymes, identifiants et avatars masques, publiee avec l'accord du proprietaire.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Tests</span></p>
+            <h3>L'invitation du partenaire principal, et deux noms hors de leur portee</h3>
+            <p>L'URL personnalisee de Twitch Memez94 etait morte (« Unknown Invite ») : une vanity URL disparait quand le serveur perd son niveau de boost. Le bouton menait au vide sur l'accueil et sur la page partenaires, et comme ce code sert aussi a lire le logo et l'effectif, la carte restait figee.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span></p>
+            <h3>Dictionnaire du bot : phrases nouvelles traduites</h3>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>L’installation en trois questions</h3>
+            <p>Un serveur qui invitait ModBot recevait des liens, et devait ensuite ouvrir un tableau de bord que la plupart n’ouvrent jamais : le bot restait muet, et on le retirait en croyant qu’il ne servait a rien.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>L’anti-nuke avalait sa premiere alerte sur une machine fraiche</h3>
+            <p>Le delai de garde comparait `time.monotonic()` — les secondes depuis le demarrage de la MACHINE — a zero. Tant que l hote avait moins de trente secondes de vie, la toute premiere alerte d’un acteur etait prise pour un doublon et jetee : pas d’alerte, pas de sanction, pas de restauration.</p>
+          </li>
+          <li class="journal-reste">et 10 autres modifications ce jour-là</li>
+        </ul>
+      </section>
+
+      <section class="journal-jour">
+        <h2><time datetime="2026-09-22">22 septembre 2026</time></h2>
+        <ul class="journal-liste">
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>Salons proteges, roles en masse, guide des rubriques, sauvegardes transportables</h3>
+            <p>- Deux rubriques : « Salons proteges » (messages supprimes d'office, auteur averti, mode « images seulement », exceptions) et « Roles en masse » (reglages de /massrole et /demassrole, lancement depuis le tableau de bord avec apercu, suivi et arret).</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span></p>
+            <h3>Les roles en masse gardent leur tache</h3>
+            <p>asyncio ne retient qu'une reference faible : une tache que plus rien ne tient peut etre ramassee en plein travail.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span></p>
+            <h3>Dictionnaire du bot : phrases nouvelles traduites</h3>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Salons proteges, /massrole et /demassrole, plus de vie du serveur, sauvegardes transportables</h3>
+            <p>- Salons proteges : un message poste dans un salon choisi est supprime aussitot, son auteur averti une fois par rafale (dans le salon, en MP ou pas du tout), avec un avertissement officiel en option. Le staff et des roles choisis y ecrivent librement ; un mode « images seulement ».</p>
+          </li>
+        </ul>
+      </section>
+
+      <section class="journal-jour">
+        <h2><time datetime="2026-09-21">21 septembre 2026</time></h2>
+        <ul class="journal-liste">
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span></p>
+            <h3>La politique de confidentialite suit le code, a nouveau</h3>
+            <p>Elle disait « le contenu des messages n'est pas conserve » : c'est desormais vrai, le bot n'en gardant plus aucune copie. Elle precise ce qu'il advient d'un message supprime ou modifie — republie dans le salon de logs, sur Discord, sans copie chez ModBot.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>Les resultats de la recherche ne s'ecrasent plus</h3>
+            <p>La liste est une colonne limitee a 520 pixels. Ses lignes avaient le droit de retrecir : avec vingt roles, le navigateur les ecrasait a vingt-deux pixels chacune au lieu de faire defiler la liste, et le nom du role debordait sur son nombre de membres.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>La grille des protections : l'anti-pub, et chaque carte par son nom</h3>
+            <p>Trois changements dans la rubrique Securite du tableau de bord.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>L'immunite du staff au tableau de bord</h3>
+            <p>Un bloc dans la rubrique Securite, avec les deux interrupteurs que le bot vient de recevoir : le staff immunise contre toutes les sanctions automatiques (actif par defaut), et le staff hors de la surveillance de l'anti-nuke (inactif, deconseille). Le wiki cite /securite staff.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Le bot ne garde plus aucun texte de message sur son disque</h3>
+            <p>La politique de confidentialite le promettait et c'etait faux. Chaque evenement du journal enregistrait ses champs en base : le texte des messages supprimes (900 caracteres), l'avant et l'apres des messages modifies, le message original d'une insulte, l'extrait d'une arnaque.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>La carte Anti-raid du tableau de bord dit la verite</h3>
+            <p>La grille « Protections serveur » lisait le booleen historique « antiraid », qui vaut « non » sur un serveur qui n'y a jamais touche — alors que l'anti-raid y est ACTIF, sa vraie config etant active par defaut. Le tableau de bord montrait une protection eteinte qui tournait.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Un administrateur suit son propre reglage d'immunite</h3>
+            <p>Un administrateur fait partie du staff. Si un serveur avait coupe « administrateurs immunises », l'immunite du staff la lui rendait en douce : un choix explicite annule par un autre, sans un mot.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span></p>
+            <h3>Dictionnaire du bot : phrases nouvelles traduites</h3>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Le staff n'est plus sanctionne par ses propres protections</h3>
+            <p>Le 21/09, sur un serveur de production, l'anti-arnaque a supprime l'annonce d'un membre du staff dans #annonces-staff et lui a inscrit trois points d'infraction. L'annonce portait le lien du serveur et un @everyone — exactement ce que contient une publicite d'arnaque.</p>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="footer-grille">
+      <span class="footer-marque">
+        <img src="assets/modbot-mark.webp" alt="ModBot" width="256" height="256" loading="lazy" decoding="async">
+      </span>
+
+      <nav class="footer-colonne" aria-label="Navigation" data-i18n-aria="pied.navigation">
+        <p class="footer-titre" data-i18n="pied.navigation">Navigation</p>
+        <a href="index.html" data-i18n="pied.accueil">Accueil</a>
+        <a href="index.html#features" data-i18n="nav.features">Fonctionnalités</a>
+        <a href="wiki.html" data-i18n="pied.commandes">Commandes</a>
+        <a href="boutique.html" data-i18n="nav.boutique">Boutique</a>
+        <a href="articles.html" data-i18n="pied.guides">Guides</a>
+      </nav>
+
+      <nav class="footer-colonne" aria-label="Communauté" data-i18n-aria="pied.communaute">
+        <p class="footer-titre" data-i18n="pied.communaute">Communauté</p>
+        <a href="wiki.html" data-i18n="pied.documentation">Documentation</a>
+        <a href="https://discord.gg/CK8CbFtYuv" target="_blank" rel="noreferrer" data-i18n="pied.support">Support Discord</a>
+        <a href="partenaires.html" data-i18n="nav.partenaires">Partenaires</a>
+        <a href="statut.html" data-i18n="pied.statut">État du service</a>
+      </nav>
+
+      <nav class="footer-colonne" aria-label="Voir aussi" data-i18n-aria="pied.voirAussi">
+        <p class="footer-titre" data-i18n="pied.voirAussi">Voir aussi</p>
+        <a href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a>
+        <a href="dashboard.html?panel=premium" data-i18n="nav.premium">Premium</a>
+        <a href="dashboard.html?flow=invite" data-discord-bot-invite data-i18n="nav.ajouter">Ajouter ModBot</a>
+        <a href="index.html#faq" data-i18n="home.faq">FAQ</a>
+      </nav>
+    </div>
+
+    <div class="footer-bas">
+      <p class="footer-legal">
+        <a href="confidentialite.html" data-i18n="pied.confidentialite">Politique de confidentialité</a>
+        <a href="conditions.html" data-i18n="pied.cgu">Conditions d’utilisation</a>
+        <a href="mentions.html" data-i18n="pied.mentions">Mentions légales</a>
+      </p>
+      <p class="footer-copyright" data-i18n="pied.copyright">© 2026 ModBot — Tous droits réservés.</p>
+      <div class="footer-langue" role="group" aria-label="Langue" data-i18n-aria="pied.langue">
+        <button type="button" data-pied-langue="fr">FR</button>
+        <span aria-hidden="true">/</span>
+        <button type="button" data-pied-langue="en">EN</button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="translations.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

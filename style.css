@@ -10328,6 +10328,49 @@ body:not(.dashboard-page) .page-glow {
   text-decoration-color: currentColor;
 }
 
+/* ── Le journal des modifications ──────────────────────────────────────
+   Une liste datee, lisible d'un coup d'oeil : la date tient la colonne
+   de gauche sur grand ecran et passe au-dessus sur telephone. Les
+   couleurs passent par les canaux, comme partout dans ce fichier.
+
+   Chaque entree porte « data-depot », ce qui permettra de filtrer plus
+   tard sans retoucher le generateur. */
+.journal { margin: 8px 0 0; }
+
+.journal-jour { display: grid; grid-template-columns: 190px minmax(0, 1fr);
+  gap: 0 28px; padding: 0 0 26px; }
+.journal-jour > h2 { margin: 0; font-size: 1rem; font-weight: 600;
+  color: var(--muted, #8a93a6); position: sticky; top: 90px; align-self: start; }
+
+.journal-liste { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+
+.journal-entree { padding: 16px 18px; border-radius: 14px;
+  border: 1px solid rgba(var(--canal-clair), 0.08);
+  background: rgba(var(--canal-clair), 0.03); }
+.journal-entree > h3 { margin: 0; font-size: 1.02rem; line-height: 1.35; }
+.journal-entree > p { margin: 8px 0 0; color: var(--soft, #c3cbd9); font-size: 0.93rem;
+  line-height: 1.55; }
+
+.journal-etiquettes { margin: 0 0 8px; display: flex; flex-wrap: wrap; gap: 6px;
+  font-size: 0.72rem; letter-spacing: 0.6px; text-transform: uppercase; }
+.journal-ou, .journal-etiquette { padding: 2px 8px; border-radius: 999px;
+  border: 1px solid rgba(var(--canal-clair), 0.12); color: var(--muted, #8a93a6); }
+/* D'ou vient la modification : c'est la premiere chose qu'on cherche,
+   et la seule etiquette qui porte une couleur. */
+.journal-ou { color: var(--accent, #5865f2); border-color: var(--accent-line, rgba(88, 101, 242, 0.38));
+  background: var(--accent-soft, rgba(88, 101, 242, 0.13)); font-weight: 600; }
+
+.journal-reste { padding: 2px 4px; color: var(--muted, #8a93a6); font-size: 0.88rem;
+  font-style: italic; }
+
+/* Sur telephone la date passe au-dessus : deux colonnes de 190 px et de
+   rien ne tiennent pas dans 375 px, et une date collante n'a pas de sens
+   quand on fait defiler un ecran haut de huit lignes. */
+@media (max-width: 760px) {
+  .journal-jour { grid-template-columns: minmax(0, 1fr); gap: 10px; padding-bottom: 22px; }
+  .journal-jour > h2 { position: static; }
+}
+
 /* ── « À lire ensuite » ────────────────────────────────────────────────
    Un bloc discret : il ferme la page sans concurrencer sa derniere
    section. Les couleurs passent par les canaux, comme partout. */
