@@ -876,6 +876,7 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "hero.eyebrow": "حماية ديسكورد 24/7",
     "hero.lead": "إشراف ذكي يحمي مجتمعك، يدير التذاكر، وينظم الخادم بطريقة واضحة وسريعة.",
     "hero.sousTitre": "بوت حماية وإشراف لديسكورد",
+    "home.metaDescription": "إشراف تلقائي، حماية من الغارات، تذاكر، كابتشا ولوحة تحكم كاملة: يحمي ModBot خادم ديسكورد الخاص بك على مدار الساعة. مجاني في الأساسيات.",
     "home.comprendreEyebrow": "قبل الاختيار",
     "home.comprendreTitre": "ثلاثة أسئلة قبل تثبيت بوت إشراف",
     "home.comprendreQ1": "ماذا يفعل بوت الحماية فعلًا؟",

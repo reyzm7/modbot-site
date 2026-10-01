@@ -101,6 +101,13 @@ class Page(HTMLParser):
                          "data-i18n-title", "data-i18n-aria"):
             if d.get(marqueur):
                 self.citees.add(d[marqueur])
+        # Le titre de l'onglet et la description vivent dans <head>, hors
+        # de portee d'un "data-i18n" : une page les nomme par ces deux
+        # metas, et le script les relit a chaque changement de langue.
+        # Sans cette lecture, leurs clefs passeraient pour mortes.
+        if tag == "meta" and d.get("name") in ("modbot-titre-i18n", "modbot-desc-i18n"):
+            if d.get("content"):
+                self.citees.add(d["content"])
         if tag in AUTO_FERMANTES:
             return
         self.pile.append({"tag": tag, "clef": d.get("data-i18n"),

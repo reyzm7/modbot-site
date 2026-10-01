@@ -895,6 +895,7 @@ window.MODBOT_TRANSLATIONS = {
     "hero.eyebrow": "Protection Discord 24/7",
     "hero.lead": "La modération intelligente qui protège votre communauté, automatise les sanctions, gère les tickets et garde votre serveur clair, sain et réactif.",
     "hero.sousTitre": "Bot de protection et de modération pour Discord",
+    "home.metaDescription": "Modération automatique, anti-raid, tickets, captcha et tableau de bord : ModBot protège votre serveur Discord 24 h sur 24. Gratuit sur l'essentiel.",
     "home.comprendreEyebrow": "Avant de choisir",
     "home.comprendreTitre": "Trois questions avant d'installer un bot de modération",
     "home.comprendreQ1": "Qu'est-ce qu'un bot de protection fait vraiment ?",

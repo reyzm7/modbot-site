@@ -876,6 +876,7 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "hero.eyebrow": "Discord protection 24/7",
     "hero.lead": "Smart moderation that protects your community, automates sanctions, manages tickets, and keeps your server clear, healthy, and responsive.",
     "hero.sousTitre": "Protection and moderation bot for Discord",
+    "home.metaDescription": "Automatic moderation, anti-raid, tickets, captcha and a full dashboard: ModBot protects your Discord server around the clock. Free for the essentials.",
     "home.comprendreEyebrow": "Before you choose",
     "home.comprendreTitre": "Three questions before installing a moderation bot",
     "home.comprendreQ1": "What does a protection bot actually do?",

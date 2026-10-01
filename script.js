@@ -480,9 +480,40 @@ function chargerDictionnaire(langue) {
 }
 
 /** Langue retenue : celle choisie, sinon celle du navigateur, sinon le français. */
+/* La langue demandee par l'adresse : « ?lang=en ».
+
+   C'est la premiere chose qu'on regarde, avant le choix enregistre et
+   avant le navigateur, et pour deux raisons.
+
+   La premiere est qu'un lien doit tenir sa promesse : partager
+   « ?lang=en » a un anglophone et le laisser tomber sur du francais
+   parce que SA memoire dit autre chose serait absurde.
+
+   La seconde est que les moteurs ne lisaient jusqu'ici qu'une seule
+   version du site. La langue vivait dans le stockage du navigateur,
+   donc une seule adresse existait, donc quatre langues sur cinq
+   n'existaient pour personne d'autre que leurs lecteurs. */
+function langueDeLAdresse() {
+  try {
+    const demandee = new URLSearchParams(location.search).get("lang");
+    const propre = String(demandee || "").slice(0, 2).toLowerCase();
+    return LANGUES_DU_SITE.includes(propre) ? propre : "";
+  } catch (erreur) {
+    return "";
+  }
+}
+
 function getSiteLanguage() {
-  const enregistree = localStorage.getItem(CLEF_LANGUE);
-  if (enregistree && LANGUES_DU_SITE.includes(enregistree)) return enregistree;
+  const parLAdresse = langueDeLAdresse();
+  if (parLAdresse) return parLAdresse;
+  // « try » autour du stockage : en navigation privee, le simple fait
+  // de le lire peut lever, et la page entiere s'arreterait la.
+  try {
+    const enregistree = localStorage.getItem(CLEF_LANGUE);
+    if (enregistree && LANGUES_DU_SITE.includes(enregistree)) return enregistree;
+  } catch (erreur) {
+    // Stockage refuse : on se rabat sur le navigateur.
+  }
   const navigateur = (navigator.language || "").slice(0, 2).toLowerCase();
   return LANGUES_DU_SITE.includes(navigateur) ? navigateur : LANGUE_PAR_DEFAUT;
 }
@@ -542,7 +573,95 @@ function applySiteLanguage(language) {
   appliquerLangue(language);
 }
 
+/* L'adresse suit la langue affichee.
+
+   Sans cela, quelqu'un qui bascule en espagnol puis partage la page
+   envoie un lien vers le francais. « replaceState » plutot que
+   « pushState » : le changement de langue n'est pas une page de plus,
+   et le bouton « precedent » doit ramener d'ou l'on vient, pas defaire
+   un choix de langue.
+
+   Le francais ne porte pas de parametre : c'est la version par defaut,
+   et une adresse nue vaut mieux qu'une adresse qui dit l'evidence. */
+function majAdresseLangue(language) {
+  try {
+    const url = new URL(location.href);
+    if (language === LANGUE_PAR_DEFAUT) url.searchParams.delete("lang");
+    else url.searchParams.set("lang", language);
+    if (url.href !== location.href) history.replaceState(null, "", url.href);
+  } catch (erreur) {
+    // Page ouverte depuis un fichier local, navigateur ancien : la
+    // langue s'affiche quand meme, seule l'adresse ne suit pas.
+  }
+}
+
+/* Le lien canonique dit aux moteurs quelle adresse represente CETTE
+   page. S'il pointait toujours vers la version sans parametre, Google
+   traiterait « ?lang=en » comme un double du francais et ne
+   l'indexerait pas — ce qui annulerait tout le reste. */
+function majCanoniqueLangue(language) {
+  const lien = document.querySelector('link[rel="canonical"]');
+  if (!lien) return;
+  try {
+    const url = new URL(lien.getAttribute("href"), location.href);
+    if (language === LANGUE_PAR_DEFAUT) url.searchParams.delete("lang");
+    else url.searchParams.set("lang", language);
+    lien.setAttribute("href", url.href);
+  } catch (erreur) {
+    // Adresse canonique illisible : mieux vaut la laisser telle quelle
+    // que d'en ecrire une fausse.
+  }
+}
+
+/* Le titre de l'onglet et la description, dans la langue lue.
+
+   Ce sont les deux lignes que Google affiche dans ses resultats, et
+   elles restaient en francais quelle que soit la langue : une page
+   allemande annoncee par un titre francais ne se classe pas en
+   allemand, et les « hreflang » n'y changent rien.
+
+   Rien de neuf n'est traduit pour autant. La page nomme deux clefs
+   qu'elle porte deja — son titre est son <h1>, sa description est son
+   chapeau — et on les relit simplement a chaque changement.
+
+   Les pages qui ne nomment rien gardent leur titre ecrit a la main :
+   les guides, notamment, sont ecrits pour une langue et restent en
+   francais, comme le dit deja le test. */
+function majTitreEtDescription(language) {
+  // On lit dans le dictionnaire de LA langue demandee, et non par
+  // « t() ». Celle-ci relit la langue courante, qui n'est pas encore
+  // celle-ci pendant la bascule : en revenant au francais, le titre
+  // restait dans la langue precedente — vu en arabe sur l'accueil.
+  const mot = (clef) => (siteTranslations[language] || {})[clef]
+    || (siteTranslations[LANGUE_PAR_DEFAUT] || {})[clef] || "";
+  const lire = (nom) => document.querySelector('meta[name="' + nom + '"]')?.content || "";
+  const clefTitre = lire("modbot-titre-i18n");
+  if (clefTitre) {
+    const traduit = mot(clefTitre);
+    // Le repli : si la clef ne rend rien, on ne remplace pas un titre
+    // juste par une clef technique affichee a l'onglet.
+    if (traduit && traduit !== clefTitre) {
+      const avant = lire("modbot-titre-prefixe");
+      const apres = lire("modbot-titre-suffixe");
+      document.title = avant + traduit + (apres ? " — " + apres : "");
+    }
+  }
+  const clefDesc = lire("modbot-desc-i18n");
+  const balise = document.querySelector('meta[name="description"]');
+  if (clefDesc && balise) {
+    const traduit = mot(clefDesc);
+    // Le chapeau d'une page de wiki peut contenir un lien : la
+    // description est du texte nu, les balises en seraient affichees
+    // telles quelles dans le resultat de recherche.
+    const nu = traduit.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+    if (nu && nu !== clefDesc) balise.setAttribute("content", nu);
+  }
+}
+
 function appliquerLangue(language) {
+  majAdresseLangue(language);
+  majCanoniqueLangue(language);
+  majTitreEtDescription(language);
   const dictionnaire = siteTranslations[language] || siteTranslations[LANGUE_PAR_DEFAUT] || {};
   const repli = siteTranslations[LANGUE_PAR_DEFAUT] || {};
   const lire = (clef) => dictionnaire[clef] || repli[clef];
