@@ -22,6 +22,11 @@ PAGES = ["index.html", "dashboard.html", "admin.html", "wiki.html",
          "partenaires.html", "boutique.html",
          "confidentialite.html", "conditions.html", "mentions.html",
          "statut.html",
+         # Les trois questions ont quitte l accueil le 05/10/2026 pour
+         # leur propre page. Elles etaient traduites avant le
+         # deplacement et doivent le rester : une section qui demenage
+         # ne sort pas des cinq langues en chemin.
+         "comprendre.html",
          # Le wiki tenait sur une page ; il en occupe huit depuis le
          # 01/10/2026. Elles sont de la DOCUMENTATION, pas des articles
          # de fond : le wiki a toujours ete traduit, et le decouper ne

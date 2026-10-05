@@ -10,24 +10,38 @@
        nous, rien de plus. Elle ne suit personne et ne charge rien.
        La retirer fait perdre la propriete du site dans la console. -->
   <meta name="google-site-verification" content="1gYsz_TcTaY_9RconiKI-sPWC-xFMnbW3DbQgO0NMf0">
-  <title>Écrire le règlement d'un serveur Discord — ModBot</title>
+  <title>Trois questions avant d'installer un bot de modération Discord — ModBot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500..900&display=swap" rel="stylesheet">
-  <meta name="description" content="Un règlement que personne ne lit ne sert à rien. Comment en écrire un court, applicable et défendable — et les quatre formules à éviter.">
-  <link rel="canonical" href="https://modbot-website.vercel.app/article-reglement-serveur-discord.html">
+  <meta name="description" content="Ce qu'un bot de modération fait vraiment, par quoi commencer sur un serveur neuf, et comment arrêter le spam sans faire fuir les nouveaux membres.">
+  <meta name="modbot-titre-i18n" content="comprendre.titre">
+  <meta name="modbot-titre-suffixe" content="ModBot">
+  <meta name="modbot-desc-i18n" content="comprendre.metaDescription">
+  <link rel="canonical" href="https://modbot-website.vercel.app/comprendre.html">
+  <!-- Les cinq versions de cette page. Le site se traduit dans le
+       navigateur, sans changer d'adresse : les moteurs n'en voyaient
+       donc qu'une seule, et quatre langues sur cinq n'existaient pour
+       personne d'autre que leurs lecteurs. Ces liens les declarent, et
+       « ?lang= » les sert. -->
+  <link rel="alternate" hreflang="fr" href="https://modbot-website.vercel.app/comprendre.html">
+  <link rel="alternate" hreflang="en" href="https://modbot-website.vercel.app/comprendre.html?lang=en">
+  <link rel="alternate" hreflang="es" href="https://modbot-website.vercel.app/comprendre.html?lang=es">
+  <link rel="alternate" hreflang="de" href="https://modbot-website.vercel.app/comprendre.html?lang=de">
+  <link rel="alternate" hreflang="ar" href="https://modbot-website.vercel.app/comprendre.html?lang=ar">
+  <link rel="alternate" hreflang="x-default" href="https://modbot-website.vercel.app/comprendre.html">
   <meta property="og:site_name" content="ModBot">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://modbot-website.vercel.app/article-reglement-serveur-discord.html">
-  <meta property="og:title" content="Écrire le règlement d'un serveur Discord">
-  <meta property="og:description" content="Un règlement que personne ne lit ne sert à rien. Comment en écrire un court, applicable et défendable — et les quatre formules à éviter.">
+  <meta property="og:url" content="https://modbot-website.vercel.app/comprendre.html">
+  <meta property="og:title" content="Trois questions avant d'installer un bot de modération Discord">
+  <meta property="og:description" content="Ce qu'un bot de modération fait vraiment, par quoi commencer sur un serveur neuf, et comment arrêter le spam sans faire fuir les nouveaux membres.">
   <meta property="og:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Écrire le règlement d'un serveur Discord">
-  <meta name="twitter:description" content="Un règlement que personne ne lit ne sert à rien. Comment en écrire un court, applicable et défendable — et les quatre formules à éviter.">
+  <meta name="twitter:title" content="Trois questions avant d'installer un bot de modération Discord">
+  <meta name="twitter:description" content="Ce qu'un bot de modération fait vraiment, par quoi commencer sur un serveur neuf, et comment arrêter le spam sans faire fuir les nouveaux membres.">
   <meta name="twitter:image" content="https://modbot-website.vercel.app/modbot-preview.jpg">
   <link rel="stylesheet" href="style.css">
   <!-- Adresse publique de l API ModBot (le bot). Deja configuree :
@@ -44,25 +58,34 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "Écrire le règlement d'un serveur Discord",
-    "description": "Un règlement que personne ne lit ne sert à rien. Comment en écrire un court, applicable et défendable — et les quatre formules à éviter.",
-    "inLanguage": "fr-FR",
-    "datePublished": "2026-10-01",
-    "dateModified": "2026-10-01",
-    "mainEntityOfPage": "https://modbot-website.vercel.app/article-reglement-serveur-discord.html",
-    "author": {
-      "@type": "Organization",
-      "name": "ModBot"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "ModBot",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://modbot-website.vercel.app/logo.png"
+    "@type": "FAQPage",
+    "inLanguage": "fr",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Qu'est-ce qu'un bot de protection fait vraiment ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Il surveille trois choses qu'un humain ne peut pas tenir en continu : ce qui arrive sur le serveur, ce qui s'y écrit, et ce que l'équipe y change. Le reste — trancher un conflit, accueillir quelqu'un, décider d'un bannissement — demande un humain, et aucun bot sérieux ne prétendra le contraire. Ce qui se mesure se délègue : la vitesse d'un spam, l'âge d'un compte, le nombre de messages identiques. Ce qui s'interprète ne se délègue pas."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Par quoi commencer sur un serveur neuf ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Par le journal, qui rend tout le reste vérifiable : sans lui, le bot travaille et vous ne voyez rien de ce qu'il fait. Puis par le rôle du staff, sans lequel vos propres modérateurs se font filtrer. Ensuite seulement une protection, une seule — activer les dix d'un coup rend impossible de savoir laquelle gêne quand quelque chose coince."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Comment arrêter le spam sans faire fuir les nouveaux ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Toute vérification est un compromis : ce qu'elle arrête d'un côté, elle le fait payer de l'autre à des gens qui n'ont rien fait. Un captcha stoppe les vagues automatisées mais coûte une part des arrivées honnêtes. Brider les premières heures — ni lien, ni fichier, ni invitation — arrête le spam publicitaire pour un coût presque nul, parce qu'un compte jetable ne patiente pas."
+        }
       }
-    }
+    ]
   }
   </script>
 </head>
@@ -130,76 +153,32 @@
 
   <main class="wiki-shell section-shell">
     <article class="wiki-hero">
-      <p class="eyebrow">Guide</p>
-      <h1>Écrire le règlement d'un serveur Discord</h1>
-      <p>Le règlement n'est pas là pour impressionner : il est là pour que personne ne discute quand vous sanctionnez. Une règle qu'on ne peut pas montrer du doigt ne vaut rien.</p>
-      <p class="field-help">Mis à jour le 1er octobre 2026 · 6 minutes de lecture</p>
+      <p class="eyebrow" data-i18n="comprendre.eyebrow">Avant de choisir</p>
+      <h1 data-i18n="comprendre.titre">Trois questions avant d'installer un bot de modération</h1>
+      <p data-i18n="comprendre.chapeau">Trois questions que tout le monde se pose avant d'installer un bot de modération sur son serveur Discord. Les réponses valent aussi pour un serveur qui n'utilise pas ModBot.</p>
     </article>
 
-    <div class="wiki-layout">
-      <aside class="wiki-toc" aria-label="Sommaire de l'article">
-        <a href="#pourquoi">À quoi ça sert</a>
-        <a href="#longueur">Combien de règles</a>
-        <a href="#formuler">Comment formuler</a>
-        <a href="#sanctions">Les sanctions</a>
-        <a href="#presenter">Où le mettre</a>
-        <a href="#modbot">Avec ModBot</a>
-      </aside>
-
-      <div class="wiki-content">
-        <section id="pourquoi" class="wiki-section">
-          <h2>À quoi sert vraiment un règlement</h2>
-          <p>Pas à faire respecter les règles — personne ne lit un règlement et ne change de comportement. Il sert à un seul moment : celui où vous sanctionnez quelqu'un, et où il demande pourquoi.</p>
-          <p>Sans texte, chaque décision se discute, et c'est cette discussion qui use une équipe, pas la décision elle-même. Avec un texte, « c'est écrit au point 3 » clôt la conversation en une phrase.</p>
-          <p>Il en découle une règle d'écriture simple : si une ligne ne vous servira jamais à justifier une sanction, elle n'a rien à faire dans le règlement.</p>
-        </section>
-
-        <section id="longueur" class="wiki-section">
-          <h2>Combien de règles</h2>
-          <p>Entre cinq et huit. En dessous, il manque des cas courants ; au-dessus, personne ne retient, et vous ne retiendrez pas non plus.</p>
-          <p>Un règlement de vingt points est un aveu : il dit qu'on a ajouté une ligne après chaque incident, sans jamais relire l'ensemble. Il devient alors contradictoire, et un membre de mauvaise foi y trouvera toujours de quoi contester.</p>
-          <p>Si un sujet demande vraiment du détail — les règles d'un salon de vente, par exemple — mettez-le dans ce salon-là, pas dans le règlement général.</p>
-        </section>
-
-        <section id="formuler" class="wiki-section">
-          <h2>Comment formuler une règle</h2>
-          <p>Une règle utile décrit un <strong>comportement observable</strong>. « Pas de publicité sans accord d'un modérateur » se vérifie ; « respectez l'esprit du serveur » ne se vérifie pas.</p>
-          <p>Quatre formules à éviter, parce qu'elles sont invérifiables et donc indéfendables :</p>
-          <p><strong>« Soyez respectueux. »</strong> Tout le monde pense l'être. Dites plutôt ce qui est interdit : insultes, moqueries sur l'apparence, acharnement sur une personne.</p>
-          <p><strong>« Pas de spam. »</strong> Donnez un chiffre ou un exemple. « Pas plus de trois messages d'affilée pour dire la même chose » se constate.</p>
-          <p><strong>« Le staff a toujours raison. »</strong> Cette ligne ne protège personne et donne au serveur une odeur de petit pouvoir. Prévoyez plutôt comment contester une sanction.</p>
-          <p><strong>« Les règles peuvent changer sans préavis. »</strong> Elles le peuvent de toute façon ; l'écrire ne fait que prévenir qu'on ne sera pas prévenu.</p>
-        </section>
-
-        <section id="sanctions" class="wiki-section">
-          <h2>Dire ce qui arrive quand on enfreint</h2>
-          <p>C'est la partie que la plupart des règlements oublient, et c'est pourtant celle qui désamorce les disputes.</p>
-          <p>Annoncez une échelle : avertissement, puis exclusion temporaire, puis renvoi. Peu importe laquelle, pourvu qu'elle soit écrite avant. Une sanction annoncée à l'avance se conteste mal ; une sanction décidée au cas par cas donne toujours l'impression d'être arbitraire, même quand elle ne l'est pas.</p>
-          <p>Dites aussi comment contester. Un membre qui a une voie de recours accepte beaucoup mieux une décision, même s'il ne l'utilise jamais.</p>
-        </section>
-
-        <section id="presenter" class="wiki-section">
-          <h2>Où le mettre et comment le présenter</h2>
-          <p>Dans un salon en lecture seule, épinglé, et si possible dans l'écran d'accueil de Discord — c'est le seul endroit que les nouveaux voient avant d'entrer.</p>
-          <p>Une règle par message plutôt qu'un pavé : on peut ainsi en citer une par son lien, ce qui vaut bien mieux que « va lire le règlement ».</p>
-          <p>Et datez-le. « Mis à jour le 12 mars » dit qu'il est vivant ; un règlement sans date paraît abandonné, et on le traite comme tel.</p>
-        </section>
-
-        <section id="modbot" class="wiki-section">
-          <h2>Avec ModBot</h2>
-          <p>L'échelle de sanctions de ModBot applique exactement ce que vous avez écrit : les points d'infraction s'accumulent, et chaque palier déclenche la sanction prévue. Ils peuvent aussi expirer, pour qu'une faute de l'an dernier ne compte pas éternellement.</p>
-          <p>Une question dont la réponse se trouve dans le règlement peut servir de vérification à l'entrée — c'est le seul filtre qui trie sur l'intention de lire. Voir <a href="wiki-verification.html">la vérification à l'arrivée</a>.</p>
-        </section>
-        <nav class="guides-suite" aria-label="À lire ensuite">
-          <h2>À lire ensuite</h2>
-          <ul>
-            <li><a href="article-commandes-moderation-discord.html">Les commandes de modération Discord expliquées</a></li>
-            <li><a href="article-accueillir-nouveaux-membres.html">Accueillir les nouveaux membres sur Discord</a></li>
-            <li><a href="article-verifier-nouveaux-membres.html">Vérifier les nouveaux membres d'un serveur Discord</a></li>
-          </ul>
-        </nav>
+    <section class="comprendre comprendre-page">
+      <div class="comprendre-grille">
+        <article class="comprendre-carte">
+          <h3 data-i18n="comprendre.q1">Qu'est-ce qu'un bot de protection fait vraiment ?</h3>
+          <p data-i18n="comprendre.r1">Il surveille trois choses qu'un humain ne peut pas tenir en continu : ce qui arrive sur le serveur, ce qui s'y écrit, et ce que l'équipe y change. Le reste — trancher un conflit, accueillir quelqu'un, décider d'un bannissement — demande un humain, et aucun bot sérieux ne prétendra le contraire.</p>
+          <p data-i18n="comprendre.r1b">Ce qui se mesure se délègue : la vitesse d'un spam, l'âge d'un compte, le nombre de messages identiques. Ce qui s'interprète ne se délègue pas.</p>
+          <a class="comprendre-lien" href="article-moderer-seul.html" data-i18n="comprendre.l1">Modérer un serveur quand on est seul →</a>
+        </article>
+        <article class="comprendre-carte">
+          <h3 data-i18n="comprendre.q2">Par quoi commencer sur un serveur neuf ?</h3>
+          <p data-i18n="comprendre.r2">Par le journal, qui rend tout le reste vérifiable : sans lui, le bot travaille et vous ne voyez rien de ce qu'il fait. Puis par le rôle du staff, sans lequel vos propres modérateurs se font filtrer. Ensuite seulement une protection, une seule — activer les dix d'un coup rend impossible de savoir laquelle gêne quand quelque chose coince.</p>
+          <a class="comprendre-lien" href="wiki-demarrer.html" data-i18n="comprendre.l2">Les quatre premiers réglages →</a>
+        </article>
+        <article class="comprendre-carte">
+          <h3 data-i18n="comprendre.q3">Comment arrêter le spam sans faire fuir les nouveaux ?</h3>
+          <p data-i18n="comprendre.r3">Toute vérification est un compromis : ce qu'elle arrête d'un côté, elle le fait payer de l'autre à des gens qui n'ont rien fait. Un captcha stoppe les vagues automatisées mais coûte une part des arrivées honnêtes. Brider les premières heures — ni lien, ni fichier, ni invitation — arrête le spam publicitaire pour un coût presque nul, parce qu'un compte jetable ne patiente pas.</p>
+          <a class="comprendre-lien" href="article-verifier-nouveaux-membres.html" data-i18n="comprendre.l3">Vérifier les nouveaux membres →</a>
+        </article>
       </div>
-    </div>
+      <p class="comprendre-note" data-i18n-html="comprendre.note">Les <a href="articles.html">guides</a> traitent ces sujets en détail, et valent aussi pour un serveur qui n'utilise pas ModBot. Le <a href="wiki.html">wiki</a> documente chaque réglage du bot, page par page.</p>
+    </section>
   </main>
   <footer class="footer">
     <div class="footer-grille">

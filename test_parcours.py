@@ -41,6 +41,7 @@ PAGES = [
     ("statut.html", "l'etat du service"),
     ("partenaires.html", "les partenaires"),
     ("articles.html", "les guides"),
+    ("comprendre.html", "les trois questions"),
     # Celle-ci est ecrite chaque nuit par outils/journal.js : c est la
     # seule page du site que personne ne relit avant sa mise en ligne.
     ("nouveautes.html", "le journal des modifications"),
