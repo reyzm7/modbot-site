@@ -1253,6 +1253,8 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "dash.immuniteStaffAutoAide": "Word filter, anti-spam, anti-link, night guard and anti-scam never touch the staff.",
     "dash.immuniteStaffNuke": "Not watched by the anti-nuke",
     "dash.immuniteStaffNukeAide": "Not recommended: a hijacked staff account would no longer be stopped. For a single trusted member, use the whitelist above instead.",
+    "dash.nukeAdmins": "Administrators bypass anti-nuke",
+    "dash.nukeAdminsAide": "On by default: deleting channels by hand won't cost you your roles. What it lets through: a compromised or hostile administrator account. Uncheck to restore monitoring; to exempt one person without opening it to all, use the whitelist above. Administrator bots stay watched either way.",
     "dash.neJamaisSanctionnerLe": "Never sanction the owner.",
     "dash.listeBlancheIdsDe": "Whitelist — member IDs (comma separated)",
     "dash.listeBlancheIdsDe2": "Whitelist — role IDs",

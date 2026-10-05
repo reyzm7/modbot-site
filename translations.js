@@ -1272,6 +1272,8 @@ window.MODBOT_TRANSLATIONS = {
     "dash.immuniteStaffAutoAide": "Filtre de langage, anti-spam, anti-lien, garde de nuit et anti-arnaque ne touchent jamais au staff.",
     "dash.immuniteStaffNuke": "Non surveillé par l'anti-nuke",
     "dash.immuniteStaffNukeAide": "Déconseillé : un compte staff piraté ne serait plus arrêté. Pour un seul membre de confiance, utilisez plutôt la liste blanche ci-dessus.",
+    "dash.nukeAdmins": "Les administrateurs échappent à l'anti-nuke",
+    "dash.nukeAdminsAide": "Activé par défaut : supprimer des salons à la main ne vous coûte pas vos rôles. Ce que cela laisse passer : un compte administrateur piraté ou devenu hostile. Décochez pour remettre la surveillance ; pour exempter une seule personne sans ouvrir à toutes, utilisez la liste blanche ci-dessus. Les bots administrateurs restent surveillés dans tous les cas.",
     "dash.neJamaisSanctionnerLe": "Ne jamais sanctionner le propriétaire.",
     "dash.listeBlancheIdsDe": "Liste blanche — IDs de membres (séparés par une virgule)",
     "dash.listeBlancheIdsDe2": "Liste blanche — IDs de rôles",

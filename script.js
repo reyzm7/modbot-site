@@ -6207,6 +6207,9 @@ function initDashboard() {
     // mis a jour) se lit comme « oui », pas comme « non ».
     setChecked("[data-filter-immunize-staff]", filter.immunize_staff !== false);
     setChecked("[data-antinuke-truststaff]", Boolean(nuke.trust_staff));
+    // Actif par defaut cote bot : une valeur absente — un bot pas encore
+    // mis a jour — se lit comme « oui », pas comme « non ».
+    setChecked("[data-antinuke-trustadmins]", nuke.trust_admins !== false);
     setValue("[data-antinuke-users]", idListToText(nuke.whitelist_users));
     setValue("[data-antinuke-roles]", idListToText(nuke.whitelist_roles));
 
@@ -6336,6 +6339,7 @@ function initDashboard() {
         auto_restore: readChecked("[data-antinuke-restore]"),
         trust_owner: readChecked("[data-antinuke-trustowner]"),
         trust_staff: readChecked("[data-antinuke-truststaff]"),
+        trust_admins: readChecked("[data-antinuke-trustadmins]"),
         whitelist_users: textToIdList(readValue("[data-antinuke-users]")),
         whitelist_roles: textToIdList(readValue("[data-antinuke-roles]"))
       },

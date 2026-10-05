@@ -1238,6 +1238,8 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "dash.immuniteStaffAutoAide": "Sprachfilter, Anti-Spam, Anti-Link, Nachtwache und Anti-Betrug greifen nie beim Team ein.",
     "dash.immuniteStaffNuke": "Nicht vom Anti-Nuke überwacht",
     "dash.immuniteStaffNukeAide": "Nicht empfohlen: Ein gehacktes Team-Konto würde nicht mehr gestoppt. Für ein einzelnes vertrauenswürdiges Mitglied besser die Whitelist oben nutzen.",
+    "dash.nukeAdmins": "Administratoren entgehen dem Anti-Nuke",
+    "dash.nukeAdminsAide": "Standardmäßig an: Kanäle von Hand zu löschen kostet dich nicht deine Rollen. Was dadurch durchkommt: ein gekapertes oder feindseliges Administrator-Konto. Zum Wiedereinschalten der Überwachung abwählen; um eine einzelne Person auszunehmen, ohne allen zu öffnen, nimm die Weißliste oben. Administrator-Bots bleiben in jedem Fall überwacht.",
     "dash.neJamaisSanctionnerLe": "Den Eigentümer nie sanktionieren.",
     "dash.listeBlancheIdsDe": "Whitelist — Mitglieds-IDs (durch Komma getrennt)",
     "dash.listeBlancheIdsDe2": "Whitelist — Rollen-IDs",

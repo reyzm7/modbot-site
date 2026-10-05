@@ -1238,6 +1238,8 @@ Object.assign(window.MODBOT_TRANSLATIONS, {
     "dash.immuniteStaffAutoAide": "El filtro de lenguaje, el antispam, el antienlaces, la guardia nocturna y el antiestafa nunca tocan al staff.",
     "dash.immuniteStaffNuke": "Sin vigilancia del antinuke",
     "dash.immuniteStaffNukeAide": "No recomendado: una cuenta de staff pirateada ya no sería detenida. Para un solo miembro de confianza, usa mejor la lista blanca de arriba.",
+    "dash.nukeAdmins": "Los administradores escapan al anti-nuke",
+    "dash.nukeAdminsAide": "Activado por defecto: borrar salas a mano no te cuesta tus roles. Lo que deja pasar: una cuenta de administrador comprometida u hostil. Desmarca para restablecer la vigilancia; para eximir a una sola persona sin abrirlo a todas, usa la lista blanca de arriba. Los bots administradores siguen vigilados en todo caso.",
     "dash.neJamaisSanctionnerLe": "No sancionar nunca al propietario.",
     "dash.listeBlancheIdsDe": "Lista blanca — IDs de miembros (separados por comas)",
     "dash.listeBlancheIdsDe2": "Lista blanca — IDs de roles",
