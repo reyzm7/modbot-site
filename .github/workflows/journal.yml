@@ -4,16 +4,28 @@
 # l'historique des deux depots, le site et le bot. Personne n'a a penser
 # a la remplir, et rien n'y entre qui n'ait ete pousse.
 #
-# Deux crons, une garde. GitHub fait tourner ses crons en UTC et ne
-# connait pas les fuseaux : minuit a Paris tombe a 23 h UTC en hiver et
-# a 22 h UTC en ete. On declenche donc aux deux heures, et l'etape de
-# garde arrete l'execution qui n'est pas la bonne. Un seul cron aurait
-# decale la page d'une heure la moitie de l'annee — et date ses entrees
-# de la veille pendant deux heures chaque soir d'ete.
+# ── Pourquoi la garde ne regarde PAS l'heure ──────────────────────────
+#
+# La premiere version demandait qu'il soit exactement minuit a Paris,
+# avec deux crons pour couvrir l'ete et l'hiver. Elle n'a jamais laisse
+# passer une seule execution : GitHub ne promet pas l'heure de ses
+# crons, et les huit premieres nuits sont parties entre 00 h 30 et
+# 02 h 30 UTC, soit deux a quatre heures apres l'heure demandee. La
+# garde refusait donc toujours, et la page n'a pas ete ecrite une fois.
+#
+# Le bon critere n'est pas « quelle heure est-il » mais « a-t-on deja
+# ecrit aujourd'hui ». Il est vrai quel que soit le retard, il survit au
+# changement d'heure, et il rend les deux crons inoffensifs : le premier
+# qui passe ecrit, le second voit que c'est fait et s'arrete.
+#
+# Le jour se compte a Paris, parce que c'est celui du lecteur — et le
+# generateur date ses entrees de la meme facon.
 name: Journal des modifications
 
 on:
   schedule:
+    # Deux departs, pour qu'un retard ou une file chargee ne fasse pas
+    # sauter une nuit entiere. La garde empeche la double ecriture.
     - cron: "10 22 * * *"
     - cron: "10 23 * * *"
   workflow_dispatch:
@@ -36,37 +48,44 @@ jobs:
   journal:
     runs-on: ubuntu-latest
     steps:
-      - name: Est-il minuit a Paris ?
-        id: heure
-        run: |
-          # Lance a la main, on ne verifie rien : c'est voulu.
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "ok=oui" >> "$GITHUB_OUTPUT"
-            echo "Lance a la main."
-            exit 0
-          fi
-          heure=$(TZ=Europe/Paris date +%H)
-          if [ "$heure" = "00" ]; then
-            echo "ok=oui" >> "$GITHUB_OUTPUT"
-            echo "Il est 00 h a Paris : on ecrit."
-          else
-            echo "ok=non" >> "$GITHUB_OUTPUT"
-            echo "Il est ${heure} h a Paris : ce n'est pas le bon cron, on s'arrete."
-          fi
-
       - name: Le site
-        if: steps.heure.outputs.ok == 'oui'
         uses: actions/checkout@v4
         with:
           path: modbot-site
-          # Le generateur lit « git log » : sans profondeur, il ne verrait
-          # qu'un seul commit et la page serait vide tous les jours.
+          # Le generateur lit « git log », et la garde cherche le dernier
+          # commit du journal : sans profondeur, ni l'un ni l'autre ne
+          # voit quoi que ce soit.
           fetch-depth: 0
+
+      - name: A-t-on deja ecrit aujourd'hui ?
+        id: garde
+        working-directory: modbot-site
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "ok=oui" >> "$GITHUB_OUTPUT"
+            echo "Lance a la main : on ecrit sans rien demander."
+            exit 0
+          fi
+          jour=$(TZ=Europe/Paris date +%F)
+          dernier=$(git log -1 --grep='^\[journal\]' --format=%cI || true)
+          if [ -n "$dernier" ]; then
+            jour_dernier=$(TZ=Europe/Paris date -d "$dernier" +%F)
+          else
+            jour_dernier="(jamais)"
+          fi
+          echo "Aujourd'hui a Paris : $jour"
+          echo "Dernier journal     : $jour_dernier"
+          if [ "$jour" = "$jour_dernier" ]; then
+            echo "ok=non" >> "$GITHUB_OUTPUT"
+            echo "Deja ecrit aujourd'hui : on s'arrete."
+          else
+            echo "ok=oui" >> "$GITHUB_OUTPUT"
+          fi
 
       # Les nouveautes du bot interessent plus les lecteurs que celles du
       # site. Il est pose a cote, comme le fait deja la suite de tests.
       - name: Le bot, a cote
-        if: steps.heure.outputs.ok == 'oui'
+        if: steps.garde.outputs.ok == 'oui'
         uses: actions/checkout@v4
         with:
           repository: reyzm7/modbot
@@ -74,7 +93,7 @@ jobs:
           fetch-depth: 0
 
       - name: Ecrire la page
-        if: steps.heure.outputs.ok == 'oui'
+        if: steps.garde.outputs.ok == 'oui'
         working-directory: modbot-site
         run: |
           jours="${{ github.event.inputs.jours }}"
@@ -82,7 +101,7 @@ jobs:
           node outils/journal.js --jours "$jours"
 
       - name: Pousser si quelque chose a change
-        if: steps.heure.outputs.ok == 'oui'
+        if: steps.garde.outputs.ok == 'oui'
         working-directory: modbot-site
         run: |
           if [ -z "$(git status --porcelain)" ]; then
@@ -93,7 +112,7 @@ jobs:
           git config user.email "noreply@github.com"
           git add nouveautes.html outils/journal.json sitemap.xml
           # « [journal] » en tete : le generateur ecarte ses propres
-          # commits, sans quoi la page parlerait d'elle-meme chaque jour.
+          # commits, et la garde de demain les reconnait.
           git commit -m "[journal] Les nouveautes du $(TZ=Europe/Paris date +%d/%m/%Y)"
           # Le site a pu bouger entre le checkout et maintenant.
           git pull --rebase origin main

@@ -1,6 +1,22 @@
 {
   "jours": [
     {
+      "date": "2026-10-05",
+      "entrees": [
+        {
+          "depot": "site",
+          "sha": "abc286f",
+          "titre": "Les trois questions ont leur propre page",
+          "detail": "La section « Avant de choisir » occupait un ecran entier de l'accueil pour trois reponses qu'on ne lit qu'une fois. Elle devient comprendre.html, et l'accueil n'en garde que l'accroche et la porte : vingt-neuf lignes deviennent neuf.",
+          "etiquettes": [
+            "Guides",
+            "Traductions"
+          ],
+          "fichiers": 49
+        }
+      ]
+    },
+    {
       "date": "2026-10-01",
       "entrees": [
         {
@@ -137,6 +153,16 @@
             "Traductions"
           ],
           "fichiers": 52
+        },
+        {
+          "depot": "site",
+          "sha": "52d9d45",
+          "titre": "Le pied du journal etait perime a sa naissance",
+          "detail": "Le gabarit porte une copie figee de l'en-tete et du pied. C'est ce qui permet de les retoucher sans toucher au generateur, et c'est aussi ce qui les laisse diverger du reste du site en silence ",
+          "etiquettes": [
+            "Outillage"
+          ],
+          "fichiers": 4
         }
       ]
     },
@@ -1419,5 +1445,5 @@
       ]
     }
   ],
-  "genere": "2026-10-01T15:46:51.524Z"
+  "genere": "2026-10-05T18:47:22.127Z"
 }
