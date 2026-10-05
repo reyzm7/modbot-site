@@ -12543,11 +12543,6 @@ body:not(.dashboard-page) .page-glow {
 .scene[data-scene="automatisations"] .scene-decor::before { animation-delay: 1.4s; }
 .scene[data-scene="automatisations"] .scene-decor::after  { animation-delay: 1.9s; }
 
-@keyframes decorMonte {
-  0%, 12%   { opacity: 0; transform: translateY(14px) scale(0.92); }
-  26%, 62%  { opacity: 1; transform: translateY(0) scale(1); }
-  78%, 100% { opacity: 0; transform: translateY(-10px) scale(0.96); }
-}
 
 @keyframes decorOnde {
   0%, 20%   { opacity: 0; transform: scale(0.6); }
