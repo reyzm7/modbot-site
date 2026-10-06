@@ -49,7 +49,7 @@
     "description": "Ce qui a changé sur ModBot et sur ce site, jour par jour. Chaque entrée vient d'une modification réellement livrée, pas d'une annonce.",
     "url": "https://modbot-website.vercel.app/nouveautes.html",
     "inLanguage": "fr",
-    "dateModified": "2026-10-05",
+    "dateModified": "2026-10-06",
     "isPartOf": {
       "@type": "WebSite",
       "name": "ModBot",
@@ -125,10 +125,65 @@
       <p class="eyebrow">Nouveautés</p>
       <h1>Le journal des modifications</h1>
       <p>Ce qui a changé sur le bot et sur ce site, jour par jour. Chaque ligne vient d'une modification réellement livrée : rien n'est annoncé ici avant d'exister.</p>
-      <p class="field-help">Mis à jour chaque nuit · 141 modifications depuis le 21 septembre 2026</p>
+      <p class="field-help">Mis à jour chaque nuit · 153 modifications depuis le 21 septembre 2026</p>
     </article>
 
     <div class="journal">
+      <section class="journal-jour">
+        <h2><time datetime="2026-10-06">6 octobre 2026</time></h2>
+        <ul class="journal-liste">
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Traductions</span><span class="journal-etiquette">Tableau de bord</span></p>
+            <h3>La case qui coupe la protection des administrateurs</h3>
+            <p>Le bot accepte « trust_admins » depuis toujours, et sa commande `/securite antinuke` l'expose. Le tableau de bord offrait « ne pas surveiller le proprietaire » et « ne pas surveiller le staff » — mais pas celui-la.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Un second test verrouillait l'ancien defaut</h3>
+            <p>`test_api` verifiait lui aussi que l'anti-nuke surveille les administrateurs. Je ne l'avais pas trouve en cherchant « trust_admins » — il est formule autrement, par un appel direct a `is_whitelisted`.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Le test de cloture suivait l'ancienne table</h3>
+            <p>`verifier_cloture_alerte` posait son alerte dans ALERTES_ACTIVES, qui n'existe plus : la fiche vit sur le disque pour qu'un clic du lendemain aboutisse encore, et les messages Discord — qui ne se serialisent pas — restent a cote en memoire.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>« // » n'est pas une commande</h3>
+            <p>Le croisement avec le wiki, une fois elargi aux neuf pages, a ramasse « // » et l'a declare commande inexistante. C'en est bien une qui n'existe pas — ce n'est tout simplement pas une commande </p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Trois suites rouges, trois causes distinctes</h3>
+            <p>La CI a enfin tourne — les trois executions precedentes n'avaient jamais demarre, GitHub Actions etant en panne. Elle a trouve trois choses, et une seule venait du travail d'aujourd'hui.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span></p>
+            <h3>Dictionnaire du bot : phrases nouvelles traduites</h3>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span></p>
+            <h3>Relance : GitHub Actions etait en panne hier soir</h3>
+            <p>Les trois executions precedentes n'ont jamais demarre. Toutes portaient « The job was not acquired by Runner of type hosted » et « Internal server error » : GitHub a declare l'incident a 20 h 47 UTC le 05/10/2026, et ses machines ne se sont pas lancees. Le code n'a donc jamais ete teste par la CI.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Les administrateurs sont proteges d'office</h3>
+            <p>Demande du proprietaire du projet, apres un second faux positif : l'anti-nuke lui a retire ses roles pendant qu'il supprimait des salons a la main, ce qui est un geste d'administration ordinaire.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span></p>
+            <h3>Relance : le job precedent n'a pas trouve de machine chez GitHub</h3>
+            <p>Rien n'a change dans le code. Le run de 4b1dd8b s'est fait annuler avec « The job was not acquired by Runner of type hosted » — une panne de l'hebergeur de la CI, pas un test en echec.</p>
+          </li>
+          <li class="journal-entree" data-depot="bot">
+            <p class="journal-etiquettes"><span class="journal-ou">Bot</span><span class="journal-etiquette">Tests</span></p>
+            <h3>Le bouton « Fausse alerte » ne rendait rien</h3>
+            <p>Signale : on annule l'alerte, et le bot ne remet pas les permissions. Trois causes, toutes frequentes, toutes avec le meme symptome.</p>
+          </li>
+        </ul>
+      </section>
+
       <section class="journal-jour">
         <h2><time datetime="2026-10-05">5 octobre 2026</time></h2>
         <ul class="journal-liste">
@@ -136,6 +191,16 @@
             <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Guides</span><span class="journal-etiquette">Traductions</span></p>
             <h3>Les trois questions ont leur propre page</h3>
             <p>La section « Avant de choisir » occupait un ecran entier de l'accueil pour trois reponses qu'on ne lit qu'une fois. Elle devient comprendre.html, et l'accueil n'en garde que l'accroche et la porte : vingt-neuf lignes deviennent neuf.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Référencement</span><span class="journal-etiquette">Affichage</span></p>
+            <h3>Sept pages annoncaient aux moteurs autre chose qu'elles</h3>
+            <p>articles.html declarait cinq versions qui n'existent pas. Son corps ne porte AUCUN « data-i18n » : huit cent quarante-neuf mots de francais, les vingt et un titres de guides compris, et ils le resteront puisque les guides le sont.</p>
+          </li>
+          <li class="journal-entree" data-depot="site">
+            <p class="journal-etiquettes"><span class="journal-ou">Site</span><span class="journal-etiquette">Outillage</span><span class="journal-etiquette">Référencement</span></p>
+            <h3>La garde du journal ne laissait jamais rien passer</h3>
+            <p>Le journal n'a pas ete ecrit une seule fois en quatre nuits. Le workflow est bien parti huit fois, chaque execution s'est terminee en « success », et aucune n'a rien produit : la garde sautait toutes les etapes, et un job dont tout est « skipped » reussit.</p>
           </li>
         </ul>
       </section>

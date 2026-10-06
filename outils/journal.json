@@ -1,6 +1,106 @@
 {
   "jours": [
     {
+      "date": "2026-10-06",
+      "entrees": [
+        {
+          "depot": "site",
+          "sha": "2c7074a",
+          "titre": "La case qui coupe la protection des administrateurs",
+          "detail": "Le bot accepte « trust_admins » depuis toujours, et sa commande `/securite antinuke` l'expose. Le tableau de bord offrait « ne pas surveiller le proprietaire » et « ne pas surveiller le staff » — mais pas celui-la.",
+          "etiquettes": [
+            "Traductions",
+            "Tableau de bord"
+          ],
+          "fichiers": 8
+        },
+        {
+          "depot": "bot",
+          "sha": "0eaff73",
+          "titre": "Un second test verrouillait l'ancien defaut",
+          "detail": "`test_api` verifiait lui aussi que l'anti-nuke surveille les administrateurs. Je ne l'avais pas trouve en cherchant « trust_admins » — il est formule autrement, par un appel direct a `is_whitelisted`.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "bot",
+          "sha": "d227ce9",
+          "titre": "Le test de cloture suivait l'ancienne table",
+          "detail": "`verifier_cloture_alerte` posait son alerte dans ALERTES_ACTIVES, qui n'existe plus : la fiche vit sur le disque pour qu'un clic du lendemain aboutisse encore, et les messages Discord — qui ne se serialisent pas — restent a cote en memoire.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 1
+        },
+        {
+          "depot": "bot",
+          "sha": "d0e8cfb",
+          "titre": "« // » n'est pas une commande",
+          "detail": "Le croisement avec le wiki, une fois elargi aux neuf pages, a ramasse « // » et l'a declare commande inexistante. C'en est bien une qui n'existe pas — ce n'est tout simplement pas une commande ",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 2
+        },
+        {
+          "depot": "bot",
+          "sha": "ccfa0f6",
+          "titre": "Trois suites rouges, trois causes distinctes",
+          "detail": "La CI a enfin tourne — les trois executions precedentes n'avaient jamais demarre, GitHub Actions etant en panne. Elle a trouve trois choses, et une seule venait du travail d'aujourd'hui.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "bot",
+          "sha": "55f4404",
+          "titre": "Dictionnaire du bot : phrases nouvelles traduites",
+          "detail": "",
+          "etiquettes": [],
+          "fichiers": 4
+        },
+        {
+          "depot": "bot",
+          "sha": "42c209f",
+          "titre": "Relance : GitHub Actions etait en panne hier soir",
+          "detail": "Les trois executions precedentes n'ont jamais demarre. Toutes portaient « The job was not acquired by Runner of type hosted » et « Internal server error » : GitHub a declare l'incident a 20 h 47 UTC le 05/10/2026, et ses machines ne se sont pas lancees. Le code n'a donc jamais ete teste par la CI.",
+          "etiquettes": [],
+          "fichiers": 0
+        },
+        {
+          "depot": "bot",
+          "sha": "d6a714a",
+          "titre": "Les administrateurs sont proteges d'office",
+          "detail": "Demande du proprietaire du projet, apres un second faux positif : l'anti-nuke lui a retire ses roles pendant qu'il supprimait des salons a la main, ce qui est un geste d'administration ordinaire.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 3
+        },
+        {
+          "depot": "bot",
+          "sha": "1fb908f",
+          "titre": "Relance : le job precedent n'a pas trouve de machine chez GitHub",
+          "detail": "Rien n'a change dans le code. Le run de 4b1dd8b s'est fait annuler avec « The job was not acquired by Runner of type hosted » — une panne de l'hebergeur de la CI, pas un test en echec.",
+          "etiquettes": [],
+          "fichiers": 0
+        },
+        {
+          "depot": "bot",
+          "sha": "668a2c6",
+          "titre": "Le bouton « Fausse alerte » ne rendait rien",
+          "detail": "Signale : on annule l'alerte, et le bot ne remet pas les permissions. Trois causes, toutes frequentes, toutes avec le meme symptome.",
+          "etiquettes": [
+            "Tests"
+          ],
+          "fichiers": 4
+        }
+      ]
+    },
+    {
       "date": "2026-10-05",
       "entrees": [
         {
@@ -13,6 +113,28 @@
             "Traductions"
           ],
           "fichiers": 49
+        },
+        {
+          "depot": "site",
+          "sha": "eea73f6",
+          "titre": "Sept pages annoncaient aux moteurs autre chose qu'elles",
+          "detail": "articles.html declarait cinq versions qui n'existent pas. Son corps ne porte AUCUN « data-i18n » : huit cent quarante-neuf mots de francais, les vingt et un titres de guides compris, et ils le resteront puisque les guides le sont.",
+          "etiquettes": [
+            "Référencement",
+            "Affichage"
+          ],
+          "fichiers": 9
+        },
+        {
+          "depot": "site",
+          "sha": "dcf7378",
+          "titre": "La garde du journal ne laissait jamais rien passer",
+          "detail": "Le journal n'a pas ete ecrit une seule fois en quatre nuits. Le workflow est bien parti huit fois, chaque execution s'est terminee en « success », et aucune n'a rien produit : la garde sautait toutes les etapes, et un job dont tout est « skipped » reussit.",
+          "etiquettes": [
+            "Outillage",
+            "Référencement"
+          ],
+          "fichiers": 5
         }
       ]
     },
@@ -1445,5 +1567,5 @@
       ]
     }
   ],
-  "genere": "2026-10-05T18:47:22.127Z"
+  "genere": "2026-10-06T02:12:01.090Z"
 }
